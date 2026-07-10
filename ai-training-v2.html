@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DARTIQ AI Training Center</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:Arial,Helvetica,sans-serif;background:#050914;color:#fff;min-height:100vh;padding:14px}
+    .wrap{max-width:430px;margin:0 auto;background:linear-gradient(180deg,#071b34,#050914);border:1px solid rgba(0,214,255,.45);border-radius:28px;padding:18px;box-shadow:0 0 28px rgba(0,214,255,.35), inset 0 0 35px rgba(0,153,255,.12)}
+    .header{border-bottom:2px solid #19d8ff;padding-bottom:14px;margin-bottom:16px}
+    h1{font-size:30px;color:#35e7ff;text-shadow:0 0 12px rgba(53,231,255,.75);line-height:1.1}
+    .subtitle{font-size:15px;color:#d9f8ff;margin-top:6px}
+    .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:16px 0}
+    .card,.wide{background:rgba(18,46,79,.7);border:1px solid rgba(49,218,255,.45);border-radius:17px;box-shadow:inset 0 0 18px rgba(0,196,255,.12);padding:14px}
+    .label{font-size:11px;text-transform:uppercase;color:#b7eaff;font-weight:700;margin-bottom:7px;letter-spacing:.4px}
+    .value{font-size:23px;color:#31e9ff;font-weight:800;line-height:1.12;text-shadow:0 0 10px rgba(49,233,255,.6);word-break:break-word}
+    .wide{margin:12px 0;position:relative;overflow:hidden}
+    .wide:before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:4px;background:#20e2ff;border-radius:20px;box-shadow:0 0 15px #20e2ff}
+    .wide-inner{padding-left:12px}
+    .section-title{font-size:18px;font-weight:800;margin-bottom:8px;color:#fff}
+    .text{font-size:15px;line-height:1.45;color:#f1fbff;white-space:pre-wrap}
+    .two{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+    .small .value{font-size:18px}
+    .coach{background:rgba(14,35,61,.9);border:1px solid rgba(49,218,255,.45);border-radius:20px;padding:18px;margin-top:14px;box-shadow:0 0 22px rgba(0,214,255,.18)}
+    .footer{text-align:center;color:#36e8ff;font-size:12px;margin-top:14px;font-weight:700;opacity:.85}
+    @media(max-width:380px){h1{font-size:26px}.grid{grid-template-columns:1fr}.two{grid-template-columns:1fr}.value{font-size:22px}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="header">
+      <h1>🎯 AI Training Center</h1>
+      <p class="subtitle">Today's personalized AI training session.</p>
+    </section>
+
+    <section class="grid">
+      <div class="card"><div class="label">Drill</div><div class="value" id="drill">--</div></div>
+      <div class="card"><div class="label">Duration</div><div class="value" id="duration">--</div></div>
+      <div class="card"><div class="label">Level</div><div class="value" id="level">--</div></div>
+    </section>
+
+    <section class="wide">
+      <div class="wide-inner">
+        <div class="section-title">🤖 Why This Training</div>
+        <div class="text" id="why">DARTIQ selected this training based on your latest session analysis.</div>
+      </div>
+    </section>
+
+    <section class="two">
+      <div class="card small"><div class="label">Main Issue</div><div class="value" id="issue">--</div></div>
+      <div class="card small"><div class="label">Focus</div><div class="value" id="focus">--</div></div>
+    </section>
+
+    <section class="wide">
+      <div class="wide-inner">
+        <div class="section-title">🎯 Session Goal</div>
+        <div class="text" id="goal">Improve your main weakness today.</div>
+      </div>
+    </section>
+
+    <section class="two">
+      <div class="card small"><div class="label">Potential</div><div class="value" id="potential">--</div></div>
+      <div class="card small"><div class="label">AI Score</div><div class="value" id="score">--</div></div>
+    </section>
+
+    <section class="coach">
+      <div class="section-title">💬 AI Coach Note</div>
+      <div class="text" id="coachmessage">Training focus: Complete the recommended drill with controlled repetitions.\nMotivation: Quality training today creates better scoring tomorrow.</div>
+    </section>
+
+    <div class="footer">Powered by DARTIQ AI</div>
+  </main>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const clean = (key, fallback = '--') => {
+      const val = params.get(key);
+      if (!val || val.trim() === '' || val.toLowerCase() === 'undefined' || val.toLowerCase() === 'null') return fallback;
+      return decodeURIComponent(val.replace(/\+/g, ' '));
+    };
+
+    const fields = {
+      drill: '--',
+      duration: '--',
+      level: '--',
+      why: 'DARTIQ selected this training based on your latest session analysis.',
+      issue: '--',
+      focus: '--',
+      goal: 'Improve your main weakness today.',
+      potential: '--',
+      score: '--',
+      coachmessage: 'Training focus: Complete the recommended drill with controlled repetitions.\nMotivation: Quality training today creates better scoring tomorrow.'
+    };
+
+    Object.keys(fields).forEach(key => {
+      const el = document.getElementById(key);
+      if (el) el.textContent = clean(key, fields[key]);
+    });
+  </script>
+</body>
+</html>

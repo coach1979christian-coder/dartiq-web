@@ -1,0 +1,268 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+<title>DARTIQ Player Profile</title>
+<style>
+:root{
+  --bg:#06101d;
+  --bg2:#0c1b31;
+  --card:rgba(15,28,51,.82);
+  --card2:rgba(8,18,34,.9);
+  --blue:#35a8ff;
+  --blue2:#006dff;
+  --cyan:#42f5ff;
+  --text:#ffffff;
+  --muted:#9eb7d8;
+  --good:#35d399;
+  --warn:#fbbf24;
+  --bad:#fb7185;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  color:var(--text);
+  font-family:Inter,Arial,Helvetica,sans-serif;
+  background:
+    radial-gradient(circle at 20% 0%,rgba(53,168,255,.28),transparent 32%),
+    radial-gradient(circle at 90% 20%,rgba(66,245,255,.14),transparent 30%),
+    linear-gradient(180deg,var(--bg),var(--bg2));
+}
+.wrap{max-width:820px;margin:0 auto;padding:18px 14px 28px}
+.topline{text-align:center;margin:2px 0 16px}
+.kicker{font-size:12px;letter-spacing:2.5px;color:var(--cyan);font-weight:800}
+.title{font-size:28px;font-weight:900;margin:5px 0 4px}
+.subtitle{color:var(--muted);font-size:13px}
+.card{
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(180deg,rgba(18,34,61,.88),rgba(9,20,38,.86));
+  border:1px solid rgba(53,168,255,.24);
+  border-radius:22px;
+  padding:18px;
+  margin-bottom:14px;
+  box-shadow:0 16px 40px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.05);
+}
+.card:before{
+  content:"";
+  position:absolute;inset:-1px;
+  background:linear-gradient(120deg,rgba(53,168,255,.18),transparent 35%,rgba(66,245,255,.08));
+  pointer-events:none;
+}
+.content{position:relative;z-index:1}
+.hero{display:flex;gap:16px;align-items:center}
+.photo{
+  width:92px;height:92px;border-radius:50%;object-fit:cover;
+  border:3px solid var(--blue);
+  box-shadow:0 0 28px rgba(53,168,255,.45);
+  background:#0d1c33;
+}
+.name{font-size:25px;font-weight:900;line-height:1.1;margin:0}
+.email{color:var(--muted);font-size:12px;margin-top:5px;word-break:break-all}
+.badges{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.badge{
+  border-radius:999px;padding:6px 10px;font-size:12px;font-weight:800;
+  background:rgba(53,168,255,.16);border:1px solid rgba(53,168,255,.35);
+}
+.badge.gold{background:rgba(251,191,36,.14);border-color:rgba(251,191,36,.45)}
+.section-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.section-title h2{font-size:18px;margin:0;font-weight:900}
+.section-title span{font-size:12px;color:var(--muted)}
+.score-row{display:flex;gap:14px;align-items:center}
+.score-ring{
+  --p:0;
+  width:118px;height:118px;border-radius:50%;
+  display:grid;place-items:center;
+  background:conic-gradient(var(--blue) calc(var(--p)*1%),rgba(255,255,255,.08) 0);
+  box-shadow:0 0 35px rgba(53,168,255,.18);
+}
+.score-inner{
+  width:88px;height:88px;border-radius:50%;background:#0b172b;
+  display:grid;place-items:center;text-align:center;border:1px solid rgba(255,255,255,.08)
+}
+.score-inner strong{font-size:30px}
+.score-inner small{color:var(--muted);font-size:10px}
+.ai-copy{flex:1;color:#dcecff;font-size:14px;line-height:1.45}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stat{
+  background:rgba(8,18,34,.72);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:16px;padding:13px;
+}
+.label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
+.value{font-size:22px;font-weight:900;margin-top:4px}
+.goal-item,.pref-item,.activity-item,.achievement{
+  background:rgba(8,18,34,.55);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:15px;
+  padding:13px;margin-bottom:9px;
+}
+.goal-top{display:flex;justify-content:space-between;gap:8px;margin-bottom:8px}
+.goal-name{font-weight:900}
+.goal-num{color:var(--cyan);font-weight:900}
+.progress{height:9px;background:rgba(255,255,255,.09);border-radius:999px;overflow:hidden}
+.bar{height:100%;width:0;background:linear-gradient(90deg,var(--blue2),var(--cyan));border-radius:999px}
+.pref-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.pref-item{margin:0}
+.pref-item strong{display:block;margin-top:4px}
+.achievement{display:flex;align-items:center;gap:10px}
+.medal{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:rgba(251,191,36,.17);border:1px solid rgba(251,191,36,.35)}
+.rings{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.mini-ring{
+  text-align:center;padding:12px 8px;border-radius:16px;background:rgba(8,18,34,.55);
+  border:1px solid rgba(255,255,255,.07)
+}
+.mini-ring .big{font-size:20px;font-weight:900;color:var(--cyan)}
+.mini-ring .small{font-size:11px;color:var(--muted)}
+.action{
+  display:block;text-align:center;text-decoration:none;color:white;font-weight:900;
+  padding:15px;border-radius:18px;
+  background:linear-gradient(90deg,#005dff,#39a7ff,#42f5ff);
+  box-shadow:0 0 28px rgba(53,168,255,.28);
+}
+.footer{text-align:center;color:var(--muted);font-size:12px;padding:18px 0}
+@media(max-width:440px){
+  .hero{align-items:flex-start}.photo{width:78px;height:78px}
+  .name{font-size:21px}.score-row{flex-direction:column;align-items:flex-start}
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .rings{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topline">
+    <div class="kicker">DARTIQ AI</div>
+    <div class="title">👤 PLAYER PROFILE</div>
+    <div class="subtitle">Your personal DARTIQ command center.</div>
+  </div>
+
+  <div class="card"><div class="content hero">
+    <img class="photo" id="photo" src="https://placehold.co/200x200/0b172b/39a7ff?text=DQ" alt="Profile photo">
+    <div>
+      <h1 class="name" id="name">Player</h1>
+      <div class="email" id="email">player@email.com</div>
+      <div class="badges">
+        <div class="badge" id="grade">Grade</div>
+        <div class="badge gold" id="status">Beta V2 Tester</div>
+        <div class="badge" id="streak">🔥 0 Day Streak</div>
+      </div>
+    </div>
+  </div></div>
+
+  <div class="card"><div class="content">
+    <div class="section-title"><h2>🤖 AI Coach Score</h2><span>Live profile rating</span></div>
+    <div class="score-row">
+      <div class="score-ring" id="scoreRing"><div class="score-inner"><div><strong id="aiscore">0</strong><br><small>/ 100</small></div></div></div>
+      <div class="ai-copy" id="coachline">Your AI Coach adapts your training based on your latest sessions, progress trends and personal goals.</div>
+    </div>
+  </div></div>
+
+  <div class="card"><div class="content">
+    <div class="section-title"><h2>📊 Statistics</h2><span>Performance overview</span></div>
+    <div class="grid">
+      <div class="stat"><div class="label">Total Sessions</div><div class="value" id="sessions">0</div></div>
+      <div class="stat"><div class="label">Current Average</div><div class="value" id="currentavg">0</div></div>
+      <div class="stat"><div class="label">Highest Average</div><div class="value" id="bestavg">0</div></div>
+      <div class="stat"><div class="label">First 9 Avg</div><div class="value" id="first9">0</div></div>
+      <div class="stat"><div class="label">Best Checkout</div><div class="value" id="checkout">0</div></div>
+      <div class="stat"><div class="label">Checkout %</div><div class="value" id="checkoutpct">0%</div></div>
+      <div class="stat"><div class="label">Total 180s</div><div class="value" id="total180">0</div></div>
+      <div class="stat"><div class="label">Best AI Score</div><div class="value" id="bestai">0</div></div>
+    </div>
+  </div></div>
+
+  <div class="card"><div class="content">
+    <div class="section-title"><h2>🎯 Goals</h2><span>Player targets</span></div>
+    <div class="goal-item">
+      <div class="goal-top"><div class="goal-name">Main Goal</div><div class="goal-num" id="goal">Set your main goal</div></div>
+    </div>
+    <div class="goal-item">
+      <div class="goal-top"><div class="goal-name">Weekly Goal</div><div class="goal-num" id="weeklygoal">Complete focused sessions</div></div>
+    </div>
+    <div class="goal-item">
+      <div class="goal-top"><div class="goal-name">Target AI Score</div><div class="goal-num"><span id="aiscoreSmall">0</span>/<span id="targetai">80</span></div></div>
+      <div class="progress"><div class="bar" id="aiBar"></div></div>
+    </div>
+    <div class="goal-item">
+      <div class="goal-top"><div class="goal-name">Target Checkout %</div><div class="goal-num"><span id="checkoutpctSmall">0</span>/<span id="targetcheckout">35</span>%</div></div>
+      <div class="progress"><div class="bar" id="checkoutBar"></div></div>
+    </div>
+  </div></div>
+
+  <div class="card"><div class="content">
+    <div class="section-title"><h2>⚙️ Training Preferences</h2><span>AI personalization</span></div>
+    <div class="pref-grid">
+      <div class="pref-item"><div class="label">Skill Level</div><strong id="level">Intermediate</strong></div>
+      <div class="pref-item"><div class="label">Duration</div><strong id="duration">20 min</strong></div>
+      <div class="pref-item"><div class="label">Training Days</div><strong id="trainingdays">4 / week</strong></div>
+      <div class="pref-item"><div class="label">Main Weakness</div><strong id="weakness">Release Timing</strong></div>
+      <div class="pref-item"><div class="label">Coach Style</div><strong id="coach">Technical Coach</strong></div>
+      <div class="pref-item"><div class="label">Motivation</div><strong id="motivation">Direct</strong></div>
+    </div>
+  </div></div>
+
+  <div class="card"><div class="content">
+    <div class="section-title"><h2>🏆 Latest Achievements</h2><span>Unlocked recently</span></div>
+    <div class="achievement"><div class="medal">🏆</div><div id="achievement1">Complete your first training session to unlock achievements.</div></div>
+    <div class="achievement"><div class="medal">🎯</div><div id="achievement2">Keep training to unlock more badges.</div></div>
+    <div class="achievement"><div class="medal">🔥</div><div id="achievement3">Build a streak to unlock progress rewards.</div></div>
+  </div></div>
+
+  <div class="card"><div class="content">
+    <div class="section-title"><h2>📈 Performance Rings</h2><span>Current form</span></div>
+    <div class="rings">
+      <div class="mini-ring"><div class="big" id="ringAi">0</div><div class="small">AI Score</div></div>
+      <div class="mini-ring"><div class="big" id="ringCheckout">0%</div><div class="small">Checkout</div></div>
+      <div class="mini-ring"><div class="big" id="consistency">0%</div><div class="small">Consistency</div></div>
+      <div class="mini-ring"><div class="big" id="confidence">0%</div><div class="small">Confidence</div></div>
+      <div class="mini-ring"><div class="big" id="pressure">0%</div><div class="small">Pressure</div></div>
+      <div class="mini-ring"><div class="big" id="grouping">0%</div><div class="small">Grouping</div></div>
+    </div>
+  </div></div>
+
+  <div class="card"><div class="content">
+    <div class="section-title"><h2>🕒 Recent Activity</h2><span>Latest training</span></div>
+    <div class="activity-item" id="activity1">No recent activity yet.</div>
+    <div class="activity-item" id="activity2">Complete a training session to update this section.</div>
+  </div></div>
+
+    <div class="footer">Powered by DARTIQ AI • Beta V2</div>
+</div>
+
+<script>
+const p = new URLSearchParams(window.location.search);
+const get = (k, d="") => p.get(k) || d;
+const set = (id, val) => { const el=document.getElementById(id); if(el && val!=="" && val!==null) el.textContent = val; };
+
+const direct = ["name","email","grade","status","streak","sessions","currentavg","bestavg","first9","checkout","checkoutpct","total180","bestai","goal","weeklygoal","targetai","targetcheckout","level","duration","trainingdays","weakness","coach","motivation","achievement1","achievement2","achievement3","consistency","confidence","pressure","grouping","activity1","activity2"];
+direct.forEach(k => set(k, get(k)));
+
+if(get("photo")) document.getElementById("photo").src = get("photo");
+if(get("editurl")) document.getElementById("editlink").href = get("editurl");
+
+const ai = parseInt(get("aiscore","0")) || 0;
+set("aiscore", ai);
+set("aiscoreSmall", ai);
+set("ringAi", ai);
+document.getElementById("scoreRing").style.setProperty("--p", Math.max(0,Math.min(100,ai)));
+
+const targetAi = parseInt(get("targetai","80")) || 80;
+const aiPct = Math.max(0, Math.min(100, (ai/targetAi)*100));
+document.getElementById("aiBar").style.width = aiPct + "%";
+
+let cp = parseFloat(String(get("checkoutpct","0")).replace("%","")) || 0;
+set("checkoutpctSmall", cp);
+set("ringCheckout", cp + "%");
+const targetCheckout = parseFloat(get("targetcheckout","35")) || 35;
+document.getElementById("checkoutBar").style.width = Math.max(0, Math.min(100, (cp/targetCheckout)*100)) + "%";
+
+const coach = get("coach","Technical Coach");
+const weakness = get("weakness","your main weakness");
+const goal = get("goal","your next performance goal");
+set("coachline", `${coach} active. DARTIQ is focusing on ${weakness} and guiding you toward ${goal}.`);
+</script>
+</body>
+</html>

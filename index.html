@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+
+html,body{
+  width:100%;
+  height:220px;
+  margin:0;
+  background:#020712;
+  color:white;
+  overflow:hidden;
+}
+
+.card{
+  width:100%;
+  height:220px;
+  padding:16px 16px 8px;
+  border-radius:24px;
+  background:linear-gradient(180deg,#06172b,#020712);
+  border:1px solid rgba(59,71,198,.55);
+  box-shadow:0 0 28px rgba(59,71,198,.35);
+  overflow:hidden;
+}
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
+}
+
+.label{
+  font-size:12px;
+  letter-spacing:2px;
+  color:#9CA6FF;
+  font-weight:900;
+}
+
+.badge{
+  font-size:10px;
+  color:#9CA6FF;
+  border:1px solid rgba(59,71,198,.75);
+  border-radius:999px;
+  padding:5px 10px;
+  font-weight:900;
+}
+
+.main{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-top:6px;
+}
+
+.ring{
+  position:relative;
+  width:120px;
+  height:120px;
+  flex:0 0 120px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  filter:
+    drop-shadow(0 0 8px rgba(59,71,198,.35))
+    drop-shadow(0 0 18px rgba(59,71,198,.55))
+    drop-shadow(0 0 34px rgba(59,71,198,.25));
+}
+
+.ring::before{
+  content:"";
+  position:absolute;
+  inset:22px;
+  border-radius:50%;
+  background:#3B47C6;
+  opacity:.18;
+  filter:blur(26px);
+  z-index:0;
+}
+
+svg{
+  position:relative;
+  z-index:1;
+  transform:rotate(-90deg);
+}
+
+.seg{
+  fill:none;
+  stroke-width:9;
+  stroke-linecap:round;
+  opacity:.22;
+}
+
+.bg{
+  stroke:rgba(59,71,198,.25);
+}
+
+.on{
+  stroke:#3B47C6;
+  stroke-width:9;
+  stroke-linecap:round;
+  opacity:1;
+  filter:
+    drop-shadow(0 0 6px #3B47C6)
+    drop-shadow(0 0 12px rgba(59,71,198,.95))
+    drop-shadow(0 0 20px rgba(59,71,198,.75))
+    drop-shadow(0 0 36px rgba(59,71,198,.45));
+}
+
+.center{
+  position:absolute;
+  inset:0;
+  z-index:2;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.score{
+  font-size:38px;
+  font-weight:900;
+}
+
+.info{
+  flex:1;
+  min-width:0;
+}
+
+.grade{
+  color:#9CA6FF;
+  font-size:20px;
+  font-weight:900;
+  margin-bottom:6px;
+}
+
+.row{
+  padding:5px 0;
+  border-top:1px solid rgba(255,255,255,.10);
+}
+}
+
+.row span{
+  display:block;
+  color:#9fb2d3;
+  font-size:10px;
+  opacity:.85;
+  margin-bottom:3px;
+}
+
+.row strong{
+  display:block;
+  color:white;
+  font-size:15px;
+  font-weight:800;
+  line-height:1.05;
+}
+</style>
+</head>
+
+<body>
+<div class="card">
+  <div class="top">
+    <div class="label">AI COACH SCORE</div>
+    <div class="badge">AI ANALYSIS</div>
+  </div>
+
+  <div class="main">
+    <div class="ring">
+      <svg width="120" height="120" viewBox="0 0 150 150" id="svg"></svg>
+      <div class="center">
+        <div class="score" id="score">0</div>
+      </div>
+    </div>
+
+    <div class="info">
+      <div class="grade" id="grade">GREAT</div>
+      <div class="row"><span>Main Issue</span><strong id="issue">Release Timing</strong></div>
+      <div class="row"><span>Recommended Drill</span><strong id="drill">Straight Line Drill</strong></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const p = new URLSearchParams(location.search);
+const clean = v => decodeURIComponent((v || "").replace(/\+/g," "));
+
+const scoreParam = p.get("score");
+const finalScore = scoreParam !== null
+  ? Math.max(0, Math.min(100, Math.round(parseFloat(scoreParam) || 0)))
+  : 0;
+console.log("Score from URL:", scoreParam);
+const grade = clean(p.get("grade")) || "GREAT";
+const issue = clean(p.get("issue")) || "Release Timing";
+const drill = clean(p.get("drill")) || "Straight Line Drill";
+
+document.getElementById("grade").textContent = grade.toUpperCase();
+document.getElementById("issue").textContent = issue;
+document.getElementById("drill").textContent = drill;
+
+const svg = document.getElementById("svg");
+const total = 16;
+const cx = 75, cy = 75, r = 58;
+const segments = [];
+
+for(let i=0;i<total;i++){
+  const start=(i*360/total)+3;
+  const end=((i+1)*360/total)-5;
+  const a1=start*Math.PI/180;
+  const a2=end*Math.PI/180;
+  const x1=cx+r*Math.cos(a1), y1=cy+r*Math.sin(a1);
+  const x2=cx+r*Math.cos(a2), y2=cy+r*Math.sin(a2);
+
+  const path=document.createElementNS("http://www.w3.org/2000/svg","path");
+  path.setAttribute("d",`M ${x1} ${y1} A ${r} ${r} 0 0 1 ${x2} ${y2}`);
+  path.setAttribute("class","seg bg");
+  svg.appendChild(path);
+  segments.push(path);
+}
+
+let current = 0;
+const scoreText = document.getElementById("score");
+
+const count = setInterval(()=>{
+  current++;
+  scoreText.textContent = current;
+  const lit = Math.round((current / 100) * total);
+  segments.forEach((s,i)=>s.setAttribute("class", i < lit ? "seg on" : "seg bg"));
+  if(current >= finalScore) clearInterval(count);
+}, 12);
+</script>
+</body>
+</html>
