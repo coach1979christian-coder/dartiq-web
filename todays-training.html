@@ -4,169 +4,324 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>DARTIQ Today's Training</title>
+
 <style>
 :root{
-  --bg:#050B18;
-  --panel:#0D2136;
-  --tile:#10243A;
-  --accent:#2FD4FF;
-  --text:#EAF7FF;
-  --muted:#9BB8D4;
+  --bg:#090502;
+  --panel:#211207;
+  --tile:#2A1709;
+  --accent:#FF8A1F;
+  --accent-light:#FFB347;
+  --text:#FFF7EF;
+  --muted:#D7A978;
 }
-*{box-sizing:border-box;margin:0;padding:0}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
 html,body{
   width:100%;
   min-height:100%;
   background:var(--bg);
   font-family:Arial,sans-serif;
   color:var(--text);
+  overflow-x:hidden;
 }
-body{padding:10px}
+
+body{
+  padding:10px;
+}
+
 .coach{
   width:100%;
+  max-width:430px;
+  margin:0 auto;
   border-radius:22px;
   padding:14px;
-  background:linear-gradient(180deg,#0D1D33,#07111D);
-  border:1px solid rgba(47,212,255,.45);
-  box-shadow:0 0 12px rgba(47,212,255,.30),0 0 30px rgba(47,212,255,.16),inset 0 0 18px rgba(47,212,255,.08);
+  background:
+    radial-gradient(circle at top right,rgba(255,138,31,.13),transparent 35%),
+    linear-gradient(180deg,#1A0D05,#080402);
+  border:1px solid rgba(255,138,31,.55);
+  box-shadow:
+    0 0 14px rgba(255,138,31,.38),
+    0 0 36px rgba(255,138,31,.20),
+    inset 0 0 20px rgba(255,138,31,.08);
 }
+
 h1{
   color:var(--accent);
   font-size:22px;
-  text-shadow:0 0 10px rgba(47,212,255,.75);
+  line-height:1.15;
+  text-shadow:
+    0 0 8px rgba(255,138,31,.95),
+    0 0 18px rgba(255,138,31,.45);
 }
-.subtitle{color:var(--muted);font-size:12px;margin:4px 0 9px}
+
+.subtitle{
+  color:var(--muted);
+  font-size:12px;
+  margin:4px 0 9px;
+}
+
 .line{
   height:2px;
-  background:linear-gradient(90deg,var(--accent),transparent);
+  background:linear-gradient(
+    90deg,
+    var(--accent),
+    var(--accent-light),
+    transparent
+  );
+  box-shadow:0 0 9px rgba(255,138,31,.55);
   margin-bottom:10px;
 }
+
 .stats{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
+  grid-template-columns:repeat(3,minmax(0,1fr));
   gap:7px;
+  width:100%;
   margin-bottom:9px;
 }
+
 .tile{
-  background:var(--tile);
+  min-width:0;
+  background:linear-gradient(180deg,#321A0A,#211006);
   border-radius:12px;
   padding:8px 5px;
   text-align:center;
-  border:1px solid rgba(47,212,255,.25);
-  box-shadow:0 0 10px rgba(47,212,255,.12);
+  border:1px solid rgba(255,138,31,.34);
+  box-shadow:
+    0 0 10px rgba(255,138,31,.16),
+    inset 0 0 10px rgba(255,138,31,.05);
+  overflow:hidden;
 }
-.label{font-size:9px;color:var(--muted);letter-spacing:.2px}
-.value{font-size:18px;font-weight:700;color:var(--accent);margin-top:3px}
+
+.label{
+  font-size:9px;
+  color:var(--muted);
+  letter-spacing:.3px;
+}
+
+.value{
+  font-size:18px;
+  font-weight:700;
+  color:var(--accent);
+  margin-top:3px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  text-shadow:0 0 8px rgba(255,138,31,.55);
+}
+
 .block{
-  background:var(--panel);
+  background:linear-gradient(180deg,#241306,#160B04);
   border-left:3px solid var(--accent);
   border-radius:11px;
   padding:8px 10px;
   margin-bottom:7px;
   font-size:11.5px;
   line-height:1.32;
+  box-shadow:
+    0 0 10px rgba(255,138,31,.10),
+    inset 0 0 10px rgba(255,138,31,.04);
 }
+
 .block-title{
   font-weight:bold;
-  color:#fff;
+  color:#FFFFFF;
   margin-bottom:3px;
   font-size:12.5px;
 }
+
 .two{
   display:grid;
-  grid-template-columns:1fr 1fr;
+  grid-template-columns:repeat(2,minmax(0,1fr));
   gap:7px;
+  width:100%;
   margin-bottom:7px;
 }
+
 .mini{
-  background:#0B1D31;
-  border:1px solid rgba(47,212,255,.18);
+  min-width:0;
+  background:linear-gradient(180deg,#2A1608,#1A0D05);
+  border:1px solid rgba(255,138,31,.28);
   border-radius:11px;
   padding:8px;
-  box-shadow:0 0 9px rgba(47,212,255,.08);
+  box-shadow:
+    0 0 10px rgba(255,138,31,.13),
+    inset 0 0 9px rgba(255,138,31,.04);
+  overflow:hidden;
 }
-.mini-label{color:var(--muted);font-size:9px;margin-bottom:3px}
-.mini-value{color:var(--accent);font-size:12.5px;font-weight:bold}
+
+.mini-label{
+  color:var(--muted);
+  font-size:9px;
+  margin-bottom:3px;
+}
+
+.mini-value{
+  color:var(--accent);
+  font-size:12.5px;
+  font-weight:bold;
+  overflow-wrap:anywhere;
+  text-shadow:0 0 7px rgba(255,138,31,.38);
+}
+
 .conclusion{
-  background:linear-gradient(180deg,#0E263E,#0B1B2D);
+  background:
+    radial-gradient(circle at right,rgba(255,138,31,.10),transparent 40%),
+    linear-gradient(180deg,#2D1708,#170B04);
   border-left:3px solid var(--accent);
   border-radius:12px;
   padding:9px 10px;
   margin-bottom:6px;
   font-size:11.5px;
   line-height:1.32;
-  box-shadow:0 0 12px rgba(47,212,255,.14);
+  box-shadow:
+    0 0 15px rgba(255,138,31,.20),
+    inset 0 0 12px rgba(255,138,31,.05);
 }
+
 .footer{
   text-align:center;
   font-size:10px;
-  color:#78CDEE;
+  color:var(--accent-light);
   opacity:.95;
+  text-shadow:0 0 7px rgba(255,138,31,.45);
 }
 </style>
 </head>
+
 <body>
+
 <div class="coach">
+
   <h1>🚀 Today's Training</h1>
-  <div class="subtitle">Execute your focused AI training session.</div>
+
+  <div class="subtitle">
+    Execute your focused AI training session.
+  </div>
+
   <div class="line"></div>
 
   <div class="stats">
-    <div class="tile"><div class="label">DRILL</div><div class="value" id="drill">--</div></div>
-    <div class="tile"><div class="label">ROUNDS</div><div class="value" id="rounds">5</div></div>
-    <div class="tile"><div class="label">TIME</div><div class="value" id="duration">20m</div></div>
+
+    <div class="tile">
+      <div class="label">DRILL</div>
+      <div class="value" id="drill">--</div>
+    </div>
+
+    <div class="tile">
+      <div class="label">ROUNDS</div>
+      <div class="value" id="rounds">5</div>
+    </div>
+
+    <div class="tile">
+      <div class="label">TIME</div>
+      <div class="value" id="duration">20m</div>
+    </div>
+
   </div>
 
   <div class="block">
     <div class="block-title">🎯 Training Objective</div>
-    <span id="objective">Complete the drill with controlled, repeatable throws.</span>
+    <span id="objective">
+      Complete the drill with controlled, repeatable throws.
+    </span>
   </div>
 
   <div class="two">
-    <div class="mini"><div class="mini-label">MAIN FOCUS</div><div class="mini-value" id="focus">--</div></div>
-    <div class="mini"><div class="mini-label">SUCCESS TARGET</div><div class="mini-value" id="target">5 clean rounds</div></div>
+
+    <div class="mini">
+      <div class="mini-label">MAIN FOCUS</div>
+      <div class="mini-value" id="focus">--</div>
+    </div>
+
+    <div class="mini">
+      <div class="mini-label">SUCCESS TARGET</div>
+      <div class="mini-value" id="target">5 clean rounds</div>
+    </div>
+
   </div>
 
   <div class="block">
     <div class="block-title">▶️ Execution</div>
-    <span id="execution">Throw each visit with the same setup, rhythm, release and follow-through.</span>
+    <span id="execution">
+      Throw each visit with the same setup, rhythm, release and follow-through.
+    </span>
   </div>
 
   <div class="two">
-    <div class="mini"><div class="mini-label">TRACK</div><div class="mini-value" id="track">Accuracy</div></div>
-    <div class="mini"><div class="mini-label">AVOID</div><div class="mini-value" id="avoid">Rushing</div></div>
+
+    <div class="mini">
+      <div class="mini-label">TRACK</div>
+      <div class="mini-value" id="track">Accuracy</div>
+    </div>
+
+    <div class="mini">
+      <div class="mini-label">AVOID</div>
+      <div class="mini-value" id="avoid">Rushing</div>
+    </div>
+
   </div>
 
   <div class="conclusion">
+
     <div class="block-title">💬 Coach Reminder</div>
-    <b>Before you start:</b> <span id="reminder">Focus on quality, not speed.</span><br>
-    <b>After training:</b> <span id="after">Complete the session so DARTIQ can save your progress.</span>
+
+    <b>Before you start:</b>
+    <span id="reminder">
+      Focus on quality, not speed.
+    </span>
+
+    <br>
+
+    <b>After training:</b>
+    <span id="after">
+      Complete the session so DARTIQ can save your progress.
+    </span>
+
   </div>
 
-  <div class="footer">Powered by DARTIQ AI</div>
+  <div class="footer">
+    Powered by DARTIQ AI
+  </div>
+
 </div>
 
 <script>
-const p=new URLSearchParams(window.location.search);
-const defaults={
-  drill:"--",
-  rounds:"5",
-  duration:"20m",
-  objective:"Complete the drill with controlled, repeatable throws.",
-  focus:"--",
-  target:"5 clean rounds",
-  execution:"Throw each visit with the same setup, rhythm, release and follow-through.",
-  track:"Accuracy",
-  avoid:"Rushing",
-  reminder:"Focus on quality, not speed.",
-  after:"Complete the session so DARTIQ can save your progress."
+const params = new URLSearchParams(window.location.search);
+
+const defaults = {
+  drill: "--",
+  rounds: "5",
+  duration: "20m",
+  objective: "Complete the drill with controlled, repeatable throws.",
+  focus: "--",
+  target: "5 clean rounds",
+  execution: "Throw each visit with the same setup, rhythm, release and follow-through.",
+  track: "Accuracy",
+  avoid: "Rushing",
+  reminder: "Focus on quality, not speed.",
+  after: "Complete the session so DARTIQ can save your progress."
 };
-Object.keys(defaults).forEach(k=>{
-  const el=document.getElementById(k);
-  if(!el)return;
-  const v=p.get(k);
-  el.textContent=v&&v.trim()?decodeURIComponent(v):defaults[k];
+
+Object.keys(defaults).forEach(key => {
+  const element = document.getElementById(key);
+
+  if (!element) return;
+
+  const value = params.get(key);
+
+  element.textContent =
+    value && value.trim()
+      ? value
+      : defaults[key];
 });
 </script>
+
 </body>
 </html>
