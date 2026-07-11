@@ -1,0 +1,25 @@
+<!DOCTYPE html><html><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>AI Progress Report</title><style>
+body{margin:0;padding:12px;background:#050b18;font-family:Arial;color:#eef}
+.box{max-width:900px;margin:auto;border:1px solid #2dff88;border-radius:20px;padding:18px;background:#0d2136;box-shadow:0 0 25px rgba(45,255,136,.35)}
+h1{color:#2dff88;text-shadow:0 0 12px rgba(45,255,136,.8)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.card{background:#10243a;border:1px solid rgba(45,255,136,.3);border-radius:12px;padding:10px}
+.l{font-size:10px;color:#9bb8d4}.v{font-size:24px;color:#2dff88;font-weight:bold}
+.block{margin-top:10px;background:#10243a;border-left:3px solid #2dff88;padding:10px;border-radius:10px}
+</style></head><body><div class='box'><h1>🟢 AI Progress Report</h1><div class='grid'>
+<div class='card'><div class='l'>AI SCORE</div><div class='v' id='score'>--</div></div>
+<div class='card'><div class='l'>AVERAGE</div><div class='v' id='average'>--</div></div>
+<div class='card'><div class='l'>FIRST 9</div><div class='v' id='first9'>--</div></div>
+<div class='card'><div class='l'>CHECKOUT %</div><div class='v' id='checkoutpct'>--</div></div>
+<div class='card'><div class='l'>180s</div><div class='v' id='total180'>--</div></div>
+<div class='card'><div class='l'>140+</div><div class='v' id='total140'>--</div></div>
+</div>
+<div class='block'><b>📊 Session Summary</b><div id='summary'>--</div></div>
+<div class='block'><b>🤖 AI Observation</b><div id='observation'>--</div></div>
+<div class='block'><b>💡 Coach Advice</b><div id='advice'>--</div></div>
+<div class='block'><b>🏆 Progress Conclusion</b><div id='conclusion'>--</div></div>
+</div>
+<script>
+const p=new URLSearchParams(location.search);
+['score','average','first9','checkoutpct','total180','total140','summary','observation','advice','conclusion'].forEach(k=>{let e=document.getElementById(k);if(e)e.textContent=p.get(k)||'--';});
+</script></body></html>
