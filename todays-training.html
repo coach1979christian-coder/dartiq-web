@@ -6,16 +6,6 @@
 <title>DARTIQ Today's Training</title>
 
 <style>
-:root{
-  --bg:#090502;
-  --panel:#211207;
-  --tile:#2A1709;
-  --accent:#FF8A1F;
-  --accent-light:#FFB347;
-  --text:#FFF7EF;
-  --muted:#D7A978;
-}
-
 *{
   box-sizing:border-box;
   margin:0;
@@ -25,179 +15,194 @@
 html,body{
   width:100%;
   min-height:100%;
-  background:var(--bg);
+  background:#050B18;
   font-family:Arial,sans-serif;
-  color:var(--text);
+  color:#EAF7FF;
   overflow-x:hidden;
 }
 
 body{
-  padding:10px;
+  padding:12px;
 }
 
-.coach{
+.box{
   width:100%;
-  max-width:430px;
-  margin:0 auto;
-  border-radius:22px;
-  padding:14px;
-  background:
-    radial-gradient(circle at top right,rgba(255,138,31,.13),transparent 35%),
-    linear-gradient(180deg,#1A0D05,#080402);
-  border:1px solid rgba(255,138,31,.55);
+  max-width:900px;
+  margin:auto;
+  border:1px solid rgba(45,255,136,.42);
+  border-radius:20px;
+  padding:18px;
+  background:#0D2136;
   box-shadow:
-    0 0 14px rgba(255,138,31,.38),
-    0 0 36px rgba(255,138,31,.20),
-    inset 0 0 20px rgba(255,138,31,.08);
+    0 0 12px rgba(45,255,136,.30),
+    0 0 25px rgba(45,255,136,.18),
+    inset 0 0 18px rgba(45,255,136,.06);
 }
 
 h1{
-  color:var(--accent);
-  font-size:22px;
+  color:#2DFF88;
+  font-size:24px;
   line-height:1.15;
   text-shadow:
-    0 0 8px rgba(255,138,31,.95),
-    0 0 18px rgba(255,138,31,.45);
+    0 0 8px rgba(45,255,136,.85),
+    0 0 18px rgba(45,255,136,.40);
 }
 
 .subtitle{
-  color:var(--muted);
+  color:#9BB8D4;
   font-size:12px;
-  margin:4px 0 9px;
+  margin:5px 0 11px;
 }
 
 .line{
   height:2px;
-  background:linear-gradient(
-    90deg,
-    var(--accent),
-    var(--accent-light),
-    transparent
-  );
-  box-shadow:0 0 9px rgba(255,138,31,.55);
+  background:linear-gradient(90deg,#2DFF88,transparent);
+  box-shadow:0 0 8px rgba(45,255,136,.45);
+  margin-bottom:12px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  width:100%;
   margin-bottom:10px;
 }
 
-.stats{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:7px;
-  width:100%;
-  margin-bottom:9px;
-}
-
-.tile{
+.card{
   min-width:0;
-  background:linear-gradient(180deg,#321A0A,#211006);
+  background:#10243A;
+  border:1px solid rgba(45,255,136,.30);
   border-radius:12px;
-  padding:8px 5px;
-  text-align:center;
-  border:1px solid rgba(255,138,31,.34);
-  box-shadow:
-    0 0 10px rgba(255,138,31,.16),
-    inset 0 0 10px rgba(255,138,31,.05);
+  padding:10px;
   overflow:hidden;
+  box-shadow:
+    0 0 10px rgba(45,255,136,.14),
+    inset 0 0 10px rgba(45,255,136,.04);
 }
 
 .label{
-  font-size:9px;
-  color:var(--muted);
+  font-size:10px;
+  color:#9BB8D4;
   letter-spacing:.3px;
+  text-transform:uppercase;
 }
 
 .value{
-  font-size:18px;
-  font-weight:700;
-  color:var(--accent);
+  font-size:20px;
+  color:#2DFF88;
+  font-weight:bold;
   margin-top:3px;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  text-shadow:0 0 8px rgba(255,138,31,.55);
+  overflow-wrap:anywhere;
+  text-shadow:0 0 8px rgba(45,255,136,.35);
 }
 
 .block{
-  background:linear-gradient(180deg,#241306,#160B04);
-  border-left:3px solid var(--accent);
-  border-radius:11px;
-  padding:8px 10px;
-  margin-bottom:7px;
-  font-size:11.5px;
-  line-height:1.32;
+  margin-top:10px;
+  background:#10243A;
+  border-left:3px solid #2DFF88;
+  border-radius:10px;
+  padding:10px;
+  font-size:13px;
+  line-height:1.4;
   box-shadow:
-    0 0 10px rgba(255,138,31,.10),
-    inset 0 0 10px rgba(255,138,31,.04);
+    0 0 10px rgba(45,255,136,.10),
+    inset 0 0 8px rgba(45,255,136,.03);
 }
 
 .block-title{
-  font-weight:bold;
   color:#FFFFFF;
-  margin-bottom:3px;
-  font-size:12.5px;
+  font-weight:bold;
+  font-size:14px;
+  margin-bottom:4px;
 }
 
 .two{
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:7px;
+  gap:10px;
   width:100%;
-  margin-bottom:7px;
+  margin-top:10px;
 }
 
 .mini{
   min-width:0;
-  background:linear-gradient(180deg,#2A1608,#1A0D05);
-  border:1px solid rgba(255,138,31,.28);
-  border-radius:11px;
-  padding:8px;
-  box-shadow:
-    0 0 10px rgba(255,138,31,.13),
-    inset 0 0 9px rgba(255,138,31,.04);
+  background:#10243A;
+  border:1px solid rgba(45,255,136,.25);
+  border-radius:10px;
+  padding:10px;
   overflow:hidden;
+  box-shadow:0 0 9px rgba(45,255,136,.10);
 }
 
 .mini-label{
-  color:var(--muted);
-  font-size:9px;
-  margin-bottom:3px;
+  color:#9BB8D4;
+  font-size:10px;
+  margin-bottom:4px;
+  text-transform:uppercase;
 }
 
 .mini-value{
-  color:var(--accent);
-  font-size:12.5px;
+  color:#2DFF88;
+  font-size:14px;
   font-weight:bold;
   overflow-wrap:anywhere;
-  text-shadow:0 0 7px rgba(255,138,31,.38);
 }
 
 .conclusion{
-  background:
-    radial-gradient(circle at right,rgba(255,138,31,.10),transparent 40%),
-    linear-gradient(180deg,#2D1708,#170B04);
-  border-left:3px solid var(--accent);
-  border-radius:12px;
-  padding:9px 10px;
-  margin-bottom:6px;
-  font-size:11.5px;
-  line-height:1.32;
+  margin-top:10px;
+  background:#10243A;
+  border-left:3px solid #2DFF88;
+  border-radius:10px;
+  padding:10px;
+  font-size:13px;
+  line-height:1.4;
   box-shadow:
-    0 0 15px rgba(255,138,31,.20),
-    inset 0 0 12px rgba(255,138,31,.05);
+    0 0 12px rgba(45,255,136,.14),
+    inset 0 0 8px rgba(45,255,136,.04);
 }
 
 .footer{
+  margin-top:10px;
   text-align:center;
+  color:#85FFAE;
   font-size:10px;
-  color:var(--accent-light);
-  opacity:.95;
-  text-shadow:0 0 7px rgba(255,138,31,.45);
+  text-shadow:0 0 7px rgba(45,255,136,.35);
+}
+
+@media(max-width:420px){
+  body{
+    padding:9px;
+  }
+
+  .box{
+    padding:14px;
+    border-radius:18px;
+  }
+
+  h1{
+    font-size:22px;
+  }
+
+  .value{
+    font-size:18px;
+  }
+
+  .block,
+  .conclusion{
+    font-size:12px;
+  }
+
+  .block-title{
+    font-size:13px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<div class="coach">
+<div class="box">
 
   <h1>🚀 Today's Training</h1>
 
@@ -207,41 +212,46 @@ h1{
 
   <div class="line"></div>
 
-  <div class="stats">
+  <div class="grid">
 
-    <div class="tile">
-      <div class="label">DRILL</div>
+    <div class="card">
+      <div class="label">Drill</div>
       <div class="value" id="drill">--</div>
     </div>
 
-    <div class="tile">
-      <div class="label">ROUNDS</div>
+    <div class="card">
+      <div class="label">Duration</div>
+      <div class="value" id="duration">20m</div>
+    </div>
+
+    <div class="card">
+      <div class="label">Rounds</div>
       <div class="value" id="rounds">5</div>
     </div>
 
-    <div class="tile">
-      <div class="label">TIME</div>
-      <div class="value" id="duration">20m</div>
+    <div class="card">
+      <div class="label">Difficulty</div>
+      <div class="value" id="level">--</div>
     </div>
 
   </div>
 
   <div class="block">
     <div class="block-title">🎯 Training Objective</div>
-    <span id="objective">
+    <div id="objective">
       Complete the drill with controlled, repeatable throws.
-    </span>
+    </div>
   </div>
 
   <div class="two">
 
     <div class="mini">
-      <div class="mini-label">MAIN FOCUS</div>
+      <div class="mini-label">Main Focus</div>
       <div class="mini-value" id="focus">--</div>
     </div>
 
     <div class="mini">
-      <div class="mini-label">SUCCESS TARGET</div>
+      <div class="mini-label">Success Target</div>
       <div class="mini-value" id="target">5 clean rounds</div>
     </div>
 
@@ -249,33 +259,44 @@ h1{
 
   <div class="block">
     <div class="block-title">▶️ Execution</div>
-    <span id="execution">
+    <div id="execution">
       Throw each visit with the same setup, rhythm, release and follow-through.
-    </span>
+    </div>
   </div>
 
   <div class="two">
 
     <div class="mini">
-      <div class="mini-label">TRACK</div>
+      <div class="mini-label">Track</div>
       <div class="mini-value" id="track">Accuracy</div>
     </div>
 
     <div class="mini">
-      <div class="mini-label">AVOID</div>
+      <div class="mini-label">Avoid</div>
       <div class="mini-value" id="avoid">Rushing</div>
     </div>
 
   </div>
 
-  <div class="conclusion">
+  <div class="block">
+    <div class="block-title">🧠 Why This Drill</div>
+    <div id="why">
+      This drill targets the main issue identified by DARTIQ AI.
+    </div>
+  </div>
 
+  <div class="block">
+    <div class="block-title">📈 Improvement Potential</div>
+    <div id="improvement">
+      Consistent practice can improve control, accuracy and confidence.
+    </div>
+  </div>
+
+  <div class="conclusion">
     <div class="block-title">💬 Coach Reminder</div>
 
     <b>Before you start:</b>
-    <span id="reminder">
-      Focus on quality, not speed.
-    </span>
+    <span id="reminder">Focus on quality, not speed.</span>
 
     <br>
 
@@ -283,7 +304,6 @@ h1{
     <span id="after">
       Complete the session so DARTIQ can save your progress.
     </span>
-
   </div>
 
   <div class="footer">
@@ -297,14 +317,17 @@ const params = new URLSearchParams(window.location.search);
 
 const defaults = {
   drill: "--",
-  rounds: "5",
   duration: "20m",
+  rounds: "5",
+  level: "--",
   objective: "Complete the drill with controlled, repeatable throws.",
   focus: "--",
   target: "5 clean rounds",
   execution: "Throw each visit with the same setup, rhythm, release and follow-through.",
   track: "Accuracy",
   avoid: "Rushing",
+  why: "This drill targets the main issue identified by DARTIQ AI.",
+  improvement: "Consistent practice can improve control, accuracy and confidence.",
   reminder: "Focus on quality, not speed.",
   after: "Complete the session so DARTIQ can save your progress."
 };
