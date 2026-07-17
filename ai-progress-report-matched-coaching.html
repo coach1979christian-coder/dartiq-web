@@ -1,1 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>DARTIQ AI Progress Report</title>
+<style>
+:root{
+  --bg:#050B18;
+  --panel:#0D2136;
+  --tile:#10243A;
+  --accent:#39FF88;
+  --text:#EAF7FF;
+  --muted:#B7D8C2;
+  --line:rgba(57,255,136,.22);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;min-height:100%;background:var(--bg);font-family:Arial,sans-serif;color:var(--text);overflow-x:hidden}
+body{padding:10px}
+.wrap{
+  width:100%;
+  border-radius:22px;
+  padding:14px;
+  background:linear-gradient(180deg,#10251A,#07110C);
+  border:1px solid rgba(57,255,136,.45);
+  box-shadow:0 0 12px rgba(57,255,136,.30),0 0 30px rgba(57,255,136,.16),inset 0 0 18px rgba(57,255,136,.08);
+}
+.k{font-size:9px;letter-spacing:1.2px;color:var(--muted);font-weight:900;text-transform:uppercase}
+h1{color:var(--accent);font-size:22px;margin-top:3px;text-shadow:0 0 10px rgba(57,255,136,.85),0 0 20px rgba(57,255,136,.38)}
+.line{height:2px;background:linear-gradient(90deg,var(--accent),transparent);box-shadow:0 0 8px rgba(57,255,136,.45);margin:8px 0 10px}
+.hero{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;width:100%;margin-bottom:7px}
+.card{background:var(--panel);border:1px solid rgba(57,255,136,.18);border-radius:11px;padding:8px 10px;box-shadow:0 0 9px rgba(57,255,136,.08);min-width:0;overflow:hidden}
+.label{font-size:9px;color:var(--muted);letter-spacing:.2px;text-transform:uppercase}
+.score{font-size:34px;font-weight:800;color:var(--accent);margin-top:3px;word-break:break-word;overflow-wrap:anywhere;text-shadow:0 0 10px rgba(57,255,136,.55)}
+.text{font-size:11.5px;line-height:1.32;color:var(--text);word-break:break-word;overflow-wrap:anywhere}
+.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;width:100%;margin-bottom:7px}
+.stat{text-align:center;padding:8px 5px}
+.value{font-size:18px;font-weight:700;color:var(--accent);margin-top:3px;word-break:break-word;overflow-wrap:anywhere;text-shadow:0 0 8px rgba(57,255,136,.35)}
+.grid{display:grid;grid-template-columns:1fr;gap:7px;width:100%}
+.grid .card{border-left:3px solid var(--accent)}
+.title{font-weight:bold;color:#fff;margin-bottom:3px;font-size:12.5px}
+.footer{text-align:center;font-size:10px;color:#9CFFC1;opacity:.95;margin-top:6px;text-shadow:0 0 7px rgba(57,255,136,.35)}
+@media(max-width:380px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="k">DARTIQ AI • SESSION PROGRESS</div>
+  <h1>AI Progress Report</h1>
+  <div class="line"></div>
 
+  <div class="hero">
+    <div class="card"><div class="label">AI Coach Score</div><div class="score" id="score">--</div></div>
+    <div class="card"><div class="label">Report Summary</div><div class="text" id="summary">No summary.</div></div>
+  </div>
+
+  <div class="stats">
+    <div class="card stat"><div class="label">Average</div><div class="value" id="average">--</div></div>
+    <div class="card stat"><div class="label">First 9</div><div class="value" id="first9">--</div></div>
+    <div class="card stat"><div class="label">Checkout %</div><div class="value" id="checkoutpct">--</div></div>
+    <div class="card stat"><div class="label">180s</div><div class="value" id="total180">0</div></div>
+    <div class="card stat"><div class="label">140+</div><div class="value" id="total140">0</div></div>
+  </div>
+
+  <div class="grid">
+    <div class="card"><div class="title">🤖 AI Observation</div><div class="text" id="observation">No observation.</div></div>
+    <div class="card"><div class="title">💡 Coach Advice</div><div class="text" id="advice">No advice.</div></div>
+  </div>
+
+  <div class="footer">POWERED BY DARTIQ AI</div>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+
+function getValue(key, fallback = "--") {
+  const value = params.get(key);
+  if (value === null || value.trim() === "") return fallback;
+  return value.replace(/\+/g, " ").trim();
+}
+
+document.getElementById("score").textContent = getValue("score");
+document.getElementById("average").textContent = getValue("average");
+document.getElementById("first9").textContent = getValue("first9");
+
+const checkoutValue = getValue("checkoutpct");
+document.getElementById("checkoutpct").textContent =
+  checkoutValue === "--" ? "--" : checkoutValue.replace(/%+$/, "") + "%";
+
+document.getElementById("total180").textContent = getValue("total180", "0");
+document.getElementById("total140").textContent = getValue("total140", "0");
+document.getElementById("summary").textContent = getValue("summary", "No summary.");
+document.getElementById("observation").textContent = getValue("observation", "No observation.");
+document.getElementById("advice").textContent = getValue("advice", "No advice.");
+</script>
+</body>
+</html>
