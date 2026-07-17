@@ -65,8 +65,7 @@ h1{color:var(--accent);font-size:22px;margin-top:3px;text-shadow:0 0 10px rgba(5
 <div class="grid">
 <div class="card"><div class="title">🤖 AI Observation</div><div class="text" id="observation">No observation.</div></div>
 <div class="card"><div class="title">💡 Coach Advice</div><div class="text" id="advice">No advice.</div></div>
-<div class="card"><div class="title">📈 Conclusion</div><div class="text" id="conclusion">No conclusion.</div></div>
-</div>
+
 
 <div class="footer">POWERED BY DARTIQ AI</div>
 </div>
@@ -74,7 +73,7 @@ h1{color:var(--accent);font-size:22px;margin-top:3px;text-shadow:0 0 10px rgba(5
 <script>
 const p=new URLSearchParams(location.search);
 function g(k,d){const v=p.get(k);return v&&v.trim()?decodeURIComponent(v.replace(/\+/g," ")):d;}
-["score","average","first9","checkoutpct","total180","total140","summary","observation","advice","conclusion"].forEach(id=>{
+["score","average","first9","checkoutpct","total180","total140","summary","observation","advice" ].forEach(id=>{
 const e=document.getElementById(id);
 if(e)e.textContent=g(id,e.textContent);
 });
