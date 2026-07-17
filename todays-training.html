@@ -1,350 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>DARTIQ Today's Training</title>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>DARTIQ Today's AI Training</title>
 <style>
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
+:root{
+  --bg:#050b18;
+  --panel:#10243a;
+  --panel2:#0d2136;
+  --accent:#39ff88;
+  --text:#f4fbff;
+  --muted:#b8d5c6;
+  --line:rgba(57,255,136,.24);
 }
-
-html,body{
-  width:100%;
-  min-height:100%;
-  background:#050B18;
-  font-family:Arial,sans-serif;
-  color:#EAF7FF;
-  overflow-x:hidden;
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;min-height:100%;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--text);overflow-x:hidden}
+body{padding:10px}
+.wrap{
+  width:100%;max-width:430px;margin:0 auto;padding:16px;
+  border-radius:24px;
+  background:linear-gradient(180deg,#102844 0%,#081a2d 100%);
+  border:1px solid rgba(57,255,136,.48);
+  box-shadow:0 0 14px rgba(57,255,136,.28),0 0 34px rgba(57,255,136,.14),inset 0 0 22px rgba(57,255,136,.06);
 }
-
-body{
-  padding:12px;
-}
-
-.box{
-  width:100%;
-  max-width:900px;
-  margin:auto;
-  border:1px solid rgba(45,255,136,.42);
-  border-radius:20px;
-  padding:18px;
-  background:#0D2136;
-  box-shadow:
-    0 0 12px rgba(45,255,136,.30),
-    0 0 25px rgba(45,255,136,.18),
-    inset 0 0 18px rgba(45,255,136,.06);
-}
-
-h1{
-  color:#2DFF88;
-  font-size:24px;
-  line-height:1.15;
-  text-shadow:
-    0 0 8px rgba(45,255,136,.85),
-    0 0 18px rgba(45,255,136,.40);
-}
-
-.subtitle{
-  color:#9BB8D4;
-  font-size:12px;
-  margin:5px 0 11px;
-}
-
-.line{
-  height:2px;
-  background:linear-gradient(90deg,#2DFF88,transparent);
-  box-shadow:0 0 8px rgba(45,255,136,.45);
-  margin-bottom:12px;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:10px;
-  width:100%;
-  margin-bottom:10px;
-}
-
+.header{padding:2px 2px 12px;border-bottom:2px solid var(--accent);box-shadow:0 8px 14px -12px rgba(57,255,136,.8)}
+.header h1{font-size:36px;line-height:1;font-weight:900;color:var(--accent);text-shadow:0 0 6px rgba(57,255,136,.85),0 0 12px rgba(57,255,136,.35)}
+.subtitle{margin-top:8px;font-size:15px;color:var(--muted)}
+.stats,.split{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
 .card{
-  min-width:0;
-  background:#10243A;
-  border:1px solid rgba(45,255,136,.30);
-  border-radius:12px;
-  padding:10px;
-  overflow:hidden;
-  box-shadow:
-    0 0 10px rgba(45,255,136,.14),
-    inset 0 0 10px rgba(45,255,136,.04);
+  background:var(--panel2);border:1px solid var(--line);border-radius:16px;
+  padding:16px;min-width:0;box-shadow:0 0 10px rgba(57,255,136,.07)
 }
-
-.label{
-  font-size:10px;
-  color:#9BB8D4;
-  letter-spacing:.3px;
-  text-transform:uppercase;
+.label{font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);font-weight:800}
+.value{margin-top:6px;font-size:27px;line-height:1.08;font-weight:900;color:var(--accent);overflow-wrap:anywhere;text-shadow:0 0 6px rgba(57,255,136,.32)}
+.section{
+  margin-top:14px;background:var(--panel2);border:1px solid var(--line);border-left:4px solid var(--accent);
+  border-radius:16px;padding:16px 16px 17px
 }
-
-.value{
-  font-size:20px;
-  color:#2DFF88;
-  font-weight:bold;
-  margin-top:3px;
-  overflow-wrap:anywhere;
-  text-shadow:0 0 8px rgba(45,255,136,.35);
-}
-
-.block{
-  margin-top:10px;
-  background:#10243A;
-  border-left:3px solid #2DFF88;
-  border-radius:10px;
-  padding:10px;
-  font-size:13px;
-  line-height:1.4;
-  box-shadow:
-    0 0 10px rgba(45,255,136,.10),
-    inset 0 0 8px rgba(45,255,136,.03);
-}
-
-.block-title{
-  color:#FFFFFF;
-  font-weight:bold;
-  font-size:14px;
-  margin-bottom:4px;
-}
-
-.two{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:10px;
-  width:100%;
-  margin-top:10px;
-}
-
-.mini{
-  min-width:0;
-  background:#10243A;
-  border:1px solid rgba(45,255,136,.25);
-  border-radius:10px;
-  padding:10px;
-  overflow:hidden;
-  box-shadow:0 0 9px rgba(45,255,136,.10);
-}
-
-.mini-label{
-  color:#9BB8D4;
-  font-size:10px;
-  margin-bottom:4px;
-  text-transform:uppercase;
-}
-
-.mini-value{
-  color:#2DFF88;
-  font-size:14px;
-  font-weight:bold;
-  overflow-wrap:anywhere;
-}
-
-.conclusion{
-  margin-top:10px;
-  background:#10243A;
-  border-left:3px solid #2DFF88;
-  border-radius:10px;
-  padding:10px;
-  font-size:13px;
-  line-height:1.4;
-  box-shadow:
-    0 0 12px rgba(45,255,136,.14),
-    inset 0 0 8px rgba(45,255,136,.04);
-}
-
-.footer{
-  margin-top:10px;
-  text-align:center;
-  color:#85FFAE;
-  font-size:10px;
-  text-shadow:0 0 7px rgba(45,255,136,.35);
-}
-
-@media(max-width:420px){
-  body{
-    padding:9px;
-  }
-
-  .box{
-    padding:14px;
-    border-radius:18px;
-  }
-
-  h1{
-    font-size:22px;
-  }
-
-  .value{
-    font-size:18px;
-  }
-
-  .block,
-  .conclusion{
-    font-size:12px;
-  }
-
-  .block-title{
-    font-size:13px;
-  }
+.section-title{font-size:17px;font-weight:900;margin-bottom:8px;color:#fff}
+.section-text{font-size:14px;line-height:1.5;color:var(--text);overflow-wrap:anywhere}
+.split .card{padding:16px}
+.split .value{font-size:21px;line-height:1.28}
+.footer{margin-top:28px;padding-bottom:16px;text-align:center;font-size:10px;color:#9cffc0;letter-spacing:.4px;text-shadow:0 0 7px rgba(57,255,136,.25)}
+@media(max-width:380px){
+  .header h1{font-size:32px}
+  .value{font-size:24px}
+  .split .value{font-size:19px}
 }
 </style>
 </head>
-
 <body>
-
-<div class="box">
-
-  <h1>🚀 Today's Training</h1>
-
-  <div class="subtitle">
-    Execute your focused AI training session.
+<div class="wrap">
+  <div class="header">
+    <h1>🚀 Today's Training</h1>
+    <div class="subtitle">Execute your focused AI training session.</div>
   </div>
 
-  <div class="line"></div>
-
-  <div class="grid">
-
-    <div class="card">
-      <div class="label">Drill</div>
-      <div class="value" id="drill">--</div>
-    </div>
-
-    <div class="card">
-      <div class="label">Duration</div>
-      <div class="value" id="duration">20m</div>
-    </div>
-
-    <div class="card">
-      <div class="label">Rounds</div>
-      <div class="value" id="rounds">5</div>
-    </div>
-
-    <div class="card">
-      <div class="label">Difficulty</div>
-      <div class="value" id="level">--</div>
-    </div>
-
+  <div class="stats">
+    <div class="card"><div class="label">Drill</div><div class="value" id="drill">Drill missing</div></div>
+    <div class="card"><div class="label">Duration</div><div class="value" id="duration">--</div></div>
+    <div class="card"><div class="label">Rounds</div><div class="value" id="rounds">--</div></div>
+    <div class="card"><div class="label">Difficulty</div><div class="value" id="level">--</div></div>
   </div>
 
-  <div class="block">
-    <div class="block-title">🎯 Training Objective</div>
-    <div id="objective">
-      Complete the drill with controlled, repeatable throws.
-    </div>
+  <div class="section">
+    <div class="section-title">🎯 Training Objective</div>
+    <div class="section-text" id="objective">Training objective missing.</div>
   </div>
 
-  <div class="two">
-
-    <div class="mini">
-      <div class="mini-label">Main Focus</div>
-      <div class="mini-value" id="focus">--</div>
-    </div>
-
-    <div class="mini">
-      <div class="mini-label">Success Target</div>
-      <div class="mini-value" id="target">5 clean rounds</div>
-    </div>
-
+  <div class="split">
+    <div class="card"><div class="label">Main Focus</div><div class="value" id="focus">Focus missing.</div></div>
+    <div class="card"><div class="label">Success Target</div><div class="value" id="target">Target missing.</div></div>
   </div>
 
-  <div class="block">
-    <div class="block-title">▶️ Execution</div>
-    <div id="execution">
-      Throw each visit with the same setup, rhythm, release and follow-through.
-    </div>
+  <div class="section">
+    <div class="section-title">▶️ Execution</div>
+    <div class="section-text" id="execution">Execution steps missing.</div>
   </div>
 
-  <div class="two">
-
-    <div class="mini">
-      <div class="mini-label">Track</div>
-      <div class="mini-value" id="track">Accuracy</div>
-    </div>
-
-    <div class="mini">
-      <div class="mini-label">Avoid</div>
-      <div class="mini-value" id="avoid">Rushing</div>
-    </div>
-
+  <div class="split">
+    <div class="card"><div class="label">Track</div><div class="value" id="track">Tracking metric missing.</div></div>
+    <div class="card"><div class="label">Avoid</div><div class="value" id="avoid">Common mistakes missing.</div></div>
   </div>
 
-  <div class="block">
-    <div class="block-title">🧠 Why This Drill</div>
-    <div id="why">
-      This drill targets the main issue identified by DARTIQ AI.
-    </div>
+  <div class="section">
+    <div class="section-title">🧠 Why This Drill</div>
+    <div class="section-text" id="why">Explanation missing.</div>
   </div>
 
-  <div class="block">
-    <div class="block-title">📈 Improvement Potential</div>
-    <div id="improvement">
-      Consistent practice can improve control, accuracy and confidence.
-    </div>
+  <div class="section">
+    <div class="section-title">📈 Improvement Potential</div>
+    <div class="section-text" id="improvement">Improvement potential missing.</div>
   </div>
 
-  <div class="conclusion">
-    <div class="block-title">💬 Coach Reminder</div>
-
-    <b>Before you start:</b>
-    <span id="reminder">Focus on quality, not speed.</span>
-
-    <br>
-
-    <b>After training:</b>
-    <span id="after">
-      Complete the session so DARTIQ can save your progress.
-    </span>
+  <div class="section">
+    <div class="section-title">💬 Coach Reminder</div>
+    <div class="section-text"><strong>Before you start:</strong> <span id="reminder">Reminder missing.</span><br><strong>After training:</strong> <span id="after">Completion message missing.</span></div>
   </div>
 
-  <div class="footer">
-    Powered by DARTIQ AI
-  </div>
-
+  <div class="footer">POWERED BY DARTIQ AI</div>
 </div>
 
 <script>
 const params = new URLSearchParams(window.location.search);
 
-const defaults = {
-  drill: "--",
-  duration: "20m",
-  rounds: "5",
+function getValue(key, fallback) {
+  const value = params.get(key);
+  if (value === null || String(value).trim() === "") return fallback;
+  return decodeURIComponent(String(value).replace(/\+/g," ")).trim();
+}
+
+const fields = {
+  drill: "Drill missing",
+  duration: "--",
+  rounds: "--",
   level: "--",
-  objective: "Complete the drill with controlled, repeatable throws.",
-  focus: "--",
-  target: "5 clean rounds",
-  execution: "Throw each visit with the same setup, rhythm, release and follow-through.",
-  track: "Accuracy",
-  avoid: "Rushing",
-  why: "This drill targets the main issue identified by DARTIQ AI.",
-  improvement: "Consistent practice can improve control, accuracy and confidence.",
-  reminder: "Focus on quality, not speed.",
-  after: "Complete the session so DARTIQ can save your progress."
+  objective: "Training objective missing.",
+  focus: "Focus missing.",
+  target: "Target missing.",
+  execution: "Execution steps missing.",
+  track: "Tracking metric missing.",
+  avoid: "Common mistakes missing.",
+  why: "Explanation missing.",
+  improvement: "Improvement potential missing.",
+  reminder: "Reminder missing.",
+  after: "Completion message missing."
 };
 
-Object.keys(defaults).forEach(key => {
-  const element = document.getElementById(key);
-
-  if (!element) return;
-
-  const value = params.get(key);
-
-  element.textContent =
-    value && value.trim()
-      ? value
-      : defaults[key];
+Object.entries(fields).forEach(([key,fallback])=>{
+  const el=document.getElementById(key);
+  if(el) el.textContent=getValue(key,fallback);
 });
 </script>
-
 </body>
 </html>
