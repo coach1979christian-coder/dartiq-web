@@ -83,9 +83,9 @@ document.getElementById("score").textContent = getValue("score");
 document.getElementById("average").textContent = getValue("average");
 document.getElementById("first9").textContent = getValue("first9");
 
-const checkoutValue = getValue("checkoutpct");
-document.getElementById("checkoutpct").textContent =
-  checkoutValue === "--" ? "--" : checkoutValue.replace(/%+$/, "") + "%";
+const checkoutValue = getValue("checkoutpct", "");
+document.getElementById("checkoutpct").textContent =checkoutValue === ""
+: checkoutValue.replace(",", ".").replace(/%$/, "") + "%";
 
 document.getElementById("total180").textContent = getValue("total180", "0");
 document.getElementById("total140").textContent = getValue("total140", "0");
