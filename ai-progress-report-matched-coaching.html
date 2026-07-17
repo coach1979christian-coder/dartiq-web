@@ -84,14 +84,25 @@ document.getElementById("average").textContent = getValue("average");
 document.getElementById("first9").textContent = getValue("first9");
 
 const checkoutValue = getValue("checkoutpct", "");
-document.getElementById("checkoutpct").textContent =checkoutValue === ""
-: checkoutValue.replace(",", ".").replace(/%$/, "") + "%";
+document.getElementById("checkoutpct").textContent =
+  checkoutValue === ""
+    ? "--"
+    : checkoutValue.replace(",", ".").replace(/%$/, "") + "%";
 
-document.getElementById("total180").textContent = getValue("total180", "0");
-document.getElementById("total140").textContent = getValue("total140", "0");
-document.getElementById("summary").textContent = getValue("summary", "No summary.");
-document.getElementById("observation").textContent = getValue("observation", "No observation.");
-document.getElementById("advice").textContent = getValue("advice", "No advice.");
+document.getElementById("total180").textContent =
+  getValue("total180", "0");
+
+document.getElementById("total140").textContent =
+  getValue("total140", "0");
+
+document.getElementById("summary").textContent =
+  getValue("summary", "No summary.");
+
+document.getElementById("observation").textContent =
+  getValue("observation", "No observation.");
+
+document.getElementById("advice").textContent =
+  getValue("advice", "No advice.");
 </script>
 </body>
 </html>
