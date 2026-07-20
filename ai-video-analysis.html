@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DARTIQ AI Throw Analysis</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Inter,Arial,sans-serif;
+}
+
+body{
+background:#020814;
+color:white;
+display:flex;
+justify-content:center;
+padding:25px;
+}
+
+.container{
+width:100%;
+max-width:430px;
+}
+
+.logo{
+text-align:center;
+font-size:34px;
+font-weight:700;
+margin-bottom:10px;
+}
+
+.subtitle{
+text-align:center;
+color:#9fb8d8;
+margin-bottom:30px;
+}
+
+.card{
+background:#0b1528;
+border:1px solid rgba(0,170,255,.35);
+border-radius:22px;
+padding:22px;
+box-shadow:0 0 18px rgba(0,170,255,.18);
+margin-bottom:20px;
+}
+
+button{
+width:100%;
+padding:16px;
+border:none;
+border-radius:16px;
+background:#00A8FF;
+color:white;
+font-size:18px;
+font-weight:700;
+cursor:pointer;
+}
+
+#status{
+margin-top:20px;
+text-align:center;
+color:#8cb7ff;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="logo">
+DARTIQ
+</div>
+
+<div class="subtitle">
+AI Throw Video Analysis
+</div>
+
+<div class="card">
+
+<input
+type="file"
+id="videoInput"
+accept="video/*"
+style="width:100%;margin-bottom:20px;">
+
+<button id="analyzeBtn">
+
+Analyze My Throw
+
+</button>
+
+<div id="status">
+
+Waiting for upload...
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>
