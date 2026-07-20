@@ -1,0 +1,45 @@
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL = "https://usglrseckxwcdykrwuvh.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_................................";
+const supabase = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+);
+
+const videoInput = document.getElementById("videoInput");
+const analyzeBtn = document.getElementById("analyzeBtn");
+const status = document.getElementById("status");
+
+analyzeBtn.addEventListener("click", uploadVideo);
+
+async function uploadVideo() {
+
+    const file = videoInput.files[0];
+
+    if (!file) {
+        status.innerText = "Please select a video.";
+        return;
+    }
+
+    status.innerText = "Uploading video...";
+
+    const filename = Date.now() + "_" + file.name;
+
+    const { data, error } = await supabase.storage
+        .from("Throw videos")
+        .upload(filename, file);
+
+    if (error) {
+        status.innerText = "Upload failed.";
+        console.error(error);
+        return;
+    }
+
+    status.innerText = "Upload successful!";
+    console.log(data);
+
+}
+</script>
