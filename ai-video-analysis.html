@@ -8,8 +8,8 @@ h1{text-align:center;color:#5ec8ff}input,button{width:100%;margin-top:16px;paddi
 <script>
 const SUPABASE_URL="https://usglrseckxwcdykrwuvh.supabase.co";
 const SUPABASE_ANON_KEY="sb_publishable_mSQ3imYCnUspBJdpl6ybQA__TdZtZ2a";
-const supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
-const videoInput=document.getElementById("videoInput");
+const { createClient } = supabase;
+const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const analyzeBtn=document.getElementById("analyzeBtn");
 const status=document.getElementById("status");
 analyzeBtn.addEventListener("click",uploadVideo);
@@ -17,12 +17,33 @@ async function uploadVideo(){
 const file=videoInput.files[0];
 if(!file){status.innerText="Please select a video.";return;}
 status.innerText="Uploading...";
-const filename=Date.now()+"_"+file.name;
-const {error}=await supabase.storage.from("Throw videos").upload(filename,file);
-if(error){console.error(error);status.innerText="Upload failed.";return;}
-const publicUrl=supabase.storage.from("Throw videos").getPublicUrl(filename).data.publicUrl;
-const {error:dbError}=await supabase.from("video_analysis").insert({video_url:publicUrl,status:"Uploaded"});
-if(dbError){console.error(dbError);status.innerText="Uploaded, DB insert failed.";return;}
-status.innerText="Upload successful!";
+const { error } = await client.storage
+  .from("Throw videos")
+  .upload(filename, file);
+
+if (error) {
+  console.error(error);
+  status.innerText = "Upload failed.";
+  return;
+}
+
+const publicUrl = client.storage
+  .from("Throw videos")
+  .getPublicUrl(filename).data.publicUrl;
+
+const { error: dbError } = await client
+  .from("video_analysis")
+  .insert({
+    video_url: publicUrl,
+    status: "Uploaded"
+  });
+
+if (dbError) {
+  console.error(dbError);
+  status.innerText = "Uploaded, DB insert failed.";
+  return;
+}
+
+status.innerText = "Upload successful!";
 }
 </script></body></html>
