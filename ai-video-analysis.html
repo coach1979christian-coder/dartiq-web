@@ -1,111 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DARTIQ AI Throw Analysis</title>
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Inter,Arial,sans-serif;
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>DARTIQ AI Video Analysis</title><style>
+body{margin:0;background:#07111f;color:#fff;font-family:Arial,sans-serif;display:flex;justify-content:center}
+.card{margin:30px;width:420px;max-width:95%;background:#101c2d;border:1px solid #1fa3ff;border-radius:20px;padding:24px;box-shadow:0 0 25px rgba(0,170,255,.35)}
+h1{text-align:center;color:#5ec8ff}input,button{width:100%;margin-top:16px;padding:14px;border-radius:12px;border:none}button{background:#0ea5ff;color:#fff;font-weight:bold;cursor:pointer}#status{margin-top:18px;text-align:center}
+</style></head><body><div class="card"><h1>DARTIQ AI Video Analysis</h1><p>Select your throw video and upload it.</p><input id="videoInput" type="file" accept="video/*"><button id="analyzeBtn">Analyze My Throw</button><div id="status">Waiting...</div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL="https://usglrseckxwcdykrwuvh.supabase.co";
+const SUPABASE_ANON_KEY="REPLACE_WITH_YOUR_PUBLISHABLE_KEY";
+const supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+const videoInput=document.getElementById("videoInput");
+const analyzeBtn=document.getElementById("analyzeBtn");
+const status=document.getElementById("status");
+analyzeBtn.addEventListener("click",uploadVideo);
+async function uploadVideo(){
+const file=videoInput.files[0];
+if(!file){status.innerText="Please select a video.";return;}
+status.innerText="Uploading...";
+const filename=Date.now()+"_"+file.name;
+const {error}=await supabase.storage.from("Throw videos").upload(filename,file);
+if(error){console.error(error);status.innerText="Upload failed.";return;}
+const publicUrl=supabase.storage.from("Throw videos").getPublicUrl(filename).data.publicUrl;
+const {error:dbError}=await supabase.from("video_analysis").insert({video_url:publicUrl,status:"Uploaded"});
+if(dbError){console.error(dbError);status.innerText="Uploaded, DB insert failed.";return;}
+status.innerText="Upload successful!";
 }
-
-body{
-background:#020814;
-color:white;
-display:flex;
-justify-content:center;
-padding:25px;
-}
-
-.container{
-width:100%;
-max-width:430px;
-}
-
-.logo{
-text-align:center;
-font-size:34px;
-font-weight:700;
-margin-bottom:10px;
-}
-
-.subtitle{
-text-align:center;
-color:#9fb8d8;
-margin-bottom:30px;
-}
-
-.card{
-background:#0b1528;
-border:1px solid rgba(0,170,255,.35);
-border-radius:22px;
-padding:22px;
-box-shadow:0 0 18px rgba(0,170,255,.18);
-margin-bottom:20px;
-}
-
-button{
-width:100%;
-padding:16px;
-border:none;
-border-radius:16px;
-background:#00A8FF;
-color:white;
-font-size:18px;
-font-weight:700;
-cursor:pointer;
-}
-
-#status{
-margin-top:20px;
-text-align:center;
-color:#8cb7ff;
-}
-
-</style>
-
-</head>
-
-<body>
-
-<div class="container">
-
-<div class="logo">
-DARTIQ
-</div>
-
-<div class="subtitle">
-AI Throw Video Analysis
-</div>
-
-<div class="card">
-
-<input
-type="file"
-id="videoInput"
-accept="video/*"
-style="width:100%;margin-bottom:20px;">
-
-<button id="analyzeBtn">
-
-Analyze My Throw
-
-</button>
-
-<div id="status">
-
-Waiting for upload...
-
-</div>
-
-</div>
-
-</div>
-
-</body>
-</html>
+</script></body></html>
