@@ -19,7 +19,9 @@ button{background:#11a8ff;color:#fff;font-weight:bold;cursor:pointer}
 <h1>DARTIQ AI Video Analysis</h1>
 <p>Select your throw video</p>
 
-<input id="videoInput" type="file" accept="video/*">
+alert(upload.error.message);
+status.innerText = upload.error.message;
+console.error(upload.error);
 
 <button id="analyzeBtn">Analyze My Throw</button>
 
