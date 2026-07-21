@@ -614,19 +614,13 @@ async function uploadVideo(
         .insert([
             {
                video_url: publicUrl,
-status:"Pose detected",
+status: "Pose detected",
 
 technique_score: analysisResult.techniqueScore,
-main_issue: analysisResult.mainIssue,
 
-frames_checked:
-    analysisResult.framesChecked,
-pose_frames:
-    analysisResult.framesWithPose,
-detection_percentage:
-    analysisResult.detectionPercentage,
-detection_quality:
-    analysisResult.quality
+main_issue: analysisResult.mainIssue
+
+   
             }
         ]);
 
