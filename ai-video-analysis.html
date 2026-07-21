@@ -393,7 +393,43 @@ async function analyzeVideo(){
         videoPreview,
         performance.now()
     );
+let techniqueScore = 0;
+let headMovement = "Unknown";
+let elbowStability = "Unknown";
+let mainIssue = "Unknown";
 
+if (result.landmarks && result.landmarks.length > 0) {
+
+    const p = result.landmarks[0];
+
+    const nose = p[0];
+    const leftShoulder = p[11];
+    const rightShoulder = p[12];
+    const leftElbow = p[13];
+    const rightElbow = p[14];
+
+    const shoulderLevel =
+        Math.abs(leftShoulder.y - rightShoulder.y);
+
+    const elbowLevel =
+        Math.abs(leftElbow.y - rightElbow.y);
+
+    techniqueScore = 100;
+
+    if (shoulderLevel > 0.05) techniqueScore -= 10;
+    if (elbowLevel > 0.07) techniqueScore -= 15;
+
+    headMovement =
+        shoulderLevel < 0.05 ? "Low" : "High";
+
+    elbowStability =
+        elbowLevel < 0.07 ? "Good" : "Poor";
+
+    if (elbowLevel > 0.07)
+        mainIssue = "Elbow Instability";
+    else
+        mainIssue = "Good Technique";
+}
     const framesChecked = 1;
 
     const framesWithPose =
@@ -416,11 +452,13 @@ async function analyzeVideo(){
     resultsElement.style.display = "block";
 
     return{
-        framesChecked,
-        framesWithPose,
-        detectionPercentage,
-        quality
-    };
+    framesChecked,
+    framesWithPose,
+    detectionPercentage,
+    quality,
+    techniqueScore,
+    mainIssue
+};
 
 }
 
@@ -575,16 +613,20 @@ async function uploadVideo(
         .from("video_analysis")
         .insert([
             {
-                video_url:publicUrl,
-                status:"Pose detected",
-                frames_checked:
-                    analysisResult.framesChecked,
-                pose_frames:
-                    analysisResult.framesWithPose,
-                detection_percentage:
-                    analysisResult.detectionPercentage,
-                detection_quality:
-                    analysisResult.quality
+               video_url: publicUrl,
+status:"Pose detected",
+
+technique_score: analysisResult.techniqueScore,
+main_issue: analysisResult.mainIssue,
+
+frames_checked:
+    analysisResult.framesChecked,
+pose_frames:
+    analysisResult.framesWithPose,
+detection_percentage:
+    analysisResult.detectionPercentage,
+detection_quality:
+    analysisResult.quality
             }
         ]);
 
