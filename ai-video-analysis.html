@@ -379,95 +379,43 @@ analyzeBtn.addEventListener(
 
 async function analyzeVideo(){
 
-    statusElement.innerText =
-        "Preparing video analysis...";
+    statusElement.innerText = "Analyzing video...";
 
     await waitForVideoMetadata();
 
-    videoPreview.pause();
+    videoPreview.currentTime = 0;
 
-    const duration =
-        videoPreview.duration;
+    await new Promise(resolve=>{
+        videoPreview.onseeked = ()=>resolve();
+    });
 
-    if(
-        !Number.isFinite(duration) ||
-        duration <= 0
-    ){
-        throw new Error(
-            "The video duration could not be read."
-        );
-    }
+    const result = poseLandmarker.detectForVideo(
+        videoPreview,
+        performance.now()
+    );
 
-    const sampleInterval =
-        0.25;
+    const framesChecked = 1;
 
-    let framesChecked = 0;
-    let framesWithPose = 0;
-
-    for(
-        let time = 0;
-        time < duration;
-        time += sampleInterval
-    ){
-
-        statusElement.innerText =
-            "Analyzing frame " +
-            (framesChecked + 1) +
-            "...";
-
-        await seekVideo(time);
-
-       const timestampMs = performance.now();
-
-        const result =
-            poseLandmarker.detectForVideo(
-                videoPreview,
-                timestampMs
-            );
-
-        framesChecked++;
-
-        if(
-            result.landmarks &&
-            result.landmarks.length > 0
-        ){
-            framesWithPose++;
-        }
-
-    }
+    const framesWithPose =
+        (result.landmarks && result.landmarks.length > 0)
+        ? 1
+        : 0;
 
     const detectionPercentage =
-        framesChecked > 0
-            ? Math.round(
-                (framesWithPose /
-                framesChecked) * 100
-            )
-            : 0;
+        framesWithPose * 100;
 
-    let quality = "Poor";
+    const quality =
+        framesWithPose
+        ? "Good"
+        : "No pose detected";
 
-    if(detectionPercentage >= 80){
-        quality = "Good";
-    }else if(detectionPercentage >= 50){
-        quality = "Usable";
-    }
+    framesCheckedElement.innerText = framesChecked;
+    poseFramesElement.innerText = framesWithPose;
+    detectionQualityElement.innerText = quality;
 
-    framesCheckedElement.innerText =
-        framesChecked;
+    resultsElement.style.display = "block";
 
-    poseFramesElement.innerText =
-        framesWithPose;
-
-    detectionQualityElement.innerText =
-        quality +
-        " (" +
-        detectionPercentage +
-        "%)";
-
-    resultsElement.style.display =
-        "block";
-
-    return {
+    return{
         framesChecked,
         framesWithPose,
         detectionPercentage,
