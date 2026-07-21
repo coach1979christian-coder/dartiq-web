@@ -417,8 +417,7 @@ async function analyzeVideo(){
 
         await seekVideo(time);
 
-        const timestampMs =
-            Math.round(time * 1000);
+       const timestampMs = performance.now();
 
         const result =
             poseLandmarker.detectForVideo(
