@@ -544,15 +544,13 @@ async function uploadVideo(file,analysisResult){
     status:finalStatus
   };
 
-  const {data:inserted,error:insertError} = await supabaseClient
-    .from(TABLE_NAME)
-    .insert(row)
-    .select()
-    .single();
+const {error:insertError} = await supabaseClient
+  .from(TABLE_NAME)
+  .insert(row);
 
-  if(insertError) throw insertError;
+if(insertError) throw insertError;
 
-  return inserted;
+return true;
 }
 
 analyzeBtn.addEventListener("click",async()=>{
