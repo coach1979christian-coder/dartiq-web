@@ -151,13 +151,27 @@ const supabaseClient = window.supabase.createClient(
 );
 
 const params = new URLSearchParams(window.location.search);
-const playerEmail = (
+
+const rawPlayerEmail = (
   params.get("email") ||
   params.get("Email") ||
   params.get("player_email") ||
   params.get("Player_Email") ||
   ""
 ).trim();
+
+const invalidEmailPlaceholders = new Set([
+  "",
+  "USER_EMAIL",
+  "EMAIL",
+  "SIGNED_IN_USER_EMAIL",
+  "null",
+  "undefined"
+]);
+
+const playerEmail = invalidEmailPlaceholders.has(rawPlayerEmail)
+  ? "coach1979christian@gmail.com"
+  : rawPlayerEmail;
 
 const videoInput = document.getElementById("videoInput");
 const videoPreview = document.getElementById("videoPreview");
@@ -544,13 +558,15 @@ async function uploadVideo(file,analysisResult){
     status:finalStatus
   };
 
-const {error:insertError} = await supabaseClient
-  .from(TABLE_NAME)
-  .insert(row);
+  const {data:inserted,error:insertError} = await supabaseClient
+    .from(TABLE_NAME)
+    .insert(row)
+    .select()
+    .single();
 
-if(insertError) throw insertError;
+  if(insertError) throw insertError;
 
-return true;
+  return inserted;
 }
 
 analyzeBtn.addEventListener("click",async()=>{
