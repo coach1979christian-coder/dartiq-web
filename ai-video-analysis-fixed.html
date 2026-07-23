@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DARTIQ AI Video Analysis</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:#06111d;
+  font-family:Arial,sans-serif;
+  color:#fff;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  min-height:100vh;
+  padding:20px 0
+}
+.card{
+  width:420px;
+  max-width:95%;
+  background:#0f1c2f;
+  border:1px solid #1ea7ff;
+  border-radius:22px;
+  padding:24px;
+  box-shadow:0 0 30px rgba(0,170,255,.35)
+}
+h1{
+  margin:0 0 8px;
+  text-align:center;
+  color:#66cfff;
+  font-size:28px
+}
+.subtitle{
+  text-align:center;
+  color:#c8d5e6;
+  margin-bottom:22px
+}
+input[type=file]{
+  width:100%;
+  padding:12px;
+  background:#091523;
+  color:#fff;
+  border:1px solid #2d4c68;
+  border-radius:12px;
+  margin-bottom:18px
+}
+video{
+  display:none;
+  width:100%;
+  max-height:440px;
+  background:#000;
+  border-radius:16px;
+  margin-bottom:18px
+}
+button{
+  width:100%;
+  border:0;
+  border-radius:14px;
+  padding:16px;
+  font-size:19px;
+  font-weight:700;
+  color:#fff;
+  background:#1478b8;
+  cursor:pointer
+}
+button:disabled{
+  opacity:.45;
+  cursor:not-allowed
+}
+.status{
+  min-height:24px;
+  margin:18px 0 0;
+  text-align:center;
+  font-size:16px;
+  font-weight:700
+}
+.error{color:#ff8383}
+.success{color:#7ee7ff}
+.results{
+  display:none;
+  margin-top:20px;
+  padding:16px;
+  border:1px solid #2c658c;
+  border-radius:16px;
+  background:#0a1727
+}
+.result-row{
+  display:flex;
+  justify-content:space-between;
+  gap:14px;
+  padding:10px 0;
+  border-bottom:1px solid rgba(255,255,255,.12)
+}
+.result-row:last-child{border-bottom:0}
+.result-label{color:#b7c6d8}
+.result-value{
+  color:#5bcaff;
+  font-weight:700;
+  text-align:right
+}
+.hidden-canvas{display:none}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>DARTIQ AI Video Analysis</h1>
+  <div class="subtitle">Select your throw video</div>
+
+  <input id="videoInput" type="file" accept="video/*">
+  <video id="videoPreview" controls playsinline preload="metadata"></video>
+
+  <button id="analyzeBtn" disabled>Analyze My Throw</button>
+  <div id="status" class="status">Loading analysis engine...</div>
+
+  <div id="results" class="results">
+    <div class="result-row">
+      <span class="result-label">Frames checked</span>
+      <span class="result-value" id="framesChecked">0</span>
+    </div>
+    <div class="result-row">
+      <span class="result-label">Pose detected</span>
+      <span class="result-value" id="poseFrames">0</span>
+    </div>
+    <div class="result-row">
+      <span class="result-label">Detection quality</span>
+      <span class="result-value" id="detectionQuality">Waiting</span>
+    </div>
+  </div>
+
+  <canvas id="analysisCanvas" class="hidden-canvas"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script type="module">
+import {
+  FilesetResolver,
+  PoseLandmarker
+} from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/+esm";
+
+const SUPABASE_URL = "https://usglrseckxwcdykrwuvh.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_mSQ3imYCnUspBJdpl6ybQA__TdZtZ2a";
+const STORAGE_BUCKET = "Throw videos";
+const TABLE_NAME = "video_analysis";
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
+
+const params = new URLSearchParams(window.location.search);
+const playerEmail = (
+  params.get("email") ||
+  params.get("Email") ||
+  params.get("player_email") ||
+  params.get("Player_Email") ||
+  ""
+).trim();
+
+const videoInput = document.getElementById("videoInput");
+const videoPreview = document.getElementById("videoPreview");
+const analyzeBtn = document.getElementById("analyzeBtn");
+const statusElement = document.getElementById("status");
+const resultsElement = document.getElementById("results");
+const framesCheckedElement = document.getElementById("framesChecked");
+const poseFramesElement = document.getElementById("poseFrames");
+const detectionQualityElement = document.getElementById("detectionQuality");
+const canvas = document.getElementById("analysisCanvas");
+const ctx = canvas.getContext("2d", { willReadFrequently:true });
+
+let poseLandmarker = null;
+let selectedFile = null;
+let selectedVideoUrl = null;
+
+function setStatus(message, type=""){
+  statusElement.textContent = message;
+  statusElement.className = "status";
+  if(type) statusElement.classList.add(type);
+}
+
+function cleanObjectUrl(){
+  if(selectedVideoUrl){
+    URL.revokeObjectURL(selectedVideoUrl);
+    selectedVideoUrl = null;
+  }
+}
+
+async function loadPoseLandmarker(){
+  try{
+    setStatus("Loading analysis engine...");
+    const vision = await FilesetResolver.forVisionTasks(
+      "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
+    );
+
+    poseLandmarker = await PoseLandmarker.createFromOptions(vision,{
+      baseOptions:{
+        modelAssetPath:
+          "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task",
+        delegate:"GPU"
+      },
+      runningMode:"VIDEO",
+      numPoses:1,
+      minPoseDetectionConfidence:0.45,
+      minPosePresenceConfidence:0.45,
+      minTrackingConfidence:0.45
+    });
+
+    setStatus("Analysis engine ready.","success");
+    if(selectedFile) analyzeBtn.disabled = false;
+  }catch(firstError){
+    try{
+      const vision = await FilesetResolver.forVisionTasks(
+        "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
+      );
+
+      poseLandmarker = await PoseLandmarker.createFromOptions(vision,{
+        baseOptions:{
+          modelAssetPath:
+            "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task"
+        },
+        runningMode:"VIDEO",
+        numPoses:1,
+        minPoseDetectionConfidence:0.4,
+        minPosePresenceConfidence:0.4,
+        minTrackingConfidence:0.4
+      });
+
+      setStatus("Analysis engine ready.","success");
+      if(selectedFile) analyzeBtn.disabled = false;
+    }catch(error){
+      console.error(error);
+      setStatus("Could not load the analysis engine.","error");
+    }
+  }
+}
+
+videoInput.addEventListener("change",()=>{
+  cleanObjectUrl();
+  selectedFile = videoInput.files?.[0] || null;
+  resultsElement.style.display = "none";
+  framesCheckedElement.textContent = "0";
+  poseFramesElement.textContent = "0";
+  detectionQualityElement.textContent = "Waiting";
+
+  if(!selectedFile){
+    videoPreview.removeAttribute("src");
+    videoPreview.style.display = "none";
+    analyzeBtn.disabled = true;
+    return;
+  }
+
+  if(!selectedFile.type.startsWith("video/")){
+    selectedFile = null;
+    videoInput.value = "";
+    videoPreview.style.display = "none";
+    analyzeBtn.disabled = true;
+    setStatus("Please select a valid video file.","error");
+    return;
+  }
+
+  selectedVideoUrl = URL.createObjectURL(selectedFile);
+  videoPreview.src = selectedVideoUrl;
+  videoPreview.style.display = "block";
+  videoPreview.load();
+
+  analyzeBtn.disabled = !poseLandmarker;
+  setStatus(
+    poseLandmarker ? "Video ready for analysis." : "Loading analysis engine..."
+  );
+});
+
+function waitForMetadata(){
+  return new Promise((resolve,reject)=>{
+    if(
+      videoPreview.readyState >= 1 &&
+      Number.isFinite(videoPreview.duration) &&
+      videoPreview.duration > 0
+    ){
+      resolve();
+      return;
+    }
+
+    const timeout = setTimeout(()=>{
+      reject(new Error("Video loading timed out."));
+    },20000);
+
+    videoPreview.addEventListener("loadedmetadata",()=>{
+      clearTimeout(timeout);
+      resolve();
+    },{once:true});
+
+    videoPreview.load();
+  });
+}
+
+function seekVideo(time){
+  return new Promise((resolve,reject)=>{
+    const timeout = setTimeout(()=>{
+      reject(new Error("Could not read a video frame."));
+    },12000);
+
+    const done = ()=>{
+      clearTimeout(timeout);
+      resolve();
+    };
+
+    videoPreview.addEventListener("seeked",done,{once:true});
+    videoPreview.currentTime = Math.min(
+      Math.max(0,time),
+      Math.max(0,videoPreview.duration - 0.02)
+    );
+  });
+}
+
+function averageVisibility(landmarks){
+  if(!Array.isArray(landmarks) || landmarks.length === 0) return 0;
+  const values = landmarks
+    .map(p=>Number.isFinite(p.visibility) ? p.visibility : 0)
+    .filter(Number.isFinite);
+  if(values.length === 0) return 0;
+  return values.reduce((a,b)=>a+b,0) / values.length;
+}
+
+function calculateTechniqueScore(poseFrames,framesChecked,visibilityTotal){
+  if(framesChecked === 0 || poseFrames === 0) return 0;
+  const poseRatio = poseFrames / framesChecked;
+  const avgVisibility = visibilityTotal / poseFrames;
+  return Math.max(
+    0,
+    Math.min(100,Math.round((poseRatio * 70) + (avgVisibility * 30)))
+  );
+}
+
+async function analyzeVideo(){
+  await waitForMetadata();
+
+  const duration = Number(videoPreview.duration);
+  if(!Number.isFinite(duration) || duration <= 0){
+    throw new Error("The selected video could not be loaded.");
+  }
+
+  canvas.width = Math.max(1, videoPreview.videoWidth);
+  canvas.height = Math.max(1, videoPreview.videoHeight);
+
+  let framesChecked = 0;
+  let framesWithPose = 0;
+  let visibilityTotal = 0;
+  let lastAnalyzedTime = -1;
+  let running = true;
+  const keypoints = [];
+  const sampleInterval = 0.45;
+  const maxFrames = 24;
+
+  videoPreview.pause();
+  videoPreview.currentTime = 0;
+  videoPreview.muted = true;
+  videoPreview.playsInline = true;
+  videoPreview.playbackRate = 1;
+
+  await new Promise((resolve, reject)=>{
+    const timeout = setTimeout(()=>{
+      running = false;
+      reject(new Error("Video analysis timed out."));
+    }, Math.max(30000, duration * 4000));
+
+    const finish = ()=>{
+      if(!running) return;
+      running = false;
+      clearTimeout(timeout);
+      videoPreview.pause();
+      resolve();
+    };
+
+    const fail = ()=>{
+      if(!running) return;
+      running = false;
+      clearTimeout(timeout);
+      reject(new Error("Could not read the video during playback."));
+    };
+
+    const analyzeCurrentFrame = ()=>{
+      if(!running) return;
+
+      const currentTime = Number(videoPreview.currentTime || 0);
+
+      if(
+        currentTime - lastAnalyzedTime >= sampleInterval &&
+        framesChecked < maxFrames &&
+        videoPreview.readyState >= 2
+      ){
+        try{
+          ctx.drawImage(
+            videoPreview,
+            0,
+            0,
+            canvas.width,
+            canvas.height
+          );
+
+          const timestampMs = Math.max(
+            1,
+            Math.round(currentTime * 1000)
+          );
+
+          const result = poseLandmarker.detectForVideo(
+            canvas,
+            timestampMs
+          );
+
+          framesChecked++;
+          lastAnalyzedTime = currentTime;
+
+          if(result.landmarks?.length){
+            framesWithPose++;
+            const landmarks = result.landmarks[0];
+            visibilityTotal += averageVisibility(landmarks);
+
+            keypoints.push({
+              frame:framesChecked,
+              time_seconds:Number(currentTime.toFixed(3)),
+              landmarks:landmarks.map((point,pointIndex)=>({
+                index:pointIndex,
+                x:Number(point.x.toFixed(6)),
+                y:Number(point.y.toFixed(6)),
+                z:Number(point.z.toFixed(6)),
+                visibility:Number((point.visibility ?? 0).toFixed(6))
+              }))
+            });
+          }
+
+          framesCheckedElement.textContent = String(framesChecked);
+          poseFramesElement.textContent = String(framesWithPose);
+          resultsElement.style.display = "block";
+          setStatus(`Analyzing frame ${framesChecked}...`);
+        }catch(error){
+          console.warn("Frame skipped:", error);
+        }
+      }
+
+      if(
+        videoPreview.ended ||
+        currentTime >= duration - 0.08 ||
+        framesChecked >= maxFrames
+      ){
+        finish();
+        return;
+      }
+
+      if(typeof videoPreview.requestVideoFrameCallback === "function"){
+        videoPreview.requestVideoFrameCallback(analyzeCurrentFrame);
+      }else{
+        requestAnimationFrame(analyzeCurrentFrame);
+      }
+    };
+
+    videoPreview.addEventListener("ended", finish, {once:true});
+    videoPreview.addEventListener("error", fail, {once:true});
+
+    videoPreview.play()
+      .then(()=>{
+        if(typeof videoPreview.requestVideoFrameCallback === "function"){
+          videoPreview.requestVideoFrameCallback(analyzeCurrentFrame);
+        }else{
+          requestAnimationFrame(analyzeCurrentFrame);
+        }
+      })
+      .catch(fail);
+  });
+
+  const detectionPercentage = framesChecked
+    ? Math.round((framesWithPose / framesChecked) * 100)
+    : 0;
+
+  let quality = "No pose detected";
+  if(detectionPercentage >= 80) quality = "Excellent";
+  else if(detectionPercentage >= 60) quality = "Good";
+  else if(detectionPercentage >= 30) quality = "Limited";
+
+  const techniqueScore = calculateTechniqueScore(
+    framesWithPose,
+    framesChecked,
+    visibilityTotal
+  );
+
+  const mainIssue = framesWithPose > 0
+    ? "Vision analysis pending"
+    : "No pose detected";
+
+  framesCheckedElement.textContent = String(framesChecked);
+  poseFramesElement.textContent = String(framesWithPose);
+  detectionQualityElement.textContent = quality;
+  resultsElement.style.display = "block";
+
+  return{
+    framesChecked,
+    framesWithPose,
+    detectionPercentage,
+    quality,
+    techniqueScore,
+    mainIssue,
+    keypoints
+  };
+}
+
+async function uploadVideo(file,analysisResult){
+  setStatus("Analysis complete. Uploading video...");
+
+  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+  const emailFolder = playerEmail
+    ? playerEmail.replace(/[^a-zA-Z0-9@._-]/g,"_")
+    : "unknown-player";
+
+  const filename = `${emailFolder}/${Date.now()}_${safeName}`;
+
+  const {error:uploadError} = await supabaseClient.storage
+    .from(STORAGE_BUCKET)
+    .upload(filename,file,{
+      cacheControl:"3600",
+      upsert:false,
+      contentType:file.type || "video/mp4"
+    });
+
+  if(uploadError) throw uploadError;
+
+  const {data:publicUrlData} = supabaseClient.storage
+    .from(STORAGE_BUCKET)
+    .getPublicUrl(filename);
+
+  const videoUrl = publicUrlData?.publicUrl;
+  if(!videoUrl) throw new Error("Could not create video URL.");
+
+  const finalStatus = analysisResult.framesWithPose > 0
+    ? "Pose detected"
+    : "No pose detected";
+
+  const detailedRow = {
+    Player_Email:playerEmail || null,
+    video_url:videoUrl,
+    technique_score:analysisResult.techniqueScore,
+    main_issue:analysisResult.mainIssue,
+    confidence_score:analysisResult.detectionPercentage,
+    status:finalStatus,
+
+    analysis_complete:true,
+    frames_checked:analysisResult.framesChecked,
+    pose_detected:analysisResult.framesWithPose,
+    detection_percentage:analysisResult.detectionPercentage,
+
+    release_frame:null,
+    release_timing:"Pending detailed motion analysis",
+    wrist_angle:null,
+    shoulder_angle:null,
+    arm_extension:null,
+    throw_consistency:null,
+    elbow_angle:null,
+    head_movement_score:null,
+    body_stability_score:null,
+    follow_through_score:null
+  };
+
+  const {error:detailedInsertError} = await supabaseClient
+    .from(TABLE_NAME)
+    .insert(detailedRow);
+
+  if(!detailedInsertError){
+    return {
+      detailedMetricsSaved:true,
+      warning:null
+    };
+  }
+
+  console.error("Detailed database insert failed:", detailedInsertError);
+
+  const coreRow = {
+    Player_Email:playerEmail || null,
+    video_url:videoUrl,
+    technique_score:analysisResult.techniqueScore,
+    main_issue:analysisResult.mainIssue,
+    confidence_score:analysisResult.detectionPercentage,
+    status:finalStatus
+  };
+
+  const {error:coreInsertError} = await supabaseClient
+    .from(TABLE_NAME)
+    .insert(coreRow);
+
+  if(coreInsertError){
+    throw new Error(
+      `Detailed insert failed: ${detailedInsertError.message}. ` +
+      `Core insert also failed: ${coreInsertError.message}`
+    );
+  }
+
+  return {
+    detailedMetricsSaved:false,
+    warning:detailedInsertError.message
+  };
+}
+
+analyzeBtn.addEventListener("click",async()=>{
+  if(!selectedFile || !poseLandmarker) return;
+
+  analyzeBtn.disabled = true;
+  videoInput.disabled = true;
+
+  try{
+    if(!playerEmail){
+      throw new Error(
+        "Player email is missing. Add ?email=SIGNED_IN_USER_EMAIL to the Glide web embed URL."
+      );
+    }
+
+    const analysisResult = await analyzeVideo();
+    const saveResult = await uploadVideo(selectedFile,analysisResult);
+
+    if(saveResult.detailedMetricsSaved){
+      setStatus("Analysis complete. Video and BV3 metrics saved.","success");
+    }else{
+      setStatus(
+        "Analysis and upload complete. Core results saved; Supabase blocked the new metric columns: " +
+        saveResult.warning,
+        "error"
+      );
+    }
+  }catch(error){
+    console.error(error);
+    setStatus(error?.message || "Analysis failed.","error");
+  }finally{
+    analyzeBtn.disabled = false;
+    videoInput.disabled = false;
+  }
+});
+
+window.addEventListener("beforeunload",cleanObjectUrl);
+
+loadPoseLandmarker();
+</script>
+</body>
+</html>
