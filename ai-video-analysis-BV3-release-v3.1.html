@@ -317,21 +317,18 @@ function waitForMetadata(){
 }
 
 function seekVideo(time){
-  return new Promise((resolve,reject)=>{
-    const timeout = setTimeout(()=>{
-      reject(new Error("Could not read a video frame."));
-    },12000);
-
-    const done = ()=>{
-      clearTimeout(timeout);
+  return new Promise((resolve)=>{
+    const target=Math.min(Math.max(0,time),Math.max(0,videoPreview.duration-0.02));
+    let finished=false;
+    const done=()=>{
+      if(finished) return;
+      finished=true;
+      videoPreview.removeEventListener("seeked",done);
       resolve();
     };
-
-    videoPreview.addEventListener("seeked",done,{once:true});
-    videoPreview.currentTime = Math.min(
-      Math.max(0,time),
-      Math.max(0,videoPreview.duration - 0.02)
-    );
+    videoPreview.addEventListener("seeked",done);
+    videoPreview.currentTime=target;
+    setTimeout(done,250);
   });
 }
 
@@ -479,7 +476,7 @@ async function analyzeVideo(){
   videoPreview.pause();
   for(let t=0;t<=duration&&framesChecked<maxFrames;t+=sampleInterval){
     await seekVideo(t);
-    if(videoPreview.readyState<2) continue;
+    if(videoPreview.readyState<2){ await new Promise(r=>setTimeout(r,20)); continue; }
     try{
       ctx.drawImage(videoPreview,0,0,canvas.width,canvas.height);
       const result=poseLandmarker.detectForVideo(canvas,Math.max(1,Math.round(videoPreview.currentTime*1000)));
