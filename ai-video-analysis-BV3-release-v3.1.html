@@ -431,19 +431,20 @@ function detectReleasePoint(keypoints){
     };
   }
 
-  let peak=velocitySamples[0];
-  for(const sample of velocitySamples){
-    if(sample.velocity>peak.velocity) peak=sample;
+  const scored=[];
+  for(let i=2;i<velocitySamples.length-2;i++){
+    const prev=velocitySamples[i-1],cur=velocitySamples[i],nxt=velocitySamples[i+1];
+    const accel=cur.velocity-prev.velocity;
+    const decel=cur.velocity-nxt.velocity;
+    const score=(cur.velocity*0.5)+(Math.max(accel,0)*0.35)+(Math.max(decel,0)*0.15)+(cur.visibility*100);
+    scored.push({...cur,score});
   }
-
-  const sorted=velocitySamples.map(s=>s.velocity).sort((a,b)=>a-b);
-  const median=sorted[Math.floor(sorted.length/2)]||0;
-  const velocityRatio=median>0 ? peak.velocity/median : 0;
-
-  let confidence="Low";
-  if(peak.visibility>=0.75 && velocityRatio>=1.8) confidence="High";
-  else if(peak.visibility>=0.5 && velocityRatio>=1.35) confidence="Medium";
-
+  if(!scored.length){return {releaseFrame:null,releaseTimeMs:null,releaseConfidence:"Low",throwingArm:arm.side,peakVelocity:0};}
+  scored.sort((a,b)=>b.score-a.score);
+  const peak=scored[0];
+  let confidence="Medium";
+  if(peak.visibility>0.75) confidence="High";
+  if(peak.visibility<0.5) confidence="Low";
   return {
     releaseFrame:peak.frame,
     releaseTimeMs:Math.round(peak.timeSeconds*1000),
