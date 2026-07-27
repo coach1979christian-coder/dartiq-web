@@ -758,14 +758,14 @@ async function uploadVideo(file,analysisResult){
     release_time_ms:analysisResult.releaseTimeMs,
     release_confidence:analysisResult.releaseConfidence,
     release_timing:`${analysisResult.releaseTimeMs} ms`,
-    wrist_angle:null,
-    shoulder_angle:null,
-    arm_extension:null,
-    throw_consistency:null,
-    elbow_angle:null,
-    head_movement_score:null,
-    body_stability_score:null,
-    follow_through_score:null
+wrist_angle:analysisResult.wristAngle,
+shoulder_angle:analysisResult.shoulderAngle,
+arm_extension:analysisResult.armExtension,
+throw_consistency:analysisResult.throwConsistency,
+elbow_angle:analysisResult.elbowAngle,
+head_movement_score:analysisResult.headMovementScore,
+body_stability_score:analysisResult.bodyStabilityScore,
+follow_through_score:analysisResult.followThroughScore
   };
 
   const {data:savedRows,error:insertError} = await supabaseClient
