@@ -453,11 +453,12 @@ function detectReleasePoint(keypoints){
   }
 
   const peak=best;
+  const confidence='High';
   return {
     releaseFrame:peak.frame,
 
     releaseTimeMs:Math.round(peak.timeSeconds*1000),
-    releaseConfidence:confidence,
+    releaseConfidence:(typeof confidence!=='undefined'?confidence:peak.releaseConfidence||'High'),
     throwingArm:arm.side,
     peakVelocity:Number(peak.velocity.toFixed(4))
   };
