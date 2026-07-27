@@ -727,25 +727,38 @@ async function analyzeVideo(){
     try{
       ctx.drawImage(videoPreview,0,0,canvas.width,canvas.height);
       const result=poseLandmarker.detectForVideo(canvas,Math.max(1,Math.round(videoPreview.currentTime*1000)));
-      framesChecked++;
-      if(result.landmarks?.length){
-        framesWithPose++;
-        const landmarks=result.landmarks[0];
-        visibilityTotal+=averageVisibility(landmarks);
-        keypoints.push({frame:framesChecked,time_seconds:Number(videoPreview.currentTime.toFixed(3)),landmarks});
-      }
-      framesCheckedElement.textContent=String(framesChecked);
-      poseFramesElement.textContent=String(framesWithPose);
-      resultsElement.style.display="block";
-    }catch(e){
-      console.warn("Frame skipped",e);
-    }
-  }
-  const detectionPercentage=framesChecked?Math.round((framesWithPose/framesChecked)*100):0;
-  let quality="No pose detected";
-  if(detectionPercentage>=80) quality="Excellent";
-  else if(detectionPercentage>=60) quality="Good";
-  else if(detectionPercentage>=30) quality="Limited";
+  729  const result = poseLandmarker.detectForVideo(
+         canvas,
+         Math.max(1, Math.round(videoPreview.currentTime * 1000))
+     );
+
+730  if (result.landmarks?.length) {
+
+731      skeletonCtx.clearRect(
+732          0,
+733          0,
+734          skeletonCanvas.width,
+735          skeletonCanvas.height
+736      );
+
+737      const nose = result.landmarks[0][0];
+
+738      skeletonCtx.beginPath();
+
+739      skeletonCtx.arc(
+740          nose.x * skeletonCanvas.width,
+741          nose.y * skeletonCanvas.height,
+742          8,
+743          0,
+744          Math.PI * 2
+745      );
+
+746      skeletonCtx.fillStyle = "#3B47C6";
+747      skeletonCtx.fill();
+
+748  }
+
+749  framesChecked++;
   const techniqueScore=calculateTechniqueScore(framesWithPose,framesChecked,visibilityTotal);
   const release=detectReleasePoint(keypoints);
   const biomechanics=calculateBiomechanics(keypoints,release);
