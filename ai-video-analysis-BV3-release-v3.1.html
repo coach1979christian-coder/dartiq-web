@@ -450,15 +450,133 @@ function detectReleasePoint(keypoints){
   if(selected.visibility>=0.70 && ratio>=1.60) releaseConfidence="High";
   else if(selected.visibility>=0.45 && ratio>=1.25) releaseConfidence="Medium";
 
-  return {
+ return {
     releaseFrame:selected.frame,
     releaseTimeMs:Math.round(selected.timeSeconds*1000),
     releaseConfidence,
     throwingArm:arm.side,
     peakVelocity:Number(velocitySamples[bestIndex].velocity.toFixed(4))
-  };
+};
 }
 
+function angle3Points(a,b,c){
+  if(!a||!b||!c) return null;
+
+  const abx=a.x-b.x;
+  const aby=a.y-b.y;
+  const cbx=c.x-b.x;
+  const cby=c.y-b.y;
+
+  const dot=abx*cbx+aby*cby;
+  const mag1=Math.hypot(abx,aby);
+  const mag2=Math.hypot(cbx,cby);
+
+  if(mag1===0||mag2===0) return null;
+
+  const cos=Math.max(-1,Math.min(1,dot/(mag1*mag2)));
+  return Math.acos(cos)*180/Math.PI;
+}
+
+function calculateElbowAngle(frame,arm){
+  return angle3Points(
+    frame.landmarks[arm.shoulderIndex],
+    frame.landmarks[arm.elbowIndex],
+    frame.landmarks[arm.wristIndex]
+  );
+}
+
+function calculateShoulderAngle(frame,arm){
+  const hipIndex=arm.side==="Right"?24:23;
+
+  return angle3Points(
+    frame.landmarks[hipIndex],
+    frame.landmarks[arm.shoulderIndex],
+    frame.landmarks[arm.elbowIndex]
+  );
+}
+
+function calculateWristAngle(frame,arm){
+  const handIndex=arm.side==="Right"?20:19;
+
+  return angle3Points(
+    frame.landmarks[arm.elbowIndex],
+    frame.landmarks[arm.wristIndex],
+    frame.landmarks[handIndex]
+  );
+}
+
+function calculateArmExtension(frame,arm){
+  return pointDistance(
+    frame.landmarks[arm.shoulderIndex],
+    frame.landmarks[arm.wristIndex]
+  );
+}
+
+function calculateHeadMovement(keypoints){
+  if(keypoints.length<2) return 100;
+
+  let total=0;
+
+  for(let i=1;i<keypoints.length;i++){
+    total+=pointDistance(
+      keypoints[i-1].landmarks[0],
+      keypoints[i].landmarks[0]
+    );
+  }
+
+  return Math.max(0,Math.min(100,Math.round(100-(total/(keypoints.length-1))*900)));
+}
+
+function calculateBodyStability(keypoints){
+  if(keypoints.length<2) return 100;
+
+  let total=0;
+
+  for(let i=1;i<keypoints.length;i++){
+
+    const p1={
+      x:(keypoints[i-1].landmarks[11].x+keypoints[i-1].landmarks[12].x)/2,
+      y:(keypoints[i-1].landmarks[11].y+keypoints[i-1].landmarks[12].y)/2
+    };
+
+    const p2={
+      x:(keypoints[i].landmarks[11].x+keypoints[i].landmarks[12].x)/2,
+      y:(keypoints[i].landmarks[11].y+keypoints[i].landmarks[12].y)/2
+    };
+
+    total+=pointDistance(p1,p2);
+  }
+
+  return Math.max(0,Math.min(100,Math.round(100-(total/(keypoints.length-1))*750)));
+}
+
+function calculateThrowConsistency(values){
+  if(values.length<2) return 100;
+
+  const mean=values.reduce((a,b)=>a+b,0)/values.length;
+  const variance=values.reduce((s,v)=>s+(v-mean)*(v-mean),0)/values.length;
+  const std=Math.sqrt(variance);
+
+  return Math.max(0,Math.min(100,Math.round(100-std*2)));
+}
+
+function calculateFollowThrough(keypoints,releaseFrame,arm){
+
+  if(releaseFrame===null) return null;
+
+  const idx=keypoints.findIndex(f=>f.frame===releaseFrame);
+  if(idx<0) return null;
+
+  const start=calculateElbowAngle(keypoints[idx],arm);
+  const finish=calculateElbowAngle(
+    keypoints[Math.min(idx+6,keypoints.length-1)],
+    arm
+  );
+
+  if(start===null||finish===null) return null;
+
+  return Math.max(0,Math.min(100,Math.round(100-Math.abs(finish-start))));
+}
 async function analyzeVideo(){
   await waitForMetadata();
   const duration=Number(videoPreview.duration);
@@ -466,7 +584,14 @@ async function analyzeVideo(){
   canvas.width=Math.max(1,videoPreview.videoWidth);
   canvas.height=Math.max(1,videoPreview.videoHeight);
   let framesChecked=0,framesWithPose=0,visibilityTotal=0;
-  const keypoints=[];
+ const keypoints=[];
+
+const armMetrics={
+  elbowAngles:[],
+  shoulderAngles:[],
+  wristAngles:[],
+  armExtensions:[]
+};
   const sampleInterval=0.10;
   const maxFrames=90;
   videoPreview.pause();
@@ -482,7 +607,19 @@ async function analyzeVideo(){
         const landmarks=result.landmarks[0];
         visibilityTotal+=averageVisibility(landmarks);
         keypoints.push({frame:framesChecked,time_seconds:Number(videoPreview.currentTime.toFixed(3)),landmarks});
-      }
+      }const arm=detectThrowingArm(keypoints);
+
+const currentFrame=keypoints[keypoints.length-1];
+
+const elbow=calculateElbowAngle(currentFrame,arm);
+const shoulder=calculateShoulderAngle(currentFrame,arm);
+const wrist=calculateWristAngle(currentFrame,arm);
+const extension=calculateArmExtension(currentFrame,arm);
+
+if(elbow!==null) armMetrics.elbowAngles.push(elbow);
+if(shoulder!==null) armMetrics.shoulderAngles.push(shoulder);
+if(wrist!==null) armMetrics.wristAngles.push(wrist);
+if(extension!==null) armMetrics.armExtensions.push(extension);
       framesCheckedElement.textContent=String(framesChecked);
       poseFramesElement.textContent=String(framesWithPose);
       resultsElement.style.display="block";
@@ -497,7 +634,57 @@ async function analyzeVideo(){
   else if(detectionPercentage>=30) quality="Limited";
   const techniqueScore=calculateTechniqueScore(framesWithPose,framesChecked,visibilityTotal);
   const release=detectReleasePoint(keypoints);
+const arm=detectThrowingArm(keypoints);
 
+const elbowAverage =
+  armMetrics.elbowAngles.length
+    ? Math.round(
+        armMetrics.elbowAngles.reduce((a,b)=>a+b,0) /
+        armMetrics.elbowAngles.length
+      )
+    : null;
+
+const shoulderAverage =
+  armMetrics.shoulderAngles.length
+    ? Math.round(
+        armMetrics.shoulderAngles.reduce((a,b)=>a+b,0) /
+        armMetrics.shoulderAngles.length
+      )
+    : null;
+
+const wristAverage =
+  armMetrics.wristAngles.length
+    ? Math.round(
+        armMetrics.wristAngles.reduce((a,b)=>a+b,0) /
+        armMetrics.wristAngles.length
+      )
+    : null;
+
+const extensionAverage =
+  armMetrics.armExtensions.length
+    ? Number(
+        (
+          armMetrics.armExtensions.reduce((a,b)=>a+b,0) /
+          armMetrics.armExtensions.length
+        ).toFixed(3)
+      )
+    : null;
+
+const throwConsistency =
+  calculateThrowConsistency(armMetrics.elbowAngles);
+
+const headMovementScore =
+  calculateHeadMovement(keypoints);
+
+const bodyStabilityScore =
+  calculateBodyStability(keypoints);
+
+const followThroughScore =
+  calculateFollowThrough(
+    keypoints,
+    release.releaseFrame,
+    arm
+  );
   detectionQualityElement.textContent=quality;
   releaseFrameElement.textContent=release.releaseFrame ?? "Not detected";
   releaseTimeElement.textContent=release.releaseTimeMs !== null
