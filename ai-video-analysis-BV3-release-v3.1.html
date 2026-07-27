@@ -99,6 +99,30 @@ button:disabled{
   color:#5bcaff;
   font-weight:700;
   text-align:right
+}.video-stage{
+  position:relative;
+  width:100%;
+  margin-top:14px;
+  overflow:hidden;
+  border-radius:14px;
+  background:#000;
+}
+
+.video-stage video{
+  display:block;
+  width:100%;
+  height:auto;
+  margin:0;
+  border-radius:14px;
+}
+
+#skeletonCanvas{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:2;
 }
 .hidden-canvas{display:none}
 </style>
@@ -109,8 +133,18 @@ button:disabled{
   <div id="buildVersion" style="font-size:12px;opacity:.72;margin-top:4px">BV3 RELEASE ENGINE v3.7 BIOMECHANICS</div>
   <div class="subtitle">Select your throw video</div>
 
-  <input id="videoInput" type="file" accept="video/*">
-  <video id="videoPreview" controls playsinline preload="metadata"></video>
+ <input id="videoInput" type="file" accept="video/*">
+
+<div class="video-stage">
+  <video
+    id="videoPreview"
+    controls
+    playsinline
+    preload="metadata"
+  ></video>
+
+  <canvas id="skeletonCanvas"></canvas>
+</div>
 
   <button id="analyzeBtn" disabled>Analyze My Throw</button>
   <div id="status" class="status">Loading analysis engine...</div>
@@ -176,6 +210,8 @@ const playerEmail = (
 
 const videoInput = document.getElementById("videoInput");
 const videoPreview = document.getElementById("videoPreview");
+const skeletonCanvas = document.getElementById("skeletonCanvas");
+const skeletonCtx = skeletonCanvas.getContext("2d");
 const analyzeBtn = document.getElementById("analyzeBtn");
 const statusElement = document.getElementById("status");
 const resultsElement = document.getElementById("results");
@@ -308,13 +344,15 @@ function waitForMetadata(){
     },20000);
 
     videoPreview.addEventListener("loadedmetadata",()=>{
-      clearTimeout(timeout);
-      resolve();
-    },{once:true});
 
-    videoPreview.load();
-  });
-}
+    skeletonCanvas.width = videoPreview.videoWidth;
+    skeletonCanvas.height = videoPreview.videoHeight;
+
+    clearTimeout(timeout);
+    resolve();
+
+},{once:true});
+
 
 function seekVideo(time){
   return new Promise((resolve,reject)=>{
