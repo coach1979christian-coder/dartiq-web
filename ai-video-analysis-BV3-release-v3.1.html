@@ -726,8 +726,8 @@ async function analyzeVideo(){
     if(videoPreview.readyState<2) continue;
     try{
       ctx.drawImage(videoPreview,0,0,canvas.width,canvas.height);
-      const result=poseLandmarker.detectForVideo(canvas,Math.max(1,Math.round(videoPreview.currentTime*1000)));
-  729  const result = poseLandmarker.detectForVideo(
+    
+  const result = poseLandmarker.detectForVideo(
          canvas,
          Math.max(1, Math.round(videoPreview.currentTime * 1000))
      );
