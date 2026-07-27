@@ -106,7 +106,7 @@ button:disabled{
 <body>
 <div class="card">
   <h1>DARTIQ AI Video Analysis</h1>
-  <div id="buildVersion" style="font-size:12px;opacity:.72;margin-top:4px">BV3 RELEASE ENGINE v3.1</div>
+  <div id="buildVersion" style="font-size:12px;opacity:.72;margin-top:4px">BV3 RELEASE ENGINE v3.6</div>
   <div class="subtitle">Select your throw video</div>
 
   <input id="videoInput" type="file" accept="video/*">
@@ -156,7 +156,7 @@ import {
 const SUPABASE_URL = "https://usglrseckxwcdykrwuvh.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_mSQ3imYCnUspBJdpl6ybQA__TdZtZ2a";
 const STORAGE_BUCKET = "Throw videos";
-const BUILD_VERSION = "BV3-RELEASE-v3.1-2026-07-27";
+const BUILD_VERSION = "BV3-RELEASE-v3.6-2026-07-27";
 console.info(BUILD_VERSION);
 const TABLE_NAME = "video_analysis";
 
@@ -317,18 +317,21 @@ function waitForMetadata(){
 }
 
 function seekVideo(time){
-  return new Promise((resolve)=>{
-    const target=Math.min(Math.max(0,time),Math.max(0,videoPreview.duration-0.02));
-    let finished=false;
-    const done=()=>{
-      if(finished) return;
-      finished=true;
-      videoPreview.removeEventListener("seeked",done);
+  return new Promise((resolve,reject)=>{
+    const timeout = setTimeout(()=>{
+      reject(new Error("Could not read a video frame."));
+    },12000);
+
+    const done = ()=>{
+      clearTimeout(timeout);
       resolve();
     };
-    videoPreview.addEventListener("seeked",done);
-    videoPreview.currentTime=target;
-    setTimeout(done,250);
+
+    videoPreview.addEventListener("seeked",done,{once:true});
+    videoPreview.currentTime = Math.min(
+      Math.max(0,time),
+      Math.max(0,videoPreview.duration - 0.02)
+    );
   });
 }
 
@@ -381,7 +384,7 @@ function detectThrowingArm(keypoints){
 }
 
 function detectReleasePoint(keypoints){
-  if(!Array.isArray(keypoints) || keypoints.length<3){
+  if(!Array.isArray(keypoints) || keypoints.length<5){
     return {
       releaseFrame:null,
       releaseTimeMs:null,
@@ -399,26 +402,19 @@ function detectReleasePoint(keypoints){
     const current=keypoints[i];
     const previousWrist=previous.landmarks?.[arm.wristIndex];
     const currentWrist=current.landmarks?.[arm.wristIndex];
-
     if(!previousWrist || !currentWrist) continue;
 
     const dt=Math.max(0.001,current.time_seconds-previous.time_seconds);
-    const velocity=pointDistance(previousWrist,currentWrist)/dt;
-    const visibility=Math.min(
-      Number(previousWrist.visibility||0),
-      Number(currentWrist.visibility||0)
-    );
-
     velocitySamples.push({
       index:i,
-      velocity,
-      visibility,
+      velocity:pointDistance(previousWrist,currentWrist)/dt,
+      visibility:Math.min(Number(previousWrist.visibility||0),Number(currentWrist.visibility||0)),
       frame:current.frame,
       timeSeconds:current.time_seconds
     });
   }
 
-  if(!velocitySamples.length){
+  if(velocitySamples.length<5){
     return {
       releaseFrame:null,
       releaseTimeMs:null,
@@ -428,39 +424,38 @@ function detectReleasePoint(keypoints){
     };
   }
 
-  
-  let best=velocitySamples[0];
-  let bestScore=-1;
+  let bestIndex=2;
+  let bestScore=-Infinity;
 
   for(let i=2;i<velocitySamples.length-2;i++){
-    const prev=velocitySamples[i-1];
-    const cur=velocitySamples[i];
-    const nxt=velocitySamples[i+1];
-
-    const accel=cur.velocity-prev.velocity;
-    const decel=cur.velocity-nxt.velocity;
-
-    const score=
-      (cur.velocity*0.45)+
-      (Math.max(0,accel)*0.35)+
-      (Math.max(0,decel)*0.20)+
-      (cur.visibility*10);
-
+    const before=velocitySamples[i-1];
+    const current=velocitySamples[i];
+    const after=velocitySamples[i+1];
+    const acceleration=current.velocity-before.velocity;
+    const deceleration=current.velocity-after.velocity;
+    const score=(current.velocity*0.50)+(Math.max(0,acceleration)*0.30)+(Math.max(0,deceleration)*0.20)+(current.visibility*0.05);
     if(score>bestScore){
       bestScore=score;
-      best=prev;
+      bestIndex=i;
     }
   }
 
-  const peak=best;
-  const confidence='High';
-  return {
-    releaseFrame:peak.frame,
+  const selectedIndex=Math.max(0,bestIndex-1);
+  const selected=velocitySamples[selectedIndex];
+  const velocities=velocitySamples.map(sample=>sample.velocity).sort((a,b)=>a-b);
+  const median=velocities[Math.floor(velocities.length/2)]||0;
+  const ratio=median>0 ? velocitySamples[bestIndex].velocity/median : 0;
 
-    releaseTimeMs:Math.round(peak.timeSeconds*1000),
-    releaseConfidence:(typeof confidence!=='undefined'?confidence:peak.releaseConfidence||'High'),
+  let releaseConfidence="Low";
+  if(selected.visibility>=0.70 && ratio>=1.60) releaseConfidence="High";
+  else if(selected.visibility>=0.45 && ratio>=1.25) releaseConfidence="Medium";
+
+  return {
+    releaseFrame:selected.frame,
+    releaseTimeMs:Math.round(selected.timeSeconds*1000),
+    releaseConfidence,
     throwingArm:arm.side,
-    peakVelocity:Number(peak.velocity.toFixed(4))
+    peakVelocity:Number(velocitySamples[bestIndex].velocity.toFixed(4))
   };
 }
 
@@ -477,7 +472,7 @@ async function analyzeVideo(){
   videoPreview.pause();
   for(let t=0;t<=duration&&framesChecked<maxFrames;t+=sampleInterval){
     await seekVideo(t);
-    if(videoPreview.readyState<2){ await new Promise(r=>setTimeout(r,20)); continue; }
+    if(videoPreview.readyState<2) continue;
     try{
       ctx.drawImage(videoPreview,0,0,canvas.width,canvas.height);
       const result=poseLandmarker.detectForVideo(canvas,Math.max(1,Math.round(videoPreview.currentTime*1000)));
