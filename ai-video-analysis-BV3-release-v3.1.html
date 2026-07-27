@@ -106,7 +106,7 @@ button:disabled{
 <body>
 <div class="card">
   <h1>DARTIQ AI Video Analysis</h1>
-  <div id="buildVersion" style="font-size:12px;opacity:.72;margin-top:4px">BV3 RELEASE ENGINE v3.6</div>
+  <div id="buildVersion" style="font-size:12px;opacity:.72;margin-top:4px">BV3 RELEASE ENGINE v3.7 BIOMECHANICS</div>
   <div class="subtitle">Select your throw video</div>
 
   <input id="videoInput" type="file" accept="video/*">
@@ -156,7 +156,7 @@ import {
 const SUPABASE_URL = "https://usglrseckxwcdykrwuvh.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_mSQ3imYCnUspBJdpl6ybQA__TdZtZ2a";
 const STORAGE_BUCKET = "Throw videos";
-const BUILD_VERSION = "BV3-RELEASE-v3.6-2026-07-27";
+const BUILD_VERSION = "BV3-RELEASE-v3.7-BIOMECHANICS-2026-07-27";
 console.info(BUILD_VERSION);
 const TABLE_NAME = "video_analysis";
 
@@ -384,7 +384,7 @@ function detectThrowingArm(keypoints){
 }
 
 function detectReleasePoint(keypoints){
-  if(!Array.isArray(keypoints) || keypoints.length<5){
+  if(!Array.isArray(keypoints) || keypoints.length<3){
     return {
       releaseFrame:null,
       releaseTimeMs:null,
@@ -402,19 +402,26 @@ function detectReleasePoint(keypoints){
     const current=keypoints[i];
     const previousWrist=previous.landmarks?.[arm.wristIndex];
     const currentWrist=current.landmarks?.[arm.wristIndex];
+
     if(!previousWrist || !currentWrist) continue;
 
     const dt=Math.max(0.001,current.time_seconds-previous.time_seconds);
+    const velocity=pointDistance(previousWrist,currentWrist)/dt;
+    const visibility=Math.min(
+      Number(previousWrist.visibility||0),
+      Number(currentWrist.visibility||0)
+    );
+
     velocitySamples.push({
       index:i,
-      velocity:pointDistance(previousWrist,currentWrist)/dt,
-      visibility:Math.min(Number(previousWrist.visibility||0),Number(currentWrist.visibility||0)),
+      velocity,
+      visibility,
       frame:current.frame,
       timeSeconds:current.time_seconds
     });
   }
 
-  if(velocitySamples.length<5){
+  if(!velocitySamples.length){
     return {
       releaseFrame:null,
       releaseTimeMs:null,
@@ -424,159 +431,247 @@ function detectReleasePoint(keypoints){
     };
   }
 
-  let bestIndex=2;
-  let bestScore=-Infinity;
-
-  for(let i=2;i<velocitySamples.length-2;i++){
-    const before=velocitySamples[i-1];
-    const current=velocitySamples[i];
-    const after=velocitySamples[i+1];
-    const acceleration=current.velocity-before.velocity;
-    const deceleration=current.velocity-after.velocity;
-    const score=(current.velocity*0.50)+(Math.max(0,acceleration)*0.30)+(Math.max(0,deceleration)*0.20)+(current.visibility*0.05);
-    if(score>bestScore){
-      bestScore=score;
-      bestIndex=i;
-    }
+  let peak=velocitySamples[0];
+  for(const sample of velocitySamples){
+    if(sample.velocity>peak.velocity) peak=sample;
   }
 
-  const selectedIndex=Math.max(0,bestIndex-1);
-  const selected=velocitySamples[selectedIndex];
-  const velocities=velocitySamples.map(sample=>sample.velocity).sort((a,b)=>a-b);
-  const median=velocities[Math.floor(velocities.length/2)]||0;
-  const ratio=median>0 ? velocitySamples[bestIndex].velocity/median : 0;
+  const sorted=velocitySamples.map(s=>s.velocity).sort((a,b)=>a-b);
+  const median=sorted[Math.floor(sorted.length/2)]||0;
+  const velocityRatio=median>0 ? peak.velocity/median : 0;
 
-  let releaseConfidence="Low";
-  if(selected.visibility>=0.70 && ratio>=1.60) releaseConfidence="High";
-  else if(selected.visibility>=0.45 && ratio>=1.25) releaseConfidence="Medium";
+  let confidence="Low";
+  if(peak.visibility>=0.75 && velocityRatio>=1.8) confidence="High";
+  else if(peak.visibility>=0.5 && velocityRatio>=1.35) confidence="Medium";
 
- return {
-    releaseFrame:selected.frame,
-    releaseTimeMs:Math.round(selected.timeSeconds*1000),
-    releaseConfidence,
+  return {
+    releaseFrame:peak.frame,
+    releaseTimeMs:Math.round(peak.timeSeconds*1000),
+    releaseConfidence:confidence,
     throwingArm:arm.side,
-    peakVelocity:Number(velocitySamples[bestIndex].velocity.toFixed(4))
-};
+    peakVelocity:Number(peak.velocity.toFixed(4))
+  };
 }
 
-function angle3Points(a,b,c){
-  if(!a||!b||!c) return null;
+
+function clamp(value,min,max){
+  return Math.max(min,Math.min(max,value));
+}
+
+function landmarkVisible(point,minVisibility=0.35){
+  return Boolean(
+    point &&
+    Number.isFinite(point.x) &&
+    Number.isFinite(point.y) &&
+    Number(point.visibility ?? 1) >= minVisibility
+  );
+}
+
+function angleAtPoint(a,b,c){
+  if(!landmarkVisible(a) || !landmarkVisible(b) || !landmarkVisible(c)) return null;
 
   const abx=a.x-b.x;
   const aby=a.y-b.y;
   const cbx=c.x-b.x;
   const cby=c.y-b.y;
+  const magnitudeAB=Math.hypot(abx,aby);
+  const magnitudeCB=Math.hypot(cbx,cby);
 
-  const dot=abx*cbx+aby*cby;
-  const mag1=Math.hypot(abx,aby);
-  const mag2=Math.hypot(cbx,cby);
+  if(magnitudeAB<1e-6 || magnitudeCB<1e-6) return null;
 
-  if(mag1===0||mag2===0) return null;
-
-  const cos=Math.max(-1,Math.min(1,dot/(mag1*mag2)));
-  return Math.acos(cos)*180/Math.PI;
-}
-
-function calculateElbowAngle(frame,arm){
-  return angle3Points(
-    frame.landmarks[arm.shoulderIndex],
-    frame.landmarks[arm.elbowIndex],
-    frame.landmarks[arm.wristIndex]
+  const cosine=clamp(
+    ((abx*cbx)+(aby*cby))/(magnitudeAB*magnitudeCB),
+    -1,
+    1
   );
+
+  return Math.acos(cosine)*(180/Math.PI);
 }
 
-function calculateShoulderAngle(frame,arm){
-  const hipIndex=arm.side==="Right"?24:23;
-
-  return angle3Points(
-    frame.landmarks[hipIndex],
-    frame.landmarks[arm.shoulderIndex],
-    frame.landmarks[arm.elbowIndex]
-  );
+function mean(values){
+  const valid=values.filter(Number.isFinite);
+  if(!valid.length) return null;
+  return valid.reduce((sum,value)=>sum+value,0)/valid.length;
 }
 
-function calculateWristAngle(frame,arm){
-  const handIndex=arm.side==="Right"?20:19;
-
-  return angle3Points(
-    frame.landmarks[arm.elbowIndex],
-    frame.landmarks[arm.wristIndex],
-    frame.landmarks[handIndex]
-  );
+function standardDeviation(values){
+  const valid=values.filter(Number.isFinite);
+  if(valid.length<2) return 0;
+  const avg=mean(valid);
+  const variance=valid.reduce(
+    (sum,value)=>sum+Math.pow(value-avg,2),
+    0
+  )/valid.length;
+  return Math.sqrt(variance);
 }
 
-function calculateArmExtension(frame,arm){
-  return pointDistance(
-    frame.landmarks[arm.shoulderIndex],
-    frame.landmarks[arm.wristIndex]
-  );
+function median(values){
+  const valid=values.filter(Number.isFinite).sort((a,b)=>a-b);
+  if(!valid.length) return null;
+  const middle=Math.floor(valid.length/2);
+  return valid.length%2
+    ? valid[middle]
+    : (valid[middle-1]+valid[middle])/2;
 }
 
-function calculateHeadMovement(keypoints){
-  if(keypoints.length<2) return 100;
+function frameShoulderWidth(frame){
+  const left=frame?.landmarks?.[11];
+  const right=frame?.landmarks?.[12];
+  if(!landmarkVisible(left) || !landmarkVisible(right)) return null;
+  const width=pointDistance(left,right);
+  return width>1e-5 ? width : null;
+}
 
-  let total=0;
+function getArmFrameMetrics(frame,arm){
+  const landmarks=frame?.landmarks;
+  if(!landmarks) return null;
 
-  for(let i=1;i<keypoints.length;i++){
-    total+=pointDistance(
-      keypoints[i-1].landmarks[0],
-      keypoints[i].landmarks[0]
-    );
+  const shoulder=landmarks[arm.shoulderIndex];
+  const elbow=landmarks[arm.elbowIndex];
+  const wrist=landmarks[arm.wristIndex];
+  const hipIndex=arm.side==="Right" ? 24 : 23;
+  const handIndex=arm.side==="Right" ? 20 : 19;
+  const hip=landmarks[hipIndex];
+  const hand=landmarks[handIndex];
+
+  const elbowAngle=angleAtPoint(shoulder,elbow,wrist);
+  const shoulderAngle=angleAtPoint(hip,shoulder,elbow);
+  const wristAngle=angleAtPoint(elbow,wrist,hand);
+  const armExtension=Number.isFinite(elbowAngle)
+    ? clamp((elbowAngle/180)*100,0,100)
+    : null;
+
+  return {
+    elbowAngle,
+    shoulderAngle,
+    wristAngle,
+    armExtension
+  };
+}
+
+function movementScore(keypoints,landmarkIndexes,multiplier){
+  if(!Array.isArray(keypoints) || keypoints.length<2) return null;
+
+  const normalizedMovements=[];
+
+  for(let index=1;index<keypoints.length;index++){
+    const previous=keypoints[index-1];
+    const current=keypoints[index];
+    const previousScale=frameShoulderWidth(previous);
+    const currentScale=frameShoulderWidth(current);
+    const scale=median([previousScale,currentScale]);
+    if(!Number.isFinite(scale) || scale<=0) continue;
+
+    const movements=[];
+    for(const landmarkIndex of landmarkIndexes){
+      const before=previous.landmarks?.[landmarkIndex];
+      const after=current.landmarks?.[landmarkIndex];
+      if(!landmarkVisible(before) || !landmarkVisible(after)) continue;
+      movements.push(pointDistance(before,after)/scale);
+    }
+
+    const movement=mean(movements);
+    if(Number.isFinite(movement)) normalizedMovements.push(movement);
   }
 
-  return Math.max(0,Math.min(100,Math.round(100-(total/(keypoints.length-1))*900)));
+  const averageMovement=mean(normalizedMovements);
+  if(!Number.isFinite(averageMovement)) return null;
+  return Math.round(clamp(100-(averageMovement*multiplier),0,100));
 }
 
-function calculateBodyStability(keypoints){
-  if(keypoints.length<2) return 100;
+function calculateFollowThroughScore(keypoints,releaseFrame,arm){
+  if(!Array.isArray(keypoints) || keypoints.length<3 || releaseFrame===null) return null;
 
-  let total=0;
+  const releaseIndex=keypoints.findIndex(frame=>frame.frame===releaseFrame);
+  if(releaseIndex<0) return null;
 
-  for(let i=1;i<keypoints.length;i++){
+  const endIndex=Math.min(keypoints.length-1,releaseIndex+6);
+  if(endIndex<=releaseIndex) return null;
 
-    const p1={
-      x:(keypoints[i-1].landmarks[11].x+keypoints[i-1].landmarks[12].x)/2,
-      y:(keypoints[i-1].landmarks[11].y+keypoints[i-1].landmarks[12].y)/2
-    };
+  const release=keypoints[releaseIndex];
+  const finish=keypoints[endIndex];
+  const releaseWrist=release.landmarks?.[arm.wristIndex];
+  const finishWrist=finish.landmarks?.[arm.wristIndex];
+  const scale=median([frameShoulderWidth(release),frameShoulderWidth(finish)]);
 
-    const p2={
-      x:(keypoints[i].landmarks[11].x+keypoints[i].landmarks[12].x)/2,
-      y:(keypoints[i].landmarks[11].y+keypoints[i].landmarks[12].y)/2
-    };
-
-    total+=pointDistance(p1,p2);
+  if(!landmarkVisible(releaseWrist) || !landmarkVisible(finishWrist) || !Number.isFinite(scale)){
+    return null;
   }
 
-  return Math.max(0,Math.min(100,Math.round(100-(total/(keypoints.length-1))*750)));
+  const travel=pointDistance(releaseWrist,finishWrist)/scale;
+  const releaseMetrics=getArmFrameMetrics(release,arm);
+  const finishMetrics=getArmFrameMetrics(finish,arm);
+  const extensionGain=(
+    Number.isFinite(finishMetrics?.armExtension) &&
+    Number.isFinite(releaseMetrics?.armExtension)
+  ) ? finishMetrics.armExtension-releaseMetrics.armExtension : 0;
+
+  const travelScore=clamp((travel/0.65)*70,0,70);
+  const extensionScore=clamp(15+(extensionGain*1.5),0,30);
+  return Math.round(clamp(travelScore+extensionScore,0,100));
 }
 
-function calculateThrowConsistency(values){
-  if(values.length<2) return 100;
+function calculateBiomechanics(keypoints,release){
+  if(!Array.isArray(keypoints) || keypoints.length===0){
+    return {
+      wristAngle:null,
+      shoulderAngle:null,
+      armExtension:null,
+      throwConsistency:null,
+      elbowAngle:null,
+      headMovementScore:null,
+      bodyStabilityScore:null,
+      followThroughScore:null
+    };
+  }
 
-  const mean=values.reduce((a,b)=>a+b,0)/values.length;
-  const variance=values.reduce((s,v)=>s+(v-mean)*(v-mean),0)/values.length;
-  const std=Math.sqrt(variance);
+  const arm=detectThrowingArm(keypoints);
+  const releaseIndex=release.releaseFrame===null
+    ? keypoints.length-1
+    : keypoints.findIndex(frame=>frame.frame===release.releaseFrame);
+  const centerIndex=releaseIndex>=0 ? releaseIndex : keypoints.length-1;
+  const startIndex=Math.max(0,centerIndex-4);
+  const endIndex=Math.min(keypoints.length-1,centerIndex+3);
+  const analysisFrames=keypoints.slice(startIndex,endIndex+1);
+  const frameMetrics=analysisFrames
+    .map(frame=>getArmFrameMetrics(frame,arm))
+    .filter(Boolean);
 
-  return Math.max(0,Math.min(100,Math.round(100-std*2)));
+  const elbowAngles=frameMetrics.map(metric=>metric.elbowAngle).filter(Number.isFinite);
+  const shoulderAngles=frameMetrics.map(metric=>metric.shoulderAngle).filter(Number.isFinite);
+  const wristAngles=frameMetrics.map(metric=>metric.wristAngle).filter(Number.isFinite);
+  const armExtensions=frameMetrics.map(metric=>metric.armExtension).filter(Number.isFinite);
+  const releaseMetrics=getArmFrameMetrics(keypoints[centerIndex],arm);
+
+  const elbowVariation=standardDeviation(elbowAngles);
+  const wristVariation=standardDeviation(wristAngles);
+  const extensionVariation=standardDeviation(armExtensions);
+  const consistencyPenalty=(elbowVariation*1.6)+(wristVariation*0.8)+(extensionVariation*1.2);
+
+  return {
+    wristAngle:Number.isFinite(releaseMetrics?.wristAngle)
+      ? Number(releaseMetrics.wristAngle.toFixed(1))
+      : (Number.isFinite(mean(wristAngles)) ? Number(mean(wristAngles).toFixed(1)) : null),
+    shoulderAngle:Number.isFinite(releaseMetrics?.shoulderAngle)
+      ? Number(releaseMetrics.shoulderAngle.toFixed(1))
+      : (Number.isFinite(mean(shoulderAngles)) ? Number(mean(shoulderAngles).toFixed(1)) : null),
+    armExtension:Number.isFinite(releaseMetrics?.armExtension)
+      ? Number(releaseMetrics.armExtension.toFixed(1))
+      : (Number.isFinite(mean(armExtensions)) ? Number(mean(armExtensions).toFixed(1)) : null),
+    throwConsistency:Math.round(clamp(100-consistencyPenalty,0,100)),
+    elbowAngle:Number.isFinite(releaseMetrics?.elbowAngle)
+      ? Number(releaseMetrics.elbowAngle.toFixed(1))
+      : (Number.isFinite(mean(elbowAngles)) ? Number(mean(elbowAngles).toFixed(1)) : null),
+    headMovementScore:movementScore(keypoints,[0,7,8],850),
+    bodyStabilityScore:movementScore(keypoints,[11,12,23,24],700),
+    followThroughScore:calculateFollowThroughScore(
+      keypoints,
+      release.releaseFrame,
+      arm
+    )
+  };
 }
 
-function calculateFollowThrough(keypoints,releaseFrame,arm){
-
-  if(releaseFrame===null) return null;
-
-  const idx=keypoints.findIndex(f=>f.frame===releaseFrame);
-  if(idx<0) return null;
-
-  const start=calculateElbowAngle(keypoints[idx],arm);
-  const finish=calculateElbowAngle(
-    keypoints[Math.min(idx+6,keypoints.length-1)],
-    arm
-  );
-
-  if(start===null||finish===null) return null;
-
-  return Math.max(0,Math.min(100,Math.round(100-Math.abs(finish-start))));
-}
 async function analyzeVideo(){
   await waitForMetadata();
   const duration=Number(videoPreview.duration);
@@ -584,14 +679,7 @@ async function analyzeVideo(){
   canvas.width=Math.max(1,videoPreview.videoWidth);
   canvas.height=Math.max(1,videoPreview.videoHeight);
   let framesChecked=0,framesWithPose=0,visibilityTotal=0;
- const keypoints=[];
-
-const armMetrics={
-  elbowAngles:[],
-  shoulderAngles:[],
-  wristAngles:[],
-  armExtensions:[]
-};
+  const keypoints=[];
   const sampleInterval=0.10;
   const maxFrames=90;
   videoPreview.pause();
@@ -607,19 +695,7 @@ const armMetrics={
         const landmarks=result.landmarks[0];
         visibilityTotal+=averageVisibility(landmarks);
         keypoints.push({frame:framesChecked,time_seconds:Number(videoPreview.currentTime.toFixed(3)),landmarks});
-      }const arm=detectThrowingArm(keypoints);
-
-const currentFrame=keypoints[keypoints.length-1];
-
-const elbow=calculateElbowAngle(currentFrame,arm);
-const shoulder=calculateShoulderAngle(currentFrame,arm);
-const wrist=calculateWristAngle(currentFrame,arm);
-const extension=calculateArmExtension(currentFrame,arm);
-
-if(elbow!==null) armMetrics.elbowAngles.push(elbow);
-if(shoulder!==null) armMetrics.shoulderAngles.push(shoulder);
-if(wrist!==null) armMetrics.wristAngles.push(wrist);
-if(extension!==null) armMetrics.armExtensions.push(extension);
+      }
       framesCheckedElement.textContent=String(framesChecked);
       poseFramesElement.textContent=String(framesWithPose);
       resultsElement.style.display="block";
@@ -634,57 +710,8 @@ if(extension!==null) armMetrics.armExtensions.push(extension);
   else if(detectionPercentage>=30) quality="Limited";
   const techniqueScore=calculateTechniqueScore(framesWithPose,framesChecked,visibilityTotal);
   const release=detectReleasePoint(keypoints);
-const arm=detectThrowingArm(keypoints);
+  const biomechanics=calculateBiomechanics(keypoints,release);
 
-const elbowAverage =
-  armMetrics.elbowAngles.length
-    ? Math.round(
-        armMetrics.elbowAngles.reduce((a,b)=>a+b,0) /
-        armMetrics.elbowAngles.length
-      )
-    : null;
-
-const shoulderAverage =
-  armMetrics.shoulderAngles.length
-    ? Math.round(
-        armMetrics.shoulderAngles.reduce((a,b)=>a+b,0) /
-        armMetrics.shoulderAngles.length
-      )
-    : null;
-
-const wristAverage =
-  armMetrics.wristAngles.length
-    ? Math.round(
-        armMetrics.wristAngles.reduce((a,b)=>a+b,0) /
-        armMetrics.wristAngles.length
-      )
-    : null;
-
-const extensionAverage =
-  armMetrics.armExtensions.length
-    ? Number(
-        (
-          armMetrics.armExtensions.reduce((a,b)=>a+b,0) /
-          armMetrics.armExtensions.length
-        ).toFixed(3)
-      )
-    : null;
-
-const throwConsistency =
-  calculateThrowConsistency(armMetrics.elbowAngles);
-
-const headMovementScore =
-  calculateHeadMovement(keypoints);
-
-const bodyStabilityScore =
-  calculateBodyStability(keypoints);
-
-const followThroughScore =
-  calculateFollowThrough(
-    keypoints,
-    release.releaseFrame,
-    arm
-  );
   detectionQualityElement.textContent=quality;
   releaseFrameElement.textContent=release.releaseFrame ?? "Not detected";
   releaseTimeElement.textContent=release.releaseTimeMs !== null
@@ -704,7 +731,15 @@ const followThroughScore =
     releaseTimeMs:release.releaseTimeMs,
     releaseConfidence:release.releaseConfidence,
     throwingArm:release.throwingArm,
-    peakWristVelocity:release.peakVelocity
+    peakWristVelocity:release.peakVelocity,
+    wristAngle:biomechanics.wristAngle,
+    shoulderAngle:biomechanics.shoulderAngle,
+    armExtension:biomechanics.armExtension,
+    throwConsistency:biomechanics.throwConsistency,
+    elbowAngle:biomechanics.elbowAngle,
+    headMovementScore:biomechanics.headMovementScore,
+    bodyStabilityScore:biomechanics.bodyStabilityScore,
+    followThroughScore:biomechanics.followThroughScore
   };
 }
 
@@ -736,7 +771,7 @@ async function uploadVideo(file,analysisResult){
 
   if(uploadError) throw uploadError;
 
- , const {data:publicUrlData} = supabaseClient.storage
+  const {data:publicUrlData} = supabaseClient.storage
     .from(STORAGE_BUCKET)
     .getPublicUrl(filename);
 
@@ -758,20 +793,20 @@ async function uploadVideo(file,analysisResult){
     release_time_ms:analysisResult.releaseTimeMs,
     release_confidence:analysisResult.releaseConfidence,
     release_timing:`${analysisResult.releaseTimeMs} ms`,
-wrist_angle:analysisResult.wristAngle,
-shoulder_angle:analysisResult.shoulderAngle,
-arm_extension:analysisResult.armExtension,
-throw_consistency:analysisResult.throwConsistency,
-elbow_angle:analysisResult.elbowAngle,
-head_movement_score:analysisResult.headMovementScore,
-body_stability_score:analysisResult.bodyStabilityScore,
-follow_through_score:analysisResult.followThroughScore
+    wrist_angle:analysisResult.wristAngle,
+    shoulder_angle:analysisResult.shoulderAngle,
+    arm_extension:analysisResult.armExtension,
+    throw_consistency:analysisResult.throwConsistency,
+    elbow_angle:analysisResult.elbowAngle,
+    head_movement_score:analysisResult.headMovementScore,
+    body_stability_score:analysisResult.bodyStabilityScore,
+    follow_through_score:analysisResult.followThroughScore
   };
 
   const {data:savedRows,error:insertError} = await supabaseClient
     .from(TABLE_NAME)
     .insert([detailedRow])
-    .select("id,release_frame,release_time_ms,release_confidence,main_issue,status");
+    .select("id,release_frame,release_time_ms,release_confidence,main_issue,status,wrist_angle,shoulder_angle,arm_extension,throw_consistency,elbow_angle,head_movement_score,body_stability_score,follow_through_score");
 
   if(insertError){
     throw new Error(`Supabase metric save failed: ${insertError.message}`);
@@ -786,6 +821,27 @@ follow_through_score:analysisResult.followThroughScore
     !saved.release_confidence
   ){
     throw new Error("Supabase returned an incomplete release-analysis row.");
+  }
+
+  const expectedBiomechanics=[
+    "wrist_angle",
+    "shoulder_angle",
+    "arm_extension",
+    "throw_consistency",
+    "elbow_angle",
+    "head_movement_score",
+    "body_stability_score",
+    "follow_through_score"
+  ];
+
+  const missingBiomechanics=expectedBiomechanics.filter(
+    key=>saved[key]===null || saved[key]===undefined
+  );
+
+  if(analysisResult.framesWithPose>=3 && missingBiomechanics.length){
+    throw new Error(
+      `Biomechanics save incomplete: ${missingBiomechanics.join(", ")}`
+    );
   }
 
   return {detailedMetricsSaved:true,saved};
@@ -810,7 +866,7 @@ analyzeBtn.addEventListener("click",async()=>{
     releaseFrameElement.textContent = String(saveResult.saved.release_frame);
     releaseTimeElement.textContent = `${saveResult.saved.release_time_ms} ms`;
     releaseConfidenceElement.textContent = saveResult.saved.release_confidence;
-    setStatus("BV3 release analysis saved and verified.","success");
+    setStatus("BV3 release and biomechanics saved and verified.","success");
   }catch(error){
     console.error(error);
     setStatus(error?.message || "Analysis failed.","error");
