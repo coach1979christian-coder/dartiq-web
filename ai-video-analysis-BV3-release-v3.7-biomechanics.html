@@ -582,9 +582,195 @@ function movementScore(keypoints,landmarkIndexes,multiplier){
 function calculateFollowThroughScore(keypoints,releaseFrame,arm){
   if(!Array.isArray(keypoints) || keypoints.length<3 || releaseFrame===null) return null;
 
-  const releaseIndex=keypoints.findIndex(frame=>frame.frame===releaseFrame);
   if(releaseIndex<0) return null;
+function detectMotionWindow(keypoints){
 
+  const samples=[];
+
+  for(let i=1;i<keypoints.length;i++){
+
+    const previous=keypoints[i-1];
+    const current=keypoints[i];
+
+    const left=pointDistance(
+      previous.landmarks?.[15],
+      current.landmarks?.[15]
+    );
+
+    const right=pointDistance(
+      previous.landmarks?.[16],
+      current.landmarks?.[16]
+    );
+
+    samples.push({
+      frame:current.frame,
+      time:current.time_seconds,
+      movement:Math.max(left,right)
+    });
+
+  }
+
+  const avg=mean(samples.map(s=>s.movement)) || 0;
+  const threshold=avg*1.35;
+
+  return samples.filter(s=>s.movement>threshold);
+
+}
+  function calculateWristVelocity(keypoints,wristIndex){
+
+    const velocity=[];
+
+    for(let i=1;i<keypoints.length;i++){
+
+        const previous=keypoints[i-1];
+        const current=keypoints[i];
+
+        const p=previous.landmarks?.[wristIndex];
+        const c=current.landmarks?.[wristIndex];
+
+        if(!p || !c) continue;
+
+        const dt=Math.max(
+            current.time_seconds-previous.time_seconds,
+            0.001
+        );
+
+        velocity.push({
+            frame:current.frame,
+            time:current.time_seconds,
+            speed:pointDistance(p,c)/dt,
+            visibility:Math.min(
+                p.visibility||0,
+                c.visibility||0
+            )
+        });
+
+    }
+
+    return velocity;
+
+}
+  function findVelocityPeak(velocity,motionWindow){
+
+    if(!velocity.length || !motionWindow.length) return null;
+
+    const motionFrames=new Set(
+        motionWindow.map(m=>m.frame)
+    );
+
+    let best=null;
+
+    for(const sample of velocity){
+
+        if(!motionFrames.has(sample.frame)) continue;
+
+        if(sample.visibility<0.45) continue;
+
+        if(best===null || sample.speed>best.speed){
+            best=sample;
+        }
+
+    }
+
+    return best;
+
+}
+  function calculateReleaseConfidence(peak,velocity){
+
+    if(!peak) return "Low";
+
+    const speeds=velocity
+        .map(v=>v.speed)
+        .sort((a,b)=>a-b);
+
+    const medianSpeed=speeds.length
+        ? speeds[Math.floor(speeds.length/2)]
+        : 0;
+
+    const ratio=medianSpeed>0
+        ? peak.speed/medianSpeed
+        : 0;
+
+    if(
+        peak.visibility>=0.80 &&
+        ratio>=2.0
+    ){
+        return "High";
+    }
+
+    if(
+        peak.visibility>=0.60 &&
+        ratio>=1.50
+    ){
+        return "Medium";
+    }
+
+    return "Low";
+
+}
+  function detectReleasePoint(keypoints){
+
+    if(!Array.isArray(keypoints) || keypoints.length<3){
+
+        return{
+            releaseFrame:null,
+            releaseTimeMs:null,
+            releaseConfidence:"Low",
+            throwingArm:"Unknown",
+            peakVelocity:0
+        };
+
+    }
+
+    const arm=detectThrowingArm(keypoints);
+
+    const motionWindow=detectMotionWindow(keypoints);
+
+    const velocity=calculateWristVelocity(
+        keypoints,
+        arm.wristIndex
+    );
+
+    const peak=findVelocityPeak(
+        velocity,
+        motionWindow
+    );
+
+    if(!peak){
+
+        return{
+            releaseFrame:null,
+            releaseTimeMs:null,
+            releaseConfidence:"Low",
+            throwingArm:arm.side,
+            peakVelocity:0
+        };
+
+    }
+
+    return{
+
+        releaseFrame:peak.frame,
+
+        releaseTimeMs:Math.round(
+            peak.time*1000
+        ),
+
+        releaseConfidence:
+            calculateReleaseConfidence(
+                peak,
+                velocity
+            ),
+
+        throwingArm:arm.side,
+
+        peakVelocity:Number(
+            peak.speed.toFixed(4)
+        )
+
+    };
+
+}
   const endIndex=Math.min(keypoints.length-1,releaseIndex+6);
   if(endIndex<=releaseIndex) return null;
 
