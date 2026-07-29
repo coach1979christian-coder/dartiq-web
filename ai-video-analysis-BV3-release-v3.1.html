@@ -341,21 +341,44 @@ function waitForMetadata(){
 }
  
 function seekVideo(time){
-  return new Promise((resolve,reject)=>{
-    const timeout = setTimeout(()=>{
-      reject(new Error("Could not read a video frame."));
-    },12000);
- 
-    const done = ()=>{
-      clearTimeout(timeout);
-      resolve();
-    };
- 
-    videoPreview.addEventListener("seeked",done,{once:true});
-    videoPreview.currentTime = Math.min(
+  return new Promise((resolve)=>{
+    const target = Math.min(
       Math.max(0,time),
       Math.max(0,videoPreview.duration - 0.02)
     );
+    let settled = false;
+ 
+    const finish = ()=>{
+      if(settled) return;
+      settled = true;
+      clearTimeout(timeout);
+      videoPreview.removeEventListener("seeked",onSeeked);
+      resolve();
+    };
+ 
+    const onSeeked = ()=> finish();
+ 
+    // Some Android WebViews / embeds fail to fire "seeked" reliably, which
+    // used to make a single stuck frame abort the whole analysis. Now we
+    // also poll currentTime as a backup, and time out gracefully instead
+    // of rejecting, so one bad frame just gets skipped, not fatal.
+    const timeout = setTimeout(()=>{
+      console.warn("Seek did not confirm in time for t=",target);
+      finish();
+    },4000);
+ 
+    const poll = ()=>{
+      if(settled) return;
+      if(Math.abs(videoPreview.currentTime - target) < 0.03){
+        finish();
+        return;
+      }
+      requestAnimationFrame(poll);
+    };
+ 
+    videoPreview.addEventListener("seeked",onSeeked,{once:true});
+    videoPreview.currentTime = target;
+    requestAnimationFrame(poll);
   });
 }
  
@@ -489,8 +512,10 @@ async function analyzeVideo(){
   const keypoints=[];
   const sampleInterval=0.10;
   const maxFrames=90;
+  const estimatedTotalFrames=Math.max(1,Math.min(maxFrames,Math.ceil(duration/sampleInterval)+1));
   videoPreview.pause();
   for(let t=0;t<=duration&&framesChecked<maxFrames;t+=sampleInterval){
+    setStatus(`Analyzing frame ${framesChecked+1} of ${estimatedTotalFrames}...`);
     await seekVideo(t);
     if(videoPreview.readyState<2) continue;
     try{
