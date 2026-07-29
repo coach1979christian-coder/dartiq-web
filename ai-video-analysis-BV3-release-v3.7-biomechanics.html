@@ -578,11 +578,99 @@ function movementScore(keypoints,landmarkIndexes,multiplier){
   if(!Number.isFinite(averageMovement)) return null;
   return Math.round(clamp(100-(averageMovement*multiplier),0,100));
 }
-
 function calculateFollowThroughScore(keypoints,releaseFrame,arm){
-  if(!Array.isArray(keypoints) || keypoints.length<3 || releaseFrame===null) return null;
 
-  if(releaseIndex<0) return null;
+    if(!Array.isArray(keypoints) || keypoints.length<3 || releaseFrame===null){
+        return null;
+    }
+
+    const releaseIndex=keypoints.findIndex(
+        frame=>frame.frame===releaseFrame
+    );
+
+    if(releaseIndex<0){
+        return null;
+    }
+
+    const endIndex=Math.min(
+        keypoints.length-1,
+        releaseIndex+6
+    );
+
+    if(endIndex<=releaseIndex){
+        return null;
+    }
+
+    const release=keypoints[releaseIndex];
+    const finish=keypoints[endIndex];
+
+    const releaseWrist=release.landmarks?.[arm.wristIndex];
+    const finishWrist=finish.landmarks?.[arm.wristIndex];
+
+    const scale=median([
+        frameShoulderWidth(release),
+        frameShoulderWidth(finish)
+    ]);
+
+    if(
+        !landmarkVisible(releaseWrist) ||
+        !landmarkVisible(finishWrist) ||
+        !Number.isFinite(scale)
+    ){
+        return null;
+    }
+
+    const travel=
+        pointDistance(
+            releaseWrist,
+            finishWrist
+        )/scale;
+
+    const releaseMetrics=
+        getArmFrameMetrics(
+            release,
+            arm
+        );
+
+    const finishMetrics=
+        getArmFrameMetrics(
+            finish,
+            arm
+        );
+
+    const extensionGain=
+        (
+            Number.isFinite(finishMetrics?.armExtension) &&
+            Number.isFinite(releaseMetrics?.armExtension)
+        )
+        ? finishMetrics.armExtension-releaseMetrics.armExtension
+        :0;
+
+    const travelScore=
+        clamp(
+            (travel/0.65)*70,
+            0,
+            70
+        );
+
+    const extensionScore=
+        clamp(
+            15+(extensionGain*1.5),
+            0,
+            30
+        );
+
+    return Math.round(
+        clamp(
+            travelScore+extensionScore,
+            0,
+            100
+        )
+    );
+
+}
+
+
 function detectMotionWindow(keypoints){
 
   const samples=[];
