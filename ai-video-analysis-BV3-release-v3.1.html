@@ -528,11 +528,18 @@ async function analyzeVideo(){
   const maxFrames=90;
   const estimatedTotalFrames=Math.max(1,Math.min(maxFrames,Math.ceil(duration/sampleInterval)+1));
   videoPreview.pause();
-  for(let t=0;t<=duration&&framesChecked<maxFrames;t+=sampleInterval){
-    setStatus(`Analyzing frame ${framesChecked+1} of ${estimatedTotalFrames}...`);
+  for(let t=0; t<=duration && framesChecked<maxFrames; t+=sampleInterval){
+
+    framesChecked++;
+
+    setStatus(`Analyzing frame ${framesChecked} of ${estimatedTotalFrames}...`);
+
     await seekVideo(t);
+
     if(videoPreview.readyState<2) continue;
+
     try{
+        ...
       ctx.drawImage(videoPreview,0,0,canvas.width,canvas.height);
       const result=poseLandmarker.detectForVideo(canvas,Math.max(1,Math.round(videoPreview.currentTime*1000)));
       framesChecked++;
