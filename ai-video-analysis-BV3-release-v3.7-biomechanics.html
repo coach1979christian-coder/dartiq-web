@@ -362,19 +362,6 @@ function pointDistance(a,b){
   return Math.hypot(dx,dy);
 }
 
-function detectThrowingArm(keypoints){
-  const scoreArm=(wristIndex)=>{
-    let movement=0;
-    let visible=0;
-    for(let i=1;i<keypoints.length;i++){
-      const prev=keypoints[i-1].landmarks?.[wristIndex];
-      const curr=keypoints[i].landmarks?.[wristIndex];
-      if(!prev || !curr) continue;
-      movement+=pointDistance(prev,curr);
-      visible+=((prev.visibility||0)+(curr.visibility||0))/2;
-    }
-    return movement+(visible*0.02);
-  };
 
   const leftScore=scoreArm(15);
   const rightScore=scoreArm(16);
