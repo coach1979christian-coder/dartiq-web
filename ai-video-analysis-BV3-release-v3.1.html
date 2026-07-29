@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -46,13 +46,27 @@ input[type=file]{
   border-radius:12px;
   margin-bottom:18px
 }
-video{
+.video-wrap{
+  position:relative;
   display:none;
+  width:100%;
+  margin-bottom:18px
+}
+video{
+  display:block;
   width:100%;
   max-height:440px;
   background:#000;
-  border-radius:16px;
-  margin-bottom:18px
+  border-radius:16px
+}
+#overlayCanvas{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  border-radius:16px
 }
 button{
   width:100%;
@@ -99,30 +113,6 @@ button:disabled{
   color:#5bcaff;
   font-weight:700;
   text-align:right
-}.video-stage{
-  position:relative;
-  width:100%;
-  margin-top:14px;
-  overflow:hidden;
-  border-radius:14px;
-  background:#000;
-}
-
-.video-stage video{
-  display:block;
-  width:100%;
-  height:auto;
-  margin:0;
-  border-radius:14px;
-}
-
-#skeletonCanvas{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  pointer-events:none;
-  z-index:2;
 }
 .hidden-canvas{display:none}
 </style>
@@ -130,25 +120,18 @@ button:disabled{
 <body>
 <div class="card">
   <h1>DARTIQ AI Video Analysis</h1>
-  <div id="buildVersion" style="font-size:12px;opacity:.72;margin-top:4px">BV3 RELEASE ENGINE v3.7 BIOMECHANICS</div>
+  <div id="buildVersion" style="font-size:12px;opacity:.72;margin-top:4px">BV3 RELEASE ENGINE v3.1</div>
   <div class="subtitle">Select your throw video</div>
-
- <input id="videoInput" type="file" accept="video/*">
-
-<div class="video-stage">
-  <video
-    id="videoPreview"
-    controls
-    playsinline
-    preload="metadata"
-  ></video>
-
-  <canvas id="skeletonCanvas"></canvas>
-</div>
-
+ 
+  <input id="videoInput" type="file" accept="video/*">
+  <div id="videoWrap" class="video-wrap">
+    <video id="videoPreview" controls playsinline preload="metadata"></video>
+    <canvas id="overlayCanvas"></canvas>
+  </div>
+ 
   <button id="analyzeBtn" disabled>Analyze My Throw</button>
   <div id="status" class="status">Loading analysis engine...</div>
-
+ 
   <div id="results" class="results">
     <div class="result-row">
       <span class="result-label">Frames checked</span>
@@ -175,30 +158,31 @@ button:disabled{
       <span class="result-value" id="releaseConfidence">Waiting</span>
     </div>
   </div>
-
+ 
   <canvas id="analysisCanvas" class="hidden-canvas"></canvas>
 </div>
-
+ 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
+ 
 <script type="module">
 import {
   FilesetResolver,
-  PoseLandmarker
+  PoseLandmarker,
+  DrawingUtils
 } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/+esm";
-
+ 
 const SUPABASE_URL = "https://usglrseckxwcdykrwuvh.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_mSQ3imYCnUspBJdpl6ybQA__TdZtZ2a";
 const STORAGE_BUCKET = "Throw videos";
-const BUILD_VERSION = "BV3-RELEASE-v3.7-BIOMECHANICS-2026-07-27";
+const BUILD_VERSION = "BV3-RELEASE-v3.1-2026-07-27";
 console.info(BUILD_VERSION);
 const TABLE_NAME = "video_analysis";
-
+ 
 const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_ANON_KEY
 );
-
+ 
 const params = new URLSearchParams(window.location.search);
 const playerEmail = (
   params.get("email") ||
@@ -207,11 +191,13 @@ const playerEmail = (
   params.get("Player_Email") ||
   ""
 ).trim();
-
+ 
 const videoInput = document.getElementById("videoInput");
+const videoWrap = document.getElementById("videoWrap");
 const videoPreview = document.getElementById("videoPreview");
-const skeletonCanvas = document.getElementById("skeletonCanvas");
-const skeletonCtx = skeletonCanvas.getContext("2d");
+const overlayCanvas = document.getElementById("overlayCanvas");
+const overlayCtx = overlayCanvas.getContext("2d");
+const drawingUtils = new DrawingUtils(overlayCtx);
 const analyzeBtn = document.getElementById("analyzeBtn");
 const statusElement = document.getElementById("status");
 const resultsElement = document.getElementById("results");
@@ -223,31 +209,31 @@ const releaseTimeElement = document.getElementById("releaseTime");
 const releaseConfidenceElement = document.getElementById("releaseConfidence");
 const canvas = document.getElementById("analysisCanvas");
 const ctx = canvas.getContext("2d", { willReadFrequently:true });
-
+ 
 let poseLandmarker = null;
 let selectedFile = null;
 let selectedVideoUrl = null;
-
+ 
 function setStatus(message, type=""){
   statusElement.textContent = message;
   statusElement.className = "status";
   if(type) statusElement.classList.add(type);
 }
-
+ 
 function cleanObjectUrl(){
   if(selectedVideoUrl){
     URL.revokeObjectURL(selectedVideoUrl);
     selectedVideoUrl = null;
   }
 }
-
+ 
 async function loadPoseLandmarker(){
   try{
     setStatus("Loading analysis engine...");
     const vision = await FilesetResolver.forVisionTasks(
       "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm"
     );
-
+ 
     poseLandmarker = await PoseLandmarker.createFromOptions(vision,{
       baseOptions:{
         modelAssetPath:
@@ -260,7 +246,7 @@ async function loadPoseLandmarker(){
       minPosePresenceConfidence:0.45,
       minTrackingConfidence:0.45
     });
-
+ 
     setStatus("Analysis engine ready.","success");
     if(selectedFile) analyzeBtn.disabled = false;
   }catch(firstError){
@@ -268,7 +254,7 @@ async function loadPoseLandmarker(){
       const vision = await FilesetResolver.forVisionTasks(
         "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm"
       );
-
+ 
       poseLandmarker = await PoseLandmarker.createFromOptions(vision,{
         baseOptions:{
           modelAssetPath:
@@ -280,7 +266,7 @@ async function loadPoseLandmarker(){
         minPosePresenceConfidence:0.4,
         minTrackingConfidence:0.4
       });
-
+ 
       setStatus("Analysis engine ready.","success");
       if(selectedFile) analyzeBtn.disabled = false;
     }catch(error){
@@ -289,7 +275,7 @@ async function loadPoseLandmarker(){
     }
   }
 }
-
+ 
 videoInput.addEventListener("change",()=>{
   cleanObjectUrl();
   selectedFile = videoInput.files?.[0] || null;
@@ -300,34 +286,36 @@ videoInput.addEventListener("change",()=>{
   releaseFrameElement.textContent = "Waiting";
   releaseTimeElement.textContent = "Waiting";
   releaseConfidenceElement.textContent = "Waiting";
-
+ 
+  overlayCtx.clearRect(0,0,overlayCanvas.width,overlayCanvas.height);
+ 
   if(!selectedFile){
     videoPreview.removeAttribute("src");
-    videoPreview.style.display = "none";
+    videoWrap.style.display = "none";
     analyzeBtn.disabled = true;
     return;
   }
-
+ 
   if(!selectedFile.type.startsWith("video/")){
     selectedFile = null;
     videoInput.value = "";
-    videoPreview.style.display = "none";
+    videoWrap.style.display = "none";
     analyzeBtn.disabled = true;
     setStatus("Please select a valid video file.","error");
     return;
   }
-
+ 
   selectedVideoUrl = URL.createObjectURL(selectedFile);
   videoPreview.src = selectedVideoUrl;
-  videoPreview.style.display = "block";
+  videoWrap.style.display = "block";
   videoPreview.load();
-
+ 
   analyzeBtn.disabled = !poseLandmarker;
   setStatus(
     poseLandmarker ? "Video ready for analysis." : "Loading analysis engine..."
   );
 });
-
+ 
 function waitForMetadata(){
   return new Promise((resolve,reject)=>{
     if(
@@ -338,33 +326,31 @@ function waitForMetadata(){
       resolve();
       return;
     }
-
+ 
     const timeout = setTimeout(()=>{
       reject(new Error("Video loading timed out."));
     },20000);
-
+ 
     videoPreview.addEventListener("loadedmetadata",()=>{
-
-    skeletonCanvas.width = videoPreview.videoWidth;
-    skeletonCanvas.height = videoPreview.videoHeight;
-
-    clearTimeout(timeout);
-    resolve();
-
-},{once:true});
-
-
+      clearTimeout(timeout);
+      resolve();
+    },{once:true});
+ 
+    videoPreview.load();
+  });
+}
+ 
 function seekVideo(time){
   return new Promise((resolve,reject)=>{
     const timeout = setTimeout(()=>{
       reject(new Error("Could not read a video frame."));
     },12000);
-
+ 
     const done = ()=>{
       clearTimeout(timeout);
       resolve();
     };
-
+ 
     videoPreview.addEventListener("seeked",done,{once:true});
     videoPreview.currentTime = Math.min(
       Math.max(0,time),
@@ -372,7 +358,7 @@ function seekVideo(time){
     );
   });
 }
-
+ 
 function averageVisibility(landmarks){
   if(!Array.isArray(landmarks) || landmarks.length === 0) return 0;
   const values = landmarks
@@ -381,7 +367,7 @@ function averageVisibility(landmarks){
   if(values.length === 0) return 0;
   return values.reduce((a,b)=>a+b,0) / values.length;
 }
-
+ 
 function calculateTechniqueScore(poseFrames,framesChecked,visibilityTotal){
   if(framesChecked === 0 || poseFrames === 0) return 0;
   const poseRatio = poseFrames / framesChecked;
@@ -391,15 +377,15 @@ function calculateTechniqueScore(poseFrames,framesChecked,visibilityTotal){
     Math.min(100,Math.round((poseRatio * 70) + (avgVisibility * 30)))
   );
 }
-
-
+ 
+ 
 function pointDistance(a,b){
   if(!a || !b) return 0;
   const dx=(a.x||0)-(b.x||0);
   const dy=(a.y||0)-(b.y||0);
   return Math.hypot(dx,dy);
 }
-
+ 
 function detectThrowingArm(keypoints){
   const scoreArm=(wristIndex)=>{
     let movement=0;
@@ -413,14 +399,14 @@ function detectThrowingArm(keypoints){
     }
     return movement+(visible*0.02);
   };
-
+ 
   const leftScore=scoreArm(15);
   const rightScore=scoreArm(16);
   return rightScore>=leftScore
     ? {side:"Right",wristIndex:16,elbowIndex:14,shoulderIndex:12}
     : {side:"Left",wristIndex:15,elbowIndex:13,shoulderIndex:11};
 }
-
+ 
 function detectReleasePoint(keypoints){
   if(!Array.isArray(keypoints) || keypoints.length<3){
     return {
@@ -431,25 +417,25 @@ function detectReleasePoint(keypoints){
       peakVelocity:0
     };
   }
-
+ 
   const arm=detectThrowingArm(keypoints);
   const velocitySamples=[];
-
+ 
   for(let i=1;i<keypoints.length;i++){
     const previous=keypoints[i-1];
     const current=keypoints[i];
     const previousWrist=previous.landmarks?.[arm.wristIndex];
     const currentWrist=current.landmarks?.[arm.wristIndex];
-
+ 
     if(!previousWrist || !currentWrist) continue;
-
+ 
     const dt=Math.max(0.001,current.time_seconds-previous.time_seconds);
     const velocity=pointDistance(previousWrist,currentWrist)/dt;
     const visibility=Math.min(
       Number(previousWrist.visibility||0),
       Number(currentWrist.visibility||0)
     );
-
+ 
     velocitySamples.push({
       index:i,
       velocity,
@@ -458,7 +444,7 @@ function detectReleasePoint(keypoints){
       timeSeconds:current.time_seconds
     });
   }
-
+ 
   if(!velocitySamples.length){
     return {
       releaseFrame:null,
@@ -468,20 +454,20 @@ function detectReleasePoint(keypoints){
       peakVelocity:0
     };
   }
-
+ 
   let peak=velocitySamples[0];
   for(const sample of velocitySamples){
     if(sample.velocity>peak.velocity) peak=sample;
   }
-
+ 
   const sorted=velocitySamples.map(s=>s.velocity).sort((a,b)=>a-b);
   const median=sorted[Math.floor(sorted.length/2)]||0;
   const velocityRatio=median>0 ? peak.velocity/median : 0;
-
+ 
   let confidence="Low";
   if(peak.visibility>=0.75 && velocityRatio>=1.8) confidence="High";
   else if(peak.visibility>=0.5 && velocityRatio>=1.35) confidence="Medium";
-
+ 
   return {
     releaseFrame:peak.frame,
     releaseTimeMs:Math.round(peak.timeSeconds*1000),
@@ -490,232 +476,15 @@ function detectReleasePoint(keypoints){
     peakVelocity:Number(peak.velocity.toFixed(4))
   };
 }
-
-
-function clamp(value,min,max){
-  return Math.max(min,Math.min(max,value));
-}
-
-function landmarkVisible(point,minVisibility=0.35){
-  return Boolean(
-    point &&
-    Number.isFinite(point.x) &&
-    Number.isFinite(point.y) &&
-    Number(point.visibility ?? 1) >= minVisibility
-  );
-}
-
-function angleAtPoint(a,b,c){
-  if(!landmarkVisible(a) || !landmarkVisible(b) || !landmarkVisible(c)) return null;
-
-  const abx=a.x-b.x;
-  const aby=a.y-b.y;
-  const cbx=c.x-b.x;
-  const cby=c.y-b.y;
-  const magnitudeAB=Math.hypot(abx,aby);
-  const magnitudeCB=Math.hypot(cbx,cby);
-
-  if(magnitudeAB<1e-6 || magnitudeCB<1e-6) return null;
-
-  const cosine=clamp(
-    ((abx*cbx)+(aby*cby))/(magnitudeAB*magnitudeCB),
-    -1,
-    1
-  );
-
-  return Math.acos(cosine)*(180/Math.PI);
-}
-
-function mean(values){
-  const valid=values.filter(Number.isFinite);
-  if(!valid.length) return null;
-  return valid.reduce((sum,value)=>sum+value,0)/valid.length;
-}
-
-function standardDeviation(values){
-  const valid=values.filter(Number.isFinite);
-  if(valid.length<2) return 0;
-  const avg=mean(valid);
-  const variance=valid.reduce(
-    (sum,value)=>sum+Math.pow(value-avg,2),
-    0
-  )/valid.length;
-  return Math.sqrt(variance);
-}
-
-function median(values){
-  const valid=values.filter(Number.isFinite).sort((a,b)=>a-b);
-  if(!valid.length) return null;
-  const middle=Math.floor(valid.length/2);
-  return valid.length%2
-    ? valid[middle]
-    : (valid[middle-1]+valid[middle])/2;
-}
-
-function frameShoulderWidth(frame){
-  const left=frame?.landmarks?.[11];
-  const right=frame?.landmarks?.[12];
-  if(!landmarkVisible(left) || !landmarkVisible(right)) return null;
-  const width=pointDistance(left,right);
-  return width>1e-5 ? width : null;
-}
-
-function getArmFrameMetrics(frame,arm){
-  const landmarks=frame?.landmarks;
-  if(!landmarks) return null;
-
-  const shoulder=landmarks[arm.shoulderIndex];
-  const elbow=landmarks[arm.elbowIndex];
-  const wrist=landmarks[arm.wristIndex];
-  const hipIndex=arm.side==="Right" ? 24 : 23;
-  const handIndex=arm.side==="Right" ? 20 : 19;
-  const hip=landmarks[hipIndex];
-  const hand=landmarks[handIndex];
-
-  const elbowAngle=angleAtPoint(shoulder,elbow,wrist);
-  const shoulderAngle=angleAtPoint(hip,shoulder,elbow);
-  const wristAngle=angleAtPoint(elbow,wrist,hand);
-  const armExtension=Number.isFinite(elbowAngle)
-    ? clamp((elbowAngle/180)*100,0,100)
-    : null;
-
-  return {
-    elbowAngle,
-    shoulderAngle,
-    wristAngle,
-    armExtension
-  };
-}
-
-function movementScore(keypoints,landmarkIndexes,multiplier){
-  if(!Array.isArray(keypoints) || keypoints.length<2) return null;
-
-  const normalizedMovements=[];
-
-  for(let index=1;index<keypoints.length;index++){
-    const previous=keypoints[index-1];
-    const current=keypoints[index];
-    const previousScale=frameShoulderWidth(previous);
-    const currentScale=frameShoulderWidth(current);
-    const scale=median([previousScale,currentScale]);
-    if(!Number.isFinite(scale) || scale<=0) continue;
-
-    const movements=[];
-    for(const landmarkIndex of landmarkIndexes){
-      const before=previous.landmarks?.[landmarkIndex];
-      const after=current.landmarks?.[landmarkIndex];
-      if(!landmarkVisible(before) || !landmarkVisible(after)) continue;
-      movements.push(pointDistance(before,after)/scale);
-    }
-
-    const movement=mean(movements);
-    if(Number.isFinite(movement)) normalizedMovements.push(movement);
-  }
-
-  const averageMovement=mean(normalizedMovements);
-  if(!Number.isFinite(averageMovement)) return null;
-  return Math.round(clamp(100-(averageMovement*multiplier),0,100));
-}
-
-function calculateFollowThroughScore(keypoints,releaseFrame,arm){
-  if(!Array.isArray(keypoints) || keypoints.length<3 || releaseFrame===null) return null;
-
-  const releaseIndex=keypoints.findIndex(frame=>frame.frame===releaseFrame);
-  if(releaseIndex<0) return null;
-
-  const endIndex=Math.min(keypoints.length-1,releaseIndex+6);
-  if(endIndex<=releaseIndex) return null;
-
-  const release=keypoints[releaseIndex];
-  const finish=keypoints[endIndex];
-  const releaseWrist=release.landmarks?.[arm.wristIndex];
-  const finishWrist=finish.landmarks?.[arm.wristIndex];
-  const scale=median([frameShoulderWidth(release),frameShoulderWidth(finish)]);
-
-  if(!landmarkVisible(releaseWrist) || !landmarkVisible(finishWrist) || !Number.isFinite(scale)){
-    return null;
-  }
-
-  const travel=pointDistance(releaseWrist,finishWrist)/scale;
-  const releaseMetrics=getArmFrameMetrics(release,arm);
-  const finishMetrics=getArmFrameMetrics(finish,arm);
-  const extensionGain=(
-    Number.isFinite(finishMetrics?.armExtension) &&
-    Number.isFinite(releaseMetrics?.armExtension)
-  ) ? finishMetrics.armExtension-releaseMetrics.armExtension : 0;
-
-  const travelScore=clamp((travel/0.65)*70,0,70);
-  const extensionScore=clamp(15+(extensionGain*1.5),0,30);
-  return Math.round(clamp(travelScore+extensionScore,0,100));
-}
-
-function calculateBiomechanics(keypoints,release){
-  if(!Array.isArray(keypoints) || keypoints.length===0){
-    return {
-      wristAngle:null,
-      shoulderAngle:null,
-      armExtension:null,
-      throwConsistency:null,
-      elbowAngle:null,
-      headMovementScore:null,
-      bodyStabilityScore:null,
-      followThroughScore:null
-    };
-  }
-
-  const arm=detectThrowingArm(keypoints);
-  const releaseIndex=release.releaseFrame===null
-    ? keypoints.length-1
-    : keypoints.findIndex(frame=>frame.frame===release.releaseFrame);
-  const centerIndex=releaseIndex>=0 ? releaseIndex : keypoints.length-1;
-  const startIndex=Math.max(0,centerIndex-4);
-  const endIndex=Math.min(keypoints.length-1,centerIndex+3);
-  const analysisFrames=keypoints.slice(startIndex,endIndex+1);
-  const frameMetrics=analysisFrames
-    .map(frame=>getArmFrameMetrics(frame,arm))
-    .filter(Boolean);
-
-  const elbowAngles=frameMetrics.map(metric=>metric.elbowAngle).filter(Number.isFinite);
-  const shoulderAngles=frameMetrics.map(metric=>metric.shoulderAngle).filter(Number.isFinite);
-  const wristAngles=frameMetrics.map(metric=>metric.wristAngle).filter(Number.isFinite);
-  const armExtensions=frameMetrics.map(metric=>metric.armExtension).filter(Number.isFinite);
-  const releaseMetrics=getArmFrameMetrics(keypoints[centerIndex],arm);
-
-  const elbowVariation=standardDeviation(elbowAngles);
-  const wristVariation=standardDeviation(wristAngles);
-  const extensionVariation=standardDeviation(armExtensions);
-  const consistencyPenalty=(elbowVariation*1.6)+(wristVariation*0.8)+(extensionVariation*1.2);
-
-  return {
-    wristAngle:Number.isFinite(releaseMetrics?.wristAngle)
-      ? Number(releaseMetrics.wristAngle.toFixed(1))
-      : (Number.isFinite(mean(wristAngles)) ? Number(mean(wristAngles).toFixed(1)) : null),
-    shoulderAngle:Number.isFinite(releaseMetrics?.shoulderAngle)
-      ? Number(releaseMetrics.shoulderAngle.toFixed(1))
-      : (Number.isFinite(mean(shoulderAngles)) ? Number(mean(shoulderAngles).toFixed(1)) : null),
-    armExtension:Number.isFinite(releaseMetrics?.armExtension)
-      ? Number(releaseMetrics.armExtension.toFixed(1))
-      : (Number.isFinite(mean(armExtensions)) ? Number(mean(armExtensions).toFixed(1)) : null),
-    throwConsistency:Math.round(clamp(100-consistencyPenalty,0,100)),
-    elbowAngle:Number.isFinite(releaseMetrics?.elbowAngle)
-      ? Number(releaseMetrics.elbowAngle.toFixed(1))
-      : (Number.isFinite(mean(elbowAngles)) ? Number(mean(elbowAngles).toFixed(1)) : null),
-    headMovementScore:movementScore(keypoints,[0,7,8],850),
-    bodyStabilityScore:movementScore(keypoints,[11,12,23,24],700),
-    followThroughScore:calculateFollowThroughScore(
-      keypoints,
-      release.releaseFrame,
-      arm
-    )
-  };
-}
-
+ 
 async function analyzeVideo(){
   await waitForMetadata();
   const duration=Number(videoPreview.duration);
   if(!Number.isFinite(duration)||duration<=0) throw new Error("The selected video could not be loaded.");
   canvas.width=Math.max(1,videoPreview.videoWidth);
   canvas.height=Math.max(1,videoPreview.videoHeight);
+  overlayCanvas.width=canvas.width;
+  overlayCanvas.height=canvas.height;
   let framesChecked=0,framesWithPose=0,visibilityTotal=0;
   const keypoints=[];
   const sampleInterval=0.10;
@@ -726,50 +495,39 @@ async function analyzeVideo(){
     if(videoPreview.readyState<2) continue;
     try{
       ctx.drawImage(videoPreview,0,0,canvas.width,canvas.height);
-    
-  const result = poseLandmarker.detectForVideo(
-         canvas,
-         Math.max(1, Math.round(videoPreview.currentTime * 1000))
-     );
-
-730  if (result.landmarks?.length) {
-
-731      skeletonCtx.clearRect(
-732          0,
-733          0,
-734          skeletonCanvas.width,
-735          skeletonCanvas.height
-736      );
-
-737      const nose = result.landmarks[0][0];
-
-738      skeletonCtx.beginPath();
-
-739      skeletonCtx.arc(
-740          nose.x * skeletonCanvas.width,
-741          nose.y * skeletonCanvas.height,
-742          8,
-743          0,
-744          Math.PI * 2
-745      );
-
-746      skeletonCtx.fillStyle = "#3B47C6";
-747      skeletonCtx.fill();
-
-748  }
-
-749  framesChecked++;
+      const result=poseLandmarker.detectForVideo(canvas,Math.max(1,Math.round(videoPreview.currentTime*1000)));
+      framesChecked++;
+      overlayCtx.clearRect(0,0,overlayCanvas.width,overlayCanvas.height);
+      if(result.landmarks?.length){
+        framesWithPose++;
+        const landmarks=result.landmarks[0];
+        visibilityTotal+=averageVisibility(landmarks);
+        keypoints.push({frame:framesChecked,time_seconds:Number(videoPreview.currentTime.toFixed(3)),landmarks});
+        drawingUtils.drawConnectors(landmarks,PoseLandmarker.POSE_CONNECTIONS,{color:"#66cfff",lineWidth:3});
+        drawingUtils.drawLandmarks(landmarks,{color:"#ff8383",radius:3});
+      }
+      framesCheckedElement.textContent=String(framesChecked);
+      poseFramesElement.textContent=String(framesWithPose);
+      resultsElement.style.display="block";
+    }catch(e){
+      console.warn("Frame skipped",e);
+    }
+  }
+  const detectionPercentage=framesChecked?Math.round((framesWithPose/framesChecked)*100):0;
+  let quality="No pose detected";
+  if(detectionPercentage>=80) quality="Excellent";
+  else if(detectionPercentage>=60) quality="Good";
+  else if(detectionPercentage>=30) quality="Limited";
   const techniqueScore=calculateTechniqueScore(framesWithPose,framesChecked,visibilityTotal);
   const release=detectReleasePoint(keypoints);
-  const biomechanics=calculateBiomechanics(keypoints,release);
-
+ 
   detectionQualityElement.textContent=quality;
   releaseFrameElement.textContent=release.releaseFrame ?? "Not detected";
   releaseTimeElement.textContent=release.releaseTimeMs !== null
     ? `${release.releaseTimeMs} ms`
     : "Not detected";
   releaseConfidenceElement.textContent=release.releaseConfidence;
-
+ 
   return {
     framesChecked,
     framesWithPose,
@@ -782,21 +540,13 @@ async function analyzeVideo(){
     releaseTimeMs:release.releaseTimeMs,
     releaseConfidence:release.releaseConfidence,
     throwingArm:release.throwingArm,
-    peakWristVelocity:release.peakVelocity,
-    wristAngle:biomechanics.wristAngle,
-    shoulderAngle:biomechanics.shoulderAngle,
-    armExtension:biomechanics.armExtension,
-    throwConsistency:biomechanics.throwConsistency,
-    elbowAngle:biomechanics.elbowAngle,
-    headMovementScore:biomechanics.headMovementScore,
-    bodyStabilityScore:biomechanics.bodyStabilityScore,
-    followThroughScore:biomechanics.followThroughScore
+    peakWristVelocity:release.peakVelocity
   };
 }
-
+ 
 async function uploadVideo(file,analysisResult){
   setStatus("Analysis complete. Uploading video...");
-
+ 
   if(
     analysisResult.releaseFrame === null ||
     analysisResult.releaseTimeMs === null ||
@@ -804,14 +554,14 @@ async function uploadVideo(file,analysisResult){
   ){
     throw new Error("Release detection produced no saveable result.");
   }
-
+ 
   const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
   const emailFolder = playerEmail
     ? playerEmail.replace(/[^a-zA-Z0-9@._-]/g,"_")
     : "unknown-player";
-
+ 
   const filename = `${emailFolder}/${Date.now()}_${safeName}`;
-
+ 
   const {error:uploadError} = await supabaseClient.storage
     .from(STORAGE_BUCKET)
     .upload(filename,file,{
@@ -819,16 +569,16 @@ async function uploadVideo(file,analysisResult){
       upsert:false,
       contentType:file.type || "video/mp4"
     });
-
+ 
   if(uploadError) throw uploadError;
-
+ 
   const {data:publicUrlData} = supabaseClient.storage
     .from(STORAGE_BUCKET)
     .getPublicUrl(filename);
-
+ 
   const videoUrl = publicUrlData?.publicUrl;
   if(!videoUrl) throw new Error("Could not create video URL.");
-
+ 
   const detailedRow = {
     Player_Email:playerEmail,
     video_url:videoUrl,
@@ -844,27 +594,27 @@ async function uploadVideo(file,analysisResult){
     release_time_ms:analysisResult.releaseTimeMs,
     release_confidence:analysisResult.releaseConfidence,
     release_timing:`${analysisResult.releaseTimeMs} ms`,
-    wrist_angle:analysisResult.wristAngle,
-    shoulder_angle:analysisResult.shoulderAngle,
-    arm_extension:analysisResult.armExtension,
-    throw_consistency:analysisResult.throwConsistency,
-    elbow_angle:analysisResult.elbowAngle,
-    head_movement_score:analysisResult.headMovementScore,
-    body_stability_score:analysisResult.bodyStabilityScore,
-    follow_through_score:analysisResult.followThroughScore
+    wrist_angle:null,
+    shoulder_angle:null,
+    arm_extension:null,
+    throw_consistency:null,
+    elbow_angle:null,
+    head_movement_score:null,
+    body_stability_score:null,
+    follow_through_score:null
   };
-
+ 
   const {data:savedRows,error:insertError} = await supabaseClient
     .from(TABLE_NAME)
     .insert([detailedRow])
-    .select("id,release_frame,release_time_ms,release_confidence,main_issue,status,wrist_angle,shoulder_angle,arm_extension,throw_consistency,elbow_angle,head_movement_score,body_stability_score,follow_through_score");
-
+    .select("id,release_frame,release_time_ms,release_confidence,main_issue,status");
+ 
   if(insertError){
     throw new Error(`Supabase metric save failed: ${insertError.message}`);
   }
-
+ 
   const saved = Array.isArray(savedRows) ? savedRows[0] : savedRows;
-
+ 
   if(
     !saved ||
     saved.release_frame === null ||
@@ -873,51 +623,30 @@ async function uploadVideo(file,analysisResult){
   ){
     throw new Error("Supabase returned an incomplete release-analysis row.");
   }
-
-  const expectedBiomechanics=[
-    "wrist_angle",
-    "shoulder_angle",
-    "arm_extension",
-    "throw_consistency",
-    "elbow_angle",
-    "head_movement_score",
-    "body_stability_score",
-    "follow_through_score"
-  ];
-
-  const missingBiomechanics=expectedBiomechanics.filter(
-    key=>saved[key]===null || saved[key]===undefined
-  );
-
-  if(analysisResult.framesWithPose>=3 && missingBiomechanics.length){
-    throw new Error(
-      `Biomechanics save incomplete: ${missingBiomechanics.join(", ")}`
-    );
-  }
-
+ 
   return {detailedMetricsSaved:true,saved};
 }
-
+ 
 analyzeBtn.addEventListener("click",async()=>{
   if(!selectedFile || !poseLandmarker) return;
-
+ 
   analyzeBtn.disabled = true;
   videoInput.disabled = true;
-
+ 
   try{
     if(!playerEmail){
       throw new Error(
         "Player email is missing. Add ?email=SIGNED_IN_USER_EMAIL to the Glide web embed URL."
       );
     }
-
+ 
     const analysisResult = await analyzeVideo();
     const saveResult = await uploadVideo(selectedFile,analysisResult);
-
+ 
     releaseFrameElement.textContent = String(saveResult.saved.release_frame);
     releaseTimeElement.textContent = `${saveResult.saved.release_time_ms} ms`;
     releaseConfidenceElement.textContent = saveResult.saved.release_confidence;
-    setStatus("BV3 release and biomechanics saved and verified.","success");
+    setStatus("BV3 release analysis saved and verified.","success");
   }catch(error){
     console.error(error);
     setStatus(error?.message || "Analysis failed.","error");
@@ -926,10 +655,11 @@ analyzeBtn.addEventListener("click",async()=>{
     videoInput.disabled = false;
   }
 });
-
+ 
 window.addEventListener("beforeunload",cleanObjectUrl);
-
+ 
 loadPoseLandmarker();
 </script>
 </body>
 </html>
+ 
