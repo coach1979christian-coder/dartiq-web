@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DARTIQ AI Video Analysis</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:#06111d;
+  font-family:Arial,sans-serif;
+  color:#fff;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  min-height:100vh;
+  padding:20px 0
+}
+.card{
+  width:420px;
+  max-width:95%;
+  background:#0f1c2f;
+  border:1px solid #1ea7ff;
+  border-radius:22px;
+  padding:24px;
+  box-shadow:0 0 30px rgba(0,170,255,.35)
+}
+h1{
+  margin:0 0 8px;
+  text-align:center;
+  color:#66cfff;
+  font-size:28px
+}
+.version{
+  text-align:center;
+  font-size:12px;
+  opacity:.72;
+  margin:4px 0 8px
+}
+.subtitle{
+  text-align:center;
+  color:#c8d5e6;
+  margin-bottom:22px
+}
+input[type=file]{
+  width:100%;
+  padding:12px;
+  background:#091523;
+  color:#fff;
+  border:1px solid #2d4c68;
+  border-radius:12px;
+  margin-bottom:18px
+}
+.video-wrap{
+  position:relative;
+  display:none;
+  width:100%;
+  margin-bottom:18px
+}
+video{
+  display:block;
+  width:100%;
+  max-height:440px;
+  background:#000;
+  border-radius:16px
+}
+#overlayCanvas{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  border-radius:16px
+}
+button{
+  width:100%;
+  border:0;
+  border-radius:14px;
+  padding:16px;
+  font-size:19px;
+  font-weight:700;
+  color:#fff;
+  background:#1478b8;
+  cursor:pointer
+}
+button:disabled{
+  opacity:.45;
+  cursor:not-allowed
+}
+.status{
+  min-height:24px;
+  margin:18px 0 0;
+  text-align:center;
+  font-size:16px;
+  font-weight:700;
+  overflow-wrap:anywhere
+}
+.error{color:#ff8383}
+.success{color:#7ee7ff}
+.results{
+  display:none;
+  margin-top:20px;
+  padding:16px;
+  border:1px solid #2c658c;
+  border-radius:16px;
+  background:#0a1727
+}
+.result-row{
+  display:flex;
+  justify-content:space-between;
+  gap:14px;
+  padding:10px 0;
+  border-bottom:1px solid rgba(255,255,255,.12)
+}
+.result-row:last-child{border-bottom:0}
+.result-label{color:#b7c6d8}
+.result-value{
+  color:#5bcaff;
+  font-weight:700;
+  text-align:right
+}
+.hidden-canvas{display:none}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>DARTIQ AI Video Analysis</h1>
+  <div class="version">BV3 REBUILD v4.0</div>
+  <div class="subtitle">Select your throw video</div>
+
+  <input id="videoInput" type="file" accept="video/*,.mp4,.mov,.webm,.m4v">
+  <div id="videoWrap" class="video-wrap">
+    <video id="videoPreview" controls playsinline preload="metadata"></video>
+    <canvas id="overlayCanvas"></canvas>
+  </div>
+
+  <button id="analyzeBtn" disabled>Analyze My Throw</button>
+  <div id="status" class="status">Loading analysis engine...</div>
+
+  <div id="results" class="results">
+    <div class="result-row">
+      <span class="result-label">Frames checked</span>
+      <span class="result-value" id="framesChecked">0</span>
+    </div>
+    <div class="result-row">
+      <span class="result-label">Pose detected</span>
+      <span class="result-value" id="poseFrames">0</span>
+    </div>
+    <div class="result-row">
+      <span class="result-label">Detection quality</span>
+      <span class="result-value" id="detectionQuality">Waiting</span>
+    </div>
+    <div class="result-row">
+      <span class="result-label">Release frame</span>
+      <span class="result-value" id="releaseFrame">Waiting</span>
+    </div>
+    <div class="result-row">
+      <span class="result-label">Release time</span>
+      <span class="result-value" id="releaseTime">Waiting</span>
+    </div>
+    <div class="result-row">
+      <span class="result-label">Release confidence</span>
+      <span class="result-value" id="releaseConfidence">Waiting</span>
+    </div>
+  </div>
+
+  <canvas id="analysisCanvas" class="hidden-canvas"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script type="module">
+import {
+  FilesetResolver,
+  PoseLandmarker,
+  DrawingUtils
+} from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/+esm";
+
+const SUPABASE_URL = "https://usglrseckxwcdykrwuvh.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_mSQ3imYCnUspBJdpl6ybQA__TdZtZ2a";
+const STORAGE_BUCKET = "Throw videos";
+const TABLE_NAME = "video_analysis";
+const BUILD_VERSION = "BV3-REBUILD-v4.0-2026-07-29";
+
+const log = {
+  info: (...args) => { try { console.info(...args); } catch {} },
+  warn: (...args) => { try { console.warn(...args); } catch {} },
+  error: (...args) => { try { console.error(...args); } catch {} }
+};
+
+log.info(BUILD_VERSION);
+
+const byId = id => document.getElementById(id);
+const videoInput = byId("videoInput");
+const videoWrap = byId("videoWrap");
+const videoPreview = byId("videoPreview");
+const overlayCanvas = byId("overlayCanvas");
+const overlayCtx = overlayCanvas.getContext("2d");
+const analyzeBtn = byId("analyzeBtn");
+const statusElement = byId("status");
+const resultsElement = byId("results");
+const framesCheckedElement = byId("framesChecked");
+const poseFramesElement = byId("poseFrames");
+const detectionQualityElement = byId("detectionQuality");
+const releaseFrameElement = byId("releaseFrame");
+const releaseTimeElement = byId("releaseTime");
+const releaseConfidenceElement = byId("releaseConfidence");
+const analysisCanvas = byId("analysisCanvas");
+const analysisCtx = analysisCanvas.getContext("2d", { willReadFrequently: true });
+
+let poseLandmarker = null;
+let drawingUtils = null;
+let supabaseClient = null;
+let selectedFile = null;
+let selectedVideoUrl = null;
+let isAnalyzing = false;
+
+const params = new URLSearchParams(location.search);
+const playerEmail = (
+  params.get("email") ||
+  params.get("Email") ||
+  params.get("player_email") ||
+  params.get("Player_Email") ||
+  ""
+).trim();
+
+function setStatus(message, type = "") {
+  statusElement.textContent = message;
+  statusElement.className = "status";
+  if (type) statusElement.classList.add(type);
+}
+
+function setBusy(busy) {
+  isAnalyzing = busy;
+  analyzeBtn.disabled = busy || !selectedFile || !poseLandmarker;
+  videoInput.disabled = busy;
+}
+
+function resetResults() {
+  resultsElement.style.display = "none";
+  framesCheckedElement.textContent = "0";
+  poseFramesElement.textContent = "0";
+  detectionQualityElement.textContent = "Waiting";
+  releaseFrameElement.textContent = "Waiting";
+  releaseTimeElement.textContent = "Waiting";
+  releaseConfidenceElement.textContent = "Waiting";
+  overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+}
+
+function cleanupObjectUrl() {
+  if (selectedVideoUrl) {
+    URL.revokeObjectURL(selectedVideoUrl);
+    selectedVideoUrl = null;
+  }
+}
+
+function initialiseSupabase() {
+  if (!window.supabase?.createClient) {
+    throw new Error("Supabase library failed to load.");
+  }
+  supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
+}
+
+async function createPoseLandmarker(delegate) {
+  const vision = await FilesetResolver.forVisionTasks(
+    "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm"
+  );
+
+  const baseOptions = {
+    modelAssetPath:
+      "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task"
+  };
+
+  if (delegate) baseOptions.delegate = delegate;
+
+  return PoseLandmarker.createFromOptions(vision, {
+    baseOptions,
+    runningMode: "VIDEO",
+    numPoses: 1,
+    minPoseDetectionConfidence: delegate ? 0.45 : 0.4,
+    minPosePresenceConfidence: delegate ? 0.45 : 0.4,
+    minTrackingConfidence: delegate ? 0.45 : 0.4
+  });
+}
+
+async function loadPoseLandmarker() {
+  setStatus("Loading analysis engine...");
+
+  try {
+    initialiseSupabase();
+
+    try {
+      poseLandmarker = await createPoseLandmarker("GPU");
+    } catch (gpuError) {
+      log.warn("GPU initialization failed; retrying with CPU.", gpuError);
+      poseLandmarker = await createPoseLandmarker();
+    }
+
+    drawingUtils = new DrawingUtils(overlayCtx);
+    setStatus("Analysis engine ready.", "success");
+    setBusy(false);
+  } catch (error) {
+    log.error(error);
+    setStatus(error?.message || "Could not load the analysis engine.", "error");
+    analyzeBtn.disabled = true;
+  }
+}
+
+function isProbablyVideo(file) {
+  if (!file) return false;
+  if (file.type?.startsWith("video/")) return true;
+  return /\.(mp4|mov|webm|m4v|avi|mkv)$/i.test(file.name || "");
+}
+
+videoInput.addEventListener("change", () => {
+  cleanupObjectUrl();
+  resetResults();
+
+  selectedFile = videoInput.files?.[0] || null;
+
+  if (!selectedFile) {
+    videoPreview.removeAttribute("src");
+    videoWrap.style.display = "none";
+    setBusy(false);
+    return;
+  }
+
+  if (!isProbablyVideo(selectedFile)) {
+    selectedFile = null;
+    videoInput.value = "";
+    videoPreview.removeAttribute("src");
+    videoWrap.style.display = "none";
+    setBusy(false);
+    setStatus("Please select a valid video file.", "error");
+    return;
+  }
+
+  selectedVideoUrl = URL.createObjectURL(selectedFile);
+  videoPreview.src = selectedVideoUrl;
+  videoWrap.style.display = "block";
+  videoPreview.load();
+
+  setBusy(false);
+  setStatus(
+    poseLandmarker ? "Video ready for analysis." : "Loading analysis engine..."
+  );
+});
+
+function waitForMetadata() {
+  return new Promise((resolve, reject) => {
+    if (
+      videoPreview.readyState >= 1 &&
+      Number.isFinite(videoPreview.duration) &&
+      videoPreview.duration > 0
+    ) {
+      resolve();
+      return;
+    }
+
+    const timeout = setTimeout(() => {
+      cleanup();
+      reject(new Error("Video loading timed out."));
+    }, 20000);
+
+    const onLoaded = () => {
+      cleanup();
+      if (
+        Number.isFinite(videoPreview.duration) &&
+        videoPreview.duration > 0
+      ) {
+        resolve();
+      } else {
+        reject(new Error("The selected video has no usable duration."));
+      }
+    };
+
+    const onError = () => {
+      cleanup();
+      reject(new Error("The selected video could not be loaded."));
+    };
+
+    const cleanup = () => {
+      clearTimeout(timeout);
+      videoPreview.removeEventListener("loadedmetadata", onLoaded);
+      videoPreview.removeEventListener("error", onError);
+    };
+
+    videoPreview.addEventListener("loadedmetadata", onLoaded, { once: true });
+    videoPreview.addEventListener("error", onError, { once: true });
+    videoPreview.load();
+  });
+}
+
+function seekVideo(time) {
+  return new Promise(resolve => {
+    const target = Math.min(
+      Math.max(0, time),
+      Math.max(0, videoPreview.duration - 0.02)
+    );
+
+    if (Math.abs(videoPreview.currentTime - target) < 0.015) {
+      resolve(true);
+      return;
+    }
+
+    let settled = false;
+
+    const finish = confirmed => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timeout);
+      videoPreview.removeEventListener("seeked", onSeeked);
+      resolve(confirmed);
+    };
+
+    const onSeeked = () => finish(true);
+
+    const timeout = setTimeout(() => {
+      log.warn("Seek timed out at", target);
+      finish(false);
+    }, 4000);
+
+    const poll = () => {
+      if (settled) return;
+      if (Math.abs(videoPreview.currentTime - target) < 0.03) {
+        finish(true);
+        return;
+      }
+      requestAnimationFrame(poll);
+    };
+
+    videoPreview.addEventListener("seeked", onSeeked, { once: true });
+
+    try {
+      videoPreview.currentTime = target;
+      requestAnimationFrame(poll);
+    } catch (error) {
+      log.warn("Seek failed", error);
+      finish(false);
+    }
+  });
+}
+
+function averageVisibility(landmarks) {
+  if (!Array.isArray(landmarks) || landmarks.length === 0) return 0;
+  const values = landmarks
+    .map(point => Number.isFinite(point.visibility) ? point.visibility : 0)
+    .filter(Number.isFinite);
+  return values.length
+    ? values.reduce((sum, value) => sum + value, 0) / values.length
+    : 0;
+}
+
+function calculateTechniqueScore(poseFrames, framesChecked, visibilityTotal) {
+  if (!framesChecked || !poseFrames) return 0;
+  const poseRatio = poseFrames / framesChecked;
+  const avgVisibility = visibilityTotal / poseFrames;
+  return Math.max(
+    0,
+    Math.min(100, Math.round((poseRatio * 70) + (avgVisibility * 30)))
+  );
+}
+
+function pointDistance(a, b) {
+  if (!a || !b) return 0;
+  return Math.hypot(
+    Number(a.x || 0) - Number(b.x || 0),
+    Number(a.y || 0) - Number(b.y || 0)
+  );
+}
+
+function detectThrowingArm(keypoints) {
+  const scoreArm = wristIndex => {
+    let movement = 0;
+    let visible = 0;
+
+    for (let i = 1; i < keypoints.length; i++) {
+      const previous = keypoints[i - 1].landmarks?.[wristIndex];
+      const current = keypoints[i].landmarks?.[wristIndex];
+      if (!previous || !current) continue;
+
+      movement += pointDistance(previous, current);
+      visible += (
+        Number(previous.visibility || 0) +
+        Number(current.visibility || 0)
+      ) / 2;
+    }
+
+    return movement + (visible * 0.02);
+  };
+
+  return scoreArm(16) >= scoreArm(15)
+    ? { side: "Right", wristIndex: 16 }
+    : { side: "Left", wristIndex: 15 };
+}
+
+function detectReleasePoint(keypoints) {
+  const empty = arm => ({
+    releaseFrame: null,
+    releaseTimeMs: null,
+    releaseConfidence: "Low",
+    throwingArm: arm,
+    peakVelocity: 0
+  });
+
+  if (!Array.isArray(keypoints) || keypoints.length < 3) {
+    return empty("Unknown");
+  }
+
+  const arm = detectThrowingArm(keypoints);
+  const samples = [];
+
+  for (let i = 1; i < keypoints.length; i++) {
+    const previous = keypoints[i - 1];
+    const current = keypoints[i];
+    const previousWrist = previous.landmarks?.[arm.wristIndex];
+    const currentWrist = current.landmarks?.[arm.wristIndex];
+
+    if (!previousWrist || !currentWrist) continue;
+
+    const dt = current.timeSeconds - previous.timeSeconds;
+    if (!Number.isFinite(dt) || dt <= 0) continue;
+
+    samples.push({
+      velocity: pointDistance(previousWrist, currentWrist) / dt,
+      visibility: Math.min(
+        Number(previousWrist.visibility || 0),
+        Number(currentWrist.visibility || 0)
+      ),
+      frame: current.frame,
+      timeSeconds: current.timeSeconds
+    });
+  }
+
+  if (!samples.length) return empty(arm.side);
+
+  let peak = samples[0];
+  for (const sample of samples) {
+    if (sample.velocity > peak.velocity) peak = sample;
+  }
+
+  const sortedVelocities = samples
+    .map(sample => sample.velocity)
+    .sort((a, b) => a - b);
+
+  const median =
+    sortedVelocities[Math.floor(sortedVelocities.length / 2)] || 0;
+  const velocityRatio = median > 0 ? peak.velocity / median : 0;
+
+  let confidence = "Low";
+  if (peak.visibility >= 0.75 && velocityRatio >= 1.8) confidence = "High";
+  else if (peak.visibility >= 0.5 && velocityRatio >= 1.35) confidence = "Medium";
+
+  return {
+    releaseFrame: peak.frame,
+    releaseTimeMs: Math.round(peak.timeSeconds * 1000),
+    releaseConfidence: confidence,
+    throwingArm: arm.side,
+    peakVelocity: Number(peak.velocity.toFixed(4))
+  };
+}
+
+function drawPose(landmarks) {
+  overlayCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+  if (!drawingUtils || !landmarks) return;
+
+  drawingUtils.drawConnectors(
+    landmarks,
+    PoseLandmarker.POSE_CONNECTIONS,
+    { color: "#66cfff", lineWidth: 3 }
+  );
+  drawingUtils.drawLandmarks(
+    landmarks,
+    { color: "#ff8383", radius: 3 }
+  );
+}
+
+async function analyzeVideo() {
+  await waitForMetadata();
+
+  const duration = Number(videoPreview.duration);
+  if (!Number.isFinite(duration) || duration <= 0) {
+    throw new Error("The selected video could not be loaded.");
+  }
+
+  const width = Math.max(1, videoPreview.videoWidth || 1);
+  const height = Math.max(1, videoPreview.videoHeight || 1);
+
+  analysisCanvas.width = width;
+  analysisCanvas.height = height;
+  overlayCanvas.width = width;
+  overlayCanvas.height = height;
+
+  let framesChecked = 0;
+  let framesWithPose = 0;
+  let visibilityTotal = 0;
+  let lastTimestampMs = -1;
+
+  const keypoints = [];
+  const sampleInterval = 0.10;
+  const maxFrames = 90;
+  const sampleTimes = [];
+
+  for (
+    let time = 0;
+    time <= duration && sampleTimes.length < maxFrames;
+    time += sampleInterval
+  ) {
+    sampleTimes.push(Math.min(time, Math.max(0, duration - 0.02)));
+  }
+
+  videoPreview.pause();
+  resultsElement.style.display = "block";
+
+  for (let index = 0; index < sampleTimes.length; index++) {
+    const targetTime = sampleTimes[index];
+    setStatus(`Analyzing frame ${index + 1} of ${sampleTimes.length}...`);
+
+    const seekConfirmed = await seekVideo(targetTime);
+    if (!seekConfirmed || videoPreview.readyState < 2) continue;
+
+    framesChecked++;
+
+    try {
+      analysisCtx.drawImage(
+        videoPreview,
+        0,
+        0,
+        analysisCanvas.width,
+        analysisCanvas.height
+      );
+
+      let timestampMs = Math.round(videoPreview.currentTime * 1000);
+      if (timestampMs <= lastTimestampMs) timestampMs = lastTimestampMs + 1;
+      lastTimestampMs = timestampMs;
+
+      const result = poseLandmarker.detectForVideo(
+        analysisCanvas,
+        timestampMs
+      );
+
+      const landmarks = result?.landmarks?.[0] || null;
+
+      if (landmarks) {
+        framesWithPose++;
+        visibilityTotal += averageVisibility(landmarks);
+
+        keypoints.push({
+          frame: framesChecked,
+          timeSeconds: Number(videoPreview.currentTime.toFixed(3)),
+          landmarks
+        });
+
+        drawPose(landmarks);
+      } else {
+        overlayCtx.clearRect(
+          0,
+          0,
+          overlayCanvas.width,
+          overlayCanvas.height
+        );
+      }
+    } catch (error) {
+      log.warn("Frame skipped", error);
+    }
+
+    framesCheckedElement.textContent = String(framesChecked);
+    poseFramesElement.textContent = String(framesWithPose);
+  }
+
+  const detectionPercentage = framesChecked
+    ? Math.round((framesWithPose / framesChecked) * 100)
+    : 0;
+
+  let quality = "No pose detected";
+  if (detectionPercentage >= 80) quality = "Excellent";
+  else if (detectionPercentage >= 60) quality = "Good";
+  else if (detectionPercentage >= 30) quality = "Limited";
+
+  const techniqueScore = calculateTechniqueScore(
+    framesWithPose,
+    framesChecked,
+    visibilityTotal
+  );
+
+  const release = detectReleasePoint(keypoints);
+
+  detectionQualityElement.textContent = quality;
+  releaseFrameElement.textContent =
+    release.releaseFrame ?? "Not detected";
+  releaseTimeElement.textContent =
+    release.releaseTimeMs !== null
+      ? `${release.releaseTimeMs} ms`
+      : "Not detected";
+  releaseConfidenceElement.textContent = release.releaseConfidence;
+
+  return {
+    framesChecked,
+    framesWithPose,
+    detectionPercentage,
+    quality,
+    techniqueScore,
+    mainIssue:
+      release.releaseFrame !== null
+        ? "Release detected"
+        : "No release detected",
+    keypoints,
+    releaseFrame: release.releaseFrame,
+    releaseTimeMs: release.releaseTimeMs,
+    releaseConfidence: release.releaseConfidence,
+    throwingArm: release.throwingArm,
+    peakWristVelocity: release.peakVelocity
+  };
+}
+
+async function uploadVideo(file, analysisResult) {
+  if (!supabaseClient) {
+    throw new Error("Supabase is not available.");
+  }
+
+  if (
+    analysisResult.releaseFrame === null ||
+    analysisResult.releaseTimeMs === null
+  ) {
+    throw new Error(
+      `No release was detected. Pose was found in ${analysisResult.framesWithPose}/${analysisResult.framesChecked} checked frames. Use a clip where the full throwing arm stays visible.`
+    );
+  }
+
+  setStatus("Analysis complete. Uploading video...");
+
+  const safeName = (file.name || "throw-video.mp4")
+    .replace(/[^a-zA-Z0-9._-]/g, "_");
+
+  const emailFolder = playerEmail
+    .replace(/[^a-zA-Z0-9@._-]/g, "_");
+
+  const filename = `${emailFolder}/${Date.now()}_${safeName}`;
+
+  const { error: uploadError } = await supabaseClient.storage
+    .from(STORAGE_BUCKET)
+    .upload(filename, file, {
+      cacheControl: "3600",
+      upsert: false,
+      contentType: file.type || "video/mp4"
+    });
+
+  if (uploadError) throw new Error(`Video upload failed: ${uploadError.message}`);
+
+  const { data: publicUrlData } = supabaseClient.storage
+    .from(STORAGE_BUCKET)
+    .getPublicUrl(filename);
+
+  const videoUrl = publicUrlData?.publicUrl;
+  if (!videoUrl) throw new Error("Could not create the video URL.");
+
+  const row = {
+    Player_Email: playerEmail,
+    video_url: videoUrl,
+    technique_score: analysisResult.techniqueScore,
+    main_issue: analysisResult.mainIssue,
+    confidence_score: analysisResult.detectionPercentage,
+    status: "Release detected",
+    analysis_complete: true,
+    frames_checked: analysisResult.framesChecked,
+    pose_detected: analysisResult.framesWithPose,
+    detection_percentage: analysisResult.detectionPercentage,
+    release_frame: analysisResult.releaseFrame,
+    release_time_ms: analysisResult.releaseTimeMs,
+    release_confidence: analysisResult.releaseConfidence,
+    release_timing: `${analysisResult.releaseTimeMs} ms`,
+    wrist_angle: null,
+    shoulder_angle: null,
+    arm_extension: null,
+    throw_consistency: null,
+    elbow_angle: null,
+    head_movement_score: null,
+    body_stability_score: null,
+    follow_through_score: null
+  };
+
+  const { data: savedRows, error: insertError } = await supabaseClient
+    .from(TABLE_NAME)
+    .insert([row])
+    .select(
+      "id,release_frame,release_time_ms,release_confidence,main_issue,status"
+    );
+
+  if (insertError) {
+    throw new Error(`Supabase metric save failed: ${insertError.message}`);
+  }
+
+  const saved = Array.isArray(savedRows) ? savedRows[0] : savedRows;
+
+  if (
+    !saved ||
+    saved.release_frame === null ||
+    saved.release_time_ms === null ||
+    !saved.release_confidence
+  ) {
+    throw new Error("Supabase returned an incomplete analysis row.");
+  }
+
+  return saved;
+}
+
+analyzeBtn.addEventListener("click", async () => {
+  if (isAnalyzing || !selectedFile || !poseLandmarker) return;
+
+  setBusy(true);
+  resetResults();
+
+  try {
+    if (!playerEmail) {
+      throw new Error(
+        "Player email is missing. Add ?email=SIGNED_IN_USER_EMAIL to the Glide web embed URL."
+      );
+    }
+
+    const analysisResult = await analyzeVideo();
+    const saved = await uploadVideo(selectedFile, analysisResult);
+
+    releaseFrameElement.textContent = String(saved.release_frame);
+    releaseTimeElement.textContent = `${saved.release_time_ms} ms`;
+    releaseConfidenceElement.textContent = saved.release_confidence;
+
+    setStatus("Release analysis saved and verified.", "success");
+  } catch (error) {
+    log.error(error);
+    setStatus(error?.message || "Analysis failed.", "error");
+  } finally {
+    setBusy(false);
+  }
+});
+
+window.addEventListener("beforeunload", cleanupObjectUrl);
+
+loadPoseLandmarker();
+</script>
+</body>
+</html>
