@@ -188,6 +188,10 @@ safeLog.info(BUILD_VERSION);
 const TABLE_NAME = "video_analysis";
 
 
+if (!window.supabase) {
+  throw new Error("Supabase library failed to load.");
+}
+
 const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_ANON_KEY
