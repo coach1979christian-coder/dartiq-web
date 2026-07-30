@@ -458,8 +458,22 @@ async function uploadVideo(file,analysisResult){
       ) * 180 / Math.PI
     )
   : null,
-    shoulder_angle:null,
-    arm_extension:null,
+  shoulder_angle: analysisResult.releaseFrame
+  ? Math.round(
+      Math.atan2(
+        analysisResult.releaseFrame.rightElbow.y - analysisResult.releaseFrame.rightShoulder.y,
+        analysisResult.releaseFrame.rightElbow.x - analysisResult.releaseFrame.rightShoulder.x
+      ) * 180 / Math.PI
+    )
+  : null,
+   arm_extension: analysisResult.releaseFrame
+  ? Math.round(
+      Math.hypot(
+        analysisResult.releaseFrame.rightWrist.x - analysisResult.releaseFrame.rightShoulder.x,
+        analysisResult.releaseFrame.rightWrist.y - analysisResult.releaseFrame.rightShoulder.y
+      ) * 1000
+    )
+  : null,
     throw_consistency:null,
     elbow_angle:null,
     head_movement_score:null,
