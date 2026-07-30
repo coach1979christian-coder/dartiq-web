@@ -447,7 +447,9 @@ async function uploadVideo(file,analysisResult){
   release_frame: analysisResult.releaseFrame
   ? analysisResult.releaseFrame.frame
   : null,
-    release_timing:"Pending detailed motion analysis",
+  release_timing: analysisResult.releaseFrame
+  ? analysisResult.releaseFrame.time_seconds
+  : null,
     wrist_angle:null,
     shoulder_angle:null,
     arm_extension:null,
