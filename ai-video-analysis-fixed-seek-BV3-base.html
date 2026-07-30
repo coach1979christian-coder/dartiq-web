@@ -355,8 +355,21 @@ async function analyzeVideo(){
         framesWithPose++;
         const landmarks=result.landmarks[0];
         visibilityTotal+=averageVisibility(landmarks);
-        keypoints.push({frame:framesChecked,time_seconds:Number(videoPreview.currentTime.toFixed(3)),landmarks});
-      }
+      keypoints.push({
+  frame: framesChecked,
+  time_seconds: Number(videoPreview.currentTime.toFixed(3)),
+  landmarks,
+
+  nose: landmarks[0],
+  leftShoulder: landmarks[11],
+  rightShoulder: landmarks[12],
+  leftElbow: landmarks[13],
+  rightElbow: landmarks[14],
+  leftWrist: landmarks[15],
+  rightWrist: landmarks[16],
+  leftHip: landmarks[23],
+  rightHip: landmarks[24]
+});
       framesCheckedElement.textContent=String(framesChecked);
       poseFramesElement.textContent=String(framesWithPose);
       resultsElement.style.display="block";
