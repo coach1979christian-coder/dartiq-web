@@ -85,8 +85,12 @@ video.onloadeddata = () => {
   status.textContent = "Video loaded";
 });
  const analyzeBtn = document.getElementById("analyzeBtn");
-analyzeBtn.addEventListener("click", () => {
+analyzeBtn.addEventListener("click", async () => {
   status.textContent = "Analyzing...";
+
+  await pose.send({ image: video });
+
+  status.textContent = "Pose detected";
 });
 
 </script>
