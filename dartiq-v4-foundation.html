@@ -85,7 +85,12 @@ video.onloadeddata = () => {
   status.textContent = "Video loaded";
 });
  const analyzeBtn = document.getElementById("analyzeBtn");
+analyzeBtn.addEventListener("click", () => {
+  status.textContent = "Analyzing...";
+});
+
 </script>
+
 
 
 
