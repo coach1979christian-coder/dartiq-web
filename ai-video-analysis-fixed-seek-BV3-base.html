@@ -444,7 +444,9 @@ async function uploadVideo(file,analysisResult){
     pose_detected:analysisResult.framesWithPose,
     detection_percentage:analysisResult.detectionPercentage,
 
-    release_frame:null,
+  release_frame: analysisResult.releaseFrame
+  ? analysisResult.releaseFrame.frame
+  : null,
     release_timing:"Pending detailed motion analysis",
     wrist_angle:null,
     shoulder_angle:null,
