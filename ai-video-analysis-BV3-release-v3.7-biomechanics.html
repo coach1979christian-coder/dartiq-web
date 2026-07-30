@@ -362,7 +362,7 @@ function pointDistance(a,b){
   return Math.hypot(dx,dy);
 }
 
-
+function detectThrowingArm(keypoints) {
   const leftScore=scoreArm(15);
   const rightScore=scoreArm(16);
   return rightScore>=leftScore
