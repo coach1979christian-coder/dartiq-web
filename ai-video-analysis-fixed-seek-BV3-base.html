@@ -476,11 +476,9 @@ analyzeBtn.addEventListener("click",async()=>{
   videoInput.disabled = true;
 
   try{
-    if(!playerEmail){
-      throw new Error(
-        "Player email is missing. Add ?email=SIGNED_IN_USER_EMAIL to the Glide web embed URL."
-      );
-    }
+   if (!playerEmail) {
+  console.warn("No player email supplied. Continuing without email.");
+}
 
     const analysisResult = await analyzeVideo();
     const saveResult = await uploadVideo(selectedFile,analysisResult);
