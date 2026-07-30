@@ -370,75 +370,7 @@ function detectThrowingArm(keypoints) {
     : {side:"Left",wristIndex:15,elbowIndex:13,shoulderIndex:11};
 }
 
-function detectReleasePoint(keypoints){
-  if(!Array.isArray(keypoints) || keypoints.length<3){
-    return {
-      releaseFrame:null,
-      releaseTimeMs:null,
-      releaseConfidence:"Low",
-      throwingArm:"Unknown",
-      peakVelocity:0
-    };
-  }
 
-  const arm=detectThrowingArm(keypoints);
-  const velocitySamples=[];
-
-  for(let i=1;i<keypoints.length;i++){
-    const previous=keypoints[i-1];
-    const current=keypoints[i];
-    const previousWrist=previous.landmarks?.[arm.wristIndex];
-    const currentWrist=current.landmarks?.[arm.wristIndex];
-
-    if(!previousWrist || !currentWrist) continue;
-
-    const dt=Math.max(0.001,current.time_seconds-previous.time_seconds);
-    const velocity=pointDistance(previousWrist,currentWrist)/dt;
-    const visibility=Math.min(
-      Number(previousWrist.visibility||0),
-      Number(currentWrist.visibility||0)
-    );
-
-    velocitySamples.push({
-      index:i,
-      velocity,
-      visibility,
-      frame:current.frame,
-      timeSeconds:current.time_seconds
-    });
-  }
-
-  if(!velocitySamples.length){
-    return {
-      releaseFrame:null,
-      releaseTimeMs:null,
-      releaseConfidence:"Low",
-      throwingArm:arm.side,
-      peakVelocity:0
-    };
-  }
-
-  let peak=velocitySamples[0];
-  for(const sample of velocitySamples){
-    if(sample.velocity>peak.velocity) peak=sample;
-  }
-
-  const sorted=velocitySamples.map(s=>s.velocity).sort((a,b)=>a-b);
-  const median=sorted[Math.floor(sorted.length/2)]||0;
-  const velocityRatio=median>0 ? peak.velocity/median : 0;
-
-  let confidence="Low";
-  if(peak.visibility>=0.75 && velocityRatio>=1.8) confidence="High";
-  else if(peak.visibility>=0.5 && velocityRatio>=1.35) confidence="Medium";
-
-  return {
-    releaseFrame:peak.frame,
-    releaseTimeMs:Math.round(peak.timeSeconds*1000),
-    releaseConfidence:confidence,
-    throwingArm:arm.side,
-    peakVelocity:Number(peak.velocity.toFixed(4))
-  };
-}
 
 
 function clamp(value,min,max){
