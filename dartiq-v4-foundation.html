@@ -67,7 +67,23 @@ const poseLandmarker = await PoseLandmarker.createFromOptions(vision, {
   numPoses: 1
 });
 
-status.textContent = "AI Ready";
+status.textContent="AI Ready";
+
+const videoInput = document.getElementById("videoInput");
+const video = document.getElementById("video");
+
+videoInput.addEventListener("change", (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  video.src = URL.createObjectURL(file);
+  video.load();
+video.onloadeddata = () => {
+  video.play();
+  status.textContent = "Video ready";
+};
+  status.textContent = "Video loaded";
+});
 </script>
 
 
