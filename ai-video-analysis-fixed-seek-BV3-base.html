@@ -384,7 +384,13 @@ async function analyzeVideo(){
   else if(detectionPercentage>=30) quality="Limited";
   const techniqueScore=calculateTechniqueScore(framesWithPose,framesChecked,visibilityTotal);
   detectionQualityElement.textContent=quality;
-  return {
+const releaseFrame =
+  keypoints.length > 0
+    ? keypoints.reduce((best, current) =>
+        current.rightWrist.x > best.rightWrist.x ? current : best
+      )
+    : null;
+   return {
   framesChecked,
   framesWithPose,
   detectionPercentage,
