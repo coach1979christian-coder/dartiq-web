@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DARTIQ AI Video Analysis</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#050816;color:#fff;display:flex;justify-content:center;align-items:center;min-height:100vh}
+.card{width:420px;background:#0d1328;border:2px solid #24c8ff;border-radius:20px;padding:30px}
+h1{text-align:center;color:#4fd8ff}
+.subtitle{text-align:center;margin:15px 0 25px}
+video{width:100%;display:none;margin-bottom:20px}
+button{width:100%;padding:14px}
+.status{text-align:center;margin-top:20px}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>DARTIQ AI Video Analysis</h1>
+<div class="subtitle">Select your throw video</div>
+<input id="videoInput" type="file" accept="video/*"><br><br>
+<video id="video" controls></video>
+<button id="analyzeBtn" disabled>Analyze My Throw</button>
+<div id="status" class="status">Initializing...</div>
+</div>
+<script>
+const input=document.getElementById('videoInput');
+const video=document.getElementById('video');
+const btn=document.getElementById('analyzeBtn');
+const status=document.getElementById('status');
+input.onchange=()=>{
+ const f=input.files[0];
+ if(!f)return;
+ video.src=URL.createObjectURL(f);
+ video.style.display='block';
+ btn.disabled=false;
+ status.textContent='Ready';
+};
+btn.onclick=()=>status.textContent='Analysis engine coming next...';
+</script>
+</body>
+</html>
