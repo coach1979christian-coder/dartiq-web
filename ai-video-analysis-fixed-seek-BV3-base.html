@@ -384,9 +384,15 @@ async function analyzeVideo(){
   else if(detectionPercentage>=30) quality="Limited";
   const techniqueScore=calculateTechniqueScore(framesWithPose,framesChecked,visibilityTotal);
   detectionQualityElement.textContent=quality;
-  return {framesChecked,framesWithPose,detectionPercentage,quality,techniqueScore,mainIssue:framesWithPose>0?"Vision analysis pending":"No pose detected",keypoints};
-}
-
+  return {
+  framesChecked,
+  framesWithPose,
+  detectionPercentage,
+  quality,
+  techniqueScore,
+  mainIssue: framesWithPose > 0 ? "Vision analysis pending" : "No pose detected",
+  keypoints
+};
 async function uploadVideo(file,analysisResult){
   setStatus("Analysis complete. Uploading video...");
 
