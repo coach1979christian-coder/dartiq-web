@@ -436,8 +436,7 @@ async function uploadVideo(file,analysisResult){
   const detailedRow = {
     Player_Email:playerEmail || null,
     video_url:videoUrl,
-    technique_score:analysisResult.techniqueScore,
-    main_issue:analysisResult.mainIssue,
+technique_score: analysisResult.releaseFrame    main_issue:analysisResult.mainIssue,
     confidence_score:analysisResult.detectionPercentage,
     status:finalStatus,
 
