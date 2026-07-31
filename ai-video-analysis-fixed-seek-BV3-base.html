@@ -454,10 +454,12 @@ async function uploadVideo(file,analysisResult){
   : null,
   wrist_angle: analysisResult.releaseFrame
   ? Math.round(
-      Math.atan2(
-        analysisResult.releaseFrame.rightWrist.y - analysisResult.releaseFrame.rightElbow.y,
-        analysisResult.releaseFrame.rightWrist.x - analysisResult.releaseFrame.rightElbow.x
-      ) * 180 / Math.PI
+      (
+        Math.atan2(
+          analysisResult.releaseFrame.rightWrist.y - analysisResult.releaseFrame.rightElbow.y,
+          analysisResult.releaseFrame.rightWrist.x - analysisResult.releaseFrame.rightElbow.x
+        ) * 180 / Math.PI + 360
+      ) % 360
     )
   : null,
   shoulder_angle: analysisResult.releaseFrame
