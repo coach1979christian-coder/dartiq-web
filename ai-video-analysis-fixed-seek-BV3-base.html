@@ -397,7 +397,9 @@ const releaseFrame =
   detectionPercentage,
   quality,
   techniqueScore,
-  mainIssue: framesWithPose > 0 ? "Vision analysis pending" : "No pose detected",
+ mainIssue: releaseFrame
+  ? "Release frame detected"
+  : "No release frame detected",
   keypoints
 };
 async function uploadVideo(file,analysisResult){
