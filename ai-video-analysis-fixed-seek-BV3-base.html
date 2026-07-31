@@ -505,8 +505,22 @@ async function uploadVideo(file,analysisResult){
       ) * 100
     )
   : null,
-    body_stability_score:null,
-    follow_through_score:null
+body_stability_score: analysisResult.releaseFrame
+  ? Math.round(
+      Math.abs(
+        analysisResult.releaseFrame.leftHip.x -
+        analysisResult.releaseFrame.rightHip.x
+      ) * 100
+    )
+  : null,   
+follow_through_score: analysisResult.releaseFrame
+  ? Math.round(
+      Math.abs(
+        analysisResult.releaseFrame.rightWrist.y -
+        analysisResult.releaseFrame.rightShoulder.y
+      ) * 100
+    )
+  : null
   };
 
   const {error:detailedInsertError} = await supabaseClient
