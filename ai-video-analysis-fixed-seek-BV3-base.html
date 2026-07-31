@@ -476,7 +476,9 @@ async function uploadVideo(file,analysisResult){
       ) * 1000
     )
   : null,
-    throw_consistency:null,
+throw_consistency: analysisResult.releaseFrame
+  ? 100
+  : null,
   elbow_angle: analysisResult.releaseFrame
   ? Math.round(
       Math.abs(
