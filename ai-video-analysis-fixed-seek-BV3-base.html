@@ -489,7 +489,22 @@ async function uploadVideo(file,analysisResult){
       ) * 180 / Math.PI
     )
   : null,
-    head_movement_score:null,
+   head_movement_score: analysisResult.releaseFrame
+  ? Math.round(
+      Math.hypot(
+        analysisResult.releaseFrame.nose.x -
+        (
+          (analysisResult.releaseFrame.leftShoulder.x +
+           analysisResult.releaseFrame.rightShoulder.x) / 2
+        ),
+        analysisResult.releaseFrame.nose.y -
+        (
+          (analysisResult.releaseFrame.leftShoulder.y +
+           analysisResult.releaseFrame.rightShoulder.y) / 2
+        )
+      ) * 100
+    )
+  : null,
     body_stability_score:null,
     follow_through_score:null
   };
