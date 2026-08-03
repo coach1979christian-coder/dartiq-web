@@ -356,6 +356,7 @@ async function analyzeVideo(){
         const landmarks=result.landmarks[0];
         visibilityTotal+=averageVisibility(landmarks);
       keypoints.push({
+     });   
   frame: framesChecked,
   time_seconds: Number(videoPreview.currentTime.toFixed(3)),
   landmarks,
@@ -373,7 +374,8 @@ async function analyzeVideo(){
       framesCheckedElement.textContent=String(framesChecked);
       poseFramesElement.textContent=String(framesWithPose);
       resultsElement.style.display="block";
-    }catch(e){
+    }
+      }catch(e){
       console.warn("Frame skipped",e);
     }
   }
