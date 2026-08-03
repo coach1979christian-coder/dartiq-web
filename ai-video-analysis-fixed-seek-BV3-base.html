@@ -355,8 +355,7 @@ async function analyzeVideo(){
         framesWithPose++;
         const landmarks=result.landmarks[0];
         visibilityTotal+=averageVisibility(landmarks);
-      keypoints.push({
-     });   
+     keypoints.push({
   frame: framesChecked,
   time_seconds: Number(videoPreview.currentTime.toFixed(3)),
   landmarks,
@@ -398,10 +397,10 @@ const releaseFrame =
   framesWithPose,
   detectionPercentage,
   quality,
-  techniqueScore,
- mainIssue: releaseFrame
-  ? "Release frame detected"
-  : "No release frame detected",
+technique_score: techniqueScore,
+     mainIssue: releaseFrame
+    ? "Release frame detected"
+    : "No release frame detected",
   keypoints
 };
   }
