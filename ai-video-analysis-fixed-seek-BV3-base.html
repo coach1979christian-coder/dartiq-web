@@ -440,10 +440,9 @@ async function uploadVideo(file,analysisResult){
     video_url: videoUrl,
 
     technique_score: analysisResult.techniqueScore,
-    main_issue: analysisResult.mainIssue,
-    confidence_score: analysisResult.detectionPercentage,
-    status: finalStatus,
-
+main_issue: analysisResult.mainIssue,
+confidence_score: analysisResult.detectionPercentage,
+status: finalStatus,
     analysis_complete:true,
     frames_checked:analysisResult.framesChecked,
     pose_detected:analysisResult.framesWithPose,
