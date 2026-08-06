@@ -360,10 +360,27 @@ async function analyzeVideo(){
   const sampleInterval=0.45;
   const maxFrames=24;
   videoPreview.pause();
-  for(let t=0;t<=duration&&framesChecked<maxFrames;t+=sampleInterval){
-    await seekVideo(t);
-    if(videoPreview.readyState<2) continue;
-    try{
+  for (let t = 0; t <= duration && framesChecked < maxFrames; t += sampleInterval) {
+
+    console.log("Seeking to", t);
+
+    try {
+        await seekVideo(t);
+    } catch (e) {
+        console.error("Seek failed at", t, e);
+        break;
+    }
+
+    console.log(
+        "CurrentTime:",
+        videoPreview.currentTime,
+        "ReadyState:",
+        videoPreview.readyState
+    );
+
+    if (videoPreview.readyState < 2) continue;
+
+    try {
       ctx.drawImage(videoPreview,0,0,canvas.width,canvas.height);
       const result=poseLandmarker.detectForVideo(canvas,Math.max(1,Math.round(videoPreview.currentTime*1000)));
       framesChecked++;
