@@ -397,7 +397,7 @@ const releaseFrame =
   framesWithPose,
   detectionPercentage,
   quality,
-technique_score: techniqueScore,
+technique_score: technique_Score,
      mainIssue: releaseFrame
     ? "Release frame detected"
     : "No release frame detected",
@@ -439,7 +439,7 @@ async function uploadVideo(file,analysisResult){
     Player_Email: playerEmail || null,
     video_url: videoUrl,
 
-    technique_score: analysisResult.techniqueScore,
+    technique_score: analysisResult.technique_Score,
 main_issue: analysisResult.mainIssue,
 confidence_score: analysisResult.detectionPercentage,
 status: finalStatus,
@@ -547,7 +547,7 @@ follow_through_score: analysisResult.releaseFrame
   const coreRow = {
     Player_Email:playerEmail || null,
     video_url:videoUrl,
-    technique_score:analysisResult.techniqueScore,
+    technique_score:analysisResult.technique_Score,
     main_issue:analysisResult.mainIssue,
     confidence_score:analysisResult.detectionPercentage,
     status:finalStatus
