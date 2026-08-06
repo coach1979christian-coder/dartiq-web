@@ -435,12 +435,14 @@ async function uploadVideo(file,analysisResult){
     ? "Pose detected"
     : "No pose detected";
 
-  const detailedRow = {
-    Player_Email:playerEmail || null,
-    video_url:videoUrl,
-technique_score: analysisResult.releaseFrame    main_issue:analysisResult.mainIssue,
-    confidence_score:analysisResult.detectionPercentage,
-    status:finalStatus,
+ const detailedRow = {
+    Player_Email: playerEmail || null,
+    video_url: videoUrl,
+
+    technique_score: analysisResult.techniqueScore,
+    main_issue: analysisResult.mainIssue,
+    confidence_score: analysisResult.detectionPercentage,
+    status: finalStatus,
 
     analysis_complete:true,
     frames_checked:analysisResult.framesChecked,
