@@ -468,12 +468,22 @@ async function uploadVideo(file,analysisResult){
   const finalStatus = analysisResult.framesWithPose > 0
     ? "Pose detected"
     : "No pose detected";
-
+const ai_observation = "Analysis completed successfully.";
+const coach_advice = "Continue practicing your throwing mechanics.";
+const recommended_drill = "Basic throwing drill";
+const why_this_drill = "Improves consistency and accuracy.";
+const practice_focus = "Release technique";
+const improvement_potential = "High";
  const detailedRow = {
     Player_Email: playerEmail || null,
     video_url: videoUrl,
-
-    technique_score: analysisResult.technique_Score,
+ai_observation: ai_observation,
+coach_advice: coach_advice,
+recommended_drill: recommended_drill,
+why_this_drill: why_this_drill,
+practice_focus: practice_focus,
+improvement_potential: improvement_potential,
+   technique_score: analysisResult.technique_score,
 main_issue: analysisResult.mainIssue,
 confidence_score: analysisResult.detectionPercentage,
 status: finalStatus,
