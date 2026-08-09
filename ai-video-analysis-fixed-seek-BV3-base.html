@@ -575,9 +575,14 @@ follow_through_score: analysisResult.releaseFrame
   : null
   };
 
-  const {error:detailedInsertError} = await supabaseClient
-    .from(TABLE_NAME)
-    .insert(detailedRow);
+ const { data, error: detailedInsertError } = await supabaseClient
+  .from(TABLE_NAME)
+  .insert(detailedRow)
+  .select();
+
+console.log("Detailed Row:", detailedRow);
+console.log("Inserted Data:", data);
+console.log("Detailed Insert Error:", detailedInsertError);
 
   if(!detailedInsertError){
     return {
