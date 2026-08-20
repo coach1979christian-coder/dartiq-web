@@ -474,6 +474,28 @@ const recommended_drill = "Basic throwing drill";
 const why_this_drill = "Improves consistency and accuracy.";
 const practice_focus = "Release technique";
 const improvement_potential = "High";
+  const releaseConfidence = analysisResult.releaseFrame
+  ? Math.round(
+      (
+        (analysisResult.releaseFrame.rightShoulder.visibility || 0) +
+        (analysisResult.releaseFrame.rightElbow.visibility || 0) +
+        (analysisResult.releaseFrame.rightWrist.visibility || 0)
+      ) / 3 * 100
+    )
+  : null;
+const ai_summary = analysisResult.releaseFrame
+  ? `Throw successfully analyzed. Release detected at ${Math.round(
+      analysisResult.releaseFrame.time_seconds * 1000
+    )} ms with ${releaseConfidence}% release confidence.`
+  : "Throw analyzed, but no reliable release frame was detected.";
+ai_observation: ai_observation,
+coach_advice: coach_advice,
+recommended_drill: recommended_drill,
+why_this_drill: why_this_drill,
+practice_focus: practice_focus,
+improvement_potential: improvement_potential,
+
+
  const detailedRow = {
     Player_Email: playerEmail || null,
     video_url: videoUrl,
@@ -483,6 +505,15 @@ recommended_drill: recommended_drill,
 why_this_drill: why_this_drill,
 practice_focus: practice_focus,
 improvement_potential: improvement_potential,
+  ai_summary: ai_summary,
+
+release_time_ms: analysisResult.releaseFrame
+  ? Math.round(analysisResult.releaseFrame.time_seconds * 1000)
+  : null,
+
+release_confidence: releaseConfidence !== null
+  ? `${releaseConfidence}%`
+  : null,
    technique_score: analysisResult.technique_score,
 main_issue: analysisResult.mainIssue,
 confidence_score: analysisResult.detectionPercentage,
