@@ -144,7 +144,8 @@ const SUPABASE_URL = "https://usglrseckxwcdykrwuvh.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_mSQ3imYCnUspBJdpl6ybQA__TdZtZ2a";
 const STORAGE_BUCKET = "Throw videos";
 const TABLE_NAME = "video_analysis";
-
+const GLIDE_WEBHOOK_URL =
+  "https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/ab4d12d2-f573-4a1d-9ec3-b2ed9f5ea28e";
 const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_ANON_KEY
@@ -158,7 +159,11 @@ const playerEmail = (
   params.get("Player_Email") ||
   ""
 ).trim();
-
+const glideRowId = (
+  params.get("row_id") ||
+  params.get("Row ID") ||
+  ""
+).trim();
 const videoInput = document.getElementById("videoInput");
 const videoPreview = document.getElementById("videoPreview");
 const analyzeBtn = document.getElementById("analyzeBtn");
@@ -608,13 +613,42 @@ console.log("Detailed Row:", detailedRow);
 console.log("Inserted Data:", data);
 console.log("Detailed Insert Error:", detailedInsertError);
 
-  if(!detailedInsertError){
-    return {
-      detailedMetricsSaved:true,
-      warning:null
-    };
+if(!detailedInsertError){
+
+  if(glideRowId){
+    try{
+      const glideResponse = await fetch(GLIDE_WEBHOOK_URL,{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+          row_id: glideRowId,
+          ai_summary: detailedRow.ai_summary,
+          release_time_ms: detailedRow.release_time_ms
+        })
+      });
+
+      console.log(
+        "Glide webhook status:",
+        glideResponse.status
+      );
+
+    }catch(glideError){
+      console.error(
+        "Glide webhook failed:",
+        glideError
+      );
+    }
+  }else{
+    console.warn("No Glide row_id supplied in URL.");
   }
 
+  return {
+    detailedMetricsSaved:true,
+    warning:null
+  };
+}
   console.error("Detailed database insert failed:", detailedInsertError);
 
   const coreRow = {
