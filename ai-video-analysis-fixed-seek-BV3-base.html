@@ -164,6 +164,12 @@ const glideRowId = (
   params.get("Row ID") ||
   ""
 ).trim();
+
+const sessionId = (
+  params.get("session_id") ||
+  params.get("Session ID") ||
+  ""
+).trim();
 const videoInput = document.getElementById("videoInput");
 const videoPreview = document.getElementById("videoPreview");
 const analyzeBtn = document.getElementById("analyzeBtn");
