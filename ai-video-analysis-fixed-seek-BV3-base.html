@@ -629,12 +629,13 @@ body: JSON.stringify({
     release_confidence: detailedRow.release_confidence,
     confidence_score: detailedRow.confidence_score,
     pose_detected: detailedRow.pose_detected,
-technique_score: detailedRow.technique_score,
-main_issue: detailedRow.main_issue,
-ai_observation: detailedRow.ai_observation,
-coach_advice: detailedRow.coach_advice,
-recommended_drill: detailedRow.recommended_drill
-}));
+    technique_score: detailedRow.technique_score,
+    main_issue: detailedRow.main_issue,
+    ai_observation: detailedRow.ai_observation,
+    coach_advice: detailedRow.coach_advice,
+    recommended_drill: detailedRow.recommended_drill
+})
+});
       console.log(
         "Glide webhook status:",
         glideResponse.status
