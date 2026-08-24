@@ -622,11 +622,14 @@ if(!detailedInsertError){
         headers:{
           "Content-Type":"application/json"
         },
-        body:JSON.stringify({
-          row_id: glideRowId,
-          ai_summary: detailedRow.ai_summary,
-          release_time_ms: detailedRow.release_time_ms
-        })
+body: JSON.stringify({
+    row_id: glideRowId,
+    ai_summary: detailedRow.ai_summary,
+    release_time_ms: detailedRow.release_time_ms,
+    release_confidence: detailedRow.release_confidence,
+    confidence_score: detailedRow.confidence_score,
+    pose_detected: detailedRow.pose_detected
+})
       });
 
       console.log(
