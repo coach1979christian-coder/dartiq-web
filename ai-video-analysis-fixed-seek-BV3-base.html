@@ -429,6 +429,55 @@ async function analyzeVideo(){
   else if(detectionPercentage>=30) quality="Limited";
   const techniqueScore=calculateTechniqueScore(framesWithPose,framesChecked,visibilityTotal);
   detectionQualityElement.textContent=quality;
+const clampScore = (value) => Math.max(0, Math.min(100, Math.round(value)));
+
+const movementDistance = (a, b) =>
+  Math.hypot(
+    (a?.x || 0) - (b?.x || 0),
+    (a?.y || 0) - (b?.y || 0)
+  );
+
+let headMovementTotal = 0;
+let hipMovementTotal = 0;
+let elbowMovementTotal = 0;
+
+for (let i = 1; i < keypoints.length; i++) {
+  const prev = keypoints[i - 1];
+  const curr = keypoints[i];
+
+  headMovementTotal += movementDistance(curr.nose, prev.nose);
+
+  const prevHipCenter = {
+    x: (prev.leftHip.x + prev.rightHip.x) / 2,
+    y: (prev.leftHip.y + prev.rightHip.y) / 2
+  };
+
+  const currHipCenter = {
+    x: (curr.leftHip.x + curr.rightHip.x) / 2,
+    y: (curr.leftHip.y + curr.rightHip.y) / 2
+  };
+
+  hipMovementTotal += movementDistance(currHipCenter, prevHipCenter);
+  elbowMovementTotal += movementDistance(curr.rightElbow, prev.rightElbow);
+}
+
+const head_stability_score =
+  keypoints.length > 1
+    ? clampScore(100 - (headMovementTotal * 500))
+    : null;
+
+const body_stability_score =
+  keypoints.length > 1
+    ? clampScore(100 - (hipMovementTotal * 500))
+    : null;
+
+const elbow_control_score =
+  keypoints.length > 1
+    ? clampScore(100 - (elbowMovementTotal * 500))
+    : null;
+
+
+  
 const releaseFrame =
   keypoints.length > 0
     ? keypoints.reduce((best, current) =>
