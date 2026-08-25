@@ -745,40 +745,11 @@ throw_consistency: analysisResult.releaseFrame
       ) * 180 / Math.PI
     )
   : null,
-   head_movement_score: analysisResult.releaseFrame
-  ? Math.round(
-      Math.hypot(
-        analysisResult.releaseFrame.nose.x -
-        (
-          (analysisResult.releaseFrame.leftShoulder.x +
-           analysisResult.releaseFrame.rightShoulder.x) / 2
-        ),
-        analysisResult.releaseFrame.nose.y -
-        (
-          (analysisResult.releaseFrame.leftShoulder.y +
-           analysisResult.releaseFrame.rightShoulder.y) / 2
-        )
-      ) * 100
-    )
-  : null,
-body_stability_score: analysisResult.releaseFrame
-  ? Math.round(
-      Math.abs(
-        analysisResult.releaseFrame.leftHip.x -
-        analysisResult.releaseFrame.rightHip.x
-      ) * 100
-    )
-  : null,   
-follow_through_score: analysisResult.releaseFrame
-  ? Math.round(
-      Math.abs(
-        analysisResult.releaseFrame.rightWrist.y -
-        analysisResult.releaseFrame.rightShoulder.y
-      ) * 100
-    )
-  : null
-  };
-
+  head_movement_score: analysisResult.head_stability_score,
+body_stability_score: analysisResult.body_stability_score,
+follow_through_score: analysisResult.follow_through_score,
+elbow_control_score: analysisResult.elbow_control_score,
+  );
  const { data, error: detailedInsertError } = await supabaseClient
   .from(TABLE_NAME)
   .insert(detailedRow)
