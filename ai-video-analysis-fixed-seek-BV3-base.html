@@ -748,7 +748,7 @@ throw_consistency: analysisResult.releaseFrame
   head_movement_score: analysisResult.head_stability_score,
 body_stability_score: analysisResult.body_stability_score,
 follow_through_score: analysisResult.follow_through_score,
-elbow_control_score: analysisResult.elbow_control_score,
+elbow_angle: elbowAngle,
   );
  const { data, error: detailedInsertError } = await supabaseClient
   .from(TABLE_NAME)
