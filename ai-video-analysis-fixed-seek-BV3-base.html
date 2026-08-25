@@ -497,12 +497,63 @@ async function uploadVideo(file,analysisResult){
   const finalStatus = analysisResult.framesWithPose > 0
     ? "Pose detected"
     : "No pose detected";
-const ai_observation = "Analysis completed successfully.";
-const coach_advice = "Continue practicing your throwing mechanics.";
-const recommended_drill = "Basic throwing drill";
-const why_this_drill = "Improves consistency and accuracy.";
-const practice_focus = "Release technique";
-const improvement_potential = "High";
+let ai_observation = "";
+let coach_advice = "";
+let recommended_drill = "";
+let why_this_drill = "";
+let practice_focus = "";
+let improvement_potential = "";
+
+const elbowAngle = detailedRow.elbow_angle;
+const headMovement = detailedRow.head_movement_score;
+const bodyStability = detailedRow.body_stability_score;
+const followThrough = detailedRow.follow_through_score;
+
+if (followThrough !== null && followThrough < 40) {
+
+    ai_observation = `Follow-through is currently the weakest part of the throw (${followThrough}).`;
+    coach_advice = "Extend the throwing arm fully toward the target after release. Avoid stopping or pulling the arm back early.";
+    recommended_drill = "Full Extension Lane";
+    why_this_drill = "Trains a complete, repeatable follow-through and improves directional control.";
+    practice_focus = "Follow-through";
+    improvement_potential = "High";
+
+} else if (bodyStability !== null && bodyStability < 40) {
+
+    ai_observation = `Body stability is low (${bodyStability}), indicating excessive movement during the throw.`;
+    coach_advice = "Keep your torso and lower body stable throughout the throwing motion.";
+    recommended_drill = "Stability Lock";
+    why_this_drill = "Reduces unnecessary body movement and creates a more repeatable throwing platform.";
+    practice_focus = "Body stability";
+    improvement_potential = "High";
+
+} else if (headMovement !== null && headMovement > 15) {
+
+    ai_observation = `Head movement is higher than desired (${headMovement}).`;
+    coach_advice = "Keep your head fixed on the target throughout the entire throwing motion.";
+    recommended_drill = "Head Stability Drill";
+    why_this_drill = "A stable head improves visual alignment and throwing consistency.";
+    practice_focus = "Head stability";
+    improvement_potential = "Medium";
+
+} else if (elbowAngle !== null && (elbowAngle < 80 || elbowAngle > 120)) {
+
+    ai_observation = `Elbow angle of ${elbowAngle}° indicates that the throwing arm position can be improved.`;
+    coach_advice = "Work on maintaining a more controlled elbow position through the acceleration and release phase.";
+    recommended_drill = "Level Elbow Builder";
+    why_this_drill = "Improves elbow control and helps create a straighter, more repeatable throwing path.";
+    practice_focus = "Elbow position";
+    improvement_potential = "Medium";
+
+} else {
+
+    ai_observation = "Throw mechanics are stable with no major biomechanical weakness detected.";
+    coach_advice = "Maintain the current mechanics and focus on repeating the same release and follow-through.";
+    recommended_drill = "Consistency Builder";
+    why_this_drill = "Reinforces the mechanics already working well and improves repeatability.";
+    practice_focus = "Consistency";
+    improvement_potential = "Low";
+}
   const releaseConfidence = analysisResult.releaseFrame
   ? Math.round(
       (
