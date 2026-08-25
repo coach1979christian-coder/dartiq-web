@@ -429,55 +429,6 @@ async function analyzeVideo(){
   else if(detectionPercentage>=30) quality="Limited";
   const techniqueScore=calculateTechniqueScore(framesWithPose,framesChecked,visibilityTotal);
   detectionQualityElement.textContent=quality;
-const clampScore = (value) => Math.max(0, Math.min(100, Math.round(value)));
-
-const movementDistance = (a, b) =>
-  Math.hypot(
-    (a?.x || 0) - (b?.x || 0),
-    (a?.y || 0) - (b?.y || 0)
-  );
-
-let headMovementTotal = 0;
-let hipMovementTotal = 0;
-let elbowMovementTotal = 0;
-
-for (let i = 1; i < keypoints.length; i++) {
-  const prev = keypoints[i - 1];
-  const curr = keypoints[i];
-
-  headMovementTotal += movementDistance(curr.nose, prev.nose);
-
-  const prevHipCenter = {
-    x: (prev.leftHip.x + prev.rightHip.x) / 2,
-    y: (prev.leftHip.y + prev.rightHip.y) / 2
-  };
-
-  const currHipCenter = {
-    x: (curr.leftHip.x + curr.rightHip.x) / 2,
-    y: (curr.leftHip.y + curr.rightHip.y) / 2
-  };
-
-  hipMovementTotal += movementDistance(currHipCenter, prevHipCenter);
-  elbowMovementTotal += movementDistance(curr.rightElbow, prev.rightElbow);
-}
-
-const head_stability_score =
-  keypoints.length > 1
-    ? clampScore(100 - (headMovementTotal * 500))
-    : null;
-
-const body_stability_score =
-  keypoints.length > 1
-    ? clampScore(100 - (hipMovementTotal * 500))
-    : null;
-
-const elbow_control_score =
-  keypoints.length > 1
-    ? clampScore(100 - (elbowMovementTotal * 500))
-    : null;
-
-
-  
 const releaseFrame =
   keypoints.length > 0
     ? keypoints.reduce((best, current) =>
@@ -503,40 +454,13 @@ const technique_score = releaseFrame
         Math.round(detectionPercentage * 0.55)
       )
     );
-  const releaseIndex = releaseFrame
-  ? keypoints.findIndex(k => k.frame === releaseFrame.frame)
-  : -1;
-
-let followThroughTravel = 0;
-
-if (releaseIndex >= 0 && releaseIndex < keypoints.length - 1) {
-  for (let i = releaseIndex + 1; i < keypoints.length; i++) {
-    const prev = keypoints[i - 1];
-    const curr = keypoints[i];
-
-    followThroughTravel += movementDistance(
-      curr.rightWrist,
-      prev.rightWrist
-    );
-  }
-}
-
-const follow_through_score =
-  releaseIndex >= 0
-    ? clampScore(followThroughTravel * 600)
-    : null;
 return {
-  
   releaseFrame,
   framesChecked,
   framesWithPose,
   detectionPercentage,
   quality,
   technique_score: technique_score,
-  head_stability_score,
-body_stability_score,
-elbow_control_score,
-follow_through_score,
   mainIssue: releaseFrame
     ? "Release frame detected"
     : "No release frame detected",
@@ -573,87 +497,12 @@ async function uploadVideo(file,analysisResult){
   const finalStatus = analysisResult.framesWithPose > 0
     ? "Pose detected"
     : "No pose detected";
-let ai_observation = "";
-let coach_advice = "";
-let recommended_drill = "";
-let why_this_drill = "";
-let practice_focus = "";
-let improvement_potential = "";
-
-const rf = analysisResult.releaseFrame;
-
-const elbowAngle = rf
-  ? Math.round(
-      Math.abs(
-        Math.atan2(rf.rightWrist.y - rf.rightElbow.y, rf.rightWrist.x - rf.rightElbow.x) -
-        Math.atan2(rf.rightShoulder.y - rf.rightElbow.y, rf.rightShoulder.x - rf.rightElbow.x)
-      ) * 180 / Math.PI
-    )
-  : null;
-
-const headStabilityScore = analysisResult.head_stability_score;
-const bodyStabilityScore = analysisResult.body_stability_score;
-const elbowControlScore = analysisResult.elbow_control_score;
-const followThroughScore = analysisResult.follow_through_score;
-
-const biomechanics = [
-  { key: "follow-through", score: followThroughScore },
-  { key: "body stability", score: bodyStabilityScore },
-  { key: "head stability", score: headStabilityScore },
-  { key: "elbow control", score: elbowControlScore }
-].filter(item => item.score !== null && item.score !== undefined);
-
-biomechanics.sort((a, b) => a.score - b.score);
-
-const weakest = biomechanics[0];
-const secondWeakest = biomechanics[1];
-const strongest = biomechanics[biomechanics.length - 1];
-
-if (weakest?.key === "follow-through") {
-
-  ai_observation = `Follow-through is the primary weakness (${weakest.score}/100).`;
-  coach_advice = "Extend the throwing arm fully toward the target after release and allow the wrist and arm to continue naturally.";
-  recommended_drill = "Full Extension Lane";
-  why_this_drill = "Builds a complete and repeatable follow-through while improving directional control.";
-  practice_focus = "Follow-through";
-  improvement_potential = weakest.score < 50 ? "High" : "Medium";
-
-} else if (weakest?.key === "body stability") {
-
-  ai_observation = `Body stability is the primary weakness (${weakest.score}/100).`;
-  coach_advice = "Keep your torso, hips and lower body quieter throughout the throw.";
-  recommended_drill = "Stability Lock";
-  why_this_drill = "Reduces unnecessary body movement and creates a more repeatable throwing platform.";
-  practice_focus = "Body stability";
-  improvement_potential = weakest.score < 50 ? "High" : "Medium";
-
-} else if (weakest?.key === "head stability") {
-
-  ai_observation = `Head stability is the primary weakness (${weakest.score}/100).`;
-  coach_advice = "Keep your head fixed and your eyes locked on the target throughout the throwing motion.";
-  recommended_drill = "Head Stability Drill";
-  why_this_drill = "Reduces visual movement and helps maintain consistent alignment with the target.";
-  practice_focus = "Head stability";
-  improvement_potential = weakest.score < 50 ? "High" : "Medium";
-
-} else if (weakest?.key === "elbow control") {
-
-  ai_observation = `Elbow control is the primary weakness (${weakest.score}/100).`;
-  coach_advice = "Keep the elbow position controlled during acceleration and release instead of allowing it to drift.";
-  recommended_drill = "Level Elbow Builder";
-  why_this_drill = "Improves elbow stability and creates a straighter, more repeatable throwing path.";
-  practice_focus = "Elbow control";
-  improvement_potential = weakest.score < 50 ? "High" : "Medium";
-
-} else {
-
-  ai_observation = "No major biomechanical weakness was detected.";
-  coach_advice = "Maintain the current throwing mechanics and focus on repeatability.";
-  recommended_drill = "Consistency Builder";
-  why_this_drill = "Reinforces the mechanics that are already performing consistently.";
-  practice_focus = "Consistency";
-  improvement_potential = "Low";
-}
+const ai_observation = "Analysis completed successfully.";
+const coach_advice = "Continue practicing your throwing mechanics.";
+const recommended_drill = "Basic throwing drill";
+const why_this_drill = "Improves consistency and accuracy.";
+const practice_focus = "Release technique";
+const improvement_potential = "High";
   const releaseConfidence = analysisResult.releaseFrame
   ? Math.round(
       (
@@ -745,11 +594,40 @@ throw_consistency: analysisResult.releaseFrame
       ) * 180 / Math.PI
     )
   : null,
-  head_movement_score: analysisResult.head_stability_score,
-body_stability_score: analysisResult.body_stability_score,
-follow_through_score: analysisResult.follow_through_score,
-elbow_control_score: analysisResult.elbow_control_score,
-  );
+   head_movement_score: analysisResult.releaseFrame
+  ? Math.round(
+      Math.hypot(
+        analysisResult.releaseFrame.nose.x -
+        (
+          (analysisResult.releaseFrame.leftShoulder.x +
+           analysisResult.releaseFrame.rightShoulder.x) / 2
+        ),
+        analysisResult.releaseFrame.nose.y -
+        (
+          (analysisResult.releaseFrame.leftShoulder.y +
+           analysisResult.releaseFrame.rightShoulder.y) / 2
+        )
+      ) * 100
+    )
+  : null,
+body_stability_score: analysisResult.releaseFrame
+  ? Math.round(
+      Math.abs(
+        analysisResult.releaseFrame.leftHip.x -
+        analysisResult.releaseFrame.rightHip.x
+      ) * 100
+    )
+  : null,   
+follow_through_score: analysisResult.releaseFrame
+  ? Math.round(
+      Math.abs(
+        analysisResult.releaseFrame.rightWrist.y -
+        analysisResult.releaseFrame.rightShoulder.y
+      ) * 100
+    )
+  : null
+  };
+
  const { data, error: detailedInsertError } = await supabaseClient
   .from(TABLE_NAME)
   .insert(detailedRow)
