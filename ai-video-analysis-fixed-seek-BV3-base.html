@@ -435,20 +435,25 @@ const releaseFrame =
         current.rightWrist.x > best.rightWrist.x ? current : best
       )
     : null;
-const technique_score = 0;
-   return {
-  releaseFrame,
-  framesChecked,
-  framesWithPose,
-  detectionPercentage,
-  quality,
-technique_score: technique_score,
-     mainIssue: releaseFrame
-    ? "Release frame detected"
-    : "No release frame detected",
-  keypoints
-};
-  }
+const technique_score = releaseFrame
+  ? Math.max(
+      0,
+      Math.min(
+        100,
+        Math.round(
+          (detectionPercentage * 0.55) +
+          25 +
+          Math.min(20, framesWithPose * 2)
+        )
+      )
+    )
+  : Math.max(
+      0,
+      Math.min(
+        100,
+        Math.round(detectionPercentage * 0.55)
+      )
+    );
 async function uploadVideo(file,analysisResult){
   setStatus("Analysis complete. Uploading video...");
 
