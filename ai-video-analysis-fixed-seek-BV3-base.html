@@ -454,6 +454,19 @@ const technique_score = releaseFrame
         Math.round(detectionPercentage * 0.55)
       )
     );
+return {
+  releaseFrame,
+  framesChecked,
+  framesWithPose,
+  detectionPercentage,
+  quality,
+  technique_score: technique_score,
+  mainIssue: releaseFrame
+    ? "Release frame detected"
+    : "No release frame detected",
+  keypoints
+};
+}  
 async function uploadVideo(file,analysisResult){
   setStatus("Analysis complete. Uploading video...");
 
