@@ -504,10 +504,33 @@ let why_this_drill = "";
 let practice_focus = "";
 let improvement_potential = "";
 
-const elbowAngle = detailedRow.elbow_angle;
-const headMovement = detailedRow.head_movement_score;
-const bodyStability = detailedRow.body_stability_score;
-const followThrough = detailedRow.follow_through_score;
+const rf = analysisResult.releaseFrame;
+
+const elbowAngle = rf
+  ? Math.round(
+      Math.abs(
+        Math.atan2(rf.rightWrist.y - rf.rightElbow.y, rf.rightWrist.x - rf.rightElbow.x) -
+        Math.atan2(rf.rightShoulder.y - rf.rightElbow.y, rf.rightShoulder.x - rf.rightElbow.x)
+      ) * 180 / Math.PI
+    )
+  : null;
+
+const headMovement = rf
+  ? Math.round(
+      Math.hypot(
+        rf.nose.x - ((rf.leftShoulder.x + rf.rightShoulder.x) / 2),
+        rf.nose.y - ((rf.leftShoulder.y + rf.rightShoulder.y) / 2)
+      ) * 100
+    )
+  : null;
+
+const bodyStability = rf
+  ? Math.round(Math.abs(rf.leftHip.x - rf.rightHip.x) * 100)
+  : null;
+
+const followThrough = rf
+  ? Math.round(Math.abs(rf.rightWrist.y - rf.rightShoulder.y) * 100)
+  : null;
 
 if (followThrough !== null && followThrough < 40) {
 
