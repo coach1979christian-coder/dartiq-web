@@ -503,13 +503,40 @@ const technique_score = releaseFrame
         Math.round(detectionPercentage * 0.55)
       )
     );
+  const releaseIndex = releaseFrame
+  ? keypoints.findIndex(k => k.frame === releaseFrame.frame)
+  : -1;
+
+let followThroughTravel = 0;
+
+if (releaseIndex >= 0 && releaseIndex < keypoints.length - 1) {
+  for (let i = releaseIndex + 1; i < keypoints.length; i++) {
+    const prev = keypoints[i - 1];
+    const curr = keypoints[i];
+
+    followThroughTravel += movementDistance(
+      curr.rightWrist,
+      prev.rightWrist
+    );
+  }
+}
+
+const follow_through_score =
+  releaseIndex >= 0
+    ? clampScore(followThroughTravel * 600)
+    : null;
 return {
+  
   releaseFrame,
   framesChecked,
   framesWithPose,
   detectionPercentage,
   quality,
   technique_score: technique_score,
+  head_stability_score,
+body_stability_score,
+elbow_control_score,
+follow_through_score,
   mainIssue: releaseFrame
     ? "Release frame detected"
     : "No release frame detected",
@@ -564,67 +591,68 @@ const elbowAngle = rf
     )
   : null;
 
-const headMovement = rf
-  ? Math.round(
-      Math.hypot(
-        rf.nose.x - ((rf.leftShoulder.x + rf.rightShoulder.x) / 2),
-        rf.nose.y - ((rf.leftShoulder.y + rf.rightShoulder.y) / 2)
-      ) * 100
-    )
-  : null;
+const headStabilityScore = analysisResult.head_stability_score;
+const bodyStabilityScore = analysisResult.body_stability_score;
+const elbowControlScore = analysisResult.elbow_control_score;
+const followThroughScore = analysisResult.follow_through_score;
 
-const bodyStability = rf
-  ? Math.round(Math.abs(rf.leftHip.x - rf.rightHip.x) * 100)
-  : null;
+const biomechanics = [
+  { key: "follow-through", score: followThroughScore },
+  { key: "body stability", score: bodyStabilityScore },
+  { key: "head stability", score: headStabilityScore },
+  { key: "elbow control", score: elbowControlScore }
+].filter(item => item.score !== null && item.score !== undefined);
 
-const followThrough = rf
-  ? Math.round(Math.abs(rf.rightWrist.y - rf.rightShoulder.y) * 100)
-  : null;
+biomechanics.sort((a, b) => a.score - b.score);
 
-if (followThrough !== null && followThrough < 40) {
+const weakest = biomechanics[0];
+const secondWeakest = biomechanics[1];
+const strongest = biomechanics[biomechanics.length - 1];
 
-    ai_observation = `Follow-through is currently the weakest part of the throw (${followThrough}).`;
-    coach_advice = "Extend the throwing arm fully toward the target after release. Avoid stopping or pulling the arm back early.";
-    recommended_drill = "Full Extension Lane";
-    why_this_drill = "Trains a complete, repeatable follow-through and improves directional control.";
-    practice_focus = "Follow-through";
-    improvement_potential = "High";
+if (weakest?.key === "follow-through") {
 
-} else if (bodyStability !== null && bodyStability < 40) {
+  ai_observation = `Follow-through is the primary weakness (${weakest.score}/100).`;
+  coach_advice = "Extend the throwing arm fully toward the target after release and allow the wrist and arm to continue naturally.";
+  recommended_drill = "Full Extension Lane";
+  why_this_drill = "Builds a complete and repeatable follow-through while improving directional control.";
+  practice_focus = "Follow-through";
+  improvement_potential = weakest.score < 50 ? "High" : "Medium";
 
-    ai_observation = `Body stability is low (${bodyStability}), indicating excessive movement during the throw.`;
-    coach_advice = "Keep your torso and lower body stable throughout the throwing motion.";
-    recommended_drill = "Stability Lock";
-    why_this_drill = "Reduces unnecessary body movement and creates a more repeatable throwing platform.";
-    practice_focus = "Body stability";
-    improvement_potential = "High";
+} else if (weakest?.key === "body stability") {
 
-} else if (headMovement !== null && headMovement > 15) {
+  ai_observation = `Body stability is the primary weakness (${weakest.score}/100).`;
+  coach_advice = "Keep your torso, hips and lower body quieter throughout the throw.";
+  recommended_drill = "Stability Lock";
+  why_this_drill = "Reduces unnecessary body movement and creates a more repeatable throwing platform.";
+  practice_focus = "Body stability";
+  improvement_potential = weakest.score < 50 ? "High" : "Medium";
 
-    ai_observation = `Head movement is higher than desired (${headMovement}).`;
-    coach_advice = "Keep your head fixed on the target throughout the entire throwing motion.";
-    recommended_drill = "Head Stability Drill";
-    why_this_drill = "A stable head improves visual alignment and throwing consistency.";
-    practice_focus = "Head stability";
-    improvement_potential = "Medium";
+} else if (weakest?.key === "head stability") {
 
-} else if (elbowAngle !== null && (elbowAngle < 80 || elbowAngle > 120)) {
+  ai_observation = `Head stability is the primary weakness (${weakest.score}/100).`;
+  coach_advice = "Keep your head fixed and your eyes locked on the target throughout the throwing motion.";
+  recommended_drill = "Head Stability Drill";
+  why_this_drill = "Reduces visual movement and helps maintain consistent alignment with the target.";
+  practice_focus = "Head stability";
+  improvement_potential = weakest.score < 50 ? "High" : "Medium";
 
-    ai_observation = `Elbow angle of ${elbowAngle}° indicates that the throwing arm position can be improved.`;
-    coach_advice = "Work on maintaining a more controlled elbow position through the acceleration and release phase.";
-    recommended_drill = "Level Elbow Builder";
-    why_this_drill = "Improves elbow control and helps create a straighter, more repeatable throwing path.";
-    practice_focus = "Elbow position";
-    improvement_potential = "Medium";
+} else if (weakest?.key === "elbow control") {
+
+  ai_observation = `Elbow control is the primary weakness (${weakest.score}/100).`;
+  coach_advice = "Keep the elbow position controlled during acceleration and release instead of allowing it to drift.";
+  recommended_drill = "Level Elbow Builder";
+  why_this_drill = "Improves elbow stability and creates a straighter, more repeatable throwing path.";
+  practice_focus = "Elbow control";
+  improvement_potential = weakest.score < 50 ? "High" : "Medium";
 
 } else {
 
-    ai_observation = "Throw mechanics are stable with no major biomechanical weakness detected.";
-    coach_advice = "Maintain the current mechanics and focus on repeating the same release and follow-through.";
-    recommended_drill = "Consistency Builder";
-    why_this_drill = "Reinforces the mechanics already working well and improves repeatability.";
-    practice_focus = "Consistency";
-    improvement_potential = "Low";
+  ai_observation = "No major biomechanical weakness was detected.";
+  coach_advice = "Maintain the current throwing mechanics and focus on repeatability.";
+  recommended_drill = "Consistency Builder";
+  why_this_drill = "Reinforces the mechanics that are already performing consistently.";
+  practice_focus = "Consistency";
+  improvement_potential = "Low";
 }
   const releaseConfidence = analysisResult.releaseFrame
   ? Math.round(
