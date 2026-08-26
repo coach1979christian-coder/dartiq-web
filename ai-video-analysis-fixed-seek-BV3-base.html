@@ -497,12 +497,77 @@ async function uploadVideo(file,analysisResult){
   const finalStatus = analysisResult.framesWithPose > 0
     ? "Pose detected"
     : "No pose detected";
-const ai_observation = "Analysis completed successfully.";
-const coach_advice = "Continue practicing your throwing mechanics.";
-const recommended_drill = "Basic throwing drill";
-const why_this_drill = "Improves consistency and accuracy.";
-const practice_focus = "Release technique";
-const improvement_potential = "High";
+let ai_observation = "";
+let coach_advice = "";
+let recommended_drill = "";
+let why_this_drill = "";
+let practice_focus = "";
+let improvement_potential = "";
+
+const rf = analysisResult.releaseFrame;
+
+const elbowAngle = rf
+  ? Math.round(
+      Math.abs(
+        Math.atan2(rf.rightWrist.y - rf.rightElbow.y, rf.rightWrist.x - rf.rightElbow.x) -
+        Math.atan2(rf.rightShoulder.y - rf.rightElbow.y, rf.rightShoulder.x - rf.rightElbow.x)
+      ) * 180 / Math.PI
+    )
+  : null;
+
+const headMovement = rf
+  ? Math.round(
+      Math.hypot(
+        rf.nose.x - ((rf.leftShoulder.x + rf.rightShoulder.x) / 2),
+        rf.nose.y - ((rf.leftShoulder.y + rf.rightShoulder.y) / 2)
+      ) * 100
+    )
+  : null;
+
+const bodyStability = rf
+  ? Math.round(Math.abs(rf.leftHip.x - rf.rightHip.x) * 100)
+  : null;
+
+const followThrough = rf
+  ? Math.round(Math.abs(rf.rightWrist.y - rf.rightShoulder.y) * 100)
+  : null;
+
+if (followThrough !== null && followThrough < 40) {
+  ai_observation = `Follow-through is currently the weakest part of the throw (${followThrough}).`;
+  coach_advice = "Extend the throwing arm fully toward the target after release. Avoid stopping or pulling the arm back early.";
+  recommended_drill = "Full Extension Lane";
+  why_this_drill = "Trains a complete, repeatable follow-through and improves directional control.";
+  practice_focus = "Follow-through";
+  improvement_potential = "High";
+} else if (bodyStability !== null && bodyStability < 40) {
+  ai_observation = `Body stability is currently the weakest part of the throw (${bodyStability}).`;
+  coach_advice = "Keep your torso and lower body stable throughout the throwing motion.";
+  recommended_drill = "Stability Lock";
+  why_this_drill = "Reduces unnecessary body movement and creates a more repeatable throwing platform.";
+  practice_focus = "Body stability";
+  improvement_potential = "High";
+} else if (headMovement !== null && headMovement > 15) {
+  ai_observation = `Head movement is higher than desired (${headMovement}).`;
+  coach_advice = "Keep your head fixed on the target throughout the entire throwing motion.";
+  recommended_drill = "Head Stability Drill";
+  why_this_drill = "A stable head improves visual alignment and throwing consistency.";
+  practice_focus = "Head stability";
+  improvement_potential = "Medium";
+} else if (elbowAngle !== null && (elbowAngle < 80 || elbowAngle > 120)) {
+  ai_observation = `Elbow angle of ${elbowAngle}° indicates the throwing arm position can be improved.`;
+  coach_advice = "Work on maintaining a more controlled elbow position through acceleration and release.";
+  recommended_drill = "Level Elbow Builder";
+  why_this_drill = "Improves elbow control and helps create a straighter, more repeatable throwing path.";
+  practice_focus = "Elbow position";
+  improvement_potential = "Medium";
+} else {
+  ai_observation = "No major biomechanical weakness was detected.";
+  coach_advice = "Maintain the current throwing mechanics and focus on repeatability.";
+  recommended_drill = "Consistency Builder";
+  why_this_drill = "Reinforces the mechanics that are already performing consistently.";
+  practice_focus = "Consistency";
+  improvement_potential = "Low";
+}
   const releaseConfidence = analysisResult.releaseFrame
   ? Math.round(
       (
