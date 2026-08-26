@@ -109,7 +109,8 @@ button:disabled{
   <div class="subtitle">Select your throw video</div>
 
   <input id="videoInput" type="file" accept="video/*">
-  <video id="videoPreview" controls playsinline preload="metadata"></video>
+ <video id="videoPreview" controls playsinline preload="metadata"></video>
+<video id="analysisVideo" playsinline preload="metadata" style="display:none;"></video>
 
   <button id="analyzeBtn" disabled>Analyze My Throw</button>
   <div id="status" class="status">Loading analysis engine...</div>
@@ -172,6 +173,7 @@ const sessionId = (
 ).trim();
 const videoInput = document.getElementById("videoInput");
 const videoPreview = document.getElementById("videoPreview");
+const analysisVideo = document.getElementById("analysisVideo");
 const analyzeBtn = document.getElementById("analyzeBtn");
 const statusElement = document.getElementById("status");
 const resultsElement = document.getElementById("results");
@@ -285,9 +287,9 @@ videoInput.addEventListener("change",()=>{
 function waitForMetadata(){
   return new Promise((resolve,reject)=>{
     if(
-      videoPreview.readyState >= 1 &&
-      Number.isFinite(videoPreview.duration) &&
-      videoPreview.duration > 0
+      analysisVideo.readyState >= 1 &&
+      Number.isFinite(analysisVideo.duration) &&
+      analysisVideo.duration > 0
     ){
       resolve();
       return;
@@ -297,15 +299,14 @@ function waitForMetadata(){
       reject(new Error("Video loading timed out."));
     },20000);
 
-    videoPreview.addEventListener("loadedmetadata",()=>{
+    analysisVideo.addEventListener("loadedmetadata",()=>{
       clearTimeout(timeout);
       resolve();
     },{once:true});
 
-    videoPreview.load();
+    analysisVideo.load();
   });
 }
-
 function seekVideo(time){
   return new Promise((resolve,reject)=>{
     const timeout = setTimeout(()=>{
@@ -315,8 +316,8 @@ function seekVideo(time){
 
     function cleanup(){
       clearTimeout(timeout);
-      videoPreview.removeEventListener("seeked", onSeeked);
-      videoPreview.removeEventListener("canplay", onCanPlay);
+      analysisVideo.removeEventListener("seeked", onSeeked);
+      analysisVideo.removeEventListener("canplay", onCanPlay);
     }
 
     function onCanPlay(){
@@ -325,22 +326,21 @@ function seekVideo(time){
     }
 
     function onSeeked(){
-      if(videoPreview.readyState >= 2){
+      if(analysisVideo.readyState >= 2){
         cleanup();
         resolve();
       }
     }
 
-    videoPreview.addEventListener("seeked", onSeeked);
-    videoPreview.addEventListener("canplay", onCanPlay);
+    analysisVideo.addEventListener("seeked", onSeeked);
+    analysisVideo.addEventListener("canplay", onCanPlay);
 
-    videoPreview.currentTime = Math.min(
+    analysisVideo.currentTime = Math.min(
       Math.max(0, time),
-      Math.max(0, videoPreview.duration - 0.02)
+      Math.max(0, analysisVideo.duration - 0.02)
     );
   });
 }
-
 function averageVisibility(landmarks){
   if(!Array.isArray(landmarks) || landmarks.length === 0) return 0;
   const values = landmarks
@@ -362,63 +362,94 @@ function calculateTechniqueScore(poseFrames,framesChecked,visibilityTotal){
 
 async function analyzeVideo(){
   await waitForMetadata();
-  const duration=Number(videoPreview.duration);
-  if(!Number.isFinite(duration)||duration<=0) throw new Error("The selected video could not be loaded.");
-  canvas.width=Math.max(1,videoPreview.videoWidth);
-  canvas.height=Math.max(1,videoPreview.videoHeight);
-  let framesChecked=0,framesWithPose=0,visibilityTotal=0;
-  const keypoints=[];
-  const sampleInterval=0.45;
-  const maxFrames=24;
-  videoPreview.pause();
-  for (let t = 0; t <= duration && framesChecked < maxFrames; t += sampleInterval) {
 
-    console.log("Seeking to", t);
+  const duration = analysisVideo.duration;
+  const videoWidth = analysisVideo.videoWidth;
+  const videoHeight = analysisVideo.videoHeight;
 
-    try {
-        await seekVideo(t);
-    } catch (e) {
-        console.error("Seek failed at", t, e);
-        break;
-    }
+  if(!Number.isFinite(duration) || duration <= 0){
+    throw new Error("Invalid video duration.");
+  }
 
-    console.log(
-        "CurrentTime:",
-        videoPreview.currentTime,
-        "ReadyState:",
-        videoPreview.readyState
-    );
+  canvas.width = videoWidth;
+  canvas.height = videoHeight;
 
-    if (videoPreview.readyState < 2) continue;
+  analysisVideo.pause();
 
-    try {
-      ctx.drawImage(videoPreview,0,0,canvas.width,canvas.height);
-      const result=poseLandmarker.detectForVideo(canvas,Math.max(1,Math.round(videoPreview.currentTime*1000)));
+  let framesChecked = 0;
+  let framesWithPose = 0;
+  let visibilityTotal = 0;
+  const keypoints = [];
+
+  const frameCount = 10;
+
+  for(let i = 0; i < frameCount; i++){
+
+    const targetTime =
+      frameCount === 1
+        ? 0
+        : (duration * i) / (frameCount - 1);
+
+    await seekVideo(targetTime);
+
+    if(analysisVideo.readyState < 2) continue;
+
+    try{
+
+      ctx.drawImage(
+        analysisVideo,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+
+      const result = poseLandmarker.detectForVideo(
+        canvas,
+        Math.max(
+          1,
+          Math.round(analysisVideo.currentTime * 1000)
+        )
+      );
+
       framesChecked++;
-      if(result.landmarks?.length){
-        framesWithPose++;
-        const landmarks=result.landmarks[0];
-        visibilityTotal+=averageVisibility(landmarks);
-     keypoints.push({
-  frame: framesChecked,
-  time_seconds: Number(videoPreview.currentTime.toFixed(3)),
-  landmarks,
 
-  nose: landmarks[0],
-  leftShoulder: landmarks[11],
-  rightShoulder: landmarks[12],
-  leftElbow: landmarks[13],
-  rightElbow: landmarks[14],
-  leftWrist: landmarks[15],
-  rightWrist: landmarks[16],
-  leftHip: landmarks[23],
-  rightHip: landmarks[24]
-});
-      framesCheckedElement.textContent=String(framesChecked);
-      poseFramesElement.textContent=String(framesWithPose);
-      resultsElement.style.display="block";
-    }
-      }catch(e){
+      if(result.landmarks?.length){
+
+        framesWithPose++;
+
+        const landmarks = result.landmarks[0];
+
+        visibilityTotal += averageVisibility(landmarks);
+
+        keypoints.push({
+          frame: framesChecked,
+          time_seconds: Number(
+            analysisVideo.currentTime.toFixed(3)
+          ),
+          landmarks,
+
+          nose: landmarks[0],
+          leftShoulder: landmarks[11],
+          rightShoulder: landmarks[12],
+          leftElbow: landmarks[13],
+          rightElbow: landmarks[14],
+          leftWrist: landmarks[15],
+          rightWrist: landmarks[16],
+          leftHip: landmarks[23],
+          rightHip: landmarks[24]
+        });
+
+        framesCheckedElement.textContent =
+          String(framesChecked);
+
+        poseFramesElement.textContent =
+          String(framesWithPose);
+
+        resultsElement.style.display = "block";
+      }
+
+    }catch(e){
       console.warn("Frame skipped",e);
     }
   }
@@ -812,6 +843,9 @@ analyzeBtn.addEventListener("click",async()=>{
 videoPreview.style.display = "none";
 resultsElement.style.display = "block";
 setStatus("Analyzing throw...");
+analysisVideo.src = selectedVideoUrl;
+analysisVideo.load();
+    
     const analysisResult = await analyzeVideo();
 
 console.log(analysisResult);
