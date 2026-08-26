@@ -809,7 +809,9 @@ analyzeBtn.addEventListener("click",async()=>{
    if (!playerEmail) {
   console.warn("No player email supplied. Continuing without email.");
 }
-
+videoPreview.style.display = "none";
+resultsElement.style.display = "block";
+setStatus("Analyzing throw...");
     const analysisResult = await analyzeVideo();
 
 console.log(analysisResult);
