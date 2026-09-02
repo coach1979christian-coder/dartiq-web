@@ -880,6 +880,17 @@ session_id: detailedRow.session_id
 }
 
 analyzeBtn.addEventListener("click",async()=>{
+      if (playerEmail) {
+      try {
+        await fetch("https://go.glideapps.com/api/container/plugin/webhook-trigger/mjlr4gu5eLbtGVZ4AzBJe5e55e46-87c2-4e14-a1fe-a33dta9ab3be", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: playerEmail })
+        });
+      } catch (resetError) {
+        console.warn("Reset webhook failed:", resetError);
+      }
+    }
   if(!selectedFile || !poseLandmarker) return;
 
   analyzeBtn.disabled = true;
