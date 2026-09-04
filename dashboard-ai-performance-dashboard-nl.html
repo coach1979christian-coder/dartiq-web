@@ -257,7 +257,7 @@ h1{
   <section class="top">
     <div>
       <div class="brand-small">DARTIQ AI</div>
-      <h1>AI Performance Dashboard</h1>
+      <h1>AI PRESTATIEDASHBOARD</h1>
     </div>
     <div class="live">LIVE</div>
   </section>
@@ -268,43 +268,42 @@ h1{
     <div class="score-card">
       <div class="label">AI Coach Score</div>
       <div class="score" id="score">--</div>
-      <div class="grade" id="grade">NO DATA</div>
-    </div>
+<div class="grade" id="grade">GEEN GEGEVENS</div>
 
     <div class="spotlight">
       <div>
-        <div class="spotlight-title">🤖 AI Insight</div>
-        <div class="spotlight-text" id="insight">Your AI insight will appear here.</div>
+       <div class="spotlight-title">🤖 AI INZICHT</div>
+        <div class="spotlight-text" id="insight">Je AI-inzicht verschijnt hier.</div>
       </div>
-      <div class="focus-pill" id="focus">Focus: Not available</div>
+      <div class="focus-pill" id="focus">Focus: Niet beschikbaar</div>
     </div>
   </section>
 
   <section class="stats">
-    <div class="stat"><div class="label">Best Average</div><div class="stat-value" id="bestavg">--</div></div>
-    <div class="stat"><div class="label">Total Sessions</div><div class="stat-value" id="sessions">--</div></div>
-    <div class="stat"><div class="label">Highest Checkout</div><div class="stat-value" id="highcheckout">--</div></div>
-    <div class="stat"><div class="label">First 9 Avg</div><div class="stat-value" id="first9">--</div></div>
-    <div class="stat"><div class="label">Checkout %</div><div class="stat-value" id="checkoutpct">--</div></div>
-    <div class="stat"><div class="label">Total 180s</div><div class="stat-value" id="total180">--</div></div>
+    <div class="stat"><div class="label">Beste gemiddelde</div><div class="stat-value" id="bestavg">--</div></div>
+    <div class="stat"><div class="label">Totaal Sessies</div><div class="stat-value" id="sessions">--</div></div>
+    <div class="stat"><div class="label">Hoogste finish</div><div class="stat-value" id="highcheckout">--</div></div>
+    <div class="stat"><div class="label">Eerste 9 gemiddelde</div><div class="stat-value" id="first9">--</div></div>
+    <div class="stat"><div class="label">Finishpercentage %</div><div class="stat-value" id="checkoutpct">--</div></div>
+    <div class="stat"><div class="label">Totaal 180s</div><div class="stat-value" id="total180">--</div></div>
   </section>
 
   <section class="info-grid">
     <div class="info-card">
-      <div class="info-title">🎯 Next Goal</div>
-      <div class="info-text" id="goal">No goal available.</div>
+      <div class="info-title">🎯VOLGEND DOEL</div>
+      <div class="info-text" id="goal">Geen doel beschikbaar.</div>
     </div>
     <div class="info-card">
-      <div class="info-title">⚡ Focus This Week</div>
-      <div class="info-text" id="focusCard">No focus available.</div>
+      <div class="info-title">⚡ FOCUS DEZE WEEK</div>
+      <div class="info-text" id="focusCard">Geen focus beschikbaar.</div>
     </div>
     <div class="info-card">
-      <div class="info-title">📈 Performance Status</div>
-      <div class="info-text" id="statusText">Submit your next session to update this dashboard.</div>
+      <div class="info-title">📈PRESTATIE STATUS</div>
+      <div class="info-text" id="statusText">Dien je volgende sessie in om dit dashboard bij te werken.</div>
     </div>
   </section>
 
-  <div class="footer">POWERED BY DARTIQ AI</div>
+  <div class="footer">AANGEDREVEN DOOR DARTIQ AI</div>
 </main>
 
 <script>
@@ -323,16 +322,16 @@ h1{
 
   const data = {
     score: safe("score","--"),
-    grade: safe("grade","NO DATA"),
+    grade: safe("grade","GEEN GEGEVENS"),
     bestavg: safe("bestavg","--"),
     sessions: safe("sessions","--"),
     highcheckout: safe("highcheckout","--"),
     first9: safe("first9","--"),
     checkoutpct: safe("checkoutpct","--"),
     total180: safe("total180","--"),
-    insight: safe("insight","Your AI insight will appear here."),
-    goal: safe("goal","No goal available."),
-    focus: safe("focus","No focus available.")
+    insight: safe("insight","Je AI-inzicht verschijnt hier."),
+goal: safe("goal","Geen doel beschikbaar."),
+focus: safe("focus","Geen focus beschikbaar.")
   };
 
   document.getElementById("score").textContent = data.score;
@@ -349,13 +348,14 @@ h1{
   document.getElementById("focusCard").textContent = data.focus;
 
   const numericScore = Number(String(data.score).replace(",","."));
-  let status = "Submit your next session to update this dashboard.";
-  if(!Number.isNaN(numericScore)){
-    if(numericScore >= 90) status = "Elite performance. Maintain consistency and pressure control.";
-    else if(numericScore >= 80) status = "Great performance. Small refinements can unlock the next level.";
-    else if(numericScore >= 70) status = "Good progress. Keep training the highlighted weakness.";
-    else if(numericScore >= 60) status = "Developing well. Stay focused on one correction at a time.";
-    else status = "Improvement phase. Follow the recommended focus and repeat the drill.";
+  let status = "Dien je volgende sessie in om dit dashboard bij te werken.";
+if(!Number.isNaN(numericScore)){
+  if(numericScore >= 90) status = "Topprestatie. Behoud je consistentie en controle onder druk.";
+  else if(numericScore >= 80) status = "Sterke prestatie. Kleine verbeteringen kunnen je naar het volgende niveau brengen.";
+  else if(numericScore >= 70) status = "Goede vooruitgang. Blijf trainen op het belangrijkste verbeterpunt.";
+  else if(numericScore >= 60) status = "Je ontwikkelt goed. Focus telkens op één verbeterpunt.";
+  else status = "Verbeterfase. Volg de aanbevolen focus en herhaal de oefening.";
+}
   }
   document.getElementById("statusText").textContent = status;
 })();
