@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DARTIQ AI Videoanalyse</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:#06111d;
+  font-family:Arial,sans-serif;
+  color:#fff;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  min-height:100vh;
+  padding:20px 0
+}
+.card{
+  width:420px;
+  max-width:95%;
+  background:#0f1c2f;
+  border:1px solid #1ea7ff;
+  border-radius:22px;
+  padding:20px;
+  box-shadow:0 0 30px rgba(0,170,255,.35);
+}
+
+h1{
+  margin:0 0 8px;
+  text-align:center;
+  color:#66cfff;
+  font-size:28px;
+}
+
+.subtitle{
+  text-align:center;
+  color:#c8d5e6;
+  margin-bottom:18px;
+}
+
+input[type=file]{
+  width:100%;
+  padding:12px;
+  background:#091523;
+  color:#fff;
+  border:1px solid #2d4c68;
+  border-radius:12px;
+  margin-bottom:16px;
+}
+
+video{
+  display:none;
+  width:100%;
+  height:auto;
+  max-height:260px;
+  object-fit:contain;
+  background:#000;
+  border-radius:16px;
+  margin-bottom:18px;
+}
+
+button{
+  width:100%;
+  border:0;
+  border-radius:14px;
+  padding:16px;
+  font-size:19px;
+  font-weight:700;
+  color:#fff;
+  background:#1478b8;
+  cursor:pointer;
+}
+
+button:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+
+.status{
+  min-height:24px;
+  margin:18px 0;
+  text-align:center;
+  font-size:16px;
+  font-weight:700;
+}
+
+.error{
+  color:#ff8383;
+}
+
+.success{
+  color:#7ee7ff;
+}
+
+.results{
+  display:none;
+  width:100%;
+  margin-top:18px;
+  padding:18px 20px;
+  background:#0b1929;
+  border:1px solid #2875a8;
+  border-radius:18px;
+}
+
+.result-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+  padding:13px 0;
+  border-bottom:1px solid rgba(255,255,255,.10);
+}
+
+.result-row:last-child{
+  border-bottom:0;
+}
+
+.result-label{
+  color:#c8d5e6;
+  font-size:17px;
+}
+
+.result-value{
+  color:#5bcaff;
+  font-size:17px;
+  font-weight:700;
+  text-align:right;
+}
+  display:none;
+  margin-top:20px;
+  padding:16px;
+  border:1px solid #2c658c;
+  border-radius:16px;
+  background:#0a1727
+}
+.result-row{
+  display:flex;
+  justify-content:space-between;
+  gap:14px;
+  padding:10px 0;
+  border-bottom:1px solid rgba(255,255,255,.12)
+}
+.result-row:last-child{border-bottom:0}
+.result-label{color:#b7c6d8}
+.result-value{
+  color:#5bcaff;
+  font-weight:700;
+  text-align:right
+}
+.hidden-canvas{display:none}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>DARTIQ AI Videoanalyse</h1>
+  <div class="subtitle">Selecteer je worpvideo</div>
+
+  <input id="videoInput" type="file" accept="video/*">
+ <video id="videoPreview" controls playsinline preload="metadata"></video>
+<video id="analysisVideo" playsinline preload="metadata" style="display:none;"></video>
+
+  <button id="analyzeBtn" disabled>Analyseer mijn worp</button>
+  <div id="status" class="status">Analyse-engine laden...</div>
+
+  <div id="results" class="results">
+    <div class="result-row">
+      <span class="result-label">Gecontroleerde frames</span>
+      <span class="result-value" id="framesChecked">0</span>
+    </div>
+    <div class="result-row">
+      <span class="result-label">Houding gedetecteerd</span>
+      <span class="result-value" id="poseFrames">0</span>
+    </div>
+    <div class="result-row">
+      <span class="result-label">Detectiekwaliteit</span>
+      <span class="result-value" id="detectionQuality">Wachten</span>
+    </div>
+  </div>
+
+  <canvas id="analysisCanvas" class="hidden-canvas"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script type="module">
+import {
+  FilesetResolver,
+  PoseLandmarker
+} from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/+esm";
+
+const SUPABASE_URL = "https://usglrseckxwcdykrwuvh.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_mSQ3imYCnUspBJdpl6ybQA__TdZtZ2a";
+const STORAGE_BUCKET = "Throw videos";
+const TABLE_NAME = "video_analysis";
+const GLIDE_WEBHOOK_URL =
+  "https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/ab4d12d2-f573-4a1d-9ec3-b2ed9f5ea28e";
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
+
+const params = new URLSearchParams(window.location.search);
+const playerEmail = (
+  params.get("email") ||
+  params.get("Email") ||
+  params.get("player_email") ||
+  params.get("Player_Email") ||
+  ""
+).trim();
+const glideRowId = (
+  params.get("row_id") ||
+  params.get("Row ID") ||
+  ""
+).trim();
+
+const sessionId = (
+  params.get("session_id") ||
+  params.get("Session ID") ||
+  ""
+).trim();
+const videoInput = document.getElementById("videoInput");
+const videoPreview = document.getElementById("videoPreview");
+const analysisVideo = document.getElementById("analysisVideo");
+const analyzeBtn = document.getElementById("analyzeBtn");
+const statusElement = document.getElementById("status");
+const resultsElement = document.getElementById("results");
+const framesCheckedElement = document.getElementById("framesChecked");
+const poseFramesElement = document.getElementById("poseFrames");
+const detectionQualityElement = document.getElementById("detectionQuality");
+const canvas = document.getElementById("analysisCanvas");
+const ctx = canvas.getContext("2d", { willReadFrequently:true });
+
+let poseLandmarker = null;
+let selectedFile = null;
+let selectedVideoUrl = null;
+
+function setStatus(message, type=""){
+  statusElement.textContent = message;
+  statusElement.className = "status";
+  if(type) statusElement.classList.add(type);
+}
+
+function cleanObjectUrl(){
+  if(selectedVideoUrl){
+    URL.revokeObjectURL(selectedVideoUrl);
+    selectedVideoUrl = null;
+  }
+}
+
+async function loadPoseLandmarker(){
+  try{
+    setStatus("Analyse-engine laden...");
+    const vision = await FilesetResolver.forVisionTasks(
+      "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
+    );
+
+    poseLandmarker = await PoseLandmarker.createFromOptions(vision,{
+      baseOptions:{
+        modelAssetPath:
+          "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task",
+        delegate:"GPU"
+      },
+      runningMode:"VIDEO",
+      numPoses:1,
+      minPoseDetectionConfidence:0.45,
+      minPosePresenceConfidence:0.45,
+      minTrackingConfidence:0.45
+    });
+
+    setStatus("Analyse-engine klaar.","success");
+    if(selectedFile) analyzeBtn.disabled = false;
+  }catch(firstError){
+    try{
+      const vision = await FilesetResolver.forVisionTasks(
+        "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
+      );
+
+      poseLandmarker = await PoseLandmarker.createFromOptions(vision,{
+        baseOptions:{
+          modelAssetPath:
+            "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task"
+        },
+        runningMode:"VIDEO",
+        numPoses:1,
+        minPoseDetectionConfidence:0.4,
+        minPosePresenceConfidence:0.4,
+        minTrackingConfidence:0.4
+      });
+
+      setStatus("Analyse-engine klaar.","success");
+      if(selectedFile) analyzeBtn.disabled = false;
+    }catch(error){
+      console.error(error);
+      setStatus("De analyse-engine kon niet worden geladen.","error");
+    }
+  }
+}
+
+videoInput.addEventListener("change",()=>{
+  cleanObjectUrl();
+  selectedFile = videoInput.files?.[0] || null;
+  resultsElement.style.display = "none";
+  framesCheckedElement.textContent = "0";
+  poseFramesElement.textContent = "0";
+  detectionQualityElement.textContent = "Wachten";
+
+  if(!selectedFile){
+    videoPreview.removeAttribute("src");
+    videoPreview.style.display = "none";
+    analyzeBtn.disabled = true;
+    return;
+  }
+
+  if(!selectedFile.type.startsWith("video/")){
+    selectedFile = null;
+    videoInput.value = "";
+    videoPreview.style.display = "none";
+    analyzeBtn.disabled = true;
+    setStatus("Selecteer een geldig videobestand.","error");
+    return;
+  }
+
+  selectedVideoUrl = URL.createObjectURL(selectedFile);
+  videoPreview.src = selectedVideoUrl;
+  videoPreview.style.display = "block";
+  videoPreview.load();
+
+  analyzeBtn.disabled = !poseLandmarker;
+  setStatus(
+    poseLandmarker ? "Video klaar voor analyse." : "Analyse-engine laden..."
+  );
+});
+
+function waitForMetadata(){
+  return new Promise((resolve,reject)=>{
+    if(
+      analysisVideo.readyState >= 1 &&
+      Number.isFinite(analysisVideo.duration) &&
+      analysisVideo.duration > 0
+    ){
+      resolve();
+      return;
+    }
+
+    const timeout = setTimeout(()=>{
+      reject(new Error("Het laden van de video duurde te lang."));
+    },20000);
+
+    analysisVideo.addEventListener("loadedmetadata",()=>{
+      clearTimeout(timeout);
+      resolve();
+    },{once:true});
+
+    analysisVideo.load();
+  });
+}
+function seekVideo(time){
+  return new Promise((resolve,reject)=>{
+    const timeout = setTimeout(()=>{
+      cleanup();
+      reject(new Error("Een videoframe kon niet worden gelezen."));
+    },12000);
+
+    function cleanup(){
+      clearTimeout(timeout);
+      analysisVideo.removeEventListener("seeked", onSeeked);
+      analysisVideo.removeEventListener("canplay", onCanPlay);
+    }
+
+    function onCanPlay(){
+      cleanup();
+      resolve();
+    }
+
+    function onSeeked(){
+      if(analysisVideo.readyState >= 2){
+        cleanup();
+        resolve();
+      }
+    }
+
+    analysisVideo.addEventListener("seeked", onSeeked);
+    analysisVideo.addEventListener("canplay", onCanPlay);
+
+    analysisVideo.currentTime = Math.min(
+      Math.max(0, time),
+      Math.max(0, analysisVideo.duration - 0.02)
+    );
+  });
+}
+function averageVisibility(landmarks){
+  if(!Array.isArray(landmarks) || landmarks.length === 0) return 0;
+  const values = landmarks
+    .map(p=>Number.isFinite(p.visibility) ? p.visibility : 0)
+    .filter(Number.isFinite);
+  if(values.length === 0) return 0;
+  return values.reduce((a,b)=>a+b,0) / values.length;
+}
+
+function calculateTechniqueScore(poseFrames,framesChecked,visibilityTotal){
+  if(framesChecked === 0 || poseFrames === 0) return 0;
+  const poseRatio = poseFrames / framesChecked;
+  const avgVisibility = visibilityTotal / poseFrames;
+  return Math.max(
+    0,
+    Math.min(100,Math.round((poseRatio * 70) + (avgVisibility * 30)))
+  );
+}
+
+async function analyzeVideo(){
+  await waitForMetadata();
+
+  const duration = analysisVideo.duration;
+  const videoWidth = analysisVideo.videoWidth;
+  const videoHeight = analysisVideo.videoHeight;
+
+  if(!Number.isFinite(duration) || duration <= 0){
+    throw new Error("Ongeldige videoduur.");
+  }
+
+  canvas.width = videoWidth;
+  canvas.height = videoHeight;
+
+  analysisVideo.pause();
+
+  let framesChecked = 0;
+  let framesWithPose = 0;
+  let visibilityTotal = 0;
+  const keypoints = [];
+
+  const frameCount = 10;
+
+  for(let i = 0; i < frameCount; i++){
+
+    const targetTime =
+      frameCount === 1
+        ? 0
+        : (duration * i) / (frameCount - 1);
+
+    await seekVideo(targetTime);
+
+    if(analysisVideo.readyState < 2) continue;
+
+    try{
+
+      ctx.drawImage(
+        analysisVideo,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+
+      const result = poseLandmarker.detectForVideo(
+        canvas,
+        Math.max(
+          1,
+          Math.round(analysisVideo.currentTime * 1000)
+        )
+      );
+
+      framesChecked++;
+
+      if(result.landmarks?.length){
+
+        framesWithPose++;
+
+        const landmarks = result.landmarks[0];
+
+        visibilityTotal += averageVisibility(landmarks);
+
+        keypoints.push({
+          frame: framesChecked,
+          time_seconds: Number(
+            analysisVideo.currentTime.toFixed(3)
+          ),
+          landmarks,
+
+          nose: landmarks[0],
+          leftShoulder: landmarks[11],
+          rightShoulder: landmarks[12],
+          leftElbow: landmarks[13],
+          rightElbow: landmarks[14],
+          leftWrist: landmarks[15],
+          rightWrist: landmarks[16],
+          leftHip: landmarks[23],
+          rightHip: landmarks[24]
+        });
+
+        framesCheckedElement.textContent =
+          String(framesChecked);
+
+        poseFramesElement.textContent =
+          String(framesWithPose);
+
+        resultsElement.style.display = "block";
+      }
+
+    }catch(e){
+      console.warn("Frame skipped",e);
+    }
+  }
+  const detectionPercentage=framesChecked?Math.round((framesWithPose/framesChecked)*100):0;
+  let quality="Geen houding gedetecteerd";
+  if(detectionPercentage>=80) quality="Uitstekend";
+  else if(detectionPercentage>=60) quality="Goed";
+  else if(detectionPercentage>=30) quality="Beperkt";
+  const techniqueScore=calculateTechniqueScore(framesWithPose,framesChecked,visibilityTotal);
+  detectionQualityElement.textContent=quality;
+const releaseFrame =
+  keypoints.length > 0
+    ? keypoints.reduce((best, current) =>
+        current.rightWrist.x > best.rightWrist.x ? current : best
+      )
+    : null;
+const technique_score = releaseFrame
+  ? Math.max(
+      0,
+      Math.min(
+        100,
+        Math.round(
+          (detectionPercentage * 0.55) +
+          25 +
+          Math.min(20, framesWithPose * 2)
+        )
+      )
+    )
+  : Math.max(
+      0,
+      Math.min(
+        100,
+        Math.round(detectionPercentage * 0.55)
+      )
+    );
+return {
+  releaseFrame,
+  framesChecked,
+  framesWithPose,
+  detectionPercentage,
+  quality,
+  technique_score: technique_score,
+  mainIssue: releaseFrame
+    ? "Release frame detected"
+    : "No release frame detected",
+  keypoints
+};
+}  
+async function uploadVideo(file,analysisResult){
+  setStatus("Analyse voltooid. Video uploaden...");
+
+  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+  const emailFolder = playerEmail
+    ? playerEmail.replace(/[^a-zA-Z0-9@._-]/g,"_")
+    : "unknown-player";
+
+  const filename = `${emailFolder}/${Date.now()}_${safeName}`;
+
+  const {error:uploadError} = await supabaseClient.storage
+    .from(STORAGE_BUCKET)
+    .upload(filename,file,{
+      cacheControl:"3600",
+      upsert:false,
+      contentType:file.type || "video/mp4"
+    });
+
+  if(uploadError) throw uploadError;
+
+  const {data:publicUrlData} = supabaseClient.storage
+    .from(STORAGE_BUCKET)
+    .getPublicUrl(filename);
+
+  const videoUrl = publicUrlData?.publicUrl;
+  if(!videoUrl) throw new Error("De video-URL kon niet worden aangemaakt.");
+
+  const finalStatus = analysisResult.framesWithPose > 0
+    ? "Pose detected"
+    : "No pose detected";
+let ai_observation = "";
+let coach_advice = "";
+let recommended_drill = "";
+let why_this_drill = "";
+let practice_focus = "";
+let improvement_potential = "";
+
+const rf = analysisResult.releaseFrame;
+
+const elbowAngle = rf
+  ? Math.round(
+      Math.abs(
+        Math.atan2(rf.rightWrist.y - rf.rightElbow.y, rf.rightWrist.x - rf.rightElbow.x) -
+        Math.atan2(rf.rightShoulder.y - rf.rightElbow.y, rf.rightShoulder.x - rf.rightElbow.x)
+      ) * 180 / Math.PI
+    )
+  : null;
+
+const headMovement = rf
+  ? Math.round(
+      Math.hypot(
+        rf.nose.x - ((rf.leftShoulder.x + rf.rightShoulder.x) / 2),
+        rf.nose.y - ((rf.leftShoulder.y + rf.rightShoulder.y) / 2)
+      ) * 100
+    )
+  : null;
+
+const bodyStability = rf
+  ? Math.round(Math.abs(rf.leftHip.x - rf.rightHip.x) * 100)
+  : null;
+
+const followThrough = rf
+  ? Math.round(Math.abs(rf.rightWrist.y - rf.rightShoulder.y) * 100)
+  : null;
+
+if (followThrough !== null && followThrough < 40) {
+  ai_observation = `De follow-through is momenteel het zwakste onderdeel van de worp (${followThrough}).`;
+  coach_advice = "Strek je werparm na de release volledig door naar het doel. Stop niet te vroeg en trek je arm niet voortijdig terug.";
+  recommended_drill = "Full Extension Lane";
+  why_this_drill = "Traint een volledige, herhaalbare follow-through en verbetert de richtingscontrole.";
+  practice_focus = "Follow-through";
+  improvement_potential = "High";
+} else if (bodyStability !== null && bodyStability < 40) {
+  ai_observation = `Lichaamsstabiliteit is momenteel het zwakste onderdeel van de worp (${bodyStability}).`;
+  coach_advice = "Houd je romp en onderlichaam stabiel tijdens de volledige worpbeweging.";
+  recommended_drill = "Stability Lock";
+  why_this_drill = "Vermindert onnodige lichaamsbeweging en zorgt voor een stabielere, beter herhaalbare werpbasis.";
+  practice_focus = "Body stability";
+  improvement_potential = "High";
+} else if (headMovement !== null && headMovement > 15) {
+  ai_observation = `De hoofdbeweging is groter dan gewenst (${headMovement}).`;
+  coach_advice = "Houd je hoofd tijdens de volledige worpbeweging stabiel en gericht op het doel.";
+  recommended_drill = "Head Stability Drill";
+  why_this_drill = "Een stabiel hoofd verbetert de visuele uitlijning en de consistentie van je worp.";
+  practice_focus = "Head stability";
+  improvement_potential = "Medium";
+} else if (elbowAngle !== null && (elbowAngle < 80 || elbowAngle > 120)) {
+  ai_observation = `Een ellebooghoek van ${elbowAngle}° geeft aan dat de positie van de werparm kan worden verbeterd.`;
+  coach_advice = "Werk aan een beter gecontroleerde elleboogpositie tijdens de versnelling en release.";
+  recommended_drill = "Level Elbow Builder";
+  why_this_drill = "Verbetert de elleboogcontrole en helpt een rechter, beter herhaalbaar worppad te creëren.";
+  practice_focus = "Elbow position";
+  improvement_potential = "Medium";
+} else {
+  ai_observation = "Er werd geen grote biomechanische zwakte gedetecteerd.";
+  coach_advice = "Behoud je huidige werptechniek en concentreer je op herhaalbaarheid.";
+  recommended_drill = "Consistency Builder";
+  why_this_drill = "Versterkt de techniekonderdelen die al consistent worden uitgevoerd.";
+  practice_focus = "Consistency";
+  improvement_potential = "Low";
+}
+  const releaseConfidence = analysisResult.releaseFrame
+  ? Math.round(
+      (
+        (analysisResult.releaseFrame.rightShoulder.visibility || 0) +
+        (analysisResult.releaseFrame.rightElbow.visibility || 0) +
+        (analysisResult.releaseFrame.rightWrist.visibility || 0)
+      ) / 3 * 100
+    )
+  : null;
+const ai_summary = analysisResult.releaseFrame
+  ? `Worp succesvol geanalyseerd. Release gedetecteerd op ${Math.round(
+      analysisResult.releaseFrame.time_seconds * 1000
+    )} ms met ${releaseConfidence}% releasebetrouwbaarheid.`
+  : "Worp geanalyseerd, maar er werd geen betrouwbaar releaseframe gedetecteerd.";
+
+ const detailedRow = {
+    Player_Email: playerEmail || null,
+    video_url: videoUrl,
+ai_observation: ai_observation,
+coach_advice: coach_advice,
+recommended_drill: recommended_drill,
+why_this_drill: why_this_drill,
+practice_focus: practice_focus,
+improvement_potential: improvement_potential,
+
+elbow_angle: elbowAngle,
+head_movement_score: headMovement,
+body_stability_score: bodyStability,
+follow_through_score: followThrough,
+
+ai_summary: ai_summary,
+
+release_time_ms: analysisResult.releaseFrame
+  ? Math.round(analysisResult.releaseFrame.time_seconds * 1000)
+  : null,
+
+release_confidence: releaseConfidence !== null
+  ? `${releaseConfidence}%`
+  : null,
+   technique_score: analysisResult.technique_score,
+main_issue: analysisResult.mainIssue,
+confidence_score: analysisResult.detectionPercentage,
+status: finalStatus,
+    analysis_complete:true,
+    frames_checked:analysisResult.framesChecked,
+    pose_detected:analysisResult.framesWithPose,
+    detection_percentage:analysisResult.detectionPercentage,
+
+  release_frame: analysisResult.releaseFrame
+  ? analysisResult.releaseFrame.frame
+  : null,
+  release_timing: analysisResult.releaseFrame
+  ? analysisResult.releaseFrame.time_seconds
+  : null,
+  wrist_angle: analysisResult.releaseFrame
+  ? Math.round(
+      (
+        Math.atan2(
+          analysisResult.releaseFrame.rightWrist.y - analysisResult.releaseFrame.rightElbow.y,
+          analysisResult.releaseFrame.rightWrist.x - analysisResult.releaseFrame.rightElbow.x
+        ) * 180 / Math.PI + 360
+      ) % 360
+    )
+  : null,
+  shoulder_angle: analysisResult.releaseFrame
+  ? Math.round(
+      Math.atan2(
+        analysisResult.releaseFrame.rightElbow.y - analysisResult.releaseFrame.rightShoulder.y,
+        analysisResult.releaseFrame.rightElbow.x - analysisResult.releaseFrame.rightShoulder.x
+      ) * 180 / Math.PI
+    )
+  : null,
+   arm_extension: analysisResult.releaseFrame
+  ? Math.round(
+      Math.hypot(
+        analysisResult.releaseFrame.rightWrist.x - analysisResult.releaseFrame.rightShoulder.x,
+        analysisResult.releaseFrame.rightWrist.y - analysisResult.releaseFrame.rightShoulder.y
+      ) * 1000
+    )
+  : null,
+throw_consistency: analysisResult.releaseFrame
+  ? 100
+  : null,
+  elbow_angle: analysisResult.releaseFrame
+  ? Math.round(
+      Math.abs(
+        Math.atan2(
+          analysisResult.releaseFrame.rightWrist.y - analysisResult.releaseFrame.rightElbow.y,
+          analysisResult.releaseFrame.rightWrist.x - analysisResult.releaseFrame.rightElbow.x
+        ) -
+        Math.atan2(
+          analysisResult.releaseFrame.rightShoulder.y - analysisResult.releaseFrame.rightElbow.y,
+          analysisResult.releaseFrame.rightShoulder.x - analysisResult.releaseFrame.rightElbow.x
+        )
+      ) * 180 / Math.PI
+    )
+  : null,
+   head_movement_score: analysisResult.releaseFrame
+  ? Math.round(
+      Math.hypot(
+        analysisResult.releaseFrame.nose.x -
+        (
+          (analysisResult.releaseFrame.leftShoulder.x +
+           analysisResult.releaseFrame.rightShoulder.x) / 2
+        ),
+        analysisResult.releaseFrame.nose.y -
+        (
+          (analysisResult.releaseFrame.leftShoulder.y +
+           analysisResult.releaseFrame.rightShoulder.y) / 2
+        )
+      ) * 100
+    )
+  : null,
+body_stability_score: analysisResult.releaseFrame
+  ? Math.round(
+      Math.abs(
+        analysisResult.releaseFrame.leftHip.x -
+        analysisResult.releaseFrame.rightHip.x
+      ) * 100
+    )
+  : null,   
+follow_through_score: analysisResult.releaseFrame
+  ? Math.round(
+      Math.abs(
+        analysisResult.releaseFrame.rightWrist.y -
+        analysisResult.releaseFrame.rightShoulder.y
+      ) * 100
+    )
+  : null
+  };
+
+ const { data, error: detailedInsertError } = await supabaseClient
+  .from(TABLE_NAME)
+  .insert(detailedRow)
+  .select();
+
+console.log("Detailed Row:", detailedRow);
+console.log("Inserted Data:", data);
+console.log("Detailed Insert Error:", detailedInsertError);
+
+if(!detailedInsertError){
+
+  if(glideRowId){
+    try{
+      const glideResponse = await fetch(GLIDE_WEBHOOK_URL,{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+body: JSON.stringify({
+    row_id: glideRowId,
+  player_email: playerEmail,
+    ai_summary: detailedRow.ai_summary,
+    release_time_ms: detailedRow.release_time_ms,
+    release_confidence: detailedRow.release_confidence,
+    confidence_score: detailedRow.confidence_score,
+    pose_detected: detailedRow.pose_detected,
+    technique_score: detailedRow.technique_score,
+    main_issue: detailedRow.main_issue,
+    ai_observation: detailedRow.ai_observation,
+    coach_advice: detailedRow.coach_advice,
+   recommended_drill: detailedRow.recommended_drill,
+elbow_angle: detailedRow.elbow_angle,
+head_movement_score: detailedRow.head_movement_score,
+body_stability_score: detailedRow.body_stability_score,
+follow_through_score: detailedRow.follow_through_score,
+release_frame: detailedRow.release_frame,
+analysis_complete: detailedRow.analysis_complete,
+release_timing: detailedRow.release_timing,
+wrist_angle: detailedRow.wrist_angle,
+shoulder_angle: detailedRow.shoulder_angle,
+arm_extension: detailedRow.arm_extension,
+  throw_consistency: detailedRow.throw_consistency,
+frames_checked: detailedRow.frames_checked,
+status: detailedRow.status,
+detection_percentage: detailedRow.detection_percentage,
+improvement_potential: detailedRow.improvement_potential,
+why_this_drill: detailedRow.why_this_drill,
+practice_focus: detailedRow.practice_focus,
+video_url: detailedRow.video_url,
+session_id: detailedRow.session_id
+})
+});
+      console.log(
+        "Glide webhook status:",
+        glideResponse.status
+      );
+
+    }catch(glideError){
+      console.error(
+        "Glide webhook failed:",
+        glideError
+      );
+    }
+  }else{
+    console.warn("No Glide row_id supplied in URL.");
+  }
+
+  return {
+    detailedMetricsSaved:true,
+    warning:null
+  };
+}
+  console.error("Detailed database insert failed:", detailedInsertError);
+
+  const coreRow = {
+    Player_Email:playerEmail || null,
+    video_url:videoUrl,
+    technique_score:analysisResult.technique_Score,
+    main_issue:analysisResult.mainIssue,
+    confidence_score:analysisResult.detectionPercentage,
+    status:finalStatus
+  };
+
+  const {error:coreInsertError} = await supabaseClient
+    .from(TABLE_NAME)
+    .insert(coreRow);
+
+  if(coreInsertError){
+    throw new Error(
+      `Detailed insert failed: ${detailedInsertError.message}. ` +
+      `Core insert also failed: ${coreInsertError.message}`
+    );
+  }
+
+  return {
+    detailedMetricsSaved:false,
+    warning:detailedInsertError.message
+  };
+}
+
+analyzeBtn.addEventListener("click",async()=>{
+      if (playerEmail) {
+      try {
+        await fetch("https://go.glideapps.com/api/container/plugin/webhook-trigger/mjlr4gu5eLbtGVZ4AzBJe5e55e46-87c2-4e14-a1fe-a33dta9ab3be", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: playerEmail })
+        });
+      } catch (resetError) {
+        console.warn("Reset webhook failed:", resetError);
+      }
+    }
+  if(!selectedFile || !poseLandmarker) return;
+
+  analyzeBtn.disabled = true;
+  videoInput.disabled = true;
+
+  try{
+   if (!playerEmail) {
+  console.warn("No player email supplied. Continuing without email.");
+}
+videoPreview.style.display = "none";
+resultsElement.style.display = "block";
+setStatus("Worp analyseren...");
+analysisVideo.src = selectedVideoUrl;
+analysisVideo.load();
+    
+    const analysisResult = await analyzeVideo();
+
+console.log(analysisResult);
+    const saveResult = await uploadVideo(selectedFile,analysisResult);
+
+    if(saveResult.detailedMetricsSaved){
+      setStatus("Analyse voltooid. Video en BV3-metingen opgeslagen.","success");
+    }else{
+      setStatus(
+        "Analyse en upload voltooid. Kernresultaten opgeslagen; Supabase blokkeerde de nieuwe meetkolommen: " +
+        saveResult.warning,
+        "error"
+      );
+    }
+  }catch(error){
+    console.error(error);
+    setStatus(error?.message || "Analyse mislukt.","error");
+  }finally{
+    analyzeBtn.disabled = false;
+    videoInput.disabled = false;
+  }
+});
+
+window.addEventListener("beforeunload",cleanObjectUrl);
+
+loadPoseLandmarker();
+</script>
+</body>
+</html>
