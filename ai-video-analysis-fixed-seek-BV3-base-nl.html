@@ -220,6 +220,11 @@ const sessionId = (
   params.get("Session ID") ||
   ""
 ).trim();
+
+// Unieke ID voor deze geanalyseerde worp. analysis_id wordt door Supabase aangemaakt.
+const throwId = (window.crypto && crypto.randomUUID)
+  ? crypto.randomUUID()
+  : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 const videoInput = document.getElementById("videoInput");
 const videoPreview = document.getElementById("videoPreview");
 const analysisVideo = document.getElementById("analysisVideo");
@@ -574,9 +579,13 @@ async function uploadVideo(file,analysisResult){
   const videoUrl = publicUrlData?.publicUrl;
   if(!videoUrl) throw new Error("De video-URL kon niet worden aangemaakt.");
 
-  const finalStatus = analysisResult.framesWithPose > 0
+  const hasPose = analysisResult.framesWithPose > 0;
+  const finalStatus = hasPose
     ? "Pose detected"
     : "No pose detected";
+  const processingStatus = hasPose ? "COMPLETED" : "FAILED";
+  const analysisSuccess = hasPose;
+  const failureReason = hasPose ? null : "Geen houding gedetecteerd";
 let ai_observation = "";
 let coach_advice = "";
 let recommended_drill = "";
@@ -666,6 +675,11 @@ const ai_summary = analysisResult.releaseFrame
  const detailedRow = {
     Player_Email: playerEmail || null,
     video_url: videoUrl,
+    session_id: sessionId || null,
+    throw_id: throwId,
+    processing_status: processingStatus,
+    analysis_success: analysisSuccess,
+    failure_reason: failureReason,
 ai_observation: ai_observation,
 coach_advice: coach_advice,
 recommended_drill: recommended_drill,
@@ -799,8 +813,13 @@ if(!detailedInsertError){
         },
 body: JSON.stringify({
     row_id: glideRowId,
-  player_email: playerEmail,
-    ai_summary: detailedRow.ai_summary,
+    player_email: playerEmail,
+    analysis_id: data?.[0]?.analysis_id || null,
+    throw_id: detailedRow.throw_id,
+    processing_status: detailedRow.processing_status,
+    analysis_success: detailedRow.analysis_success,
+    failure_reason: detailedRow.failure_reason,
+ai_summary: detailedRow.ai_summary,
     release_time_ms: detailedRow.release_time_ms,
     release_confidence: detailedRow.release_confidence,
     confidence_score: detailedRow.confidence_score,
@@ -854,12 +873,17 @@ session_id: detailedRow.session_id
   console.error("Detailed database insert failed:", detailedInsertError);
 
   const coreRow = {
-    Player_Email:playerEmail || null,
-    video_url:videoUrl,
-    technique_score:analysisResult.technique_Score,
-    main_issue:analysisResult.mainIssue,
-    confidence_score:analysisResult.detectionPercentage,
-    status:finalStatus
+    Player_Email: playerEmail || null,
+    video_url: videoUrl,
+    session_id: sessionId || null,
+    throw_id: throwId,
+    processing_status: processingStatus,
+    analysis_success: analysisSuccess,
+    failure_reason: failureReason,
+    technique_score: analysisResult.technique_score,
+    main_issue: analysisResult.mainIssue,
+    confidence_score: analysisResult.detectionPercentage,
+    status: finalStatus
   };
 
   const {error:coreInsertError} = await supabaseClient
