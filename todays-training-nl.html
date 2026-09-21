@@ -33,15 +33,15 @@ html,body{
 }
 
 body{
-  padding:10px;
+  padding:8px;
 }
 
 .wrap{
   width:100%;
   max-width:430px;
   margin:0 auto;
-  padding:16px;
-  border-radius:24px;
+  padding:15px;
+  border-radius:22px;
   background:linear-gradient(180deg,#102844 0%,#081a2d 100%);
   border:1px solid rgba(57,255,136,.48);
   box-shadow:
@@ -50,15 +50,16 @@ body{
     inset 0 0 22px rgba(57,255,136,.06);
 }
 
+/* HEADER */
+
 .header{
-  padding:2px 2px 12px;
+  padding:4px 2px 13px;
   border-bottom:2px solid var(--accent);
-  box-shadow:0 8px 14px -12px rgba(57,255,136,.8);
 }
 
 .header h1{
-  font-size:36px;
-  line-height:1;
+  font-size:32px;
+  line-height:1.05;
   font-weight:900;
   color:var(--accent);
   text-shadow:
@@ -68,12 +69,14 @@ body{
 
 .subtitle{
   margin-top:8px;
-  font-size:15px;
+  font-size:14px;
+  line-height:1.4;
   color:var(--muted);
 }
 
-.stats,
-.split{
+/* TOP STATS */
+
+.stats{
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
   gap:10px;
@@ -83,83 +86,166 @@ body{
 .card{
   background:var(--panel2);
   border:1px solid var(--line);
-  border-radius:16px;
-  padding:16px;
+  border-radius:15px;
+  padding:14px;
   min-width:0;
   box-shadow:0 0 10px rgba(57,255,136,.07);
 }
 
 .label{
-  font-size:11px;
-  letter-spacing:.6px;
+  font-size:10px;
+  letter-spacing:.65px;
   text-transform:uppercase;
   color:var(--muted);
   font-weight:800;
 }
 
 .value{
-  margin-top:6px;
-  font-size:27px;
-  line-height:1.08;
+  margin-top:7px;
+  font-size:23px;
+  line-height:1.12;
   font-weight:900;
   color:var(--accent);
-  overflow-wrap:anywhere;
+  overflow-wrap:break-word;
+  word-break:normal;
   text-shadow:0 0 6px rgba(57,255,136,.32);
 }
 
+/* FULL WIDTH SECTIONS */
+
 .section{
-  margin-top:14px;
+  margin-top:13px;
   background:var(--panel2);
   border:1px solid var(--line);
   border-left:4px solid var(--accent);
-  border-radius:16px;
-  padding:16px 16px 17px;
+  border-radius:15px;
+  padding:15px;
 }
 
 .section-title{
-  font-size:17px;
+  font-size:16px;
   font-weight:900;
-  margin-bottom:8px;
+  margin-bottom:9px;
   color:#fff;
 }
 
 .section-text{
   font-size:14px;
+  line-height:1.55;
+  color:var(--text);
+  overflow-wrap:break-word;
+  word-break:normal;
+}
+
+/* FOCUS / TARGET / TRACK / AVOID */
+
+.detail-card{
+  margin-top:13px;
+  background:var(--panel2);
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:15px;
+}
+
+.detail-card .value{
+  font-size:15px;
+  line-height:1.5;
+  font-weight:700;
+  color:var(--text);
+  text-shadow:none;
+}
+
+/* EXECUTION */
+
+.execution-list{
+  list-style:none;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.execution-step{
+  display:grid;
+  grid-template-columns:30px 1fr;
+  gap:9px;
+  align-items:start;
+  padding:10px;
+  border-radius:11px;
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(57,255,136,.12);
+}
+
+.step-number{
+  width:28px;
+  height:28px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  background:rgba(57,255,136,.13);
+  color:var(--accent);
+  font-size:13px;
+  font-weight:900;
+}
+
+.step-text{
+  font-size:13.5px;
   line-height:1.5;
   color:var(--text);
-  overflow-wrap:anywhere;
+  overflow-wrap:break-word;
 }
 
-.split .card{
-  padding:16px;
+/* COACH REMINDER */
+
+.coach-row{
+  margin-top:8px;
 }
 
-.split .value{
-  font-size:21px;
-  line-height:1.28;
+.coach-row:first-child{
+  margin-top:0;
+}
+
+.coach-label{
+  display:block;
+  margin-bottom:3px;
+  color:var(--accent);
+  font-size:12px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.35px;
 }
 
 .footer{
-  margin-top:28px;
-  padding-bottom:16px;
+  margin-top:24px;
+  padding-bottom:8px;
   text-align:center;
   font-size:10px;
   color:#9cffc0;
-  letter-spacing:.4px;
+  letter-spacing:.6px;
   text-shadow:0 0 7px rgba(57,255,136,.25);
 }
 
 @media(max-width:380px){
+
+  .wrap{
+    padding:12px;
+  }
+
   .header h1{
-    font-size:32px;
+    font-size:29px;
   }
 
   .value{
-    font-size:24px;
+    font-size:21px;
   }
 
-  .split .value{
-    font-size:19px;
+  .section-text,
+  .detail-card .value{
+    font-size:13px;
+  }
+
+  .step-text{
+    font-size:13px;
   }
 }
 </style>
@@ -171,8 +257,11 @@ body{
 
   <div class="header">
     <h1>🚀 Training van vandaag</h1>
-    <div class="subtitle">Voer je gerichte AI-trainingssessie uit.</div>
+    <div class="subtitle">
+      Voer je gerichte AI-trainingssessie uit.
+    </div>
   </div>
+
 
   <div class="stats">
 
@@ -198,114 +287,275 @@ body{
 
   </div>
 
+
   <div class="section">
     <div class="section-title">🎯 Trainingsdoel</div>
-    <div class="section-text" id="objective">Trainingsdoel ontbreekt.</div>
+    <div class="section-text" id="objective">
+      Trainingsdoel ontbreekt.
+    </div>
   </div>
 
-  <div class="split">
 
-    <div class="card">
-      <div class="label">Belangrijkste focus</div>
-      <div class="value" id="focus">Focus ontbreekt.</div>
+  <div class="detail-card">
+    <div class="label">🎯 Belangrijkste focus</div>
+    <div class="value" id="focus">
+      Focus ontbreekt.
     </div>
-
-    <div class="card">
-      <div class="label">Succesdoel</div>
-      <div class="value" id="target">Doel ontbreekt.</div>
-    </div>
-
   </div>
+
+
+  <div class="detail-card">
+    <div class="label">🏆 Succesdoel</div>
+    <div class="value" id="target">
+      Doel ontbreekt.
+    </div>
+  </div>
+
 
   <div class="section">
     <div class="section-title">▶️ Uitvoering</div>
-    <div class="section-text" id="execution">Uitvoeringsstappen ontbreken.</div>
-  </div>
 
-  <div class="split">
-
-    <div class="card">
-      <div class="label">Bijhouden</div>
-      <div class="value" id="track">Meetpunt ontbreekt.</div>
-    </div>
-
-    <div class="card">
-      <div class="label">Vermijd</div>
-      <div class="value" id="avoid">Veelgemaakte fouten ontbreken.</div>
+    <div id="execution">
+      <div class="section-text">
+        Uitvoeringsstappen ontbreken.
+      </div>
     </div>
 
   </div>
+
+
+  <div class="detail-card">
+    <div class="label">📊 Bijhouden</div>
+    <div class="value" id="track">
+      Meetpunt ontbreekt.
+    </div>
+  </div>
+
+
+  <div class="detail-card">
+    <div class="label">⚠️ Vermijd</div>
+    <div class="value" id="avoid">
+      Veelgemaakte fouten ontbreken.
+    </div>
+  </div>
+
 
   <div class="section">
     <div class="section-title">🧠 Waarom deze oefening</div>
-    <div class="section-text" id="why">Uitleg ontbreekt.</div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">📈 Verbeterpotentieel</div>
-    <div class="section-text" id="improvement">Verbeterpotentieel ontbreekt.</div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">💬 Coachherinnering</div>
-
-    <div class="section-text">
-      <strong>Voor je begint:</strong>
-      <span id="reminder">Herinnering ontbreekt.</span>
-
-      <br>
-
-      <strong>Na de training:</strong>
-      <span id="after">Afrondingsbericht ontbreekt.</span>
+    <div class="section-text" id="why">
+      Uitleg ontbreekt.
     </div>
   </div>
 
-  <div class="footer">AANGEDREVEN DOOR DARTIQ AI</div>
+
+  <div class="section">
+    <div class="section-title">📈 Verbeterpotentieel</div>
+    <div class="section-text" id="improvement">
+      Verbeterpotentieel ontbreekt.
+    </div>
+  </div>
+
+
+  <div class="section">
+
+    <div class="section-title">
+      💬 Coachherinnering
+    </div>
+
+    <div class="coach-row">
+      <span class="coach-label">Voor je begint</span>
+      <div class="section-text" id="reminder">
+        Herinnering ontbreekt.
+      </div>
+    </div>
+
+    <div class="coach-row">
+      <span class="coach-label">Na de training</span>
+      <div class="section-text" id="after">
+        Afrondingsbericht ontbreekt.
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="footer">
+    AANGEDREVEN DOOR DARTIQ AI
+  </div>
 
 </div>
+
 
 <script>
 
 const params = new URLSearchParams(window.location.search);
 
-function getValue(key, fallback) {
+
+function getValue(key, fallback){
+
   const value = params.get(key);
 
-  if (value === null || String(value).trim() === "") {
+  if(
+    value === null ||
+    String(value).trim() === ""
+  ){
     return fallback;
   }
 
   return decodeURIComponent(
     String(value).replace(/\+/g," ")
   ).trim();
+
 }
 
+
+/* NORMALE VELDEN */
+
 const fields = {
-  drill: "Oefening ontbreekt",
-  duration: "--",
-  rounds: "--",
-  level: "--",
-  objective: "Trainingsdoel ontbreekt.",
-  focus: "Focus ontbreekt.",
-  target: "Doel ontbreekt.",
-  execution: "Uitvoeringsstappen ontbreken.",
-  track: "Meetpunt ontbreekt.",
-  avoid: "Veelgemaakte fouten ontbreken.",
-  why: "Uitleg ontbreekt.",
-  improvement: "Verbeterpotentieel ontbreekt.",
-  reminder: "Herinnering ontbreekt.",
-  after: "Afrondingsbericht ontbreekt."
+
+  drill:"Oefening ontbreekt",
+
+  duration:"--",
+
+  rounds:"--",
+
+  level:"--",
+
+  objective:"Trainingsdoel ontbreekt.",
+
+  focus:"Focus ontbreekt.",
+
+  target:"Doel ontbreekt.",
+
+  track:"Meetpunt ontbreekt.",
+
+  avoid:"Veelgemaakte fouten ontbreken.",
+
+  why:"Uitleg ontbreekt.",
+
+  improvement:"Verbeterpotentieel ontbreekt.",
+
+  reminder:"Herinnering ontbreekt.",
+
+  after:"Afrondingsbericht ontbreekt."
+
 };
 
-Object.entries(fields).forEach(([key,fallback]) => {
 
-  const el = document.getElementById(key);
+Object.entries(fields).forEach(([key,fallback])=>{
 
-  if (el) {
-    el.textContent = getValue(key,fallback);
+  const el=document.getElementById(key);
+
+  if(el){
+
+    el.textContent=getValue(
+      key,
+      fallback
+    );
+
   }
 
 });
+
+
+/* UITVOERINGSSTAPPEN */
+
+function renderExecution(){
+
+  const container =
+    document.getElementById("execution");
+
+  const execution =
+    getValue(
+      "execution",
+      ""
+    );
+
+  if(!execution){
+
+    container.textContent =
+      "Uitvoeringsstappen ontbreken.";
+
+    return;
+
+  }
+
+
+  let steps =
+    execution
+      .split(/\r?\n+/)
+      .map(step => step.trim())
+      .filter(Boolean);
+
+
+  /*
+  Fallback wanneer de URL de regeleinden verwijdert.
+  */
+
+  if(steps.length === 1){
+
+    steps =
+      execution
+        .split(/(?<=[.!?])\s+(?=[A-ZÀ-ÖØ-Ý])/)
+        .map(step => step.trim())
+        .filter(Boolean);
+
+  }
+
+
+  const list =
+    document.createElement("div");
+
+  list.className =
+    "execution-list";
+
+
+  steps.forEach((step,index)=>{
+
+    const row =
+      document.createElement("div");
+
+    row.className =
+      "execution-step";
+
+
+    const number =
+      document.createElement("div");
+
+    number.className =
+      "step-number";
+
+    number.textContent =
+      index + 1;
+
+
+    const text =
+      document.createElement("div");
+
+    text.className =
+      "step-text";
+
+    text.textContent =
+      step;
+
+
+    row.appendChild(number);
+
+    row.appendChild(text);
+
+    list.appendChild(row);
+
+  });
+
+
+  container.innerHTML="";
+
+  container.appendChild(list);
+
+}
+
+
+renderExecution();
 
 </script>
 
