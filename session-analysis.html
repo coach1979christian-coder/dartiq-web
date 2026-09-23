@@ -1,238 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>DARTIQ Session Analysis</title>
-
 <style>
 :root{
-  --bg:#05070b;
-  --panel:#0b0f15;
-  --panel2:#0f141d;
-  --line:rgba(255,255,255,.10);
-  --line-strong:rgba(255,255,255,.18);
-  --text:#f7f9fc;
-  --muted:#9da7b5;
-  --blue:#55a8ff;
-  --purple:#9a7cff;
-  --orange:#ff9f43;
-  --green:#63e6a7;
+  --bg:#050608;
+  --panel:#0a0d12;
+  --text:#f7f8fb;
+  --muted:#8f98a6;
+  --line:rgba(255,255,255,.08);
+  --blue:#6ab1ff;
+  --purple:#a892ff;
+  --orange:#ff9a3d;
+  --green:#62dca5;
 }
-
 *{box-sizing:border-box;margin:0;padding:0}
-
 html,body{
   width:100%;
   min-height:100%;
-  background:transparent;
-  font-family:Inter,Arial,sans-serif;
+  background:var(--bg);
   color:var(--text);
+  font-family:Inter,Arial,sans-serif;
   overflow-x:hidden;
 }
-
-body{
-  display:flex;
-  justify-content:center;
-  align-items:flex-start;
-  padding:4px;
-}
-
+body{padding:0}
 .report{
   width:100%;
-  max-width:430px;
-  background:
-    radial-gradient(circle at 50% -15%, rgba(75,128,255,.15), transparent 34%),
-    linear-gradient(180deg,#070a10 0%,#040507 100%);
-  border:1px solid var(--line-strong);
-  border-radius:22px;
-  padding:14px;
-  box-shadow:0 8px 30px rgba(0,0,0,.38);
+  max-width:460px;
+  margin:0 auto;
+  padding:16px 16px 22px;
+  background:var(--bg);
 }
-
-.topbar{
+.header{
   display:flex;
-  align-items:flex-start;
   justify-content:space-between;
-  gap:12px;
-  padding:3px 2px 12px;
+  gap:14px;
+  align-items:flex-start;
+  padding-bottom:14px;
+  border-bottom:1px solid var(--line);
 }
-
-.eyebrow{
-  font-size:9px;
-  line-height:1;
-  letter-spacing:2.2px;
-  font-weight:900;
+.kicker{
+  font-size:8px;
+  letter-spacing:1.8px;
   color:var(--muted);
+  font-weight:900;
   text-transform:uppercase;
 }
-
 h1{
-  margin-top:6px;
-  font-size:22px;
+  margin-top:5px;
+  font-size:25px;
   line-height:1.05;
-  letter-spacing:.2px;
   font-weight:950;
 }
-
 .meta{
-  margin-top:6px;
+  margin-top:7px;
   display:flex;
   gap:7px;
   flex-wrap:wrap;
-  align-items:center;
   color:var(--muted);
   font-size:10px;
   font-weight:800;
 }
-
-.meta .dot{opacity:.45}
-
-.format-pill{
+.bo{
   flex:0 0 auto;
-  min-width:56px;
-  text-align:center;
-  padding:8px 10px;
+  padding:7px 10px;
   border-radius:999px;
-  border:1px solid rgba(85,168,255,.28);
-  background:rgba(85,168,255,.08);
+  background:rgba(106,177,255,.08);
+  border:1px solid rgba(106,177,255,.22);
   color:#dcebff;
   font-size:10px;
   font-weight:950;
   letter-spacing:.6px;
 }
-
-.score-strip{
+.scoreline{
   display:grid;
-  grid-template-columns:104px 1fr;
-  gap:10px;
-  margin-bottom:10px;
+  grid-template-columns:118px 1fr;
+  gap:14px;
+  padding:16px 0;
+  border-bottom:1px solid var(--line);
 }
-
-.score-box,
-.performance-card,
-.diagnosis-card,
-.action-card{
-  background:linear-gradient(180deg,rgba(255,255,255,.042),rgba(255,255,255,.018));
-  border:1px solid var(--line);
-  border-radius:16px;
-}
-
-.score-box{
-  min-height:106px;
-  padding:12px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-}
-
-.score-label{
+.scorebox .small,
+.gradebox .small,
+.section-title,
+.stat-label,
+.mini-title{
   font-size:8px;
+  line-height:1.2;
+  letter-spacing:1.15px;
   color:var(--muted);
-  letter-spacing:1.2px;
   text-transform:uppercase;
   font-weight:900;
 }
-
 .score{
-  font-size:46px;
+  margin-top:6px;
+  font-size:48px;
   line-height:.9;
   font-weight:1000;
   letter-spacing:-2px;
 }
-
-.grade-box{
-  min-height:106px;
-  padding:12px 14px;
+.gradebox{
   display:flex;
   flex-direction:column;
   justify-content:center;
 }
-
-.grade-label{
-  font-size:8px;
-  color:var(--muted);
-  letter-spacing:1.2px;
-  text-transform:uppercase;
-  font-weight:900;
-}
-
 .grade{
   margin-top:7px;
-  font-size:18px;
+  font-size:20px;
   line-height:1.1;
   font-weight:950;
 }
-
-.performance-card{
-  padding:12px;
-  margin-bottom:10px;
+.section{
+  padding:16px 0;
+  border-bottom:1px solid var(--line);
 }
-
-.section-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  margin-bottom:10px;
-}
-
-.section-kicker{
-  font-size:9px;
-  letter-spacing:1.5px;
-  text-transform:uppercase;
-  font-weight:950;
-  color:var(--muted);
-}
-
-.section-icon{
-  font-size:14px;
-  opacity:.9;
-}
-
+.section:last-of-type{border-bottom:0}
+.section-title{margin-bottom:11px}
 .stats{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:7px;
 }
-
 .stat{
-  padding:9px 7px 8px;
-  border-radius:11px;
-  background:rgba(255,255,255,.025);
-  border:1px solid rgba(255,255,255,.07);
-  text-align:center;
+  padding:4px 10px 8px;
+  min-width:0;
 }
-
-.stat-title{
-  font-size:7px;
-  line-height:1.2;
-  color:var(--muted);
-  letter-spacing:.8px;
-  text-transform:uppercase;
-  font-weight:900;
+.stat:nth-child(3n+2),
+.stat:nth-child(3n+3){
+  border-left:1px solid var(--line);
 }
-
+.stat:nth-child(n+4){
+  padding-top:12px;
+  border-top:1px solid var(--line);
+}
 .stat-value{
   margin-top:5px;
-  font-size:18px;
+  font-size:20px;
+  line-height:1;
   font-weight:950;
 }
-
-.diagnosis-card{
-  padding:13px;
-  margin-bottom:10px;
-  border-color:rgba(154,124,255,.18);
-}
-
-.focus-row{
+.focus{
   display:flex;
-  gap:10px;
+  gap:11px;
   align-items:flex-start;
 }
-
-.focus-icon,
-.action-icon{
+.icon{
   width:34px;
   height:34px;
   border-radius:10px;
@@ -242,270 +154,169 @@ h1{
   flex:0 0 auto;
   font-size:16px;
 }
-
-.focus-icon{
-  background:rgba(154,124,255,.12);
-  border:1px solid rgba(154,124,255,.18);
+.icon.purple{
+  background:rgba(168,146,255,.10);
+  border:1px solid rgba(168,146,255,.18);
 }
-
-.action-icon{
-  background:rgba(255,159,67,.12);
-  border:1px solid rgba(255,159,67,.20);
+.icon.orange{
+  background:rgba(255,154,61,.10);
+  border:1px solid rgba(255,154,61,.18);
 }
-
-.card-title{
-  font-size:8px;
-  line-height:1;
-  color:var(--muted);
-  letter-spacing:1.15px;
-  text-transform:uppercase;
-  font-weight:950;
-}
-
-.focus-text{
-  margin-top:4px;
-  font-size:16px;
-  line-height:1.25;
-  font-weight:950;
-}
-
-.insight{
-  margin-top:11px;
-  padding-top:11px;
-  border-top:1px solid var(--line);
-}
-
-.insight-title{
-  font-size:8px;
-  color:#c8bbff;
-  letter-spacing:1.1px;
-  text-transform:uppercase;
-  font-weight:950;
-}
-
-.insight-text,
-.advice-text,
-.why-text{
-  margin-top:5px;
-  font-size:12px;
-  line-height:1.48;
-  color:#e8ebf0;
-  font-weight:650;
-}
-
-.advice{
-  margin-top:9px;
-  padding:9px 10px;
-  border-radius:11px;
-  background:rgba(85,168,255,.06);
-  border:1px solid rgba(85,168,255,.11);
-}
-
-.advice-title{
-  font-size:8px;
-  color:#a7d1ff;
-  letter-spacing:1.1px;
-  text-transform:uppercase;
-  font-weight:950;
-}
-
-.action-card{
-  padding:13px;
-  border-color:rgba(255,159,67,.20);
-}
-
-.action-top{
-  display:flex;
-  gap:10px;
-  align-items:flex-start;
-}
-
+.focus-text,
 .drill{
   margin-top:4px;
   font-size:17px;
-  line-height:1.2;
+  line-height:1.25;
   font-weight:950;
 }
-
-.training-meta{
-  margin-top:7px;
+.copy{
+  margin-top:11px;
+  font-size:12px;
+  line-height:1.5;
+  color:#e6e9ee;
+  font-weight:650;
+}
+.subblock{
+  margin-top:12px;
+  padding-top:12px;
+  border-top:1px solid var(--line);
+}
+.advice{
+  margin-top:10px;
+  padding:10px 11px;
+  border-radius:10px;
+  background:rgba(106,177,255,.05);
+}
+.advice .mini-title{color:#a8d2ff}
+.chips{
+  margin-top:8px;
   display:flex;
   gap:6px;
   flex-wrap:wrap;
 }
-
 .chip{
-  padding:5px 7px;
+  padding:5px 8px;
   border-radius:999px;
-  border:1px solid rgba(255,255,255,.09);
-  background:rgba(255,255,255,.035);
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.025);
   color:#dfe4ea;
   font-size:9px;
   font-weight:850;
 }
-
 .improvement{
-  margin-top:11px;
-  display:flex;
-  justify-content:space-between;
-  gap:12px;
-  align-items:center;
-  padding:9px 10px;
-  border-radius:11px;
-  background:rgba(99,230,167,.055);
-  border:1px solid rgba(99,230,167,.12);
+  margin-top:13px;
+  padding:10px 11px;
+  border-radius:10px;
+  background:rgba(98,220,165,.055);
+  border:1px solid rgba(98,220,165,.12);
 }
-
-.improvement-label{
-  font-size:8px;
-  color:#acefce;
-  letter-spacing:1.05px;
-  text-transform:uppercase;
-  font-weight:950;
-}
-
+.improvement .mini-title{color:#a8edca}
 .improvement-value{
-  font-size:11px;
-  line-height:1.3;
+  margin-top:4px;
+  font-size:12px;
+  line-height:1.35;
   font-weight:850;
-  text-align:right;
 }
-
 details{
-  margin-top:10px;
+  margin-top:12px;
+  padding-top:12px;
   border-top:1px solid var(--line);
-  padding-top:10px;
 }
-
 summary{
-  cursor:pointer;
   list-style:none;
-  font-size:9px;
+  cursor:pointer;
   color:var(--muted);
+  font-size:9px;
   letter-spacing:1px;
   text-transform:uppercase;
   font-weight:900;
 }
-
 summary::-webkit-details-marker{display:none}
 summary:after{content:" +";color:#fff}
 details[open] summary:after{content:" −"}
-
 .footer{
-  margin-top:13px;
+  padding-top:14px;
   text-align:center;
-  color:#6f7884;
+  color:#626a75;
   font-size:7px;
-  letter-spacing:1.7px;
+  letter-spacing:1.6px;
   font-weight:900;
   text-transform:uppercase;
 }
-
 .hidden{display:none!important}
-
 @media(max-width:360px){
-  .score-strip{grid-template-columns:92px 1fr}
-  .score{font-size:40px}
-  h1{font-size:20px}
+  .report{padding-left:12px;padding-right:12px}
+  h1{font-size:22px}
+  .scoreline{grid-template-columns:105px 1fr}
+  .score{font-size:43px}
 }
 </style>
 </head>
-
 <body>
 <main class="report">
-
-  <section class="topbar">
+  <header class="header">
     <div>
-      <div class="eyebrow">AI DARTIQ • Session Report</div>
+      <div class="kicker">AI DARTIQ • Session Report</div>
       <h1>Session Analysis</h1>
       <div class="meta">
         <span id="date">Date missing</span>
-        <span class="dot">•</span>
+        <span>•</span>
         <span id="sessiontype">Match</span>
       </div>
     </div>
-    <div class="format-pill" id="matchformat">BO--</div>
-  </section>
+    <div class="bo" id="matchformat">BO--</div>
+  </header>
 
-  <section class="score-strip">
-    <div class="score-box">
-      <div class="score-label">AI Coach Score</div>
+  <section class="scoreline">
+    <div class="scorebox">
+      <div class="small">AI Coach Score</div>
       <div class="score" id="score">--</div>
     </div>
-
-    <div class="grade-box">
-      <div class="grade-label">Session Grade</div>
+    <div class="gradebox">
+      <div class="small">Session Grade</div>
       <div class="grade" id="grade">Needs Work</div>
     </div>
   </section>
 
-  <section class="performance-card">
-    <div class="section-head">
-      <div class="section-kicker">Performance</div>
-      <div class="section-icon">📊</div>
-    </div>
-
+  <section class="section">
+    <div class="section-title">Performance</div>
     <div class="stats">
-      <div class="stat">
-        <div class="stat-title">Average</div>
-        <div class="stat-value" id="average">--</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-title">First 9</div>
-        <div class="stat-value" id="first9">--</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-title">Checkout</div>
-        <div class="stat-value" id="checkoutpct">--</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-title">180s</div>
-        <div class="stat-value" id="total180">0</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-title">140+</div>
-        <div class="stat-value" id="total140">0</div>
-      </div>
-
-      <div class="stat">
-        <div class="stat-title">100+</div>
-        <div class="stat-value" id="total100">0</div>
-      </div>
+      <div class="stat"><div class="stat-label">Average</div><div class="stat-value" id="average">--</div></div>
+      <div class="stat"><div class="stat-label">First 9</div><div class="stat-value" id="first9">--</div></div>
+      <div class="stat"><div class="stat-label">Checkout</div><div class="stat-value" id="checkoutpct">--</div></div>
+      <div class="stat"><div class="stat-label">180s</div><div class="stat-value" id="total180">0</div></div>
+      <div class="stat"><div class="stat-label">140+</div><div class="stat-value" id="total140">0</div></div>
+      <div class="stat"><div class="stat-label">100+</div><div class="stat-value" id="total100">0</div></div>
     </div>
   </section>
 
-  <section class="diagnosis-card">
-    <div class="focus-row">
-      <div class="focus-icon">🎯</div>
+  <section class="section">
+    <div class="focus">
+      <div class="icon purple">🎯</div>
       <div>
-        <div class="card-title">Main Focus</div>
+        <div class="mini-title">Main Focus</div>
         <div class="focus-text" id="focus">Focus data missing.</div>
       </div>
     </div>
 
-    <div class="insight">
-      <div class="insight-title">AI Insight</div>
-      <div class="insight-text" id="insight">AI insight data missing.</div>
+    <div class="subblock">
+      <div class="mini-title" style="color:#c8bbff">AI Insight</div>
+      <div class="copy" id="insight">AI insight data missing.</div>
     </div>
 
     <div class="advice">
-      <div class="advice-title">Coach Advice</div>
-      <div class="advice-text" id="advice">Coach advice data missing.</div>
+      <div class="mini-title">Coach Advice</div>
+      <div class="copy" id="advice">Coach advice data missing.</div>
     </div>
   </section>
 
-  <section class="action-card">
-    <div class="action-top">
-      <div class="action-icon">🔥</div>
+  <section class="section">
+    <div class="focus">
+      <div class="icon orange">🔥</div>
       <div>
-        <div class="card-title">Your Next Action</div>
+        <div class="mini-title">Your Next Action</div>
         <div class="drill" id="drill">Recommended drill data missing.</div>
-
-        <div class="training-meta">
+        <div class="chips">
           <span class="chip" id="duration">Duration missing</span>
           <span class="chip" id="level">Level missing</span>
         </div>
@@ -513,93 +324,71 @@ details[open] summary:after{content:" −"}
     </div>
 
     <div class="improvement">
-      <div class="improvement-label">Improvement Potential</div>
+      <div class="mini-title">Improvement Potential</div>
       <div class="improvement-value" id="improvement">Improvement data missing.</div>
     </div>
 
-    <details id="why-wrap">
+    <details id="whywrap">
       <summary>Why this matters</summary>
-      <div class="why-text" id="why">Improvement explanation missing.</div>
+      <div class="copy" id="why">Improvement explanation missing.</div>
     </details>
   </section>
 
   <div class="footer">Built with players • Powered by DARTIQ AI</div>
-
 </main>
 
 <script>
 const params = new URLSearchParams(window.location.search);
 
-const fallback = {
-  date:'Date missing',
-  sessiontype:'Match',
-  matchformat:'BO--',
-  score:'--',
-  grade:'Needs Work',
-  average:'--',
-  first9:'--',
-  checkoutpct:'--',
-  total180:'0',
-  total140:'0',
-  total100:'0',
-  focus:'Focus data missing.',
-  insight:'AI insight data missing.',
-  advice:'Coach advice data missing.',
-  drill:'Recommended drill data missing.',
-  duration:'Duration missing',
-  level:'Level missing',
-  why:'Improvement explanation missing.',
-  improvement:'Improvement data missing.'
-};
-
-function getParam(...keys){
+function raw(...keys){
   for(const key of keys){
-    const raw = params.get(key);
-    if(raw !== null && String(raw).trim() !== ''){
-      return decodeURIComponent(String(raw).replace(/\+/g,' '));
+    const v = params.get(key);
+    if(v !== null){
+      const cleaned = decodeURIComponent(String(v).replace(/\+/g,' ')).trim();
+      if(cleaned && cleaned !== '...' && cleaned !== '…') return cleaned;
     }
   }
   return '';
 }
 
-function setValue(id, value, fallbackValue){
+function set(id, value, fallback='--'){
   const el = document.getElementById(id);
-  if(el) el.textContent = value || fallbackValue;
+  if(el) el.textContent = value || fallback;
 }
 
-setValue('date', getParam('date'), fallback.date);
-setValue('sessiontype', getParam('sessiontype','type'), fallback.sessiontype);
-setValue('matchformat', getParam('matchformat','format','bo'), fallback.matchformat);
+set('date', raw('date'), '');
+set('sessiontype', raw('sessiontype','type'), 'Match');
+set('matchformat', raw('matchformat','format','bo'), '');
+set('score', raw('score'), '--');
+set('grade', raw('grade'), '--');
+set('average', raw('average'), '--');
+set('first9', raw('first9'), '--');
+set('checkoutpct', raw('checkoutpct','checkout'), '--');
+set('total180', raw('total180'), '0');
+set('total140', raw('total140'), '0');
+set('total100', raw('total100'), '0');
+set('focus', raw('focus'), 'No focus data');
+set('insight', raw('insight'), 'No AI insight available');
+set('advice', raw('advice'), 'No coach advice available');
+set('drill', raw('drill'), 'No drill recommendation');
+set('duration', raw('duration'), '');
+set('level', raw('level'), '');
+set('improvement', raw('improvement'), 'No improvement estimate');
+set('why', raw('why'), '');
 
-setValue('score', getParam('score'), fallback.score);
-setValue('grade', getParam('grade'), fallback.grade);
-setValue('average', getParam('average'), fallback.average);
-setValue('first9', getParam('first9'), fallback.first9);
-setValue('checkoutpct', getParam('checkoutpct','checkout'), fallback.checkoutpct);
-setValue('total180', getParam('total180'), fallback.total180);
-setValue('total140', getParam('total140'), fallback.total140);
-setValue('total100', getParam('total100'), fallback.total100);
+if(!raw('matchformat','format','bo')) document.getElementById('matchformat').classList.add('hidden');
+if(!raw('why')) document.getElementById('whywrap').classList.add('hidden');
 
-setValue('focus', getParam('focus'), fallback.focus);
-setValue('insight', getParam('insight'), fallback.insight);
-setValue('advice', getParam('advice'), fallback.advice);
-setValue('drill', getParam('drill'), fallback.drill);
-setValue('duration', getParam('duration'), fallback.duration);
-setValue('level', getParam('level'), fallback.level);
-setValue('why', getParam('why'), fallback.why);
-setValue('improvement', getParam('improvement'), fallback.improvement);
+if(!raw('duration')) document.getElementById('duration').classList.add('hidden');
+if(!raw('level')) document.getElementById('level').classList.add('hidden');
 
-/* Hide match format when it is not supplied or not valid */
-const matchFormat = getParam('matchformat','format','bo');
-if(!matchFormat){
-  document.getElementById('matchformat').classList.add('hidden');
-}
-
-/* Hide "Why this matters" when Glide sends nothing */
-if(!getParam('why')){
-  document.getElementById('why-wrap').classList.add('hidden');
+const meta = document.querySelector('.meta');
+if(!raw('date')) {
+  const dateEl = document.getElementById('date');
+  dateEl.classList.add('hidden');
+  const sep = meta.querySelector('span:nth-child(2)');
+  if(sep) sep.classList.add('hidden');
 }
 </script>
-
 </body>
 </html>
