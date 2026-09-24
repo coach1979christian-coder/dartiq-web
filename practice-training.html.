@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>DARTIQ Practice Training</title>
+<style>
+:root{
+  --bg:#050b18;
+  --panel:#0d2136;
+  --panel2:#10243a;
+  --accent:#37b7ff;
+  --accent2:#39ff88;
+  --text:#f4fbff;
+  --muted:#9fb7c9;
+  --line:rgba(55,183,255,.22);
+  --good:#39ff88;
+  --warn:#ffd35a;
+  --bad:#ff6b7a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;min-height:100%;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--text);overflow-x:hidden}
+body{padding:14px}
+.wrap{width:100%;max-width:960px;margin:0 auto}
+.hero{background:linear-gradient(180deg,rgba(55,183,255,.10),rgba(13,33,54,.96));border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:14px}
+.eyebrow{font-size:11px;letter-spacing:1.7px;text-transform:uppercase;color:var(--accent);font-weight:800;margin-bottom:8px}
+h1{font-size:clamp(28px,7vw,46px);line-height:1.02;margin-bottom:10px;word-break:break-word}
+.subtitle{color:var(--muted);font-size:14px;line-height:1.45}
+.meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:16px}
+.meta .box{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);border-radius:13px;padding:12px;min-width:0}
+.label{font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:5px}
+.value{font-size:16px;font-weight:800;line-height:1.25;overflow-wrap:anywhere}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.card{background:var(--panel);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:16px;min-width:0}
+.card.full{grid-column:1/-1}
+.card h2{font-size:13px;text-transform:uppercase;letter-spacing:1.3px;color:var(--accent);margin-bottom:10px}
+.card p{font-size:15px;line-height:1.55;color:var(--text);white-space:pre-line;overflow-wrap:anywhere}
+.coach{border-color:rgba(57,255,136,.28);background:linear-gradient(180deg,rgba(57,255,136,.055),var(--panel))}
+.coach h2{color:var(--accent2)}
+.coach-flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-top:12px}
+.step{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:11px;min-width:0}
+.step b{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--accent2);margin-bottom:5px}
+.step span{display:block;font-size:13px;line-height:1.35;color:var(--muted);overflow-wrap:anywhere}
+.callout{margin-top:12px;padding:12px 13px;border-left:3px solid var(--accent2);background:rgba(57,255,136,.06);border-radius:0 10px 10px 0;font-size:14px;line-height:1.45}
+.footer{margin-top:14px;background:var(--panel2);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:16px}
+.footer h2{font-size:13px;text-transform:uppercase;letter-spacing:1.3px;color:var(--accent);margin-bottom:10px}
+.next{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.next .box{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:12px}
+.empty{display:none}
+@media(max-width:680px){
+  body{padding:10px}
+  .meta{grid-template-columns:1fr 1fr}
+  .grid{grid-template-columns:1fr}
+  .card.full{grid-column:auto}
+  .coach-flow{grid-template-columns:1fr 1fr}
+  .next{grid-template-columns:1fr}
+}
+@media(max-width:420px){
+  .meta{grid-template-columns:1fr}
+  .coach-flow{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="hero">
+    <div class="eyebrow">DARTIQ PRACTICE TRAINING</div>
+    <h1 id="practice">Practice Training</h1>
+    <div class="subtitle" id="focusLine">Focused training with measurable coaching feedback.</div>
+    <div class="meta">
+      <div class="box"><div class="label">Duration</div><div class="value" id="duration">—</div></div>
+      <div class="box"><div class="label">Rounds</div><div class="value" id="rounds">—</div></div>
+      <div class="box"><div class="label">Level</div><div class="value" id="level">—</div></div>
+    </div>
+  </section>
+
+  <div class="grid">
+    <section class="card" data-field="objective"><h2>Objective</h2><p id="objective">—</p></section>
+    <section class="card" data-field="target"><h2>Success Target</h2><p id="target">—</p></section>
+    <section class="card full" data-field="execution"><h2>How To Execute</h2><p id="execution">—</p></section>
+    <section class="card" data-field="track"><h2>Track</h2><p id="track">—</p></section>
+    <section class="card" data-field="avoid"><h2>Common Mistakes</h2><p id="avoid">—</p></section>
+    <section class="card" data-field="why"><h2>Why This Practice</h2><p id="why">—</p></section>
+    <section class="card" data-field="improvement"><h2>Improvement Potential</h2><p id="improvement">—</p></section>
+
+    <section class="card full coach">
+      <h2>Coaching Insight</h2>
+      <p id="coachIntro">Keith's first coaching rule: judge the throw against the player's intention and the actual outcome before changing technique. A different-looking action is not automatically a problem if it is producing the intended result consistently.</p>
+      <div class="coach-flow">
+        <div class="step"><b>1 · Intention</b><span id="observe">Start with what the player is trying to achieve in this practice.</span></div>
+        <div class="step"><b>2 · Outcome</b><span id="detect">Compare the result with that intended target and look for a repeatable pattern.</span></div>
+        <div class="step"><b>3 · Decide</b><span id="adjust">If the outcome is effective, preserve the action. If it is not, correct only the part linked to the miss.</span></div>
+        <div class="step"><b>4 · Retest</b><span id="measure">Repeat the practice and confirm that the adjustment actually improves the result.</span></div>
+      </div>
+      <div class="callout" id="coachCue">Coach cue: outcome first. Do not correct a player simply because the throw does not look textbook. Correct only when the result or repeatable pattern shows a meaningful problem.</div>
+    </section>
+  </div>
+
+  <section class="footer">
+    <h2>After Practice</h2>
+    <div class="next">
+      <div class="box"><div class="label">Player Reminder</div><div class="value" id="reminder">Record the result honestly. The score is feedback, not a verdict.</div></div>
+      <div class="box"><div class="label">Next Step</div><div class="value" id="after">Enter the practice result so DARTIQ can decide whether to repeat, progress, test it in play, or flag it for coach review.</div></div>
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+  const params = new URLSearchParams(window.location.search);
+  const get = (key, fallback='') => {
+    const value = (params.get(key) || '').trim();
+    return value || fallback;
+  };
+  const set = (id, value) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+  };
+
+  const data = {
+    practice: get('practice','Practice Training'),
+    duration: get('duration','—'),
+    rounds: get('rounds','—'),
+    level: get('level','—'),
+    objective: get('objective',''),
+    focus: get('focus',''),
+    target: get('target',''),
+    execution: get('execution',''),
+    track: get('track',''),
+    avoid: get('avoid',''),
+    why: get('why',''),
+    improvement: get('improvement',''),
+    reminder: get('reminder','Record the result honestly. The score is feedback, not a verdict.'),
+    after: get('after','Enter the practice result so DARTIQ can decide whether to repeat, progress, test it in play, or flag it for coach review.')
+  };
+
+  set('practice', data.practice);
+  set('duration', data.duration);
+  set('rounds', data.rounds);
+  set('level', data.level);
+  set('focusLine', data.focus ? 'Training focus: ' + data.focus : 'Focused training with measurable coaching feedback.');
+
+  ['objective','target','execution','track','avoid','why','improvement'].forEach(key => {
+    const el = document.getElementById(key);
+    const card = document.querySelector('[data-field="'+key+'"]');
+    if (!data[key]) {
+      if (card) card.classList.add('empty');
+    } else {
+      if (el) el.textContent = data[key];
+    }
+  });
+
+  set('reminder', data.reminder);
+  set('after', data.after);
+
+  const observe = data.objective
+    ? 'Intended goal: ' + data.objective
+    : (data.target ? 'Intended target: ' + data.target : 'Start with what the player is trying to achieve in this practice.');
+  const detect = data.track
+    ? 'Judge the outcome by tracking: ' + data.track
+    : (data.target ? 'Compare the result with: ' + data.target : 'Compare the actual result with the intended outcome and look for a repeatable pattern.');
+  const adjust = data.focus
+    ? 'Decision rule: preserve what works. Only correct the part affecting ' + data.focus + '.'
+    : 'Decision rule: if the outcome is effective, preserve the action. If it is not, change only the part linked to the miss.';
+  const measure = data.target
+    ? 'Retest against: ' + data.target
+    : 'Retest the same practice and confirm that the adjustment improves the result.';
+
+  set('observe', observe);
+  set('detect', detect);
+  set('adjust', adjust);
+  set('measure', measure);
+
+  const coachCueParts = [];
+  coachCueParts.push('Outcome first.');
+  if (data.avoid) coachCueParts.push('Avoid: ' + data.avoid);
+  coachCueParts.push('Do not correct a non-textbook action if it consistently produces the intended result.');
+  if (data.improvement) coachCueParts.push('If correction is needed, make the smallest change toward: ' + data.improvement + '.');
+  set('coachCue', 'Coach cue: ' + coachCueParts.join(' '));
+})();
+</script>
+</body>
+</html>
