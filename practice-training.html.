@@ -2,126 +2,178 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>DARTIQ Practice Training</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>DARTIQ Today's AI Training</title>
 <style>
 :root{
-  --bg:#050b18;
-  --panel:#0d2136;
-  --panel2:#10243a;
-  --accent:#37b7ff;
-  --accent2:#39ff88;
-  --text:#f4fbff;
-  --muted:#9fb7c9;
-  --line:rgba(55,183,255,.22);
-  --good:#39ff88;
-  --warn:#ffd35a;
-  --bad:#ff6b7a;
+  --bg:#050914;
+  --panel:#0b1627;
+  --panel2:#101d33;
+  --panel3:#152546;
+  --blue:#1f7dff;
+  --blue2:#43b7ff;
+  --text:#f4f8ff;
+  --muted:#aab8cf;
+  --line:rgba(76,151,255,.20);
+  --soft:rgba(255,255,255,.055);
+  --warning:#ffd66b;
 }
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{width:100%;min-height:100%;background:var(--bg);font-family:Arial,Helvetica,sans-serif;color:var(--text);overflow-x:hidden}
-body{padding:14px}
-.wrap{width:100%;max-width:960px;margin:0 auto}
-.hero{background:linear-gradient(180deg,rgba(55,183,255,.10),rgba(13,33,54,.96));border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:14px}
-.eyebrow{font-size:11px;letter-spacing:1.7px;text-transform:uppercase;color:var(--accent);font-weight:800;margin-bottom:8px}
-h1{font-size:clamp(28px,7vw,46px);line-height:1.02;margin-bottom:10px;word-break:break-word}
-.subtitle{color:var(--muted);font-size:14px;line-height:1.45}
-.meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:16px}
-.meta .box{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);border-radius:13px;padding:12px;min-width:0}
-.label{font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:5px}
-.value{font-size:16px;font-weight:800;line-height:1.25;overflow-wrap:anywhere}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.card{background:var(--panel);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:16px;min-width:0}
-.card.full{grid-column:1/-1}
-.card h2{font-size:13px;text-transform:uppercase;letter-spacing:1.3px;color:var(--accent);margin-bottom:10px}
-.card p{font-size:15px;line-height:1.55;color:var(--text);white-space:pre-line;overflow-wrap:anywhere}
-.coach{border-color:rgba(57,255,136,.28);background:linear-gradient(180deg,rgba(57,255,136,.055),var(--panel))}
-.coach h2{color:var(--accent2)}
-.coach-flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-top:12px}
-.step{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:11px;min-width:0}
-.step b{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--accent2);margin-bottom:5px}
-.step span{display:block;font-size:13px;line-height:1.35;color:var(--muted);overflow-wrap:anywhere}
-.callout{margin-top:12px;padding:12px 13px;border-left:3px solid var(--accent2);background:rgba(57,255,136,.06);border-radius:0 10px 10px 0;font-size:14px;line-height:1.45}
-.footer{margin-top:14px;background:var(--panel2);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:16px}
-.footer h2{font-size:13px;text-transform:uppercase;letter-spacing:1.3px;color:var(--accent);margin-bottom:10px}
-.next{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.next .box{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:12px}
-.empty{display:none}
-@media(max-width:680px){
-  body{padding:10px}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;min-height:100%;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif;overflow-x:hidden}
+body{padding:0}
+.app{width:100%;max-width:760px;margin:0 auto;padding:14px 12px 24px}
+.hero{position:relative;overflow:hidden;border:1px solid var(--line);background:linear-gradient(180deg,rgba(32,95,193,.20),rgba(8,16,31,.96));border-radius:20px;padding:18px 16px 16px;margin-bottom:12px}
+.hero:before{content:"";position:absolute;inset:-80px auto auto -60px;width:180px;height:180px;border-radius:50%;background:rgba(31,125,255,.11);filter:blur(18px);pointer-events:none}
+.kicker{font-size:11px;letter-spacing:1.8px;text-transform:uppercase;color:var(--blue2);font-weight:800;margin-bottom:8px}
+h1{font-size:clamp(27px,8vw,42px);line-height:1.05;margin:0 0 6px;overflow-wrap:anywhere}
+.focus{font-size:15px;color:#76c8ff;font-weight:800;line-height:1.35;overflow-wrap:anywhere}
+.status{margin-top:15px;display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;border-radius:12px;background:linear-gradient(90deg,#1662d9,#2389ff);font-weight:800;font-size:14px;box-shadow:0 0 18px rgba(31,125,255,.18)}
+.status.pending{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.08);box-shadow:none;color:var(--muted)}
+.meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}
+.meta-box{background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.065);border-radius:12px;padding:11px 10px;min-width:0}
+.meta-label{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:4px}
+.meta-value{font-size:15px;font-weight:800;line-height:1.25;overflow-wrap:anywhere}
+.equipment{margin-top:8px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.055);border-radius:12px;padding:11px 12px}
+.section{margin-top:10px;border:1px solid rgba(255,255,255,.065);border-radius:15px;overflow:hidden;background:var(--panel)}
+.section-head{display:flex;align-items:center;gap:9px;background:linear-gradient(90deg,rgba(31,125,255,.25),rgba(31,125,255,.08));padding:11px 13px;border-bottom:1px solid rgba(255,255,255,.055)}
+.section-head .icon{font-size:17px;line-height:1}
+.section-head h2{font-size:13px;letter-spacing:.7px;text-transform:uppercase;margin:0}
+.section-body{padding:13px 14px;font-size:15px;line-height:1.52;white-space:pre-line;overflow-wrap:anywhere}
+.section.hidden{display:none}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.coach{margin-top:12px;border:1px solid rgba(67,183,255,.24);border-radius:17px;background:linear-gradient(180deg,rgba(31,125,255,.075),rgba(11,22,39,.98));overflow:hidden}
+.coach-title{padding:13px 14px;border-bottom:1px solid rgba(67,183,255,.18);font-size:13px;font-weight:900;letter-spacing:.8px;text-transform:uppercase;color:var(--blue2)}
+.coach-intro{padding:13px 14px 0;color:#eaf6ff;font-size:14px;line-height:1.48}
+.flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:12px}
+.step{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.065);border-radius:12px;padding:10px;min-width:0}
+.step-num{font-size:10px;font-weight:900;letter-spacing:.7px;text-transform:uppercase;color:var(--blue2);margin-bottom:5px}
+.step-text{font-size:12.5px;line-height:1.4;color:var(--muted);overflow-wrap:anywhere}
+.rule{margin:0 12px 12px;border-left:3px solid var(--blue2);background:rgba(31,125,255,.075);border-radius:0 10px 10px 0;padding:11px 12px;font-size:13px;line-height:1.46}
+.after{margin-top:12px;background:var(--panel2);border:1px solid rgba(255,255,255,.07);border-radius:15px;padding:13px}
+.after h2{font-size:12px;letter-spacing:.8px;text-transform:uppercase;color:var(--blue2);margin:0 0 9px}
+.after-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.after-box{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.055);border-radius:11px;padding:10px 11px}
+.after-label{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);font-weight:700;margin-bottom:4px}
+.after-text{font-size:13px;line-height:1.4;font-weight:700;overflow-wrap:anywhere}
+.empty{display:none!important}
+@media(max-width:620px){
+  .app{padding:10px 9px 20px}
   .meta{grid-template-columns:1fr 1fr}
-  .grid{grid-template-columns:1fr}
-  .card.full{grid-column:auto}
-  .coach-flow{grid-template-columns:1fr 1fr}
-  .next{grid-template-columns:1fr}
+  .meta-box:last-child{grid-column:1/-1}
+  .two{grid-template-columns:1fr}
+  .flow{grid-template-columns:1fr 1fr}
+  .after-grid{grid-template-columns:1fr}
 }
-@media(max-width:420px){
+@media(max-width:390px){
   .meta{grid-template-columns:1fr}
-  .coach-flow{grid-template-columns:1fr}
+  .meta-box:last-child{grid-column:auto}
+  .flow{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
-<div class="wrap">
+<main class="app">
   <section class="hero">
-    <div class="eyebrow">DARTIQ PRACTICE TRAINING</div>
+    <div class="kicker">DARTIQ · TODAY'S AI TRAINING</div>
     <h1 id="practice">Practice Training</h1>
-    <div class="subtitle" id="focusLine">Focused training with measurable coaching feedback.</div>
+    <div class="focus" id="focus">Focused practice</div>
+
+    <div class="status pending" id="status">◻ Training in progress</div>
+
     <div class="meta">
-      <div class="box"><div class="label">Duration</div><div class="value" id="duration">—</div></div>
-      <div class="box"><div class="label">Rounds</div><div class="value" id="rounds">—</div></div>
-      <div class="box"><div class="label">Level</div><div class="value" id="level">—</div></div>
+      <div class="meta-box"><div class="meta-label">Difficulty</div><div class="meta-value" id="level">—</div></div>
+      <div class="meta-box"><div class="meta-label">Training duration</div><div class="meta-value" id="duration">—</div></div>
+      <div class="meta-box"><div class="meta-label">Training rounds</div><div class="meta-value" id="rounds">—</div></div>
+    </div>
+
+    <div class="equipment" id="equipmentWrap">
+      <div class="meta-label">Equipment</div>
+      <div class="meta-value" id="equipment">—</div>
     </div>
   </section>
 
-  <div class="grid">
-    <section class="card" data-field="objective"><h2>Objective</h2><p id="objective">—</p></section>
-    <section class="card" data-field="target"><h2>Success Target</h2><p id="target">—</p></section>
-    <section class="card full" data-field="execution"><h2>How To Execute</h2><p id="execution">—</p></section>
-    <section class="card" data-field="track"><h2>Track</h2><p id="track">—</p></section>
-    <section class="card" data-field="avoid"><h2>Common Mistakes</h2><p id="avoid">—</p></section>
-    <section class="card" data-field="why"><h2>Why This Practice</h2><p id="why">—</p></section>
-    <section class="card" data-field="improvement"><h2>Improvement Potential</h2><p id="improvement">—</p></section>
+  <section class="section" data-field="objective">
+    <div class="section-head"><span class="icon">🎯</span><h2>Goal</h2></div>
+    <div class="section-body" id="objective"></div>
+  </section>
 
-    <section class="card full coach">
-      <h2>Coaching Insight</h2>
-      <p id="coachIntro">Keith's first coaching rule: judge the throw against the player's intention and the actual outcome before changing technique. A different-looking action is not automatically a problem if it is producing the intended result consistently.</p>
-      <div class="coach-flow">
-        <div class="step"><b>1 · Intention</b><span id="observe">Start with what the player is trying to achieve in this practice.</span></div>
-        <div class="step"><b>2 · Outcome</b><span id="detect">Compare the result with that intended target and look for a repeatable pattern.</span></div>
-        <div class="step"><b>3 · Decide</b><span id="adjust">If the outcome is effective, preserve the action. If it is not, correct only the part linked to the miss.</span></div>
-        <div class="step"><b>4 · Retest</b><span id="measure">Repeat the practice and confirm that the adjustment actually improves the result.</span></div>
-      </div>
-      <div class="callout" id="coachCue">Coach cue: outcome first. Do not correct a player simply because the throw does not look textbook. Correct only when the result or repeatable pattern shows a meaningful problem.</div>
+  <section class="section" data-field="focusText">
+    <div class="section-head"><span class="icon">🎯</span><h2>Training Focus</h2></div>
+    <div class="section-body" id="focusText"></div>
+  </section>
+
+  <section class="section" data-field="why">
+    <div class="section-head"><span class="icon">💡</span><h2>Why This Practice</h2></div>
+    <div class="section-body" id="why"></div>
+  </section>
+
+  <section class="section" data-field="execution">
+    <div class="section-head"><span class="icon">▶</span><h2>How To Practice</h2></div>
+    <div class="section-body" id="execution"></div>
+  </section>
+
+  <div class="two">
+    <section class="section" data-field="track">
+      <div class="section-head"><span class="icon">📊</span><h2>What To Track</h2></div>
+      <div class="section-body" id="track"></div>
+    </section>
+
+    <section class="section" data-field="avoid">
+      <div class="section-head"><span class="icon">⚠️</span><h2>Watch Out For</h2></div>
+      <div class="section-body" id="avoid"></div>
     </section>
   </div>
 
-  <section class="footer">
+  <section class="section" data-field="target">
+    <div class="section-head"><span class="icon">🏆</span><h2>Success Target</h2></div>
+    <div class="section-body" id="target"></div>
+  </section>
+
+  <section class="section" data-field="improvement">
+    <div class="section-head"><span class="icon">📈</span><h2>Improvement Potential</h2></div>
+    <div class="section-body" id="improvement"></div>
+  </section>
+
+  <section class="coach">
+    <div class="coach-title">DARTIQ Coaching Logic</div>
+    <div class="coach-intro">Outcome first. DARTIQ compares the player's intention with the actual result before deciding that anything needs to change.</div>
+    <div class="flow">
+      <div class="step"><div class="step-num">1 · Intention</div><div class="step-text" id="coach1">Define what this practice is trying to achieve.</div></div>
+      <div class="step"><div class="step-num">2 · Outcome</div><div class="step-text" id="coach2">Compare the actual result with the intended target.</div></div>
+      <div class="step"><div class="step-num">3 · Decide</div><div class="step-text" id="coach3">Preserve what works. Correct only a repeatable problem.</div></div>
+      <div class="step"><div class="step-num">4 · Retest</div><div class="step-text" id="coach4">Repeat the same practice and verify the change.</div></div>
+    </div>
+    <div class="rule" id="coachRule">Do not change an effective action simply because it does not look textbook. Change it only when the result shows a meaningful, repeatable problem.</div>
+  </section>
+
+  <section class="after">
     <h2>After Practice</h2>
-    <div class="next">
-      <div class="box"><div class="label">Player Reminder</div><div class="value" id="reminder">Record the result honestly. The score is feedback, not a verdict.</div></div>
-      <div class="box"><div class="label">Next Step</div><div class="value" id="after">Enter the practice result so DARTIQ can decide whether to repeat, progress, test it in play, or flag it for coach review.</div></div>
+    <div class="after-grid">
+      <div class="after-box"><div class="after-label">Reminder</div><div class="after-text" id="reminder">Record the result honestly. The result is feedback.</div></div>
+      <div class="after-box"><div class="after-label">Next Step</div><div class="after-text" id="after">Enter the result so DARTIQ can decide what comes next.</div></div>
     </div>
   </section>
-</div>
+</main>
 
 <script>
 (function(){
-  const params = new URLSearchParams(window.location.search);
+  const p = new URLSearchParams(location.search);
   const get = (key, fallback='') => {
-    const value = (params.get(key) || '').trim();
-    return value || fallback;
+    const v = (p.get(key) || '').trim();
+    return v || fallback;
   };
   const set = (id, value) => {
     const el = document.getElementById(id);
     if (el) el.textContent = value;
   };
+  const truthy = (v) => ['1','true','yes','completed','done','complete'].includes(String(v).trim().toLowerCase());
 
   const data = {
     practice: get('practice','Practice Training'),
     duration: get('duration','—'),
     rounds: get('rounds','—'),
     level: get('level','—'),
+    equipment: get('equipment',''),
     objective: get('objective',''),
     focus: get('focus',''),
     target: get('target',''),
@@ -130,53 +182,66 @@ h1{font-size:clamp(28px,7vw,46px);line-height:1.02;margin-bottom:10px;word-break
     avoid: get('avoid',''),
     why: get('why',''),
     improvement: get('improvement',''),
-    reminder: get('reminder','Record the result honestly. The score is feedback, not a verdict.'),
-    after: get('after','Enter the practice result so DARTIQ can decide whether to repeat, progress, test it in play, or flag it for coach review.')
+    reminder: get('reminder','Record the result honestly. The result is feedback, not a verdict.'),
+    after: get('after','Enter the practice result so DARTIQ can decide whether to repeat, progress, test it in play, or flag it for coach review.'),
+    completed: get('completed','false')
   };
 
   set('practice', data.practice);
+  set('focus', data.focus || 'Focused practice');
+  set('focusText', data.focus);
+  set('level', data.level);
   set('duration', data.duration);
   set('rounds', data.rounds);
-  set('level', data.level);
-  set('focusLine', data.focus ? 'Training focus: ' + data.focus : 'Focused training with measurable coaching feedback.');
-
-  ['objective','target','execution','track','avoid','why','improvement'].forEach(key => {
-    const el = document.getElementById(key);
-    const card = document.querySelector('[data-field="'+key+'"]');
-    if (!data[key]) {
-      if (card) card.classList.add('empty');
-    } else {
-      if (el) el.textContent = data[key];
-    }
-  });
-
+  set('equipment', data.equipment);
+  set('objective', data.objective);
+  set('why', data.why);
+  set('execution', data.execution);
+  set('track', data.track);
+  set('avoid', data.avoid);
+  set('target', data.target);
+  set('improvement', data.improvement);
   set('reminder', data.reminder);
   set('after', data.after);
 
-  const observe = data.objective
-    ? 'Intended goal: ' + data.objective
-    : (data.target ? 'Intended target: ' + data.target : 'Start with what the player is trying to achieve in this practice.');
-  const detect = data.track
-    ? 'Judge the outcome by tracking: ' + data.track
-    : (data.target ? 'Compare the result with: ' + data.target : 'Compare the actual result with the intended outcome and look for a repeatable pattern.');
-  const adjust = data.focus
-    ? 'Decision rule: preserve what works. Only correct the part affecting ' + data.focus + '.'
-    : 'Decision rule: if the outcome is effective, preserve the action. If it is not, change only the part linked to the miss.';
-  const measure = data.target
-    ? 'Retest against: ' + data.target
-    : 'Retest the same practice and confirm that the adjustment improves the result.';
+  const fields = ['objective','focusText','why','execution','track','avoid','target','improvement'];
+  fields.forEach(key => {
+    const node = document.querySelector('[data-field="'+key+'"]');
+    const actualKey = key === 'focusText' ? 'focus' : key;
+    if (node && !data[actualKey]) node.classList.add('hidden');
+  });
+  if (!data.equipment) document.getElementById('equipmentWrap').classList.add('empty');
 
-  set('observe', observe);
-  set('detect', detect);
-  set('adjust', adjust);
-  set('measure', measure);
+  const status = document.getElementById('status');
+  if (truthy(data.completed)) {
+    status.textContent = '✓ Training Completed';
+    status.classList.remove('pending');
+  } else {
+    status.textContent = '◻ Training in progress';
+    status.classList.add('pending');
+  }
 
-  const coachCueParts = [];
-  coachCueParts.push('Outcome first.');
-  if (data.avoid) coachCueParts.push('Avoid: ' + data.avoid);
-  coachCueParts.push('Do not correct a non-textbook action if it consistently produces the intended result.');
-  if (data.improvement) coachCueParts.push('If correction is needed, make the smallest change toward: ' + data.improvement + '.');
-  set('coachCue', 'Coach cue: ' + coachCueParts.join(' '));
+  set('coach1', data.objective
+    ? 'Intention: ' + data.objective
+    : (data.target ? 'Intention: work toward ' + data.target : 'Define what this practice is trying to achieve.'));
+
+  set('coach2', data.track
+    ? 'Judge the outcome using: ' + data.track
+    : (data.target ? 'Compare each result with: ' + data.target : 'Compare the actual result with the intended outcome and look for a repeatable pattern.'));
+
+  set('coach3', data.focus
+    ? 'Preserve what works. Only correct a repeatable issue affecting ' + data.focus + '.'
+    : 'Preserve what works. Correct only a repeatable problem that affects the intended result.');
+
+  set('coach4', data.target
+    ? 'Retest the same practice against: ' + data.target
+    : 'Repeat the same practice and verify that any adjustment improves the result.');
+
+  const rule = ['Outcome first.'];
+  if (data.avoid) rule.push('Watch for: ' + data.avoid + '.');
+  rule.push('Do not change an effective action simply because it does not look textbook.');
+  if (data.improvement) rule.push('If a correction is needed, use the smallest useful change toward: ' + data.improvement + '.');
+  set('coachRule', rule.join(' '));
 })();
 </script>
 </body>
