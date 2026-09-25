@@ -3,43 +3,2076 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+
 <title>DARTIQ Practice Training</title>
+
 <style>
-:root{--bg:#050914;--panel:#0b1627;--panel2:#101d33;--blue:#1f7dff;--blue2:#43b7ff;--text:#f4f8ff;--muted:#aab8cf;--line:rgba(76,151,255,.18)}
-*{box-sizing:border-box}html,body{margin:0;width:100%;min-height:100%;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif;overflow-x:hidden}body{padding:0}.app{width:100%;max-width:760px;margin:0 auto;padding:10px 10px 20px}
-.hero{border:1px solid var(--line);background:linear-gradient(180deg,rgba(32,95,193,.18),rgba(8,16,31,.98));border-radius:18px;padding:16px 14px 14px;margin-bottom:9px}.kicker{font-size:10px;letter-spacing:1.6px;text-transform:uppercase;color:var(--blue2);font-weight:900;margin-bottom:7px}h1{font-size:clamp(26px,7vw,40px);line-height:1.05;margin:0 0 6px;overflow-wrap:anywhere}.focus{font-size:14px;color:#78c9ff;font-weight:800;line-height:1.35}.quick{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:12px}.quick-box{background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.06);border-radius:11px;padding:9px 10px;min-width:0}.quick-label{font-size:9px;letter-spacing:.9px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:3px}.quick-value{font-size:14px;font-weight:900;line-height:1.2;overflow-wrap:anywhere}.equipment{margin-top:7px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.055);border-radius:11px;padding:9px 10px}.status{margin-top:9px;display:flex;align-items:center;justify-content:center;gap:7px;min-height:38px;border-radius:11px;font-weight:800;font-size:13px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07);color:var(--muted)}.status.done{background:linear-gradient(90deg,#1662d9,#2389ff);color:white;box-shadow:0 0 16px rgba(31,125,255,.18)}
-.section{margin-top:8px;border:1px solid rgba(255,255,255,.06);border-radius:14px;background:var(--panel);overflow:hidden}.section-head{display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid rgba(255,255,255,.05);background:linear-gradient(90deg,rgba(31,125,255,.18),rgba(31,125,255,.04))}.section-head .icon{font-size:15px}.section-head h2{font-size:12px;letter-spacing:.7px;text-transform:uppercase;margin:0}.section-body{padding:11px 12px;font-size:14px;line-height:1.45;white-space:pre-line;overflow-wrap:anywhere}.section.hidden{display:none}.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}.compact .section-body{padding:10px 12px}
-.steps{display:grid;gap:7px}.practice-step{display:grid;grid-template-columns:26px 1fr;gap:9px;align-items:start;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.05);border-radius:10px;padding:8px 9px}.step-badge{width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:rgba(31,125,255,.16);color:var(--blue2);font-size:11px;font-weight:900}.step-copy{font-size:13.5px;line-height:1.4;color:#edf5ff}
-.coach{margin-top:9px;border:1px solid rgba(67,183,255,.20);border-radius:15px;background:linear-gradient(180deg,rgba(31,125,255,.06),rgba(11,22,39,.98));overflow:hidden}.coach-title{padding:10px 12px;border-bottom:1px solid rgba(67,183,255,.14);font-size:12px;font-weight:900;letter-spacing:.8px;text-transform:uppercase;color:var(--blue2)}.coach-intro{padding:10px 12px 4px;font-size:13px;line-height:1.42;color:#eaf6ff}.flow{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:8px 10px}.logic-step{display:flex;gap:8px;align-items:flex-start;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.055);border-radius:10px;padding:9px}.logic-num{min-width:24px;height:24px;border-radius:7px;display:flex;align-items:center;justify-content:center;background:rgba(31,125,255,.14);color:var(--blue2);font-size:10px;font-weight:900}.logic-copy{font-size:12.5px;line-height:1.35;color:var(--muted)}.logic-copy strong{display:block;color:#f3f8ff;margin-bottom:2px;font-size:12px}.coach-foot{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:0 10px 10px}.note{border-left:3px solid var(--blue2);background:rgba(31,125,255,.065);border-radius:0 9px 9px 0;padding:9px 10px;font-size:12.5px;line-height:1.4}.improve{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.055);border-radius:10px;padding:9px 10px}.improve-label{font-size:9px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);font-weight:800;margin-bottom:3px}.improve-text{font-size:13px;line-height:1.35;font-weight:800}
-.after{margin-top:9px;background:var(--panel2);border:1px solid rgba(255,255,255,.065);border-radius:14px;padding:11px}.after h2{font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--blue2);margin:0 0 7px}.after-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}.after-box{background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.05);border-radius:10px;padding:9px 10px}.after-label{font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);font-weight:700;margin-bottom:3px}.after-text{font-size:12.5px;line-height:1.38;font-weight:700}.empty{display:none!important}
-@media(max-width:620px){.app{padding:8px 8px 18px}.two{grid-template-columns:1fr}.flow{grid-template-columns:1fr}.coach-foot{grid-template-columns:1fr}.after-grid{grid-template-columns:1fr}}@media(max-width:390px){.quick{grid-template-columns:1fr 1fr}.quick-box:last-child{grid-column:1/-1}}
+:root{
+  --bg:#050914;
+  --panel:#0b1627;
+  --panel2:#101d33;
+
+  --blue:#1f7dff;
+  --blue2:#43b7ff;
+
+  --text:#f4f8ff;
+  --muted:#aab8cf;
+
+  --line:rgba(76,151,255,.18);
+
+  --red:#ff5c6c;
+  --orange:#ffad42;
+  --yellow:#ffe05c;
+  --green:#49e58a;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  margin:0;
+  width:100%;
+  min-height:100%;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+  overflow-x:hidden;
+}
+
+body{
+  padding:0;
+}
+
+.app{
+  width:100%;
+  max-width:760px;
+  margin:0 auto;
+  padding:10px 10px 20px;
+}
+
+
+/* HERO */
+
+.hero{
+  border:1px solid var(--line);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(32,95,193,.18),
+      rgba(8,16,31,.98)
+    );
+  border-radius:18px;
+  padding:16px 14px 14px;
+  margin-bottom:9px;
+}
+
+.kicker{
+  font-size:10px;
+  letter-spacing:1.6px;
+  text-transform:uppercase;
+  color:var(--blue2);
+  font-weight:900;
+  margin-bottom:7px;
+}
+
+h1{
+  font-size:clamp(26px,7vw,40px);
+  line-height:1.05;
+  margin:0 0 6px;
+  overflow-wrap:anywhere;
+}
+
+.focus{
+  font-size:14px;
+  color:#78c9ff;
+  font-weight:800;
+  line-height:1.35;
+}
+
+
+/* QUICK INFO */
+
+.quick{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:7px;
+  margin-top:12px;
+}
+
+.quick-box{
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:11px;
+  padding:9px 10px;
+  min-width:0;
+}
+
+.quick-label{
+  font-size:9px;
+  letter-spacing:.9px;
+  text-transform:uppercase;
+  color:var(--muted);
+  font-weight:700;
+  margin-bottom:3px;
+}
+
+.quick-value{
+  font-size:14px;
+  font-weight:900;
+  line-height:1.2;
+  overflow-wrap:anywhere;
+}
+
+.equipment{
+  margin-top:7px;
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.055);
+  border-radius:11px;
+  padding:9px 10px;
+}
+
+.status{
+  margin-top:9px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  min-height:38px;
+  border-radius:11px;
+  font-weight:800;
+  font-size:13px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.07);
+  color:var(--muted);
+}
+
+.status.done{
+  background:linear-gradient(90deg,#1662d9,#2389ff);
+  color:white;
+  box-shadow:0 0 16px rgba(31,125,255,.18);
+}
+
+
+/* STANDARD SECTIONS */
+
+.section{
+  margin-top:8px;
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:14px;
+  background:var(--panel);
+  overflow:hidden;
+}
+
+.section-head{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:9px 12px;
+  border-bottom:1px solid rgba(255,255,255,.05);
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(31,125,255,.18),
+      rgba(31,125,255,.04)
+    );
+}
+
+.section-head .icon{
+  font-size:15px;
+}
+
+.section-head h2{
+  font-size:12px;
+  letter-spacing:.7px;
+  text-transform:uppercase;
+  margin:0;
+}
+
+.section-body{
+  padding:11px 12px;
+  font-size:14px;
+  line-height:1.45;
+  white-space:pre-line;
+  overflow-wrap:anywhere;
+}
+
+.section.hidden{
+  display:none;
+}
+
+.two{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+.compact .section-body{
+  padding:10px 12px;
+}
+
+
+/* EXECUTION */
+
+.steps{
+  display:grid;
+  gap:7px;
+}
+
+.practice-step{
+  display:grid;
+  grid-template-columns:26px 1fr;
+  gap:9px;
+  align-items:start;
+
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.05);
+
+  border-radius:10px;
+  padding:8px 9px;
+}
+
+.step-badge{
+  width:26px;
+  height:26px;
+
+  border-radius:8px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:rgba(31,125,255,.16);
+
+  color:var(--blue2);
+
+  font-size:11px;
+  font-weight:900;
+}
+
+.step-copy{
+  font-size:13.5px;
+  line-height:1.4;
+  color:#edf5ff;
+}
+
+
+/* KEITH ALLEN GUTHER BLOCK */
+
+.keith{
+  margin-top:9px;
+
+  border:1px solid rgba(67,183,255,.28);
+  border-radius:15px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(22,70,125,.25),
+      rgba(11,22,39,.98)
+    );
+
+  overflow:hidden;
+}
+
+.keith.hidden{
+  display:none;
+}
+
+.keith-head{
+  padding:11px 12px;
+
+  border-bottom:1px solid rgba(67,183,255,.16);
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+
+.keith-title{
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.8px;
+  text-transform:uppercase;
+  color:var(--blue2);
+}
+
+.keith-coach{
+  font-size:12px;
+  font-weight:800;
+  color:#fff;
+}
+
+.keith-body{
+  padding:10px 12px;
+}
+
+.keith-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+.keith-card{
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.055);
+
+  border-radius:11px;
+
+  padding:10px;
+}
+
+.keith-card.full{
+  grid-column:1/-1;
+}
+
+.keith-label{
+  font-size:9px;
+  letter-spacing:.8px;
+  text-transform:uppercase;
+
+  color:var(--muted);
+
+  font-weight:800;
+
+  margin-bottom:4px;
+}
+
+.keith-value{
+  font-size:13px;
+  line-height:1.4;
+  font-weight:700;
+
+  white-space:pre-line;
+  overflow-wrap:anywhere;
+}
+
+
+/* GRADING */
+
+.grade-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:6px;
+}
+
+.grade{
+  border-radius:9px;
+
+  padding:8px;
+
+  text-align:center;
+
+  border:1px solid rgba(255,255,255,.06);
+}
+
+.grade-label{
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:.6px;
+  font-weight:900;
+
+  margin-bottom:3px;
+}
+
+.grade-value{
+  font-size:12px;
+  font-weight:900;
+  overflow-wrap:anywhere;
+}
+
+.grade.red{
+  background:rgba(255,92,108,.10);
+  color:var(--red);
+}
+
+.grade.orange{
+  background:rgba(255,173,66,.10);
+  color:var(--orange);
+}
+
+.grade.yellow{
+  background:rgba(255,224,92,.10);
+  color:var(--yellow);
+}
+
+.grade.green{
+  background:rgba(73,229,138,.10);
+  color:var(--green);
+}
+
+.source{
+  margin-top:8px;
+
+  font-size:11px;
+  line-height:1.4;
+
+  color:var(--muted);
+
+  border-top:1px solid rgba(255,255,255,.05);
+
+  padding-top:8px;
+}
+
+
+/* DARTIQ COACH */
+
+.coach{
+  margin-top:9px;
+
+  border:1px solid rgba(67,183,255,.20);
+  border-radius:15px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(31,125,255,.06),
+      rgba(11,22,39,.98)
+    );
+
+  overflow:hidden;
+}
+
+.coach-title{
+  padding:10px 12px;
+
+  border-bottom:1px solid rgba(67,183,255,.14);
+
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.8px;
+
+  text-transform:uppercase;
+
+  color:var(--blue2);
+}
+
+.coach-intro{
+  padding:10px 12px 4px;
+
+  font-size:13px;
+  line-height:1.42;
+
+  color:#eaf6ff;
+}
+
+.flow{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+
+  gap:7px;
+
+  padding:8px 10px;
+}
+
+.logic-step{
+  display:flex;
+
+  gap:8px;
+
+  align-items:flex-start;
+
+  background:rgba(255,255,255,.035);
+
+  border:1px solid rgba(255,255,255,.055);
+
+  border-radius:10px;
+
+  padding:9px;
+}
+
+.logic-num{
+  min-width:24px;
+  height:24px;
+
+  border-radius:7px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:rgba(31,125,255,.14);
+
+  color:var(--blue2);
+
+  font-size:10px;
+  font-weight:900;
+}
+
+.logic-copy{
+  font-size:12.5px;
+  line-height:1.35;
+
+  color:var(--muted);
+}
+
+.logic-copy strong{
+  display:block;
+
+  color:#f3f8ff;
+
+  margin-bottom:2px;
+
+  font-size:12px;
+}
+
+.coach-foot{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+
+  gap:7px;
+
+  padding:0 10px 10px;
+}
+
+.note{
+  border-left:3px solid var(--blue2);
+
+  background:rgba(31,125,255,.065);
+
+  border-radius:0 9px 9px 0;
+
+  padding:9px 10px;
+
+  font-size:12.5px;
+  line-height:1.4;
+}
+
+.improve{
+  background:rgba(255,255,255,.035);
+
+  border:1px solid rgba(255,255,255,.055);
+
+  border-radius:10px;
+
+  padding:9px 10px;
+}
+
+.improve-label{
+  font-size:9px;
+  letter-spacing:.8px;
+  text-transform:uppercase;
+
+  color:var(--muted);
+
+  font-weight:800;
+
+  margin-bottom:3px;
+}
+
+.improve-text{
+  font-size:13px;
+  line-height:1.35;
+  font-weight:800;
+}
+
+
+/* AFTER PRACTICE */
+
+.after{
+  margin-top:9px;
+
+  background:var(--panel2);
+
+  border:1px solid rgba(255,255,255,.065);
+
+  border-radius:14px;
+
+  padding:11px;
+}
+
+.after h2{
+  font-size:11px;
+  letter-spacing:.8px;
+  text-transform:uppercase;
+
+  color:var(--blue2);
+
+  margin:0 0 7px;
+}
+
+.after-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+
+  gap:7px;
+}
+
+.after-box{
+  background:rgba(255,255,255,.035);
+
+  border:1px solid rgba(255,255,255,.05);
+
+  border-radius:10px;
+
+  padding:9px 10px;
+}
+
+.after-label{
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:.8px;
+
+  color:var(--muted);
+
+  font-weight:700;
+
+  margin-bottom:3px;
+}
+
+.after-text{
+  font-size:12.5px;
+  line-height:1.38;
+  font-weight:700;
+}
+
+.empty{
+  display:none!important;
+}
+
+
+/* MOBILE */
+
+@media(max-width:620px){
+
+  .app{
+    padding:8px 8px 18px;
+  }
+
+  .two{
+    grid-template-columns:1fr;
+  }
+
+  .flow{
+    grid-template-columns:1fr;
+  }
+
+  .coach-foot{
+    grid-template-columns:1fr;
+  }
+
+  .after-grid{
+    grid-template-columns:1fr;
+  }
+
+  .keith-grid{
+    grid-template-columns:1fr;
+  }
+
+  .keith-card.full{
+    grid-column:auto;
+  }
+
+  .grade-grid{
+    grid-template-columns:1fr 1fr;
+  }
+}
+
+@media(max-width:390px){
+
+  .quick{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .quick-box:last-child{
+    grid-column:1/-1;
+  }
+}
 </style>
 </head>
+
 <body>
+
 <main class="app">
+
+
+<!-- HERO -->
+
 <section class="hero">
-<div class="kicker">DARTIQ · TODAY'S AI TRAINING</div><h1 id="practice">Practice Training</h1><div class="focus" id="focus">Focused practice</div>
-<div class="quick"><div class="quick-box"><div class="quick-label">Difficulty</div><div class="quick-value" id="level">—</div></div><div class="quick-box"><div class="quick-label">Duration</div><div class="quick-value" id="duration">—</div></div><div class="quick-box"><div class="quick-label">Rounds</div><div class="quick-value" id="rounds">—</div></div></div>
-<div class="equipment" id="equipmentWrap"><div class="quick-label">Equipment</div><div class="quick-value" id="equipment">—</div></div>
-<div class="status" id="status">◻ Training in progress</div>
+
+<div class="kicker">
+DARTIQ · PRACTICE TRAINING
+</div>
+
+<h1 id="practice">
+Practice Training
+</h1>
+
+<div class="focus" id="focus">
+Focused practice
+</div>
+
+
+<div class="quick">
+
+<div class="quick-box">
+<div class="quick-label">Difficulty</div>
+<div class="quick-value" id="level">—</div>
+</div>
+
+<div class="quick-box">
+<div class="quick-label">Duration</div>
+<div class="quick-value" id="duration">—</div>
+</div>
+
+<div class="quick-box">
+<div class="quick-label">Rounds</div>
+<div class="quick-value" id="rounds">—</div>
+</div>
+
+</div>
+
+
+<div class="equipment" id="equipmentWrap">
+
+<div class="quick-label">
+Equipment
+</div>
+
+<div class="quick-value" id="equipment">
+—
+</div>
+
+</div>
+
+
+<div class="status" id="status">
+◻ Training in progress
+</div>
+
 </section>
-<section class="section compact" data-field="objective"><div class="section-head"><span class="icon">🎯</span><h2>Goal</h2></div><div class="section-body" id="objective"></div></section>
-<section class="section compact" data-field="why"><div class="section-head"><span class="icon">💡</span><h2>Why This Practice</h2></div><div class="section-body" id="why"></div></section>
-<section class="section" data-field="execution"><div class="section-head"><span class="icon">▶</span><h2>How To Practice</h2></div><div class="section-body"><div class="steps" id="executionSteps"></div></div></section>
-<div class="two"><section class="section compact" data-field="track"><div class="section-head"><span class="icon">📊</span><h2>Track</h2></div><div class="section-body" id="track"></div></section><section class="section compact" data-field="avoid"><div class="section-head"><span class="icon">⚠️</span><h2>Watch For</h2></div><div class="section-body" id="avoid"></div></section></div>
-<section class="section compact" data-field="target"><div class="section-head"><span class="icon">🏆</span><h2>Success Target</h2></div><div class="section-body" id="target"></div></section>
-<section class="coach"><div class="coach-title">DARTIQ Coaching Logic</div><div class="coach-intro">Outcome first. Compare intention with the actual result before changing mechanics.</div><div class="flow"><div class="logic-step"><div class="logic-num">1</div><div class="logic-copy"><strong>Intention</strong><span id="coach1"></span></div></div><div class="logic-step"><div class="logic-num">2</div><div class="logic-copy"><strong>Outcome</strong><span id="coach2"></span></div></div><div class="logic-step"><div class="logic-num">3</div><div class="logic-copy"><strong>Decide</strong><span id="coach3"></span></div></div><div class="logic-step"><div class="logic-num">4</div><div class="logic-copy"><strong>Retest</strong><span id="coach4"></span></div></div></div><div class="coach-foot"><div class="note" id="coachRule">Preserve what works. Change only a repeatable issue that affects the result.</div><div class="improve" id="improvementWrap"><div class="improve-label">Improvement Potential</div><div class="improve-text" id="improvement"></div></div></div></section>
-<section class="after"><h2>After Practice</h2><div class="after-grid"><div class="after-box"><div class="after-label">Reminder</div><div class="after-text" id="reminder"></div></div><div class="after-box"><div class="after-label">Next Step</div><div class="after-text" id="after"></div></div></div></section>
+
+
+
+<!-- GOAL -->
+
+<section
+class="section compact"
+data-field="objective"
+>
+
+<div class="section-head">
+
+<span class="icon">🎯</span>
+
+<h2>
+Goal
+</h2>
+
+</div>
+
+<div
+class="section-body"
+id="objective"
+></div>
+
+</section>
+
+
+
+<!-- WHY -->
+
+<section
+class="section compact"
+data-field="why"
+>
+
+<div class="section-head">
+
+<span class="icon">💡</span>
+
+<h2>
+Why This Practice
+</h2>
+
+</div>
+
+<div
+class="section-body"
+id="why"
+></div>
+
+</section>
+
+
+
+<!-- EXECUTION -->
+
+<section
+class="section"
+data-field="execution"
+>
+
+<div class="section-head">
+
+<span class="icon">▶</span>
+
+<h2>
+How To Practice
+</h2>
+
+</div>
+
+<div class="section-body">
+
+<div
+class="steps"
+id="executionSteps"
+></div>
+
+</div>
+
+</section>
+
+
+
+<!-- TRACK + AVOID -->
+
+<div class="two">
+
+<section
+class="section compact"
+data-field="track"
+>
+
+<div class="section-head">
+
+<span class="icon">📊</span>
+
+<h2>
+Track
+</h2>
+
+</div>
+
+<div
+class="section-body"
+id="track"
+></div>
+
+</section>
+
+
+<section
+class="section compact"
+data-field="avoid"
+>
+
+<div class="section-head">
+
+<span class="icon">⚠️</span>
+
+<h2>
+Watch For
+</h2>
+
+</div>
+
+<div
+class="section-body"
+id="avoid"
+></div>
+
+</section>
+
+</div>
+
+
+
+<!-- NORMAL SUCCESS TARGET -->
+
+<section
+class="section compact"
+data-field="target"
+>
+
+<div class="section-head">
+
+<span class="icon">🏆</span>
+
+<h2>
+Success Target
+</h2>
+
+</div>
+
+<div
+class="section-body"
+id="target"
+></div>
+
+</section>
+
+
+
+<!-- KEITH ALLEN GUTHER -->
+
+<section
+class="keith hidden"
+id="keithBlock"
+>
+
+<div class="keith-head">
+
+<div class="keith-title">
+Coach Methodology
+</div>
+
+<div
+class="keith-coach"
+id="keithCoach"
+></div>
+
+</div>
+
+
+<div class="keith-body">
+
+<div class="keith-grid">
+
+
+<!-- RULES -->
+
+<div
+class="keith-card full"
+id="keithRulesWrap"
+>
+
+<div class="keith-label">
+Rules
+</div>
+
+<div
+class="keith-value"
+id="keithRules"
+></div>
+
+</div>
+
+
+
+<!-- PRIMARY METRIC -->
+
+<div
+class="keith-card"
+id="primaryMetricWrap"
+>
+
+<div class="keith-label">
+Primary Metric
+</div>
+
+<div
+class="keith-value"
+id="primaryMetric"
+></div>
+
+</div>
+
+
+
+<!-- SECONDARY METRIC -->
+
+<div
+class="keith-card"
+id="secondaryMetricWrap"
+>
+
+<div class="keith-label">
+Secondary Metric
+</div>
+
+<div
+class="keith-value"
+id="secondaryMetric"
+></div>
+
+</div>
+
+
+
+<!-- GRADING -->
+
+<div
+class="keith-card full"
+id="gradingWrap"
+>
+
+<div class="keith-label">
+Practice Grading
+</div>
+
+
+<div class="grade-grid">
+
+
+<div class="grade red">
+
+<div class="grade-label">
+Red
+</div>
+
+<div
+class="grade-value"
+id="redRange"
+></div>
+
+</div>
+
+
+<div class="grade orange">
+
+<div class="grade-label">
+Orange
+</div>
+
+<div
+class="grade-value"
+id="orangeRange"
+></div>
+
+</div>
+
+
+<div class="grade yellow">
+
+<div class="grade-label">
+Yellow
+</div>
+
+<div
+class="grade-value"
+id="yellowRange"
+></div>
+
+</div>
+
+
+<div class="grade green">
+
+<div class="grade-label">
+Green
+</div>
+
+<div
+class="grade-value"
+id="greenRange"
+></div>
+
+</div>
+
+
+</div>
+
+</div>
+
+
+
+<!-- KEITH SUCCESS TARGET -->
+
+<div
+class="keith-card full"
+id="keithSuccessWrap"
+>
+
+<div class="keith-label">
+Coach Success Target
+</div>
+
+<div
+class="keith-value"
+id="keithSuccessTarget"
+></div>
+
+</div>
+
+
+</div>
+
+
+<!-- SOURCE -->
+
+<div
+class="source"
+id="sourceWrap"
+>
+
+<strong>
+Methodology source:
+</strong>
+
+<span id="source"></span>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+
+<!-- DARTIQ COACH LOGIC -->
+
+<section class="coach">
+
+<div class="coach-title">
+DARTIQ Coaching Logic
+</div>
+
+<div class="coach-intro">
+Outcome first. Compare intention with the actual result before changing mechanics.
+</div>
+
+
+<div class="flow">
+
+
+<div class="logic-step">
+
+<div class="logic-num">
+1
+</div>
+
+<div class="logic-copy">
+
+<strong>
+Intention
+</strong>
+
+<span id="coach1"></span>
+
+</div>
+
+</div>
+
+
+
+<div class="logic-step">
+
+<div class="logic-num">
+2
+</div>
+
+<div class="logic-copy">
+
+<strong>
+Outcome
+</strong>
+
+<span id="coach2"></span>
+
+</div>
+
+</div>
+
+
+
+<div class="logic-step">
+
+<div class="logic-num">
+3
+</div>
+
+<div class="logic-copy">
+
+<strong>
+Decide
+</strong>
+
+<span id="coach3"></span>
+
+</div>
+
+</div>
+
+
+
+<div class="logic-step">
+
+<div class="logic-num">
+4
+</div>
+
+<div class="logic-copy">
+
+<strong>
+Retest
+</strong>
+
+<span id="coach4"></span>
+
+</div>
+
+</div>
+
+
+</div>
+
+
+
+<div class="coach-foot">
+
+
+<div
+class="note"
+id="coachRule"
+>
+
+Preserve what works.
+Change only a repeatable issue that affects the result.
+
+</div>
+
+
+<div
+class="improve"
+id="improvementWrap"
+>
+
+<div class="improve-label">
+Improvement Potential
+</div>
+
+<div
+class="improve-text"
+id="improvement"
+></div>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+
+<!-- AFTER PRACTICE -->
+
+<section class="after">
+
+<h2>
+After Practice
+</h2>
+
+
+<div class="after-grid">
+
+
+<div class="after-box">
+
+<div class="after-label">
+Reminder
+</div>
+
+<div
+class="after-text"
+id="reminder"
+></div>
+
+</div>
+
+
+
+<div class="after-box">
+
+<div class="after-label">
+Next Step
+</div>
+
+<div
+class="after-text"
+id="after"
+></div>
+
+</div>
+
+
+</div>
+
+</section>
+
+
 </main>
+
+
+
 <script>
+
 (function(){
-const p=new URLSearchParams(location.search);const get=(key,fallback='')=>{const v=(p.get(key)||'').trim();return v||fallback};const set=(id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value};const truthy=v=>['1','true','yes','completed','done','complete'].includes(String(v).trim().toLowerCase());
-const data={practice:get('practice','Practice Training'),duration:get('duration','—'),rounds:get('rounds','—'),level:get('level','—'),equipment:get('equipment',''),objective:get('objective',''),focus:get('focus',''),target:get('target',''),execution:get('execution',''),track:get('track',''),avoid:get('avoid',''),why:get('why',''),improvement:get('improvement',''),reminder:get('reminder','Record the result honestly. The result is feedback.'),after:get('after','Enter the result so DARTIQ can decide what comes next.'),completed:get('completed','false')};
-set('practice',data.practice);set('focus',data.focus||'Focused practice');set('level',data.level);set('duration',data.duration);set('rounds',data.rounds);set('equipment',data.equipment);set('objective',data.objective);set('why',data.why);set('track',data.track);set('avoid',data.avoid);set('target',data.target);set('improvement',data.improvement);set('reminder',data.reminder);set('after',data.after);
-if(!data.equipment)document.getElementById('equipmentWrap').classList.add('empty');if(!data.improvement)document.getElementById('improvementWrap').classList.add('empty');['objective','why','execution','track','avoid','target'].forEach(key=>{const node=document.querySelector('[data-field="'+key+'"]');if(node&&!data[key])node.classList.add('hidden')});
-const executionSteps=document.getElementById('executionSteps');if(executionSteps&&data.execution){let parts=data.execution.replace(/\s+/g,' ').split(/(?<=[.!?])\s+(?=[A-Z0-9])/).map(s=>s.trim()).filter(Boolean);if(parts.length<=1)parts=data.execution.split(/\n+/).map(s=>s.trim()).filter(Boolean);parts.forEach((part,i)=>{const row=document.createElement('div');row.className='practice-step';const badge=document.createElement('div');badge.className='step-badge';badge.textContent=i+1;const copy=document.createElement('div');copy.className='step-copy';copy.textContent=part;row.appendChild(badge);row.appendChild(copy);executionSteps.appendChild(row)})}
-const status=document.getElementById('status');if(truthy(data.completed)){status.textContent='✓ Training Completed';status.classList.add('done')}else status.textContent='◻ Training in progress';
-set('coach1',data.objective||data.target||'Define what this practice is trying to achieve.');set('coach2',data.track?'Judge the result using: '+data.track:(data.target?'Compare each result with: '+data.target:'Compare the actual result with the intended outcome.'));set('coach3',data.focus?'Correct only a repeatable issue affecting '+data.focus+'.':'Correct only a repeatable issue that affects the intended result.');set('coach4',data.target?'Retest against: '+data.target:'Repeat the practice and verify that the adjustment improves the result.');const rule=[];if(data.avoid)rule.push('Watch for: '+data.avoid+'.');rule.push('Preserve what works. Use the smallest useful change.');set('coachRule',rule.join(' '));
+
+const p =
+new URLSearchParams(
+location.search
+);
+
+
+const get =
+(key,fallback='')=>{
+
+const v =
+(p.get(key)||'').trim();
+
+return v || fallback;
+
+};
+
+
+const set =
+(id,value)=>{
+
+const el =
+document.getElementById(id);
+
+if(el){
+el.textContent=value;
+}
+
+};
+
+
+const truthy =
+v =>
+[
+'1',
+'true',
+'yes',
+'completed',
+'done',
+'complete'
+]
+.includes(
+String(v)
+.trim()
+.toLowerCase()
+);
+
+
+
+const data={
+
+practice:get(
+'practice',
+'Practice Training'
+),
+
+duration:get(
+'duration',
+'—'
+),
+
+rounds:get(
+'rounds',
+'—'
+),
+
+level:get(
+'level',
+'—'
+),
+
+equipment:get(
+'equipment',
+''
+),
+
+objective:get(
+'objective',
+''
+),
+
+focus:get(
+'focus',
+''
+),
+
+target:get(
+'target',
+''
+),
+
+execution:get(
+'execution',
+''
+),
+
+track:get(
+'track',
+''
+),
+
+avoid:get(
+'avoid',
+''
+),
+
+why:get(
+'why',
+''
+),
+
+improvement:get(
+'improvement',
+''
+),
+
+reminder:get(
+'reminder',
+'Record the result honestly. The result is feedback.'
+),
+
+after:get(
+'after',
+'Enter the result so DARTIQ can decide what comes next.'
+),
+
+completed:get(
+'completed',
+'false'
+),
+
+
+/* KEITH PARAMETERS */
+
+coach:get(
+'coach',
+''
+),
+
+rules:get(
+'rules',
+''
+),
+
+red:get(
+'red',
+''
+),
+
+orange:get(
+'orange',
+''
+),
+
+yellow:get(
+'yellow',
+''
+),
+
+green:get(
+'green',
+''
+),
+
+primarymetric:get(
+'primarymetric',
+''
+),
+
+secondarymetric:get(
+'secondarymetric',
+''
+),
+
+successtarget:get(
+'successtarget',
+''
+),
+
+source:get(
+'source',
+'')
+
+};
+
+
+
+/* STANDARD TRAINING */
+
+set(
+'practice',
+data.practice
+);
+
+set(
+'focus',
+data.focus || 'Focused practice'
+);
+
+set(
+'level',
+data.level
+);
+
+set(
+'duration',
+data.duration
+);
+
+set(
+'rounds',
+data.rounds
+);
+
+set(
+'equipment',
+data.equipment
+);
+
+set(
+'objective',
+data.objective
+);
+
+set(
+'why',
+data.why
+);
+
+set(
+'track',
+data.track
+);
+
+set(
+'avoid',
+data.avoid
+);
+
+set(
+'target',
+data.target
+);
+
+set(
+'improvement',
+data.improvement
+);
+
+set(
+'reminder',
+data.reminder
+);
+
+set(
+'after',
+data.after
+);
+
+
+
+if(
+!data.equipment
+){
+
+document
+.getElementById(
+'equipmentWrap'
+)
+.classList
+.add(
+'empty'
+);
+
+}
+
+
+if(
+!data.improvement
+){
+
+document
+.getElementById(
+'improvementWrap'
+)
+.classList
+.add(
+'empty'
+);
+
+}
+
+
+
+[
+'objective',
+'why',
+'execution',
+'track',
+'avoid',
+'target'
+]
+.forEach(
+key=>{
+
+const node =
+document.querySelector(
+'[data-field="'+key+'"]'
+);
+
+if(
+node &&
+!data[key]
+){
+
+node
+.classList
+.add(
+'hidden'
+);
+
+}
+
+}
+);
+
+
+
+/* EXECUTION STEPS */
+
+const executionSteps =
+document.getElementById(
+'executionSteps'
+);
+
+
+if(
+executionSteps &&
+data.execution
+){
+
+let parts =
+
+data.execution
+
+.replace(
+/\s+/g,
+' '
+)
+
+.split(
+/(?<=[.!?])\s+(?=[A-Z0-9])/
+)
+
+.map(
+s=>s.trim()
+)
+
+.filter(
+Boolean
+);
+
+
+if(
+parts.length<=1
+){
+
+parts =
+
+data.execution
+
+.split(
+/\n+/
+)
+
+.map(
+s=>s.trim()
+)
+
+.filter(
+Boolean
+);
+
+}
+
+
+parts.forEach(
+(part,i)=>{
+
+const row =
+document.createElement(
+'div'
+);
+
+row.className =
+'practice-step';
+
+
+const badge =
+document.createElement(
+'div'
+);
+
+badge.className =
+'step-badge';
+
+badge.textContent =
+i+1;
+
+
+const copy =
+document.createElement(
+'div'
+);
+
+copy.className =
+'step-copy';
+
+copy.textContent =
+part;
+
+
+row.appendChild(
+badge
+);
+
+row.appendChild(
+copy
+);
+
+executionSteps.appendChild(
+row
+);
+
+}
+);
+
+}
+
+
+
+/* STATUS */
+
+const status =
+document.getElementById(
+'status'
+);
+
+
+if(
+truthy(
+data.completed
+)
+){
+
+status.textContent =
+'✓ Training Completed';
+
+status.classList.add(
+'done'
+);
+
+}
+
+else{
+
+status.textContent =
+'◻ Training in progress';
+
+}
+
+
+
+/* DARTIQ LOGIC */
+
+set(
+'coach1',
+data.objective ||
+data.target ||
+'Define what this practice is trying to achieve.'
+);
+
+
+set(
+'coach2',
+data.track
+?
+'Judge the result using: ' +
+data.track
+:
+(
+data.target
+?
+'Compare each result with: ' +
+data.target
+:
+'Compare the actual result with the intended outcome.'
+)
+);
+
+
+set(
+'coach3',
+data.focus
+?
+'Correct only a repeatable issue affecting ' +
+data.focus +
+'.'
+:
+'Correct only a repeatable issue that affects the intended result.'
+);
+
+
+set(
+'coach4',
+data.target
+?
+'Retest against: ' +
+data.target
+:
+'Repeat the practice and verify that the adjustment improves the result.'
+);
+
+
+
+const rule=[];
+
+
+if(
+data.avoid
+){
+
+rule.push(
+'Watch for: ' +
+data.avoid +
+'.'
+);
+
+}
+
+
+rule.push(
+'Preserve what works. Use the smallest useful change.'
+);
+
+
+set(
+'coachRule',
+rule.join(
+' '
+)
+);
+
+
+
+/* KEITH ALLEN GUTHER METHODOLOGY */
+
+const hasKeith = Boolean(
+
+data.coach ||
+
+data.rules ||
+
+data.red ||
+
+data.orange ||
+
+data.yellow ||
+
+data.green ||
+
+data.primarymetric ||
+
+data.secondarymetric ||
+
+data.successtarget ||
+
+data.source
+
+);
+
+
+
+if(
+hasKeith
+){
+
+const block =
+document.getElementById(
+'keithBlock'
+);
+
+
+block
+.classList
+.remove(
+'hidden'
+);
+
+
+
+set(
+'keithCoach',
+data.coach ||
+'Keith Allen Guther'
+);
+
+
+set(
+'keithRules',
+data.rules
+);
+
+
+set(
+'primaryMetric',
+data.primarymetric
+);
+
+
+set(
+'secondaryMetric',
+data.secondarymetric
+);
+
+
+set(
+'redRange',
+data.red
+);
+
+
+set(
+'orangeRange',
+data.orange
+);
+
+
+set(
+'yellowRange',
+data.yellow
+);
+
+
+set(
+'greenRange',
+data.green
+);
+
+
+set(
+'keithSuccessTarget',
+data.successtarget
+);
+
+
+set(
+'source',
+data.source
+);
+
+
+
+if(
+!data.rules
+){
+
+document
+.getElementById(
+'keithRulesWrap'
+)
+.classList
+.add(
+'empty'
+);
+
+}
+
+
+if(
+!data.primarymetric
+){
+
+document
+.getElementById(
+'primaryMetricWrap'
+)
+.classList
+.add(
+'empty'
+);
+
+}
+
+
+if(
+!data.secondarymetric
+){
+
+document
+.getElementById(
+'secondaryMetricWrap'
+)
+.classList
+.add(
+'empty'
+);
+
+}
+
+
+if(
+!(
+data.red ||
+data.orange ||
+data.yellow ||
+data.green
+)
+){
+
+document
+.getElementById(
+'gradingWrap'
+)
+.classList
+.add(
+'empty'
+);
+
+}
+
+
+if(
+!data.successtarget
+){
+
+document
+.getElementById(
+'keithSuccessWrap'
+)
+.classList
+.add(
+'empty'
+);
+
+}
+
+
+if(
+!data.source
+){
+
+document
+.getElementById(
+'sourceWrap'
+)
+.classList
+.add(
+'empty'
+);
+
+}
+
+}
+
+
 })();
+
 </script>
-</body></html>
+
+</body>
+</html>
