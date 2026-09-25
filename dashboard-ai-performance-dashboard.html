@@ -8,6 +8,7 @@
 <style>
 :root{
   --bg:#050b18;
+  --bg2:#07101e;
   --panel:#0b1728;
   --panel2:#0e1d31;
   --line:rgba(44,177,255,.18);
@@ -22,12 +23,22 @@ html,body{
   margin:0;
   padding:0;
   width:100%;
-  background:transparent;
+  min-height:100%;
+  background:linear-gradient(180deg,var(--bg2),var(--bg));
   color:var(--text);
   font-family:Inter,Arial,Helvetica,sans-serif;
 }
 
 body{
+  min-height:100vh;
+}
+
+.page{
+  width:100%;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 20% 0%,rgba(41,185,255,.09),transparent 28%),
+    linear-gradient(180deg,#07101e,#050b18);
   padding:6px;
 }
 
@@ -255,7 +266,7 @@ body{
 }
 
 @media(max-width:430px){
-  body{padding:4px}
+  .page{padding:4px}
 
   .wrap{
     padding:10px;
@@ -304,6 +315,7 @@ body{
 </head>
 
 <body>
+<div class="page">
 
 <main class="wrap">
 
@@ -312,12 +324,10 @@ body{
       <span class="dot"></span>
       <strong>DARTIQ Performance</strong>
     </div>
-
     <div class="live">LIVE</div>
   </div>
 
   <section class="hero">
-
     <div class="score-card">
       <div class="kicker">AI Coach Score</div>
       <div class="score" id="score">--</div>
@@ -327,266 +337,98 @@ body{
     <div class="insight-card">
       <div>
         <div class="title">AI Insight</div>
-        <div class="insight" id="insight">
-          Your AI insight will appear here.
-        </div>
+        <div class="insight" id="insight">Your AI insight will appear here.</div>
       </div>
-
-      <div class="focus" id="focus">
-        Focus: Not available
-      </div>
+      <div class="focus" id="focus">Focus: Not available</div>
     </div>
-
   </section>
 
   <section class="stats">
-
-    <div class="stat">
-      <div class="name">Best Avg</div>
-      <div class="value" id="bestavg">--</div>
-    </div>
-
-    <div class="stat">
-      <div class="name">Sessions</div>
-      <div class="value" id="sessions">--</div>
-    </div>
-
-    <div class="stat">
-      <div class="name">High Checkout</div>
-      <div class="value" id="highcheckout">--</div>
-    </div>
-
-    <div class="stat">
-      <div class="name">First 9 Avg</div>
-      <div class="value" id="first9">--</div>
-    </div>
-
-    <div class="stat">
-      <div class="name">Checkout %</div>
-      <div class="value" id="checkoutpct">--</div>
-    </div>
-
-    <div class="stat">
-      <div class="name">180s</div>
-      <div class="value" id="total180">--</div>
-    </div>
-
+    <div class="stat"><div class="name">Best Avg</div><div class="value" id="bestavg">--</div></div>
+    <div class="stat"><div class="name">Sessions</div><div class="value" id="sessions">--</div></div>
+    <div class="stat"><div class="name">High Checkout</div><div class="value" id="highcheckout">--</div></div>
+    <div class="stat"><div class="name">First 9 Avg</div><div class="value" id="first9">--</div></div>
+    <div class="stat"><div class="name">Checkout %</div><div class="value" id="checkoutpct">--</div></div>
+    <div class="stat"><div class="name">180s</div><div class="value" id="total180">--</div></div>
   </section>
 
   <section class="info-grid">
-
     <div class="info">
       <div class="head">🎯 Next Goal</div>
-      <div class="copy" id="goal">
-        No goal available.
-      </div>
+      <div class="copy" id="goal">No goal available.</div>
     </div>
 
     <div class="info">
       <div class="head">⚡ Focus This Week</div>
-      <div class="copy" id="focusCard">
-        No focus available.
-      </div>
+      <div class="copy" id="focusCard">No focus available.</div>
     </div>
-
   </section>
 
   <section class="status">
     <div class="status-badge">↗</div>
-
-    <div class="status-text" id="statusText">
-      Submit your next session to update this dashboard.
-    </div>
+    <div class="status-text" id="statusText">Submit your next session to update this dashboard.</div>
   </section>
 
-  <div class="footer">
-    POWERED BY DARTIQ AI
-  </div>
+  <div class="footer">POWERED BY DARTIQ AI</div>
 
 </main>
+</div>
 
 <script>
 (function(){
-
   const p = new URLSearchParams(window.location.search);
 
   function safe(key, fallback){
-
     const raw = p.get(key);
-
-    if(raw === null || raw.trim() === ""){
-      return fallback;
-    }
-
+    if(raw === null || raw.trim() === "") return fallback;
     try{
-      return decodeURIComponent(
-        raw.replace(/\+/g," ")
-      )
-      .replace(/[{}]/g,"")
-      .trim() || fallback;
-
+      return decodeURIComponent(raw.replace(/\+/g," ")).replace(/[{}]/g,"").trim() || fallback;
     }catch(e){
-
-      return raw
-        .replace(/[{}]/g,"")
-        .trim() || fallback;
-
+      return raw.replace(/[{}]/g,"").trim() || fallback;
     }
   }
 
   const d = {
-
-    score:
-      safe("score","--"),
-
-    grade:
-      safe("grade","NO DATA"),
-
-    bestavg:
-      safe("bestavg","--"),
-
-    sessions:
-      safe("sessions","--"),
-
-    highcheckout:
-      safe("highcheckout","--"),
-
-    first9:
-      safe("first9","--"),
-
-    checkoutpct:
-      safe("checkoutpct","--"),
-
-    total180:
-      safe("total180","--"),
-
-    insight:
-      safe(
-        "insight",
-        "Your AI insight will appear here."
-      ),
-
-    goal:
-      safe(
-        "goal",
-        "No goal available."
-      ),
-
-    focus:
-      safe(
-        "focus",
-        "No focus available."
-      )
-
+    score:safe("score","--"),
+    grade:safe("grade","NO DATA"),
+    bestavg:safe("bestavg","--"),
+    sessions:safe("sessions","--"),
+    highcheckout:safe("highcheckout","--"),
+    first9:safe("first9","--"),
+    checkoutpct:safe("checkoutpct","--"),
+    total180:safe("total180","--"),
+    insight:safe("insight","Your AI insight will appear here."),
+    goal:safe("goal","No goal available."),
+    focus:safe("focus","No focus available.")
   };
 
-  const set = (id,val) => {
-    document.getElementById(id).textContent = val;
-  };
+  const set = (id,val) => document.getElementById(id).textContent = val;
 
   set("score",d.score);
+  set("grade",d.grade.toUpperCase());
+  set("bestavg",d.bestavg);
+  set("sessions",d.sessions);
+  set("highcheckout",d.highcheckout);
+  set("first9",d.first9);
+  set("checkoutpct",d.checkoutpct==="--" ? "--" : d.checkoutpct.replace(/%$/,"")+"%");
+  set("total180",d.total180);
+  set("insight",d.insight);
+  set("goal",d.goal);
+  set("focus","Focus: " + d.focus);
+  set("focusCard",d.focus);
 
-  set(
-    "grade",
-    d.grade.toUpperCase()
-  );
-
-  set(
-    "bestavg",
-    d.bestavg
-  );
-
-  set(
-    "sessions",
-    d.sessions
-  );
-
-  set(
-    "highcheckout",
-    d.highcheckout
-  );
-
-  set(
-    "first9",
-    d.first9
-  );
-
-  set(
-    "checkoutpct",
-    d.checkoutpct === "--"
-      ? "--"
-      : d.checkoutpct.replace(/%$/,"") + "%"
-  );
-
-  set(
-    "total180",
-    d.total180
-  );
-
-  set(
-    "insight",
-    d.insight
-  );
-
-  set(
-    "goal",
-    d.goal
-  );
-
-  set(
-    "focus",
-    "Focus: " + d.focus
-  );
-
-  set(
-    "focusCard",
-    d.focus
-  );
-
-  const n = Number(
-    String(d.score)
-      .replace(",",".")
-  );
-
-  let status =
-    "Submit your next session to update this dashboard.";
+  const n = Number(String(d.score).replace(",","."));
+  let status = "Submit your next session to update this dashboard.";
 
   if(!Number.isNaN(n)){
-
-    if(n >= 90){
-
-      status =
-        "Elite performance. Maintain consistency and pressure control.";
-
-    }else if(n >= 80){
-
-      status =
-        "Great performance. Small refinements can unlock the next level.";
-
-    }else if(n >= 70){
-
-      status =
-        "Good progress. Keep training the highlighted weakness.";
-
-    }else if(n >= 60){
-
-      status =
-        "Developing well. Stay focused on one correction at a time.";
-
-    }else{
-
-      status =
-        "Improvement phase. Follow the recommended focus and repeat the drill.";
-
-    }
-
+    if(n >= 90) status = "Elite performance. Maintain consistency and pressure control.";
+    else if(n >= 80) status = "Great performance. Small refinements can unlock the next level.";
+    else if(n >= 70) status = "Good progress. Keep training the highlighted weakness.";
+    else if(n >= 60) status = "Developing well. Stay focused on one correction at a time.";
+    else status = "Improvement phase. Follow the recommended focus and repeat the drill.";
   }
 
-  set(
-    "statusText",
-    status
-  );
-
+  set("statusText",status);
 })();
 </script>
 
