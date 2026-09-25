@@ -45,6 +45,7 @@ body{
   padding:8px 8px 18px;
 }
 
+/* Minimal header */
 .page-head{
   display:flex;
   align-items:center;
@@ -68,6 +69,7 @@ body{
   text-transform:uppercase;
 }
 
+/* Generic sections */
 .section{
   margin-top:8px;
   border:1px solid var(--line);
@@ -121,6 +123,7 @@ body{
   overflow-wrap:anywhere;
 }
 
+/* Goal */
 .goal-card{
   border-color:rgba(41,185,255,.23);
 }
@@ -131,6 +134,7 @@ body{
   line-height:1.43;
 }
 
+/* Two-column cards */
 .two{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -165,6 +169,7 @@ body{
   overflow-wrap:anywhere;
 }
 
+/* Execution */
 .steps{
   display:grid;
   gap:6px;
@@ -201,17 +206,14 @@ body{
   color:#edf6ff;
 }
 
+/* Keith methodology */
 .keith{
   margin-top:9px;
   border:1px solid rgba(41,185,255,.23);
   border-radius:15px;
   overflow:hidden;
   background:
-    radial-gradient(
-      circle at 100% 0%,
-      rgba(41,185,255,.07),
-      transparent 28%
-    ),
+    radial-gradient(circle at 100% 0%,rgba(41,185,255,.07),transparent 28%),
     linear-gradient(180deg,#0c1a2d,#081321);
 }
 
@@ -281,6 +283,7 @@ body{
   overflow-wrap:anywhere;
 }
 
+/* Grading */
 .grade-grid{
   display:grid;
   grid-template-columns:repeat(4,minmax(0,1fr));
@@ -336,6 +339,7 @@ body{
   line-height:1.35;
 }
 
+/* DARTIQ Coaching Logic */
 .coach{
   margin-top:9px;
   border:1px solid var(--line);
@@ -443,6 +447,7 @@ body{
   font-weight:700;
 }
 
+/* After Practice */
 .after{
   margin-top:9px;
   border:1px solid var(--line);
@@ -512,7 +517,6 @@ body{
   .after-grid{
     grid-template-columns:1fr 1fr;
   }
-
 }
 
 @media(max-width:390px){
@@ -540,7 +544,6 @@ body{
   .grade-grid{
     grid-template-columns:1fr 1fr;
   }
-
 }
 </style>
 </head>
@@ -554,63 +557,35 @@ body{
     <span>DARTIQ · Practice Guide</span>
   </div>
 
-  <section
-    class="section goal-card"
-    data-field="objective"
-  >
+  <!-- GOAL -->
+  <section class="section goal-card" data-field="objective">
 
     <div class="section-head">
       <span class="icon">🎯</span>
       <h2>Goal</h2>
     </div>
 
-    <div
-      class="section-body"
-      id="objective"
-    ></div>
+    <div class="section-body" id="objective"></div>
 
   </section>
 
+  <!-- WHY + TARGET -->
   <div class="two">
 
-    <section
-      class="mini"
-      data-mini="why"
-    >
-
-      <div class="mini-label">
-        Why This Practice
-      </div>
-
-      <div
-        class="mini-copy"
-        id="why"
-      ></div>
-
+    <section class="mini" data-mini="why">
+      <div class="mini-label">Why This Practice</div>
+      <div class="mini-copy" id="why"></div>
     </section>
 
-    <section
-      class="mini"
-      data-mini="target"
-    >
-
-      <div class="mini-label">
-        Success Target
-      </div>
-
-      <div
-        class="mini-copy"
-        id="target"
-      ></div>
-
+    <section class="mini" data-mini="target">
+      <div class="mini-label">Success Target</div>
+      <div class="mini-copy" id="target"></div>
     </section>
 
   </div>
 
-  <section
-    class="section"
-    data-field="execution"
-  >
+  <!-- HOW TO PRACTICE -->
+  <section class="section" data-field="execution">
 
     <div class="section-head">
       <span class="icon">▶</span>
@@ -618,56 +593,28 @@ body{
     </div>
 
     <div class="section-body">
-
-      <div
-        class="steps"
-        id="executionSteps"
-      ></div>
-
+      <div class="steps" id="executionSteps"></div>
     </div>
 
   </section>
 
+  <!-- TRACK + WATCH FOR -->
   <div class="two">
 
-    <section
-      class="mini"
-      data-mini="track"
-    >
-
-      <div class="mini-label">
-        What To Track
-      </div>
-
-      <div
-        class="mini-copy"
-        id="track"
-      ></div>
-
+    <section class="mini" data-mini="track">
+      <div class="mini-label">What To Track</div>
+      <div class="mini-copy" id="track"></div>
     </section>
 
-    <section
-      class="mini"
-      data-mini="avoid"
-    >
-
-      <div class="mini-label">
-        Watch For
-      </div>
-
-      <div
-        class="mini-copy"
-        id="avoid"
-      ></div>
-
+    <section class="mini" data-mini="avoid">
+      <div class="mini-label">Watch For</div>
+      <div class="mini-copy" id="avoid"></div>
     </section>
 
   </div>
 
-  <section
-    class="keith hidden"
-    id="keithBlock"
-  >
+  <!-- KEITH METHODOLOGY -->
+  <section class="keith hidden" id="keithBlock">
 
     <div class="keith-head">
 
@@ -675,10 +622,7 @@ body{
         Keith Allen Guther Methodology
       </div>
 
-      <div
-        class="keith-coach"
-        id="keithCoach"
-      ></div>
+      <div class="keith-coach" id="keithCoach"></div>
 
     </div>
 
@@ -686,58 +630,37 @@ body{
 
       <div class="keith-grid">
 
-        <div
-          class="keith-card full"
-          id="keithRulesWrap"
-        >
+        <div class="keith-card full" id="keithRulesWrap">
 
           <div class="keith-label">
             Rules
           </div>
 
-          <div
-            class="keith-value"
-            id="keithRules"
-          ></div>
+          <div class="keith-value" id="keithRules"></div>
 
         </div>
 
-        <div
-          class="keith-card"
-          id="primaryMetricWrap"
-        >
+        <div class="keith-card" id="primaryMetricWrap">
 
           <div class="keith-label">
             Primary Metric
           </div>
 
-          <div
-            class="keith-value"
-            id="primaryMetric"
-          ></div>
+          <div class="keith-value" id="primaryMetric"></div>
 
         </div>
 
-        <div
-          class="keith-card"
-          id="secondaryMetricWrap"
-        >
+        <div class="keith-card" id="secondaryMetricWrap">
 
           <div class="keith-label">
             Secondary Metric
           </div>
 
-          <div
-            class="keith-value"
-            id="secondaryMetric"
-          ></div>
+          <div class="keith-value" id="secondaryMetric"></div>
 
         </div>
 
-        <div
-          class="keith-card full"
-          id="gradingWrap"
-        >
+        <div class="keith-card full" id="gradingWrap">
 
           <div class="keith-label">
             Practice Grading
@@ -746,79 +669,73 @@ body{
           <div class="grade-grid">
 
             <div class="grade red">
+
               <div class="grade-label">
                 Red
               </div>
-              <div
-                class="grade-value"
-                id="redRange"
-              ></div>
+
+              <div class="grade-value" id="redRange"></div>
+
             </div>
 
             <div class="grade orange">
+
               <div class="grade-label">
                 Orange
               </div>
-              <div
-                class="grade-value"
-                id="orangeRange"
-              ></div>
+
+              <div class="grade-value" id="orangeRange"></div>
+
             </div>
 
             <div class="grade yellow">
+
               <div class="grade-label">
                 Yellow
               </div>
-              <div
-                class="grade-value"
-                id="yellowRange"
-              ></div>
+
+              <div class="grade-value" id="yellowRange"></div>
+
             </div>
 
             <div class="grade green">
+
               <div class="grade-label">
                 Green
               </div>
-              <div
-                class="grade-value"
-                id="greenRange"
-              ></div>
+
+              <div class="grade-value" id="greenRange"></div>
+
             </div>
 
           </div>
 
         </div>
 
-        <div
-          class="keith-card full"
-          id="keithSuccessWrap"
-        >
+        <div class="keith-card full" id="keithSuccessWrap">
 
           <div class="keith-label">
             Keith Success Target
           </div>
 
-          <div
-            class="keith-value"
-            id="keithSuccessTarget"
-          ></div>
+          <div class="keith-value" id="keithSuccessTarget"></div>
 
         </div>
 
       </div>
 
-      <div
-        class="source"
-        id="sourceWrap"
-      >
+      <div class="source" id="sourceWrap">
+
         <strong>Methodology source:</strong>
         <span id="source"></span>
+
       </div>
 
     </div>
 
   </section>
 
+  <!-- DARTIQ COACHING LOGIC -->
   <section class="coach">
 
     <div class="coach-title">
@@ -833,9 +750,7 @@ body{
 
       <div class="logic-step">
 
-        <div class="logic-num">
-          1
-        </div>
+        <div class="logic-num">1</div>
 
         <div class="logic-copy">
           <strong>Intention</strong>
@@ -846,9 +761,7 @@ body{
 
       <div class="logic-step">
 
-        <div class="logic-num">
-          2
-        </div>
+        <div class="logic-num">2</div>
 
         <div class="logic-copy">
           <strong>Outcome</strong>
@@ -859,9 +772,7 @@ body{
 
       <div class="logic-step">
 
-        <div class="logic-num">
-          3
-        </div>
+        <div class="logic-num">3</div>
 
         <div class="logic-copy">
           <strong>Decide</strong>
@@ -872,9 +783,7 @@ body{
 
       <div class="logic-step">
 
-        <div class="logic-num">
-          4
-        </div>
+        <div class="logic-num">4</div>
 
         <div class="logic-copy">
           <strong>Retest</strong>
@@ -887,26 +796,17 @@ body{
 
     <div class="coach-foot">
 
-      <div
-        class="note"
-        id="coachRule"
-      >
+      <div class="note" id="coachRule">
         Preserve what works. Change only a repeatable issue that affects the result.
       </div>
 
-      <div
-        class="improve"
-        id="improvementWrap"
-      >
+      <div class="improve" id="improvementWrap">
 
         <div class="improve-label">
           Improvement Potential
         </div>
 
-        <div
-          class="improve-text"
-          id="improvement"
-        ></div>
+        <div class="improve-text" id="improvement"></div>
 
       </div>
 
@@ -914,11 +814,10 @@ body{
 
   </section>
 
+  <!-- AFTER PRACTICE -->
   <section class="after">
 
-    <h2>
-      After Practice
-    </h2>
+    <h2>After Practice</h2>
 
     <div class="after-grid">
 
@@ -928,10 +827,7 @@ body{
           Reminder
         </div>
 
-        <div
-          class="after-text"
-          id="reminder"
-        ></div>
+        <div class="after-text" id="reminder"></div>
 
       </div>
 
@@ -941,10 +837,7 @@ body{
           Next Step
         </div>
 
-        <div
-          class="after-text"
-          id="after"
-        ></div>
+        <div class="after-text" id="after"></div>
 
       </div>
 
@@ -964,7 +857,6 @@ body{
     const v = (p.get(key) || '').trim();
 
     return v || fallback;
-
   };
 
   const set = (id,value) => {
@@ -979,329 +871,186 @@ body{
 
   const data = {
 
-    objective:
-      get('objective',''),
+    objective:get('objective',''),
+    target:get('target',''),
+    execution:get('execution',''),
+    track:get('track',''),
+    avoid:get('avoid',''),
+    why:get('why',''),
 
-    target:
-      get('target',''),
+    improvement:get('improvement',''),
 
-    execution:
-      get('execution',''),
+    reminder:get(
+      'reminder',
+      'Record the result honestly. The result is feedback.'
+    ),
 
-    track:
-      get('track',''),
+    after:get(
+      'after',
+      'Enter the result so DARTIQ can decide what comes next.'
+    ),
 
-    avoid:
-      get('avoid',''),
+    focus:get('focus',''),
 
-    why:
-      get('why',''),
+    coach:get('coach',''),
 
-    improvement:
-      get('improvement',''),
+    rules:get('rules',''),
 
-    reminder:
-      get(
-        'reminder',
-        'Record the result honestly. The result is feedback.'
-      ),
+    red:get('red',''),
+    orange:get('orange',''),
+    yellow:get('yellow',''),
+    green:get('green',''),
 
-    after:
-      get(
-        'after',
-        'Enter the result so DARTIQ can decide what comes next.'
-      ),
+    primarymetric:get('primarymetric',''),
+    secondarymetric:get('secondarymetric',''),
 
-    focus:
-      get('focus',''),
+    successtarget:get('successtarget',''),
 
-    coach:
-      get('coach',''),
-
-    rules:
-      get('rules',''),
-
-    red:
-      get('red',''),
-
-    orange:
-      get('orange',''),
-
-    yellow:
-      get('yellow',''),
-
-    green:
-      get('green',''),
-
-    primarymetric:
-      get('primarymetric',''),
-
-    secondarymetric:
-      get('secondarymetric',''),
-
-    successtarget:
-      get('successtarget',''),
-
-    source:
-      get('source','')
-
+    source:get('source','')
   };
 
-  set(
-    'objective',
-    data.objective
-  );
+  set('objective',data.objective);
+  set('why',data.why);
+  set('target',data.target);
+  set('track',data.track);
+  set('avoid',data.avoid);
+  set('improvement',data.improvement);
+  set('reminder',data.reminder);
+  set('after',data.after);
 
-  set(
-    'why',
-    data.why
-  );
-
-  set(
-    'target',
-    data.target
-  );
-
-  set(
-    'track',
-    data.track
-  );
-
-  set(
-    'avoid',
-    data.avoid
-  );
-
-  set(
-    'improvement',
-    data.improvement
-  );
-
-  set(
-    'reminder',
-    data.reminder
-  );
-
-  set(
-    'after',
-    data.after
-  );
+  /* Hide empty sections */
 
   const objectiveNode =
-    document.querySelector(
-      '[data-field="objective"]'
-    );
+    document.querySelector('[data-field="objective"]');
 
-  if(
-    objectiveNode &&
-    !data.objective
-  ){
-    objectiveNode
-      .classList
-      .add('hidden');
+  if(objectiveNode && !data.objective){
+    objectiveNode.classList.add('hidden');
   }
 
-  [
-    'why',
-    'target',
-    'track',
-    'avoid'
-  ]
-  .forEach(key => {
+  ['why','target','track','avoid'].forEach(key=>{
 
     const node =
-      document.querySelector(
-        '[data-mini="'+key+'"]'
-      );
+      document.querySelector('[data-mini="'+key+'"]');
 
-    if(
-      node &&
-      !data[key]
-    ){
-      node
-        .classList
-        .add('hidden');
+    if(node && !data[key]){
+      node.classList.add('hidden');
     }
 
   });
 
   const execNode =
-    document.querySelector(
-      '[data-field="execution"]'
-    );
+    document.querySelector('[data-field="execution"]');
 
-  if(
-    execNode &&
-    !data.execution
-  ){
-    execNode
-      .classList
-      .add('hidden');
+  if(execNode && !data.execution){
+    execNode.classList.add('hidden');
   }
 
-  if(
-    !data.improvement
-  ){
+  if(!data.improvement){
+
     document
-      .getElementById(
-        'improvementWrap'
-      )
-      .classList
-      .add('empty');
+      .getElementById('improvementWrap')
+      .classList.add('empty');
+
   }
+
+  /* Build execution steps */
 
   const executionSteps =
-    document.getElementById(
-      'executionSteps'
-    );
+    document.getElementById('executionSteps');
 
-  if(
-    executionSteps &&
-    data.execution
-  ){
+  if(executionSteps && data.execution){
 
-    let parts =
-      data.execution
-        .replace(/\s+/g,' ')
-        .split(
-          /(?<=[.!?])\s+(?=[A-Z0-9])/
-        )
-        .map(
-          s => s.trim()
-        )
+    let parts = data.execution
+      .replace(/\s+/g,' ')
+      .split(/(?<=[.!?])\s+(?=[A-Z0-9])/)
+      .map(s=>s.trim())
+      .filter(Boolean);
+
+    if(parts.length <= 1){
+
+      parts = data.execution
+        .split(/\n+/)
+        .map(s=>s.trim())
         .filter(Boolean);
-
-    if(
-      parts.length <= 1
-    ){
-
-      parts =
-        data.execution
-          .split(/\n+/)
-          .map(
-            s => s.trim()
-          )
-          .filter(Boolean);
 
     }
 
-    parts.forEach(
-      (part,i) => {
+    parts.forEach((part,i)=>{
 
-        const row =
-          document.createElement(
-            'div'
-          );
+      const row =
+        document.createElement('div');
 
-        row.className =
-          'practice-step';
+      row.className =
+        'practice-step';
 
-        const badge =
-          document.createElement(
-            'div'
-          );
+      const badge =
+        document.createElement('div');
 
-        badge.className =
-          'step-badge';
+      badge.className =
+        'step-badge';
 
-        badge.textContent =
-          i + 1;
+      badge.textContent =
+        i + 1;
 
-        const copy =
-          document.createElement(
-            'div'
-          );
+      const copy =
+        document.createElement('div');
 
-        copy.className =
-          'step-copy';
+      copy.className =
+        'step-copy';
 
-        copy.textContent =
-          part;
+      copy.textContent =
+        part;
 
-        row.appendChild(
-          badge
-        );
+      row.appendChild(badge);
 
-        row.appendChild(
-          copy
-        );
+      row.appendChild(copy);
 
-        executionSteps
-          .appendChild(
-            row
-          );
+      executionSteps.appendChild(row);
 
-      }
-    );
+    });
 
   }
 
+  /* DARTIQ logic */
+
   set(
     'coach1',
-
     data.objective ||
-
     data.target ||
-
     'Define what this practice is trying to achieve.'
   );
 
   set(
     'coach2',
-
     data.track
-
-      ? 'Judge the result using: ' +
-        data.track
-
+      ? 'Judge the result using: ' + data.track
       : (
-
-        data.target
-
-          ? 'Compare each result with: ' +
-            data.target
-
-          : 'Compare the actual result with the intended outcome.'
-
-      )
-
+          data.target
+            ? 'Compare each result with: ' + data.target
+            : 'Compare the actual result with the intended outcome.'
+        )
   );
 
   set(
     'coach3',
-
     data.focus
-
-      ? 'Correct only a repeatable issue affecting ' +
-        data.focus +
-        '.'
-
+      ? 'Correct only a repeatable issue affecting ' + data.focus + '.'
       : 'Correct only a repeatable issue that affects the intended result.'
-
   );
 
   set(
     'coach4',
-
     data.target
-
-      ? 'Retest against: ' +
-        data.target
-
+      ? 'Retest against: ' + data.target
       : 'Repeat the practice and verify that the adjustment improves the result.'
-
   );
 
   const rule = [];
 
-  if(
-    data.avoid
-  ){
+  if(data.avoid){
 
     rule.push(
-      'Watch for: ' +
-      data.avoid +
-      '.'
+      'Watch for: ' + data.avoid + '.'
     );
 
   }
@@ -1315,46 +1064,30 @@ body{
     rule.join(' ')
   );
 
-  const hasKeith =
-    Boolean(
+  /* Keith methodology */
 
-      data.coach ||
+  const hasKeith = Boolean(
+    data.coach ||
+    data.rules ||
+    data.red ||
+    data.orange ||
+    data.yellow ||
+    data.green ||
+    data.primarymetric ||
+    data.secondarymetric ||
+    data.successtarget ||
+    data.source
+  );
 
-      data.rules ||
-
-      data.red ||
-
-      data.orange ||
-
-      data.yellow ||
-
-      data.green ||
-
-      data.primarymetric ||
-
-      data.secondarymetric ||
-
-      data.successtarget ||
-
-      data.source
-
-    );
-
-  if(
-    hasKeith
-  ){
+  if(hasKeith){
 
     document
-      .getElementById(
-        'keithBlock'
-      )
-      .classList
-      .remove('hidden');
+      .getElementById('keithBlock')
+      .classList.remove('hidden');
 
     set(
       'keithCoach',
-      data.coach ||
-      'Keith Allen Guther'
+      data.coach || 'Keith Allen Guther'
     );
 
     set(
@@ -1402,573 +1135,62 @@ body{
       data.source
     );
 
-    if(
-      !data.rules
-    ){
+    if(!data.rules){
 
       document
-        .getElementById(
-          'keithRulesWrap'
-        )
-        .classList
-        .add('empty');
+        .getElementById('keithRulesWrap')
+        .classList.add('empty');
 
     }
 
-    if(
-      !data.primarymetric
-    ){
+    if(!data.primarymetric){
 
       document
-        .getElementById(
-          'primaryMetricWrap'
-        )
-        .classList
-        .add('empty');
+        .getElementById('primaryMetricWrap')
+        .classList.add('empty');
 
     }
 
-    if(
-      !data.secondarymetric
-    ){
+    if(!data.secondarymetric){
 
       document
-        .getElementById(
-          'secondaryMetricWrap'
-        )
-        .classList
-        .add('empty');
+        .getElementById('secondaryMetricWrap')
+        .classList.add('empty');
 
     }
 
-    if(
-      !(
-        data.red ||
-        data.orange ||
-        data.yellow ||
-        data.green
-      )
-    ){
+    if(!(
+      data.red ||
+      data.orange ||
+      data.yellow ||
+      data.green
+    )){
 
       document
-        .getElementById(
-          'gradingWrap'
-        )
-        .classList
-        .add('empty');
+        .getElementById('gradingWrap')
+        .classList.add('empty');
 
     }
 
-    if(
-      !data.successtarget
-    ){
+    if(!data.successtarget){
 
       document
-        .getElementById(
-          'keithSuccessWrap'
-        )
-        .classList
-        .add('empty');
+        .getElementById('keithSuccessWrap')
+        .classList.add('empty');
 
     }
 
-    if(
-      !data.source
-    ){
+    if(!data.source){
 
       document
-        .getElementById(
-          'sourceWrap'
-        )
-        .classList
-        .add('empty');
+        .getElementById('sourceWrap')
+        .classList.add('empty');
 
     }
 
   }
 
 })();
-</script>
-
-</body>
-</html>
-
-
-
-[
-'objective',
-'why',
-'execution',
-'track',
-'avoid',
-'target'
-]
-.forEach(
-key=>{
-
-const node =
-document.querySelector(
-'[data-field="'+key+'"]'
-);
-
-if(
-node &&
-!data[key]
-){
-
-node
-.classList
-.add(
-'hidden'
-);
-
-}
-
-}
-);
-
-
-
-/* EXECUTION STEPS */
-
-const executionSteps =
-document.getElementById(
-'executionSteps'
-);
-
-
-if(
-executionSteps &&
-data.execution
-){
-
-let parts =
-
-data.execution
-
-.replace(
-/\s+/g,
-' '
-)
-
-.split(
-/(?<=[.!?])\s+(?=[A-Z0-9])/
-)
-
-.map(
-s=>s.trim()
-)
-
-.filter(
-Boolean
-);
-
-
-if(
-parts.length<=1
-){
-
-parts =
-
-data.execution
-
-.split(
-/\n+/
-)
-
-.map(
-s=>s.trim()
-)
-
-.filter(
-Boolean
-);
-
-}
-
-
-parts.forEach(
-(part,i)=>{
-
-const row =
-document.createElement(
-'div'
-);
-
-row.className =
-'practice-step';
-
-
-const badge =
-document.createElement(
-'div'
-);
-
-badge.className =
-'step-badge';
-
-badge.textContent =
-i+1;
-
-
-const copy =
-document.createElement(
-'div'
-);
-
-copy.className =
-'step-copy';
-
-copy.textContent =
-part;
-
-
-row.appendChild(
-badge
-);
-
-row.appendChild(
-copy
-);
-
-executionSteps.appendChild(
-row
-);
-
-}
-);
-
-}
-
-
-
-/* STATUS */
-
-const status =
-document.getElementById(
-'status'
-);
-
-
-if(
-truthy(
-data.completed
-)
-){
-
-status.textContent =
-'✓ Training Completed';
-
-status.classList.add(
-'done'
-);
-
-}
-
-else{
-
-status.textContent =
-'◻ Training in progress';
-
-}
-
-
-
-/* DARTIQ LOGIC */
-
-set(
-'coach1',
-data.objective ||
-data.target ||
-'Define what this practice is trying to achieve.'
-);
-
-
-set(
-'coach2',
-data.track
-?
-'Judge the result using: ' +
-data.track
-:
-(
-data.target
-?
-'Compare each result with: ' +
-data.target
-:
-'Compare the actual result with the intended outcome.'
-)
-);
-
-
-set(
-'coach3',
-data.focus
-?
-'Correct only a repeatable issue affecting ' +
-data.focus +
-'.'
-:
-'Correct only a repeatable issue that affects the intended result.'
-);
-
-
-set(
-'coach4',
-data.target
-?
-'Retest against: ' +
-data.target
-:
-'Repeat the practice and verify that the adjustment improves the result.'
-);
-
-
-
-const rule=[];
-
-
-if(
-data.avoid
-){
-
-rule.push(
-'Watch for: ' +
-data.avoid +
-'.'
-);
-
-}
-
-
-rule.push(
-'Preserve what works. Use the smallest useful change.'
-);
-
-
-set(
-'coachRule',
-rule.join(
-' '
-)
-);
-
-
-
-/* KEITH ALLEN GUTHER METHODOLOGY */
-
-const hasKeith = Boolean(
-
-data.coach ||
-
-data.rules ||
-
-data.red ||
-
-data.orange ||
-
-data.yellow ||
-
-data.green ||
-
-data.primarymetric ||
-
-data.secondarymetric ||
-
-data.successtarget ||
-
-data.source
-
-);
-
-
-
-if(
-hasKeith
-){
-
-const block =
-document.getElementById(
-'keithBlock'
-);
-
-
-block
-.classList
-.remove(
-'hidden'
-);
-
-
-
-set(
-'keithCoach',
-data.coach ||
-'Keith Allen Guther'
-);
-
-
-set(
-'keithRules',
-data.rules
-);
-
-
-set(
-'primaryMetric',
-data.primarymetric
-);
-
-
-set(
-'secondaryMetric',
-data.secondarymetric
-);
-
-
-set(
-'redRange',
-data.red
-);
-
-
-set(
-'orangeRange',
-data.orange
-);
-
-
-set(
-'yellowRange',
-data.yellow
-);
-
-
-set(
-'greenRange',
-data.green
-);
-
-
-set(
-'keithSuccessTarget',
-data.successtarget
-);
-
-
-set(
-'source',
-data.source
-);
-
-
-
-if(
-!data.rules
-){
-
-document
-.getElementById(
-'keithRulesWrap'
-)
-.classList
-.add(
-'empty'
-);
-
-}
-
-
-if(
-!data.primarymetric
-){
-
-document
-.getElementById(
-'primaryMetricWrap'
-)
-.classList
-.add(
-'empty'
-);
-
-}
-
-
-if(
-!data.secondarymetric
-){
-
-document
-.getElementById(
-'secondaryMetricWrap'
-)
-.classList
-.add(
-'empty'
-);
-
-}
-
-
-if(
-!(
-data.red ||
-data.orange ||
-data.yellow ||
-data.green
-)
-){
-
-document
-.getElementById(
-'gradingWrap'
-)
-.classList
-.add(
-'empty'
-);
-
-}
-
-
-if(
-!data.successtarget
-){
-
-document
-.getElementById(
-'keithSuccessWrap'
-)
-.classList
-.add(
-'empty'
-);
-
-}
-
-
-if(
-!data.source
-){
-
-document
-.getElementById(
-'sourceWrap'
-)
-.classList
-.add(
-'empty'
-);
-
-}
-
-}
-
-
-})();
-
 </script>
 
 </body>
