@@ -42,8 +42,13 @@ body{
   margin:0 auto;
   padding:15px;
   border-radius:22px;
-  background:linear-gradient(180deg,#102844 0%,#081a2d 100%);
+
+  background:
+    radial-gradient(circle at 20% 0%,rgba(57,169,255,.08),transparent 30%),
+    linear-gradient(180deg,#102844 0%,#081a2d 100%);
+
   border:1px solid rgba(57,169,255,.48);
+
   box-shadow:
     0 0 14px rgba(57,169,255,.28),
     0 0 34px rgba(57,169,255,.14),
@@ -57,24 +62,31 @@ body{
   border-bottom:2px solid var(--accent);
 }
 
+.kicker{
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:1.5px;
+  color:var(--accent);
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+
 .header h1{
   font-size:32px;
   line-height:1.05;
   font-weight:900;
-  color:var(--accent);
-  text-shadow:
-    0 0 6px rgba(57,169,255,.85),
-    0 0 12px rgba(57,169,255,.35);
+  color:#fff;
 }
 
 .subtitle{
   margin-top:8px;
-  font-size:14px;
+  font-size:15px;
   line-height:1.4;
-  color:var(--muted);
+  font-weight:700;
+  color:var(--accent);
 }
 
-/* TOP STATS */
+/* STATS */
 
 .stats{
   display:grid;
@@ -94,7 +106,7 @@ body{
 
 .label{
   font-size:10px;
-  letter-spacing:.65px;
+  letter-spacing:.7px;
   text-transform:uppercase;
   color:var(--muted);
   font-weight:800;
@@ -102,127 +114,56 @@ body{
 
 .value{
   margin-top:7px;
-  font-size:23px;
-  line-height:1.12;
+  font-size:20px;
+  line-height:1.18;
   font-weight:900;
-  color:var(--accent);
-  overflow-wrap:break-word;
-  word-break:normal;
-  text-shadow:0 0 6px rgba(57,169,255,.32);
-}
-
-/* FULL WIDTH SECTIONS */
-
-.section{
-  margin-top:13px;
-  background:var(--panel2);
-  border:1px solid var(--line);
-  border-left:4px solid var(--accent);
-  border-radius:15px;
-  padding:15px;
-}
-
-.section-title{
-  font-size:16px;
-  font-weight:900;
-  margin-bottom:9px;
   color:#fff;
-}
-
-.section-text{
-  font-size:14px;
-  line-height:1.55;
-  color:var(--text);
   overflow-wrap:break-word;
-  word-break:normal;
 }
 
-/* FOCUS / TARGET / TRACK / AVOID */
+/* EQUIPMENT */
 
-.detail-card{
-  margin-top:13px;
+.equipment{
+  margin-top:10px;
   background:var(--panel2);
   border:1px solid var(--line);
   border-radius:15px;
-  padding:15px;
+  padding:14px;
 }
 
-.detail-card .value{
+.equipment .value{
   font-size:15px;
-  line-height:1.5;
-  font-weight:700;
+  line-height:1.45;
   color:var(--text);
-  text-shadow:none;
 }
 
-/* EXECUTION */
+/* STATUS */
 
-.execution-list{
-  list-style:none;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
+.status{
+  margin-top:12px;
+  min-height:48px;
 
-.execution-step{
-  display:grid;
-  grid-template-columns:30px 1fr;
-  gap:9px;
-  align-items:start;
-  padding:10px;
-  border-radius:11px;
-  background:rgba(255,255,255,.035);
-  border:1px solid rgba(57,169,255,.12);
-}
-
-.step-number{
-  width:28px;
-  height:28px;
   display:flex;
   align-items:center;
   justify-content:center;
-  border-radius:50%;
-  background:rgba(57,169,255,.13);
-  color:var(--accent);
-  font-size:13px;
+  gap:8px;
+
+  border-radius:14px;
+
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(57,169,255,.20);
+
+  color:#d9eaff;
+
+  font-size:15px;
   font-weight:900;
 }
 
-.step-text{
-  font-size:13.5px;
-  line-height:1.5;
-  color:var(--text);
-  overflow-wrap:break-word;
-}
-
-/* COACH REMINDER */
-
-.coach-row{
-  margin-top:8px;
-}
-
-.coach-row:first-child{
-  margin-top:0;
-}
-
-.coach-label{
-  display:block;
-  margin-bottom:3px;
-  color:var(--accent);
-  font-size:12px;
-  font-weight:900;
-  text-transform:uppercase;
-  letter-spacing:.35px;
-}
-
-.footer{
-  margin-top:24px;
-  padding-bottom:8px;
-  text-align:center;
-  font-size:10px;
-  color:#9fd4ff;
-  letter-spacing:.6px;
-  text-shadow:0 0 7px rgba(57,169,255,.25);
+.status.completed{
+  background:linear-gradient(90deg,#1662d9,#2389ff);
+  border-color:rgba(57,169,255,.55);
+  color:#fff;
+  box-shadow:0 0 18px rgba(57,169,255,.20);
 }
 
 @media(max-width:380px){
@@ -232,21 +173,13 @@ body{
   }
 
   .header h1{
-    font-size:29px;
+    font-size:28px;
   }
 
   .value{
-    font-size:21px;
+    font-size:18px;
   }
 
-  .section-text,
-  .detail-card .value{
-    font-size:13px;
-  }
-
-  .step-text{
-    font-size:13px;
-  }
 }
 </style>
 </head>
@@ -256,151 +189,85 @@ body{
 <div class="wrap">
 
   <div class="header">
-    <h1>🚀 Today's Training</h1>
-    <div class="subtitle">
-      Execute your focused AI training session.
+
+    <div class="kicker">
+      DARTIQ · PRACTICE TRAINING
     </div>
+
+    <h1 id="drill">
+      Practice Training
+    </h1>
+
+    <div class="subtitle" id="focus">
+      Focused practice
+    </div>
+
   </div>
 
-
-  <!-- MAIN STATS -->
 
   <div class="stats">
 
     <div class="card">
-      <div class="label">Drill</div>
-      <div class="value" id="drill">Drill missing</div>
+      <div class="label">
+        Difficulty
+      </div>
+
+      <div class="value" id="level">
+        --
+      </div>
     </div>
+
 
     <div class="card">
-      <div class="label">Duration</div>
-      <div class="value" id="duration">--</div>
+      <div class="label">
+        Duration
+      </div>
+
+      <div class="value" id="duration">
+        --
+      </div>
     </div>
+
 
     <div class="card">
-      <div class="label">Rounds</div>
-      <div class="value" id="rounds">--</div>
+      <div class="label">
+        Rounds
+      </div>
+
+      <div class="value" id="rounds">
+        --
+      </div>
     </div>
+
 
     <div class="card">
-      <div class="label">Difficulty</div>
-      <div class="value" id="level">--</div>
-    </div>
+      <div class="label">
+        Main Focus
+      </div>
 
-  </div>
-
-
-  <!-- OBJECTIVE -->
-
-  <div class="section">
-    <div class="section-title">🎯 Training Objective</div>
-    <div class="section-text" id="objective">
-      Training objective missing.
-    </div>
-  </div>
-
-
-  <!-- FOCUS -->
-
-  <div class="detail-card">
-    <div class="label">🎯 Main Focus</div>
-    <div class="value" id="focus">
-      Focus missing.
-    </div>
-  </div>
-
-
-  <!-- TARGET -->
-
-  <div class="detail-card">
-    <div class="label">🏆 Success Target</div>
-    <div class="value" id="target">
-      Target missing.
-    </div>
-  </div>
-
-
-  <!-- EXECUTION -->
-
-  <div class="section">
-    <div class="section-title">▶️ Execution</div>
-
-    <div id="execution">
-      <div class="section-text">
-        Execution steps missing.
+      <div class="value" id="focusShort">
+        --
       </div>
     </div>
 
   </div>
 
 
-  <!-- TRACK -->
+  <div class="equipment" id="equipmentWrap">
 
-  <div class="detail-card">
-    <div class="label">📊 Track</div>
-    <div class="value" id="track">
-      Tracking metric missing.
-    </div>
-  </div>
-
-
-  <!-- AVOID -->
-
-  <div class="detail-card">
-    <div class="label">⚠️ Avoid</div>
-    <div class="value" id="avoid">
-      Common mistakes missing.
-    </div>
-  </div>
-
-
-  <!-- WHY -->
-
-  <div class="section">
-    <div class="section-title">🧠 Why This Drill</div>
-    <div class="section-text" id="why">
-      Explanation missing.
-    </div>
-  </div>
-
-
-  <!-- IMPROVEMENT -->
-
-  <div class="section">
-    <div class="section-title">📈 Improvement Potential</div>
-    <div class="section-text" id="improvement">
-      Improvement potential missing.
-    </div>
-  </div>
-
-
-  <!-- COACH -->
-
-  <div class="section">
-
-    <div class="section-title">
-      💬 Coach Reminder
+    <div class="label">
+      Equipment
     </div>
 
-    <div class="coach-row">
-      <span class="coach-label">Before you start</span>
-      <div class="section-text" id="reminder">
-        Reminder missing.
-      </div>
-    </div>
-
-    <div class="coach-row">
-      <span class="coach-label">After training</span>
-      <div class="section-text" id="after">
-        Completion message missing.
-      </div>
+    <div class="value" id="equipment">
+      --
     </div>
 
   </div>
 
 
-  <div class="footer">
-    POWERED BY DARTIQ AI
+  <div class="status" id="status">
+    ◻ Training in progress
   </div>
 
 </div>
@@ -408,12 +275,16 @@ body{
 
 <script>
 
-const params = new URLSearchParams(window.location.search);
+const params =
+  new URLSearchParams(
+    window.location.search
+  );
 
 
-function getValue(key, fallback){
+function getValue(key,fallback){
 
-  const value = params.get(key);
+  const value =
+    params.get(key);
 
   if(
     value === null ||
@@ -422,166 +293,158 @@ function getValue(key, fallback){
     return fallback;
   }
 
-  return decodeURIComponent(
-    String(value).replace(/\+/g," ")
-  ).trim();
+  try{
+
+    return decodeURIComponent(
+      String(value)
+        .replace(/\+/g," ")
+    ).trim();
+
+  }catch(e){
+
+    return String(value).trim();
+
+  }
 
 }
 
 
-/* NORMAL FIELDS */
-
-const fields = {
-
-  drill:"Drill missing",
-
-  duration:"--",
-
-  rounds:"--",
-
-  level:"--",
-
-  objective:"Training objective missing.",
-
-  focus:"Focus missing.",
-
-  target:"Target missing.",
-
-  track:"Tracking metric missing.",
-
-  avoid:"Common mistakes missing.",
-
-  why:"Explanation missing.",
-
-  improvement:"Improvement potential missing.",
-
-  reminder:"Reminder missing.",
-
-  after:"Completion message missing."
-
-};
-
-
-Object.entries(fields).forEach(([key,fallback])=>{
-
-  const el=document.getElementById(key);
-
-  if(el){
-
-    el.textContent=getValue(
-      key,
-      fallback
-    );
-
-  }
-
-});
-
-
-/* EXECUTION STEPS */
-
-function renderExecution(){
-
-  const container =
-    document.getElementById("execution");
-
-  const execution =
+const drill =
+  getValue(
+    "drill",
     getValue(
-      "execution",
-      ""
-    );
+      "practice",
+      "Practice Training"
+    )
+  );
 
-  if(!execution){
+const duration =
+  getValue(
+    "duration",
+    "--"
+  );
 
-    container.textContent =
-      "Execution steps missing.";
+const rounds =
+  getValue(
+    "rounds",
+    "--"
+  );
 
-    return;
+const level =
+  getValue(
+    "level",
+    "--"
+  );
 
-  }
+const focus =
+  getValue(
+    "focus",
+    "Focused practice"
+  );
 
+const equipment =
+  getValue(
+    "equipment",
+    ""
+  );
 
-  /*
-  The Glide Execution Combined field sends
-  STEP1 ... STEP5 separated by line breaks.
-  */
-
-  let steps =
-    execution
-      .split(/\r?\n+/)
-      .map(step => step.trim())
-      .filter(Boolean);
-
-
-  /*
-  Fallback in case URL processing strips
-  the line breaks.
-  */
-
-  if(steps.length === 1){
-
-    steps =
-      execution
-        .split(/(?<=[.!?])\s+(?=[A-Z])/)
-        .map(step => step.trim())
-        .filter(Boolean);
-
-  }
-
-
-  const list =
-    document.createElement("div");
-
-  list.className =
-    "execution-list";
+const completed =
+  getValue(
+    "completed",
+    "false"
+  );
 
 
-  steps.forEach((step,index)=>{
-
-    const row =
-      document.createElement("div");
-
-    row.className =
-      "execution-step";
+document
+  .getElementById("drill")
+  .textContent =
+  drill;
 
 
-    const number =
-      document.createElement("div");
-
-    number.className =
-      "step-number";
-
-    number.textContent =
-      index + 1;
+document
+  .getElementById("duration")
+  .textContent =
+  duration;
 
 
-    const text =
-      document.createElement("div");
-
-    text.className =
-      "step-text";
-
-    text.textContent =
-      step;
+document
+  .getElementById("rounds")
+  .textContent =
+  rounds;
 
 
-    row.appendChild(number);
-
-    row.appendChild(text);
-
-    list.appendChild(row);
-
-  });
+document
+  .getElementById("level")
+  .textContent =
+  level;
 
 
-  container.innerHTML="";
+document
+  .getElementById("focus")
+  .textContent =
+  focus;
 
-  container.appendChild(list);
+
+document
+  .getElementById("focusShort")
+  .textContent =
+  focus;
+
+
+if(equipment){
+
+  document
+    .getElementById("equipment")
+    .textContent =
+    equipment;
+
+}else{
+
+  document
+    .getElementById("equipmentWrap")
+    .style.display =
+    "none";
 
 }
 
 
-renderExecution();
+const status =
+  document.getElementById(
+    "status"
+  );
+
+
+const isCompleted =
+[
+  "1",
+  "true",
+  "yes",
+  "done",
+  "complete",
+  "completed"
+]
+.includes(
+  String(completed)
+    .toLowerCase()
+    .trim()
+);
+
+
+if(isCompleted){
+
+  status.textContent =
+    "✓ Training Completed";
+
+  status.classList.add(
+    "completed"
+  );
+
+}else{
+
+  status.textContent =
+    "◻ Training in progress";
+
+}
 
 </script>
 
