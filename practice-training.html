@@ -330,13 +330,58 @@ body{
   color:#69eba2;
 }
 
-.source{
-  margin-top:7px;
-  padding:7px 2px 1px;
-  border-top:1px solid rgba(255,255,255,.04);
-  color:#7f95aa;
-  font-size:9.5px;
-  line-height:1.35;
+/* Grade coaching actions */
+.action-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:7px;
+}
+
+.action-card{
+  border-radius:10px;
+  padding:9px 10px;
+  border:1px solid rgba(255,255,255,.05);
+  background:rgba(255,255,255,.025);
+}
+
+.action-card.hidden{
+  display:none;
+}
+
+.action-head{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  margin-bottom:5px;
+  font-size:9px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.65px;
+}
+
+.action-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  flex:0 0 auto;
+}
+
+.action-card.red .action-head{color:#ff7180}
+.action-card.orange .action-head{color:#ffb75f}
+.action-card.yellow .action-head{color:#ffe778}
+.action-card.green .action-head{color:#69eba2}
+
+.action-card.red .action-dot{background:#ff5c6c}
+.action-card.orange .action-dot{background:#ffad42}
+.action-card.yellow .action-dot{background:#ffe05c}
+.action-card.green .action-dot{background:#49e58a}
+
+.action-copy{
+  color:#e8f2fc;
+  font-size:11px;
+  line-height:1.38;
+  white-space:pre-line;
+  overflow-wrap:anywhere;
 }
 
 /* DARTIQ Coaching Logic */
@@ -544,6 +589,10 @@ body{
   .grade-grid{
     grid-template-columns:1fr 1fr;
   }
+
+  .action-grid{
+    grid-template-columns:1fr;
+  }
 }
 </style>
 </head>
@@ -722,12 +771,49 @@ body{
 
         </div>
 
-      </div>
+        <div class="keith-card full" id="keithActionsWrap">
 
-      <div class="source" id="sourceWrap">
+          <div class="keith-label">
+            Coaching Action by Grade
+          </div>
 
-        <strong>Methodology source:</strong>
-        <span id="source"></span>
+          <div class="action-grid">
+
+            <div class="action-card red" id="redActionWrap">
+              <div class="action-head">
+                <span class="action-dot"></span>
+                Red Action
+              </div>
+              <div class="action-copy" id="redAction"></div>
+            </div>
+
+            <div class="action-card orange" id="orangeActionWrap">
+              <div class="action-head">
+                <span class="action-dot"></span>
+                Orange Action
+              </div>
+              <div class="action-copy" id="orangeAction"></div>
+            </div>
+
+            <div class="action-card yellow" id="yellowActionWrap">
+              <div class="action-head">
+                <span class="action-dot"></span>
+                Yellow Action
+              </div>
+              <div class="action-copy" id="yellowAction"></div>
+            </div>
+
+            <div class="action-card green" id="greenActionWrap">
+              <div class="action-head">
+                <span class="action-dot"></span>
+                Green Action
+              </div>
+              <div class="action-copy" id="greenAction"></div>
+            </div>
+
+          </div>
+
+        </div>
 
       </div>
 
@@ -892,21 +978,24 @@ body{
 
     focus:get('focus',''),
 
-    coach:get('coach',''),
+    coach:get('keithcoach',get('coach','')),
 
-    rules:get('rules',''),
+    rules:get('keithrules',get('rules','')),
 
-    red:get('red',''),
-    orange:get('orange',''),
-    yellow:get('yellow',''),
-    green:get('green',''),
+    red:get('keithred',get('red','')),
+    orange:get('keithorange',get('orange','')),
+    yellow:get('keithyellow',get('yellow','')),
+    green:get('keithgreen',get('green','')),
 
-    primarymetric:get('primarymetric',''),
-    secondarymetric:get('secondarymetric',''),
+    primarymetric:get('keithprimary',get('primarymetric','')),
+    secondarymetric:get('keithsecondary',get('secondarymetric','')),
 
-    successtarget:get('successtarget',''),
+    redaction:get('redaction',''),
+    orangeaction:get('orangeaction',''),
+    yellowaction:get('yellowaction',''),
+    greenaction:get('greenaction',''),
 
-    source:get('source','')
+    successtarget:get('keithtarget',get('successtarget',''))
   };
 
   set('objective',data.objective);
@@ -1075,8 +1164,11 @@ body{
     data.green ||
     data.primarymetric ||
     data.secondarymetric ||
-    data.successtarget ||
-    data.source
+    data.redaction ||
+    data.orangeaction ||
+    data.yellowaction ||
+    data.greenaction ||
+    data.successtarget
   );
 
   if(hasKeith){
@@ -1131,8 +1223,23 @@ body{
     );
 
     set(
-      'source',
-      data.source
+      'redAction',
+      data.redaction
+    );
+
+    set(
+      'orangeAction',
+      data.orangeaction
+    );
+
+    set(
+      'yellowAction',
+      data.yellowaction
+    );
+
+    set(
+      'greenAction',
+      data.greenaction
     );
 
     if(!data.rules){
@@ -1180,12 +1287,30 @@ body{
 
     }
 
-    if(!data.source){
+    const actionMap = [
+      ['redaction','redActionWrap'],
+      ['orangeaction','orangeActionWrap'],
+      ['yellowaction','yellowActionWrap'],
+      ['greenaction','greenActionWrap']
+    ];
 
+    actionMap.forEach(([key,id])=>{
+      if(!data[key]){
+        document
+          .getElementById(id)
+          .classList.add('hidden');
+      }
+    });
+
+    if(!(
+      data.redaction ||
+      data.orangeaction ||
+      data.yellowaction ||
+      data.greenaction
+    )){
       document
-        .getElementById('sourceWrap')
+        .getElementById('keithActionsWrap')
         .classList.add('empty');
-
     }
 
   }
