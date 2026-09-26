@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DARTIQ Home Voordelen</title>
+
+<style>
+:root{
+  --bg:#050b18;
+  --card:#0c1728;
+  --card2:#0a1321;
+  --line:rgba(40,170,255,.18);
+  --blue:#27b8ff;
+  --text:#f5f9ff;
+  --muted:#aebdce;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,body{
+  margin:0;
+  padding:0;
+  width:100%;
+  min-height:100%;
+  background:var(--bg);
+  font-family:Arial,Helvetica,sans-serif;
+  color:var(--text);
+}
+
+body{
+  padding:6px;
+}
+
+.wrap{
+  width:100%;
+  max-width:720px;
+  margin:0 auto;
+}
+
+.head{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin:2px 2px 9px;
+}
+
+.head-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--blue);
+  box-shadow:0 0 10px rgba(39,184,255,.8);
+  flex:0 0 auto;
+}
+
+.head span{
+  font-size:11px;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  font-weight:800;
+  color:#7fcfff;
+}
+
+.list{
+  display:grid;
+  gap:8px;
+}
+
+.item{
+  display:grid;
+  grid-template-columns:42px 1fr;
+  gap:11px;
+  align-items:center;
+  min-height:74px;
+  padding:11px 12px;
+  border:1px solid var(--line);
+  border-radius:15px;
+  background:linear-gradient(180deg,var(--card),var(--card2));
+}
+
+.icon{
+  width:42px;
+  height:42px;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  background:rgba(39,184,255,.09);
+  border:1px solid rgba(39,184,255,.22);
+}
+
+.icon svg{
+  width:21px;
+  height:21px;
+  fill:none;
+  stroke:var(--blue);
+  stroke-width:1.9;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.copy h3{
+  margin:0 0 3px;
+  font-size:14px;
+  line-height:1.2;
+  font-weight:800;
+}
+
+.copy p{
+  margin:0;
+  color:var(--muted);
+  font-size:12.5px;
+  line-height:1.32;
+}
+
+@media (min-width:620px){
+  .list{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .item{
+    display:block;
+    min-height:160px;
+    padding:14px;
+  }
+
+  .icon{
+    margin-bottom:12px;
+  }
+
+  .copy h3{
+    font-size:15px;
+  }
+
+  .copy p{
+    font-size:12.5px;
+    line-height:1.4;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+  <div class="head">
+    <div class="head-dot"></div>
+    <span>Waarom DARTIQ</span>
+  </div>
+
+  <div class="list">
+
+    <!-- REAL ISSUE -->
+
+    <section class="item">
+
+      <div class="icon">
+        <svg viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="7"></circle>
+          <circle cx="12" cy="12" r="2.5"></circle>
+          <path d="M12 2v3M22 12h-3M12 22v-3M2 12h3"></path>
+        </svg>
+      </div>
+
+      <div class="copy">
+        <h3>Vind het echte probleem</h3>
+        <p>
+          Ontdek wat je spel werkelijk tegenhoudt.
+        </p>
+      </div>
+
+    </section>
+
+
+    <!-- TRAINING -->
+
+    <section class="item">
+
+      <div class="icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M4 17l5-5 4 3 7-8"></path>
+          <path d="M15 7h5v5"></path>
+        </svg>
+      </div>
+
+      <div class="copy">
+        <h3>Train met een doel</h3>
+        <p>
+          Krijg training afgestemd op jouw prestaties.
+        </p>
+      </div>
+
+    </section>
+
+
+    <!-- PROGRESS -->
+
+    <section class="item">
+
+      <div class="icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M5 18V9"></path>
+          <path d="M12 18V5"></path>
+          <path d="M19 18v-7"></path>
+        </svg>
+      </div>
+
+      <div class="copy">
+        <h3>Bekijk je vooruitgang</h3>
+        <p>
+          Zie wanneer je scores en consistentie verbeteren.
+        </p>
+      </div>
+
+    </section>
+
+  </div>
+
+</div>
+
+</body>
+</html>
