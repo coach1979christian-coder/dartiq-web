@@ -7,12 +7,18 @@
 
 <style>
 :root{
-  --bg:#000;
-  --panel:#111;
-  --panel2:#181818;
-  --line:#2b2b2b;
-  --text:#fff;
-  --muted:#999;
+  --bg:#050914;
+  --card:#09111f;
+  --panel:#0d1727;
+  --panel2:#101d30;
+  --line:rgba(75,175,255,.16);
+  --line-strong:rgba(75,175,255,.28);
+  --accent:#38a9ff;
+  --accent-soft:#8dd3ff;
+  --text:#f5f9ff;
+  --muted:#8292a8;
+  --goal:#35d98b;
+  --warning:#ffb84d;
 }
 
 *{
@@ -33,53 +39,83 @@ body{
 body{
   display:flex;
   justify-content:center;
-  padding:6px;
+  padding:8px;
 }
 
 .profile-card{
   width:100%;
   max-width:430px;
-  background:linear-gradient(180deg,#141414,#050505);
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(56,169,255,.10),
+      transparent 34%
+    ),
+    linear-gradient(180deg,#09111f 0%,#050914 100%);
   border:1px solid var(--line);
-  border-radius:18px;
-  padding:12px;
+  border-radius:20px;
+  padding:14px;
+  box-shadow:0 14px 40px rgba(0,0,0,.28);
 }
 
+/* BRAND */
+
 .brand{
-  text-align:center;
-  font-size:8px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
+}
+
+.brand-name{
+  font-size:9px;
   font-weight:900;
   letter-spacing:2px;
-  color:#ccc;
-  margin-bottom:8px;
+  color:var(--accent-soft);
 }
+
+.brand-status{
+  font-size:7px;
+  font-weight:800;
+  letter-spacing:1px;
+  color:var(--muted);
+  text-transform:uppercase;
+}
+
+/* PLAYER HEADER */
 
 .profile-head{
   display:flex;
   align-items:center;
-  gap:12px;
-  padding:10px;
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:14px;
+  gap:13px;
+  padding:13px;
+  background:linear-gradient(
+    135deg,
+    rgba(16,29,48,.95),
+    rgba(9,17,31,.95)
+  );
+  border:1px solid var(--line-strong);
+  border-radius:16px;
 }
 
 .photo{
-  width:70px;
-  height:70px;
+  width:64px;
+  height:64px;
   border-radius:50%;
   object-fit:cover;
-  border:2px solid #fff;
-  background:#222;
+  background:#111b29;
+  border:2px solid rgba(56,169,255,.65);
+  box-shadow:0 0 18px rgba(56,169,255,.18);
   flex-shrink:0;
 }
 
 .player-info{
   min-width:0;
+  flex:1;
 }
 
 .name{
-  font-size:20px;
+  font-size:21px;
   font-weight:900;
   line-height:1.1;
   overflow-wrap:anywhere;
@@ -92,98 +128,252 @@ body{
   overflow-wrap:anywhere;
 }
 
-.score-card{
+.player-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
   margin-top:8px;
-  padding:12px;
-  text-align:center;
-  border:1px solid var(--line);
-  border-radius:14px;
-  background:var(--panel2);
-}
-
-.label{
+  padding:5px 8px;
+  border-radius:20px;
+  background:rgba(56,169,255,.09);
+  border:1px solid rgba(56,169,255,.20);
   font-size:8px;
-  font-weight:800;
-  letter-spacing:.8px;
+  font-weight:900;
+  letter-spacing:.7px;
+  color:var(--accent-soft);
   text-transform:uppercase;
-  color:var(--muted);
 }
 
-.score{
-  margin-top:3px;
-  font-size:42px;
-  line-height:1;
-  font-weight:950;
+.badge-dot{
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  background:var(--accent);
+  box-shadow:0 0 7px var(--accent);
 }
+
+/* SECTION HEADER */
+
+.section-title{
+  margin:15px 2px 8px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.section-title span:first-child{
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:1.3px;
+  color:#d9e9f8;
+  text-transform:uppercase;
+}
+
+.section-line{
+  height:1px;
+  flex:1;
+  margin-left:10px;
+  background:linear-gradient(
+    90deg,
+    var(--line-strong),
+    transparent
+  );
+}
+
+/* PERFORMANCE GRID */
 
 .stats{
   display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-template-columns:repeat(3,minmax(0,1fr));
   gap:7px;
-  margin-top:8px;
 }
 
 .stat{
   min-width:0;
-  padding:9px 7px;
+  min-height:72px;
+  padding:10px 5px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
   text-align:center;
+  background:linear-gradient(
+    180deg,
+    rgba(16,29,48,.92),
+    rgba(10,19,33,.92)
+  );
   border:1px solid var(--line);
   border-radius:12px;
-  background:var(--panel);
+}
+
+.stat.highlight{
+  border-color:rgba(56,169,255,.30);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(56,169,255,.11),
+      rgba(10,19,33,.95)
+    );
+}
+
+.label{
+  font-size:7px;
+  line-height:1.2;
+  font-weight:900;
+  letter-spacing:.65px;
+  text-transform:uppercase;
+  color:var(--muted);
 }
 
 .stat-value{
-  margin-top:4px;
-  font-size:18px;
+  margin-top:6px;
+  font-size:20px;
+  line-height:1;
   font-weight:900;
+  color:var(--text);
   overflow-wrap:anywhere;
 }
 
-.stat:last-child{
-  grid-column:1 / -1;
+.stat.highlight .stat-value{
+  color:#fff;
+  text-shadow:0 0 14px rgba(56,169,255,.25);
+}
+
+/* DEVELOPMENT */
+
+.development{
+  display:grid;
+  gap:8px;
 }
 
 .info{
-  margin-top:8px;
-  padding:10px;
+  position:relative;
+  overflow:hidden;
+  padding:12px 13px;
+  background:linear-gradient(
+    135deg,
+    rgba(16,29,48,.92),
+    rgba(9,17,31,.95)
+  );
   border:1px solid var(--line);
-  border-radius:12px;
-  background:var(--panel);
+  border-radius:13px;
+}
+
+.info::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:3px;
+}
+
+.info.goal::before{
+  background:var(--goal);
+}
+
+.info.issue::before{
+  background:var(--warning);
+}
+
+.info-header{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  margin-bottom:6px;
+}
+
+.info-icon{
+  width:22px;
+  height:22px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:7px;
+  font-size:11px;
+}
+
+.goal .info-icon{
+  color:var(--goal);
+  background:rgba(53,217,139,.10);
+}
+
+.issue .info-icon{
+  color:var(--warning);
+  background:rgba(255,184,77,.10);
 }
 
 .info-title{
-  margin-bottom:4px;
-  font-size:10px;
+  font-size:8px;
   font-weight:900;
+  letter-spacing:.9px;
+  color:var(--muted);
+  text-transform:uppercase;
 }
 
 .info-text{
-  font-size:11px;
-  line-height:1.3;
-  color:#eee;
+  padding-left:29px;
+  font-size:12px;
+  line-height:1.45;
+  font-weight:700;
+  color:#edf5ff;
   overflow-wrap:anywhere;
 }
 
+/* FOOTER */
+
 .footer{
-  margin-top:10px;
+  margin-top:14px;
+  padding-top:10px;
+  border-top:1px solid rgba(255,255,255,.05);
   text-align:center;
+}
+
+.footer-brand{
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:1.5px;
+  color:#8191a6;
+}
+
+.footer-text{
+  margin-top:4px;
   font-size:7px;
-  font-weight:800;
-  letter-spacing:1px;
-  color:#666;
+  letter-spacing:.4px;
+  color:#4f5d70;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:340px){
+
+  .stats{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .photo{
+    width:56px;
+    height:56px;
+  }
+
+  .name{
+    font-size:18px;
+  }
 }
 
 @media(min-width:600px){
+
   .profile-card{
-    max-width:600px;
+    max-width:560px;
   }
 
-  .stats{
-    grid-template-columns:repeat(5,minmax(0,1fr));
+  .photo{
+    width:72px;
+    height:72px;
   }
 
-  .stat:last-child{
-    grid-column:auto;
+  .stat{
+    min-height:78px;
   }
 }
 </style>
@@ -193,16 +383,26 @@ body{
 
 <main class="profile-card">
 
+  <!-- BRAND -->
+
   <div class="brand">
-    DARTIQ AI PLAYER PROFILE
+    <div class="brand-name">
+      DARTIQ
+    </div>
+
+    <div class="brand-status">
+      AI Player Profile
+    </div>
   </div>
+
+  <!-- PLAYER -->
 
   <section class="profile-head">
 
     <img
       class="photo"
       id="photo"
-      src="https://placehold.co/200x200/181818/ffffff?text=DQ"
+      src="https://placehold.co/200x200/101d30/ffffff?text=DQ"
       alt="Player profile photo"
     >
 
@@ -216,21 +416,22 @@ body{
         player@email.com
       </div>
 
+      <div class="player-badge">
+        <span class="badge-dot"></span>
+        AI COACH SCORE&nbsp;
+        <span id="header-score">0</span>
+      </div>
+
     </div>
 
   </section>
 
-  <section class="score-card">
+  <!-- PERFORMANCE -->
 
-    <div class="label">
-      AI Coach Score
-    </div>
-
-    <div class="score" id="aiscore">
-      0
-    </div>
-
-  </section>
+  <div class="section-title">
+    <span>Performance</span>
+    <div class="section-line"></div>
+  </div>
 
   <section class="stats">
 
@@ -259,34 +460,66 @@ body{
       <div class="stat-value" id="checkoutpct">0%</div>
     </div>
 
-  </section>
-
-  <section class="info">
-
-    <div class="info-title">
-      🎯 MAIN GOAL
-    </div>
-
-    <div class="info-text" id="goal">
-      No goal set.
+    <div class="stat highlight">
+      <div class="label">AI Coach Score</div>
+      <div class="stat-value" id="aiscore">0</div>
     </div>
 
   </section>
 
-  <section class="info">
+  <!-- PLAYER DEVELOPMENT -->
 
-    <div class="info-title">
-      ⚠️ MAIN ISSUE
+  <div class="section-title">
+    <span>Player Development</span>
+    <div class="section-line"></div>
+  </div>
+
+  <section class="development">
+
+    <div class="info goal">
+
+      <div class="info-header">
+        <div class="info-icon">◎</div>
+        <div class="info-title">
+          Main Goal
+        </div>
+      </div>
+
+      <div class="info-text" id="goal">
+        No goal set.
+      </div>
+
     </div>
 
-    <div class="info-text" id="weakness">
-      No issue detected.
+    <div class="info issue">
+
+      <div class="info-header">
+        <div class="info-icon">!</div>
+        <div class="info-title">
+          Current Main Issue
+        </div>
+      </div>
+
+      <div class="info-text" id="weakness">
+        No issue detected.
+      </div>
+
     </div>
 
   </section>
+
+  <!-- FOOTER -->
 
   <div class="footer">
-    POWERED BY DARTIQ AI
+
+    <div class="footer-brand">
+      DARTIQ AI PLAYER PROFILE
+    </div>
+
+    <div class="footer-text">
+      Built with players. Built to improve.
+    </div>
+
   </div>
 
 </main>
@@ -294,11 +527,10 @@ body{
 <script>
 (function(){
 
-  const params = new URLSearchParams(
-    window.location.search
-  );
+  const params =
+    new URLSearchParams(window.location.search);
 
-  function getValue(key, fallback){
+  function getValue(key,fallback){
 
     const value = params.get(key);
 
@@ -324,35 +556,26 @@ body{
 
   const fields = {
 
-    name:
-      "Player",
+    name:"Player",
 
-    email:
-      "player@email.com",
+    email:"player@email.com",
 
-    aiscore:
-      "0",
+    aiscore:"0",
 
-    sessions:
-      "0",
+    sessions:"0",
 
-    currentavg:
-      "0",
+    currentavg:"0",
 
-    bestavg:
-      "0",
+    bestavg:"0",
 
-    checkout:
-      "0",
+    checkout:"0",
 
-    checkoutpct:
-      "0%",
+    checkoutpct:"0%",
 
-    goal:
-      "No goal set.",
+    goal:"No goal set.",
 
-    weakness:
-      "No issue detected."
+    weakness:"No issue detected."
+
   };
 
   Object.keys(fields).forEach(function(id){
@@ -369,10 +592,10 @@ body{
 
   });
 
+  /* CHECKOUT % */
+
   const checkout =
-    document.getElementById(
-      "checkoutpct"
-    );
+    document.getElementById("checkoutpct");
 
   if(
     checkout &&
@@ -385,14 +608,27 @@ body{
 
   }
 
+  /* HEADER AI SCORE */
+
+  const score =
+    getValue("aiscore","0");
+
+  const headerScore =
+    document.getElementById("header-score");
+
+  if(headerScore){
+    headerScore.textContent = score;
+  }
+
+  /* PROFILE PHOTO */
+
   const photo =
     getValue("photo","");
 
   if(photo){
 
-    document.getElementById(
-      "photo"
-    ).src = photo;
+    document.getElementById("photo").src =
+      photo;
 
   }
 
