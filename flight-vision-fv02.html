@@ -20,21 +20,14 @@
   --warning:#ffc857;
 }
 
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
   margin:0;
   min-height:100vh;
   font-family:Arial,Helvetica,sans-serif;
   background:
-    radial-gradient(
-      circle at 50% 0,
-      #0a2842 0,
-      #06111d 35%,
-      var(--bg) 72%
-    );
+    radial-gradient(circle at 50% 0,#0a2842 0,#06111d 35%,var(--bg) 72%);
   color:var(--text);
   padding:14px;
 }
@@ -63,11 +56,22 @@ body{
   letter-spacing:1px;
 }
 
+.version{
+  display:inline-block;
+  margin-top:6px;
+  padding:5px 10px;
+  border:1px solid #14507a;
+  border-radius:20px;
+  color:#8fd5ff;
+  font-size:11px;
+  letter-spacing:1px;
+}
+
 .card{
   background:rgba(8,17,28,.94);
   border:1px solid var(--line);
   border-radius:18px;
-  padding:16px;
+  padding:14px;
   box-shadow:0 0 30px rgba(24,168,255,.09);
 }
 
@@ -91,7 +95,7 @@ video{
   display:flex;
   align-items:center;
   gap:10px;
-  margin-top:15px;
+  margin-top:14px;
   padding:13px;
   border-radius:12px;
   background:#050b12;
@@ -107,21 +111,10 @@ video{
   flex:0 0 auto;
 }
 
-.status.ok .dot{
-  background:var(--ok);
-}
-
-.status.error .dot{
-  background:var(--bad);
-}
-
-.status.loading .dot{
-  background:var(--blue);
-}
-
-.status.warning .dot{
-  background:var(--warning);
-}
+.status.ok .dot{background:var(--ok)}
+.status.error .dot{background:var(--bad)}
+.status.loading .dot{background:var(--blue)}
+.status.warning .dot{background:var(--warning)}
 
 #statusText{
   font-weight:700;
@@ -132,48 +125,45 @@ button{
   width:100%;
   margin-top:14px;
   padding:16px;
-  border:0;
+  border:1px solid #1679b7;
   border-radius:12px;
-  background:linear-gradient(180deg,#24b4ff,#0785d0);
-  color:white;
+  background:linear-gradient(180deg,#169be9,#0875ba);
+  color:#fff;
   font-weight:800;
   font-size:15px;
-  letter-spacing:.5px;
   cursor:pointer;
-  box-shadow:0 0 18px rgba(24,168,255,.25);
 }
 
 button:disabled{
-  opacity:.55;
+  opacity:.4;
   cursor:not-allowed;
 }
 
 .progress{
-  width:100%;
-  height:8px;
-  background:#06101a;
+  height:9px;
+  border-radius:20px;
+  background:#04101a;
   border:1px solid #12324d;
-  border-radius:999px;
   overflow:hidden;
   margin-top:12px;
 }
 
-.progress-bar{
-  height:100%;
+.progress > div{
   width:0%;
+  height:100%;
   background:var(--blue);
-  transition:width .15s ease;
+  transition:width .15s linear;
 }
 
 .meta{
   display:grid;
   grid-template-columns:repeat(2,1fr);
   gap:10px;
-  margin-top:14px;
+  margin-top:12px;
 }
 
 .metric{
-  padding:13px 8px;
+  padding:11px;
   background:#050b12;
   border:1px solid #10283a;
   border-radius:10px;
@@ -185,7 +175,7 @@ button:disabled{
   display:block;
   color:var(--blue);
   font-size:17px;
-  margin-bottom:5px;
+  margin-bottom:4px;
   overflow-wrap:anywhere;
 }
 
@@ -197,23 +187,26 @@ button:disabled{
 }
 
 .section-title{
-  margin:22px 0 10px;
-  font-size:16px;
-  letter-spacing:1px;
+  margin:20px 2px 9px;
+  color:#fff;
+  font-size:14px;
+  font-weight:800;
+  letter-spacing:.6px;
 }
 
 .results{
+  margin-top:10px;
   background:#050b12;
   border:1px solid #10283a;
   border-radius:12px;
-  padding:14px;
+  padding:13px;
 }
 
 .result-row{
   display:flex;
   justify-content:space-between;
-  gap:14px;
-  padding:10px 0;
+  gap:12px;
+  padding:9px 0;
   border-bottom:1px solid #10202d;
 }
 
@@ -223,20 +216,21 @@ button:disabled{
 
 .result-row span{
   color:var(--muted);
-  font-size:13px;
+  font-size:12px;
 }
 
 .result-row b{
-  color:white;
+  color:#fff;
+  font-size:12px;
   text-align:right;
-  font-size:13px;
+  overflow-wrap:anywhere;
 }
 
 .note{
-  font-size:12px;
+  font-size:11px;
   color:var(--muted);
   line-height:1.5;
-  margin:15px 2px 0;
+  margin:14px 2px 0;
 }
 
 canvas{
@@ -244,18 +238,8 @@ canvas{
 }
 
 @media(max-width:560px){
-
-  body{
-    padding:8px;
-  }
-
-  .card{
-    padding:11px;
-  }
-
-  .meta{
-    grid-template-columns:1fr 1fr;
-  }
+  body{padding:9px}
+  .card{padding:10px}
 }
 </style>
 </head>
@@ -266,7 +250,8 @@ canvas{
 
   <div class="brand">
     <h1>DARTIQ</h1>
-    <p>FLIGHT VISION · FV-02</p>
+    <p>FLIGHT VISION</p>
+    <div class="version">FV-02 · FRAME ACCESS TEST</div>
   </div>
 
   <div class="card">
@@ -290,7 +275,7 @@ canvas{
     </button>
 
     <div class="progress">
-      <div id="progressBar" class="progress-bar"></div>
+      <div id="progressBar"></div>
     </div>
 
     <div class="meta">
@@ -317,15 +302,20 @@ canvas{
 
     </div>
 
-    <h2 class="section-title">
+    <div class="section-title">
       FV-02 MOTION ANALYSIS
-    </h2>
+    </div>
 
     <div class="results">
 
       <div class="result-row">
+        <span>Frame access</span>
+        <b id="frameAccess">TESTING</b>
+      </div>
+
+      <div class="result-row">
         <span>Motion detected</span>
-        <b id="motionDetected">WAITING</b>
+        <b id="motionDetected">NOT ANALYSED</b>
       </div>
 
       <div class="result-row">
@@ -351,21 +341,22 @@ canvas{
     </div>
 
     <p class="note">
-      FV-02 samples real frames from the uploaded throw video and
-      compares consecutive frames for movement. A motion candidate
-      is only reported after the complete sampling pass finishes.
+      FV-02 first validates browser access to the actual video pixels.
+      If cross-origin canvas access is blocked, Flight Vision will report
+      that directly instead of remaining stuck in analysis.
     </p>
 
-  </div>
+    <canvas id="canvas"></canvas>
 
+  </div>
 </div>
 
-<canvas id="canvas"></canvas>
 
 <script>
 (function(){
 
-  const params = new URLSearchParams(location.search);
+  const params =
+    new URLSearchParams(location.search);
 
   const videoParam =
     params.get("video") ||
@@ -378,12 +369,18 @@ canvas{
     params.get("rowid") ||
     "—";
 
-  const video = document.getElementById("video");
-  const canvas = document.getElementById("canvas");
-  const ctx = canvas.getContext(
-    "2d",
-    {willReadFrequently:true}
-  );
+
+  const video =
+    document.getElementById("video");
+
+  const canvas =
+    document.getElementById("canvas");
+
+  const ctx =
+    canvas.getContext(
+      "2d",
+      {willReadFrequently:true}
+    );
 
   const statusBox =
     document.getElementById("status");
@@ -397,8 +394,12 @@ canvas{
   const progressBar =
     document.getElementById("progressBar");
 
-  document.getElementById("analysisId").textContent =
+
+  document.getElementById(
+    "analysisId"
+  ).textContent =
     analysisID;
+
 
   function setStatus(type,text){
 
@@ -409,6 +410,7 @@ canvas{
       text;
   }
 
+
   if(!videoParam){
 
     setStatus(
@@ -416,69 +418,163 @@ canvas{
       "NO VIDEO URL RECEIVED"
     );
 
+    document.getElementById(
+      "frameAccess"
+    ).textContent =
+      "NO VIDEO";
+
     return;
   }
 
-  let videoSource = videoParam;
+
+  let source =
+    videoParam;
 
   try{
-    videoSource =
-      decodeURIComponent(videoParam);
-  }
-  catch(error){}
+
+    source =
+      decodeURIComponent(
+        videoParam
+      );
+
+  }catch(error){}
+
+
+  /*
+  IMPORTANT:
+  crossOrigin MUST be set before src.
+  */
+
+  video.crossOrigin =
+    "anonymous";
 
   setStatus(
     "loading",
     "LOADING VIDEO..."
   );
 
-  video.src = videoSource;
+  video.src =
+    source;
+
+  video.load();
 
 
-  video.addEventListener(
-    "loadedmetadata",
-    function(){
+  function prepareCanvas(){
 
-      document.getElementById("duration").textContent =
-        Number.isFinite(video.duration)
-        ? video.duration.toFixed(2) + " s"
-        : "—";
+    canvas.width =
+      160;
 
-      document.getElementById("resolution").textContent =
-        video.videoWidth && video.videoHeight
-        ? video.videoWidth + "×" + video.videoHeight
-        : "—";
+    const ratio =
+      video.videoHeight /
+      video.videoWidth;
 
-      analyseBtn.disabled = false;
-
-      setStatus(
-        "ok",
-        "VIDEO READY · FV-02 AVAILABLE"
+    canvas.height =
+      Math.max(
+        90,
+        Math.round(
+          160 * ratio
+        )
       );
-    }
-  );
+  }
 
 
-  video.addEventListener(
-    "error",
-    function(){
+  function readFrame(){
 
-      analyseBtn.disabled = true;
+    ctx.drawImage(
+      video,
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
 
-      setStatus(
-        "error",
-        "VIDEO COULD NOT BE LOADED"
+    const image =
+      ctx.getImageData(
+        0,
+        0,
+        canvas.width,
+        canvas.height
       );
+
+    return image.data;
+  }
+
+
+  function grayscaleFrame(){
+
+    const data =
+      readFrame();
+
+    const gray =
+      new Uint8Array(
+        canvas.width *
+        canvas.height
+      );
+
+    let j = 0;
+
+    for(
+      let i = 0;
+      i < data.length;
+      i += 4
+    ){
+
+      gray[j++] =
+        Math.round(
+          data[i] * .299 +
+          data[i+1] * .587 +
+          data[i+2] * .114
+        );
     }
-  );
+
+    return gray;
+  }
 
 
-  function waitForSeek(timeoutMs = 2500){
+  function compareFrames(a,b){
+
+    if(
+      !a ||
+      !b ||
+      a.length !== b.length
+    ){
+
+      return 0;
+    }
+
+    let difference =
+      0;
+
+    for(
+      let i = 0;
+      i < a.length;
+      i++
+    ){
+
+      difference +=
+        Math.abs(
+          a[i] -
+          b[i]
+        );
+    }
+
+    return (
+      difference /
+      a.length /
+      255
+    );
+  }
+
+
+  function waitForSeek(
+    timeoutMs = 2500
+  ){
 
     return new Promise(
-      (resolve,reject) => {
+      function(resolve,reject){
 
-        let finished = false;
+        let finished =
+          false;
 
         function cleanup(){
 
@@ -487,7 +583,9 @@ canvas{
             onSeeked
           );
 
-          clearTimeout(timer);
+          clearTimeout(
+            timer
+          );
         }
 
         function onSeeked(){
@@ -496,12 +594,17 @@ canvas{
             return;
           }
 
-          finished = true;
+          finished =
+            true;
 
           cleanup();
 
           requestAnimationFrame(
-            () => resolve(true)
+            function(){
+
+              resolve(true);
+
+            }
           );
         }
 
@@ -513,7 +616,8 @@ canvas{
                 return;
               }
 
-              finished = true;
+              finished =
+                true;
 
               cleanup();
 
@@ -527,6 +631,7 @@ canvas{
             timeoutMs
           );
 
+
         video.addEventListener(
           "seeked",
           onSeeked,
@@ -537,115 +642,236 @@ canvas{
   }
 
 
-  function grayscaleFrame(){
+  async function testFrameAccess(){
 
-    const targetWidth = 160;
-
-    const ratio =
-      video.videoHeight /
-      video.videoWidth;
-
-    const targetHeight =
-      Math.max(
-        90,
-        Math.round(
-          targetWidth * ratio
-        )
-      );
-
-    canvas.width =
-      targetWidth;
-
-    canvas.height =
-      targetHeight;
-
-    ctx.drawImage(
-      video,
-      0,
-      0,
-      targetWidth,
-      targetHeight
+    setStatus(
+      "loading",
+      "TESTING VIDEO FRAME ACCESS..."
     );
 
-    const image =
-      ctx.getImageData(
-        0,
-        0,
-        targetWidth,
-        targetHeight
-      );
+    document.getElementById(
+      "frameAccess"
+    ).textContent =
+      "TESTING";
 
-    const data =
-      image.data;
 
-    const gray =
-      new Uint8Array(
-        targetWidth *
-        targetHeight
-      );
+    try{
 
-    let position = 0;
+      prepareCanvas();
 
-    for(
-      let i = 0;
-      i < data.length;
-      i += 4
-    ){
+      /*
+      Seek slightly into the video.
+      Avoid frame zero because some
+      mobile browsers are awkward there.
+      */
 
-      gray[position++] =
-        Math.round(
-          data[i] * 0.299 +
-          data[i + 1] * 0.587 +
-          data[i + 2] * 0.114
+      const testTime =
+        Math.min(
+          0.5,
+          Math.max(
+            0,
+            video.duration / 10
+          )
         );
-    }
-
-    return gray;
-  }
 
 
-  function compareFrames(
-    previous,
-    current
-  ){
-
-    if(
-      !previous ||
-      !current ||
-      previous.length !== current.length
-    ){
-      return 0;
-    }
-
-    let difference = 0;
-
-    for(
-      let i = 0;
-      i < current.length;
-      i++
-    ){
-
-      difference +=
+      if(
         Math.abs(
-          current[i] -
-          previous[i]
-        );
-    }
+          video.currentTime -
+          testTime
+        ) > 0.02
+      ){
 
-    return (
-      difference /
-      current.length /
-      255
-    );
+        video.currentTime =
+          testTime;
+
+        await waitForSeek(
+          3000
+        );
+      }
+
+
+      /*
+      This is the important test.
+
+      If the video server does not allow
+      canvas access, getImageData will
+      throw a SecurityError here.
+      */
+
+      readFrame();
+
+
+      document.getElementById(
+        "frameAccess"
+      ).textContent =
+        "READY";
+
+
+      analyseBtn.disabled =
+        false;
+
+
+      setStatus(
+        "ok",
+        "FRAME ACCESS READY · FV-02 AVAILABLE"
+      );
+
+
+      return true;
+
+    }
+    catch(error){
+
+      console.error(
+        "FV-02 FRAME ACCESS ERROR:",
+        error
+      );
+
+
+      analyseBtn.disabled =
+        true;
+
+
+      document.getElementById(
+        "frameAccess"
+      ).textContent =
+        "BLOCKED";
+
+
+      document.getElementById(
+        "motionDetected"
+      ).textContent =
+        "BLOCKED";
+
+
+      /*
+      Distinguish likely canvas/CORS
+      problems from seek/decode problems.
+      */
+
+      if(
+        error &&
+        (
+          error.name ===
+            "SecurityError" ||
+
+          String(
+            error.message
+          )
+          .toLowerCase()
+          .includes(
+            "tainted"
+          ) ||
+
+          String(
+            error.message
+          )
+          .toLowerCase()
+          .includes(
+            "cross-origin"
+          )
+        )
+      ){
+
+        setStatus(
+          "error",
+          "CORS / CANVAS FRAME ACCESS BLOCKED"
+        );
+
+      }
+      else{
+
+        setStatus(
+          "error",
+          "FRAME ACCESS FAILED · " +
+          (
+            error.message ||
+            "UNKNOWN ERROR"
+          )
+        );
+      }
+
+
+      return false;
+    }
   }
+
+
+  video.addEventListener(
+    "loadedmetadata",
+    async function(){
+
+      document.getElementById(
+        "duration"
+      ).textContent =
+
+        Number.isFinite(
+          video.duration
+        )
+
+        ? video.duration.toFixed(2) +
+          " s"
+
+        : "—";
+
+
+      document.getElementById(
+        "resolution"
+      ).textContent =
+
+        video.videoWidth &&
+        video.videoHeight
+
+        ? video.videoWidth +
+          "×" +
+          video.videoHeight
+
+        : "—";
+
+
+      prepareCanvas();
+
+
+      /*
+      Immediately test whether the browser
+      is actually allowed to read frames.
+      */
+
+      await testFrameAccess();
+
+    }
+  );
+
+
+  video.addEventListener(
+    "error",
+    function(){
+
+      analyseBtn.disabled =
+        true;
+
+      document.getElementById(
+        "frameAccess"
+      ).textContent =
+        "VIDEO ERROR";
+
+      setStatus(
+        "error",
+        "VIDEO COULD NOT BE LOADED WITH FRAME ACCESS"
+      );
+    }
+  );
 
 
   async function analyseVideo(){
 
-    analyseBtn.disabled = true;
+    analyseBtn.disabled =
+      true;
 
     progressBar.style.width =
       "0%";
+
 
     document.getElementById(
       "motionDetected"
@@ -677,13 +903,17 @@ canvas{
     ).textContent =
       "0";
 
+
     try{
 
       const duration =
         video.duration;
 
+
       if(
-        !Number.isFinite(duration) ||
+        !Number.isFinite(
+          duration
+        ) ||
         duration <= 0
       ){
 
@@ -693,26 +923,16 @@ canvas{
       }
 
 
-      /*
-      IMPORTANT FIX
+      const targetSamples =
+        24;
 
-      We do NOT analyse every single
-      frame of a 22 second phone video.
-
-      That was the reason the previous
-      version could appear to run forever.
-
-      FV-02 samples 24 points across
-      the entire throw video.
-      */
-
-      const targetSamples = 24;
 
       const startTime =
         Math.min(
           0.10,
           duration * 0.02
         );
+
 
       const endTime =
         Math.max(
@@ -724,7 +944,10 @@ canvas{
           )
         );
 
-      const times = [];
+
+      const times =
+        [];
+
 
       for(
         let i = 0;
@@ -733,33 +956,50 @@ canvas{
       ){
 
         const fraction =
+
           targetSamples === 1
+
           ? 0
+
           : i /
-            (targetSamples - 1);
+            (
+              targetSamples -
+              1
+            );
+
 
         times.push(
+
           startTime +
+
           (
             endTime -
             startTime
           ) *
+
           fraction
+
         );
       }
 
 
-      let previous = null;
+      let previous =
+        null;
 
-      let samples = [];
+      let samples =
+        [];
 
-      let maxMotion = 0;
+      let maxMotion =
+        0;
 
-      let maxMotionTime = 0;
+      let maxMotionTime =
+        0;
 
-      let successfulFrames = 0;
+      let successfulFrames =
+        0;
 
-      let failedFrames = 0;
+      let failedFrames =
+        0;
 
 
       for(
@@ -771,6 +1011,7 @@ canvas{
         const time =
           times[i];
 
+
         setStatus(
           "loading",
           "ANALYSING FRAME " +
@@ -779,13 +1020,15 @@ canvas{
           times.length
         );
 
+
         try{
 
           if(
             Math.abs(
               video.currentTime -
               time
-            ) > 0.015
+            ) >
+            0.015
           ){
 
             video.currentTime =
@@ -793,9 +1036,11 @@ canvas{
                 time,
                 Math.max(
                   0,
-                  duration - 0.02
+                  duration -
+                  0.02
                 )
               );
+
 
             await waitForSeek(
               2500
@@ -805,6 +1050,7 @@ canvas{
 
           const current =
             grayscaleFrame();
+
 
           successfulFrames++;
 
@@ -817,10 +1063,12 @@ canvas{
                 current
               );
 
+
             samples.push({
               time:time,
               motion:motion
             });
+
 
             if(
               motion >
@@ -844,13 +1092,34 @@ canvas{
 
           failedFrames++;
 
+
           console.warn(
-            "FV-02 frame skipped:",
+            "FV-02 FRAME FAILED:",
             time,
             frameError
           );
 
-          previous = null;
+
+          /*
+          If canvas access becomes blocked,
+          stop instead of wasting time
+          attempting another 23 frames.
+          */
+
+          if(
+            frameError &&
+            frameError.name ===
+              "SecurityError"
+          ){
+
+            throw new Error(
+              "CORS / CANVAS FRAME ACCESS BLOCKED"
+            );
+          }
+
+
+          previous =
+            null;
         }
 
 
@@ -867,6 +1136,7 @@ canvas{
           ) *
           100;
 
+
         progressBar.style.width =
           progress.toFixed(0) +
           "%";
@@ -874,7 +1144,8 @@ canvas{
 
 
       if(
-        successfulFrames < 3
+        successfulFrames <
+        3
       ){
 
         throw new Error(
@@ -883,13 +1154,20 @@ canvas{
       }
 
 
-      let average = 0;
+      let average =
+        0;
 
-      if(samples.length){
+
+      if(
+        samples.length
+      ){
 
         average =
           samples.reduce(
-            function(sum,item){
+            function(
+              sum,
+              item
+            ){
 
               return (
                 sum +
@@ -905,7 +1183,8 @@ canvas{
 
       const strongThreshold =
         Math.max(
-          average * 2.2,
+          average *
+          2.2,
           0.12
         );
 
@@ -918,15 +1197,20 @@ canvas{
               item.motion >
               strongThreshold
             );
+
           }
         );
 
 
-      let confidence = 0;
+      let confidence =
+        0;
+
 
       if(
-        maxMotion > 0 &&
-        average > 0
+        maxMotion >
+        0 &&
+        average >
+        0
       ){
 
         confidence =
@@ -968,21 +1252,30 @@ canvas{
       document.getElementById(
         "confidence"
       ).textContent =
-        confidence + "%";
+        confidence +
+        "%";
 
 
-      if(candidates.length){
+      if(
+        candidates.length
+      ){
 
         const strongestCandidate =
           candidates.reduce(
-            function(best,item){
+            function(
+              best,
+              item
+            ){
 
               return (
                 item.motion >
                 best.motion
               )
+
               ? item
+
               : best;
+
             },
             candidates[0]
           );
@@ -1002,23 +1295,18 @@ canvas{
           " s";
 
 
-        if(failedFrames > 0){
+        setStatus(
+          "ok",
 
-          setStatus(
-            "ok",
-            "FV-02 COMPLETE · " +
+          failedFrames >
+          0
+
+          ? "FV-02 COMPLETE · " +
             failedFrames +
             " FRAME(S) SKIPPED"
-          );
 
-        }
-        else{
-
-          setStatus(
-            "ok",
-            "FV-02 MOTION ANALYSIS COMPLETE"
-          );
-        }
+          : "FV-02 MOTION ANALYSIS COMPLETE"
+        );
 
       }
       else{
@@ -1079,13 +1367,20 @@ canvas{
     finally{
 
       /*
-      This guarantees that FV-02
-      cannot remain stuck in
-      ANALYSING forever.
+      Only enable Analyse again if
+      frame access itself is available.
       */
 
-      analyseBtn.disabled =
-        false;
+      if(
+        document.getElementById(
+          "frameAccess"
+        ).textContent ===
+        "READY"
+      ){
+
+        analyseBtn.disabled =
+          false;
+      }
     }
   }
 
