@@ -1,40 +1,500 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+
 <title>DARTIQ Flight Vision</title>
+
 <style>
-:root{color-scheme:dark;--bg:#03070d;--panel:#08111c;--line:#12324d;--blue:#18a8ff;--text:#f4f8fb;--muted:#8fa5b8;--ok:#35e58a;--bad:#ff6474}
-*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Arial,Helvetica,sans-serif;background:radial-gradient(circle at 50% 0,#0a2842 0,#06111d 35%,var(--bg) 72%);color:var(--text);padding:18px}
-.wrap{max-width:920px;margin:auto}.brand{text-align:center;margin:8px 0 18px}.brand h1{margin:0;font-size:clamp(25px,6vw,42px);letter-spacing:2px;color:var(--blue);text-shadow:0 0 20px #168edb}.brand p{margin:7px 0;color:var(--muted);letter-spacing:1px}
-.card{background:rgba(8,17,28,.92);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 0 30px rgba(24,168,255,.09)}
-.video-shell{width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:13px;background:#000;border:1px solid #164b70}video{width:100%;height:100%;object-fit:contain;background:#000}
-.status{display:flex;align-items:center;gap:10px;margin-top:15px;padding:13px;border-radius:12px;background:#050b12;border:1px solid #132b3d}.dot{width:11px;height:11px;border-radius:50%;background:#778896;box-shadow:0 0 10px currentColor;flex:0 0 auto}.status.ok .dot{background:var(--ok)}.status.error .dot{background:var(--bad)}.status.loading .dot{background:var(--blue)}#statusText{font-weight:700;font-size:14px}
-.meta{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}.metric{padding:11px;background:#050b12;border:1px solid #10283a;border-radius:10px;text-align:center}.metric b{display:block;color:var(--blue);font-size:17px;margin-bottom:4px}.metric span{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px}.note{font-size:12px;color:var(--muted);line-height:1.5;margin:14px 2px 0}code{color:#a9dcff;word-break:break-all}
-@media(max-width:560px){body{padding:10px}.card{padding:11px}.meta{grid-template-columns:1fr}}
-</style></head>
-<body><div class="wrap"><div class="brand"><h1>DARTIQ</h1><p>FLIGHT VISION · FV-01B</p></div><div class="card">
-<div class="video-shell"><video id="video" controls playsinline preload="metadata"></video></div>
-<div id="status" class="status loading"><span class="dot"></span><span id="statusText">WAITING FOR VIDEO...</span></div>
-<div class="meta"><div class="metric"><b id="duration">—</b><span>Duration</span></div><div class="metric"><b id="resolution">—</b><span>Resolution</span></div><div class="metric"><b id="analysisId">—</b><span>Analysis ID</span></div></div>
-<p class="note">Expected Glide URL parameters: <code>?video=VIDEO_URL&amp;id=ROW_ID</code><br>This build only validates that Flight Vision can receive and load the uploaded video. Dart tracking is not enabled yet.</p>
-</div></div>
+:root{
+  color-scheme:dark;
+  --bg:#03070d;
+  --panel:#08111c;
+  --line:#12324d;
+  --blue:#18a8ff;
+  --text:#f4f8fb;
+  --muted:#8fa5b8;
+  --ok:#35e58a;
+  --bad:#ff6474;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:Arial,Helvetica,sans-serif;
+  background:
+    radial-gradient(
+      circle at 50% 0,
+      #0a2842 0,
+      #06111d 35%,
+      var(--bg) 72%
+    );
+  color:var(--text);
+  padding:18px;
+}
+
+.wrap{
+  max-width:920px;
+  margin:auto;
+}
+
+.brand{
+  text-align:center;
+  margin:8px 0 18px;
+}
+
+.brand h1{
+  margin:0;
+  font-size:clamp(25px,6vw,42px);
+  letter-spacing:2px;
+  color:var(--blue);
+  text-shadow:0 0 20px #168edb;
+}
+
+.brand p{
+  margin:7px 0;
+  color:var(--muted);
+  letter-spacing:1px;
+}
+
+.card{
+  background:rgba(8,17,28,.92);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:16px;
+  box-shadow:0 0 30px rgba(24,168,255,.09);
+}
+
+.video-shell{
+  width:100%;
+  aspect-ratio:16/9;
+  overflow:hidden;
+  border-radius:13px;
+  background:#000;
+  border:1px solid #164b70;
+}
+
+video{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  background:#000;
+}
+
+.status{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-top:15px;
+  padding:13px;
+  border-radius:12px;
+  background:#050b12;
+  border:1px solid #132b3d;
+}
+
+.dot{
+  width:11px;
+  height:11px;
+  border-radius:50%;
+  background:#778896;
+  box-shadow:0 0 10px currentColor;
+  flex:0 0 auto;
+}
+
+.status.ok .dot{
+  background:var(--ok);
+}
+
+.status.error .dot{
+  background:var(--bad);
+}
+
+.status.loading .dot{
+  background:var(--blue);
+}
+
+#statusText{
+  font-weight:700;
+  font-size:14px;
+}
+
+.meta{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-top:12px;
+}
+
+.metric{
+  padding:11px;
+  background:#050b12;
+  border:1px solid #10283a;
+  border-radius:10px;
+  text-align:center;
+}
+
+.metric b{
+  display:block;
+  color:var(--blue);
+  font-size:17px;
+  margin-bottom:4px;
+}
+
+.metric span{
+  font-size:11px;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.7px;
+}
+
+.note{
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.5;
+  margin:14px 2px 0;
+}
+
+code{
+  color:#a9dcff;
+  word-break:break-all;
+}
+
+@media(max-width:560px){
+  body{
+    padding:10px;
+  }
+
+  .card{
+    padding:11px;
+  }
+
+  .meta{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+  <div class="brand">
+    <h1>DARTIQ</h1>
+    <p>FLIGHT VISION · FV-01B</p>
+  </div>
+
+  <div class="card">
+
+    <div class="video-shell">
+      <video
+        id="video"
+        controls
+        playsinline
+        preload="metadata">
+      </video>
+    </div>
+
+    <div id="status" class="status loading">
+      <span class="dot"></span>
+      <span id="statusText">WAITING FOR VIDEO...</span>
+    </div>
+
+    <div class="meta">
+
+      <div class="metric">
+        <b id="duration">—</b>
+        <span>Duration</span>
+      </div>
+
+      <div class="metric">
+        <b id="resolution">—</b>
+        <span>Resolution</span>
+      </div>
+
+      <div class="metric">
+        <b id="analysisId">—</b>
+        <span>Analysis ID</span>
+      </div>
+
+    </div>
+
+    <p class="note">
+      Flight Vision video validation build.
+      Uploaded throw video is loaded directly from the
+      DARTIQ Flight Analysis record.
+    </p>
+
+  </div>
+</div>
+
 <script>
-(function(){
-const p=new URLSearchParams(location.search);
-const vp=p.get("video")||p.get("video_url")||p.get("VideoUpload");
-const id=p.get("id")||p.get("analysis_id")||p.get("rowid")||"—";
-const v=document.getElementById("video"),s=document.getElementById("status"),st=document.getElementById("statusText");
-document.getElementById("analysisId").textContent=id;
-function status(type,text){s.className="status "+type;st.textContent=text}
-if(!vp){status("error","NO VIDEO URL RECEIVED");return}
-let src=vp;try{src=decodeURIComponent(vp)}catch(e){}
-status("loading","LOADING VIDEO...");v.src=src;
-v.addEventListener("loadedmetadata",function(){
-document.getElementById("duration").textContent=Number.isFinite(v.duration)?v.duration.toFixed(2)+" s":"—";
-document.getElementById("resolution").textContent=(v.videoWidth&&v.videoHeight)?v.videoWidth+"×"+v.videoHeight:"—";
-status("ok","VIDEO READY FOR ANALYSIS");
-});
-v.addEventListener("error",function(){status("error","VIDEO COULD NOT BE LOADED")});
+(function () {
+
+  const params = new URLSearchParams(window.location.search);
+
+  /*
+   * IMPORTANT:
+   * URLSearchParams already decodes parameter values.
+   * Do NOT run decodeURIComponent() on the video URL again.
+   */
+
+  const videoUrl =
+    params.get("video") ||
+    params.get("video_url") ||
+    params.get("VideoUpload");
+
+  const analysisId =
+    params.get("id") ||
+    params.get("analysis_id") ||
+    params.get("rowid") ||
+    "—";
+
+  const video =
+    document.getElementById("video");
+
+  const statusBox =
+    document.getElementById("status");
+
+  const statusText =
+    document.getElementById("statusText");
+
+  const durationEl =
+    document.getElementById("duration");
+
+  const resolutionEl =
+    document.getElementById("resolution");
+
+  const analysisIdEl =
+    document.getElementById("analysisId");
+
+
+  function setStatus(type,text){
+    statusBox.className="status "+type;
+    statusText.textContent=text;
+  }
+
+
+  /*
+   * Show Glide Row ID
+   */
+
+  analysisIdEl.textContent =
+    analysisId || "—";
+
+
+  /*
+   * Make sure Glide actually supplied a video URL.
+   */
+
+  if(!videoUrl){
+
+    setStatus(
+      "error",
+      "NO VIDEO URL RECEIVED"
+    );
+
+    console.error(
+      "Flight Vision: no video parameter received."
+    );
+
+    return;
+  }
+
+
+  console.log(
+    "Flight Vision received video:",
+    videoUrl
+  );
+
+  console.log(
+    "Flight Vision analysis ID:",
+    analysisId
+  );
+
+
+  /*
+   * IMPORTANT:
+   * Use the URL exactly as supplied by Glide.
+   */
+
+  setStatus(
+    "loading",
+    "LOADING VIDEO..."
+  );
+
+
+  /*
+   * Create source element explicitly.
+   */
+
+  const source =
+    document.createElement("source");
+
+  source.src = videoUrl;
+
+  video.innerHTML = "";
+
+  video.appendChild(source);
+
+  video.load();
+
+
+  /*
+   * Metadata loaded successfully.
+   */
+
+  video.addEventListener(
+    "loadedmetadata",
+    function(){
+
+      if(
+        Number.isFinite(video.duration)
+      ){
+
+        durationEl.textContent =
+          video.duration.toFixed(2)+" s";
+
+      }else{
+
+        durationEl.textContent="—";
+      }
+
+
+      if(
+        video.videoWidth &&
+        video.videoHeight
+      ){
+
+        resolutionEl.textContent =
+          video.videoWidth+
+          "×"+
+          video.videoHeight;
+
+      }else{
+
+        resolutionEl.textContent="—";
+      }
+
+
+      setStatus(
+        "ok",
+        "VIDEO READY FOR ANALYSIS"
+      );
+
+    }
+  );
+
+
+  /*
+   * Browser confirms video can play.
+   */
+
+  video.addEventListener(
+    "canplay",
+    function(){
+
+      setStatus(
+        "ok",
+        "VIDEO READY FOR ANALYSIS"
+      );
+
+    }
+  );
+
+
+  /*
+   * Video loading error.
+   */
+
+  video.addEventListener(
+    "error",
+    function(){
+
+      const error =
+        video.error;
+
+      let message =
+        "VIDEO COULD NOT BE LOADED";
+
+
+      if(error){
+
+        switch(error.code){
+
+          case 1:
+            message =
+              "VIDEO LOADING ABORTED";
+            break;
+
+          case 2:
+            message =
+              "VIDEO NETWORK ERROR";
+            break;
+
+          case 3:
+            message =
+              "VIDEO DECODING ERROR";
+            break;
+
+          case 4:
+            message =
+              "VIDEO FORMAT OR URL NOT SUPPORTED";
+            break;
+
+        }
+
+      }
+
+
+      setStatus(
+        "error",
+        message
+      );
+
+
+      console.error(
+        "Flight Vision video error:",
+        error
+      );
+
+      console.error(
+        "Flight Vision video URL:",
+        videoUrl
+      );
+
+    }
+  );
+
+
+  /*
+   * Extra source-level error detection.
+   */
+
+  source.addEventListener(
+    "error",
+    function(){
+
+      setStatus(
+        "error",
+        "VIDEO SOURCE COULD NOT BE LOADED"
+      );
+
+      console.error(
+        "Flight Vision source failed:",
+        videoUrl
+      );
+
+    }
+  );
+
 })();
-</script></body></html>
+</script>
+
+</body>
+</html>
