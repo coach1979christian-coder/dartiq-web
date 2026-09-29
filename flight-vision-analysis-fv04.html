@@ -1,0 +1,3431 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+
+<title>DARTIQ Flight Vision FV-04</title>
+
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#03070d;
+  --panel:#08111c;
+  --line:#12324d;
+  --blue:#18a8ff;
+  --text:#f4f8fb;
+  --muted:#8fa5b8;
+  --ok:#35e58a;
+  --bad:#ff6474;
+  --warn:#ffc857;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  margin:0;
+  width:100%;
+  min-height:100%;
+  background:var(--bg);
+}
+
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:
+    radial-gradient(
+      circle at 50% 0,
+      #0a2842 0,
+      #06111d 35%,
+      var(--bg) 72%
+    );
+  color:var(--text);
+  padding:12px;
+}
+
+.wrap{
+  width:100%;
+  max-width:920px;
+  margin:auto;
+}
+
+.brand{
+  text-align:center;
+  margin:6px 0 16px;
+}
+
+.brand h1{
+  margin:0;
+  font-size:clamp(26px,6vw,42px);
+  letter-spacing:3px;
+  color:var(--blue);
+  text-shadow:0 0 20px #168edb;
+}
+
+.brand p{
+  margin:7px 0;
+  color:var(--muted);
+  letter-spacing:1px;
+}
+
+.version{
+  display:inline-block;
+  margin-top:5px;
+  padding:5px 11px;
+  border:1px solid #14507a;
+  border-radius:20px;
+  color:#8fd5ff;
+  font-size:11px;
+  letter-spacing:1px;
+}
+
+.card{
+  background:rgba(8,17,28,.95);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:13px;
+  box-shadow:
+    0 0 30px rgba(24,168,255,.09);
+}
+
+.video-shell{
+  width:100%;
+  aspect-ratio:16/9;
+  overflow:hidden;
+  border-radius:13px;
+  background:#000;
+  border:1px solid #164b70;
+}
+
+video{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  background:#000;
+}
+
+.status{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-top:13px;
+  padding:13px;
+  border-radius:12px;
+  background:#050b12;
+  border:1px solid #132b3d;
+}
+
+.dot{
+  width:11px;
+  height:11px;
+  border-radius:50%;
+  background:#778896;
+  box-shadow:0 0 10px currentColor;
+  flex:0 0 auto;
+}
+
+.status.ok .dot{
+  background:var(--ok);
+}
+
+.status.error .dot{
+  background:var(--bad);
+}
+
+.status.loading .dot{
+  background:var(--blue);
+}
+
+.status.warning .dot{
+  background:var(--warn);
+}
+
+#statusText{
+  font-weight:800;
+  font-size:13px;
+}
+
+button{
+  width:100%;
+  margin-top:13px;
+  padding:15px;
+  border:1px solid #1679b7;
+  border-radius:12px;
+  background:
+    linear-gradient(
+      180deg,
+      #169be9,
+      #0875ba
+    );
+  color:#fff;
+  font-weight:800;
+  font-size:14px;
+  cursor:pointer;
+}
+
+button:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+
+.progress{
+  height:9px;
+  border-radius:20px;
+  background:#04101a;
+  border:1px solid #12324d;
+  overflow:hidden;
+  margin-top:12px;
+}
+
+.progress > div{
+  width:0%;
+  height:100%;
+  background:var(--blue);
+  transition:width .12s linear;
+}
+
+.meta{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:9px;
+  margin-top:12px;
+}
+
+.metric{
+  padding:11px 7px;
+  background:#050b12;
+  border:1px solid #10283a;
+  border-radius:10px;
+  text-align:center;
+  min-width:0;
+}
+
+.metric b{
+  display:block;
+  color:var(--blue);
+  font-size:16px;
+  margin-bottom:4px;
+  overflow-wrap:anywhere;
+}
+
+.metric span{
+  font-size:9px;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.7px;
+}
+
+.section-title{
+  margin:20px 2px 9px;
+  color:#fff;
+  font-size:14px;
+  font-weight:800;
+  letter-spacing:.7px;
+}
+
+.results{
+  background:#050b12;
+  border:1px solid #10283a;
+  border-radius:12px;
+  padding:12px;
+}
+
+.result-row{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding:9px 0;
+  border-bottom:1px solid #10202d;
+}
+
+.result-row:last-child{
+  border-bottom:0;
+}
+
+.result-row span{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.result-row b{
+  color:#fff;
+  font-size:12px;
+  text-align:right;
+  overflow-wrap:anywhere;
+}
+
+.good{
+  color:var(--ok) !important;
+}
+
+.bad{
+  color:var(--bad) !important;
+}
+
+.blue{
+  color:var(--blue) !important;
+}
+
+.warning{
+  color:var(--warn) !important;
+}
+
+.note{
+  font-size:11px;
+  color:var(--muted);
+  line-height:1.5;
+  margin:14px 2px 0;
+}
+
+canvas{
+  display:none;
+}
+
+@media(max-width:560px){
+
+  body{
+    padding:8px;
+  }
+
+  .card{
+    padding:10px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+  <div class="brand">
+
+    <h1>DARTIQ</h1>
+
+    <p>FLIGHT VISION</p>
+
+    <div class="version">
+      FV-04 · DART CANDIDATE DETECTION
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <div class="video-shell">
+
+      <video
+        id="video"
+        controls
+        playsinline
+        preload="auto">
+      </video>
+
+    </div>
+
+
+    <div
+      id="status"
+      class="status loading">
+
+      <span class="dot"></span>
+
+      <span id="statusText">
+        WAITING FOR VIDEO...
+      </span>
+
+    </div>
+
+
+    <button
+      id="analyseBtn"
+      disabled>
+      ANALYSE THROW
+    </button>
+
+
+    <div class="progress">
+      <div id="progressBar"></div>
+    </div>
+
+
+    <div class="meta">
+
+      <div class="metric">
+        <b id="duration">—</b>
+        <span>Duration</span>
+      </div>
+
+      <div class="metric">
+        <b id="resolution">—</b>
+        <span>Resolution</span>
+      </div>
+
+      <div class="metric">
+        <b id="analysisId">—</b>
+        <span>Analysis ID</span>
+      </div>
+
+      <div class="metric">
+        <b id="coarseFrames">—</b>
+        <span>Coarse Frames</span>
+      </div>
+
+      <div class="metric">
+        <b id="fineFrames">—</b>
+        <span>FV-03 Frames</span>
+      </div>
+
+      <div class="metric">
+        <b id="dartFrames">—</b>
+        <span>FV-04 Frames</span>
+      </div>
+
+      <div class="metric">
+        <b id="frameAccess">TESTING</b>
+        <span>Frame Access</span>
+      </div>
+
+      <div class="metric">
+        <b id="engine">FV-04</b>
+        <span>Detection Engine</span>
+      </div>
+
+    </div>
+
+
+    <div class="section-title">
+      FV-02 · MOTION FOUNDATION
+    </div>
+
+
+    <div class="results">
+
+      <div class="result-row">
+        <span>Motion detected</span>
+        <b id="motionDetected">
+          NOT ANALYSED
+        </b>
+      </div>
+
+      <div class="result-row">
+        <span>Highest motion score</span>
+        <b id="maxMotion">—</b>
+      </div>
+
+      <div class="result-row">
+        <span>Strongest motion timestamp</span>
+        <b id="strongestTime">—</b>
+      </div>
+
+    </div>
+
+
+    <div class="section-title">
+      FV-03 · THROW EVENT ANALYSIS
+    </div>
+
+
+    <div class="results">
+
+      <div class="result-row">
+        <span>Throw event detected</span>
+        <b id="throwDetected">
+          NOT ANALYSED
+        </b>
+      </div>
+
+      <div class="result-row">
+        <span>Motion start</span>
+        <b id="motionStart">—</b>
+      </div>
+
+      <div class="result-row">
+        <span>Peak motion</span>
+        <b id="peakMotionTime">—</b>
+      </div>
+
+      <div class="result-row">
+        <span>Probable release</span>
+        <b id="releaseTime">—</b>
+      </div>
+
+      <div class="result-row">
+        <span>Post-release</span>
+        <b id="postRelease">—</b>
+      </div>
+
+      <div class="result-row">
+        <span>Throw event duration</span>
+        <b id="eventDuration">—</b>
+      </div>
+
+      <div class="result-row">
+        <span>Release confidence</span>
+        <b id="releaseConfidence">—</b>
+      </div>
+
+      <div class="result-row">
+        <span>Fine scan window</span>
+        <b id="scanWindow">—</b>
+      </div>
+
+    </div>
+
+
+    <div class="section-title">
+      FV-04 · DART CANDIDATE DETECTION
+    </div>
+
+
+    <div class="results">
+
+      <div class="result-row">
+        <span>Dart candidate detected</span>
+        <b id="dartDetected">
+          NOT ANALYSED
+        </b>
+      </div>
+
+      <div class="result-row">
+        <span>Detection confidence</span>
+        <b id="dartConfidence">—</b>
+      </div>
+
+      <div class="result-row">
+        <span>First dart candidate</span>
+        <b id="firstDartTime">—</b>
+      </div>
+
+      <div class="result-row">
+        <span>Last dart candidate</span>
+        <b id="lastDartTime">—</b>
+      </div>
+
+      <div class="result-row">
+        <span>Confirmed release candidate</span>
+        <b id="confirmedRelease">—</b>
+      </div>
+
+      <div class="result-row">
+        <span>Release offset vs FV-03</span>
+        <b id="releaseOffset">—</b>
+      </div>
+
+      <div class="result-row">
+        <span>Candidate motion size</span>
+        <b id="candidateSize">—</b>
+      </div>
+
+      <div class="result-row">
+        <span>Peak local motion</span>
+        <b id="dartPeakMotion">—</b>
+      </div>
+
+      <div class="result-row">
+        <span>FV-04 search window</span>
+        <b id="dartWindow">—</b>
+      </div>
+
+      <div class="result-row">
+        <span>Detection method</span>
+        <b id="detectionMethod">
+          TEMPORAL OBJECT MOTION
+        </b>
+      </div>
+
+    </div>
+
+
+    <p class="note">
+      FV-04 builds on the validated FV-02 and FV-03
+      motion pipeline. It performs a tighter temporal
+      scan around the FV-03 release candidate and
+      searches for smaller, short-lived motion regions
+      that may correspond to the dart leaving the hand.
+      Dart detection remains experimental until
+      trajectory tracking validates the candidate
+      across multiple frames.
+    </p>
+
+
+    <canvas id="canvas"></canvas>
+
+  </div>
+
+</div>
+
+
+<script>
+
+(function(){
+
+  /*
+  ========================================
+  URL PARAMETERS
+  ========================================
+  */
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+
+  function cleanParam(value){
+
+    if(!value){
+      return "";
+    }
+
+    let cleaned =
+      String(value).trim();
+
+    while(
+      cleaned.length >= 2 &&
+      cleaned.startsWith("{") &&
+      cleaned.endsWith("}")
+    ){
+
+      cleaned =
+        cleaned
+          .slice(1,-1)
+          .trim();
+
+    }
+
+    return cleaned;
+  }
+
+
+  const videoParam =
+    cleanParam(
+
+      params.get("video") ||
+
+      params.get("video_url") ||
+
+      params.get("VideoUpload")
+
+    );
+
+
+  const analysisID =
+    cleanParam(
+
+      params.get("id") ||
+
+      params.get("analysis_id") ||
+
+      params.get("rowid") ||
+
+      "—"
+
+    );
+
+
+  /*
+  ========================================
+  ELEMENTS
+  ========================================
+  */
+
+  const video =
+    document.getElementById(
+      "video"
+    );
+
+  const canvas =
+    document.getElementById(
+      "canvas"
+    );
+
+  const ctx =
+    canvas.getContext(
+      "2d",
+      {
+        willReadFrequently:true
+      }
+    );
+
+  const statusBox =
+    document.getElementById(
+      "status"
+    );
+
+  const statusText =
+    document.getElementById(
+      "statusText"
+    );
+
+  const analyseBtn =
+    document.getElementById(
+      "analyseBtn"
+    );
+
+  const progressBar =
+    document.getElementById(
+      "progressBar"
+    );
+
+
+  document.getElementById(
+    "analysisId"
+  ).textContent =
+    analysisID;
+
+
+  /*
+  ========================================
+  STATUS
+  ========================================
+  */
+
+  function setStatus(
+    type,
+    text
+  ){
+
+    statusBox.className =
+      "status " + type;
+
+    statusText.textContent =
+      text;
+  }
+
+
+  /*
+  ========================================
+  RESET
+  ========================================
+  */
+
+  function resetResults(){
+
+    const values = {
+
+      coarseFrames:"0",
+      fineFrames:"0",
+      dartFrames:"0",
+
+      motionDetected:"ANALYSING",
+      maxMotion:"—",
+      strongestTime:"—",
+
+      throwDetected:"ANALYSING",
+      motionStart:"—",
+      peakMotionTime:"—",
+      releaseTime:"—",
+      postRelease:"—",
+      eventDuration:"—",
+      releaseConfidence:"—",
+      scanWindow:"—",
+
+      dartDetected:"ANALYSING",
+      dartConfidence:"—",
+      firstDartTime:"—",
+      lastDartTime:"—",
+      confirmedRelease:"—",
+      releaseOffset:"—",
+      candidateSize:"—",
+      dartPeakMotion:"—",
+      dartWindow:"—"
+
+    };
+
+
+    Object.keys(values).forEach(
+      function(id){
+
+        const element =
+          document.getElementById(id);
+
+        if(element){
+
+          element.textContent =
+            values[id];
+
+          element.className =
+            "";
+        }
+
+      }
+    );
+  }
+
+
+  /*
+  ========================================
+  VIDEO PARAMETER
+  ========================================
+  */
+
+  if(!videoParam){
+
+    document.getElementById(
+      "frameAccess"
+    ).textContent =
+      "NO VIDEO";
+
+    setStatus(
+      "error",
+      "NO VIDEO URL RECEIVED"
+    );
+
+    return;
+  }
+
+
+  /*
+  ========================================
+  VIDEO SOURCE
+  ========================================
+  */
+
+  const source =
+    videoParam;
+
+
+  console.log(
+    "FV-04 VIDEO SOURCE:",
+    source
+  );
+
+
+  console.log(
+    "FV-04 ANALYSIS ID:",
+    analysisID
+  );
+
+
+  /*
+    Must remain before video.src.
+  */
+
+  video.crossOrigin =
+    "anonymous";
+
+  video.src =
+    source;
+
+  video.load();
+
+
+  setStatus(
+    "loading",
+    "LOADING VIDEO..."
+  );
+
+
+  /*
+  ========================================
+  CANVAS
+  ========================================
+  */
+
+  function prepareCanvas(){
+
+    if(
+      !video.videoWidth ||
+      !video.videoHeight
+    ){
+
+      throw new Error(
+        "VIDEO DIMENSIONS NOT READY"
+      );
+    }
+
+
+    /*
+      160 px analysis width keeps the
+      browser workload manageable.
+
+      We preserve the video's aspect ratio.
+    */
+
+    canvas.width =
+      160;
+
+
+    const ratio =
+      video.videoHeight /
+      video.videoWidth;
+
+
+    canvas.height =
+      Math.max(
+        90,
+        Math.round(
+          canvas.width *
+          ratio
+        )
+      );
+  }
+
+
+  /*
+  ========================================
+  RAW FRAME
+  ========================================
+  */
+
+  function readFrame(){
+
+    ctx.drawImage(
+      video,
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
+
+
+    const image =
+      ctx.getImageData(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+
+
+    return image.data;
+  }
+
+
+  /*
+  ========================================
+  GRAYSCALE
+  ========================================
+  */
+
+  function grayscaleFrame(){
+
+    const data =
+      readFrame();
+
+
+    const gray =
+      new Uint8Array(
+        canvas.width *
+        canvas.height
+      );
+
+
+    let j =
+      0;
+
+
+    for(
+      let i = 0;
+      i < data.length;
+      i += 4
+    ){
+
+      gray[j++] =
+        Math.round(
+
+          data[i] *
+          0.299 +
+
+          data[i + 1] *
+          0.587 +
+
+          data[i + 2] *
+          0.114
+
+        );
+    }
+
+
+    return gray;
+  }
+
+
+  /*
+  ========================================
+  WHOLE-FRAME MOTION
+  FV-02 / FV-03
+  ========================================
+  */
+
+  function compareFrames(
+    current,
+    previous
+  ){
+
+    if(
+      !current ||
+      !previous ||
+      current.length !==
+      previous.length
+    ){
+
+      return 0;
+    }
+
+
+    let difference =
+      0;
+
+
+    for(
+      let i = 0;
+      i < current.length;
+      i++
+    ){
+
+      difference +=
+        Math.abs(
+          current[i] -
+          previous[i]
+        );
+    }
+
+
+    return (
+      difference /
+      current.length /
+      255
+    );
+  }
+
+
+  /*
+  ========================================
+  FV-04 LOCAL MOTION ANALYSIS
+  ========================================
+
+  Instead of only averaging the entire
+  frame, identify pixels whose brightness
+  changed substantially.
+
+  This gives us:
+  - changed pixel count
+  - changed pixel percentage
+  - bounding box
+  - bounding box area
+  - centroid
+
+  Small short-lived regions are more
+  interesting to FV-04 than huge regions
+  caused by body movement.
+  */
+
+  function analyseLocalMotion(
+    current,
+    previous
+  ){
+
+    if(
+      !current ||
+      !previous ||
+      current.length !==
+      previous.length
+    ){
+
+      return null;
+    }
+
+
+    /*
+      Pixel brightness change required
+      before a pixel counts as motion.
+    */
+
+    const pixelThreshold =
+      32;
+
+
+    let changed =
+      0;
+
+    let minX =
+      canvas.width;
+
+    let minY =
+      canvas.height;
+
+    let maxX =
+      -1;
+
+    let maxY =
+      -1;
+
+    let sumX =
+      0;
+
+    let sumY =
+      0;
+
+    let differenceTotal =
+      0;
+
+
+    for(
+      let i = 0;
+      i < current.length;
+      i++
+    ){
+
+      const difference =
+        Math.abs(
+          current[i] -
+          previous[i]
+        );
+
+
+      differenceTotal +=
+        difference;
+
+
+      if(
+        difference >=
+        pixelThreshold
+      ){
+
+        const x =
+          i %
+          canvas.width;
+
+        const y =
+          Math.floor(
+            i /
+            canvas.width
+          );
+
+
+        changed++;
+
+
+        if(x < minX){
+          minX = x;
+        }
+
+        if(x > maxX){
+          maxX = x;
+        }
+
+        if(y < minY){
+          minY = y;
+        }
+
+        if(y > maxY){
+          maxY = y;
+        }
+
+
+        sumX +=
+          x;
+
+        sumY +=
+          y;
+      }
+
+    }
+
+
+    const totalPixels =
+      current.length;
+
+
+    const changedRatio =
+      changed /
+      totalPixels;
+
+
+    const meanDifference =
+      differenceTotal /
+      totalPixels /
+      255;
+
+
+    if(
+      changed === 0
+    ){
+
+      return {
+
+        changedPixels:0,
+        changedRatio:0,
+        meanDifference:
+          meanDifference,
+
+        width:0,
+        height:0,
+        area:0,
+
+        areaRatio:0,
+
+        centerX:null,
+        centerY:null
+
+      };
+    }
+
+
+    const width =
+      maxX -
+      minX +
+      1;
+
+
+    const height =
+      maxY -
+      minY +
+      1;
+
+
+    const area =
+      width *
+      height;
+
+
+    const areaRatio =
+      area /
+      (
+        canvas.width *
+        canvas.height
+      );
+
+
+    return {
+
+      changedPixels:
+        changed,
+
+      changedRatio:
+        changedRatio,
+
+      meanDifference:
+        meanDifference,
+
+      minX:
+        minX,
+
+      minY:
+        minY,
+
+      maxX:
+        maxX,
+
+      maxY:
+        maxY,
+
+      width:
+        width,
+
+      height:
+        height,
+
+      area:
+        area,
+
+      areaRatio:
+        areaRatio,
+
+      centerX:
+        sumX /
+        changed,
+
+      centerY:
+        sumY /
+        changed
+
+    };
+  }
+
+
+  /*
+  ========================================
+  SEEK
+  ========================================
+  */
+
+  function waitForSeek(
+    timeoutMs = 5000
+  ){
+
+    return new Promise(
+      function(
+        resolve,
+        reject
+      ){
+
+        let finished =
+          false;
+
+
+        function cleanup(){
+
+          video.removeEventListener(
+            "seeked",
+            onSeeked
+          );
+
+          clearTimeout(
+            timer
+          );
+        }
+
+
+        function onSeeked(){
+
+          if(finished){
+            return;
+          }
+
+
+          finished =
+            true;
+
+          cleanup();
+
+
+          requestAnimationFrame(
+            function(){
+
+              requestAnimationFrame(
+                function(){
+
+                  resolve(true);
+
+                }
+              );
+
+            }
+          );
+        }
+
+
+        const timer =
+          setTimeout(
+            function(){
+
+              if(finished){
+                return;
+              }
+
+
+              finished =
+                true;
+
+              cleanup();
+
+
+              reject(
+                new Error(
+                  "VIDEO SEEK TIMEOUT"
+                )
+              );
+
+            },
+            timeoutMs
+          );
+
+
+        video.addEventListener(
+          "seeked",
+          onSeeked,
+          {
+            once:true
+          }
+        );
+
+      }
+    );
+  }
+
+
+  /*
+  ========================================
+  SEEK + READ
+  ========================================
+  */
+
+  async function seekAndRead(
+    time
+  ){
+
+    const duration =
+      video.duration;
+
+
+    const safeTime =
+      Math.min(
+
+        Math.max(
+          time,
+          0
+        ),
+
+        Math.max(
+          0,
+          duration - 0.03
+        )
+
+      );
+
+
+    const difference =
+      Math.abs(
+        video.currentTime -
+        safeTime
+      );
+
+
+    if(
+      difference >
+      0.015
+    ){
+
+      video.currentTime =
+        safeTime;
+
+
+      await waitForSeek(
+        5000
+      );
+
+    }
+    else{
+
+      await new Promise(
+        function(resolve){
+
+          requestAnimationFrame(
+            function(){
+
+              requestAnimationFrame(
+                resolve
+              );
+
+            }
+          );
+
+        }
+      );
+    }
+
+
+    return grayscaleFrame();
+  }
+
+
+  /*
+  ========================================
+  WAIT FOR VIDEO DATA
+  ========================================
+  */
+
+  function waitForVideoData(
+    timeoutMs = 10000
+  ){
+
+    return new Promise(
+      function(
+        resolve,
+        reject
+      ){
+
+        if(
+          video.readyState >= 2 &&
+          video.videoWidth > 0 &&
+          video.videoHeight > 0
+        ){
+
+          resolve(true);
+          return;
+        }
+
+
+        let finished =
+          false;
+
+
+        function cleanup(){
+
+          video.removeEventListener(
+            "loadeddata",
+            ready
+          );
+
+          video.removeEventListener(
+            "canplay",
+            ready
+          );
+
+          clearTimeout(
+            timer
+          );
+        }
+
+
+        function ready(){
+
+          if(finished){
+            return;
+          }
+
+
+          if(
+            video.readyState >= 2 &&
+            video.videoWidth > 0 &&
+            video.videoHeight > 0
+          ){
+
+            finished =
+              true;
+
+            cleanup();
+
+            resolve(true);
+          }
+        }
+
+
+        const timer =
+          setTimeout(
+            function(){
+
+              if(finished){
+                return;
+              }
+
+
+              finished =
+                true;
+
+              cleanup();
+
+
+              reject(
+                new Error(
+                  "VIDEO DATA TIMEOUT"
+                )
+              );
+
+            },
+            timeoutMs
+          );
+
+
+        video.addEventListener(
+          "loadeddata",
+          ready
+        );
+
+
+        video.addEventListener(
+          "canplay",
+          ready
+        );
+
+      }
+    );
+  }
+
+
+  /*
+  ========================================
+  FRAME ACCESS TEST
+  ========================================
+  */
+
+  async function testFrameAccess(){
+
+    document.getElementById(
+      "frameAccess"
+    ).textContent =
+      "TESTING";
+
+
+    analyseBtn.disabled =
+      true;
+
+
+    setStatus(
+      "loading",
+      "TESTING FRAME ACCESS..."
+    );
+
+
+    try{
+
+      await waitForVideoData(
+        10000
+      );
+
+
+      prepareCanvas();
+
+
+      const testTime =
+        Math.min(
+
+          Math.max(
+            video.duration *
+            0.15,
+            0.75
+          ),
+
+          Math.max(
+            0,
+            video.duration -
+            0.25
+          )
+
+        );
+
+
+      video.currentTime =
+        testTime;
+
+
+      await waitForSeek(
+        5000
+      );
+
+
+      await new Promise(
+        function(resolve){
+
+          requestAnimationFrame(
+            function(){
+
+              requestAnimationFrame(
+                resolve
+              );
+
+            }
+          );
+
+        }
+      );
+
+
+      const data =
+        readFrame();
+
+
+      if(
+        !data ||
+        data.length === 0
+      ){
+
+        throw new Error(
+          "EMPTY FRAME DATA"
+        );
+      }
+
+
+      document.getElementById(
+        "frameAccess"
+      ).textContent =
+        "READY";
+
+
+      document.getElementById(
+        "frameAccess"
+      ).className =
+        "good";
+
+
+      analyseBtn.disabled =
+        false;
+
+
+      setStatus(
+        "ok",
+        "FRAME ACCESS READY · FV-04 AVAILABLE"
+      );
+
+
+      return true;
+
+    }
+    catch(error){
+
+      console.error(
+        "FV-04 FRAME ACCESS ERROR:",
+        error
+      );
+
+
+      document.getElementById(
+        "frameAccess"
+      ).textContent =
+        "BLOCKED";
+
+
+      analyseBtn.disabled =
+        true;
+
+
+      let message =
+        error.message ||
+        "UNKNOWN ERROR";
+
+
+      if(
+        error.name ===
+        "SecurityError"
+      ){
+
+        message =
+          "CORS / CANVAS ACCESS BLOCKED";
+      }
+
+
+      setStatus(
+        "error",
+        "FRAME ACCESS ERROR · " +
+        message
+      );
+
+
+      return false;
+    }
+  }
+
+
+  /*
+  ========================================
+  VIDEO METADATA
+  ========================================
+  */
+
+  video.addEventListener(
+    "loadedmetadata",
+    function(){
+
+      document.getElementById(
+        "duration"
+      ).textContent =
+
+        Number.isFinite(
+          video.duration
+        )
+
+        ? video.duration.toFixed(2) +
+          " s"
+
+        : "—";
+
+
+      document.getElementById(
+        "resolution"
+      ).textContent =
+
+        video.videoWidth &&
+        video.videoHeight
+
+        ? video.videoWidth +
+          "×" +
+          video.videoHeight
+
+        : "—";
+
+    }
+  );
+
+
+  /*
+  ========================================
+  START FRAME TEST
+  ========================================
+  */
+
+  let frameTestStarted =
+    false;
+
+
+  async function startFrameTest(){
+
+    if(frameTestStarted){
+      return;
+    }
+
+
+    frameTestStarted =
+      true;
+
+
+    await testFrameAccess();
+  }
+
+
+  video.addEventListener(
+    "loadeddata",
+    startFrameTest,
+    {
+      once:true
+    }
+  );
+
+
+  video.addEventListener(
+    "canplay",
+    startFrameTest,
+    {
+      once:true
+    }
+  );
+
+
+  /*
+  ========================================
+  VIDEO ERROR
+  ========================================
+  */
+
+  video.addEventListener(
+    "error",
+    function(){
+
+      const mediaError =
+        video.error;
+
+
+      let message =
+        "VIDEO COULD NOT BE LOADED";
+
+
+      if(mediaError){
+
+        message +=
+          " · CODE " +
+          mediaError.code;
+      }
+
+
+      document.getElementById(
+        "frameAccess"
+      ).textContent =
+        "ERROR";
+
+
+      analyseBtn.disabled =
+        true;
+
+
+      setStatus(
+        "error",
+        message
+      );
+
+    }
+  );
+
+
+  /*
+  ========================================
+  FV-02 COARSE SCAN
+  ========================================
+  */
+
+  async function coarseScan(){
+
+    const duration =
+      video.duration;
+
+
+    const targetSamples =
+      24;
+
+
+    const startTime =
+      Math.min(
+        0.1,
+        duration * 0.02
+      );
+
+
+    const endTime =
+      Math.max(
+        startTime,
+        duration - 0.1
+      );
+
+
+    const times =
+      [];
+
+
+    for(
+      let i = 0;
+      i < targetSamples;
+      i++
+    ){
+
+      const fraction =
+        i /
+        (
+          targetSamples - 1
+        );
+
+
+      times.push(
+
+        startTime +
+
+        (
+          endTime -
+          startTime
+        ) *
+
+        fraction
+
+      );
+    }
+
+
+    let previous =
+      null;
+
+
+    const samples =
+      [];
+
+
+    for(
+      let i = 0;
+      i < times.length;
+      i++
+    ){
+
+      setStatus(
+        "loading",
+        "FV-02 COARSE SCAN " +
+        (i + 1) +
+        " / " +
+        times.length
+      );
+
+
+      const current =
+        await seekAndRead(
+          times[i]
+        );
+
+
+      if(previous){
+
+        const motion =
+          compareFrames(
+            current,
+            previous
+          );
+
+
+        samples.push({
+
+          time:
+            times[i],
+
+          motion:
+            motion
+
+        });
+      }
+
+
+      previous =
+        current;
+
+
+      document.getElementById(
+        "coarseFrames"
+      ).textContent =
+        i + 1;
+
+
+      const progress =
+        (
+          (
+            i + 1
+          ) /
+          times.length
+        ) *
+        35;
+
+
+      progressBar.style.width =
+        progress.toFixed(0) +
+        "%";
+
+    }
+
+
+    return samples;
+  }
+
+
+  /*
+  ========================================
+  FV-03 FINE SCAN
+  ========================================
+  */
+
+  async function fineScan(
+    candidateTime
+  ){
+
+    const duration =
+      video.duration;
+
+
+    const windowBefore =
+      1.5;
+
+
+    const windowAfter =
+      1.5;
+
+
+    const start =
+      Math.max(
+        0,
+        candidateTime -
+        windowBefore
+      );
+
+
+    const end =
+      Math.min(
+        duration - 0.03,
+        candidateTime +
+        windowAfter
+      );
+
+
+    document.getElementById(
+      "scanWindow"
+    ).textContent =
+
+      start.toFixed(3) +
+      " – " +
+      end.toFixed(3) +
+      " s";
+
+
+    const fineFPS =
+      20;
+
+
+    const interval =
+      1 /
+      fineFPS;
+
+
+    const times =
+      [];
+
+
+    for(
+      let time = start;
+      time <= end;
+      time += interval
+    ){
+
+      times.push(
+        Math.min(
+          time,
+          end
+        )
+      );
+    }
+
+
+    if(
+      times.length === 0 ||
+      times[
+        times.length - 1
+      ] < end
+    ){
+
+      times.push(
+        end
+      );
+    }
+
+
+    let previous =
+      null;
+
+
+    const samples =
+      [];
+
+
+    for(
+      let i = 0;
+      i < times.length;
+      i++
+    ){
+
+      setStatus(
+        "loading",
+        "FV-03 FINE SCAN " +
+        (i + 1) +
+        " / " +
+        times.length
+      );
+
+
+      const current =
+        await seekAndRead(
+          times[i]
+        );
+
+
+      if(previous){
+
+        const motion =
+          compareFrames(
+            current,
+            previous
+          );
+
+
+        samples.push({
+
+          time:
+            times[i],
+
+          motion:
+            motion
+
+        });
+      }
+
+
+      previous =
+        current;
+
+
+      document.getElementById(
+        "fineFrames"
+      ).textContent =
+        i + 1;
+
+
+      const progress =
+        35 +
+
+        (
+          (
+            i + 1
+          ) /
+          times.length
+        ) *
+
+        35;
+
+
+      progressBar.style.width =
+        progress.toFixed(0) +
+        "%";
+
+    }
+
+
+    return samples;
+  }
+
+
+  /*
+  ========================================
+  FV-03 THROW EVENT
+  ========================================
+  */
+
+  function analyseThrowEvent(
+    samples
+  ){
+
+    if(
+      !samples ||
+      samples.length < 3
+    ){
+
+      throw new Error(
+        "NOT ENOUGH FINE-SCAN DATA"
+      );
+    }
+
+
+    const average =
+      samples.reduce(
+        function(
+          sum,
+          item
+        ){
+
+          return (
+            sum +
+            item.motion
+          );
+
+        },
+        0
+      ) /
+      samples.length;
+
+
+    let peak =
+      samples[0];
+
+
+    for(
+      const item of samples
+    ){
+
+      if(
+        item.motion >
+        peak.motion
+      ){
+
+        peak =
+          item;
+      }
+    }
+
+
+    const eventThreshold =
+      Math.max(
+
+        average *
+        1.35,
+
+        peak.motion *
+        0.28
+
+      );
+
+
+    const peakIndex =
+      samples.indexOf(
+        peak
+      );
+
+
+    let startIndex =
+      peakIndex;
+
+
+    while(
+      startIndex > 0 &&
+      samples[
+        startIndex - 1
+      ].motion >
+      eventThreshold
+    ){
+
+      startIndex--;
+    }
+
+
+    let endIndex =
+      peakIndex;
+
+
+    while(
+      endIndex <
+      samples.length - 1 &&
+      samples[
+        endIndex + 1
+      ].motion >
+      eventThreshold
+    ){
+
+      endIndex++;
+    }
+
+
+    startIndex =
+      Math.max(
+        0,
+        startIndex - 1
+      );
+
+
+    endIndex =
+      Math.min(
+        samples.length - 1,
+        endIndex + 1
+      );
+
+
+    const motionStart =
+      samples[
+        startIndex
+      ].time;
+
+
+    const motionEnd =
+      samples[
+        endIndex
+      ].time;
+
+
+    const releaseTime =
+      peak.time;
+
+
+    const postThreshold =
+      Math.max(
+
+        average,
+
+        peak.motion *
+        0.45
+
+      );
+
+
+    let postRelease =
+      motionEnd;
+
+
+    for(
+      let i =
+        peakIndex + 1;
+
+      i <
+        samples.length;
+
+      i++
+    ){
+
+      if(
+        samples[i].motion <=
+        postThreshold
+      ){
+
+        postRelease =
+          samples[i].time;
+
+        break;
+      }
+    }
+
+
+    const eventDuration =
+      Math.max(
+        0,
+        motionEnd -
+        motionStart
+      );
+
+
+    let confidence =
+      0;
+
+
+    if(
+      peak.motion > 0
+    ){
+
+      const contrast =
+        peak.motion /
+        Math.max(
+          average,
+          0.0001
+        );
+
+
+      confidence =
+        Math.min(
+
+          100,
+
+          Math.round(
+            contrast *
+            25
+          )
+
+        );
+    }
+
+
+    return {
+
+      average:
+        average,
+
+      peak:
+        peak,
+
+      motionStart:
+        motionStart,
+
+      motionEnd:
+        motionEnd,
+
+      releaseTime:
+        releaseTime,
+
+      postRelease:
+        postRelease,
+
+      eventDuration:
+        eventDuration,
+
+      confidence:
+        confidence
+
+    };
+  }
+
+
+  /*
+  ========================================
+  FV-04 DART WINDOW SCAN
+  ========================================
+
+  Search only around the FV-03 release
+  candidate.
+
+  0.30 sec before
+  0.30 sec after
+
+  Approx 40 FPS equivalent sampling.
+  */
+
+  async function dartCandidateScan(
+    releaseTime
+  ){
+
+    const duration =
+      video.duration;
+
+
+    const start =
+      Math.max(
+        0,
+        releaseTime -
+        0.30
+      );
+
+
+    const end =
+      Math.min(
+        duration - 0.03,
+        releaseTime +
+        0.30
+      );
+
+
+    document.getElementById(
+      "dartWindow"
+    ).textContent =
+
+      start.toFixed(3) +
+      " – " +
+      end.toFixed(3) +
+      " s";
+
+
+    const scanFPS =
+      40;
+
+
+    const interval =
+      1 /
+      scanFPS;
+
+
+    const times =
+      [];
+
+
+    for(
+      let time = start;
+      time <= end;
+      time += interval
+    ){
+
+      times.push(
+        Math.min(
+          time,
+          end
+        )
+      );
+    }
+
+
+    if(
+      times.length === 0 ||
+      times[
+        times.length - 1
+      ] < end
+    ){
+
+      times.push(
+        end
+      );
+    }
+
+
+    let previous =
+      null;
+
+
+    const samples =
+      [];
+
+
+    for(
+      let i = 0;
+      i < times.length;
+      i++
+    ){
+
+      setStatus(
+        "loading",
+        "FV-04 DART SCAN " +
+        (i + 1) +
+        " / " +
+        times.length
+      );
+
+
+      const current =
+        await seekAndRead(
+          times[i]
+        );
+
+
+      if(previous){
+
+        const local =
+          analyseLocalMotion(
+            current,
+            previous
+          );
+
+
+        if(local){
+
+          samples.push({
+
+            time:
+              times[i],
+
+            changedPixels:
+              local.changedPixels,
+
+            changedRatio:
+              local.changedRatio,
+
+            meanDifference:
+              local.meanDifference,
+
+            width:
+              local.width,
+
+            height:
+              local.height,
+
+            area:
+              local.area,
+
+            areaRatio:
+              local.areaRatio,
+
+            centerX:
+              local.centerX,
+
+            centerY:
+              local.centerY
+
+          });
+        }
+      }
+
+
+      previous =
+        current;
+
+
+      document.getElementById(
+        "dartFrames"
+      ).textContent =
+        i + 1;
+
+
+      const progress =
+        70 +
+
+        (
+          (
+            i + 1
+          ) /
+          times.length
+        ) *
+
+        30;
+
+
+      progressBar.style.width =
+        Math.min(
+          100,
+          progress
+        ).toFixed(0) +
+        "%";
+
+    }
+
+
+    return samples;
+  }
+
+
+  /*
+  ========================================
+  FV-04 CANDIDATE CLASSIFIER
+  ========================================
+  */
+
+  function classifyDartCandidate(
+    samples,
+    fv03Release
+  ){
+
+    if(
+      !samples ||
+      samples.length < 3
+    ){
+
+      return {
+
+        detected:false,
+        confidence:0,
+        first:null,
+        last:null,
+        release:null,
+        offset:null,
+        size:null,
+        peak:null
+
+      };
+    }
+
+
+    /*
+      Calculate normal motion level in the
+      tight FV-04 window.
+    */
+
+    const averageDifference =
+      samples.reduce(
+        function(
+          total,
+          item
+        ){
+
+          return (
+            total +
+            item.meanDifference
+          );
+
+        },
+        0
+      ) /
+      samples.length;
+
+
+    /*
+      Candidate rules:
+
+      - enough changed pixels to avoid noise
+      - changed region cannot consume most
+        of the image
+      - motion difference must be meaningful
+      - candidate must remain relatively
+        compact
+
+      These thresholds are intentionally
+      conservative for the first FV-04
+      experimental build.
+    */
+
+    const candidates =
+      samples.filter(
+        function(item){
+
+          const enoughPixels =
+            item.changedPixels >=
+            8;
+
+
+          const notHuge =
+            item.areaRatio >
+              0 &&
+
+            item.areaRatio <
+              0.55;
+
+
+          const meaningfulMotion =
+            item.meanDifference >=
+            Math.max(
+              averageDifference *
+              0.75,
+              0.008
+            );
+
+
+          return (
+            enoughPixels &&
+            notHuge &&
+            meaningfulMotion
+          );
+        }
+      );
+
+
+    if(
+      candidates.length === 0
+    ){
+
+      return {
+
+        detected:false,
+        confidence:0,
+        first:null,
+        last:null,
+        release:null,
+        offset:null,
+        size:null,
+        peak:null
+
+      };
+    }
+
+
+    /*
+      Score each candidate.
+
+      Favor:
+      - stronger local motion
+      - smaller region
+      - temporal proximity to FV-03 release
+    */
+
+    const scored =
+      candidates.map(
+        function(item){
+
+          const proximity =
+            Math.max(
+
+              0,
+
+              1 -
+              (
+                Math.abs(
+                  item.time -
+                  fv03Release
+                ) /
+                0.30
+              )
+
+            );
+
+
+          const compactness =
+            Math.max(
+
+              0,
+
+              1 -
+              Math.min(
+                1,
+                item.areaRatio /
+                0.35
+              )
+
+            );
+
+
+          const motionStrength =
+            Math.min(
+
+              1,
+
+              item.meanDifference /
+              Math.max(
+                averageDifference *
+                2,
+                0.02
+              )
+
+            );
+
+
+          const score =
+
+            proximity *
+            0.45 +
+
+            compactness *
+            0.30 +
+
+            motionStrength *
+            0.25;
+
+
+          return {
+
+            ...item,
+
+            score:
+              score
+
+          };
+
+        }
+      );
+
+
+    scored.sort(
+      function(a,b){
+
+        return (
+          b.score -
+          a.score
+        );
+      }
+    );
+
+
+    const best =
+      scored[0];
+
+
+    /*
+      Keep candidates near the best temporal
+      event to estimate first/last appearance.
+    */
+
+    const sequence =
+      candidates.filter(
+        function(item){
+
+          return (
+            Math.abs(
+              item.time -
+              best.time
+            ) <=
+            0.125
+          );
+        }
+      );
+
+
+    sequence.sort(
+      function(a,b){
+
+        return (
+          a.time -
+          b.time
+        );
+      }
+    );
+
+
+    const first =
+      sequence.length
+      ? sequence[0].time
+      : best.time;
+
+
+    const last =
+      sequence.length
+      ? sequence[
+          sequence.length - 1
+        ].time
+      : best.time;
+
+
+    const offset =
+      (
+        best.time -
+        fv03Release
+      ) *
+      1000;
+
+
+    /*
+      Experimental confidence.
+
+      Do NOT interpret as laboratory
+      probability. It is an FV-04
+      candidate-quality score.
+    */
+
+    let confidence =
+      Math.round(
+        best.score *
+        100
+      );
+
+
+    /*
+      Require some meaningful confidence
+      before calling it detected.
+    */
+
+    const detected =
+      confidence >=
+      35;
+
+
+    if(!detected){
+
+      confidence =
+        Math.min(
+          confidence,
+          34
+        );
+    }
+
+
+    return {
+
+      detected:
+        detected,
+
+      confidence:
+        confidence,
+
+      first:
+        first,
+
+      last:
+        last,
+
+      release:
+        best.time,
+
+      offset:
+        offset,
+
+      size:
+        best.width +
+        "×" +
+        best.height +
+        " px",
+
+      peak:
+        best.meanDifference,
+
+      areaRatio:
+        best.areaRatio,
+
+      centerX:
+        best.centerX,
+
+      centerY:
+        best.centerY
+
+    };
+  }
+
+
+  /*
+  ========================================
+  MAIN ANALYSIS
+  ========================================
+  */
+
+  async function analyseVideo(){
+
+    analyseBtn.disabled =
+      true;
+
+
+    progressBar.style.width =
+      "0%";
+
+
+    resetResults();
+
+
+    try{
+
+      const frameAccess =
+        document.getElementById(
+          "frameAccess"
+        ).textContent;
+
+
+      if(
+        frameAccess !==
+        "READY"
+      ){
+
+        throw new Error(
+          "FRAME ACCESS NOT READY"
+        );
+      }
+
+
+      /*
+      =====================================
+      STAGE 1
+      FV-02
+      =====================================
+      */
+
+      const coarse =
+        await coarseScan();
+
+
+      if(
+        !coarse ||
+        coarse.length === 0
+      ){
+
+        throw new Error(
+          "NO COARSE MOTION DATA"
+        );
+      }
+
+
+      let strongest =
+        coarse[0];
+
+
+      for(
+        const item of coarse
+      ){
+
+        if(
+          item.motion >
+          strongest.motion
+        ){
+
+          strongest =
+            item;
+        }
+      }
+
+
+      document.getElementById(
+        "motionDetected"
+      ).textContent =
+        strongest.motion > 0
+        ? "YES"
+        : "NO";
+
+
+      document.getElementById(
+        "motionDetected"
+      ).className =
+        strongest.motion > 0
+        ? "good"
+        : "";
+
+
+      document.getElementById(
+        "maxMotion"
+      ).textContent =
+        strongest.motion
+          .toFixed(3);
+
+
+      document.getElementById(
+        "strongestTime"
+      ).textContent =
+        strongest.time
+          .toFixed(3) +
+        " s";
+
+
+      /*
+      =====================================
+      STAGE 2
+      FV-03 FINE SCAN
+      =====================================
+      */
+
+      const fine =
+        await fineScan(
+          strongest.time
+        );
+
+
+      if(
+        !fine ||
+        fine.length < 3
+      ){
+
+        throw new Error(
+          "NO FINE MOTION DATA"
+        );
+      }
+
+
+      /*
+      =====================================
+      STAGE 3
+      FV-03 THROW EVENT
+      =====================================
+      */
+
+      const event =
+        analyseThrowEvent(
+          fine
+        );
+
+
+      document.getElementById(
+        "throwDetected"
+      ).textContent =
+        "YES";
+
+
+      document.getElementById(
+        "throwDetected"
+      ).className =
+        "good";
+
+
+      document.getElementById(
+        "motionStart"
+      ).textContent =
+        event.motionStart
+          .toFixed(3) +
+        " s";
+
+
+      document.getElementById(
+        "peakMotionTime"
+      ).textContent =
+        event.peak.time
+          .toFixed(3) +
+        " s";
+
+
+      document.getElementById(
+        "releaseTime"
+      ).textContent =
+        event.releaseTime
+          .toFixed(3) +
+        " s";
+
+
+      document.getElementById(
+        "postRelease"
+      ).textContent =
+        event.postRelease
+          .toFixed(3) +
+        " s";
+
+
+      document.getElementById(
+        "eventDuration"
+      ).textContent =
+        event.eventDuration
+          .toFixed(3) +
+        " s";
+
+
+      document.getElementById(
+        "releaseConfidence"
+      ).textContent =
+        event.confidence +
+        "%";
+
+
+      /*
+      =====================================
+      STAGE 4
+      FV-04 DART CANDIDATE SCAN
+      =====================================
+      */
+
+      const dartSamples =
+        await dartCandidateScan(
+          event.releaseTime
+        );
+
+
+      const dart =
+        classifyDartCandidate(
+          dartSamples,
+          event.releaseTime
+        );
+
+
+      if(
+        dart.detected
+      ){
+
+        document.getElementById(
+          "dartDetected"
+        ).textContent =
+          "YES";
+
+
+        document.getElementById(
+          "dartDetected"
+        ).className =
+          "good";
+
+      }
+      else{
+
+        document.getElementById(
+          "dartDetected"
+        ).textContent =
+          "NO";
+
+
+        document.getElementById(
+          "dartDetected"
+        ).className =
+          "warning";
+      }
+
+
+      document.getElementById(
+        "dartConfidence"
+      ).textContent =
+        dart.confidence +
+        "%";
+
+
+      if(
+        dart.detected
+      ){
+
+        document.getElementById(
+          "dartConfidence"
+        ).className =
+          "good";
+      }
+
+
+      document.getElementById(
+        "firstDartTime"
+      ).textContent =
+
+        dart.first !== null
+
+        ? dart.first.toFixed(3) +
+          " s"
+
+        : "—";
+
+
+      document.getElementById(
+        "lastDartTime"
+      ).textContent =
+
+        dart.last !== null
+
+        ? dart.last.toFixed(3) +
+          " s"
+
+        : "—";
+
+
+      document.getElementById(
+        "confirmedRelease"
+      ).textContent =
+
+        dart.release !== null
+
+        ? dart.release.toFixed(3) +
+          " s"
+
+        : "—";
+
+
+      document.getElementById(
+        "releaseOffset"
+      ).textContent =
+
+        dart.offset !== null
+
+        ? (
+            dart.offset >= 0
+            ? "+"
+            : ""
+          ) +
+
+          dart.offset.toFixed(0) +
+          " ms"
+
+        : "—";
+
+
+      document.getElementById(
+        "candidateSize"
+      ).textContent =
+        dart.size ||
+        "—";
+
+
+      document.getElementById(
+        "dartPeakMotion"
+      ).textContent =
+
+        dart.peak !== null &&
+        dart.peak !== undefined
+
+        ? dart.peak.toFixed(3)
+
+        : "—";
+
+
+      progressBar.style.width =
+        "100%";
+
+
+      if(
+        dart.detected
+      ){
+
+        setStatus(
+          "ok",
+          "FV-04 DART CANDIDATE DETECTED"
+        );
+
+      }
+      else{
+
+        setStatus(
+          "warning",
+          "FV-04 COMPLETE · NO RELIABLE DART CANDIDATE"
+        );
+      }
+
+
+      /*
+        Position video slightly before the
+        best available release candidate.
+      */
+
+      const finalRelease =
+        dart.release !== null
+        ? dart.release
+        : event.releaseTime;
+
+
+      try{
+
+        video.currentTime =
+          Math.max(
+            0,
+            finalRelease -
+            0.25
+          );
+
+      }
+      catch(error){
+
+        console.warn(
+          "Could not reposition video",
+          error
+        );
+      }
+
+
+      /*
+        Debug output for later calibration.
+      */
+
+      console.log(
+        "FV-04 RESULT:",
+        {
+          analysisID:
+            analysisID,
+
+          fv02StrongestMotion:
+            strongest,
+
+          fv03Event:
+            event,
+
+          fv04Dart:
+            dart,
+
+          fv04Samples:
+            dartSamples
+        }
+      );
+
+    }
+    catch(error){
+
+      console.error(
+        "FV-04 ANALYSIS ERROR:",
+        error
+      );
+
+
+      document.getElementById(
+        "dartDetected"
+      ).textContent =
+        "ERROR";
+
+
+      document.getElementById(
+        "dartDetected"
+      ).className =
+        "bad";
+
+
+      setStatus(
+        "error",
+        "FV-04 ERROR · " +
+        (
+          error.message ||
+          "ANALYSIS FAILED"
+        )
+      );
+
+    }
+    finally{
+
+      if(
+        document.getElementById(
+          "frameAccess"
+        ).textContent ===
+        "READY"
+      ){
+
+        analyseBtn.disabled =
+          false;
+      }
+
+    }
+  }
+
+
+  /*
+  ========================================
+  BUTTON
+  ========================================
+  */
+
+  analyseBtn.addEventListener(
+    "click",
+    analyseVideo
+  );
+
+
+})();
+
+</script>
+
+</body>
+</html>
