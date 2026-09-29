@@ -20,19 +20,33 @@
   --warn:#ffc857;
 }
 
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
+html,
 body{
   margin:0;
-  min-height:100vh;
+  width:100%;
+  min-height:100%;
+  background:var(--bg);
+}
+
+body{
   font-family:Arial,Helvetica,sans-serif;
   background:
-    radial-gradient(circle at 50% 0,#0a2842 0,#06111d 35%,var(--bg) 72%);
+    radial-gradient(
+      circle at 50% 0,
+      #0a2842 0,
+      #06111d 35%,
+      var(--bg) 72%
+    );
   color:var(--text);
   padding:12px;
 }
 
 .wrap{
+  width:100%;
   max-width:920px;
   margin:auto;
 }
@@ -72,7 +86,8 @@ body{
   border:1px solid var(--line);
   border-radius:18px;
   padding:13px;
-  box-shadow:0 0 30px rgba(24,168,255,.09);
+  box-shadow:
+    0 0 30px rgba(24,168,255,.09);
 }
 
 .video-shell{
@@ -111,10 +126,21 @@ video{
   flex:0 0 auto;
 }
 
-.status.ok .dot{background:var(--ok)}
-.status.error .dot{background:var(--bad)}
-.status.loading .dot{background:var(--blue)}
-.status.warning .dot{background:var(--warn)}
+.status.ok .dot{
+  background:var(--ok);
+}
+
+.status.error .dot{
+  background:var(--bad);
+}
+
+.status.loading .dot{
+  background:var(--blue);
+}
+
+.status.warning .dot{
+  background:var(--warn);
+}
 
 #statusText{
   font-weight:800;
@@ -127,7 +153,12 @@ button{
   padding:15px;
   border:1px solid #1679b7;
   border-radius:12px;
-  background:linear-gradient(180deg,#169be9,#0875ba);
+  background:
+    linear-gradient(
+      180deg,
+      #169be9,
+      #0875ba
+    );
   color:#fff;
   font-weight:800;
   font-size:14px;
@@ -225,12 +256,12 @@ button:disabled{
   overflow-wrap:anywhere;
 }
 
-.result-row b.good{
-  color:var(--ok);
+.good{
+  color:var(--ok) !important;
 }
 
-.result-row b.blue{
-  color:var(--blue);
+.blue{
+  color:var(--blue) !important;
 }
 
 .note{
@@ -245,8 +276,14 @@ canvas{
 }
 
 @media(max-width:560px){
-  body{padding:8px}
-  .card{padding:10px}
+
+  body{
+    padding:8px;
+  }
+
+  .card{
+    padding:10px;
+  }
 }
 </style>
 </head>
@@ -256,34 +293,58 @@ canvas{
 <div class="wrap">
 
   <div class="brand">
+
     <h1>DARTIQ</h1>
+
     <p>FLIGHT VISION</p>
-    <div class="version">FV-03 · THROW EVENT DETECTION</div>
+
+    <div class="version">
+      FV-03 · THROW EVENT DETECTION
+    </div>
+
   </div>
+
 
   <div class="card">
 
     <div class="video-shell">
+
       <video
         id="video"
         controls
         playsinline
         preload="auto">
       </video>
+
     </div>
 
-    <div id="status" class="status loading">
+
+    <div
+      id="status"
+      class="status loading">
+
       <span class="dot"></span>
-      <span id="statusText">WAITING FOR VIDEO...</span>
+
+      <span id="statusText">
+        WAITING FOR VIDEO...
+      </span>
+
     </div>
 
-    <button id="analyseBtn" disabled>
+
+    <button
+      id="analyseBtn"
+      disabled>
+
       ANALYSE THROW
+
     </button>
+
 
     <div class="progress">
       <div id="progressBar"></div>
     </div>
+
 
     <div class="meta">
 
@@ -324,11 +385,14 @@ canvas{
       FV-02 · MOTION FOUNDATION
     </div>
 
+
     <div class="results">
 
       <div class="result-row">
         <span>Motion detected</span>
-        <b id="motionDetected">NOT ANALYSED</b>
+        <b id="motionDetected">
+          NOT ANALYSED
+        </b>
       </div>
 
       <div class="result-row">
@@ -337,7 +401,9 @@ canvas{
       </div>
 
       <div class="result-row">
-        <span>Strongest motion timestamp</span>
+        <span>
+          Strongest motion timestamp
+        </span>
         <b id="strongestTime">—</b>
       </div>
 
@@ -348,11 +414,14 @@ canvas{
       FV-03 · THROW EVENT ANALYSIS
     </div>
 
+
     <div class="results">
 
       <div class="result-row">
         <span>Throw event detected</span>
-        <b id="throwDetected">NOT ANALYSED</b>
+        <b id="throwDetected">
+          NOT ANALYSED
+        </b>
       </div>
 
       <div class="result-row">
@@ -392,30 +461,50 @@ canvas{
 
     </div>
 
+
     <p class="note">
-      FV-03 first performs the validated FV-02 coarse motion scan.
-      It then automatically zooms into the strongest motion region
-      and performs a denser temporal scan to estimate the throw event.
-      Probable release remains a candidate until dart-specific tracking
-      is introduced in the next Flight Vision stage.
+
+      FV-03 first performs the validated
+      FV-02 coarse motion scan. It then
+      automatically zooms into the
+      strongest motion region and performs
+      a denser temporal scan to estimate
+      the throw event. Probable release
+      remains a candidate until
+      dart-specific tracking is introduced
+      in the next Flight Vision stage.
+
     </p>
+
 
     <canvas id="canvas"></canvas>
 
   </div>
+
 </div>
 
 
 <script>
+
 (function(){
 
+  /*
+  ========================================
+  URL PARAMETERS
+  ========================================
+  */
+
   const params =
-    new URLSearchParams(location.search);
+    new URLSearchParams(
+      window.location.search
+    );
+
 
   const videoParam =
     params.get("video") ||
     params.get("video_url") ||
     params.get("VideoUpload");
+
 
   const analysisID =
     params.get("id") ||
@@ -424,29 +513,55 @@ canvas{
     "—";
 
 
+  /*
+  ========================================
+  ELEMENTS
+  ========================================
+  */
+
   const video =
-    document.getElementById("video");
+    document.getElementById(
+      "video"
+    );
+
 
   const canvas =
-    document.getElementById("canvas");
+    document.getElementById(
+      "canvas"
+    );
+
 
   const ctx =
     canvas.getContext(
       "2d",
-      {willReadFrequently:true}
+      {
+        willReadFrequently:true
+      }
     );
 
+
   const statusBox =
-    document.getElementById("status");
+    document.getElementById(
+      "status"
+    );
+
 
   const statusText =
-    document.getElementById("statusText");
+    document.getElementById(
+      "statusText"
+    );
+
 
   const analyseBtn =
-    document.getElementById("analyseBtn");
+    document.getElementById(
+      "analyseBtn"
+    );
+
 
   const progressBar =
-    document.getElementById("progressBar");
+    document.getElementById(
+      "progressBar"
+    );
 
 
   document.getElementById(
@@ -455,7 +570,16 @@ canvas{
     analysisID;
 
 
-  function setStatus(type,text){
+  /*
+  ========================================
+  STATUS
+  ========================================
+  */
+
+  function setStatus(
+    type,
+    text
+  ){
 
     statusBox.className =
       "status " + type;
@@ -465,75 +589,126 @@ canvas{
   }
 
 
+  /*
+  ========================================
+  RESET RESULTS
+  ========================================
+  */
+
   function resetResults(){
 
     document.getElementById(
       "coarseFrames"
-    ).textContent = "0";
+    ).textContent =
+      "0";
+
 
     document.getElementById(
       "fineFrames"
-    ).textContent = "0";
+    ).textContent =
+      "0";
+
 
     document.getElementById(
       "motionDetected"
-    ).textContent = "ANALYSING";
+    ).textContent =
+      "ANALYSING";
+
 
     document.getElementById(
       "maxMotion"
-    ).textContent = "—";
+    ).textContent =
+      "—";
+
 
     document.getElementById(
       "strongestTime"
-    ).textContent = "—";
+    ).textContent =
+      "—";
+
 
     document.getElementById(
       "throwDetected"
-    ).textContent = "ANALYSING";
+    ).textContent =
+      "ANALYSING";
+
 
     document.getElementById(
       "motionStart"
-    ).textContent = "—";
+    ).textContent =
+      "—";
+
 
     document.getElementById(
       "peakMotionTime"
-    ).textContent = "—";
+    ).textContent =
+      "—";
+
 
     document.getElementById(
       "releaseTime"
-    ).textContent = "—";
+    ).textContent =
+      "—";
+
 
     document.getElementById(
       "postRelease"
-    ).textContent = "—";
+    ).textContent =
+      "—";
+
 
     document.getElementById(
       "eventDuration"
-    ).textContent = "—";
+    ).textContent =
+      "—";
+
 
     document.getElementById(
       "releaseConfidence"
-    ).textContent = "—";
+    ).textContent =
+      "—";
+
 
     document.getElementById(
       "scanWindow"
-    ).textContent = "—";
+    ).textContent =
+      "—";
   }
 
 
+  /*
+  ========================================
+  CHECK VIDEO PARAMETER
+  ========================================
+  */
+
   if(!videoParam){
+
+    document.getElementById(
+      "frameAccess"
+    ).textContent =
+      "NO VIDEO";
+
 
     setStatus(
       "error",
       "NO VIDEO URL RECEIVED"
     );
 
+
     return;
   }
 
 
+  /*
+  ========================================
+  VIDEO SOURCE
+  ========================================
+  */
+
   let source =
     videoParam;
+
 
   try{
 
@@ -542,22 +717,34 @@ canvas{
         videoParam
       );
 
-  }catch(error){}
+  }
+  catch(error){
+
+    console.warn(
+      "Video URL decode skipped",
+      error
+    );
+  }
 
 
   /*
     IMPORTANT:
-    crossOrigin must be assigned
-    before video.src.
+
+    crossOrigin MUST be set before src.
+
+    Do not move these lines.
   */
 
   video.crossOrigin =
     "anonymous";
 
+
   video.src =
     source;
 
+
   video.load();
+
 
   setStatus(
     "loading",
@@ -565,14 +752,33 @@ canvas{
   );
 
 
+  /*
+  ========================================
+  CANVAS
+  ========================================
+  */
+
   function prepareCanvas(){
+
+    if(
+      !video.videoWidth ||
+      !video.videoHeight
+    ){
+
+      throw new Error(
+        "VIDEO DIMENSIONS NOT READY"
+      );
+    }
+
 
     canvas.width =
       160;
 
+
     const ratio =
       video.videoHeight /
       video.videoWidth;
+
 
     canvas.height =
       Math.max(
@@ -584,6 +790,12 @@ canvas{
   }
 
 
+  /*
+  ========================================
+  READ FRAME
+  ========================================
+  */
+
   function readFrame(){
 
     ctx.drawImage(
@@ -594,19 +806,31 @@ canvas{
       canvas.height
     );
 
-    return ctx.getImageData(
-      0,
-      0,
-      canvas.width,
-      canvas.height
-    ).data;
+
+    const image =
+      ctx.getImageData(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+
+
+    return image.data;
   }
 
+
+  /*
+  ========================================
+  GRAYSCALE FRAME
+  ========================================
+  */
 
   function grayscaleFrame(){
 
     const data =
       readFrame();
+
 
     const gray =
       new Uint8Array(
@@ -614,8 +838,10 @@ canvas{
         canvas.height
       );
 
+
     let j =
       0;
+
 
     for(
       let i = 0;
@@ -625,90 +851,87 @@ canvas{
 
       gray[j++] =
         Math.round(
-          data[i] * .299 +
-          data[i+1] * .587 +
-          data[i+2] * .114
+
+          data[i] *
+          0.299 +
+
+          data[i + 1] *
+          0.587 +
+
+          data[i + 2] *
+          0.114
+
         );
     }
+
 
     return gray;
   }
 
 
-  function compareFrames(a,b){
+  /*
+  ========================================
+  MOTION COMPARISON
+  ========================================
+  */
+
+  function compareFrames(
+    current,
+    previous
+  ){
 
     if(
-      !a ||
-      !b ||
-      a.length !== b.length
+      !current ||
+      !previous ||
+      current.length !==
+      previous.length
     ){
+
       return 0;
     }
 
-    let changed =
-      0;
 
     let difference =
       0;
 
-    const threshold =
-      28;
 
     for(
       let i = 0;
-      i < a.length;
+      i < current.length;
       i++
     ){
 
-      const diff =
+      difference +=
         Math.abs(
-          a[i] -
-          b[i]
+          current[i] -
+          previous[i]
         );
-
-      if(
-        diff >
-        threshold
-      ){
-
-        changed++;
-
-        difference +=
-          diff;
-      }
     }
-
-
-    if(
-      changed ===
-      0
-    ){
-      return 0;
-    }
-
-
-    const changedRatio =
-      changed /
-      a.length;
-
-    const avgDifference =
-      difference /
-      changed;
 
 
     return (
-      changedRatio *
-      avgDifference
+      difference /
+      current.length /
+      255
     );
   }
 
 
+  /*
+  ========================================
+  SEEK HANDLER
+  ========================================
+  */
+
   function waitForSeek(
-    timeoutMs = 2500
+    timeoutMs = 5000
   ){
 
     return new Promise(
-      function(resolve,reject){
+      function(
+        resolve,
+        reject
+      ){
 
         let finished =
           false;
@@ -720,6 +943,7 @@ canvas{
             "seeked",
             onSeeked
           );
+
 
           clearTimeout(
             timer
@@ -733,15 +957,24 @@ canvas{
             return;
           }
 
+
           finished =
             true;
 
+
           cleanup();
+
 
           requestAnimationFrame(
             function(){
 
-              resolve(true);
+              requestAnimationFrame(
+                function(){
+
+                  resolve(true);
+
+                }
+              );
 
             }
           );
@@ -756,10 +989,13 @@ canvas{
                 return;
               }
 
+
               finished =
                 true;
 
+
               cleanup();
+
 
               reject(
                 new Error(
@@ -775,12 +1011,21 @@ canvas{
         video.addEventListener(
           "seeked",
           onSeeked,
-          {once:true}
+          {
+            once:true
+          }
         );
+
       }
     );
   }
 
+
+  /*
+  ========================================
+  SEEK AND READ
+  ========================================
+  */
 
   async function seekAndRead(
     time
@@ -789,33 +1034,60 @@ canvas{
     const duration =
       video.duration;
 
+
     const safeTime =
       Math.min(
+
         Math.max(
           time,
           0
         ),
+
         Math.max(
           0,
-          duration -
-          .02
+          duration - 0.03
         )
+
+      );
+
+
+    const difference =
+      Math.abs(
+        video.currentTime -
+        safeTime
       );
 
 
     if(
-      Math.abs(
-        video.currentTime -
-        safeTime
-      ) >
-      .01
+      difference >
+      0.015
     ){
 
       video.currentTime =
         safeTime;
 
+
       await waitForSeek(
-        2500
+        5000
+      );
+
+    }
+    else{
+
+      await new Promise(
+        function(resolve){
+
+          requestAnimationFrame(
+            function(){
+
+              requestAnimationFrame(
+                resolve
+              );
+
+            }
+          );
+
+        }
       );
     }
 
@@ -824,7 +1096,142 @@ canvas{
   }
 
 
+  /*
+  ========================================
+  WAIT FOR VIDEO DATA
+  ========================================
+  */
+
+  function waitForVideoData(
+    timeoutMs = 10000
+  ){
+
+    return new Promise(
+      function(
+        resolve,
+        reject
+      ){
+
+        if(
+          video.readyState >= 2 &&
+          video.videoWidth > 0 &&
+          video.videoHeight > 0
+        ){
+
+          resolve(true);
+          return;
+        }
+
+
+        let finished =
+          false;
+
+
+        function cleanup(){
+
+          video.removeEventListener(
+            "loadeddata",
+            ready
+          );
+
+
+          video.removeEventListener(
+            "canplay",
+            ready
+          );
+
+
+          clearTimeout(
+            timer
+          );
+        }
+
+
+        function ready(){
+
+          if(finished){
+            return;
+          }
+
+
+          if(
+            video.readyState >= 2 &&
+            video.videoWidth > 0 &&
+            video.videoHeight > 0
+          ){
+
+            finished =
+              true;
+
+
+            cleanup();
+
+
+            resolve(true);
+          }
+        }
+
+
+        const timer =
+          setTimeout(
+            function(){
+
+              if(finished){
+                return;
+              }
+
+
+              finished =
+                true;
+
+
+              cleanup();
+
+
+              reject(
+                new Error(
+                  "VIDEO DATA TIMEOUT"
+                )
+              );
+
+            },
+            timeoutMs
+          );
+
+
+        video.addEventListener(
+          "loadeddata",
+          ready
+        );
+
+
+        video.addEventListener(
+          "canplay",
+          ready
+        );
+
+      }
+    );
+  }
+
+
+  /*
+  ========================================
+  FRAME ACCESS TEST
+  ========================================
+  */
+
   async function testFrameAccess(){
+
+    document.getElementById(
+      "frameAccess"
+    ).textContent =
+      "TESTING";
+
+
+    analyseBtn.disabled =
+      true;
+
 
     setStatus(
       "loading",
@@ -834,23 +1241,81 @@ canvas{
 
     try{
 
+      await waitForVideoData(
+        10000
+      );
+
+
       prepareCanvas();
 
 
+      /*
+        Use a decoded frame well inside
+        the video instead of frame zero.
+      */
+
       const testTime =
         Math.min(
-          .5,
+
+          Math.max(
+            video.duration *
+            0.15,
+            0.75
+          ),
+
           Math.max(
             0,
-            video.duration /
-            10
+            video.duration -
+            0.25
           )
+
         );
 
 
-      await seekAndRead(
-        testTime
+      video.currentTime =
+        testTime;
+
+
+      await waitForSeek(
+        5000
       );
+
+
+      /*
+        Give WebView / browser two
+        rendering cycles after seek.
+      */
+
+      await new Promise(
+        function(resolve){
+
+          requestAnimationFrame(
+            function(){
+
+              requestAnimationFrame(
+                resolve
+              );
+
+            }
+          );
+
+        }
+      );
+
+
+      const data =
+        readFrame();
+
+
+      if(
+        !data ||
+        data.length === 0
+      ){
+
+        throw new Error(
+          "EMPTY FRAME DATA"
+        );
+      }
 
 
       document.getElementById(
@@ -859,13 +1324,19 @@ canvas{
         "READY";
 
 
+      document.getElementById(
+        "frameAccess"
+      ).className =
+        "good";
+
+
       analyseBtn.disabled =
         false;
 
 
       setStatus(
         "ok",
-        "VIDEO READY · FV-03 AVAILABLE"
+        "FRAME ACCESS READY · FV-03 AVAILABLE"
       );
 
 
@@ -875,7 +1346,7 @@ canvas{
     catch(error){
 
       console.error(
-        "FRAME ACCESS ERROR",
+        "FV-03 FRAME ACCESS ERROR:",
         error
       );
 
@@ -890,9 +1361,25 @@ canvas{
         true;
 
 
+      let message =
+        error.message ||
+        "UNKNOWN ERROR";
+
+
+      if(
+        error.name ===
+        "SecurityError"
+      ){
+
+        message =
+          "CORS / CANVAS ACCESS BLOCKED";
+      }
+
+
       setStatus(
         "error",
-        "FRAME ACCESS BLOCKED"
+        "FRAME ACCESS ERROR · " +
+        message
       );
 
 
@@ -901,9 +1388,15 @@ canvas{
   }
 
 
+  /*
+  ========================================
+  VIDEO METADATA
+  ========================================
+  */
+
   video.addEventListener(
     "loadedmetadata",
-    async function(){
+    function(){
 
       document.getElementById(
         "duration"
@@ -932,50 +1425,127 @@ canvas{
 
         : "—";
 
+    }
+  );
 
-      prepareCanvas();
 
-      await testFrameAccess();
+  /*
+  ========================================
+  START FRAME ACCESS TEST
+  ========================================
+  */
+
+  let frameTestStarted =
+    false;
+
+
+  async function startFrameTest(){
+
+    if(frameTestStarted){
+      return;
+    }
+
+
+    frameTestStarted =
+      true;
+
+
+    await testFrameAccess();
+  }
+
+
+  video.addEventListener(
+    "loadeddata",
+    startFrameTest,
+    {
+      once:true
     }
   );
 
 
   video.addEventListener(
+    "canplay",
+    startFrameTest,
+    {
+      once:true
+    }
+  );
+
+
+  /*
+  ========================================
+  VIDEO ERROR
+  ========================================
+  */
+
+  video.addEventListener(
     "error",
     function(){
+
+      const mediaError =
+        video.error;
+
+
+      let message =
+        "VIDEO COULD NOT BE LOADED";
+
+
+      if(mediaError){
+
+        message +=
+          " · CODE " +
+          mediaError.code;
+      }
+
+
+      document.getElementById(
+        "frameAccess"
+      ).textContent =
+        "ERROR";
+
 
       analyseBtn.disabled =
         true;
 
+
       setStatus(
         "error",
-        "VIDEO COULD NOT BE LOADED"
+        message
       );
+
     }
   );
 
+
+  /*
+  ========================================
+  FV-02 COARSE SCAN
+  ========================================
+  */
 
   async function coarseScan(){
 
     const duration =
       video.duration;
 
+
     const targetSamples =
       24;
 
+
     const startTime =
       Math.min(
-        .1,
-        duration *
-        .02
+        0.1,
+        duration * 0.02
       );
+
 
     const endTime =
       Math.max(
         startTime,
-        duration -
-        .1
+        duration - 0.1
       );
+
 
     const times =
       [];
@@ -990,8 +1560,7 @@ canvas{
       const fraction =
         i /
         (
-          targetSamples -
-          1
+          targetSamples - 1
         );
 
 
@@ -1012,6 +1581,7 @@ canvas{
 
     let previous =
       null;
+
 
     const samples =
       [];
@@ -1042,14 +1612,19 @@ canvas{
 
         const motion =
           compareFrames(
-            previous,
-            current
+            current,
+            previous
           );
 
 
         samples.push({
-          time:times[i],
-          motion:motion
+
+          time:
+            times[i],
+
+          motion:
+            motion
+
         });
       }
 
@@ -1064,21 +1639,32 @@ canvas{
         i + 1;
 
 
-      progressBar.style.width =
+      const progress =
         (
           (
-            (i + 1) /
-            times.length
-          ) *
-          45
-        ).toFixed(0) +
+            i + 1
+          ) /
+          times.length
+        ) *
+        45;
+
+
+      progressBar.style.width =
+        progress.toFixed(0) +
         "%";
+
     }
 
 
     return samples;
   }
 
+
+  /*
+  ========================================
+  FV-03 FINE SCAN
+  ========================================
+  */
 
   async function fineScan(
     candidateTime
@@ -1088,14 +1674,9 @@ canvas{
       video.duration;
 
 
-    /*
-      FV-03 zooms 1.5 seconds
-      before and after the strongest
-      coarse motion candidate.
-    */
-
     const windowBefore =
       1.5;
+
 
     const windowAfter =
       1.5;
@@ -1111,8 +1692,7 @@ canvas{
 
     const end =
       Math.min(
-        duration -
-        .02,
+        duration - 0.03,
         candidateTime +
         windowAfter
       );
@@ -1129,14 +1709,13 @@ canvas{
 
 
     /*
-      Fine temporal sampling.
-
-      20 samples per second gives
+      20 samples per second =
       approximately 50 ms spacing.
     */
 
     const fineFPS =
       20;
+
 
     const interval =
       1 /
@@ -1162,8 +1741,22 @@ canvas{
     }
 
 
+    if(
+      times.length === 0 ||
+      times[
+        times.length - 1
+      ] < end
+    ){
+
+      times.push(
+        end
+      );
+    }
+
+
     let previous =
       null;
+
 
     const samples =
       [];
@@ -1194,14 +1787,19 @@ canvas{
 
         const motion =
           compareFrames(
-            previous,
-            current
+            current,
+            previous
           );
 
 
         samples.push({
-          time:times[i],
-          motion:motion
+
+          time:
+            times[i],
+
+          motion:
+            motion
+
         });
       }
 
@@ -1216,20 +1814,23 @@ canvas{
         i + 1;
 
 
-      const fineProgress =
+      const progress =
         45 +
+
         (
           (
-            (i + 1) /
-            times.length
-          ) *
-          55
-        );
+            i + 1
+          ) /
+          times.length
+        ) *
+
+        55;
 
 
       progressBar.style.width =
-        fineProgress.toFixed(0) +
+        progress.toFixed(0) +
         "%";
+
     }
 
 
@@ -1237,14 +1838,19 @@ canvas{
   }
 
 
+  /*
+  ========================================
+  THROW EVENT DETECTION
+  ========================================
+  */
+
   function analyseThrowEvent(
     samples
   ){
 
     if(
       !samples ||
-      samples.length <
-      3
+      samples.length < 3
     ){
 
       throw new Error(
@@ -1255,7 +1861,10 @@ canvas{
 
     const average =
       samples.reduce(
-        function(sum,item){
+        function(
+          sum,
+          item
+        ){
 
           return (
             sum +
@@ -1287,24 +1896,19 @@ canvas{
     }
 
 
-    /*
-      Dynamic event threshold.
-
-      This identifies the active
-      movement region surrounding
-      the local motion peak.
-    */
-
     const eventThreshold =
       Math.max(
+
         average *
         1.35,
+
         peak.motion *
-        .28
+        0.28
+
       );
 
 
-    let peakIndex =
+    const peakIndex =
       samples.indexOf(
         peak
       );
@@ -1315,8 +1919,7 @@ canvas{
 
 
     while(
-      startIndex >
-      0 &&
+      startIndex > 0 &&
       samples[
         startIndex - 1
       ].motion >
@@ -1333,8 +1936,7 @@ canvas{
 
     while(
       endIndex <
-      samples.length -
-      1 &&
+      samples.length - 1 &&
       samples[
         endIndex + 1
       ].motion >
@@ -1345,27 +1947,17 @@ canvas{
     }
 
 
-    /*
-      Include one surrounding sample
-      where available so the event
-      boundaries do not stop exactly
-      on the threshold crossing.
-    */
-
     startIndex =
       Math.max(
         0,
-        startIndex -
-        1
+        startIndex - 1
       );
 
 
     endIndex =
       Math.min(
-        samples.length -
-        1,
-        endIndex +
-        1
+        samples.length - 1,
+        endIndex + 1
       );
 
 
@@ -1382,39 +1974,31 @@ canvas{
 
 
     /*
-      FV-03 release candidate:
+      FV-03 still treats the local
+      motion peak as the release
+      candidate.
 
-      For this validation stage the
-      strongest local motion transition
-      is treated as the probable release.
-
-      FV-04 will add dart-specific
-      visual evidence before this can
-      become a confirmed release.
+      It is NOT yet a confirmed
+      dart release.
     */
 
     const releaseTime =
       peak.time;
 
 
-    /*
-      Post-release marker:
-      first sampled point after the peak
-      where movement falls substantially.
+    const postThreshold =
+      Math.max(
 
-      If none is found, use event end.
-    */
+        average,
+
+        peak.motion *
+        0.45
+
+      );
+
 
     let postRelease =
       motionEnd;
-
-
-    const postThreshold =
-      Math.max(
-        average,
-        peak.motion *
-        .45
-      );
 
 
     for(
@@ -1448,71 +2032,95 @@ canvas{
       );
 
 
-    /*
-      Confidence is based on how clearly
-      the peak rises above local baseline.
-
-      It is NOT yet dart confidence.
-    */
-
     let confidence =
       0;
 
 
     if(
-      peak.motion >
-      0
+      peak.motion > 0
     ){
 
       const contrast =
         peak.motion /
         Math.max(
           average,
-          .0001
+          0.0001
         );
 
 
       confidence =
         Math.min(
+
           100,
+
           Math.round(
             contrast *
             25
           )
+
         );
     }
 
 
     return {
-      average:average,
-      peak:peak,
-      motionStart:motionStart,
-      motionEnd:motionEnd,
-      releaseTime:releaseTime,
-      postRelease:postRelease,
-      eventDuration:eventDuration,
-      confidence:confidence
+
+      average:
+        average,
+
+      peak:
+        peak,
+
+      motionStart:
+        motionStart,
+
+      motionEnd:
+        motionEnd,
+
+      releaseTime:
+        releaseTime,
+
+      postRelease:
+        postRelease,
+
+      eventDuration:
+        eventDuration,
+
+      confidence:
+        confidence
+
     };
   }
 
+
+  /*
+  ========================================
+  MAIN ANALYSIS
+  ========================================
+  */
 
   async function analyseVideo(){
 
     analyseBtn.disabled =
       true;
 
+
     progressBar.style.width =
       "0%";
+
 
     resetResults();
 
 
     try{
 
-      if(
+      const frameAccess =
         document.getElementById(
           "frameAccess"
-        ).textContent !==
+        ).textContent;
+
+
+      if(
+        frameAccess !==
         "READY"
       ){
 
@@ -1523,8 +2131,10 @@ canvas{
 
 
       /*
-        STAGE 1
-        Validated FV-02 coarse scan.
+      -------------------------------
+      STAGE 1
+      FV-02 COARSE SCAN
+      -------------------------------
       */
 
       const coarse =
@@ -1532,7 +2142,8 @@ canvas{
 
 
       if(
-        !coarse.length
+        !coarse ||
+        coarse.length === 0
       ){
 
         throw new Error(
@@ -1563,15 +2174,26 @@ canvas{
       document.getElementById(
         "motionDetected"
       ).textContent =
-        strongest.motion >
-        0
+
+        strongest.motion > 0
+
         ? "YES"
+
         : "NO";
+
+
+      document.getElementById(
+        "motionDetected"
+      ).className =
+        strongest.motion > 0
+        ? "good"
+        : "";
 
 
       document.getElementById(
         "maxMotion"
       ).textContent =
+
         strongest.motion
           .toFixed(3);
 
@@ -1579,14 +2201,17 @@ canvas{
       document.getElementById(
         "strongestTime"
       ).textContent =
+
         strongest.time
           .toFixed(3) +
         " s";
 
 
       /*
-        STAGE 2
-        FV-03 high-density scan.
+      -------------------------------
+      STAGE 2
+      FV-03 FINE SCAN
+      -------------------------------
       */
 
       const fine =
@@ -1595,9 +2220,22 @@ canvas{
         );
 
 
+      if(
+        !fine ||
+        fine.length < 3
+      ){
+
+        throw new Error(
+          "NO FINE MOTION DATA"
+        );
+      }
+
+
       /*
-        STAGE 3
-        Detect local throw event.
+      -------------------------------
+      STAGE 3
+      THROW EVENT ANALYSIS
+      -------------------------------
       */
 
       const event =
@@ -1613,8 +2251,15 @@ canvas{
 
 
       document.getElementById(
+        "throwDetected"
+      ).className =
+        "good";
+
+
+      document.getElementById(
         "motionStart"
       ).textContent =
+
         event.motionStart
           .toFixed(3) +
         " s";
@@ -1623,6 +2268,7 @@ canvas{
       document.getElementById(
         "peakMotionTime"
       ).textContent =
+
         event.peak.time
           .toFixed(3) +
         " s";
@@ -1631,6 +2277,7 @@ canvas{
       document.getElementById(
         "releaseTime"
       ).textContent =
+
         event.releaseTime
           .toFixed(3) +
         " s";
@@ -1639,6 +2286,7 @@ canvas{
       document.getElementById(
         "postRelease"
       ).textContent =
+
         event.postRelease
           .toFixed(3) +
         " s";
@@ -1647,6 +2295,7 @@ canvas{
       document.getElementById(
         "eventDuration"
       ).textContent =
+
         event.eventDuration
           .toFixed(3) +
         " s";
@@ -1655,6 +2304,7 @@ canvas{
       document.getElementById(
         "releaseConfidence"
       ).textContent =
+
         event.confidence +
         "%";
 
@@ -1668,11 +2318,36 @@ canvas{
         "FV-03 THROW EVENT ANALYSIS COMPLETE"
       );
 
+
+      /*
+        Return video to release candidate
+        so the player visually lands near
+        the detected event.
+      */
+
+      try{
+
+        video.currentTime =
+          Math.max(
+            0,
+            event.releaseTime -
+            0.25
+          );
+
+      }
+      catch(error){
+
+        console.warn(
+          "Could not reposition video",
+          error
+        );
+      }
+
     }
     catch(error){
 
       console.error(
-        "FV-03 ERROR:",
+        "FV-03 ANALYSIS ERROR:",
         error
       );
 
@@ -1705,16 +2380,25 @@ canvas{
         analyseBtn.disabled =
           false;
       }
+
     }
   }
 
+
+  /*
+  ========================================
+  BUTTON
+  ========================================
+  */
 
   analyseBtn.addEventListener(
     "click",
     analyseVideo
   );
 
+
 })();
+
 </script>
 
 </body>
