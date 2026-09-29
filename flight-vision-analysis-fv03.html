@@ -500,17 +500,71 @@ canvas{
     );
 
 
+  /*
+  ========================================
+  CLEAN GLIDE PARAMETERS
+  ========================================
+
+  Glide can occasionally pass replacement
+  values wrapped in { }.
+
+  URLSearchParams already handles URL
+  decoding, so we do NOT decode the video
+  URL a second time.
+  */
+
+  function cleanParam(value){
+
+    if(!value){
+      return "";
+    }
+
+    let cleaned =
+      String(value).trim();
+
+
+    while(
+      cleaned.length >= 2 &&
+      cleaned.startsWith("{") &&
+      cleaned.endsWith("}")
+    ){
+
+      cleaned =
+        cleaned
+          .slice(1,-1)
+          .trim();
+
+    }
+
+
+    return cleaned;
+  }
+
+
   const videoParam =
-    params.get("video") ||
-    params.get("video_url") ||
-    params.get("VideoUpload");
+    cleanParam(
+
+      params.get("video") ||
+
+      params.get("video_url") ||
+
+      params.get("VideoUpload")
+
+    );
 
 
   const analysisID =
-    params.get("id") ||
-    params.get("analysis_id") ||
-    params.get("rowid") ||
-    "—";
+    cleanParam(
+
+      params.get("id") ||
+
+      params.get("analysis_id") ||
+
+      params.get("rowid") ||
+
+      "—"
+
+    );
 
 
   /*
@@ -704,27 +758,32 @@ canvas{
   ========================================
   VIDEO SOURCE
   ========================================
+
+  IMPORTANT:
+
+  URLSearchParams already decodes the
+  parameter value.
+
+  Do NOT call decodeURIComponent() again.
+
+  cleanParam() removes accidental outer
+  braces without modifying the actual URL.
   */
 
-  let source =
+  const source =
     videoParam;
 
 
-  try{
+  console.log(
+    "FV-03 VIDEO SOURCE:",
+    source
+  );
 
-    source =
-      decodeURIComponent(
-        videoParam
-      );
 
-  }
-  catch(error){
-
-    console.warn(
-      "Video URL decode skipped",
-      error
-    );
-  }
+  console.log(
+    "FV-03 ANALYSIS ID:",
+    analysisID
+  );
 
 
   /*
