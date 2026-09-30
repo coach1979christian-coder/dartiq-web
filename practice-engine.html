@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>DARTIQ Practice Engine</title>
+
+<style>
+:root{
+  --bg:#03070d;
+  --panel:#081421;
+  --panel2:#0d1d2d;
+  --line:#17344d;
+  --blue:#39a9ff;
+  --text:#ffffff;
+  --muted:#8fa9bd;
+  --danger:#ff5252;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,body{
+  margin:0;
+  padding:0;
+  width:100%;
+  min-height:100%;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+  padding:12px;
+}
+
+.engine{
+  width:100%;
+  max-width:460px;
+  margin:auto;
+}
+
+/* HEADER */
+
+.brand{
+  text-align:center;
+  margin-bottom:14px;
+}
+
+.brand-small{
+  font-size:11px;
+  letter-spacing:3px;
+  color:var(--blue);
+  font-weight:700;
+}
+
+.brand h1{
+  margin:5px 0 3px;
+  font-size:25px;
+  letter-spacing:1px;
+}
+
+.brand p{
+  margin:0;
+  color:var(--muted);
+  font-size:12px;
+}
+
+/* SESSION */
+
+.session{
+  background:linear-gradient(180deg,#0c1b2a,#07111b);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:15px;
+  margin-bottom:12px;
+}
+
+.session-label{
+  font-size:10px;
+  letter-spacing:2px;
+  color:var(--blue);
+  font-weight:bold;
+  margin-bottom:5px;
+}
+
+.session-id{
+  color:var(--muted);
+  font-size:11px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+/* SCORE */
+
+.score-card{
+  background:linear-gradient(180deg,#10243a,#081421);
+  border:1px solid rgba(57,169,255,.35);
+  border-radius:18px;
+  padding:18px;
+  text-align:center;
+  box-shadow:0 0 25px rgba(57,169,255,.08);
+}
+
+.score-label{
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:2px;
+  font-size:10px;
+}
+
+.remaining{
+  font-size:58px;
+  font-weight:800;
+  margin:5px 0 2px;
+}
+
+.visit-info{
+  display:flex;
+  justify-content:center;
+  gap:28px;
+  margin-top:8px;
+}
+
+.info-value{
+  font-size:19px;
+  font-weight:bold;
+}
+
+.info-label{
+  font-size:9px;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+/* INPUT */
+
+.input-card{
+  margin-top:12px;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:15px;
+}
+
+.input-title{
+  font-size:11px;
+  color:var(--blue);
+  font-weight:bold;
+  letter-spacing:1.5px;
+  margin-bottom:10px;
+}
+
+.score-display{
+  background:#02070c;
+  border:1px solid var(--line);
+  border-radius:12px;
+  height:62px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:32px;
+  font-weight:bold;
+  margin-bottom:12px;
+}
+
+/* KEYPAD */
+
+.keypad{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+}
+
+.key{
+  border:1px solid #1c3b55;
+  background:#0d2031;
+  color:white;
+  border-radius:11px;
+  padding:14px 5px;
+  font-size:18px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.key:active{
+  transform:scale(.97);
+  background:#153550;
+}
+
+.clear{
+  color:#ff7777;
+}
+
+.back{
+  color:#b8d9ef;
+}
+
+/* BUTTON */
+
+.submit{
+  width:100%;
+  border:none;
+  margin-top:10px;
+  padding:15px;
+  border-radius:12px;
+  background:var(--blue);
+  color:#00101c;
+  font-size:15px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.submit:active{
+  transform:scale(.99);
+}
+
+/* STATS */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-top:12px;
+}
+
+.stat{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:11px 5px;
+  text-align:center;
+}
+
+.stat-value{
+  font-size:17px;
+  font-weight:bold;
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:8px;
+  margin-top:4px;
+  letter-spacing:.7px;
+  text-transform:uppercase;
+}
+
+.message{
+  min-height:20px;
+  margin-top:10px;
+  text-align:center;
+  font-size:11px;
+  color:var(--muted);
+}
+
+.footer{
+  text-align:center;
+  margin-top:18px;
+  color:#49677c;
+  font-size:9px;
+  letter-spacing:1px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="engine">
+
+  <div class="brand">
+    <div class="brand-small">DARTIQ</div>
+    <h1>PRACTICE ENGINE</h1>
+    <p>Live scoring • Automatic performance tracking</p>
+  </div>
+
+  <div class="session">
+    <div class="session-label">ACTIVE SESSION</div>
+    <div class="session-id" id="sessionID">Loading session...</div>
+  </div>
+
+  <div class="score-card">
+
+    <div class="score-label">Remaining</div>
+
+    <div class="remaining" id="remaining">501</div>
+
+    <div class="visit-info">
+
+      <div>
+        <div class="info-value" id="visitNumber">1</div>
+        <div class="info-label">Visit</div>
+      </div>
+
+      <div>
+        <div class="info-value" id="dartsThrown">0</div>
+        <div class="info-label">Darts</div>
+      </div>
+
+      <div>
+        <div class="info-value" id="average">0.00</div>
+        <div class="info-label">Average</div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="input-card">
+
+    <div class="input-title">ENTER VISIT SCORE</div>
+
+    <div class="score-display" id="scoreDisplay">0</div>
+
+    <div class="keypad">
+
+      <button class="key" onclick="press('1')">1</button>
+      <button class="key" onclick="press('2')">2</button>
+      <button class="key" onclick="press('3')">3</button>
+
+      <button class="key" onclick="press('4')">4</button>
+      <button class="key" onclick="press('5')">5</button>
+      <button class="key" onclick="press('6')">6</button>
+
+      <button class="key" onclick="press('7')">7</button>
+      <button class="key" onclick="press('8')">8</button>
+      <button class="key" onclick="press('9')">9</button>
+
+      <button class="key clear" onclick="clearScore()">C</button>
+      <button class="key" onclick="press('0')">0</button>
+      <button class="key back" onclick="backspace()">⌫</button>
+
+    </div>
+
+    <button class="submit" onclick="confirmVisit()">
+      CONFIRM VISIT
+    </button>
+
+    <div class="message" id="message">
+      Enter the total score for this visit.
+    </div>
+
+  </div>
+
+  <div class="stats">
+
+    <div class="stat">
+      <div class="stat-value" id="stat100">0</div>
+      <div class="stat-label">100+</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-value" id="stat140">0</div>
+      <div class="stat-label">140+</div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-value" id="stat180">0</div>
+      <div class="stat-label">180</div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    DARTIQ CORE VISION • PRACTICE ENGINE V1
+  </div>
+
+</div>
+
+<script>
+
+const params = new URLSearchParams(window.location.search);
+const sessionID = params.get("session") || "No session supplied";
+
+document.getElementById("sessionID").textContent = sessionID;
+
+let input = "";
+let remaining = 501;
+let visit = 1;
+let totalPoints = 0;
+let totalDarts = 0;
+
+let count100 = 0;
+let count140 = 0;
+let count180 = 0;
+
+function press(number){
+
+  if(input.length >= 3) return;
+
+  input += number;
+
+  const value = Number(input);
+
+  if(value > 180){
+    input = "";
+    showMessage("Maximum visit score is 180.");
+  }
+
+  updateInput();
+}
+
+function clearScore(){
+  input = "";
+  updateInput();
+}
+
+function backspace(){
+  input = input.slice(0,-1);
+  updateInput();
+}
+
+function updateInput(){
+  document.getElementById("scoreDisplay").textContent =
+    input === "" ? "0" : input;
+}
+
+function showMessage(text){
+  document.getElementById("message").textContent = text;
+}
+
+function confirmVisit(){
+
+  if(input === ""){
+    showMessage("Enter a visit score first.");
+    return;
+  }
+
+  const score = Number(input);
+
+  if(score < 0 || score > 180){
+    showMessage("Visit score must be between 0 and 180.");
+    return;
+  }
+
+  /*
+    V1 assumes three darts per confirmed visit.
+    Checkout-specific dart counts will be added
+    when the Glide write workflow is connected.
+  */
+
+  const dartsThisVisit = 3;
+
+  if(score > remaining){
+
+    showMessage("Bust. Score cannot exceed remaining total.");
+
+    input = "";
+    updateInput();
+
+    totalDarts += dartsThisVisit;
+    visit++;
+
+    updateStats();
+    return;
+  }
+
+  remaining -= score;
+
+  totalPoints += score;
+  totalDarts += dartsThisVisit;
+
+  if(score === 180){
+    count180++;
+  }
+  else if(score >= 140){
+    count140++;
+  }
+  else if(score >= 100){
+    count100++;
+  }
+
+  showMessage("Visit recorded locally: " + score);
+
+  visit++;
+
+  input = "";
+
+  updateInput();
+  updateStats();
+
+  if(remaining === 0){
+    showMessage("LEG COMPLETE • Checkout!");
+  }
+}
+
+function updateStats(){
+
+  document.getElementById("remaining").textContent = remaining;
+
+  document.getElementById("visitNumber").textContent = visit;
+
+  document.getElementById("dartsThrown").textContent = totalDarts;
+
+  let avg = 0;
+
+  if(totalDarts > 0){
+    avg = (totalPoints / totalDarts) * 3;
+  }
+
+  document.getElementById("average").textContent =
+    avg.toFixed(2);
+
+  document.getElementById("stat100").textContent =
+    count100;
+
+  document.getElementById("stat140").textContent =
+    count140;
+
+  document.getElementById("stat180").textContent =
+    count180;
+}
+
+updateStats();
+
+</script>
+
+</body>
+</html>
