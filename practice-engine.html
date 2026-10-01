@@ -13,17 +13,9 @@
   --panel2:#0d1d2d;
   --line:#17344d;
   --blue:#39a9ff;
-  --blue-dark:#126da8;
-  --blue-deep:#082b45;
   --text:#ffffff;
   --muted:#8fa9bd;
   --danger:#ff5252;
-
-  /* DARTIQ BOARD */
-  --board-dark:#02070c;
-  --board-light:#0b1d2c;
-  --board-blue:#39a9ff;
-  --board-blue-dark:#126da8;
 }
 
 *{
@@ -50,8 +42,6 @@ body{
   margin:auto;
 }
 
-/* HEADER */
-
 .brand{
   text-align:center;
   margin-bottom:14px;
@@ -76,8 +66,6 @@ body{
   font-size:12px;
 }
 
-/* SESSION */
-
 .session{
   background:linear-gradient(180deg,#0c1b2a,#07111b);
   border:1px solid var(--line);
@@ -101,8 +89,6 @@ body{
   text-overflow:ellipsis;
   white-space:nowrap;
 }
-
-/* SCORE */
 
 .score-card{
   background:linear-gradient(180deg,#10243a,#081421);
@@ -145,8 +131,6 @@ body{
   letter-spacing:1px;
 }
 
-/* INPUT CARD */
-
 .input-card{
   margin-top:12px;
   background:var(--panel);
@@ -162,8 +146,6 @@ body{
   letter-spacing:1.5px;
   margin-bottom:10px;
 }
-
-/* MODE SWITCH */
 
 .mode-switch{
   display:grid;
@@ -188,10 +170,7 @@ body{
   background:var(--blue);
   border-color:var(--blue);
   color:#00101c;
-  box-shadow:0 0 14px rgba(57,169,255,.25);
 }
-
-/* SCORE DISPLAY */
 
 .score-display{
   background:#02070c;
@@ -205,8 +184,6 @@ body{
   font-weight:bold;
   margin-bottom:12px;
 }
-
-/* KEYPAD */
 
 .keypad{
   display:grid;
@@ -237,8 +214,6 @@ body{
 .back{
   color:#b8d9ef;
 }
-
-/* DARTBOARD MODE */
 
 #dartboardMode{
   display:none;
@@ -271,7 +246,6 @@ body{
   font-weight:800;
   margin-top:4px;
   min-height:18px;
-  color:#fff;
 }
 
 .dartboard-wrap{
@@ -289,10 +263,7 @@ body{
   height:100%;
   display:block;
   cursor:crosshair;
-
-  filter:
-    drop-shadow(0 0 5px rgba(57,169,255,.55))
-    drop-shadow(0 0 20px rgba(57,169,255,.18));
+  filter:drop-shadow(0 0 10px rgba(57,169,255,.28));
 }
 
 .board-actions{
@@ -325,8 +296,6 @@ body{
   margin:8px 4px 2px;
 }
 
-/* SUBMIT */
-
 .submit{
   width:100%;
   border:none;
@@ -338,14 +307,11 @@ body{
   font-size:15px;
   font-weight:800;
   cursor:pointer;
-  box-shadow:0 0 16px rgba(57,169,255,.18);
 }
 
 .submit:active{
   transform:scale(.99);
 }
-
-/* STATS */
 
 .stats{
   display:grid;
@@ -571,15 +537,11 @@ body{
 
 <script>
 
-/* SESSION */
-
 const params = new URLSearchParams(window.location.search);
 const sessionID = params.get("session") || "No session supplied";
 
 document.getElementById("sessionID").textContent = sessionID;
 
-
-/* GAME STATE */
 
 let currentMode = "keypad";
 let input = "";
@@ -596,8 +558,6 @@ let count180 = 0;
 
 let currentDarts = [];
 
-
-/* MODE SWITCH */
 
 function setMode(mode){
 
@@ -641,8 +601,6 @@ function setMode(mode){
   }
 }
 
-
-/* KEYPAD */
 
 function press(number){
 
@@ -779,21 +737,20 @@ function addSegment(
     fill
   );
 
+  /* NO BLUE SPIDERWEB */
+
   path.setAttribute(
     "stroke",
-    "#39a9ff"
+    "#777777"
   );
 
   path.setAttribute(
     "stroke-width",
-    ".75"
+    ".65"
   );
 
   path.style.cursor =
     "pointer";
-
-  path.style.filter =
-    "drop-shadow(0 0 1.5px rgba(57,169,255,.55))";
 
   path.addEventListener(
     "click",
@@ -807,7 +764,9 @@ function addSegment(
     }
   );
 
-  svg.appendChild(path);
+  svg.appendChild(
+    path
+  );
 }
 
 
@@ -816,7 +775,7 @@ function drawBoard(){
   svg.innerHTML = "";
 
 
-  /* OUTER SURROUND */
+  /* NEON BLUE OUTER RIM */
 
   const surround =
     document.createElementNS(
@@ -840,18 +799,16 @@ function drawBoard(){
 
   surround.setAttribute(
     "stroke-width",
-    "3"
+    "4"
   );
 
   surround.style.filter =
-    "drop-shadow(0 0 7px rgba(57,169,255,.75))";
+    "drop-shadow(0 0 7px rgba(57,169,255,.9))";
 
   svg.appendChild(
     surround
   );
 
-
-  /* SEGMENTS */
 
   for(let i=0;i<20;i++){
 
@@ -871,19 +828,21 @@ function drawBoard(){
       i % 2 === 0;
 
 
+    /* NORMAL BOARD SINGLE COLOURS */
+
     const singleColor =
       dark
-        ? "#02070c"
-        : "#0b1d2c";
+        ? "#090d11"
+        : "#d5c9aa";
 
+
+    /* NORMAL DOUBLE / TREBLE COLOURS */
 
     const scoreColor =
       dark
-        ? "#39a9ff"
-        : "#126da8";
+        ? "#c73b43"
+        : "#21865c";
 
-
-    /* INNER SINGLE */
 
     addSegment(
       24,
@@ -897,8 +856,6 @@ function drawBoard(){
     );
 
 
-    /* TREBLE */
-
     addSegment(
       103,
       118,
@@ -910,8 +867,6 @@ function drawBoard(){
       "T" + number
     );
 
-
-    /* OUTER SINGLE */
 
     addSegment(
       118,
@@ -925,8 +880,6 @@ function drawBoard(){
     );
 
 
-    /* DOUBLE */
-
     addSegment(
       178,
       195,
@@ -939,7 +892,7 @@ function drawBoard(){
     );
 
 
-    /* NUMBERS */
+    /* NEON BLUE NUMBERS */
 
     const textPoint =
       polar(
@@ -965,7 +918,7 @@ function drawBoard(){
 
     text.setAttribute(
       "fill",
-      "#ffffff"
+      "#39a9ff"
     );
 
     text.setAttribute(
@@ -975,7 +928,7 @@ function drawBoard(){
 
     text.setAttribute(
       "font-weight",
-      "bold"
+      "900"
     );
 
     text.setAttribute(
@@ -992,7 +945,7 @@ function drawBoard(){
       "none";
 
     text.style.filter =
-      "drop-shadow(0 0 3px rgba(57,169,255,.65))";
+      "drop-shadow(0 0 4px rgba(57,169,255,.95))";
 
     text.textContent =
       number;
@@ -1003,7 +956,7 @@ function drawBoard(){
   }
 
 
-  /* OUTER BULL */
+  /* NORMAL OUTER BULL */
 
   const outerBull =
     document.createElementNS(
@@ -1017,24 +970,21 @@ function drawBoard(){
 
   outerBull.setAttribute(
     "fill",
-    "#126da8"
+    "#21865c"
   );
 
   outerBull.setAttribute(
     "stroke",
-    "#39a9ff"
+    "#c5c5c5"
   );
 
   outerBull.setAttribute(
     "stroke-width",
-    "1.5"
+    "1"
   );
 
   outerBull.style.cursor =
     "pointer";
-
-  outerBull.style.filter =
-    "drop-shadow(0 0 5px rgba(57,169,255,.75))";
 
   outerBull.addEventListener(
     "click",
@@ -1053,7 +1003,7 @@ function drawBoard(){
   );
 
 
-  /* INNER BULL */
+  /* NORMAL INNER BULL */
 
   const bull =
     document.createElementNS(
@@ -1067,24 +1017,21 @@ function drawBoard(){
 
   bull.setAttribute(
     "fill",
-    "#39a9ff"
+    "#c73b43"
   );
 
   bull.setAttribute(
     "stroke",
-    "#dff4ff"
+    "#dddddd"
   );
 
   bull.setAttribute(
     "stroke-width",
-    "1.5"
+    "1"
   );
 
   bull.style.cursor =
     "pointer";
-
-  bull.style.filter =
-    "drop-shadow(0 0 8px #39a9ff)";
 
   bull.addEventListener(
     "click",
@@ -1148,14 +1095,14 @@ function drawBoard(){
 
   branding.setAttribute(
     "opacity",
-    ".82"
+    ".9"
   );
 
   branding.style.pointerEvents =
     "none";
 
   branding.style.filter =
-    "drop-shadow(0 0 5px #39a9ff)";
+    "drop-shadow(0 0 5px rgba(57,169,255,.9))";
 
   branding.textContent =
     "DARTIQ";
@@ -1356,8 +1303,6 @@ function confirmVisit(){
   }
 
 
-  /* BUST */
-
   if(score > remaining){
 
     showMessage(
@@ -1376,8 +1321,6 @@ function confirmVisit(){
     return;
   }
 
-
-  /* VALID VISIT */
 
   remaining -=
     score;
@@ -1408,17 +1351,12 @@ function confirmVisit(){
 
 
   /*
-    BACKEND BRIDGE DATA
+    BACKEND BRIDGE READY:
 
     sessionID
     confirmedScore
     dartsThisVisit
     currentDarts
-
-    Later:
-    Glide
-    Scolia
-    Autodarts
   */
 
 
@@ -1445,23 +1383,17 @@ function confirmVisit(){
 }
 
 
-/* RESET VISIT */
-
 function resetCurrentVisit(){
 
-  input =
-    "";
+  input = "";
 
-  currentDarts =
-    [];
+  currentDarts = [];
 
   updateInput();
 
   updateDartDisplay();
 }
 
-
-/* STATS */
 
 function updateStats(){
 
@@ -1481,8 +1413,7 @@ function updateStats(){
     totalDarts;
 
 
-  let avg =
-    0;
+  let avg = 0;
 
 
   if(totalDarts > 0){
