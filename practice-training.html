@@ -2,27 +2,27 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-
-<title>DARTIQ Practice Session</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>DARTIQ Today's Practice</title>
 
 <style>
 :root{
-  --bg:#03070d;
-  --panel:#081421;
-  --panel2:#0d1d2d;
-  --panel3:#10233c;
+  --bg:#02060b;
+  --panel:#071421;
+  --panel2:#0b1d2d;
+  --panel3:#0d2234;
+  --line:#174568;
   --blue:#39a9ff;
-  --blue2:#77d4ff;
-  --text:#fff;
+  --text:#ffffff;
   --muted:#8fa9bd;
-  --line:#17344d;
-  --soft:rgba(255,255,255,.04);
+  --danger:#ff6b72;
+  --red:#e74c55;
+  --orange:#ff9f43;
+  --yellow:#ffd447;
+  --green:#35c978;
 }
 
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 html,body{
   margin:0;
@@ -32,390 +32,295 @@ html,body{
   background:var(--bg);
   color:var(--text);
   font-family:Arial,Helvetica,sans-serif;
-  overflow-x:hidden;
 }
 
 body{
-  background:
-    radial-gradient(circle at 50% -10%,rgba(57,169,255,.08),transparent 30%),
-    linear-gradient(180deg,#07101d 0%,#03070d 48%,#03070d 100%);
   padding:8px;
 }
 
-button{
-  font-family:inherit;
-}
-
-.app{
+.engine{
   width:100%;
-  max-width:760px;
-  margin:auto;
+  max-width:680px;
+  margin:0 auto;
+  background:linear-gradient(180deg,#06111d,#02070c);
+  border-radius:22px;
+  padding:14px;
 }
 
-/* =========================
-   HEADER
-========================= */
+/* HEADER */
 
 .brand{
   text-align:center;
-  padding:8px 4px 12px;
+  padding:5px 4px 14px;
 }
 
 .brand-small{
-  font-size:10px;
-  letter-spacing:4px;
   color:var(--blue);
+  font-size:12px;
   font-weight:900;
+  letter-spacing:5px;
 }
 
 .brand h1{
-  margin:5px 0 0;
-  font-size:24px;
-  letter-spacing:1px;
+  margin:5px 0 3px;
+  font-size:29px;
+  line-height:1;
+  letter-spacing:.5px;
 }
 
-/* =========================
-   TOP PRACTICE CARDS
-========================= */
-
-.practice-top{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:7px;
-  margin-bottom:11px;
-}
-
-.practice-top-card{
-  min-width:0;
-  background:linear-gradient(180deg,#0d1d2d,#081421);
-  border:1px solid rgba(57,169,255,.28);
-  border-radius:12px;
-  padding:10px;
-}
-
-.practice-top-card.hidden{
-  display:none;
-}
-
-.practice-top-label{
-  color:var(--blue2);
-  font-size:8px;
-  line-height:1.2;
+.practice-name{
+  color:var(--blue);
+  font-size:13px;
   font-weight:900;
-  letter-spacing:.8px;
+  letter-spacing:1.5px;
   text-transform:uppercase;
-  margin-bottom:5px;
+  margin-top:9px;
 }
 
-.practice-top-value{
-  color:#fff;
-  font-size:11.5px;
-  line-height:1.4;
-  font-weight:700;
-  white-space:pre-line;
-  overflow-wrap:anywhere;
-}
-
-/* =========================
-   TITLES
-========================= */
-
-.section-title{
-  display:flex;
-  align-items:center;
-  gap:7px;
-  color:var(--blue2);
+.coach-name{
+  color:#aebbc6;
   font-size:10px;
-  font-weight:900;
   letter-spacing:1.3px;
   text-transform:uppercase;
-  margin:9px 3px 5px;
+  margin-top:5px;
 }
 
-.dot{
-  width:6px;
-  height:6px;
-  border-radius:50%;
-  background:var(--blue);
-  box-shadow:0 0 8px rgba(57,169,255,.8);
-}
+/* TOP THREE CARDS */
 
-/* =========================
-   SHARED PANELS
-========================= */
-
-.section,
-.mini,
-.keith,
-.coach,
-.after,
-.session,
-.score-card,
-.input-card,
-.stat{
-  background:linear-gradient(180deg,#0d1d2d,#081421);
-  border:1px solid var(--line);
-  border-radius:14px;
-}
-
-.empty,
-.hidden{
-  display:none!important;
-}
-
-.section{
-  margin-top:7px;
-  overflow:hidden;
-}
-
-.section-head{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding:9px 11px;
-  background:linear-gradient(
-    90deg,
-    rgba(57,169,255,.11),
-    rgba(57,169,255,.02)
-  );
-  border-bottom:1px solid rgba(255,255,255,.045);
-}
-
-.section-head .icon{
-  width:24px;
-  height:24px;
-  border-radius:7px;
+.top-cards{
   display:grid;
-  place-items:center;
-  background:rgba(57,169,255,.08);
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-bottom:12px;
+}
+
+.top-card{
+  min-width:0;
+  background:linear-gradient(180deg,#081827,#06121e);
+  border:1px solid rgba(57,169,255,.35);
+  border-radius:12px;
+  padding:11px;
+  box-shadow:0 0 12px rgba(57,169,255,.05);
+}
+
+.top-label{
   color:var(--blue);
-  font-size:12px;
-}
-
-.section-head h2{
-  margin:0;
-  font-size:10px;
-  letter-spacing:.7px;
-  text-transform:uppercase;
-}
-
-.section-body{
-  padding:10px 11px;
-  font-size:12.5px;
-  line-height:1.42;
-  color:#e8f2fc;
-  white-space:pre-line;
-  overflow-wrap:anywhere;
-}
-
-.mini{
-  margin-top:7px;
-  padding:10px 11px;
-}
-
-.mini-label,
-.keith-label,
-.after-label{
-  font-size:8.5px;
+  font-size:9px;
+  font-weight:900;
   letter-spacing:.8px;
   text-transform:uppercase;
-  color:var(--blue2);
-  font-weight:900;
-  margin-bottom:4px;
-}
-
-.mini-copy{
-  font-size:12px;
-  line-height:1.38;
-  color:#e7f2fc;
-  white-space:pre-line;
-  overflow-wrap:anywhere;
-}
-
-/* =========================
-   EXECUTION STEPS
-========================= */
-
-.steps{
-  display:grid;
-  gap:6px;
-}
-
-.practice-step{
-  display:grid;
-  grid-template-columns:25px 1fr;
-  gap:8px;
-  align-items:start;
-  background:rgba(255,255,255,.025);
-  border:1px solid rgba(255,255,255,.045);
-  border-radius:9px;
-  padding:7px 8px;
-}
-
-.step-badge{
-  width:25px;
-  height:25px;
-  border-radius:7px;
+  margin-bottom:7px;
   display:flex;
   align-items:center;
-  justify-content:center;
-  background:rgba(57,169,255,.10);
-  color:var(--blue2);
-  font-size:9px;
-  font-weight:900;
+  gap:5px;
 }
 
-.step-copy{
+.top-value{
   font-size:12px;
-  line-height:1.38;
+  font-weight:700;
+  line-height:1.35;
+  color:white;
 }
 
-/* =========================
-   LIVE PRACTICE
-========================= */
+/* LIVE PRACTICE */
 
-.session{
-  padding:10px 12px;
-  margin-bottom:7px;
+.live-panel{
+  border:1px solid rgba(57,169,255,.4);
+  border-radius:15px;
+  padding:12px;
+  background:linear-gradient(180deg,#061523,#030b13);
+  box-shadow:0 0 20px rgba(57,169,255,.08);
 }
 
-.session-label{
-  font-size:9px;
-  letter-spacing:1.5px;
-  color:var(--blue);
-  font-weight:bold;
-  margin-bottom:4px;
-}
-
-.session-id{
-  color:var(--muted);
-  font-size:10px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-
-.score-card{
-  padding:13px;
-  text-align:center;
-  border-color:rgba(57,169,255,.35);
-  box-shadow:0 0 22px rgba(57,169,255,.07);
-}
-
-.score-label{
-  color:var(--muted);
-  text-transform:uppercase;
-  letter-spacing:2px;
-  font-size:9px;
-}
-
-.remaining{
-  font-size:52px;
-  font-weight:800;
-  margin:3px 0 1px;
-}
-
-.visit-info{
+.live-header{
   display:flex;
-  justify-content:center;
-  gap:28px;
-  margin-top:6px;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:10px;
 }
 
-.info-value{
-  font-size:17px;
-  font-weight:bold;
+.live-title{
+  font-size:22px;
+  font-weight:900;
+  line-height:1;
 }
 
-.info-label{
-  font-size:8px;
-  color:var(--muted);
-  text-transform:uppercase;
-  letter-spacing:1px;
-}
-
-.input-card{
-  margin-top:7px;
-  padding:11px;
-}
-
-.input-title{
-  font-size:10px;
+.live-sub{
   color:var(--blue);
-  font-weight:bold;
-  letter-spacing:1.4px;
-  margin-bottom:8px;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.7px;
+  margin-top:4px;
 }
 
 .mode-switch{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:7px;
-  margin-bottom:10px;
+  gap:6px;
+  min-width:205px;
 }
 
-.mode-button,
-.board-action{
-  border:1px solid #1c3b55;
-  background:#07121d;
-  color:var(--muted);
-  border-radius:9px;
-  padding:10px 6px;
-  font-size:10px;
-  font-weight:800;
-  letter-spacing:.8px;
+.mode-button{
+  border:1px solid #24577b;
+  background:#06111b;
+  color:#9db7ca;
+  border-radius:8px;
+  padding:9px 7px;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.5px;
   cursor:pointer;
 }
 
 .mode-button.active{
   background:var(--blue);
-  border-color:var(--blue);
   color:#00101c;
+  border-color:var(--blue);
+  box-shadow:0 0 12px rgba(57,169,255,.4);
+}
+
+/* MAIN SCORING AREA */
+
+.practice-grid{
+  display:grid;
+  grid-template-columns:170px 1fr;
+  gap:10px;
+  align-items:start;
+}
+
+.score-column{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.remaining-card{
+  border:1px solid rgba(57,169,255,.35);
+  border-radius:11px;
+  padding:11px 8px;
+  background:#071727;
+  text-align:center;
+}
+
+.score-label{
+  color:var(--blue);
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.remaining{
+  font-size:48px;
+  line-height:1;
+  font-weight:900;
+  margin-top:5px;
+}
+
+.mini-stat{
+  display:grid;
+  grid-template-columns:34px 1fr;
+  align-items:center;
+  border:1px solid rgba(57,169,255,.25);
+  background:#071727;
+  border-radius:10px;
+  padding:7px;
+}
+
+.mini-icon{
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#07325a;
+  color:var(--blue);
+  font-size:12px;
+  font-weight:900;
+}
+
+.mini-value{
+  text-align:center;
+  font-size:18px;
+  font-weight:900;
+}
+
+.mini-label{
+  text-align:center;
+  color:var(--blue);
+  font-size:8px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.7px;
+}
+
+.session-small{
+  border:1px solid rgba(57,169,255,.22);
+  border-radius:9px;
+  padding:7px;
+  background:#06131f;
+}
+
+.session-label{
+  color:var(--blue);
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+.session-id{
+  color:var(--muted);
+  font-size:9px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  margin-top:3px;
+}
+
+/* INPUT */
+
+.input-column{
+  min-width:0;
 }
 
 .score-display{
-  background:#02070c;
-  border:1px solid var(--line);
+  background:#010509;
+  border:1px solid #174568;
   border-radius:10px;
-  min-height:54px;
+  min-height:52px;
   display:flex;
   align-items:center;
   justify-content:center;
   font-size:29px;
-  font-weight:bold;
-  margin-bottom:9px;
+  font-weight:900;
+  margin-bottom:8px;
 }
 
 .keypad{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:7px;
+  gap:6px;
 }
 
 .key{
-  border:1px solid #1c3b55;
-  background:#0d2031;
+  border:1px solid #1b4260;
+  background:#0b2031;
   color:white;
-  border-radius:10px;
-  padding:12px 5px;
-  font-size:17px;
-  font-weight:bold;
+  border-radius:8px;
+  padding:10px 4px;
+  font-size:16px;
+  font-weight:900;
   cursor:pointer;
 }
 
-.key:active,
-.submit:active{
-  transform:scale(.98);
+.key:active{
+  transform:scale(.97);
 }
 
-.clear,
-.board-action.danger{
-  color:#ff7777;
-}
-
-.back{
-  color:#b8d9ef;
-}
+.clear{color:#ff737a}
+.back{color:#b8d9ef}
 
 #dartboardMode{
   display:none;
@@ -424,37 +329,38 @@ button{
 .dart-slots{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:6px;
-  margin-bottom:9px;
+  gap:5px;
+  margin-bottom:7px;
 }
 
 .dart-slot{
-  background:#02070c;
-  border:1px solid var(--line);
-  border-radius:9px;
-  padding:7px 3px;
+  background:#010509;
+  border:1px solid #173d59;
+  border-radius:8px;
+  padding:6px 2px;
   text-align:center;
 }
 
 .dart-slot-label{
   color:var(--muted);
   font-size:7px;
-  letter-spacing:1px;
+  letter-spacing:.8px;
   text-transform:uppercase;
 }
 
 .dart-slot-value{
-  font-size:13px;
-  font-weight:800;
+  font-size:11px;
+  font-weight:900;
   margin-top:3px;
-  min-height:16px;
+  min-height:14px;
 }
 
 .dartboard-wrap{
+  position:relative;
   width:100%;
-  max-width:390px;
+  max-width:340px;
   aspect-ratio:1/1;
-  margin:0 auto 8px;
+  margin:0 auto 6px;
   user-select:none;
   touch-action:manipulation;
 }
@@ -464,464 +370,276 @@ button{
   height:100%;
   display:block;
   cursor:crosshair;
-  filter:drop-shadow(0 0 10px rgba(57,169,255,.25));
+  filter:drop-shadow(0 0 9px rgba(57,169,255,.4));
 }
 
 .board-actions{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:7px;
-  margin-top:6px;
+  gap:6px;
 }
 
-.board-help{
-  color:var(--muted);
-  text-align:center;
-  font-size:9px;
-  line-height:1.4;
-  margin:7px 4px 1px;
+.board-action{
+  border:1px solid #1c496a;
+  background:#0b2031;
+  color:#b9d0df;
+  border-radius:8px;
+  padding:9px 4px;
+  font-size:10px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.board-action.danger{
+  color:#ff7777;
 }
 
 .submit{
   width:100%;
   border:none;
   margin-top:9px;
-  padding:13px;
-  border-radius:10px;
+  padding:12px;
+  border-radius:9px;
   background:var(--blue);
   color:#00101c;
   font-size:13px;
   font-weight:900;
   cursor:pointer;
+  box-shadow:0 0 12px rgba(57,169,255,.25);
 }
 
 .message{
-  min-height:18px;
-  margin-top:8px;
+  min-height:15px;
+  margin-top:7px;
   text-align:center;
-  font-size:10px;
   color:var(--muted);
+  font-size:9px;
 }
 
-.stats{
+.performance{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:7px;
-  margin-top:7px;
+  gap:6px;
+  margin-top:9px;
 }
 
-.stat{
-  padding:9px 4px;
+.performance-card{
+  border:1px solid rgba(57,169,255,.25);
+  border-radius:9px;
+  background:#071727;
+  padding:7px;
   text-align:center;
 }
 
-.stat-value{
+.performance-value{
   font-size:16px;
-  font-weight:bold;
+  font-weight:900;
 }
 
-.stat-label{
+.performance-label{
   color:var(--muted);
-  font-size:7.5px;
-  margin-top:3px;
-  letter-spacing:.7px;
-  text-transform:uppercase;
+  font-size:8px;
+  margin-top:2px;
 }
 
-/* =========================
-   ACCORDIONS
-========================= */
+/* ACCORDIONS */
 
 .accordions{
   margin-top:10px;
-  display:grid;
-  gap:7px;
 }
 
-.accordion{
-  background:linear-gradient(180deg,#0d1d2d,#081421);
-  border:1px solid rgba(57,169,255,.23);
-  border-radius:12px;
+details{
+  margin-bottom:7px;
+  border:1px solid rgba(57,169,255,.35);
+  border-radius:10px;
+  background:linear-gradient(180deg,#081827,#05111c);
   overflow:hidden;
 }
 
-.accordion summary{
+summary{
   list-style:none;
-  display:flex;
-  align-items:center;
-  gap:9px;
-  padding:12px;
   cursor:pointer;
-  user-select:none;
-  color:#fff;
+  padding:12px 13px;
   font-size:10px;
   font-weight:900;
-  letter-spacing:.75px;
+  letter-spacing:1px;
   text-transform:uppercase;
-}
-
-.accordion summary::-webkit-details-marker{
-  display:none;
-}
-
-.accordion summary::before{
-  content:"";
-  width:6px;
-  height:6px;
-  flex:0 0 6px;
-  border-radius:50%;
-  background:var(--blue);
-  box-shadow:0 0 7px rgba(57,169,255,.8);
-}
-
-.accordion summary::after{
-  content:"⌄";
-  margin-left:auto;
-  color:var(--blue);
-  font-size:18px;
-  line-height:1;
-  transition:transform .2s ease;
-}
-
-.accordion[open] summary::after{
-  transform:rotate(180deg);
-}
-
-.accordion-content{
-  border-top:1px solid rgba(57,169,255,.12);
-  padding:0 8px 8px;
-}
-
-/* =========================
-   KEITH
-========================= */
-
-.keith{
-  margin-top:8px;
-  overflow:hidden;
-  border-color:rgba(57,169,255,.24);
-}
-
-.keith-head{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:8px;
-  padding:9px 11px;
-  border-bottom:1px solid rgba(57,169,255,.13);
 }
 
-.keith-title{
-  color:var(--blue2);
-  font-size:10px;
-  letter-spacing:.7px;
-  text-transform:uppercase;
-  font-weight:900;
-}
-
-.keith-coach{
-  font-size:10px;
-  font-weight:800;
-  text-align:right;
-}
-
-.keith-body{
-  padding:8px;
-}
-
-.keith-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:6px;
-}
-
-.keith-card{
-  background:rgba(255,255,255,.025);
-  border:1px solid rgba(255,255,255,.045);
-  border-radius:9px;
-  padding:8px 9px;
-}
-
-.keith-card.full{
-  grid-column:1/-1;
-}
-
-.keith-value{
-  font-size:11.5px;
-  line-height:1.36;
-  font-weight:700;
-  white-space:pre-line;
-  overflow-wrap:anywhere;
-}
-
-/* =========================
-   GRADING
-========================= */
-
-.grade-grid{
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:5px;
-}
-
-.grade{
-  border-radius:7px;
-  padding:6px 3px;
-  text-align:center;
-  border:1px solid rgba(255,255,255,.055);
-}
-
-.grade-label{
-  font-size:7.5px;
-  text-transform:uppercase;
-  font-weight:900;
-  margin-bottom:3px;
-}
-
-.grade-value{
-  font-size:10px;
-  font-weight:900;
-  overflow-wrap:anywhere;
-}
-
-.grade.red{
-  background:rgba(255,92,108,.08);
-  color:#ff7180;
-}
-
-.grade.orange{
-  background:rgba(255,173,66,.08);
-  color:#ffb75f;
-}
-
-.grade.yellow{
-  background:rgba(255,224,92,.08);
-  color:#ffe778;
-}
-
-.grade.green{
-  background:rgba(73,229,138,.08);
-  color:#69eba2;
-}
-
-.action-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:6px;
-}
-
-.action-card{
-  border-radius:9px;
-  padding:8px 9px;
-  border:1px solid rgba(255,255,255,.05);
-  background:rgba(255,255,255,.025);
-}
-
-.action-card.hidden{
+summary::-webkit-details-marker{
   display:none;
 }
 
-.action-head{
-  font-size:8.5px;
+summary::before{
+  content:"●";
+  color:var(--blue);
+  margin-right:8px;
+  text-shadow:0 0 7px var(--blue);
+}
+
+summary::after{
+  content:"⌄";
+  color:var(--blue);
+  font-size:16px;
+  margin-left:auto;
+}
+
+details[open] summary::after{
+  content:"⌃";
+}
+
+.detail-body{
+  padding:0 13px 13px;
+  border-top:1px solid rgba(57,169,255,.15);
+}
+
+.detail-item{
+  padding-top:11px;
+}
+
+.detail-label{
+  color:var(--blue);
+  font-size:8px;
   font-weight:900;
+  letter-spacing:1px;
   text-transform:uppercase;
   margin-bottom:4px;
 }
 
-.action-card.red .action-head{
-  color:#ff7180;
+.detail-value{
+  color:#e7f2f9;
+  font-size:11px;
+  line-height:1.45;
+  white-space:pre-wrap;
 }
 
-.action-card.orange .action-head{
-  color:#ffb75f;
-}
-
-.action-card.yellow .action-head{
-  color:#ffe778;
-}
-
-.action-card.green .action-head{
-  color:#69eba2;
-}
-
-.action-copy{
-  font-size:10.5px;
-  line-height:1.35;
-  white-space:pre-line;
-}
-
-/* =========================
-   COACHING
-========================= */
-
-.coach{
-  margin-top:8px;
-  overflow:hidden;
-}
-
-.coach-title{
-  padding:9px 11px 5px;
-  color:var(--blue2);
-  font-size:10px;
-  font-weight:900;
-  letter-spacing:.75px;
-  text-transform:uppercase;
-}
-
-.coach-intro{
-  padding:0 11px 8px;
-  color:var(--muted);
-  font-size:10.5px;
-  line-height:1.35;
-}
-
-.flow{
+.grading-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:6px;
-  padding:0 8px 8px;
+  gap:7px;
+  margin-top:10px;
 }
 
-.logic-step{
-  display:grid;
-  grid-template-columns:22px 1fr;
-  gap:6px;
-  background:rgba(255,255,255,.025);
-  border:1px solid rgba(255,255,255,.04);
+.grade{
   border-radius:8px;
-  padding:7px;
-}
-
-.logic-num{
-  width:22px;
-  height:22px;
-  border-radius:6px;
-  display:grid;
-  place-items:center;
-  color:var(--blue2);
-  background:rgba(57,169,255,.09);
-  font-size:8px;
-  font-weight:900;
-}
-
-.logic-copy{
-  font-size:10px;
-  line-height:1.3;
-  color:var(--muted);
-}
-
-.logic-copy strong{
-  display:block;
-  color:#fff;
-  font-size:10px;
-  margin-bottom:2px;
-}
-
-.coach-foot{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:6px;
-  padding:0 8px 8px;
-}
-
-.note,
-.improve{
-  border-radius:8px;
-  padding:7px 8px;
-  font-size:10px;
-  line-height:1.34;
-}
-
-.note{
-  border-left:3px solid var(--blue);
-  background:rgba(57,169,255,.055);
-}
-
-.improve{
-  background:rgba(255,255,255,.025);
-  border:1px solid rgba(255,255,255,.04);
-}
-
-.improve-label{
-  color:var(--muted);
-  font-size:7.5px;
-  letter-spacing:.65px;
-  text-transform:uppercase;
-  font-weight:900;
-  margin-bottom:3px;
-}
-
-.improve-text{
-  font-size:10px;
-  font-weight:700;
-}
-
-/* =========================
-   AFTER PRACTICE
-========================= */
-
-.after{
-  margin-top:8px;
   padding:9px;
+  background:#06111b;
 }
 
-.after-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:6px;
+.grade.red{border-left:4px solid var(--red)}
+.grade.orange{border-left:4px solid var(--orange)}
+.grade.yellow{border-left:4px solid var(--yellow)}
+.grade.green{border-left:4px solid var(--green)}
+
+.grade-title{
+  font-size:9px;
+  font-weight:900;
+  margin-bottom:4px;
 }
 
-.after-box{
-  background:rgba(255,255,255,.025);
-  border:1px solid rgba(255,255,255,.04);
-  border-radius:8px;
-  padding:8px;
-}
+.grade.red .grade-title{color:var(--red)}
+.grade.orange .grade-title{color:var(--orange)}
+.grade.yellow .grade-title{color:var(--yellow)}
+.grade.green .grade-title{color:var(--green)}
 
-.after-text{
-  font-size:10.5px;
-  line-height:1.36;
-  font-weight:700;
-  white-space:pre-line;
+.grade-value{
+  font-size:10px;
+  line-height:1.4;
 }
 
 .footer{
   text-align:center;
-  margin:14px 0 5px;
-  color:#49677c;
+  padding:12px 4px 3px;
+  color:#456278;
   font-size:8px;
-  letter-spacing:1px;
+  letter-spacing:1.5px;
 }
 
-/* =========================
-   MOBILE
-========================= */
+@media(max-width:560px){
+  body{padding:5px}
+  .engine{padding:10px;border-radius:16px}
 
-@media(max-width:520px){
-  .practice-top{
-    grid-template-columns:1fr;
+  .brand h1{font-size:25px}
+
+  .top-cards{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:5px;
   }
 
-  .practice-top-card{
-    padding:9px 10px;
+  .top-card{
+    padding:8px 6px;
+  }
+
+  .top-label{
+    font-size:7px;
+    letter-spacing:.2px;
+  }
+
+  .top-value{
+    font-size:9px;
+  }
+
+  .live-title{
+    font-size:18px;
+  }
+
+  .live-sub{
+    font-size:7px;
+  }
+
+  .mode-switch{
+    min-width:170px;
+  }
+
+  .mode-button{
+    padding:8px 4px;
+    font-size:8px;
+  }
+
+  .practice-grid{
+    grid-template-columns:120px 1fr;
+    gap:7px;
+  }
+
+  .remaining{
+    font-size:40px;
+  }
+
+  .mini-value{
+    font-size:15px;
+  }
+
+  .dartboard-wrap{
+    max-width:300px;
   }
 }
 
 @media(max-width:390px){
-  .flow,
-  .coach-foot,
-  .after-grid,
-  .keith-grid,
-  .action-grid{
+  .top-cards{
     grid-template-columns:1fr;
   }
 
-  .keith-card.full{
-    grid-column:auto;
+  .top-card{
+    padding:9px;
   }
 
-  .grade-grid{
-    grid-template-columns:1fr 1fr;
+  .top-value{
+    font-size:11px;
+  }
+
+  .live-header{
+    align-items:flex-start;
+  }
+
+  .mode-switch{
+    min-width:155px;
+  }
+
+  .practice-grid{
+    grid-template-columns:105px 1fr;
   }
 }
 </style>
@@ -929,1290 +647,578 @@ button{
 
 <body>
 
-<main class="app">
+<div class="engine">
 
-  <!-- =========================
-       HEADER
-  ========================== -->
-
-  <div class="brand">
+  <header class="brand">
     <div class="brand-small">DARTIQ</div>
     <h1>TODAY'S PRACTICE</h1>
-  </div>
+    <div class="practice-name" id="practiceName"></div>
+    <div class="coach-name" id="coachName"></div>
+  </header>
 
-  <!-- =========================
-       TOP PRACTICE CARDS
-  ========================== -->
+  <section class="top-cards">
 
-  <div class="practice-top">
-
-    <div class="practice-top-card" id="goalCard">
-      <div class="practice-top-label">🎯 Goal</div>
-      <div class="practice-top-value" id="objective"></div>
+    <div class="top-card">
+      <div class="top-label">🎯 GOAL</div>
+      <div class="top-value" id="objectiveValue">-</div>
     </div>
 
-    <div class="practice-top-card" id="targetCard">
-      <div class="practice-top-label">◎ Today's Target</div>
-      <div class="practice-top-value" id="target"></div>
+    <div class="top-card">
+      <div class="top-label">📈 TODAY'S TARGET</div>
+      <div class="top-value" id="targetValue">-</div>
     </div>
 
-    <div class="practice-top-card" id="focusCard">
-      <div class="practice-top-label">◆ Coach Keith's Focus</div>
-      <div class="practice-top-value" id="topFocus"></div>
+    <div class="top-card">
+      <div class="top-label">🎓 COACH KEITH'S FOCUS</div>
+      <div class="top-value" id="focusValue">-</div>
     </div>
 
-  </div>
+  </section>
 
-  <!-- =========================
-       LIVE PRACTICE
-  ========================== -->
+  <section class="live-panel">
 
-  <div class="section-title">
-    <span class="dot"></span>
-    Live Practice
-  </div>
-
-  <div class="session">
-    <div class="session-label">ACTIVE SESSION</div>
-    <div class="session-id" id="sessionID">Loading session...</div>
-  </div>
-
-  <div class="score-card">
-
-    <div class="score-label">Remaining</div>
-
-    <div class="remaining" id="remaining">501</div>
-
-    <div class="visit-info">
+    <div class="live-header">
 
       <div>
-        <div class="info-value" id="visitNumber">1</div>
-        <div class="info-label">Visit</div>
+        <div class="live-title">LIVE PRACTICE</div>
+        <div class="live-sub">TRACK YOUR PROGRESS IN REAL TIME</div>
       </div>
 
-      <div>
-        <div class="info-value" id="dartsThrown">0</div>
-        <div class="info-label">Darts</div>
-      </div>
-
-      <div>
-        <div class="info-value" id="average">0.00</div>
-        <div class="info-label">Average</div>
-      </div>
-
-    </div>
-
-  </div>
-
-  <div class="input-card">
-
-    <div class="input-title">ENTER VISIT</div>
-
-    <div class="mode-switch">
-
-      <button
-        class="mode-button active"
-        id="keypadTab"
-        onclick="setMode('keypad')">
-        KEYPAD
-      </button>
-
-      <button
-        class="mode-button"
-        id="dartboardTab"
-        onclick="setMode('dartboard')">
-        🎯 DARTBOARD
-      </button>
-
-    </div>
-
-    <!-- KEYPAD -->
-
-    <div id="keypadMode">
-
-      <div class="score-display" id="scoreDisplay">0</div>
-
-      <div class="keypad">
-
-        <button class="key" onclick="press('1')">1</button>
-        <button class="key" onclick="press('2')">2</button>
-        <button class="key" onclick="press('3')">3</button>
-
-        <button class="key" onclick="press('4')">4</button>
-        <button class="key" onclick="press('5')">5</button>
-        <button class="key" onclick="press('6')">6</button>
-
-        <button class="key" onclick="press('7')">7</button>
-        <button class="key" onclick="press('8')">8</button>
-        <button class="key" onclick="press('9')">9</button>
-
-        <button class="key clear" onclick="clearScore()">C</button>
-        <button class="key" onclick="press('0')">0</button>
-        <button class="key back" onclick="backspace()">⌫</button>
-
-      </div>
-
-    </div>
-
-    <!-- DARTBOARD -->
-
-    <div id="dartboardMode">
-
-      <div class="dart-slots">
-
-        <div class="dart-slot">
-          <div class="dart-slot-label">Dart 1</div>
-          <div class="dart-slot-value" id="dart1">-</div>
-        </div>
-
-        <div class="dart-slot">
-          <div class="dart-slot-label">Dart 2</div>
-          <div class="dart-slot-value" id="dart2">-</div>
-        </div>
-
-        <div class="dart-slot">
-          <div class="dart-slot-label">Dart 3</div>
-          <div class="dart-slot-value" id="dart3">-</div>
-        </div>
-
-      </div>
-
-      <div class="score-display">
-        <span id="boardVisitScore">0</span>
-      </div>
-
-      <div class="dartboard-wrap">
-        <svg
-          id="dartboard"
-          viewBox="-230 -230 460 460"
-          aria-label="Interactive DARTIQ dartboard">
-        </svg>
-      </div>
-
-      <div class="board-actions">
+      <div class="mode-switch">
 
         <button
-          class="board-action"
-          onclick="addMiss()">
-          MISS
+          class="mode-button active"
+          id="keypadTab"
+          onclick="setMode('keypad')">
+          ▦ KEYPAD
         </button>
 
         <button
-          class="board-action danger"
-          onclick="undoDart()">
-          UNDO DART
+          class="mode-button"
+          id="dartboardTab"
+          onclick="setMode('dartboard')">
+          🎯 DARTBOARD
         </button>
 
       </div>
 
-      <div class="board-help">
-        Tap the exact segment hit. DARTIQ calculates singles, doubles,
-        trebles and bull automatically.
+    </div>
+
+    <div class="practice-grid">
+
+      <div class="score-column">
+
+        <div class="remaining-card">
+          <div class="score-label">Remaining</div>
+          <div class="remaining" id="remaining">501</div>
+        </div>
+
+        <div class="mini-stat">
+          <div class="mini-icon">#</div>
+          <div>
+            <div class="mini-label">Visit</div>
+            <div class="mini-value" id="visitNumber">1</div>
+          </div>
+        </div>
+
+        <div class="mini-stat">
+          <div class="mini-icon">Ø</div>
+          <div>
+            <div class="mini-label">Average</div>
+            <div class="mini-value" id="average">0.00</div>
+          </div>
+        </div>
+
+        <div class="mini-stat">
+          <div class="mini-icon">3</div>
+          <div>
+            <div class="mini-label">Darts</div>
+            <div class="mini-value" id="dartsThrown">0</div>
+          </div>
+        </div>
+
+        <div class="session-small">
+          <div class="session-label">ACTIVE SESSION</div>
+          <div class="session-id" id="sessionID">SESSION</div>
+        </div>
+
+      </div>
+
+      <div class="input-column">
+
+        <div id="keypadMode">
+
+          <div class="score-display" id="scoreDisplay">0</div>
+
+          <div class="keypad">
+            <button class="key" onclick="press('1')">1</button>
+            <button class="key" onclick="press('2')">2</button>
+            <button class="key" onclick="press('3')">3</button>
+
+            <button class="key" onclick="press('4')">4</button>
+            <button class="key" onclick="press('5')">5</button>
+            <button class="key" onclick="press('6')">6</button>
+
+            <button class="key" onclick="press('7')">7</button>
+            <button class="key" onclick="press('8')">8</button>
+            <button class="key" onclick="press('9')">9</button>
+
+            <button class="key clear" onclick="clearScore()">C</button>
+            <button class="key" onclick="press('0')">0</button>
+            <button class="key back" onclick="backspace()">⌫</button>
+          </div>
+
+        </div>
+
+        <div id="dartboardMode">
+
+          <div class="dart-slots">
+
+            <div class="dart-slot">
+              <div class="dart-slot-label">Dart 1</div>
+              <div class="dart-slot-value" id="dart1">-</div>
+            </div>
+
+            <div class="dart-slot">
+              <div class="dart-slot-label">Dart 2</div>
+              <div class="dart-slot-value" id="dart2">-</div>
+            </div>
+
+            <div class="dart-slot">
+              <div class="dart-slot-label">Dart 3</div>
+              <div class="dart-slot-value" id="dart3">-</div>
+            </div>
+
+          </div>
+
+          <div class="score-display">
+            <span id="boardVisitScore">0</span>
+          </div>
+
+          <div class="dartboard-wrap">
+            <svg
+              id="dartboard"
+              viewBox="-230 -230 460 460"
+              aria-label="Interactive DARTIQ dartboard">
+            </svg>
+          </div>
+
+          <div class="board-actions">
+
+            <button class="board-action" onclick="addMiss()">
+              MISS
+            </button>
+
+            <button class="board-action danger" onclick="undoDart()">
+              UNDO DART
+            </button>
+
+          </div>
+
+        </div>
+
+        <button class="submit" onclick="confirmVisit()">
+          CONFIRM VISIT
+        </button>
+
+        <div class="message" id="message">
+          Enter the total score for this visit.
+        </div>
+
       </div>
 
     </div>
 
-    <button
-      class="submit"
-      onclick="confirmVisit()">
-      CONFIRM VISIT
-    </button>
+    <div class="performance">
 
-    <div class="message" id="message">
-      Enter the total score for this visit.
+      <div class="performance-card">
+        <div class="performance-value" id="stat100">0</div>
+        <div class="performance-label">100+</div>
+      </div>
+
+      <div class="performance-card">
+        <div class="performance-value" id="stat140">0</div>
+        <div class="performance-label">140+</div>
+      </div>
+
+      <div class="performance-card">
+        <div class="performance-value" id="stat180">0</div>
+        <div class="performance-label">180</div>
+      </div>
+
     </div>
 
-  </div>
+  </section>
 
-  <!-- PERFORMANCE STATS -->
+  <section class="accordions">
 
-  <div class="stats">
+    <details>
+      <summary>PRACTICE INSTRUCTIONS</summary>
 
-    <div class="stat">
-      <div class="stat-value" id="stat100">0</div>
-      <div class="stat-label">100+</div>
-    </div>
+      <div class="detail-body">
 
-    <div class="stat">
-      <div class="stat-value" id="stat140">0</div>
-      <div class="stat-label">140+</div>
-    </div>
+        <div class="detail-item">
+          <div class="detail-label">Why This Practice</div>
+          <div class="detail-value" id="whyValue">-</div>
+        </div>
 
-    <div class="stat">
-      <div class="stat-value" id="stat180">0</div>
-      <div class="stat-label">180</div>
-    </div>
+        <div class="detail-item">
+          <div class="detail-label">How To Practice</div>
+          <div class="detail-value" id="executionValue">-</div>
+        </div>
 
-  </div>
+        <div class="detail-item" id="avoidBlock">
+          <div class="detail-label">Watch For</div>
+          <div class="detail-value" id="avoidValue">-</div>
+        </div>
 
-  <!-- =========================
-       COLLAPSED INFORMATION
-  ========================== -->
+      </div>
+    </details>
 
-  <div class="accordions">
+    <details>
+      <summary>KEITH ALLEN GUTHER METHODOLOGY</summary>
 
-    <!-- PRACTICE INSTRUCTIONS -->
+      <div class="detail-body">
 
-    <details class="accordion" id="practiceAccordion">
+        <div class="detail-item">
+          <div class="detail-label">Coach</div>
+          <div class="detail-value" id="keithCoachValue">-</div>
+        </div>
 
-      <summary>Practice Instructions</summary>
+        <div class="detail-item">
+          <div class="detail-label">Rules</div>
+          <div class="detail-value" id="keithRulesValue">-</div>
+        </div>
 
-      <div class="accordion-content">
+        <div class="detail-item">
+          <div class="detail-label">Primary Metric</div>
+          <div class="detail-value" id="primaryValue">-</div>
+        </div>
 
-        <section class="mini" id="whyWrap">
-          <div class="mini-label">Why This Practice</div>
-          <div class="mini-copy" id="why"></div>
-        </section>
+        <div class="detail-item">
+          <div class="detail-label">Secondary Metric</div>
+          <div class="detail-value" id="secondaryValue">-</div>
+        </div>
 
-        <section class="section" id="executionWrap">
+        <div class="detail-item">
+          <div class="detail-label">Success Target</div>
+          <div class="detail-value" id="keithTargetValue">-</div>
+        </div>
 
-          <div class="section-head">
-            <span class="icon">▶</span>
-            <h2>How To Practice</h2>
+      </div>
+    </details>
+
+    <details>
+      <summary>GRADING &amp; COACHING ACTIONS</summary>
+
+      <div class="detail-body">
+
+        <div class="grading-grid">
+
+          <div class="grade red">
+            <div class="grade-title">RED</div>
+            <div class="grade-value" id="redValue">-</div>
+            <div class="grade-value" id="redActionValue"></div>
           </div>
 
-          <div class="section-body">
-            <div class="steps" id="executionSteps"></div>
+          <div class="grade orange">
+            <div class="grade-title">ORANGE</div>
+            <div class="grade-value" id="orangeValue">-</div>
+            <div class="grade-value" id="orangeActionValue"></div>
           </div>
 
-        </section>
+          <div class="grade yellow">
+            <div class="grade-title">YELLOW</div>
+            <div class="grade-value" id="yellowValue">-</div>
+            <div class="grade-value" id="yellowActionValue"></div>
+          </div>
 
-        <section class="mini" id="avoidWrap">
-          <div class="mini-label">Watch For</div>
-          <div class="mini-copy" id="avoid"></div>
-        </section>
+          <div class="grade green">
+            <div class="grade-title">GREEN</div>
+            <div class="grade-value" id="greenValue">-</div>
+            <div class="grade-value" id="greenActionValue"></div>
+          </div>
 
+        </div>
+
+        <div class="detail-item">
+          <div class="detail-label">DARTIQ Coaching Logic / Improvement Potential</div>
+          <div class="detail-value" id="improvementValue">-</div>
+        </div>
+
+      </div>
+    </details>
+
+    <details>
+      <summary>WHAT TO TRACK</summary>
+
+      <div class="detail-body">
+        <div class="detail-item">
+          <div class="detail-value" id="trackValue">-</div>
+        </div>
       </div>
 
     </details>
 
-    <!-- KEITH METHODOLOGY -->
+    <details>
+      <summary>AFTER PRACTICE</summary>
 
-    <details class="accordion" id="keithAccordion">
+      <div class="detail-body">
 
-      <summary>Keith Allen Guther Methodology</summary>
+        <div class="detail-item">
+          <div class="detail-label">Reminder</div>
+          <div class="detail-value" id="reminderValue">-</div>
+        </div>
 
-      <div class="accordion-content">
-
-        <section class="keith" id="keithBlock">
-
-          <div class="keith-head">
-
-            <div class="keith-title">
-              Keith Allen Guther Methodology
-            </div>
-
-            <div class="keith-coach" id="keithCoach"></div>
-
-          </div>
-
-          <div class="keith-body">
-
-            <div class="keith-grid">
-
-              <div
-                class="keith-card full"
-                id="keithRulesWrap">
-
-                <div class="keith-label">Rules</div>
-
-                <div
-                  class="keith-value"
-                  id="keithRules">
-                </div>
-
-              </div>
-
-              <div
-                class="keith-card"
-                id="primaryMetricWrap">
-
-                <div class="keith-label">
-                  Primary Metric
-                </div>
-
-                <div
-                  class="keith-value"
-                  id="primaryMetric">
-                </div>
-
-              </div>
-
-              <div
-                class="keith-card"
-                id="secondaryMetricWrap">
-
-                <div class="keith-label">
-                  Secondary Metric
-                </div>
-
-                <div
-                  class="keith-value"
-                  id="secondaryMetric">
-                </div>
-
-              </div>
-
-              <div
-                class="keith-card full"
-                id="keithSuccessWrap">
-
-                <div class="keith-label">
-                  Keith Success Target
-                </div>
-
-                <div
-                  class="keith-value"
-                  id="keithSuccessTarget">
-                </div>
-
-              </div>
-
-            </div>
-
-          </div>
-
-        </section>
+        <div class="detail-item">
+          <div class="detail-label">Next Step</div>
+          <div class="detail-value" id="afterValue">-</div>
+        </div>
 
       </div>
-
     </details>
 
-    <!-- GRADING -->
-
-    <details class="accordion" id="gradingAccordion">
-
-      <summary>Grading &amp; Coaching Actions</summary>
-
-      <div class="accordion-content">
-
-        <section class="keith">
-
-          <div class="keith-body">
-
-            <div class="keith-grid">
-
-              <div
-                class="keith-card full"
-                id="gradingWrap">
-
-                <div class="keith-label">
-                  Practice Grading
-                </div>
-
-                <div class="grade-grid">
-
-                  <div class="grade red">
-                    <div class="grade-label">Red</div>
-                    <div class="grade-value" id="redRange"></div>
-                  </div>
-
-                  <div class="grade orange">
-                    <div class="grade-label">Orange</div>
-                    <div class="grade-value" id="orangeRange"></div>
-                  </div>
-
-                  <div class="grade yellow">
-                    <div class="grade-label">Yellow</div>
-                    <div class="grade-value" id="yellowRange"></div>
-                  </div>
-
-                  <div class="grade green">
-                    <div class="grade-label">Green</div>
-                    <div class="grade-value" id="greenRange"></div>
-                  </div>
-
-                </div>
-
-              </div>
-
-              <div
-                class="keith-card full"
-                id="keithActionsWrap">
-
-                <div class="keith-label">
-                  Coaching Action by Grade
-                </div>
-
-                <div class="action-grid">
-
-                  <div
-                    class="action-card red"
-                    id="redActionWrap">
-
-                    <div class="action-head">
-                      ● Red Action
-                    </div>
-
-                    <div
-                      class="action-copy"
-                      id="redAction">
-                    </div>
-
-                  </div>
-
-                  <div
-                    class="action-card orange"
-                    id="orangeActionWrap">
-
-                    <div class="action-head">
-                      ● Orange Action
-                    </div>
-
-                    <div
-                      class="action-copy"
-                      id="orangeAction">
-                    </div>
-
-                  </div>
-
-                  <div
-                    class="action-card yellow"
-                    id="yellowActionWrap">
-
-                    <div class="action-head">
-                      ● Yellow Action
-                    </div>
-
-                    <div
-                      class="action-copy"
-                      id="yellowAction">
-                    </div>
-
-                  </div>
-
-                  <div
-                    class="action-card green"
-                    id="greenActionWrap">
-
-                    <div class="action-head">
-                      ● Green Action
-                    </div>
-
-                    <div
-                      class="action-copy"
-                      id="greenAction">
-                    </div>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-            </div>
-
-          </div>
-
-        </section>
-
-        <!-- DARTIQ COACHING LOGIC -->
-
-        <section class="coach">
-
-          <div class="coach-title">
-            DARTIQ Coaching Logic
-          </div>
-
-          <div class="coach-intro">
-            Outcome first. Compare intention with the actual result
-            before changing mechanics.
-          </div>
-
-          <div class="flow">
-
-            <div class="logic-step">
-
-              <div class="logic-num">1</div>
-
-              <div class="logic-copy">
-                <strong>Intention</strong>
-                <span id="coach1"></span>
-              </div>
-
-            </div>
-
-            <div class="logic-step">
-
-              <div class="logic-num">2</div>
-
-              <div class="logic-copy">
-                <strong>Outcome</strong>
-                <span id="coach2"></span>
-              </div>
-
-            </div>
-
-            <div class="logic-step">
-
-              <div class="logic-num">3</div>
-
-              <div class="logic-copy">
-                <strong>Decide</strong>
-                <span id="coach3"></span>
-              </div>
-
-            </div>
-
-            <div class="logic-step">
-
-              <div class="logic-num">4</div>
-
-              <div class="logic-copy">
-                <strong>Retest</strong>
-                <span id="coach4"></span>
-              </div>
-
-            </div>
-
-          </div>
-
-          <div class="coach-foot">
-
-            <div
-              class="note"
-              id="coachRule">
-              Preserve what works. Change only a repeatable issue
-              that affects the result.
-            </div>
-
-            <div
-              class="improve"
-              id="improvementWrap">
-
-              <div class="improve-label">
-                Improvement Potential
-              </div>
-
-              <div
-                class="improve-text"
-                id="improvement">
-              </div>
-
-            </div>
-
-          </div>
-
-        </section>
-
-      </div>
-
-    </details>
-
-    <!-- WHAT TO TRACK -->
-
-    <details class="accordion" id="trackAccordion">
-
-      <summary>What To Track</summary>
-
-      <div class="accordion-content">
-
-        <section class="mini">
-          <div class="mini-label">
-            What To Track
-          </div>
-
-          <div
-            class="mini-copy"
-            id="track">
-          </div>
-        </section>
-
-      </div>
-
-    </details>
-
-    <!-- AFTER PRACTICE -->
-
-    <details class="accordion" id="afterAccordion">
-
-      <summary>After Practice</summary>
-
-      <div class="accordion-content">
-
-        <section class="after">
-
-          <div class="after-grid">
-
-            <div
-              class="after-box"
-              id="reminderWrap">
-
-              <div class="after-label">
-                Reminder
-              </div>
-
-              <div
-                class="after-text"
-                id="reminder">
-              </div>
-
-            </div>
-
-            <div
-              class="after-box"
-              id="afterWrap">
-
-              <div class="after-label">
-                Next Step
-              </div>
-
-              <div
-                class="after-text"
-                id="after">
-              </div>
-
-            </div>
-
-          </div>
-
-        </section>
-
-      </div>
-
-    </details>
-
-  </div>
+  </section>
 
   <div class="footer">
     DARTIQ • PRACTICE SESSION • CORE VISION
   </div>
 
-</main>
+</div>
 
 <script>
-
-/* ==========================================================
-   URL PARAMETERS
-========================================================== */
-
-const p = new URLSearchParams(location.search);
-
-const get = (k,f='') =>
-  (p.get(k) || '').trim() || f;
-
-const set = (id,v) => {
-  const e = document.getElementById(id);
-  if(e) e.textContent = v;
-};
-
-const data = {
-
-  objective:get('objective'),
-  target:get('target'),
-  execution:get('execution'),
-  track:get('track'),
-  avoid:get('avoid'),
-  why:get('why'),
-
-  improvement:get('improvement'),
-
-  reminder:get(
-    'reminder',
-    'Record the result honestly. The result is feedback.'
-  ),
-
-  after:get(
-    'after',
-    'Enter the result so DARTIQ can decide what comes next.'
-  ),
-
-  focus:get('focus'),
-
-  coach:get(
-    'keithcoach',
-    get('coach')
-  ),
-
-  rules:get(
-    'keithrules',
-    get('rules')
-  ),
-
-  red:get(
-    'keithred',
-    get('red')
-  ),
-
-  orange:get(
-    'keithorange',
-    get('orange')
-  ),
-
-  yellow:get(
-    'keithyellow',
-    get('yellow')
-  ),
-
-  green:get(
-    'keithgreen',
-    get('green')
-  ),
-
-  primarymetric:get(
-    'keithprimary',
-    get('primarymetric')
-  ),
-
-  secondarymetric:get(
-    'keithsecondary',
-    get('secondarymetric')
-  ),
-
-  redaction:get('redaction'),
-  orangeaction:get('orangeaction'),
-  yellowaction:get('yellowaction'),
-  greenaction:get('greenaction'),
-
-  successtarget:get(
-    'keithtarget',
-    get('successtarget')
-  )
-
-};
-
-
-/* ==========================================================
-   TOP PRACTICE INFORMATION
-========================================================== */
-
-set('objective',data.objective);
-set('target',data.target);
-
-let keithFocus = data.focus;
-
-if(!keithFocus){
-  keithFocus =
-    data.rules ||
-    data.reminder ||
-    data.improvement ||
-    '';
-}
-
-set('topFocus',keithFocus);
-
-if(!data.objective){
-  document.getElementById('goalCard').classList.add('hidden');
-}
-
-if(!data.target){
-  document.getElementById('targetCard').classList.add('hidden');
-}
-
-if(!keithFocus){
-  document.getElementById('focusCard').classList.add('hidden');
-}
-
-
-/* ==========================================================
-   PRACTICE INSTRUCTIONS
-========================================================== */
-
-set('why',data.why);
-set('avoid',data.avoid);
-set('track',data.track);
-set('improvement',data.improvement);
-set('reminder',data.reminder);
-set('after',data.after);
-
-if(!data.why){
-  document.getElementById('whyWrap').classList.add('hidden');
-}
-
-if(!data.avoid){
-  document.getElementById('avoidWrap').classList.add('hidden');
-}
-
-if(!data.execution){
-  document.getElementById('executionWrap').classList.add('hidden');
-}
-
-if(!data.improvement){
-  document.getElementById('improvementWrap').classList.add('empty');
-}
-
-
-/* ==========================================================
-   EXECUTION STEPS
-========================================================== */
-
-if(data.execution){
-
-  let parts = data.execution
-    .replace(/\s+/g,' ')
-    .split(/(?<=[.!?])\s+(?=[A-Z0-9])/)
-    .map(s=>s.trim())
-    .filter(Boolean);
-
-  if(parts.length <= 1){
-
-    parts = data.execution
-      .split(/\n+/)
-      .map(s=>s.trim())
-      .filter(Boolean);
-
-  }
-
-  parts.forEach((part,i)=>{
-
-    const row = document.createElement('div');
-
-    row.className = 'practice-step';
-
-    row.innerHTML =
-      '<div class="step-badge">' +
-      (i+1) +
-      '</div>' +
-      '<div class="step-copy"></div>';
-
-    row.querySelector('.step-copy').textContent = part;
-
-    document
-      .getElementById('executionSteps')
-      .appendChild(row);
-
-  });
-
-}
-
-
-/* ==========================================================
-   DARTIQ COACHING LOGIC
-========================================================== */
-
-set(
-  'coach1',
-  data.objective ||
-  data.target ||
-  'Define what this practice is trying to achieve.'
-);
-
-set(
-  'coach2',
-  data.track
-    ? 'Judge the result using: ' + data.track
-    : (
-        data.target
-          ? 'Compare each result with: ' + data.target
-          : 'Compare the actual result with the intended outcome.'
-      )
-);
-
-set(
-  'coach3',
-  data.focus
-    ? 'Correct only a repeatable issue affecting ' +
-      data.focus +
-      '.'
-    : 'Correct only a repeatable issue that affects the intended result.'
-);
-
-set(
-  'coach4',
-  data.target
-    ? 'Retest against: ' + data.target
-    : 'Repeat the practice and verify that the adjustment improves the result.'
-);
-
-set(
-  'coachRule',
-  (
-    data.avoid
-      ? 'Watch for: ' + data.avoid + '. '
-      : ''
-  ) +
-  'Preserve what works. Use the smallest useful change.'
-);
-
-
-/* ==========================================================
-   KEITH ALLEN GUTHER METHODOLOGY
-========================================================== */
-
-const hasKeith = Boolean(
-  data.coach ||
-  data.rules ||
-  data.red ||
-  data.orange ||
-  data.yellow ||
-  data.green ||
-  data.primarymetric ||
-  data.secondarymetric ||
-  data.redaction ||
-  data.orangeaction ||
-  data.yellowaction ||
-  data.greenaction ||
-  data.successtarget
-);
-
-if(hasKeith){
-
-  set(
-    'keithCoach',
-    data.coach || 'Keith Allen Guther'
-  );
-
-  set(
-    'keithRules',
-    data.rules
-  );
-
-  set(
-    'primaryMetric',
-    data.primarymetric
-  );
-
-  set(
-    'secondaryMetric',
-    data.secondarymetric
-  );
-
-  set(
-    'redRange',
-    data.red
-  );
-
-  set(
-    'orangeRange',
-    data.orange
-  );
-
-  set(
-    'yellowRange',
-    data.yellow
-  );
-
-  set(
-    'greenRange',
-    data.green
-  );
-
-  set(
-    'keithSuccessTarget',
-    data.successtarget
-  );
-
-  set(
-    'redAction',
-    data.redaction
-  );
-
-  set(
-    'orangeAction',
-    data.orangeaction
-  );
-
-  set(
-    'yellowAction',
-    data.yellowaction
-  );
-
-  set(
-    'greenAction',
-    data.greenaction
-  );
-
-  if(!data.rules){
-    document
-      .getElementById('keithRulesWrap')
-      .classList.add('empty');
-  }
-
-  if(!data.primarymetric){
-    document
-      .getElementById('primaryMetricWrap')
-      .classList.add('empty');
-  }
-
-  if(!data.secondarymetric){
-    document
-      .getElementById('secondaryMetricWrap')
-      .classList.add('empty');
-  }
-
-  if(!data.successtarget){
-    document
-      .getElementById('keithSuccessWrap')
-      .classList.add('empty');
-  }
-
-  if(!(data.red || data.orange || data.yellow || data.green)){
-    document
-      .getElementById('gradingWrap')
-      .classList.add('empty');
-  }
-
-  [
-    ['redaction','redActionWrap'],
-    ['orangeaction','orangeActionWrap'],
-    ['yellowaction','yellowActionWrap'],
-    ['greenaction','greenActionWrap']
-  ].forEach(([k,id])=>{
-
-    if(!data[k]){
-      document
-        .getElementById(id)
-        .classList.add('hidden');
+const params = new URLSearchParams(window.location.search);
+
+function param(){
+  for(let i=0;i<arguments.length;i++){
+    const value=params.get(arguments[i]);
+    if(value && value.trim()!==""){
+      return value.trim();
     }
-
-  });
-
-  if(!(
-    data.redaction ||
-    data.orangeaction ||
-    data.yellowaction ||
-    data.greenaction
-  )){
-    document
-      .getElementById('keithActionsWrap')
-      .classList.add('empty');
   }
-
-}
-else{
-
-  document
-    .getElementById('keithAccordion')
-    .classList.add('hidden');
-
-  document
-    .getElementById('gradingWrap')
-    .classList.add('empty');
-
-  document
-    .getElementById('keithActionsWrap')
-    .classList.add('empty');
-
+  return "";
 }
 
-
-/* ==========================================================
-   HIDE EMPTY ACCORDIONS
-========================================================== */
-
-if(!data.why && !data.execution && !data.avoid){
-  document
-    .getElementById('practiceAccordion')
-    .classList.add('hidden');
+function put(id,value,fallback="-"){
+  const el=document.getElementById(id);
+  if(el) el.textContent=value || fallback;
 }
 
-if(!data.track){
-  document
-    .getElementById('trackAccordion')
-    .classList.add('hidden');
+const sessionID=param("session") || "SESSION";
+
+const objective=param("objective");
+const target=param("target");
+const execution=param("execution");
+const track=param("track");
+const avoid=param("avoid");
+const why=param("why");
+const improvement=param("improvement");
+const reminder=param("reminder");
+const after=param("after");
+const focus=param("focus");
+
+const keithCoach=param("keithcoach","coach");
+const keithRules=param("keithrules","rules");
+const keithRed=param("keithred","red");
+const keithOrange=param("keithorange","orange");
+const keithYellow=param("keithyellow","yellow");
+const keithGreen=param("keithgreen","green");
+const keithPrimary=param("keithprimary","primarymetric");
+const keithSecondary=param("keithsecondary","secondarymetric");
+const redAction=param("redaction");
+const orangeAction=param("orangeaction");
+const yellowAction=param("yellowaction");
+const greenAction=param("greenaction");
+const keithTarget=param("keithtarget","successtarget");
+
+const coachFocus=
+  focus ||
+  keithRules ||
+  reminder ||
+  improvement ||
+  "-";
+
+put("sessionID",sessionID);
+put("objectiveValue",objective);
+put("targetValue",target);
+put("focusValue",coachFocus);
+
+put("whyValue",why);
+put("executionValue",execution);
+put("avoidValue",avoid);
+
+put("keithCoachValue",keithCoach || "Keith Allen Guther");
+put("keithRulesValue",keithRules);
+put("primaryValue",keithPrimary);
+put("secondaryValue",keithSecondary);
+put("keithTargetValue",keithTarget);
+
+put("redValue",keithRed);
+put("orangeValue",keithOrange);
+put("yellowValue",keithYellow);
+put("greenValue",keithGreen);
+
+put("redActionValue",redAction,"");
+put("orangeActionValue",orangeAction,"");
+put("yellowActionValue",yellowAction,"");
+put("greenActionValue",greenAction,"");
+
+put("improvementValue",improvement);
+put("trackValue",track);
+put("reminderValue",reminder);
+put("afterValue",after);
+
+if(!avoid){
+  const block=document.getElementById("avoidBlock");
+  if(block) block.style.display="none";
+}
+
+if(keithCoach){
+  put("coachName","COACH " + keithCoach,"");
+}else{
+  put("coachName","COACH KEITH ALLEN GUTHER","");
+}
+
+if(focus){
+  put("practiceName",focus,"");
+}else if(objective){
+  const shortObjective=objective.length>38
+    ? objective.substring(0,38)+"…"
+    : objective;
+  put("practiceName",shortObjective,"");
 }
 
 
-/* ==========================================================
-   PRACTICE ENGINE
-========================================================== */
+/* ==================================================
+   EXISTING 501 PRACTICE ENGINE
+   ================================================== */
 
-const sessionID = get(
-  'session',
-  'No session supplied'
-);
+let currentMode="keypad";
+let input="";
 
-set(
-  'sessionID',
-  sessionID
-);
+let remaining=501;
+let visit=1;
 
-let currentMode = 'keypad';
+let totalPoints=0;
+let totalDarts=0;
 
-let input = '';
+let count100=0;
+let count140=0;
+let count180=0;
 
-let remaining = 501;
+let currentDarts=[];
 
-let visit = 1;
-
-let totalPoints = 0;
-
-let totalDarts = 0;
-
-let count100 = 0;
-
-let count140 = 0;
-
-let count180 = 0;
-
-let currentDarts = [];
-
-
-/* ==========================================================
-   MODE SWITCHING
-========================================================== */
 
 function setMode(mode){
 
-  currentMode = mode;
+  currentMode=mode;
 
-  const km = document.getElementById('keypadMode');
-  const dm = document.getElementById('dartboardMode');
+  const keypadMode=document.getElementById("keypadMode");
+  const dartboardMode=document.getElementById("dartboardMode");
+  const keypadTab=document.getElementById("keypadTab");
+  const dartboardTab=document.getElementById("dartboardTab");
 
-  const kt = document.getElementById('keypadTab');
-  const dt = document.getElementById('dartboardTab');
+  if(mode==="keypad"){
 
-  if(mode === 'keypad'){
+    keypadMode.style.display="block";
+    dartboardMode.style.display="none";
 
-    km.style.display = 'block';
+    keypadTab.classList.add("active");
+    dartboardTab.classList.remove("active");
 
-    dm.style.display = 'none';
+    showMessage("Enter the total score for this visit.");
 
-    kt.classList.add('active');
+  }else{
 
-    dt.classList.remove('active');
+    keypadMode.style.display="none";
+    dartboardMode.style.display="block";
 
-    showMessage(
-      'Enter the total score for this visit.'
-    );
+    dartboardTab.classList.add("active");
+    keypadTab.classList.remove("active");
 
+    showMessage("Tap the board for Dart 1.");
   }
-  else{
-
-    km.style.display = 'none';
-
-    dm.style.display = 'block';
-
-    dt.classList.add('active');
-
-    kt.classList.remove('active');
-
-    showMessage(
-      'Tap the board for Dart 1.'
-    );
-
-  }
-
 }
 
 
-/* ==========================================================
-   KEYPAD
-========================================================== */
+function press(number){
 
-function press(n){
+  if(input.length>=3) return;
 
-  if(input.length >= 3){
-    return;
-  }
+  input+=number;
 
-  input += n;
+  const value=Number(input);
 
-  if(Number(input) > 180){
-
-    input = '';
-
-    showMessage(
-      'Maximum visit score is 180.'
-    );
-
+  if(value>180){
+    input="";
+    showMessage("Maximum visit score is 180.");
   }
 
   updateInput();
-
 }
+
 
 function clearScore(){
-
-  input = '';
-
+  input="";
   updateInput();
-
 }
+
 
 function backspace(){
-
-  input = input.slice(0,-1);
-
+  input=input.slice(0,-1);
   updateInput();
-
 }
+
 
 function updateInput(){
-
-  set(
-    'scoreDisplay',
-    input === '' ? '0' : input
-  );
-
-}
-
-function showMessage(t){
-
-  set(
-    'message',
-    t
-  );
-
+  document.getElementById("scoreDisplay").textContent=
+    input==="" ? "0" : input;
 }
 
 
-/* ==========================================================
+function showMessage(text){
+  document.getElementById("message").textContent=text;
+}
+
+
+/* ==================================================
    INTERACTIVE DARTBOARD
-========================================================== */
+   ================================================== */
 
-const boardNumbers = [
-  20,1,18,4,13,
-  6,10,15,2,17,
-  3,19,7,16,8,
-  11,14,9,12,5
+const boardNumbers=[
+  20,1,18,4,13,6,10,15,2,17,
+  3,19,7,16,8,11,14,9,12,5
 ];
 
-const svg =
-  document.getElementById('dartboard');
-
-const NS =
-  'http://www.w3.org/2000/svg';
+const svg=document.getElementById("dartboard");
+const NS="http://www.w3.org/2000/svg";
 
 
-function polar(r,a){
+function polar(radius,angle){
 
-  const rad =
-    (a - 90) *
-    Math.PI /
-    180;
+  const rad=(angle-90)*Math.PI/180;
 
   return{
-    x:r * Math.cos(rad),
-    y:r * Math.sin(rad)
+    x:radius*Math.cos(rad),
+    y:radius*Math.sin(rad)
   };
-
 }
 
 
-function ringPath(i,o,s,e){
+function ringPath(innerRadius,outerRadius,startAngle,endAngle){
 
-  const p1 = polar(o,s);
-  const p2 = polar(o,e);
-  const p3 = polar(i,e);
-  const p4 = polar(i,s);
+  const p1=polar(outerRadius,startAngle);
+  const p2=polar(outerRadius,endAngle);
+  const p3=polar(innerRadius,endAngle);
+  const p4=polar(innerRadius,startAngle);
 
   return[
-    'M',
-    p1.x,
-    p1.y,
-    'A',
-    o,
-    o,
-    0,
-    0,
-    1,
-    p2.x,
-    p2.y,
-    'L',
-    p3.x,
-    p3.y,
-    'A',
-    i,
-    i,
-    0,
-    0,
-    0,
-    p4.x,
-    p4.y,
-    'Z'
-  ].join(' ');
-
+    "M",p1.x,p1.y,
+    "A",outerRadius,outerRadius,0,0,1,p2.x,p2.y,
+    "L",p3.x,p3.y,
+    "A",innerRadius,innerRadius,0,0,0,p4.x,p4.y,
+    "Z"
+  ].join(" ");
 }
 
 
@@ -2227,133 +1233,89 @@ function addSegment(
   label
 ){
 
-  const path =
-    document.createElementNS(
-      NS,
-      'path'
-    );
+  const path=document.createElementNS(NS,"path");
 
   path.setAttribute(
-    'd',
-    ringPath(
-      inner,
-      outer,
-      start,
-      end
-    )
+    "d",
+    ringPath(inner,outer,start,end)
+  );
+
+  path.setAttribute("fill",fill);
+
+  path.setAttribute(
+    "stroke",
+    "#777777"
   );
 
   path.setAttribute(
-    'fill',
-    fill
+    "stroke-width",
+    ".65"
   );
 
-  path.setAttribute(
-    'stroke',
-    '#777'
-  );
-
-  path.setAttribute(
-    'stroke-width',
-    '.65'
-  );
-
-  path.style.cursor =
-    'pointer';
+  path.style.cursor="pointer";
 
   path.addEventListener(
-    'click',
-    () =>
-      addDart(
-        number,
-        multiplier,
-        label
-      )
+    "click",
+    function(){
+      addDart(number,multiplier,label);
+    }
   );
 
   svg.appendChild(path);
-
 }
 
 
 function drawBoard(){
 
-  svg.innerHTML = '';
+  svg.innerHTML="";
+
 
   /* BLUE OUTER RING */
 
-  const surround =
-    document.createElementNS(
-      NS,
-      'circle'
-    );
+  const surround=document.createElementNS(NS,"circle");
+
+  surround.setAttribute("cx","0");
+  surround.setAttribute("cy","0");
+  surround.setAttribute("r","224");
 
   surround.setAttribute(
-    'cx',
-    '0'
-  );
-
-  surround.setAttribute(
-    'cy',
-    '0'
+    "fill",
+    "#010407"
   );
 
   surround.setAttribute(
-    'r',
-    '224'
+    "stroke",
+    "#39a9ff"
   );
 
   surround.setAttribute(
-    'fill',
-    '#010407'
+    "stroke-width",
+    "4"
   );
 
-  surround.setAttribute(
-    'stroke',
-    '#39a9ff'
-  );
+  surround.style.filter=
+    "drop-shadow(0 0 7px rgba(57,169,255,.9))";
 
-  surround.setAttribute(
-    'stroke-width',
-    '4'
-  );
+  svg.appendChild(surround);
 
-  surround.style.filter =
-    'drop-shadow(0 0 7px rgba(57,169,255,.9))';
-
-  svg.appendChild(
-    surround
-  );
-
-
-  /* DARTBOARD SEGMENTS */
 
   for(let i=0;i<20;i++){
 
-    const number =
-      boardNumbers[i];
+    const number=boardNumbers[i];
+    const center=i*18;
+    const start=center-9;
+    const end=center+9;
+    const dark=i%2===0;
 
-    const center =
-      i * 18;
-
-    const start =
-      center - 9;
-
-    const end =
-      center + 9;
-
-    const dark =
-      i % 2 === 0;
-
-    const single =
+    const singleColor=
       dark
-        ? '#090d11'
-        : '#d5c9aa';
+        ? "#090d11"
+        : "#d5c9aa";
 
-    const score =
+    const scoreColor=
       dark
-        ? '#c73b43'
-        : '#21865c';
+        ? "#c73b43"
+        : "#21865c";
 
 
     addSegment(
@@ -2361,297 +1323,235 @@ function drawBoard(){
       103,
       start,
       end,
-      single,
+      singleColor,
       number,
       1,
-      'S' + number
+      "S"+number
     );
+
 
     addSegment(
       103,
       118,
       start,
       end,
-      score,
+      scoreColor,
       number,
       3,
-      'T' + number
+      "T"+number
     );
+
 
     addSegment(
       118,
       178,
       start,
       end,
-      single,
+      singleColor,
       number,
       1,
-      'S' + number
+      "S"+number
     );
+
 
     addSegment(
       178,
       195,
       start,
       end,
-      score,
+      scoreColor,
       number,
       2,
-      'D' + number
+      "D"+number
     );
 
 
     /* BLUE NUMBERS */
 
-    const pt =
-      polar(
-        211,
-        center
-      );
+    const textPoint=polar(211,center);
 
-    const text =
-      document.createElementNS(
-        NS,
-        'text'
-      );
+    const text=document.createElementNS(NS,"text");
+
+    text.setAttribute("x",textPoint.x);
+    text.setAttribute("y",textPoint.y);
 
     text.setAttribute(
-      'x',
-      pt.x
+      "fill",
+      "#39a9ff"
     );
 
     text.setAttribute(
-      'y',
-      pt.y
+      "font-size",
+      "16"
     );
 
     text.setAttribute(
-      'fill',
-      '#39a9ff'
+      "font-weight",
+      "900"
     );
 
     text.setAttribute(
-      'font-size',
-      '16'
+      "text-anchor",
+      "middle"
     );
 
     text.setAttribute(
-      'font-weight',
-      '900'
+      "dominant-baseline",
+      "middle"
     );
 
-    text.setAttribute(
-      'text-anchor',
-      'middle'
-    );
+    text.style.pointerEvents="none";
 
-    text.setAttribute(
-      'dominant-baseline',
-      'middle'
-    );
+    text.style.filter=
+      "drop-shadow(0 0 4px rgba(57,169,255,.95))";
 
-    text.style.pointerEvents =
-      'none';
+    text.textContent=number;
 
-    text.style.filter =
-      'drop-shadow(0 0 4px rgba(57,169,255,.95))';
-
-    text.textContent =
-      number;
-
-    svg.appendChild(
-      text
-    );
-
+    svg.appendChild(text);
   }
 
 
   /* OUTER BULL */
 
-  const ob =
-    document.createElementNS(
-      NS,
-      'circle'
-    );
+  const outerBull=document.createElementNS(NS,"circle");
 
-  ob.setAttribute(
-    'cx',
-    '0'
+  outerBull.setAttribute("cx","0");
+  outerBull.setAttribute("cy","0");
+  outerBull.setAttribute("r","24");
+
+  outerBull.setAttribute(
+    "fill",
+    "#21865c"
   );
 
-  ob.setAttribute(
-    'cy',
-    '0'
+  outerBull.setAttribute(
+    "stroke",
+    "#c5c5c5"
   );
 
-  ob.setAttribute(
-    'r',
-    '24'
+  outerBull.setAttribute(
+    "stroke-width",
+    "1"
   );
 
-  ob.setAttribute(
-    'fill',
-    '#21865c'
+  outerBull.style.cursor="pointer";
+
+  outerBull.addEventListener(
+    "click",
+    function(){
+      addDart(25,1,"25");
+    }
   );
 
-  ob.setAttribute(
-    'stroke',
-    '#c5c5c5'
-  );
-
-  ob.setAttribute(
-    'stroke-width',
-    '1'
-  );
-
-  ob.style.cursor =
-    'pointer';
-
-  ob.addEventListener(
-    'click',
-    () =>
-      addDart(
-        25,
-        1,
-        '25'
-      )
-  );
-
-  svg.appendChild(
-    ob
-  );
+  svg.appendChild(outerBull);
 
 
-  /* BULL */
+  /* INNER BULL */
 
-  const bull =
-    document.createElementNS(
-      NS,
-      'circle'
-    );
+  const bull=document.createElementNS(NS,"circle");
+
+  bull.setAttribute("cx","0");
+  bull.setAttribute("cy","0");
+  bull.setAttribute("r","10");
 
   bull.setAttribute(
-    'cx',
-    '0'
+    "fill",
+    "#c73b43"
   );
 
   bull.setAttribute(
-    'cy',
-    '0'
+    "stroke",
+    "#dddddd"
   );
 
   bull.setAttribute(
-    'r',
-    '10'
+    "stroke-width",
+    "1"
   );
 
-  bull.setAttribute(
-    'fill',
-    '#c73b43'
-  );
-
-  bull.setAttribute(
-    'stroke',
-    '#ddd'
-  );
-
-  bull.setAttribute(
-    'stroke-width',
-    '1'
-  );
-
-  bull.style.cursor =
-    'pointer';
+  bull.style.cursor="pointer";
 
   bull.addEventListener(
-    'click',
-    () =>
-      addDart(
-        25,
-        2,
-        'BULL'
-      )
+    "click",
+    function(){
+      addDart(25,2,"BULL");
+    }
   );
 
-  svg.appendChild(
-    bull
-  );
+  svg.appendChild(bull);
 
+  /*
+    IMPORTANT:
+    NO DARTIQ TEXT IS DRAWN INSIDE THE BOARD.
+    OUTER BLUE RING AND BLUE NUMBERS REMAIN.
+  */
 }
 
 
-/* ==========================================================
-   DART ENTRY
-========================================================== */
+/* ==================================================
+   DART INPUT
+   ================================================== */
 
-function addDart(
-  number,
-  multiplier,
-  label
-){
+function addDart(number,multiplier,label){
 
-  if(currentDarts.length >= 3){
+  if(currentDarts.length>=3){
 
     showMessage(
-      'Three darts entered. Confirm the visit.'
+      "Three darts entered. Confirm the visit."
     );
 
     return;
-
   }
 
+  const score=number*multiplier;
+
   currentDarts.push({
-    number,
-    multiplier,
-    score:number * multiplier,
-    label
+    number:number,
+    multiplier:multiplier,
+    score:score,
+    label:label
   });
 
   updateDartDisplay();
-
 }
 
 
 function addMiss(){
 
-  if(currentDarts.length >= 3){
+  if(currentDarts.length>=3){
 
     showMessage(
-      'Three darts entered. Confirm the visit.'
+      "Three darts entered. Confirm the visit."
     );
 
     return;
-
   }
 
   currentDarts.push({
     number:0,
     multiplier:0,
     score:0,
-    label:'MISS'
+    label:"MISS"
   });
 
   updateDartDisplay();
-
 }
 
 
 function undoDart(){
 
-  if(!currentDarts.length){
+  if(currentDarts.length===0){
 
     showMessage(
-      'No dart to undo.'
+      "No dart to undo."
     );
 
     return;
-
   }
 
   currentDarts.pop();
 
   updateDartDisplay();
-
 }
 
 
@@ -2659,131 +1559,126 @@ function updateDartDisplay(){
 
   for(let i=0;i<3;i++){
 
-    const d =
-      currentDarts[i];
+    const el=
+      document.getElementById(
+        "dart"+(i+1)
+      );
 
-    set(
-      'dart' + (i+1),
-      d
-        ? d.label + ' • ' + d.score
-        : '-'
-    );
+    if(currentDarts[i]){
 
+      el.textContent=
+        currentDarts[i].label+
+        " • "+
+        currentDarts[i].score;
+
+    }else{
+
+      el.textContent="-";
+    }
   }
 
-  const total =
+
+  const total=
     currentDarts.reduce(
-      (s,d)=>s+d.score,
+      (sum,dart)=>sum+dart.score,
       0
     );
 
-  set(
-    'boardVisitScore',
-    total
-  );
 
-  if(currentDarts.length < 3){
+  document.getElementById(
+    "boardVisitScore"
+  ).textContent=total;
 
-    showMessage(
-      'Enter Dart ' +
-      (currentDarts.length + 1) +
-      '.'
-    );
 
-  }
-  else{
+  if(currentDarts.length<3){
 
     showMessage(
-      'Visit total: ' +
-      total +
-      '. Confirm visit.'
+      "Enter Dart "+
+      (currentDarts.length+1)+
+      "."
     );
 
-  }
+  }else{
 
+    showMessage(
+      "Visit total: "+
+      total+
+      ". Confirm visit."
+    );
+  }
 }
 
 
-/* ==========================================================
+/* ==================================================
    CONFIRM VISIT
-========================================================== */
+   ================================================== */
 
 function confirmVisit(){
 
-  let score = 0;
+  let score=0;
+  let dartsThisVisit=3;
 
-  let dartsThisVisit = 3;
 
+  if(currentMode==="keypad"){
 
-  /* KEYPAD MODE */
-
-  if(currentMode === 'keypad'){
-
-    if(input === ''){
+    if(input===""){
 
       showMessage(
-        'Enter a visit score first.'
+        "Enter a visit score first."
       );
 
       return;
-
     }
 
-    score =
-      Number(input);
+    score=Number(input);
+
+    dartsThisVisit=3;
+
 
     if(
-      score < 0 ||
-      score > 180
+      score<0 ||
+      score>180
     ){
 
       showMessage(
-        'Visit score must be between 0 and 180.'
+        "Visit score must be between 0 and 180."
       );
 
       return;
-
     }
 
-  }
+  }else{
 
-
-  /* DARTBOARD MODE */
-
-  else{
-
-    if(!currentDarts.length){
+    if(currentDarts.length===0){
 
       showMessage(
-        'Enter at least one dart first.'
+        "Enter at least one dart first."
       );
 
       return;
-
     }
 
-    score =
+
+    score=
       currentDarts.reduce(
-        (s,d)=>s+d.score,
+        (sum,dart)=>sum+dart.score,
         0
       );
 
-    dartsThisVisit =
-      currentDarts.length;
 
+    dartsThisVisit=currentDarts.length;
   }
 
 
-  /* BUST */
+  /* EXISTING BUST BEHAVIOUR */
 
-  if(score > remaining){
+  if(score>remaining){
 
     showMessage(
-      'BUST • Visit scored 0.'
+      "BUST • Visit scored 0."
     );
 
-    totalDarts +=
-      dartsThisVisit;
+    totalDarts+=dartsThisVisit;
 
     visit++;
 
@@ -2792,41 +1687,42 @@ function confirmVisit(){
     updateStats();
 
     return;
-
   }
 
 
-  /* VALID VISIT */
+  remaining-=score;
 
-  remaining -= score;
+  totalPoints+=score;
 
-  totalPoints += score;
-
-  totalDarts +=
-    dartsThisVisit;
+  totalDarts+=dartsThisVisit;
 
 
-  /* SCORE COUNTERS */
-
-  if(score === 180){
+  if(score===180){
 
     count180++;
 
-  }
-  else if(score >= 140){
+  }else if(score>=140){
 
     count140++;
 
-  }
-  else if(score >= 100){
+  }else if(score>=100){
 
     count100++;
-
   }
 
 
-  const confirmedScore =
-    score;
+  const confirmedScore=score;
+
+
+  /*
+    BACKEND BRIDGE READY:
+
+    sessionID
+    confirmedScore
+    dartsThisVisit
+    currentDarts
+  */
+
 
   visit++;
 
@@ -2835,94 +1731,80 @@ function confirmVisit(){
   updateStats();
 
 
-  if(remaining === 0){
+  if(remaining===0){
 
     showMessage(
-      'LEG COMPLETE • Checkout!'
+      "LEG COMPLETE • Checkout!"
     );
 
-  }
-  else{
+  }else{
 
     showMessage(
-      'Visit recorded locally: ' +
+      "Visit recorded locally: "+
       confirmedScore
     );
-
   }
-
 }
 
 
-/* ==========================================================
-   RESET CURRENT VISIT
-========================================================== */
-
 function resetCurrentVisit(){
 
-  input = '';
+  input="";
 
-  currentDarts = [];
+  currentDarts=[];
 
   updateInput();
 
   updateDartDisplay();
-
 }
 
-
-/* ==========================================================
-   STATISTICS
-========================================================== */
 
 function updateStats(){
 
-  set(
-    'remaining',
-    remaining
-  );
+  document.getElementById(
+    "remaining"
+  ).textContent=remaining;
 
-  set(
-    'visitNumber',
-    visit
-  );
+  document.getElementById(
+    "visitNumber"
+  ).textContent=visit;
 
-  set(
-    'dartsThrown',
-    totalDarts
-  );
+  document.getElementById(
+    "dartsThrown"
+  ).textContent=totalDarts;
 
-  set(
-    'average',
-    totalDarts > 0
-      ? (
-          (totalPoints / totalDarts) *
-          3
-        ).toFixed(2)
-      : '0.00'
-  );
 
-  set(
-    'stat100',
-    count100
-  );
+  let avg=0;
 
-  set(
-    'stat140',
-    count140
-  );
 
-  set(
-    'stat180',
-    count180
-  );
+  if(totalDarts>0){
 
+    avg=
+      (totalPoints/totalDarts)*3;
+  }
+
+
+  document.getElementById(
+    "average"
+  ).textContent=
+    avg.toFixed(2);
+
+
+  document.getElementById(
+    "stat100"
+  ).textContent=count100;
+
+  document.getElementById(
+    "stat140"
+  ).textContent=count140;
+
+  document.getElementById(
+    "stat180"
+  ).textContent=count180;
 }
 
 
-/* ==========================================================
-   START ENGINE
-========================================================== */
+/* START */
 
 drawBoard();
 
