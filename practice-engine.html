@@ -13,13 +13,17 @@
   --panel2:#0d1d2d;
   --line:#17344d;
   --blue:#39a9ff;
+  --blue-dark:#126da8;
+  --blue-deep:#082b45;
   --text:#ffffff;
   --muted:#8fa9bd;
   --danger:#ff5252;
-  --board-dark:#111820;
-  --board-light:#d7c9aa;
-  --board-red:#c73b43;
-  --board-green:#21865c;
+
+  /* DARTIQ BOARD */
+  --board-dark:#02070c;
+  --board-light:#0b1d2c;
+  --board-blue:#39a9ff;
+  --board-blue-dark:#126da8;
 }
 
 *{
@@ -184,6 +188,7 @@ body{
   background:var(--blue);
   border-color:var(--blue);
   color:#00101c;
+  box-shadow:0 0 14px rgba(57,169,255,.25);
 }
 
 /* SCORE DISPLAY */
@@ -266,6 +271,7 @@ body{
   font-weight:800;
   margin-top:4px;
   min-height:18px;
+  color:#fff;
 }
 
 .dartboard-wrap{
@@ -283,7 +289,10 @@ body{
   height:100%;
   display:block;
   cursor:crosshair;
-  filter:drop-shadow(0 0 13px rgba(57,169,255,.12));
+
+  filter:
+    drop-shadow(0 0 5px rgba(57,169,255,.55))
+    drop-shadow(0 0 20px rgba(57,169,255,.18));
 }
 
 .board-actions{
@@ -329,6 +338,7 @@ body{
   font-size:15px;
   font-weight:800;
   cursor:pointer;
+  box-shadow:0 0 16px rgba(57,169,255,.18);
 }
 
 .submit:active{
@@ -429,6 +439,7 @@ body{
     <div class="input-title">ENTER VISIT</div>
 
     <div class="mode-switch">
+
       <button
         class="mode-button active"
         id="keypadTab"
@@ -442,9 +453,8 @@ body{
         onclick="setMode('dartboard')">
         🎯 DARTBOARD
       </button>
-    </div>
 
-    <!-- KEYPAD MODE -->
+    </div>
 
     <div id="keypadMode">
 
@@ -471,8 +481,6 @@ body{
       </div>
 
     </div>
-
-    <!-- DARTBOARD MODE -->
 
     <div id="dartboardMode">
 
@@ -503,7 +511,7 @@ body{
         <svg
           id="dartboard"
           viewBox="-230 -230 460 460"
-          aria-label="Interactive dartboard">
+          aria-label="Interactive DARTIQ dartboard">
         </svg>
       </div>
 
@@ -563,9 +571,7 @@ body{
 
 <script>
 
-/* =========================================================
-   SESSION
-========================================================= */
+/* SESSION */
 
 const params = new URLSearchParams(window.location.search);
 const sessionID = params.get("session") || "No session supplied";
@@ -573,12 +579,9 @@ const sessionID = params.get("session") || "No session supplied";
 document.getElementById("sessionID").textContent = sessionID;
 
 
-/* =========================================================
-   GAME STATE
-========================================================= */
+/* GAME STATE */
 
 let currentMode = "keypad";
-
 let input = "";
 
 let remaining = 501;
@@ -594,9 +597,7 @@ let count180 = 0;
 let currentDarts = [];
 
 
-/* =========================================================
-   MODE SWITCH
-========================================================= */
+/* MODE SWITCH */
 
 function setMode(mode){
 
@@ -641,9 +642,7 @@ function setMode(mode){
 }
 
 
-/* =========================================================
-   KEYPAD
-========================================================= */
+/* KEYPAD */
 
 function press(number){
 
@@ -696,9 +695,7 @@ function showMessage(text){
 }
 
 
-/* =========================================================
-   DARTBOARD DRAWING
-========================================================= */
+/* DARTBOARD */
 
 const boardNumbers = [
   20,1,18,4,13,6,10,15,2,17,
@@ -777,20 +774,26 @@ function addSegment(
     )
   );
 
-  path.setAttribute("fill",fill);
+  path.setAttribute(
+    "fill",
+    fill
+  );
 
   path.setAttribute(
     "stroke",
-    "#c5c5c5"
+    "#39a9ff"
   );
 
   path.setAttribute(
     "stroke-width",
-    ".8"
+    ".75"
   );
 
   path.style.cursor =
     "pointer";
+
+  path.style.filter =
+    "drop-shadow(0 0 1.5px rgba(57,169,255,.55))";
 
   path.addEventListener(
     "click",
@@ -812,20 +815,43 @@ function drawBoard(){
 
   svg.innerHTML = "";
 
-  /* outer surround */
+
+  /* OUTER SURROUND */
 
   const surround =
-    document.createElementNS(NS,"circle");
+    document.createElementNS(
+      NS,
+      "circle"
+    );
 
   surround.setAttribute("cx","0");
   surround.setAttribute("cy","0");
   surround.setAttribute("r","224");
-  surround.setAttribute("fill","#05090d");
-  surround.setAttribute("stroke","#263847");
-  surround.setAttribute("stroke-width","3");
 
-  svg.appendChild(surround);
+  surround.setAttribute(
+    "fill",
+    "#010407"
+  );
 
+  surround.setAttribute(
+    "stroke",
+    "#39a9ff"
+  );
+
+  surround.setAttribute(
+    "stroke-width",
+    "3"
+  );
+
+  surround.style.filter =
+    "drop-shadow(0 0 7px rgba(57,169,255,.75))";
+
+  svg.appendChild(
+    surround
+  );
+
+
+  /* SEGMENTS */
 
   for(let i=0;i<20;i++){
 
@@ -844,18 +870,20 @@ function drawBoard(){
     const dark =
       i % 2 === 0;
 
+
     const singleColor =
       dark
-        ? "#111820"
-        : "#d7c9aa";
+        ? "#02070c"
+        : "#0b1d2c";
+
 
     const scoreColor =
       dark
-        ? "#c73b43"
-        : "#21865c";
+        ? "#39a9ff"
+        : "#126da8";
 
 
-    /* inner single */
+    /* INNER SINGLE */
 
     addSegment(
       24,
@@ -883,7 +911,7 @@ function drawBoard(){
     );
 
 
-    /* outer single */
+    /* OUTER SINGLE */
 
     addSegment(
       118,
@@ -911,10 +939,13 @@ function drawBoard(){
     );
 
 
-    /* NUMBER */
+    /* NUMBERS */
 
     const textPoint =
-      polar(211,center);
+      polar(
+        211,
+        center
+      );
 
     const text =
       document.createElementNS(
@@ -960,10 +991,15 @@ function drawBoard(){
     text.style.pointerEvents =
       "none";
 
+    text.style.filter =
+      "drop-shadow(0 0 3px rgba(57,169,255,.65))";
+
     text.textContent =
       number;
 
-    svg.appendChild(text);
+    svg.appendChild(
+      text
+    );
   }
 
 
@@ -981,25 +1017,29 @@ function drawBoard(){
 
   outerBull.setAttribute(
     "fill",
-    "#21865c"
+    "#126da8"
   );
 
   outerBull.setAttribute(
     "stroke",
-    "#c5c5c5"
+    "#39a9ff"
   );
 
   outerBull.setAttribute(
     "stroke-width",
-    "1"
+    "1.5"
   );
 
   outerBull.style.cursor =
     "pointer";
 
+  outerBull.style.filter =
+    "drop-shadow(0 0 5px rgba(57,169,255,.75))";
+
   outerBull.addEventListener(
     "click",
     function(){
+
       addDart(
         25,
         1,
@@ -1013,7 +1053,7 @@ function drawBoard(){
   );
 
 
-  /* BULL */
+  /* INNER BULL */
 
   const bull =
     document.createElementNS(
@@ -1027,25 +1067,29 @@ function drawBoard(){
 
   bull.setAttribute(
     "fill",
-    "#c73b43"
+    "#39a9ff"
   );
 
   bull.setAttribute(
     "stroke",
-    "#dddddd"
+    "#dff4ff"
   );
 
   bull.setAttribute(
     "stroke-width",
-    "1"
+    "1.5"
   );
 
   bull.style.cursor =
     "pointer";
 
+  bull.style.filter =
+    "drop-shadow(0 0 8px #39a9ff)";
+
   bull.addEventListener(
     "click",
     function(){
+
       addDart(
         25,
         2,
@@ -1057,12 +1101,72 @@ function drawBoard(){
   svg.appendChild(
     bull
   );
+
+
+  /* DARTIQ BRANDING */
+
+  const branding =
+    document.createElementNS(
+      NS,
+      "text"
+    );
+
+  branding.setAttribute(
+    "x",
+    "0"
+  );
+
+  branding.setAttribute(
+    "y",
+    "154"
+  );
+
+  branding.setAttribute(
+    "fill",
+    "#39a9ff"
+  );
+
+  branding.setAttribute(
+    "font-size",
+    "16"
+  );
+
+  branding.setAttribute(
+    "font-weight",
+    "900"
+  );
+
+  branding.setAttribute(
+    "letter-spacing",
+    "5"
+  );
+
+  branding.setAttribute(
+    "text-anchor",
+    "middle"
+  );
+
+  branding.setAttribute(
+    "opacity",
+    ".82"
+  );
+
+  branding.style.pointerEvents =
+    "none";
+
+  branding.style.filter =
+    "drop-shadow(0 0 5px #39a9ff)";
+
+  branding.textContent =
+    "DARTIQ";
+
+  svg.appendChild(
+    branding
+  );
 }
 
 
-/* =========================================================
-   DART INPUT
-========================================================= */
+/* DART INPUT */
 
 function addDart(
   number,
@@ -1150,9 +1254,11 @@ function updateDartDisplay(){
 
     }else{
 
-      el.textContent = "-";
+      el.textContent =
+        "-";
     }
   }
+
 
   const total =
     currentDarts.reduce(
@@ -1161,9 +1267,11 @@ function updateDartDisplay(){
       0
     );
 
+
   document.getElementById(
     "boardVisitScore"
-  ).textContent = total;
+  ).textContent =
+    total;
 
 
   if(currentDarts.length < 3){
@@ -1185,17 +1293,13 @@ function updateDartDisplay(){
 }
 
 
-/* =========================================================
-   CONFIRM VISIT
-========================================================= */
+/* CONFIRM VISIT */
 
 function confirmVisit(){
 
   let score = 0;
   let dartsThisVisit = 3;
 
-
-  /* KEYPAD */
 
   if(currentMode === "keypad"){
 
@@ -1211,7 +1315,8 @@ function confirmVisit(){
     score =
       Number(input);
 
-    dartsThisVisit = 3;
+    dartsThisVisit =
+      3;
 
 
     if(
@@ -1225,12 +1330,8 @@ function confirmVisit(){
 
       return;
     }
-  }
 
-
-  /* DARTBOARD */
-
-  else{
+  }else{
 
     if(currentDarts.length === 0){
 
@@ -1241,6 +1342,7 @@ function confirmVisit(){
       return;
     }
 
+
     score =
       currentDarts.reduce(
         (sum,dart) =>
@@ -1248,10 +1350,6 @@ function confirmVisit(){
         0
       );
 
-    /*
-      Unlike keypad mode, the dartboard
-      knows the actual number of darts.
-    */
 
     dartsThisVisit =
       currentDarts.length;
@@ -1281,9 +1379,11 @@ function confirmVisit(){
 
   /* VALID VISIT */
 
-  remaining -= score;
+  remaining -=
+    score;
 
-  totalPoints += score;
+  totalPoints +=
+    score;
 
   totalDarts +=
     dartsThisVisit;
@@ -1308,16 +1408,17 @@ function confirmVisit(){
 
 
   /*
-    READY FOR BACKEND BRIDGE
+    BACKEND BRIDGE DATA
 
     sessionID
     confirmedScore
     dartsThisVisit
     currentDarts
 
-    These values can later be sent to
-    Glide / webhook / Scolia / Autodarts
-    integration without rebuilding the UI.
+    Later:
+    Glide
+    Scolia
+    Autodarts
   */
 
 
@@ -1344,15 +1445,15 @@ function confirmVisit(){
 }
 
 
-/* =========================================================
-   RESET CURRENT VISIT
-========================================================= */
+/* RESET VISIT */
 
 function resetCurrentVisit(){
 
-  input = "";
+  input =
+    "";
 
-  currentDarts = [];
+  currentDarts =
+    [];
 
   updateInput();
 
@@ -1360,9 +1461,7 @@ function resetCurrentVisit(){
 }
 
 
-/* =========================================================
-   STATS
-========================================================= */
+/* STATS */
 
 function updateStats(){
 
@@ -1382,7 +1481,9 @@ function updateStats(){
     totalDarts;
 
 
-  let avg = 0;
+  let avg =
+    0;
+
 
   if(totalDarts > 0){
 
@@ -1414,9 +1515,7 @@ function updateStats(){
 }
 
 
-/* =========================================================
-   START
-========================================================= */
+/* START */
 
 drawBoard();
 
