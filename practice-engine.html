@@ -2,25 +2,27 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>DARTIQ Practice Engine</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>DARTIQ Today's Practice</title>
 
 <style>
 :root{
-  --bg:#03070d;
-  --panel:#081421;
-  --panel2:#0d1d2d;
-  --line:#17344d;
+  --bg:#02060b;
+  --panel:#071421;
+  --panel2:#0b1d2d;
+  --panel3:#0d2234;
+  --line:#174568;
   --blue:#39a9ff;
   --text:#ffffff;
   --muted:#8fa9bd;
-  --danger:#ff5252;
+  --danger:#ff6b72;
+  --red:#e74c55;
+  --orange:#ff9f43;
+  --yellow:#ffd447;
+  --green:#35c978;
 }
 
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 html,body{
   margin:0;
@@ -33,187 +35,292 @@ html,body{
 }
 
 body{
-  padding:12px;
+  padding:8px;
 }
 
 .engine{
   width:100%;
-  max-width:460px;
-  margin:auto;
+  max-width:680px;
+  margin:0 auto;
+  background:linear-gradient(180deg,#06111d,#02070c);
+  border-radius:22px;
+  padding:14px;
 }
+
+/* HEADER */
 
 .brand{
   text-align:center;
-  margin-bottom:14px;
+  padding:5px 4px 14px;
 }
 
 .brand-small{
-  font-size:11px;
-  letter-spacing:3px;
   color:var(--blue);
-  font-weight:700;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:5px;
 }
 
 .brand h1{
   margin:5px 0 3px;
-  font-size:25px;
-  letter-spacing:1px;
+  font-size:29px;
+  line-height:1;
+  letter-spacing:.5px;
 }
 
-.brand p{
-  margin:0;
-  color:var(--muted);
-  font-size:12px;
+.practice-name{
+  color:var(--blue);
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  margin-top:9px;
 }
 
-.session{
-  background:linear-gradient(180deg,#0c1b2a,#07111b);
-  border:1px solid var(--line);
-  border-radius:16px;
-  padding:15px;
+.coach-name{
+  color:#aebbc6;
+  font-size:10px;
+  letter-spacing:1.3px;
+  text-transform:uppercase;
+  margin-top:5px;
+}
+
+/* TOP THREE CARDS */
+
+.top-cards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
   margin-bottom:12px;
 }
 
-.session-label{
-  font-size:10px;
-  letter-spacing:2px;
-  color:var(--blue);
-  font-weight:bold;
-  margin-bottom:5px;
-}
-
-.session-id{
-  color:var(--muted);
-  font-size:11px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-
-.score-card{
-  background:linear-gradient(180deg,#10243a,#081421);
+.top-card{
+  min-width:0;
+  background:linear-gradient(180deg,#081827,#06121e);
   border:1px solid rgba(57,169,255,.35);
-  border-radius:18px;
-  padding:18px;
-  text-align:center;
-  box-shadow:0 0 25px rgba(57,169,255,.08);
+  border-radius:12px;
+  padding:11px;
+  box-shadow:0 0 12px rgba(57,169,255,.05);
 }
 
-.score-label{
-  color:var(--muted);
-  text-transform:uppercase;
-  letter-spacing:2px;
-  font-size:10px;
-}
-
-.remaining{
-  font-size:58px;
-  font-weight:800;
-  margin:5px 0 2px;
-}
-
-.visit-info{
-  display:flex;
-  justify-content:center;
-  gap:28px;
-  margin-top:8px;
-}
-
-.info-value{
-  font-size:19px;
-  font-weight:bold;
-}
-
-.info-label{
-  font-size:9px;
-  color:var(--muted);
-  text-transform:uppercase;
-  letter-spacing:1px;
-}
-
-.input-card{
-  margin-top:12px;
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:16px;
-  padding:15px;
-}
-
-.input-title{
-  font-size:11px;
+.top-label{
   color:var(--blue);
-  font-weight:bold;
-  letter-spacing:1.5px;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.8px;
+  text-transform:uppercase;
+  margin-bottom:7px;
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+
+.top-value{
+  font-size:12px;
+  font-weight:700;
+  line-height:1.35;
+  color:white;
+}
+
+/* LIVE PRACTICE */
+
+.live-panel{
+  border:1px solid rgba(57,169,255,.4);
+  border-radius:15px;
+  padding:12px;
+  background:linear-gradient(180deg,#061523,#030b13);
+  box-shadow:0 0 20px rgba(57,169,255,.08);
+}
+
+.live-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
   margin-bottom:10px;
+}
+
+.live-title{
+  font-size:22px;
+  font-weight:900;
+  line-height:1;
+}
+
+.live-sub{
+  color:var(--blue);
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.7px;
+  margin-top:4px;
 }
 
 .mode-switch{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:8px;
-  margin-bottom:14px;
+  gap:6px;
+  min-width:205px;
 }
 
 .mode-button{
-  border:1px solid #1c3b55;
-  background:#07121d;
-  color:var(--muted);
-  border-radius:10px;
-  padding:11px 8px;
-  font-size:11px;
-  font-weight:800;
-  letter-spacing:1px;
+  border:1px solid #24577b;
+  background:#06111b;
+  color:#9db7ca;
+  border-radius:8px;
+  padding:9px 7px;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.5px;
   cursor:pointer;
 }
 
 .mode-button.active{
   background:var(--blue);
-  border-color:var(--blue);
   color:#00101c;
+  border-color:var(--blue);
+  box-shadow:0 0 12px rgba(57,169,255,.4);
 }
 
-.score-display{
-  background:#02070c;
-  border:1px solid var(--line);
-  border-radius:12px;
-  min-height:62px;
+/* MAIN SCORING AREA */
+
+.practice-grid{
+  display:grid;
+  grid-template-columns:170px 1fr;
+  gap:10px;
+  align-items:start;
+}
+
+.score-column{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.remaining-card{
+  border:1px solid rgba(57,169,255,.35);
+  border-radius:11px;
+  padding:11px 8px;
+  background:#071727;
+  text-align:center;
+}
+
+.score-label{
+  color:var(--blue);
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.remaining{
+  font-size:48px;
+  line-height:1;
+  font-weight:900;
+  margin-top:5px;
+}
+
+.mini-stat{
+  display:grid;
+  grid-template-columns:34px 1fr;
+  align-items:center;
+  border:1px solid rgba(57,169,255,.25);
+  background:#071727;
+  border-radius:10px;
+  padding:7px;
+}
+
+.mini-icon{
+  width:28px;
+  height:28px;
+  border-radius:50%;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:32px;
-  font-weight:bold;
-  margin-bottom:12px;
+  background:#07325a;
+  color:var(--blue);
+  font-size:12px;
+  font-weight:900;
+}
+
+.mini-value{
+  text-align:center;
+  font-size:18px;
+  font-weight:900;
+}
+
+.mini-label{
+  text-align:center;
+  color:var(--blue);
+  font-size:8px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.7px;
+}
+
+.session-small{
+  border:1px solid rgba(57,169,255,.22);
+  border-radius:9px;
+  padding:7px;
+  background:#06131f;
+}
+
+.session-label{
+  color:var(--blue);
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+.session-id{
+  color:var(--muted);
+  font-size:9px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  margin-top:3px;
+}
+
+/* INPUT */
+
+.input-column{
+  min-width:0;
+}
+
+.score-display{
+  background:#010509;
+  border:1px solid #174568;
+  border-radius:10px;
+  min-height:52px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:29px;
+  font-weight:900;
+  margin-bottom:8px;
 }
 
 .keypad{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:8px;
+  gap:6px;
 }
 
 .key{
-  border:1px solid #1c3b55;
-  background:#0d2031;
+  border:1px solid #1b4260;
+  background:#0b2031;
   color:white;
-  border-radius:11px;
-  padding:14px 5px;
-  font-size:18px;
-  font-weight:bold;
+  border-radius:8px;
+  padding:10px 4px;
+  font-size:16px;
+  font-weight:900;
   cursor:pointer;
 }
 
 .key:active{
   transform:scale(.97);
-  background:#153550;
 }
 
-.clear{
-  color:#ff7777;
-}
-
-.back{
-  color:#b8d9ef;
-}
+.clear{color:#ff737a}
+.back{color:#b8d9ef}
 
 #dartboardMode{
   display:none;
@@ -222,38 +329,38 @@ body{
 .dart-slots{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:7px;
-  margin-bottom:12px;
+  gap:5px;
+  margin-bottom:7px;
 }
 
 .dart-slot{
-  background:#02070c;
-  border:1px solid var(--line);
-  border-radius:10px;
-  padding:9px 4px;
+  background:#010509;
+  border:1px solid #173d59;
+  border-radius:8px;
+  padding:6px 2px;
   text-align:center;
 }
 
 .dart-slot-label{
   color:var(--muted);
-  font-size:8px;
-  letter-spacing:1px;
+  font-size:7px;
+  letter-spacing:.8px;
   text-transform:uppercase;
 }
 
 .dart-slot-value{
-  font-size:15px;
-  font-weight:800;
-  margin-top:4px;
-  min-height:18px;
+  font-size:11px;
+  font-weight:900;
+  margin-top:3px;
+  min-height:14px;
 }
 
 .dartboard-wrap{
   position:relative;
   width:100%;
-  max-width:390px;
+  max-width:340px;
   aspect-ratio:1/1;
-  margin:0 auto 12px;
+  margin:0 auto 6px;
   user-select:none;
   touch-action:manipulation;
 }
@@ -263,24 +370,23 @@ body{
   height:100%;
   display:block;
   cursor:crosshair;
-  filter:drop-shadow(0 0 10px rgba(57,169,255,.28));
+  filter:drop-shadow(0 0 9px rgba(57,169,255,.4));
 }
 
 .board-actions{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:8px;
-  margin-top:8px;
+  gap:6px;
 }
 
 .board-action{
-  border:1px solid #1c3b55;
-  background:#0d2031;
-  color:#fff;
-  border-radius:10px;
-  padding:11px 5px;
-  font-size:11px;
-  font-weight:bold;
+  border:1px solid #1c496a;
+  background:#0b2031;
+  color:#b9d0df;
+  border-radius:8px;
+  padding:9px 4px;
+  font-size:10px;
+  font-weight:900;
   cursor:pointer;
 }
 
@@ -288,73 +394,253 @@ body{
   color:#ff7777;
 }
 
-.board-help{
-  color:var(--muted);
-  text-align:center;
-  font-size:10px;
-  line-height:1.4;
-  margin:8px 4px 2px;
-}
-
 .submit{
   width:100%;
   border:none;
-  margin-top:10px;
-  padding:15px;
-  border-radius:12px;
+  margin-top:9px;
+  padding:12px;
+  border-radius:9px;
   background:var(--blue);
   color:#00101c;
-  font-size:15px;
-  font-weight:800;
+  font-size:13px;
+  font-weight:900;
   cursor:pointer;
-}
-
-.submit:active{
-  transform:scale(.99);
-}
-
-.stats{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:8px;
-  margin-top:12px;
-}
-
-.stat{
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:12px;
-  padding:11px 5px;
-  text-align:center;
-}
-
-.stat-value{
-  font-size:17px;
-  font-weight:bold;
-}
-
-.stat-label{
-  color:var(--muted);
-  font-size:8px;
-  margin-top:4px;
-  letter-spacing:.7px;
-  text-transform:uppercase;
+  box-shadow:0 0 12px rgba(57,169,255,.25);
 }
 
 .message{
-  min-height:20px;
-  margin-top:10px;
+  min-height:15px;
+  margin-top:7px;
   text-align:center;
-  font-size:11px;
   color:var(--muted);
+  font-size:9px;
+}
+
+.performance{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:6px;
+  margin-top:9px;
+}
+
+.performance-card{
+  border:1px solid rgba(57,169,255,.25);
+  border-radius:9px;
+  background:#071727;
+  padding:7px;
+  text-align:center;
+}
+
+.performance-value{
+  font-size:16px;
+  font-weight:900;
+}
+
+.performance-label{
+  color:var(--muted);
+  font-size:8px;
+  margin-top:2px;
+}
+
+/* ACCORDIONS */
+
+.accordions{
+  margin-top:10px;
+}
+
+details{
+  margin-bottom:7px;
+  border:1px solid rgba(57,169,255,.35);
+  border-radius:10px;
+  background:linear-gradient(180deg,#081827,#05111c);
+  overflow:hidden;
+}
+
+summary{
+  list-style:none;
+  cursor:pointer;
+  padding:12px 13px;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+summary::-webkit-details-marker{
+  display:none;
+}
+
+summary::before{
+  content:"●";
+  color:var(--blue);
+  margin-right:8px;
+  text-shadow:0 0 7px var(--blue);
+}
+
+summary::after{
+  content:"⌄";
+  color:var(--blue);
+  font-size:16px;
+  margin-left:auto;
+}
+
+details[open] summary::after{
+  content:"⌃";
+}
+
+.detail-body{
+  padding:0 13px 13px;
+  border-top:1px solid rgba(57,169,255,.15);
+}
+
+.detail-item{
+  padding-top:11px;
+}
+
+.detail-label{
+  color:var(--blue);
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  margin-bottom:4px;
+}
+
+.detail-value{
+  color:#e7f2f9;
+  font-size:11px;
+  line-height:1.45;
+  white-space:pre-wrap;
+}
+
+.grading-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:7px;
+  margin-top:10px;
+}
+
+.grade{
+  border-radius:8px;
+  padding:9px;
+  background:#06111b;
+}
+
+.grade.red{border-left:4px solid var(--red)}
+.grade.orange{border-left:4px solid var(--orange)}
+.grade.yellow{border-left:4px solid var(--yellow)}
+.grade.green{border-left:4px solid var(--green)}
+
+.grade-title{
+  font-size:9px;
+  font-weight:900;
+  margin-bottom:4px;
+}
+
+.grade.red .grade-title{color:var(--red)}
+.grade.orange .grade-title{color:var(--orange)}
+.grade.yellow .grade-title{color:var(--yellow)}
+.grade.green .grade-title{color:var(--green)}
+
+.grade-value{
+  font-size:10px;
+  line-height:1.4;
 }
 
 .footer{
   text-align:center;
-  margin-top:18px;
-  color:#49677c;
-  font-size:9px;
-  letter-spacing:1px;
+  padding:12px 4px 3px;
+  color:#456278;
+  font-size:8px;
+  letter-spacing:1.5px;
+}
+
+@media(max-width:560px){
+  body{padding:5px}
+  .engine{padding:10px;border-radius:16px}
+
+  .brand h1{font-size:25px}
+
+  .top-cards{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:5px;
+  }
+
+  .top-card{
+    padding:8px 6px;
+  }
+
+  .top-label{
+    font-size:7px;
+    letter-spacing:.2px;
+  }
+
+  .top-value{
+    font-size:9px;
+  }
+
+  .live-title{
+    font-size:18px;
+  }
+
+  .live-sub{
+    font-size:7px;
+  }
+
+  .mode-switch{
+    min-width:170px;
+  }
+
+  .mode-button{
+    padding:8px 4px;
+    font-size:8px;
+  }
+
+  .practice-grid{
+    grid-template-columns:120px 1fr;
+    gap:7px;
+  }
+
+  .remaining{
+    font-size:40px;
+  }
+
+  .mini-value{
+    font-size:15px;
+  }
+
+  .dartboard-wrap{
+    max-width:300px;
+  }
+}
+
+@media(max-width:390px){
+  .top-cards{
+    grid-template-columns:1fr;
+  }
+
+  .top-card{
+    padding:9px;
+  }
+
+  .top-value{
+    font-size:11px;
+  }
+
+  .live-header{
+    align-items:flex-start;
+  }
+
+  .mode-switch{
+    min-width:155px;
+  }
+
+  .practice-grid{
+    grid-template-columns:105px 1fr;
+  }
 }
 </style>
 </head>
@@ -363,260 +649,509 @@ body{
 
 <div class="engine">
 
-  <div class="brand">
+  <header class="brand">
     <div class="brand-small">DARTIQ</div>
-    <h1>PRACTICE ENGINE</h1>
-    <p>Live scoring • Automatic performance tracking</p>
-  </div>
+    <h1>TODAY'S PRACTICE</h1>
+    <div class="practice-name" id="practiceName"></div>
+    <div class="coach-name" id="coachName"></div>
+  </header>
 
-  <div class="session">
-    <div class="session-label">ACTIVE SESSION</div>
-    <div class="session-id" id="sessionID">Loading session...</div>
-  </div>
+  <section class="top-cards">
 
-  <div class="score-card">
-
-    <div class="score-label">Remaining</div>
-    <div class="remaining" id="remaining">501</div>
-
-    <div class="visit-info">
-
-      <div>
-        <div class="info-value" id="visitNumber">1</div>
-        <div class="info-label">Visit</div>
-      </div>
-
-      <div>
-        <div class="info-value" id="dartsThrown">0</div>
-        <div class="info-label">Darts</div>
-      </div>
-
-      <div>
-        <div class="info-value" id="average">0.00</div>
-        <div class="info-label">Average</div>
-      </div>
-
+    <div class="top-card">
+      <div class="top-label">🎯 GOAL</div>
+      <div class="top-value" id="objectiveValue">-</div>
     </div>
 
-  </div>
-
-  <div class="input-card">
-
-    <div class="input-title">ENTER VISIT</div>
-
-    <div class="mode-switch">
-
-      <button
-        class="mode-button active"
-        id="keypadTab"
-        onclick="setMode('keypad')">
-        KEYPAD
-      </button>
-
-      <button
-        class="mode-button"
-        id="dartboardTab"
-        onclick="setMode('dartboard')">
-        🎯 DARTBOARD
-      </button>
-
+    <div class="top-card">
+      <div class="top-label">📈 TODAY'S TARGET</div>
+      <div class="top-value" id="targetValue">-</div>
     </div>
 
-    <div id="keypadMode">
-
-      <div class="score-display" id="scoreDisplay">0</div>
-
-      <div class="keypad">
-
-        <button class="key" onclick="press('1')">1</button>
-        <button class="key" onclick="press('2')">2</button>
-        <button class="key" onclick="press('3')">3</button>
-
-        <button class="key" onclick="press('4')">4</button>
-        <button class="key" onclick="press('5')">5</button>
-        <button class="key" onclick="press('6')">6</button>
-
-        <button class="key" onclick="press('7')">7</button>
-        <button class="key" onclick="press('8')">8</button>
-        <button class="key" onclick="press('9')">9</button>
-
-        <button class="key clear" onclick="clearScore()">C</button>
-        <button class="key" onclick="press('0')">0</button>
-        <button class="key back" onclick="backspace()">⌫</button>
-
-      </div>
-
+    <div class="top-card">
+      <div class="top-label">🎓 COACH KEITH'S FOCUS</div>
+      <div class="top-value" id="focusValue">-</div>
     </div>
 
-    <div id="dartboardMode">
+  </section>
 
-      <div class="dart-slots">
+  <section class="live-panel">
 
-        <div class="dart-slot">
-          <div class="dart-slot-label">Dart 1</div>
-          <div class="dart-slot-value" id="dart1">-</div>
-        </div>
+    <div class="live-header">
 
-        <div class="dart-slot">
-          <div class="dart-slot-label">Dart 2</div>
-          <div class="dart-slot-value" id="dart2">-</div>
-        </div>
-
-        <div class="dart-slot">
-          <div class="dart-slot-label">Dart 3</div>
-          <div class="dart-slot-value" id="dart3">-</div>
-        </div>
-
+      <div>
+        <div class="live-title">LIVE PRACTICE</div>
+        <div class="live-sub">TRACK YOUR PROGRESS IN REAL TIME</div>
       </div>
 
-      <div class="score-display">
-        <span id="boardVisitScore">0</span>
-      </div>
+      <div class="mode-switch">
 
-      <div class="dartboard-wrap">
-        <svg
-          id="dartboard"
-          viewBox="-230 -230 460 460"
-          aria-label="Interactive DARTIQ dartboard">
-        </svg>
-      </div>
-
-      <div class="board-actions">
-
-        <button class="board-action" onclick="addMiss()">
-          MISS
+        <button
+          class="mode-button active"
+          id="keypadTab"
+          onclick="setMode('keypad')">
+          ▦ KEYPAD
         </button>
 
-        <button class="board-action danger" onclick="undoDart()">
-          UNDO DART
+        <button
+          class="mode-button"
+          id="dartboardTab"
+          onclick="setMode('dartboard')">
+          🎯 DARTBOARD
         </button>
 
       </div>
 
-      <div class="board-help">
-        Tap the exact segment hit. DARTIQ will calculate
-        singles, doubles, trebles and bull automatically.
+    </div>
+
+    <div class="practice-grid">
+
+      <div class="score-column">
+
+        <div class="remaining-card">
+          <div class="score-label">Remaining</div>
+          <div class="remaining" id="remaining">501</div>
+        </div>
+
+        <div class="mini-stat">
+          <div class="mini-icon">#</div>
+          <div>
+            <div class="mini-label">Visit</div>
+            <div class="mini-value" id="visitNumber">1</div>
+          </div>
+        </div>
+
+        <div class="mini-stat">
+          <div class="mini-icon">Ø</div>
+          <div>
+            <div class="mini-label">Average</div>
+            <div class="mini-value" id="average">0.00</div>
+          </div>
+        </div>
+
+        <div class="mini-stat">
+          <div class="mini-icon">3</div>
+          <div>
+            <div class="mini-label">Darts</div>
+            <div class="mini-value" id="dartsThrown">0</div>
+          </div>
+        </div>
+
+        <div class="session-small">
+          <div class="session-label">ACTIVE SESSION</div>
+          <div class="session-id" id="sessionID">SESSION</div>
+        </div>
+
+      </div>
+
+      <div class="input-column">
+
+        <div id="keypadMode">
+
+          <div class="score-display" id="scoreDisplay">0</div>
+
+          <div class="keypad">
+            <button class="key" onclick="press('1')">1</button>
+            <button class="key" onclick="press('2')">2</button>
+            <button class="key" onclick="press('3')">3</button>
+
+            <button class="key" onclick="press('4')">4</button>
+            <button class="key" onclick="press('5')">5</button>
+            <button class="key" onclick="press('6')">6</button>
+
+            <button class="key" onclick="press('7')">7</button>
+            <button class="key" onclick="press('8')">8</button>
+            <button class="key" onclick="press('9')">9</button>
+
+            <button class="key clear" onclick="clearScore()">C</button>
+            <button class="key" onclick="press('0')">0</button>
+            <button class="key back" onclick="backspace()">⌫</button>
+          </div>
+
+        </div>
+
+        <div id="dartboardMode">
+
+          <div class="dart-slots">
+
+            <div class="dart-slot">
+              <div class="dart-slot-label">Dart 1</div>
+              <div class="dart-slot-value" id="dart1">-</div>
+            </div>
+
+            <div class="dart-slot">
+              <div class="dart-slot-label">Dart 2</div>
+              <div class="dart-slot-value" id="dart2">-</div>
+            </div>
+
+            <div class="dart-slot">
+              <div class="dart-slot-label">Dart 3</div>
+              <div class="dart-slot-value" id="dart3">-</div>
+            </div>
+
+          </div>
+
+          <div class="score-display">
+            <span id="boardVisitScore">0</span>
+          </div>
+
+          <div class="dartboard-wrap">
+            <svg
+              id="dartboard"
+              viewBox="-230 -230 460 460"
+              aria-label="Interactive DARTIQ dartboard">
+            </svg>
+          </div>
+
+          <div class="board-actions">
+
+            <button class="board-action" onclick="addMiss()">
+              MISS
+            </button>
+
+            <button class="board-action danger" onclick="undoDart()">
+              UNDO DART
+            </button>
+
+          </div>
+
+        </div>
+
+        <button class="submit" onclick="confirmVisit()">
+          CONFIRM VISIT
+        </button>
+
+        <div class="message" id="message">
+          Enter the total score for this visit.
+        </div>
+
       </div>
 
     </div>
 
-    <button class="submit" onclick="confirmVisit()">
-      CONFIRM VISIT
-    </button>
+    <div class="performance">
 
-    <div class="message" id="message">
-      Enter the total score for this visit.
+      <div class="performance-card">
+        <div class="performance-value" id="stat100">0</div>
+        <div class="performance-label">100+</div>
+      </div>
+
+      <div class="performance-card">
+        <div class="performance-value" id="stat140">0</div>
+        <div class="performance-label">140+</div>
+      </div>
+
+      <div class="performance-card">
+        <div class="performance-value" id="stat180">0</div>
+        <div class="performance-label">180</div>
+      </div>
+
     </div>
 
-  </div>
+  </section>
 
-  <div class="stats">
+  <section class="accordions">
 
-    <div class="stat">
-      <div class="stat-value" id="stat100">0</div>
-      <div class="stat-label">100+</div>
-    </div>
+    <details>
+      <summary>PRACTICE INSTRUCTIONS</summary>
 
-    <div class="stat">
-      <div class="stat-value" id="stat140">0</div>
-      <div class="stat-label">140+</div>
-    </div>
+      <div class="detail-body">
 
-    <div class="stat">
-      <div class="stat-value" id="stat180">0</div>
-      <div class="stat-label">180</div>
-    </div>
+        <div class="detail-item">
+          <div class="detail-label">Why This Practice</div>
+          <div class="detail-value" id="whyValue">-</div>
+        </div>
 
-  </div>
+        <div class="detail-item">
+          <div class="detail-label">How To Practice</div>
+          <div class="detail-value" id="executionValue">-</div>
+        </div>
+
+        <div class="detail-item" id="avoidBlock">
+          <div class="detail-label">Watch For</div>
+          <div class="detail-value" id="avoidValue">-</div>
+        </div>
+
+      </div>
+    </details>
+
+    <details>
+      <summary>KEITH ALLEN GUTHER METHODOLOGY</summary>
+
+      <div class="detail-body">
+
+        <div class="detail-item">
+          <div class="detail-label">Coach</div>
+          <div class="detail-value" id="keithCoachValue">-</div>
+        </div>
+
+        <div class="detail-item">
+          <div class="detail-label">Rules</div>
+          <div class="detail-value" id="keithRulesValue">-</div>
+        </div>
+
+        <div class="detail-item">
+          <div class="detail-label">Primary Metric</div>
+          <div class="detail-value" id="primaryValue">-</div>
+        </div>
+
+        <div class="detail-item">
+          <div class="detail-label">Secondary Metric</div>
+          <div class="detail-value" id="secondaryValue">-</div>
+        </div>
+
+        <div class="detail-item">
+          <div class="detail-label">Success Target</div>
+          <div class="detail-value" id="keithTargetValue">-</div>
+        </div>
+
+      </div>
+    </details>
+
+    <details>
+      <summary>GRADING &amp; COACHING ACTIONS</summary>
+
+      <div class="detail-body">
+
+        <div class="grading-grid">
+
+          <div class="grade red">
+            <div class="grade-title">RED</div>
+            <div class="grade-value" id="redValue">-</div>
+            <div class="grade-value" id="redActionValue"></div>
+          </div>
+
+          <div class="grade orange">
+            <div class="grade-title">ORANGE</div>
+            <div class="grade-value" id="orangeValue">-</div>
+            <div class="grade-value" id="orangeActionValue"></div>
+          </div>
+
+          <div class="grade yellow">
+            <div class="grade-title">YELLOW</div>
+            <div class="grade-value" id="yellowValue">-</div>
+            <div class="grade-value" id="yellowActionValue"></div>
+          </div>
+
+          <div class="grade green">
+            <div class="grade-title">GREEN</div>
+            <div class="grade-value" id="greenValue">-</div>
+            <div class="grade-value" id="greenActionValue"></div>
+          </div>
+
+        </div>
+
+        <div class="detail-item">
+          <div class="detail-label">DARTIQ Coaching Logic / Improvement Potential</div>
+          <div class="detail-value" id="improvementValue">-</div>
+        </div>
+
+      </div>
+    </details>
+
+    <details>
+      <summary>WHAT TO TRACK</summary>
+
+      <div class="detail-body">
+        <div class="detail-item">
+          <div class="detail-value" id="trackValue">-</div>
+        </div>
+      </div>
+
+    </details>
+
+    <details>
+      <summary>AFTER PRACTICE</summary>
+
+      <div class="detail-body">
+
+        <div class="detail-item">
+          <div class="detail-label">Reminder</div>
+          <div class="detail-value" id="reminderValue">-</div>
+        </div>
+
+        <div class="detail-item">
+          <div class="detail-label">Next Step</div>
+          <div class="detail-value" id="afterValue">-</div>
+        </div>
+
+      </div>
+    </details>
+
+  </section>
 
   <div class="footer">
-    DARTIQ CORE VISION • PRACTICE ENGINE V2
+    DARTIQ • PRACTICE SESSION • CORE VISION
   </div>
 
 </div>
 
 <script>
-
 const params = new URLSearchParams(window.location.search);
-const sessionID = params.get("session") || "No session supplied";
 
-document.getElementById("sessionID").textContent = sessionID;
+function param(){
+  for(let i=0;i<arguments.length;i++){
+    const value=params.get(arguments[i]);
+    if(value && value.trim()!==""){
+      return value.trim();
+    }
+  }
+  return "";
+}
+
+function put(id,value,fallback="-"){
+  const el=document.getElementById(id);
+  if(el) el.textContent=value || fallback;
+}
+
+const sessionID=param("session") || "SESSION";
+
+const objective=param("objective");
+const target=param("target");
+const execution=param("execution");
+const track=param("track");
+const avoid=param("avoid");
+const why=param("why");
+const improvement=param("improvement");
+const reminder=param("reminder");
+const after=param("after");
+const focus=param("focus");
+
+const keithCoach=param("keithcoach","coach");
+const keithRules=param("keithrules","rules");
+const keithRed=param("keithred","red");
+const keithOrange=param("keithorange","orange");
+const keithYellow=param("keithyellow","yellow");
+const keithGreen=param("keithgreen","green");
+const keithPrimary=param("keithprimary","primarymetric");
+const keithSecondary=param("keithsecondary","secondarymetric");
+const redAction=param("redaction");
+const orangeAction=param("orangeaction");
+const yellowAction=param("yellowaction");
+const greenAction=param("greenaction");
+const keithTarget=param("keithtarget","successtarget");
+
+const coachFocus=
+  focus ||
+  keithRules ||
+  reminder ||
+  improvement ||
+  "-";
+
+put("sessionID",sessionID);
+put("objectiveValue",objective);
+put("targetValue",target);
+put("focusValue",coachFocus);
+
+put("whyValue",why);
+put("executionValue",execution);
+put("avoidValue",avoid);
+
+put("keithCoachValue",keithCoach || "Keith Allen Guther");
+put("keithRulesValue",keithRules);
+put("primaryValue",keithPrimary);
+put("secondaryValue",keithSecondary);
+put("keithTargetValue",keithTarget);
+
+put("redValue",keithRed);
+put("orangeValue",keithOrange);
+put("yellowValue",keithYellow);
+put("greenValue",keithGreen);
+
+put("redActionValue",redAction,"");
+put("orangeActionValue",orangeAction,"");
+put("yellowActionValue",yellowAction,"");
+put("greenActionValue",greenAction,"");
+
+put("improvementValue",improvement);
+put("trackValue",track);
+put("reminderValue",reminder);
+put("afterValue",after);
+
+if(!avoid){
+  const block=document.getElementById("avoidBlock");
+  if(block) block.style.display="none";
+}
+
+if(keithCoach){
+  put("coachName","COACH " + keithCoach,"");
+}else{
+  put("coachName","COACH KEITH ALLEN GUTHER","");
+}
+
+if(focus){
+  put("practiceName",focus,"");
+}else if(objective){
+  const shortObjective=objective.length>38
+    ? objective.substring(0,38)+"…"
+    : objective;
+  put("practiceName",shortObjective,"");
+}
 
 
-let currentMode = "keypad";
-let input = "";
+/* ==================================================
+   EXISTING 501 PRACTICE ENGINE
+   ================================================== */
 
-let remaining = 501;
-let visit = 1;
+let currentMode="keypad";
+let input="";
 
-let totalPoints = 0;
-let totalDarts = 0;
+let remaining=501;
+let visit=1;
 
-let count100 = 0;
-let count140 = 0;
-let count180 = 0;
+let totalPoints=0;
+let totalDarts=0;
 
-let currentDarts = [];
+let count100=0;
+let count140=0;
+let count180=0;
+
+let currentDarts=[];
 
 
 function setMode(mode){
 
-  currentMode = mode;
+  currentMode=mode;
 
-  const keypadMode =
-    document.getElementById("keypadMode");
+  const keypadMode=document.getElementById("keypadMode");
+  const dartboardMode=document.getElementById("dartboardMode");
+  const keypadTab=document.getElementById("keypadTab");
+  const dartboardTab=document.getElementById("dartboardTab");
 
-  const dartboardMode =
-    document.getElementById("dartboardMode");
+  if(mode==="keypad"){
 
-  const keypadTab =
-    document.getElementById("keypadTab");
-
-  const dartboardTab =
-    document.getElementById("dartboardTab");
-
-  if(mode === "keypad"){
-
-    keypadMode.style.display = "block";
-    dartboardMode.style.display = "none";
+    keypadMode.style.display="block";
+    dartboardMode.style.display="none";
 
     keypadTab.classList.add("active");
     dartboardTab.classList.remove("active");
 
-    showMessage(
-      "Enter the total score for this visit."
-    );
+    showMessage("Enter the total score for this visit.");
 
   }else{
 
-    keypadMode.style.display = "none";
-    dartboardMode.style.display = "block";
+    keypadMode.style.display="none";
+    dartboardMode.style.display="block";
 
     dartboardTab.classList.add("active");
     keypadTab.classList.remove("active");
 
-    showMessage(
-      "Tap the board for Dart 1."
-    );
+    showMessage("Tap the board for Dart 1.");
   }
 }
 
 
 function press(number){
 
-  if(input.length >= 3) return;
+  if(input.length>=3) return;
 
-  input += number;
+  input+=number;
 
-  const value = Number(input);
+  const value=Number(input);
 
-  if(value > 180){
-
-    input = "";
-
-    showMessage(
-      "Maximum visit score is 180."
-    );
+  if(value>180){
+    input="";
+    showMessage("Maximum visit score is 180.");
   }
 
   updateInput();
@@ -624,81 +1159,60 @@ function press(number){
 
 
 function clearScore(){
-
-  input = "";
-
+  input="";
   updateInput();
 }
 
 
 function backspace(){
-
-  input = input.slice(0,-1);
-
+  input=input.slice(0,-1);
   updateInput();
 }
 
 
 function updateInput(){
-
-  document.getElementById("scoreDisplay").textContent =
-    input === "" ? "0" : input;
+  document.getElementById("scoreDisplay").textContent=
+    input==="" ? "0" : input;
 }
 
 
 function showMessage(text){
-
-  document.getElementById("message").textContent =
-    text;
+  document.getElementById("message").textContent=text;
 }
 
 
-/* DARTBOARD */
+/* ==================================================
+   INTERACTIVE DARTBOARD
+   ================================================== */
 
-const boardNumbers = [
+const boardNumbers=[
   20,1,18,4,13,6,10,15,2,17,
   3,19,7,16,8,11,14,9,12,5
 ];
 
-const svg =
-  document.getElementById("dartboard");
-
-const NS =
-  "http://www.w3.org/2000/svg";
+const svg=document.getElementById("dartboard");
+const NS="http://www.w3.org/2000/svg";
 
 
 function polar(radius,angle){
 
-  const rad =
-    (angle - 90) * Math.PI / 180;
+  const rad=(angle-90)*Math.PI/180;
 
-  return {
-    x: radius * Math.cos(rad),
-    y: radius * Math.sin(rad)
+  return{
+    x:radius*Math.cos(rad),
+    y:radius*Math.sin(rad)
   };
 }
 
 
-function ringPath(
-  innerRadius,
-  outerRadius,
-  startAngle,
-  endAngle
-){
+function ringPath(innerRadius,outerRadius,startAngle,endAngle){
 
-  const p1 =
-    polar(outerRadius,startAngle);
+  const p1=polar(outerRadius,startAngle);
+  const p2=polar(outerRadius,endAngle);
+  const p3=polar(innerRadius,endAngle);
+  const p4=polar(innerRadius,startAngle);
 
-  const p2 =
-    polar(outerRadius,endAngle);
-
-  const p3 =
-    polar(innerRadius,endAngle);
-
-  const p4 =
-    polar(innerRadius,startAngle);
-
-  return [
+  return[
     "M",p1.x,p1.y,
     "A",outerRadius,outerRadius,0,0,1,p2.x,p2.y,
     "L",p3.x,p3.y,
@@ -719,25 +1233,14 @@ function addSegment(
   label
 ){
 
-  const path =
-    document.createElementNS(NS,"path");
+  const path=document.createElementNS(NS,"path");
 
   path.setAttribute(
     "d",
-    ringPath(
-      inner,
-      outer,
-      start,
-      end
-    )
+    ringPath(inner,outer,start,end)
   );
 
-  path.setAttribute(
-    "fill",
-    fill
-  );
-
-  /* NO BLUE SPIDERWEB */
+  path.setAttribute("fill",fill);
 
   path.setAttribute(
     "stroke",
@@ -749,39 +1252,27 @@ function addSegment(
     ".65"
   );
 
-  path.style.cursor =
-    "pointer";
+  path.style.cursor="pointer";
 
   path.addEventListener(
     "click",
     function(){
-
-      addDart(
-        number,
-        multiplier,
-        label
-      );
+      addDart(number,multiplier,label);
     }
   );
 
-  svg.appendChild(
-    path
-  );
+  svg.appendChild(path);
 }
 
 
 function drawBoard(){
 
-  svg.innerHTML = "";
+  svg.innerHTML="";
 
 
-  /* NEON BLUE OUTER RIM */
+  /* BLUE OUTER RING */
 
-  const surround =
-    document.createElementNS(
-      NS,
-      "circle"
-    );
+  const surround=document.createElementNS(NS,"circle");
 
   surround.setAttribute("cx","0");
   surround.setAttribute("cy","0");
@@ -802,43 +1293,26 @@ function drawBoard(){
     "4"
   );
 
-  surround.style.filter =
+  surround.style.filter=
     "drop-shadow(0 0 7px rgba(57,169,255,.9))";
 
-  svg.appendChild(
-    surround
-  );
+  svg.appendChild(surround);
 
 
   for(let i=0;i<20;i++){
 
-    const number =
-      boardNumbers[i];
+    const number=boardNumbers[i];
+    const center=i*18;
+    const start=center-9;
+    const end=center+9;
+    const dark=i%2===0;
 
-    const center =
-      i * 18;
-
-    const start =
-      center - 9;
-
-    const end =
-      center + 9;
-
-    const dark =
-      i % 2 === 0;
-
-
-    /* NORMAL BOARD SINGLE COLOURS */
-
-    const singleColor =
+    const singleColor=
       dark
         ? "#090d11"
         : "#d5c9aa";
 
-
-    /* NORMAL DOUBLE / TREBLE COLOURS */
-
-    const scoreColor =
+    const scoreColor=
       dark
         ? "#c73b43"
         : "#21865c";
@@ -852,7 +1326,7 @@ function drawBoard(){
       singleColor,
       number,
       1,
-      "S" + number
+      "S"+number
     );
 
 
@@ -864,7 +1338,7 @@ function drawBoard(){
       scoreColor,
       number,
       3,
-      "T" + number
+      "T"+number
     );
 
 
@@ -876,7 +1350,7 @@ function drawBoard(){
       singleColor,
       number,
       1,
-      "S" + number
+      "S"+number
     );
 
 
@@ -888,33 +1362,18 @@ function drawBoard(){
       scoreColor,
       number,
       2,
-      "D" + number
+      "D"+number
     );
 
 
-    /* NEON BLUE NUMBERS */
+    /* BLUE NUMBERS */
 
-    const textPoint =
-      polar(
-        211,
-        center
-      );
+    const textPoint=polar(211,center);
 
-    const text =
-      document.createElementNS(
-        NS,
-        "text"
-      );
+    const text=document.createElementNS(NS,"text");
 
-    text.setAttribute(
-      "x",
-      textPoint.x
-    );
-
-    text.setAttribute(
-      "y",
-      textPoint.y
-    );
+    text.setAttribute("x",textPoint.x);
+    text.setAttribute("y",textPoint.y);
 
     text.setAttribute(
       "fill",
@@ -941,28 +1400,20 @@ function drawBoard(){
       "middle"
     );
 
-    text.style.pointerEvents =
-      "none";
+    text.style.pointerEvents="none";
 
-    text.style.filter =
+    text.style.filter=
       "drop-shadow(0 0 4px rgba(57,169,255,.95))";
 
-    text.textContent =
-      number;
+    text.textContent=number;
 
-    svg.appendChild(
-      text
-    );
+    svg.appendChild(text);
   }
 
 
-  /* NORMAL OUTER BULL */
+  /* OUTER BULL */
 
-  const outerBull =
-    document.createElementNS(
-      NS,
-      "circle"
-    );
+  const outerBull=document.createElementNS(NS,"circle");
 
   outerBull.setAttribute("cx","0");
   outerBull.setAttribute("cy","0");
@@ -983,33 +1434,21 @@ function drawBoard(){
     "1"
   );
 
-  outerBull.style.cursor =
-    "pointer";
+  outerBull.style.cursor="pointer";
 
   outerBull.addEventListener(
     "click",
     function(){
-
-      addDart(
-        25,
-        1,
-        "25"
-      );
+      addDart(25,1,"25");
     }
   );
 
-  svg.appendChild(
-    outerBull
-  );
+  svg.appendChild(outerBull);
 
 
-  /* NORMAL INNER BULL */
+  /* INNER BULL */
 
-  const bull =
-    document.createElementNS(
-      NS,
-      "circle"
-    );
+  const bull=document.createElementNS(NS,"circle");
 
   bull.setAttribute("cx","0");
   bull.setAttribute("cy","0");
@@ -1030,98 +1469,32 @@ function drawBoard(){
     "1"
   );
 
-  bull.style.cursor =
-    "pointer";
+  bull.style.cursor="pointer";
 
   bull.addEventListener(
     "click",
     function(){
-
-      addDart(
-        25,
-        2,
-        "BULL"
-      );
+      addDart(25,2,"BULL");
     }
   );
 
-  svg.appendChild(
-    bull
-  );
+  svg.appendChild(bull);
 
-
-  /* DARTIQ BRANDING */
-
-  const branding =
-    document.createElementNS(
-      NS,
-      "text"
-    );
-
-  branding.setAttribute(
-    "x",
-    "0"
-  );
-
-  branding.setAttribute(
-    "y",
-    "154"
-  );
-
-  branding.setAttribute(
-    "fill",
-    "#39a9ff"
-  );
-
-  branding.setAttribute(
-    "font-size",
-    "16"
-  );
-
-  branding.setAttribute(
-    "font-weight",
-    "900"
-  );
-
-  branding.setAttribute(
-    "letter-spacing",
-    "5"
-  );
-
-  branding.setAttribute(
-    "text-anchor",
-    "middle"
-  );
-
-  branding.setAttribute(
-    "opacity",
-    ".9"
-  );
-
-  branding.style.pointerEvents =
-    "none";
-
-  branding.style.filter =
-    "drop-shadow(0 0 5px rgba(57,169,255,.9))";
-
-  branding.textContent =
-    "DARTIQ";
-
-  svg.appendChild(
-    branding
-  );
+  /*
+    IMPORTANT:
+    NO DARTIQ TEXT IS DRAWN INSIDE THE BOARD.
+    OUTER BLUE RING AND BLUE NUMBERS REMAIN.
+  */
 }
 
 
-/* DART INPUT */
+/* ==================================================
+   DART INPUT
+   ================================================== */
 
-function addDart(
-  number,
-  multiplier,
-  label
-){
+function addDart(number,multiplier,label){
 
-  if(currentDarts.length >= 3){
+  if(currentDarts.length>=3){
 
     showMessage(
       "Three darts entered. Confirm the visit."
@@ -1130,8 +1503,7 @@ function addDart(
     return;
   }
 
-  const score =
-    number * multiplier;
+  const score=number*multiplier;
 
   currentDarts.push({
     number:number,
@@ -1146,7 +1518,7 @@ function addDart(
 
 function addMiss(){
 
-  if(currentDarts.length >= 3){
+  if(currentDarts.length>=3){
 
     showMessage(
       "Three darts entered. Confirm the visit."
@@ -1168,7 +1540,7 @@ function addMiss(){
 
 function undoDart(){
 
-  if(currentDarts.length === 0){
+  if(currentDarts.length===0){
 
     showMessage(
       "No dart to undo."
@@ -1187,70 +1559,69 @@ function updateDartDisplay(){
 
   for(let i=0;i<3;i++){
 
-    const el =
+    const el=
       document.getElementById(
-        "dart" + (i+1)
+        "dart"+(i+1)
       );
 
     if(currentDarts[i]){
 
-      el.textContent =
-        currentDarts[i].label +
-        " • " +
+      el.textContent=
+        currentDarts[i].label+
+        " • "+
         currentDarts[i].score;
 
     }else{
 
-      el.textContent =
-        "-";
+      el.textContent="-";
     }
   }
 
 
-  const total =
+  const total=
     currentDarts.reduce(
-      (sum,dart) =>
-        sum + dart.score,
+      (sum,dart)=>sum+dart.score,
       0
     );
 
 
   document.getElementById(
     "boardVisitScore"
-  ).textContent =
-    total;
+  ).textContent=total;
 
 
-  if(currentDarts.length < 3){
+  if(currentDarts.length<3){
 
     showMessage(
-      "Enter Dart " +
-      (currentDarts.length + 1) +
+      "Enter Dart "+
+      (currentDarts.length+1)+
       "."
     );
 
   }else{
 
     showMessage(
-      "Visit total: " +
-      total +
+      "Visit total: "+
+      total+
       ". Confirm visit."
     );
   }
 }
 
 
-/* CONFIRM VISIT */
+/* ==================================================
+   CONFIRM VISIT
+   ================================================== */
 
 function confirmVisit(){
 
-  let score = 0;
-  let dartsThisVisit = 3;
+  let score=0;
+  let dartsThisVisit=3;
 
 
-  if(currentMode === "keypad"){
+  if(currentMode==="keypad"){
 
-    if(input === ""){
+    if(input===""){
 
       showMessage(
         "Enter a visit score first."
@@ -1259,16 +1630,14 @@ function confirmVisit(){
       return;
     }
 
-    score =
-      Number(input);
+    score=Number(input);
 
-    dartsThisVisit =
-      3;
+    dartsThisVisit=3;
 
 
     if(
-      score < 0 ||
-      score > 180
+      score<0 ||
+      score>180
     ){
 
       showMessage(
@@ -1280,7 +1649,7 @@ function confirmVisit(){
 
   }else{
 
-    if(currentDarts.length === 0){
+    if(currentDarts.length===0){
 
       showMessage(
         "Enter at least one dart first."
@@ -1290,27 +1659,26 @@ function confirmVisit(){
     }
 
 
-    score =
+    score=
       currentDarts.reduce(
-        (sum,dart) =>
-          sum + dart.score,
+        (sum,dart)=>sum+dart.score,
         0
       );
 
 
-    dartsThisVisit =
-      currentDarts.length;
+    dartsThisVisit=currentDarts.length;
   }
 
 
-  if(score > remaining){
+  /* EXISTING BUST BEHAVIOUR */
+
+  if(score>remaining){
 
     showMessage(
       "BUST • Visit scored 0."
     );
 
-    totalDarts +=
-      dartsThisVisit;
+    totalDarts+=dartsThisVisit;
 
     visit++;
 
@@ -1322,32 +1690,28 @@ function confirmVisit(){
   }
 
 
-  remaining -=
-    score;
+  remaining-=score;
 
-  totalPoints +=
-    score;
+  totalPoints+=score;
 
-  totalDarts +=
-    dartsThisVisit;
+  totalDarts+=dartsThisVisit;
 
 
-  if(score === 180){
+  if(score===180){
 
     count180++;
 
-  }else if(score >= 140){
+  }else if(score>=140){
 
     count140++;
 
-  }else if(score >= 100){
+  }else if(score>=100){
 
     count100++;
   }
 
 
-  const confirmedScore =
-    score;
+  const confirmedScore=score;
 
 
   /*
@@ -1367,7 +1731,7 @@ function confirmVisit(){
   updateStats();
 
 
-  if(remaining === 0){
+  if(remaining===0){
 
     showMessage(
       "LEG COMPLETE • Checkout!"
@@ -1376,7 +1740,7 @@ function confirmVisit(){
   }else{
 
     showMessage(
-      "Visit recorded locally: " +
+      "Visit recorded locally: "+
       confirmedScore
     );
   }
@@ -1385,9 +1749,9 @@ function confirmVisit(){
 
 function resetCurrentVisit(){
 
-  input = "";
+  input="";
 
-  currentDarts = [];
+  currentDarts=[];
 
   updateInput();
 
@@ -1399,50 +1763,44 @@ function updateStats(){
 
   document.getElementById(
     "remaining"
-  ).textContent =
-    remaining;
+  ).textContent=remaining;
 
   document.getElementById(
     "visitNumber"
-  ).textContent =
-    visit;
+  ).textContent=visit;
 
   document.getElementById(
     "dartsThrown"
-  ).textContent =
-    totalDarts;
+  ).textContent=totalDarts;
 
 
-  let avg = 0;
+  let avg=0;
 
 
-  if(totalDarts > 0){
+  if(totalDarts>0){
 
-    avg =
-      (totalPoints / totalDarts) * 3;
+    avg=
+      (totalPoints/totalDarts)*3;
   }
 
 
   document.getElementById(
     "average"
-  ).textContent =
+  ).textContent=
     avg.toFixed(2);
 
 
   document.getElementById(
     "stat100"
-  ).textContent =
-    count100;
+  ).textContent=count100;
 
   document.getElementById(
     "stat140"
-  ).textContent =
-    count140;
+  ).textContent=count140;
 
   document.getElementById(
     "stat180"
-  ).textContent =
-    count180;
+  ).textContent=count180;
 }
 
 
