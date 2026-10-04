@@ -2,18 +2,19 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>DARTIQ AI Training van Vandaag</title>
+<title>DARTIQ Today's AI Training NL</title>
 
 <style>
 :root{
-  --bg:#030811;
-  --panel:#081522;
-  --panel2:#0b1b2c;
+  --bg:#03070d;
+  --panel:#071523;
+  --card:#0b1c2c;
+  --card2:#0d2134;
   --blue:#39a9ff;
   --text:#ffffff;
-  --muted:#91a9bd;
+  --muted:#8fa9bd;
   --line:rgba(57,169,255,.22);
 }
 
@@ -26,166 +27,232 @@ body{
   margin:0;
   padding:0;
   width:100%;
-  min-height:100%;
-  background:var(--bg);
+  background:transparent;
   color:var(--text);
   font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
-  background:
-    radial-gradient(circle at 50% 0%,rgba(57,169,255,.10),transparent 32%),
-    linear-gradient(180deg,#06101c,#030811);
-}
-
-.app{
-  width:100%;
-  max-width:620px;
-  margin:0 auto;
   padding:6px;
 }
 
-.hero{
+.training{
   width:100%;
+  max-width:720px;
+  margin:0 auto;
   background:
-    radial-gradient(circle at 85% 0%,rgba(57,169,255,.11),transparent 34%),
-    linear-gradient(180deg,#0b1d31,#07131f);
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:15px 13px 13px;
+    radial-gradient(circle at 50% 0%,rgba(57,169,255,.10),transparent 45%),
+    linear-gradient(180deg,#0a1a2a 0%,#050c14 100%);
+  border:1px solid rgba(57,169,255,.38);
+  border-radius:20px;
+  padding:20px;
   box-shadow:
-    0 0 22px rgba(57,169,255,.06),
+    0 0 22px rgba(57,169,255,.08),
     inset 0 1px 0 rgba(255,255,255,.025);
 }
 
-.kicker{
+.eyebrow{
+  margin:0 0 12px;
   color:var(--blue);
-  font-size:10px;
-  line-height:1.2;
-  font-weight:900;
-  letter-spacing:1.6px;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:2.1px;
   text-transform:uppercase;
-  margin-bottom:8px;
 }
 
 h1{
   margin:0;
-  padding:0;
-  font-size:29px;
-  line-height:1.05;
-  font-weight:900;
-  letter-spacing:-.4px;
   color:#fff;
-  overflow-wrap:anywhere;
+  font-size:34px;
+  line-height:1.03;
+  font-weight:900;
+  letter-spacing:-1px;
+  overflow-wrap:break-word;
 }
 
-.focus{
-  margin-top:7px;
+.description{
+  margin:12px 0 0;
   color:var(--blue);
-  font-size:13.5px;
-  line-height:1.4;
+  font-size:16px;
+  line-height:1.45;
   font-weight:700;
-  overflow-wrap:anywhere;
 }
 
 .divider{
-  width:100%;
-  height:1px;
-  margin:13px 0 11px;
+  height:2px;
+  margin:18px 0;
+  border-radius:999px;
   background:linear-gradient(
     90deg,
-    rgba(57,169,255,.9),
-    rgba(57,169,255,.08)
+    var(--blue),
+    rgba(57,169,255,.18),
+    transparent
   );
+  box-shadow:0 0 8px rgba(57,169,255,.22);
 }
 
-.meta{
+.stats{
   display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:7px;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
 }
 
-.meta-box{
+.stat{
   min-width:0;
-  min-height:72px;
-  padding:10px 11px;
-  border-radius:12px;
-  background:linear-gradient(180deg,#0e2136,#091725);
-  border:1px solid rgba(57,169,255,.14);
+  min-height:92px;
+  padding:14px;
+  background:linear-gradient(180deg,var(--card2),var(--card));
+  border:1px solid var(--line);
+  border-radius:15px;
 }
 
-.meta-label{
-  color:var(--muted);
-  font-size:9px;
+.stat-label{
+  margin-bottom:9px;
+  color:#9cb4c6;
+  font-size:10px;
   line-height:1.2;
-  font-weight:900;
-  letter-spacing:.9px;
+  font-weight:800;
+  letter-spacing:1.35px;
   text-transform:uppercase;
-  margin-bottom:6px;
 }
 
-.meta-value{
+.stat-value{
   color:#fff;
-  font-size:17px;
+  font-size:19px;
   line-height:1.25;
-  font-weight:900;
-  overflow-wrap:anywhere;
+  font-weight:800;
+  overflow-wrap:break-word;
 }
 
-.focus-box .meta-value{
-  font-size:14px;
-  line-height:1.35;
+.focus{
+  grid-column:1 / -1;
+  min-height:auto;
+}
+
+.focus .stat-value{
+  font-size:16px;
+  line-height:1.4;
+  font-weight:700;
 }
 
 .equipment{
-  display:block;
-  width:100%;
-  margin-top:7px;
-  padding:10px 11px;
-  border-radius:12px;
-  background:linear-gradient(180deg,#0e2136,#091725);
-  border:1px solid rgba(57,169,255,.14);
+  margin-top:10px;
+  padding:14px;
+  background:linear-gradient(180deg,var(--card2),var(--card));
+  border:1px solid var(--line);
+  border-radius:15px;
 }
 
-.equipment .meta-label{
-  margin-bottom:5px;
-}
-
-.equipment .meta-value{
-  font-size:13.5px;
-  line-height:1.4;
+.equipment-label{
+  margin-bottom:7px;
+  color:#9cb4c6;
+  font-size:10px;
   font-weight:800;
+  letter-spacing:1.35px;
+  text-transform:uppercase;
+}
+
+.equipment-value{
   color:#fff;
+  font-size:15px;
+  line-height:1.4;
+  font-weight:700;
+  overflow-wrap:break-word;
+}
+
+@media(max-width:520px){
+
+  body{
+    padding:3px;
+  }
+
+  .training{
+    padding:16px;
+    border-radius:17px;
+  }
+
+  .eyebrow{
+    margin-bottom:10px;
+    font-size:10px;
+    letter-spacing:1.55px;
+  }
+
+  h1{
+    font-size:30px;
+  }
+
+  .description{
+    margin-top:10px;
+    font-size:14px;
+    line-height:1.4;
+  }
+
+  .divider{
+    margin:15px 0;
+  }
+
+  .stats{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:7px;
+  }
+
+  .stat{
+    min-height:80px;
+    padding:11px;
+    border-radius:13px;
+  }
+
+  .stat-label{
+    margin-bottom:7px;
+    font-size:8px;
+    letter-spacing:.8px;
+  }
+
+  .stat-value{
+    font-size:16px;
+  }
+
+  .focus{
+    grid-column:1 / -1;
+  }
+
+  .focus .stat-value{
+    font-size:14px;
+    line-height:1.35;
+  }
+
+  .equipment{
+    margin-top:7px;
+    padding:11px;
+    border-radius:13px;
+  }
+
+  .equipment-label{
+    font-size:8px;
+    letter-spacing:.8px;
+  }
+
+  .equipment-value{
+    font-size:14px;
+  }
 }
 
 @media(max-width:360px){
 
-  .app{
-    padding:4px;
-  }
-
-  .hero{
-    padding:13px 11px 11px;
+  .training{
+    padding:14px;
   }
 
   h1{
-    font-size:26px;
+    font-size:27px;
   }
 
-  .meta{
-    gap:6px;
+  .stats{
+    grid-template-columns:1fr 1fr;
   }
 
-  .meta-box{
-    padding:9px;
-  }
-
-  .meta-value{
-    font-size:15px;
-  }
-
-  .focus-box .meta-value{
-    font-size:13px;
+  .focus{
+    grid-column:1 / -1;
   }
 }
 </style>
@@ -193,225 +260,152 @@ h1{
 
 <body>
 
-<main class="app">
+<div class="training">
 
-  <section class="hero">
+  <div class="eyebrow">
+    DARTIQ · AI TRAINING VAN VANDAAG
+  </div>
 
-    <div class="kicker">
-      DARTIQ · AI TRAINING VAN VANDAAG
+  <h1 id="drill">
+    Training
+  </h1>
+
+  <div class="description" id="objective">
+    Gerichte training
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="stats">
+
+    <div class="stat">
+      <div class="stat-label">Moeilijkheidsgraad</div>
+      <div class="stat-value" id="level">—</div>
     </div>
 
-    <h1 id="practice">
-      Training
-    </h1>
-
-    <div class="focus" id="focus">
-      Gerichte training
+    <div class="stat">
+      <div class="stat-label">Duur</div>
+      <div class="stat-value" id="duration">—</div>
     </div>
 
-    <div class="divider"></div>
-
-    <div class="meta">
-
-      <div class="meta-box">
-        <div class="meta-label">
-          Moeilijkheidsgraad
-        </div>
-
-        <div class="meta-value" id="level">
-          —
-        </div>
-      </div>
-
-
-      <div class="meta-box">
-        <div class="meta-label">
-          Duur
-        </div>
-
-        <div class="meta-value" id="duration">
-          —
-        </div>
-      </div>
-
-
-      <div class="meta-box">
-        <div class="meta-label">
-          Rondes
-        </div>
-
-        <div class="meta-value" id="rounds">
-          —
-        </div>
-      </div>
-
-
-      <div class="meta-box focus-box">
-        <div class="meta-label">
-          Hoofdfocus
-        </div>
-
-        <div class="meta-value" id="focusCard">
-          —
-        </div>
-      </div>
-
+    <div class="stat">
+      <div class="stat-label">Rondes</div>
+      <div class="stat-value" id="rounds">—</div>
     </div>
 
-
-    <div class="equipment">
-
-      <div class="meta-label">
-        Materiaal
-      </div>
-
-      <div class="meta-value" id="equipment">
-        —
-      </div>
-
+    <div class="stat focus">
+      <div class="stat-label">Hoofdfocus</div>
+      <div class="stat-value" id="focus">—</div>
     </div>
 
-  </section>
+  </div>
 
-</main>
+  <div class="equipment">
+    <div class="equipment-label">Materiaal</div>
+    <div class="equipment-value" id="equipment">—</div>
+  </div>
 
+</div>
 
 <script>
-(function(){
+const params = new URLSearchParams(window.location.search);
 
-  const params = new URLSearchParams(window.location.search);
+function getParam(...names){
+  for(const name of names){
+    const value = params.get(name);
 
-
-  function getValue(keys,fallback){
-
-    for(const key of keys){
-
-      const raw = params.get(key);
-
-      if(raw !== null){
-
-        const value = raw.trim();
-
-        if(value !== ""){
-          return value;
-        }
-
-      }
-
+    if(
+      value !== null &&
+      value !== undefined &&
+      value.trim() !== "" &&
+      value.toLowerCase() !== "null" &&
+      value.toLowerCase() !== "undefined"
+    ){
+      return decodeURIComponent(value.replace(/\+/g," "));
     }
-
-    return fallback;
-
   }
 
+  return "";
+}
 
-  function setText(id,value){
+function setText(id,value,fallback="—"){
+  const el = document.getElementById(id);
 
-    const element = document.getElementById(id);
-
-    if(element){
-      element.textContent = value;
-    }
-
+  if(el){
+    el.textContent = value || fallback;
   }
+}
 
+const drill = getParam(
+  "drill",
+  "practice",
+  "training"
+);
 
-  const practice = getValue(
-    [
-      "practice",
-      "drill"
-    ],
-    "Training"
-  );
+const objective = getParam(
+  "objective"
+);
 
+const level = getParam(
+  "level",
+  "difficulty"
+);
 
-  const focus = getValue(
-    [
-      "focus"
-    ],
-    "Gerichte training"
-  );
+const duration = getParam(
+  "duration"
+);
 
+const rounds = getParam(
+  "rounds"
+);
 
-  const level = getValue(
-    [
-      "level",
-      "grade"
-    ],
-    "—"
-  );
+const focus = getParam(
+  "focus"
+);
 
+const equipment = getParam(
+  "equipment",
+  "trainingequipment",
+  "equipmentneeded",
+  "material"
+);
 
-  const duration = getValue(
-    [
-      "duration"
-    ],
-    "—"
-  );
+setText(
+  "drill",
+  drill,
+  "Training"
+);
 
+setText(
+  "objective",
+  objective,
+  "Gerichte training"
+);
 
-  const rounds = getValue(
-    [
-      "rounds"
-    ],
-    "—"
-  );
+setText(
+  "level",
+  level
+);
 
+setText(
+  "duration",
+  duration
+);
 
-  const equipment = getValue(
-    [
-      "equipment",
-      "trainingequipment",
-      "equipmentnl",
-      "material",
-      "materiaal"
-    ],
-    "—"
-  );
+setText(
+  "rounds",
+  rounds
+);
 
+setText(
+  "focus",
+  focus
+);
 
-  setText(
-    "practice",
-    practice
-  );
-
-
-  setText(
-    "focus",
-    focus
-  );
-
-
-  setText(
-    "focusCard",
-    focus
-  );
-
-
-  setText(
-    "level",
-    level
-  );
-
-
-  setText(
-    "duration",
-    duration
-  );
-
-
-  setText(
-    "rounds",
-    rounds
-  );
-
-
-  setText(
-    "equipment",
-    equipment
-  );
-
-})();
+setText(
+  "equipment",
+  equipment
+);
 </script>
 
 </body>
