@@ -2,812 +2,682 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
 <title>DARTIQ Today's AI Training NL</title>
 
 <style>
 :root{
-  --bg:#030811;
-  --panel:#081522;
-  --panel2:#0b1b2c;
-  --blue:#39a9ff;
-  --text:#ffffff;
-  --muted:#91a9bd;
+  --bg:#050b18;
+  --panel:#10243a;
+  --panel2:#0d2136;
+  --accent:#39a9ff;
+  --text:#f4fbff;
+  --muted:#9db8ce;
   --line:rgba(57,169,255,.24);
-  --glow:rgba(57,169,255,.14);
 }
 
 *{
   box-sizing:border-box;
-}
-
-html,
-body{
   margin:0;
   padding:0;
+}
+
+html,body{
   width:100%;
-  height:100%;
-  min-height:100vh;
-  background:#030811 !important;
-  color:var(--text);
+  min-height:100%;
+  background:var(--bg);
   font-family:Arial,Helvetica,sans-serif;
+  color:var(--text);
   overflow-x:hidden;
 }
 
-html{
-  background:#030811 !important;
-}
-
 body{
-  background:#030811 !important;
+  padding:6px;
 }
 
-.app{
+.wrap{
   width:100%;
-  max-width:620px;
-  min-height:100vh;
+  max-width:430px;
   margin:0 auto;
-  padding:8px;
-  background:#030811;
-}
+  padding:16px;
 
-/* =========================
-   MAIN TRAINING CARD
-========================= */
-
-.hero{
-  position:relative;
-  overflow:hidden;
-  background:
-    radial-gradient(circle at 80% 0%,rgba(57,169,255,.12),transparent 35%),
-    linear-gradient(180deg,#0c2037,#07121f);
-  border:1px solid var(--line);
   border-radius:20px;
-  padding:18px;
+
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(57,169,255,.10),
+      transparent 35%
+    ),
+    linear-gradient(
+      180deg,
+      #102844 0%,
+      #081a2d 100%
+    );
+
+  border:1px solid rgba(57,169,255,.40);
+
   box-shadow:
-    0 0 25px rgba(57,169,255,.08),
+    0 0 16px rgba(57,169,255,.18),
     inset 0 1px 0 rgba(255,255,255,.025);
 }
 
-.kicker{
-  color:var(--blue);
-  font-size:11px;
-  font-weight:900;
-  letter-spacing:1.8px;
-  text-transform:uppercase;
-  margin-bottom:9px;
+
+/* =========================
+   HEADER
+========================= */
+
+.header{
+  padding:2px 2px 15px;
 }
 
-h1{
+.kicker{
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:1.7px;
+  color:var(--accent);
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+
+.header h1{
   margin:0;
-  font-size:clamp(27px,8vw,40px);
+  font-size:31px;
   line-height:1.05;
   font-weight:900;
   letter-spacing:-.5px;
+  color:#fff;
   overflow-wrap:anywhere;
 }
 
-.focus{
-  margin-top:9px;
-  color:var(--blue);
-  font-size:15px;
-  line-height:1.45;
+.subtitle{
+  margin-top:8px;
+  color:var(--accent);
+  font-size:14px;
+  line-height:1.4;
   font-weight:700;
   overflow-wrap:anywhere;
 }
 
 .divider{
-  height:2px;
   width:100%;
-  margin:16px 0;
-  background:linear-gradient(
-    90deg,
-    var(--blue),
-    rgba(57,169,255,.15)
-  );
+  height:2px;
+  margin-top:15px;
+
+  background:
+    linear-gradient(
+      90deg,
+      var(--accent),
+      rgba(57,169,255,.12)
+    );
+
   border-radius:99px;
-  box-shadow:0 0 9px rgba(57,169,255,.25);
+
+  box-shadow:
+    0 0 8px rgba(57,169,255,.20);
 }
+
 
 /* =========================
-   TRAINING INFO
+   PRIMARY STATS
 ========================= */
 
-.meta{
+.stats{
   display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:9px;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+  margin-top:14px;
 }
 
-.meta-box{
+.card{
   min-width:0;
-  min-height:94px;
-  padding:13px;
-  border-radius:14px;
-  background:linear-gradient(180deg,#10243a,#0a1929);
-  border:1px solid rgba(57,169,255,.16);
-  display:flex;
-  flex-direction:column;
-  justify-content:flex-start;
+  padding:12px 10px;
+
+  border-radius:13px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #10243a,
+      #0a1929
+    );
+
+  border:1px solid var(--line);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.02);
 }
 
-.meta-label{
-  font-size:10px;
-  font-weight:900;
-  letter-spacing:1px;
-  text-transform:uppercase;
+.label{
   color:var(--muted);
-  margin-bottom:8px;
+  font-size:9px;
+  line-height:1.2;
+  font-weight:900;
+  letter-spacing:.7px;
+  text-transform:uppercase;
 }
 
-.meta-value{
-  font-size:19px;
-  line-height:1.28;
-  font-weight:850;
+.value{
+  margin-top:7px;
+
   color:#fff;
+
+  font-size:17px;
+  line-height:1.2;
+  font-weight:900;
+
   overflow-wrap:anywhere;
 }
 
-.focus-box .meta-value{
-  font-size:16px;
-  line-height:1.36;
-}
 
-.equipment{
-  margin-top:9px;
+/* =========================
+   MAIN FOCUS
+========================= */
+
+.main-focus{
+  margin-top:8px;
   padding:13px 14px;
-  border-radius:14px;
-  background:linear-gradient(180deg,#10243a,#0a1929);
-  border:1px solid rgba(57,169,255,.16);
+
+  border-radius:13px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #10243a,
+      #0a1929
+    );
+
+  border:1px solid var(--line);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.02);
 }
 
-.equipment .meta-value{
+.main-focus .value{
+  margin-top:6px;
   font-size:15px;
   line-height:1.4;
+  font-weight:800;
 }
+
 
 /* =========================
-   EXTRA TRAINING CONTENT
+   EQUIPMENT
 ========================= */
 
-.section{
-  margin-top:10px;
-  border:1px solid rgba(57,169,255,.16);
-  border-radius:15px;
-  overflow:hidden;
-  background:linear-gradient(180deg,#0b1a2b,#07131f);
+.equipment{
+  margin-top:8px;
+  padding:13px 14px;
+
+  border-radius:13px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #10243a,
+      #0a1929
+    );
+
+  border:1px solid var(--line);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.02);
 }
 
-.section-head{
+.equipment .value{
+  margin-top:6px;
+  font-size:14px;
+  line-height:1.4;
+  font-weight:800;
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+.status{
+  margin-top:10px;
+  min-height:44px;
+
   display:flex;
   align-items:center;
-  gap:9px;
-  padding:11px 13px;
-  background:rgba(57,169,255,.07);
-  border-bottom:1px solid rgba(57,169,255,.10);
-}
+  justify-content:center;
+  gap:8px;
 
-.section-head .icon{
-  font-size:16px;
-  line-height:1;
-}
+  padding:10px 12px;
 
-.section-head h2{
-  margin:0;
-  color:#fff;
-  font-size:12px;
-  font-weight:900;
-  letter-spacing:.8px;
-  text-transform:uppercase;
-}
+  border-radius:13px;
 
-.section-body{
-  padding:13px 14px;
-  color:#dcecff;
+  background:rgba(255,255,255,.035);
+
+  border:1px solid rgba(57,169,255,.18);
+
+  color:#d9eaff;
+
   font-size:14px;
-  line-height:1.5;
-  white-space:pre-line;
-  overflow-wrap:anywhere;
+  font-weight:900;
 }
 
-.two{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
+.status-icon{
+  width:8px;
+  height:8px;
+
+  border:2px solid var(--accent);
+  border-radius:2px;
+
+  box-shadow:
+    0 0 6px rgba(57,169,255,.35);
 }
 
-/* =========================
-   DARTIQ COACHING
-========================= */
-
-.coach{
-  margin-top:11px;
-  border:1px solid rgba(57,169,255,.22);
-  border-radius:16px;
-  overflow:hidden;
+.status.completed{
   background:
-    linear-gradient(180deg,rgba(57,169,255,.07),rgba(7,19,31,.98));
+    linear-gradient(
+      90deg,
+      #1662d9,
+      #2389ff
+    );
+
+  border-color:rgba(57,169,255,.55);
+  color:#fff;
+
+  box-shadow:
+    0 0 16px rgba(57,169,255,.18);
 }
 
-.coach-title{
-  padding:12px 14px;
-  color:var(--blue);
-  font-size:12px;
-  font-weight:900;
-  letter-spacing:1px;
-  text-transform:uppercase;
-  border-bottom:1px solid rgba(57,169,255,.14);
-}
-
-.coach-intro{
-  padding:13px 14px 3px;
-  color:#dcecff;
-  font-size:13px;
-  line-height:1.48;
-}
-
-.flow{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-  padding:11px;
-}
-
-.step{
-  min-width:0;
-  padding:10px;
-  border-radius:11px;
-  background:rgba(255,255,255,.025);
-  border:1px solid rgba(57,169,255,.10);
-}
-
-.step-num{
-  color:var(--blue);
-  font-size:9px;
-  font-weight:900;
-  letter-spacing:.8px;
-  text-transform:uppercase;
-  margin-bottom:5px;
-}
-
-.step-text{
-  color:#c4d8e9;
-  font-size:12px;
-  line-height:1.42;
-  overflow-wrap:anywhere;
-}
-
-.rule{
-  margin:0 11px 11px;
-  padding:10px 11px;
-  border-left:3px solid var(--blue);
-  border-radius:0 9px 9px 0;
-  background:rgba(57,169,255,.06);
-  color:#d7e8f6;
-  font-size:12.5px;
-  line-height:1.45;
-}
-
-/* =========================
-   AFTER PRACTICE
-========================= */
-
-.after{
-  margin-top:11px;
-  padding:13px;
-  border-radius:15px;
-  background:var(--panel2);
-  border:1px solid rgba(57,169,255,.15);
-}
-
-.after h2{
-  margin:0 0 9px;
-  color:var(--blue);
-  font-size:11px;
-  font-weight:900;
-  letter-spacing:1px;
-  text-transform:uppercase;
-}
-
-.after-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-}
-
-.after-box{
-  padding:10px 11px;
-  border-radius:11px;
-  background:rgba(255,255,255,.025);
-  border:1px solid rgba(57,169,255,.10);
-}
-
-.after-label{
-  color:var(--muted);
-  font-size:9px;
-  font-weight:900;
-  letter-spacing:.8px;
-  text-transform:uppercase;
-  margin-bottom:5px;
-}
-
-.after-text{
-  color:#e7f3ff;
-  font-size:12.5px;
-  line-height:1.42;
-  font-weight:700;
-  overflow-wrap:anywhere;
-}
-
-.empty,
-.hidden{
-  display:none!important;
-}
 
 /* =========================
    MOBILE
 ========================= */
 
-@media(max-width:430px){
+@media(max-width:380px){
 
-  .app{
-    padding:5px;
+  body{
+    padding:4px;
   }
 
-  .hero{
-    padding:15px 13px;
-    border-radius:17px;
+  .wrap{
+    padding:13px;
   }
 
-  h1{
-    font-size:29px;
+  .header h1{
+    font-size:28px;
   }
 
-  .focus{
-    font-size:13.5px;
+  .stats{
+    gap:6px;
   }
 
-  .meta{
-    gap:7px;
+  .card{
+    padding:11px 8px;
   }
 
-  .meta-box{
-    min-height:82px;
-    padding:11px;
+  .label{
+    font-size:8px;
+    letter-spacing:.5px;
   }
 
-  .meta-value{
-    font-size:17px;
+  .value{
+    font-size:15px;
   }
 
-  .focus-box .meta-value{
+  .main-focus .value{
     font-size:14px;
   }
 
-  .equipment{
-    padding:11px 12px;
-  }
-
-  .equipment .meta-value{
-    font-size:13.5px;
-  }
-
-  .section-body{
-    font-size:13px;
-  }
-
-  .flow{
-    grid-template-columns:1fr 1fr;
-  }
-}
-
-@media(max-width:340px){
-
-  .meta{
-    grid-template-columns:1fr;
-  }
-
-  .two,
-  .after-grid,
-  .flow{
-    grid-template-columns:1fr;
-  }
 }
 </style>
 </head>
 
 <body>
 
-<main class="app">
+<div class="wrap">
 
-  <section class="hero">
+  <!-- HEADER -->
 
-    <div class="kicker">DARTIQ · AI TRAINING VAN VANDAAG</div>
+  <div class="header">
 
-    <h1 id="practice">Training</h1>
+    <div class="kicker">
+      DARTIQ · PRACTICE TRAINING
+    </div>
 
-    <div class="focus" id="focus">Gerichte training</div>
+    <h1 id="practice">
+      Training
+    </h1>
+
+    <div
+      class="subtitle"
+      id="focus">
+      Gerichte training
+    </div>
 
     <div class="divider"></div>
-
-    <div class="meta">
-
-      <div class="meta-box">
-        <div class="meta-label">Moeilijkheidsgraad</div>
-        <div class="meta-value" id="level">—</div>
-      </div>
-
-      <div class="meta-box">
-        <div class="meta-label">Duur</div>
-        <div class="meta-value" id="duration">—</div>
-      </div>
-
-      <div class="meta-box">
-        <div class="meta-label">Rondes</div>
-        <div class="meta-value" id="rounds">—</div>
-      </div>
-
-      <div class="meta-box focus-box">
-        <div class="meta-label">Hoofdfocus</div>
-        <div class="meta-value" id="focusCard">—</div>
-      </div>
-
-    </div>
-
-    <div class="equipment" id="equipmentWrap">
-      <div class="meta-label">Materiaal</div>
-      <div class="meta-value" id="equipment">—</div>
-    </div>
-
-  </section>
-
-
-  <section class="section" data-field="objective">
-    <div class="section-head">
-      <span class="icon">🎯</span>
-      <h2>Doel</h2>
-    </div>
-    <div class="section-body" id="objective"></div>
-  </section>
-
-
-  <section class="section" data-field="why">
-    <div class="section-head">
-      <span class="icon">💡</span>
-      <h2>Waarom deze training</h2>
-    </div>
-    <div class="section-body" id="why"></div>
-  </section>
-
-
-  <section class="section" data-field="execution">
-    <div class="section-head">
-      <span class="icon">▶</span>
-      <h2>Hoe te trainen</h2>
-    </div>
-    <div class="section-body" id="execution"></div>
-  </section>
-
-
-  <div class="two">
-
-    <section class="section" data-field="track">
-      <div class="section-head">
-        <span class="icon">📊</span>
-        <h2>Wat bijhouden</h2>
-      </div>
-      <div class="section-body" id="track"></div>
-    </section>
-
-    <section class="section" data-field="avoid">
-      <div class="section-head">
-        <span class="icon">⚠️</span>
-        <h2>Let hierop</h2>
-      </div>
-      <div class="section-body" id="avoid"></div>
-    </section>
 
   </div>
 
 
-  <section class="section" data-field="target">
-    <div class="section-head">
-      <span class="icon">🏆</span>
-      <h2>Succesdoel</h2>
-    </div>
-    <div class="section-body" id="target"></div>
-  </section>
+  <!-- MOEILIJKHEID / DUUR / RONDES -->
 
+  <div class="stats">
 
-  <section class="section" data-field="improvement">
-    <div class="section-head">
-      <span class="icon">📈</span>
-      <h2>Verbeterpotentieel</h2>
-    </div>
-    <div class="section-body" id="improvement"></div>
-  </section>
+    <div class="card">
 
-
-  <section class="coach">
-
-    <div class="coach-title">
-      DARTIQ Coachinglogica
-    </div>
-
-    <div class="coach-intro">
-      Resultaat eerst. DARTIQ vergelijkt de bedoeling van de speler met het werkelijke resultaat voordat wordt bepaald of er iets moet veranderen.
-    </div>
-
-    <div class="flow">
-
-      <div class="step">
-        <div class="step-num">1 · Bedoeling</div>
-        <div class="step-text" id="coach1">
-          Bepaal wat deze training moet bereiken.
-        </div>
+      <div class="label">
+        Moeilijkheid
       </div>
 
-      <div class="step">
-        <div class="step-num">2 · Resultaat</div>
-        <div class="step-text" id="coach2">
-          Vergelijk het resultaat met het gewenste doel.
-        </div>
-      </div>
-
-      <div class="step">
-        <div class="step-num">3 · Beslissen</div>
-        <div class="step-text" id="coach3">
-          Behoud wat werkt. Corrigeer alleen een herhaalbaar probleem.
-        </div>
-      </div>
-
-      <div class="step">
-        <div class="step-num">4 · Hertesten</div>
-        <div class="step-text" id="coach4">
-          Herhaal dezelfde training en controleer de verandering.
-        </div>
+      <div
+        class="value"
+        id="level">
+        --
       </div>
 
     </div>
 
-    <div class="rule" id="coachRule">
-      Verander geen effectieve beweging alleen omdat ze er niet perfect uitziet. Pas alleen iets aan wanneer het resultaat een betekenisvol en herhaalbaar probleem toont.
-    </div>
 
-  </section>
+    <div class="card">
 
-
-  <section class="after">
-
-    <h2>Na de training</h2>
-
-    <div class="after-grid">
-
-      <div class="after-box">
-        <div class="after-label">Herinnering</div>
-        <div class="after-text" id="reminder">
-          Registreer het resultaat eerlijk. Het resultaat is feedback.
-        </div>
+      <div class="label">
+        Duur
       </div>
 
-      <div class="after-box">
-        <div class="after-label">Volgende stap</div>
-        <div class="after-text" id="after">
-          Voer het resultaat in zodat DARTIQ kan bepalen wat hierna komt.
-        </div>
+      <div
+        class="value"
+        id="duration">
+        --
       </div>
 
     </div>
 
-  </section>
 
-</main>
+    <div class="card">
+
+      <div class="label">
+        Rondes
+      </div>
+
+      <div
+        class="value"
+        id="rounds">
+        --
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- HOOFDFOCUS -->
+
+  <div class="main-focus">
+
+    <div class="label">
+      Hoofdfocus
+    </div>
+
+    <div
+      class="value"
+      id="focusCard">
+      --
+    </div>
+
+  </div>
+
+
+  <!-- MATERIAAL -->
+
+  <div
+    class="equipment"
+    id="equipmentWrap">
+
+    <div class="label">
+      Materiaal
+    </div>
+
+    <div
+      class="value"
+      id="equipment">
+      --
+    </div>
+
+  </div>
+
+
+  <!-- STATUS -->
+
+  <div
+    class="status"
+    id="status">
+
+    <span
+      class="status-icon"
+      id="statusIcon">
+    </span>
+
+    <span id="statusText">
+      Training bezig
+    </span>
+
+  </div>
+
+</div>
 
 
 <script>
-(function(){
 
-  const p = new URLSearchParams(location.search);
-
-  const get = (key,fallback='') => {
-    const v = (p.get(key) || '').trim();
-    return v || fallback;
-  };
-
-  const set = (id,value) => {
-    const el = document.getElementById(id);
-    if(el) el.textContent = value;
-  };
-
-  const data = {
-
-    practice:
-      get('practice',get('drill','Training')),
-
-    duration:
-      get('duration','—'),
-
-    rounds:
-      get('rounds','—'),
-
-    level:
-      get('level','—'),
-
-    equipment:
-      get('equipment',''),
-
-    objective:
-      get('objective',''),
-
-    focus:
-      get('focus',''),
-
-    target:
-      get('target',''),
-
-    execution:
-      get('execution',''),
-
-    track:
-      get('track',''),
-
-    avoid:
-      get('avoid',''),
-
-    why:
-      get('why',''),
-
-    improvement:
-      get('improvement',''),
-
-    reminder:
-      get(
-        'reminder',
-        'Registreer het resultaat eerlijk. Het resultaat is feedback, geen oordeel.'
-      ),
-
-    after:
-      get(
-        'after',
-        'Voer het trainingsresultaat in zodat DARTIQ kan bepalen wat hierna komt.'
-      )
-
-  };
-
-
-  set('practice',data.practice);
-
-  set(
-    'focus',
-    data.focus || 'Gerichte training'
+const params =
+  new URLSearchParams(
+    window.location.search
   );
 
-  set(
-    'focusCard',
-    data.focus || '—'
-  );
 
-  set('level',data.level);
-  set('duration',data.duration);
-  set('rounds',data.rounds);
-  set('equipment',data.equipment);
+function getValue(
+  key,
+  fallback
+){
 
-  set('objective',data.objective);
-  set('why',data.why);
-  set('execution',data.execution);
-  set('track',data.track);
-  set('avoid',data.avoid);
-  set('target',data.target);
-  set('improvement',data.improvement);
-  set('reminder',data.reminder);
-  set('after',data.after);
+  const value =
+    params.get(key);
 
+  if(
+    value === null ||
+    String(value).trim() === ""
+  ){
+    return fallback;
+  }
 
-  const fields = [
-    'objective',
-    'why',
-    'execution',
-    'track',
-    'avoid',
-    'target',
-    'improvement'
-  ];
+  try{
 
-  fields.forEach(key => {
+    return decodeURIComponent(
+      String(value)
+        .replace(/\+/g," ")
+    ).trim();
 
-    const node =
-      document.querySelector(
-        '[data-field="'+key+'"]'
-      );
+  }catch(e){
 
-    if(node && !data[key]){
-      node.classList.add('hidden');
-    }
-
-  });
-
-
-  if(!data.equipment){
-
-    const equipment =
-      document.getElementById('equipmentWrap');
-
-    if(equipment){
-      equipment.classList.add('empty');
-    }
+    return String(value)
+      .trim();
 
   }
 
+}
 
-  set(
-    'coach1',
-    data.objective
-      ? 'Bedoeling: ' + data.objective
-      : (
-          data.target
-            ? 'Werk gericht naar: ' + data.target
-            : 'Bepaal wat deze training moet bereiken.'
-        )
+
+/* =========================
+   PARAMETERS
+========================= */
+
+const practice =
+  getValue(
+    "practice",
+    getValue(
+      "drill",
+      "Training"
+    )
   );
 
 
-  set(
-    'coach2',
-    data.track
-      ? 'Beoordeel het resultaat aan de hand van: ' + data.track
-      : (
-          data.target
-            ? 'Vergelijk elk resultaat met: ' + data.target
-            : 'Vergelijk het werkelijke resultaat met het gewenste resultaat.'
-        )
+const duration =
+  getValue(
+    "duration",
+    "--"
   );
 
 
-  set(
-    'coach3',
-    data.focus
-      ? 'Behoud wat werkt. Corrigeer alleen een herhaalbaar probleem dat invloed heeft op ' + data.focus + '.'
-      : 'Behoud wat werkt. Corrigeer alleen een herhaalbaar probleem dat het gewenste resultaat beïnvloedt.'
+const rounds =
+  getValue(
+    "rounds",
+    "--"
   );
 
 
-  set(
-    'coach4',
-    data.target
-      ? 'Herhaal dezelfde training en vergelijk opnieuw met: ' + data.target
-      : 'Herhaal dezelfde training en controleer of de aanpassing het resultaat verbetert.'
+const level =
+  getValue(
+    "level",
+    "--"
   );
 
 
-  const rule = [
-    'Resultaat eerst.'
-  ];
-
-  if(data.avoid){
-    rule.push(
-      'Let op: ' + data.avoid + '.'
-    );
-  }
-
-  rule.push(
-    'Verander geen effectieve beweging alleen omdat ze er niet perfect uitziet.'
+const focus =
+  getValue(
+    "focus",
+    "Gerichte training"
   );
 
-  if(data.improvement){
-    rule.push(
-      'Als een correctie nodig is, gebruik dan de kleinste nuttige aanpassing richting: ' +
-      data.improvement +
-      '.'
-    );
-  }
 
-  set(
-    'coachRule',
-    rule.join(' ')
+const equipment =
+  getValue(
+    "equipment",
+    ""
   );
 
-})();
+
+const completed =
+  getValue(
+    "completed",
+    "false"
+  );
+
+
+/* =========================
+   POPULATE SCREEN
+========================= */
+
+document
+  .getElementById("practice")
+  .textContent =
+  practice;
+
+
+document
+  .getElementById("duration")
+  .textContent =
+  duration;
+
+
+document
+  .getElementById("rounds")
+  .textContent =
+  rounds;
+
+
+document
+  .getElementById("level")
+  .textContent =
+  level;
+
+
+document
+  .getElementById("focus")
+  .textContent =
+  focus;
+
+
+document
+  .getElementById("focusCard")
+  .textContent =
+  focus;
+
+
+/* =========================
+   EQUIPMENT
+========================= */
+
+if(equipment){
+
+  document
+    .getElementById("equipment")
+    .textContent =
+    equipment;
+
+}else{
+
+  document
+    .getElementById("equipmentWrap")
+    .style.display =
+    "none";
+
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+const status =
+  document.getElementById(
+    "status"
+  );
+
+
+const statusText =
+  document.getElementById(
+    "statusText"
+  );
+
+
+const statusIcon =
+  document.getElementById(
+    "statusIcon"
+  );
+
+
+const isCompleted =
+[
+  "1",
+  "true",
+  "yes",
+  "done",
+  "complete",
+  "completed"
+]
+.includes(
+  String(completed)
+    .toLowerCase()
+    .trim()
+);
+
+
+if(isCompleted){
+
+  statusText.textContent =
+    "Training voltooid";
+
+  statusIcon.style.display =
+    "none";
+
+  status.classList.add(
+    "completed"
+  );
+
+}else{
+
+  statusText.textContent =
+    "Training bezig";
+
+}
+
 </script>
 
 </body>
