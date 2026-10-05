@@ -160,13 +160,10 @@ body{
 
 .value{
   margin-top:7px;
-
   color:#fff;
-
   font-size:17px;
   line-height:1.2;
   font-weight:900;
-
   overflow-wrap:anywhere;
 }
 
@@ -230,60 +227,6 @@ body{
   font-size:14px;
   line-height:1.4;
   font-weight:800;
-}
-
-
-/* =========================
-   STATUS
-========================= */
-
-.status{
-  margin-top:10px;
-  min-height:44px;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:8px;
-
-  padding:10px 12px;
-
-  border-radius:13px;
-
-  background:rgba(255,255,255,.035);
-
-  border:1px solid rgba(57,169,255,.18);
-
-  color:#d9eaff;
-
-  font-size:14px;
-  font-weight:900;
-}
-
-.status-icon{
-  width:8px;
-  height:8px;
-
-  border:2px solid var(--accent);
-  border-radius:2px;
-
-  box-shadow:
-    0 0 6px rgba(57,169,255,.35);
-}
-
-.status.completed{
-  background:
-    linear-gradient(
-      90deg,
-      #1662d9,
-      #2389ff
-    );
-
-  border-color:rgba(57,169,255,.55);
-  color:#fff;
-
-  box-shadow:
-    0 0 16px rgba(57,169,255,.18);
 }
 
 
@@ -443,24 +386,6 @@ body{
 
   </div>
 
-
-  <!-- STATUS -->
-
-  <div
-    class="status"
-    id="status">
-
-    <span
-      class="status-icon"
-      id="statusIcon">
-    </span>
-
-    <span id="statusText">
-      Training bezig
-    </span>
-
-  </div>
-
 </div>
 
 
@@ -553,13 +478,6 @@ const equipment =
   );
 
 
-const completed =
-  getValue(
-    "completed",
-    "false"
-  );
-
-
 /* =========================
    POPULATE SCREEN
 ========================= */
@@ -617,64 +535,6 @@ if(equipment){
     .getElementById("equipmentWrap")
     .style.display =
     "none";
-
-}
-
-
-/* =========================
-   STATUS
-========================= */
-
-const status =
-  document.getElementById(
-    "status"
-  );
-
-
-const statusText =
-  document.getElementById(
-    "statusText"
-  );
-
-
-const statusIcon =
-  document.getElementById(
-    "statusIcon"
-  );
-
-
-const isCompleted =
-[
-  "1",
-  "true",
-  "yes",
-  "done",
-  "complete",
-  "completed"
-]
-.includes(
-  String(completed)
-    .toLowerCase()
-    .trim()
-);
-
-
-if(isCompleted){
-
-  statusText.textContent =
-    "Training voltooid";
-
-  statusIcon.style.display =
-    "none";
-
-  status.classList.add(
-    "completed"
-  );
-
-}else{
-
-  statusText.textContent =
-    "Training bezig";
 
 }
 
