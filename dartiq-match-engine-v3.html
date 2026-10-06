@@ -1,0 +1,3183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>DARTIQ Match Engine</title>
+
+<style>
+:root{
+  --bg:#02060b;
+  --panel:#071421;
+  --panel2:#0b1d2d;
+  --line:#174568;
+  --blue:#39a9ff;
+  --text:#ffffff;
+  --muted:#8fa9bd;
+  --danger:#ff6b72;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,body{
+  margin:0;
+  padding:0;
+  width:100%;
+  min-height:100%;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+  padding:8px;
+}
+
+.engine{
+  width:100%;
+  max-width:680px;
+  margin:0 auto;
+  background:linear-gradient(180deg,#06111d,#02070c);
+  border-radius:22px;
+  padding:14px;
+}
+
+/* ==================================================
+   HEADER
+================================================== */
+
+.brand{
+  text-align:center;
+  padding:5px 4px 14px;
+}
+
+.brand-small{
+  color:var(--blue);
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:5px;
+}
+
+.brand h1{
+  margin:5px 0 3px;
+  font-size:29px;
+  line-height:1;
+}
+
+.format-selector{
+  margin:14px auto 10px;
+  max-width:420px;
+}
+
+.format-label{
+  color:var(--muted);
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:1.2px;
+  margin-bottom:7px;
+}
+
+.format-buttons{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:6px;
+}
+
+.format-btn{
+  border:1px solid #24577b;
+  background:#06111b;
+  color:#9db7ca;
+  border-radius:8px;
+  padding:10px 5px;
+  font-size:11px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.format-btn.active{
+  background:var(--blue);
+  color:#00101c;
+  border-color:var(--blue);
+  box-shadow:0 0 12px rgba(57,169,255,.4);
+}
+
+.match-format{
+  color:var(--blue);
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:1.5px;
+  margin-top:8px;
+}
+
+/* ==================================================
+   MATCH PROGRESS
+================================================== */
+
+.match-progress{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:7px;
+  margin-bottom:12px;
+}
+
+.match-card{
+  background:linear-gradient(180deg,#081827,#06121e);
+  border:1px solid rgba(57,169,255,.35);
+  border-radius:12px;
+  padding:10px 6px;
+  text-align:center;
+}
+
+.match-label{
+  color:var(--blue);
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+.match-value{
+  font-size:25px;
+  font-weight:900;
+  margin-top:4px;
+}
+
+/* ==================================================
+   LIVE PANEL
+================================================== */
+
+.live-panel{
+  border:1px solid rgba(57,169,255,.4);
+  border-radius:15px;
+  padding:12px;
+  background:linear-gradient(180deg,#061523,#030b13);
+  box-shadow:0 0 20px rgba(57,169,255,.08);
+}
+
+.live-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:10px;
+}
+
+.live-title{
+  font-size:22px;
+  font-weight:900;
+  line-height:1;
+}
+
+.live-sub{
+  color:var(--blue);
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.7px;
+  margin-top:4px;
+}
+
+.mode-switch{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6px;
+  min-width:205px;
+}
+
+.mode-button{
+  border:1px solid #24577b;
+  background:#06111b;
+  color:#9db7ca;
+  border-radius:8px;
+  padding:9px 7px;
+  font-size:9px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.mode-button.active{
+  background:var(--blue);
+  color:#00101c;
+  border-color:var(--blue);
+  box-shadow:0 0 12px rgba(57,169,255,.4);
+}
+
+/* ==================================================
+   MAIN GRID
+================================================== */
+
+.practice-grid{
+  display:grid;
+  grid-template-columns:170px 1fr;
+  gap:10px;
+  align-items:start;
+}
+
+.score-column{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.remaining-card{
+  border:1px solid rgba(57,169,255,.35);
+  border-radius:11px;
+  padding:11px 8px;
+  background:#071727;
+  text-align:center;
+}
+
+.score-label{
+  color:var(--blue);
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+.remaining{
+  font-size:48px;
+  line-height:1;
+  font-weight:900;
+  margin-top:5px;
+}
+
+.mini-stat{
+  display:grid;
+  grid-template-columns:34px 1fr;
+  align-items:center;
+  border:1px solid rgba(57,169,255,.25);
+  background:#071727;
+  border-radius:10px;
+  padding:7px;
+}
+
+.mini-icon{
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#07325a;
+  color:var(--blue);
+  font-size:12px;
+  font-weight:900;
+}
+
+.mini-value{
+  text-align:center;
+  font-size:18px;
+  font-weight:900;
+}
+
+.mini-label{
+  text-align:center;
+  color:var(--blue);
+  font-size:8px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.7px;
+}
+
+.session-small{
+  border:1px solid rgba(57,169,255,.22);
+  border-radius:9px;
+  padding:7px;
+  background:#06131f;
+}
+
+.session-label{
+  color:var(--blue);
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+.session-id{
+  color:var(--muted);
+  font-size:9px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  margin-top:3px;
+}
+
+/* ==================================================
+   INPUT
+================================================== */
+
+.input-column{
+  min-width:0;
+}
+
+.score-display{
+  background:#010509;
+  border:1px solid #174568;
+  border-radius:10px;
+  min-height:52px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:29px;
+  font-weight:900;
+  margin-bottom:8px;
+}
+
+.keypad{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:6px;
+}
+
+.key{
+  border:1px solid #1b4260;
+  background:#0b2031;
+  color:white;
+  border-radius:8px;
+  padding:10px 4px;
+  font-size:16px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.key:active{
+  transform:scale(.97);
+}
+
+.clear{
+  color:#ff737a;
+}
+
+.back{
+  color:#b8d9ef;
+}
+
+#dartboardMode{
+  display:none;
+}
+
+/* ==================================================
+   DARTBOARD
+================================================== */
+
+.dart-slots{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:5px;
+  margin-bottom:7px;
+}
+
+.dart-slot{
+  background:#010509;
+  border:1px solid #173d59;
+  border-radius:8px;
+  padding:6px 2px;
+  text-align:center;
+}
+
+.dart-slot-label{
+  color:var(--muted);
+  font-size:7px;
+  letter-spacing:.8px;
+}
+
+.dart-slot-value{
+  font-size:11px;
+  font-weight:900;
+  margin-top:3px;
+  min-height:14px;
+}
+
+.dartboard-wrap{
+  position:relative;
+  width:100%;
+  max-width:340px;
+  aspect-ratio:1/1;
+  margin:0 auto 6px;
+  user-select:none;
+  touch-action:manipulation;
+}
+
+#dartboard{
+  width:100%;
+  height:100%;
+  display:block;
+  cursor:crosshair;
+  filter:drop-shadow(0 0 9px rgba(57,169,255,.4));
+}
+
+.board-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6px;
+}
+
+.board-action{
+  border:1px solid #1c496a;
+  background:#0b2031;
+  color:#b9d0df;
+  border-radius:8px;
+  padding:9px 4px;
+  font-size:10px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.board-action.danger{
+  color:#ff7777;
+}
+
+/* ==================================================
+   BUTTON / MESSAGE
+================================================== */
+
+.submit{
+  width:100%;
+  border:none;
+  margin-top:9px;
+  padding:12px;
+  border-radius:9px;
+  background:var(--blue);
+  color:#00101c;
+  font-size:13px;
+  font-weight:900;
+  cursor:pointer;
+  box-shadow:0 0 12px rgba(57,169,255,.25);
+}
+
+.message{
+  min-height:30px;
+  margin-top:8px;
+  text-align:center;
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.4;
+}
+
+/* ==================================================
+   PERFORMANCE
+================================================== */
+
+.performance{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:6px;
+  margin-top:9px;
+}
+
+.performance.second{
+  margin-top:6px;
+}
+
+.performance-card{
+  border:1px solid rgba(57,169,255,.25);
+  border-radius:9px;
+  background:#071727;
+  padding:7px;
+  text-align:center;
+}
+
+.performance-value{
+  font-size:16px;
+  font-weight:900;
+}
+
+.performance-label{
+  color:var(--muted);
+  font-size:8px;
+  margin-top:2px;
+}
+
+/* ==================================================
+   MATCH COMPLETE
+================================================== */
+
+.match-complete{
+  display:none;
+  margin-top:10px;
+  padding:15px;
+  border:1px solid var(--blue);
+  border-radius:12px;
+  background:#071727;
+  text-align:center;
+  box-shadow:0 0 18px rgba(57,169,255,.18);
+}
+
+.match-complete-title{
+  color:var(--blue);
+  font-size:20px;
+  font-weight:900;
+}
+
+.match-complete-text{
+  margin-top:7px;
+  font-size:12px;
+  line-height:1.5;
+}
+
+.new-match{
+  margin-top:12px;
+  width:100%;
+  border:none;
+  border-radius:9px;
+  padding:11px;
+  background:var(--blue);
+  color:#00101c;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.footer{
+  text-align:center;
+  padding:12px 4px 3px;
+  color:#456278;
+  font-size:8px;
+  letter-spacing:1.5px;
+}
+
+/* ==================================================
+   MOBILE
+================================================== */
+
+@media(max-width:560px){
+
+  body{
+    padding:5px;
+  }
+
+  .engine{
+    padding:10px;
+    border-radius:16px;
+  }
+
+  .brand h1{
+    font-size:25px;
+  }
+
+  .live-title{
+    font-size:18px;
+  }
+
+  .live-sub{
+    font-size:7px;
+  }
+
+  .mode-switch{
+    min-width:170px;
+  }
+
+  .mode-button{
+    padding:8px 4px;
+    font-size:8px;
+  }
+
+  .practice-grid{
+    grid-template-columns:120px 1fr;
+    gap:7px;
+  }
+
+  .remaining{
+    font-size:40px;
+  }
+
+  .mini-value{
+    font-size:15px;
+  }
+
+  .dartboard-wrap{
+    max-width:300px;
+  }
+}
+
+@media(max-width:390px){
+
+  .practice-grid{
+    grid-template-columns:105px 1fr;
+  }
+
+  .mode-switch{
+    min-width:155px;
+  }
+
+  .format-btn{
+    font-size:10px;
+    padding:9px 2px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="engine">
+
+<header class="brand">
+
+  <div class="brand-small">
+    DARTIQ
+  </div>
+
+  <h1>
+    MATCH ENGINE
+  </h1>
+
+  <div class="format-selector" id="formatSelector">
+
+    <div class="format-label">
+      CHOOSE MATCH FORMAT
+    </div>
+
+    <div class="format-buttons">
+
+      <button
+        class="format-btn"
+        data-format="3"
+        onclick="selectFormat(3,this)">
+        BO3
+      </button>
+
+      <button
+        class="format-btn active"
+        data-format="5"
+        onclick="selectFormat(5,this)">
+        BO5
+      </button>
+
+      <button
+        class="format-btn"
+        data-format="7"
+        onclick="selectFormat(7,this)">
+        BO7
+      </button>
+
+      <button
+        class="format-btn"
+        data-format="9"
+        onclick="selectFormat(9,this)">
+        BO9
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="match-format" id="matchFormat">
+    BEST OF 5 LEGS • FIRST TO 3
+  </div>
+
+</header>
+
+
+<div class="match-progress">
+
+  <div class="match-card">
+    <div class="match-label">
+      LEG
+    </div>
+    <div class="match-value" id="legNumberTop">
+      1
+    </div>
+  </div>
+
+  <div class="match-card">
+    <div class="match-label">
+      LEGS WON
+    </div>
+    <div class="match-value" id="legsWon">
+      0
+    </div>
+  </div>
+
+  <div class="match-card">
+    <div class="match-label">
+      TO WIN
+    </div>
+    <div class="match-value" id="legsTarget">
+      3
+    </div>
+  </div>
+
+</div>
+
+
+<section class="live-panel">
+
+<div class="live-header">
+
+  <div>
+
+    <div class="live-title">
+      LIVE MATCH
+    </div>
+
+    <div class="live-sub" id="turnText">
+      ENTER YOUR SCORE
+    </div>
+
+  </div>
+
+  <div class="mode-switch">
+
+    <button
+      class="mode-button active"
+      id="keypadTab"
+      onclick="setMode('keypad')">
+      ▦ KEYPAD
+    </button>
+
+    <button
+      class="mode-button"
+      id="dartboardTab"
+      onclick="setMode('dartboard')">
+      🎯 DARTBOARD
+    </button>
+
+  </div>
+
+</div>
+
+
+<div class="practice-grid">
+
+<div class="score-column">
+
+  <div class="remaining-card">
+
+    <div class="score-label">
+      REMAINING
+    </div>
+
+    <div class="remaining" id="remaining">
+      501
+    </div>
+
+  </div>
+
+
+  <div class="mini-stat">
+
+    <div class="mini-icon">
+      #
+    </div>
+
+    <div>
+
+      <div class="mini-label">
+        LEG
+      </div>
+
+      <div class="mini-value" id="legNumber">
+        1
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="mini-stat">
+
+    <div class="mini-icon">
+      Ø
+    </div>
+
+    <div>
+
+      <div class="mini-label">
+        AVERAGE
+      </div>
+
+      <div class="mini-value" id="average">
+        0.00
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="mini-stat">
+
+    <div class="mini-icon">
+      9
+    </div>
+
+    <div>
+
+      <div class="mini-label">
+        FIRST 9
+      </div>
+
+      <div class="mini-value" id="first9Average">
+        0.00
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="mini-stat">
+
+    <div class="mini-icon">
+      3
+    </div>
+
+    <div>
+
+      <div class="mini-label">
+        DARTS
+      </div>
+
+      <div class="mini-value" id="dartsThrown">
+        0
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="session-small">
+
+    <div class="session-label">
+      ACTIVE SESSION
+    </div>
+
+    <div class="session-id" id="sessionID">
+      SESSION
+    </div>
+
+  </div>
+
+</div>
+
+
+<div class="input-column">
+
+<div id="keypadMode">
+
+  <div class="score-display" id="scoreDisplay">
+    0
+  </div>
+
+  <div class="keypad">
+
+    <button class="key" onclick="press('1')">1</button>
+    <button class="key" onclick="press('2')">2</button>
+    <button class="key" onclick="press('3')">3</button>
+
+    <button class="key" onclick="press('4')">4</button>
+    <button class="key" onclick="press('5')">5</button>
+    <button class="key" onclick="press('6')">6</button>
+
+    <button class="key" onclick="press('7')">7</button>
+    <button class="key" onclick="press('8')">8</button>
+    <button class="key" onclick="press('9')">9</button>
+
+    <button class="key clear" onclick="clearScore()">C</button>
+    <button class="key" onclick="press('0')">0</button>
+    <button class="key back" onclick="backspace()">⌫</button>
+
+  </div>
+
+</div>
+
+
+<div id="dartboardMode">
+
+<div class="dart-slots">
+
+  <div class="dart-slot">
+
+    <div class="dart-slot-label">
+      DART 1
+    </div>
+
+    <div class="dart-slot-value" id="dart1">
+      -
+    </div>
+
+  </div>
+
+
+  <div class="dart-slot">
+
+    <div class="dart-slot-label">
+      DART 2
+    </div>
+
+    <div class="dart-slot-value" id="dart2">
+      -
+    </div>
+
+  </div>
+
+
+  <div class="dart-slot">
+
+    <div class="dart-slot-label">
+      DART 3
+    </div>
+
+    <div class="dart-slot-value" id="dart3">
+      -
+    </div>
+
+  </div>
+
+</div>
+
+
+<div class="score-display">
+  <span id="boardVisitScore">
+    0
+  </span>
+</div>
+
+
+<div class="dartboard-wrap">
+
+  <svg
+    id="dartboard"
+    viewBox="-230 -230 460 460"
+    aria-label="Interactive DARTIQ dartboard">
+  </svg>
+
+</div>
+
+
+<div class="board-actions">
+
+  <button
+    class="board-action"
+    onclick="addMiss()">
+    MISS
+  </button>
+
+  <button
+    class="board-action danger"
+    onclick="undoDart()">
+    UNDO DART
+  </button>
+
+</div>
+
+</div>
+
+
+<button
+  class="submit"
+  id="confirmButton"
+  onclick="confirmVisit()">
+  CONFIRM VISIT
+</button>
+
+
+<div class="message" id="message">
+  Choose BO3, BO5, BO7 or BO9 and start scoring.
+</div>
+
+</div>
+</div>
+
+
+<div class="performance">
+
+  <div class="performance-card">
+
+    <div class="performance-value" id="stat100">
+      0
+    </div>
+
+    <div class="performance-label">
+      100+
+    </div>
+
+  </div>
+
+
+  <div class="performance-card">
+
+    <div class="performance-value" id="stat140">
+      0
+    </div>
+
+    <div class="performance-label">
+      140+
+    </div>
+
+  </div>
+
+
+  <div class="performance-card">
+
+    <div class="performance-value" id="stat180">
+      0
+    </div>
+
+    <div class="performance-label">
+      180
+    </div>
+
+  </div>
+
+</div>
+
+
+<div class="performance second">
+
+  <div class="performance-card">
+
+    <div class="performance-value" id="checkoutHits">
+      0
+    </div>
+
+    <div class="performance-label">
+      CHECKOUT HITS
+    </div>
+
+  </div>
+
+
+  <div class="performance-card">
+
+    <div class="performance-value" id="checkoutPct">
+      0%
+    </div>
+
+    <div class="performance-label">
+      CHECKOUT %
+    </div>
+
+  </div>
+
+
+  <div class="performance-card">
+
+    <div class="performance-value" id="highestCheckout">
+      0
+    </div>
+
+    <div class="performance-label">
+      HIGHEST CO
+    </div>
+
+  </div>
+
+</div>
+
+
+<div class="match-complete" id="matchComplete">
+
+  <div class="match-complete-title">
+    MATCH COMPLETE
+  </div>
+
+  <div
+    class="match-complete-text"
+    id="matchCompleteText">
+  </div>
+
+  <button
+    class="new-match"
+    onclick="newMatch()">
+    START NEW MATCH
+  </button>
+
+</div>
+
+</section>
+
+
+<div class="footer">
+  DARTIQ • MATCH ENGINE • CORE VISION
+</div>
+
+</div>
+
+
+<script>
+
+/* ==================================================
+   URL PARAMETERS
+================================================== */
+
+const params=
+  new URLSearchParams(
+    window.location.search
+  );
+
+function param(){
+
+  for(
+    let i=0;
+    i<arguments.length;
+    i++
+  ){
+
+    const value=
+      params.get(
+        arguments[i]
+      );
+
+    if(
+      value &&
+      value.trim()!==""
+    ){
+
+      return value.trim();
+    }
+  }
+
+  return "";
+}
+
+
+const sessionID=
+  param("session") ||
+  "SESSION";
+
+const email=
+  param("email") ||
+  "";
+
+const MATCH_VISIT_WEBHOOK=
+  "https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/5415568e-2eca-408f-a460-572b257d1cdf";
+
+
+let bestOf=
+  Number(
+    param(
+      "bestof",
+      "legs"
+    )
+  ) || 5;
+
+
+if(
+  ![3,5,7,9].includes(bestOf)
+){
+
+  bestOf=5;
+}
+
+
+let legsToWin=
+  Math.floor(bestOf/2)+1;
+
+
+document.getElementById(
+  "sessionID"
+).textContent=
+  sessionID;
+
+
+/* ==================================================
+   MATCH STATE
+================================================== */
+
+let currentMode=
+  "keypad";
+
+let input=
+  "";
+
+let remaining=
+  501;
+
+let currentLeg=
+  1;
+
+let legsWon=
+  0;
+
+let totalPoints=
+  0;
+
+let totalDarts=
+  0;
+
+let first9Points=
+  0;
+
+let first9Darts=
+  0;
+
+let count100=
+  0;
+
+let count140=
+  0;
+
+let count180=
+  0;
+
+let checkoutAttempts=
+  0;
+
+let checkoutHits=
+  0;
+
+let highestCheckout=
+  0;
+
+let currentDarts=
+  [];
+
+let matchFinished=
+  false;
+
+let matchStarted=
+  false;
+
+let visitNumber=
+  0;
+
+
+/* ==================================================
+   FORMAT
+================================================== */
+
+function updateFormatUI(){
+
+  document.getElementById(
+    "matchFormat"
+  ).textContent=
+    "BEST OF "+
+    bestOf+
+    " LEGS • FIRST TO "+
+    legsToWin;
+
+
+  document.getElementById(
+    "legsTarget"
+  ).textContent=
+    legsToWin;
+
+
+  document
+    .querySelectorAll(
+      ".format-btn"
+    )
+    .forEach(
+      function(button){
+
+        const format=
+          Number(
+            button.dataset.format
+          );
+
+        if(
+          format===bestOf
+        ){
+
+          button
+            .classList
+            .add("active");
+
+        }else{
+
+          button
+            .classList
+            .remove("active");
+        }
+      }
+    );
+}
+
+
+function selectFormat(
+  format,
+  button
+){
+
+  if(
+    matchStarted ||
+    totalDarts>0 ||
+    legsWon>0
+  ){
+
+    showMessage(
+      "Match format is locked after the match starts."
+    );
+
+    return;
+  }
+
+
+  bestOf=
+    format;
+
+
+  legsToWin=
+    Math.floor(
+      bestOf/2
+    )+1;
+
+
+  updateFormatUI();
+
+
+  showMessage(
+    "BO"+
+    bestOf+
+    " selected • First to "+
+    legsToWin+
+    " legs."
+  );
+}
+
+
+/* ==================================================
+   MODE
+================================================== */
+
+function setMode(mode){
+
+  if(matchFinished){
+    return;
+  }
+
+
+  currentMode=
+    mode;
+
+
+  const keypadMode=
+    document.getElementById(
+      "keypadMode"
+    );
+
+  const dartboardMode=
+    document.getElementById(
+      "dartboardMode"
+    );
+
+  const keypadTab=
+    document.getElementById(
+      "keypadTab"
+    );
+
+  const dartboardTab=
+    document.getElementById(
+      "dartboardTab"
+    );
+
+
+  if(
+    mode==="keypad"
+  ){
+
+    keypadMode.style.display=
+      "block";
+
+    dartboardMode.style.display=
+      "none";
+
+    keypadTab
+      .classList
+      .add("active");
+
+    dartboardTab
+      .classList
+      .remove("active");
+
+
+    showMessage(
+      "Enter the total score for this visit."
+    );
+
+  }else{
+
+    keypadMode.style.display=
+      "none";
+
+    dartboardMode.style.display=
+      "block";
+
+    dartboardTab
+      .classList
+      .add("active");
+
+    keypadTab
+      .classList
+      .remove("active");
+
+
+    showMessage(
+      "Tap the board for Dart 1."
+    );
+  }
+}
+
+
+/* ==================================================
+   KEYPAD
+================================================== */
+
+function press(number){
+
+  if(matchFinished){
+    return;
+  }
+
+
+  if(
+    input.length>=3
+  ){
+    return;
+  }
+
+
+  input+=
+    number;
+
+
+  const value=
+    Number(input);
+
+
+  if(
+    value>180
+  ){
+
+    input=
+      "";
+
+    showMessage(
+      "Maximum visit score is 180."
+    );
+  }
+
+
+  updateInput();
+}
+
+
+function clearScore(){
+
+  input=
+    "";
+
+  updateInput();
+}
+
+
+function backspace(){
+
+  input=
+    input.slice(
+      0,
+      -1
+    );
+
+  updateInput();
+}
+
+
+function updateInput(){
+
+  document.getElementById(
+    "scoreDisplay"
+  ).textContent=
+    input===""
+      ? "0"
+      : input;
+}
+
+
+function showMessage(text){
+
+  document.getElementById(
+    "message"
+  ).textContent=
+    text;
+}
+
+
+/* ==================================================
+   DARTBOARD
+================================================== */
+
+const boardNumbers=[
+  20,1,18,4,13,
+  6,10,15,2,17,
+  3,19,7,16,8,
+  11,14,9,12,5
+];
+
+
+const svg=
+  document.getElementById(
+    "dartboard"
+  );
+
+
+const NS=
+  "http://www.w3.org/2000/svg";
+
+
+function polar(
+  radius,
+  angle
+){
+
+  const rad=
+    (
+      angle-90
+    )*
+    Math.PI/
+    180;
+
+
+  return{
+
+    x:
+      radius*
+      Math.cos(rad),
+
+    y:
+      radius*
+      Math.sin(rad)
+  };
+}
+
+
+function ringPath(
+  innerRadius,
+  outerRadius,
+  startAngle,
+  endAngle
+){
+
+  const p1=
+    polar(
+      outerRadius,
+      startAngle
+    );
+
+  const p2=
+    polar(
+      outerRadius,
+      endAngle
+    );
+
+  const p3=
+    polar(
+      innerRadius,
+      endAngle
+    );
+
+  const p4=
+    polar(
+      innerRadius,
+      startAngle
+    );
+
+
+  return[
+    "M",p1.x,p1.y,
+    "A",
+    outerRadius,
+    outerRadius,
+    0,0,1,
+    p2.x,p2.y,
+    "L",
+    p3.x,p3.y,
+    "A",
+    innerRadius,
+    innerRadius,
+    0,0,0,
+    p4.x,p4.y,
+    "Z"
+  ].join(" ");
+}
+
+
+function addSegment(
+  inner,
+  outer,
+  start,
+  end,
+  fill,
+  number,
+  multiplier,
+  label
+){
+
+  const path=
+    document.createElementNS(
+      NS,
+      "path"
+    );
+
+
+  path.setAttribute(
+    "d",
+    ringPath(
+      inner,
+      outer,
+      start,
+      end
+    )
+  );
+
+
+  path.setAttribute(
+    "fill",
+    fill
+  );
+
+
+  path.setAttribute(
+    "stroke",
+    "#777777"
+  );
+
+
+  path.setAttribute(
+    "stroke-width",
+    ".65"
+  );
+
+
+  path.style.cursor=
+    "pointer";
+
+
+  path.addEventListener(
+    "click",
+    function(){
+
+      addDart(
+        number,
+        multiplier,
+        label
+      );
+    }
+  );
+
+
+  svg.appendChild(
+    path
+  );
+}
+
+
+function drawBoard(){
+
+  svg.innerHTML=
+    "";
+
+
+  const surround=
+    document.createElementNS(
+      NS,
+      "circle"
+    );
+
+
+  surround.setAttribute(
+    "cx",
+    "0"
+  );
+
+  surround.setAttribute(
+    "cy",
+    "0"
+  );
+
+  surround.setAttribute(
+    "r",
+    "224"
+  );
+
+  surround.setAttribute(
+    "fill",
+    "#010407"
+  );
+
+  surround.setAttribute(
+    "stroke",
+    "#39a9ff"
+  );
+
+  surround.setAttribute(
+    "stroke-width",
+    "4"
+  );
+
+
+  surround.style.filter=
+    "drop-shadow(0 0 7px rgba(57,169,255,.9))";
+
+
+  svg.appendChild(
+    surround
+  );
+
+
+  for(
+    let i=0;
+    i<20;
+    i++
+  ){
+
+    const number=
+      boardNumbers[i];
+
+    const center=
+      i*18;
+
+    const start=
+      center-9;
+
+    const end=
+      center+9;
+
+    const dark=
+      i%2===0;
+
+
+    const singleColor=
+      dark
+        ? "#090d11"
+        : "#d5c9aa";
+
+
+    const scoreColor=
+      dark
+        ? "#c73b43"
+        : "#21865c";
+
+
+    addSegment(
+      24,
+      103,
+      start,
+      end,
+      singleColor,
+      number,
+      1,
+      "S"+number
+    );
+
+
+    addSegment(
+      103,
+      118,
+      start,
+      end,
+      scoreColor,
+      number,
+      3,
+      "T"+number
+    );
+
+
+    addSegment(
+      118,
+      178,
+      start,
+      end,
+      singleColor,
+      number,
+      1,
+      "S"+number
+    );
+
+
+    addSegment(
+      178,
+      195,
+      start,
+      end,
+      scoreColor,
+      number,
+      2,
+      "D"+number
+    );
+
+
+    const textPoint=
+      polar(
+        211,
+        center
+      );
+
+
+    const text=
+      document.createElementNS(
+        NS,
+        "text"
+      );
+
+
+    text.setAttribute(
+      "x",
+      textPoint.x
+    );
+
+    text.setAttribute(
+      "y",
+      textPoint.y
+    );
+
+    text.setAttribute(
+      "fill",
+      "#39a9ff"
+    );
+
+    text.setAttribute(
+      "font-size",
+      "16"
+    );
+
+    text.setAttribute(
+      "font-weight",
+      "900"
+    );
+
+    text.setAttribute(
+      "text-anchor",
+      "middle"
+    );
+
+    text.setAttribute(
+      "dominant-baseline",
+      "middle"
+    );
+
+
+    text.style.pointerEvents=
+      "none";
+
+
+    text.style.filter=
+      "drop-shadow(0 0 4px rgba(57,169,255,.95))";
+
+
+    text.textContent=
+      number;
+
+
+    svg.appendChild(
+      text
+    );
+  }
+
+
+  const outerBull=
+    document.createElementNS(
+      NS,
+      "circle"
+    );
+
+
+  outerBull.setAttribute(
+    "cx",
+    "0"
+  );
+
+  outerBull.setAttribute(
+    "cy",
+    "0"
+  );
+
+  outerBull.setAttribute(
+    "r",
+    "24"
+  );
+
+  outerBull.setAttribute(
+    "fill",
+    "#21865c"
+  );
+
+  outerBull.setAttribute(
+    "stroke",
+    "#c5c5c5"
+  );
+
+  outerBull.setAttribute(
+    "stroke-width",
+    "1"
+  );
+
+
+  outerBull.style.cursor=
+    "pointer";
+
+
+  outerBull.addEventListener(
+    "click",
+    function(){
+
+      addDart(
+        25,
+        1,
+        "25"
+      );
+    }
+  );
+
+
+  svg.appendChild(
+    outerBull
+  );
+
+
+  const bull=
+    document.createElementNS(
+      NS,
+      "circle"
+    );
+
+
+  bull.setAttribute(
+    "cx",
+    "0"
+  );
+
+  bull.setAttribute(
+    "cy",
+    "0"
+  );
+
+  bull.setAttribute(
+    "r",
+    "10"
+  );
+
+  bull.setAttribute(
+    "fill",
+    "#c73b43"
+  );
+
+  bull.setAttribute(
+    "stroke",
+    "#dddddd"
+  );
+
+  bull.setAttribute(
+    "stroke-width",
+    "1"
+  );
+
+
+  bull.style.cursor=
+    "pointer";
+
+
+  bull.addEventListener(
+    "click",
+    function(){
+
+      addDart(
+        25,
+        2,
+        "BULL"
+      );
+    }
+  );
+
+
+  svg.appendChild(
+    bull
+  );
+}
+
+
+/* ==================================================
+   DART INPUT
+================================================== */
+
+function addDart(
+  number,
+  multiplier,
+  label
+){
+
+  if(matchFinished){
+    return;
+  }
+
+
+  if(
+    currentDarts.length>=3
+  ){
+
+    showMessage(
+      "Three darts entered. Confirm the visit."
+    );
+
+    return;
+  }
+
+
+  const score=
+    number*
+    multiplier;
+
+
+  currentDarts.push({
+
+    number:
+      number,
+
+    multiplier:
+      multiplier,
+
+    score:
+      score,
+
+    label:
+      label
+  });
+
+
+  updateDartDisplay();
+}
+
+
+function addMiss(){
+
+  if(matchFinished){
+    return;
+  }
+
+
+  if(
+    currentDarts.length>=3
+  ){
+
+    showMessage(
+      "Three darts entered. Confirm the visit."
+    );
+
+    return;
+  }
+
+
+  currentDarts.push({
+
+    number:0,
+
+    multiplier:0,
+
+    score:0,
+
+    label:"MISS"
+  });
+
+
+  updateDartDisplay();
+}
+
+
+function undoDart(){
+
+  if(
+    currentDarts.length===0
+  ){
+
+    showMessage(
+      "No dart to undo."
+    );
+
+    return;
+  }
+
+
+  currentDarts.pop();
+
+
+  updateDartDisplay();
+}
+
+
+function updateDartDisplay(){
+
+  for(
+    let i=0;
+    i<3;
+    i++
+  ){
+
+    const el=
+      document.getElementById(
+        "dart"+
+        (i+1)
+      );
+
+
+    if(
+      currentDarts[i]
+    ){
+
+      el.textContent=
+        currentDarts[i].label+
+        " • "+
+        currentDarts[i].score;
+
+    }else{
+
+      el.textContent=
+        "-";
+    }
+  }
+
+
+  const total=
+    currentDarts.reduce(
+      (
+        sum,
+        dart
+      )=>
+        sum+
+        dart.score,
+      0
+    );
+
+
+  document.getElementById(
+    "boardVisitScore"
+  ).textContent=
+    total;
+
+
+  if(
+    currentDarts.length<3
+  ){
+
+    showMessage(
+      "Enter Dart "+
+      (
+        currentDarts.length+
+        1
+      )+
+      "."
+    );
+
+  }else{
+
+    showMessage(
+      "Visit total: "+
+      total+
+      ". Confirm visit."
+    );
+  }
+}
+
+
+/* ==================================================
+   CHECKOUT
+================================================== */
+
+function isDoubleCheckout(){
+
+  if(
+    currentMode!=="dartboard"
+  ){
+
+    return true;
+  }
+
+
+  if(
+    currentDarts.length===0
+  ){
+
+    return false;
+  }
+
+
+  const lastDart=
+    currentDarts[
+      currentDarts.length-
+      1
+    ];
+
+
+  return(
+    lastDart.multiplier===2
+  );
+}
+
+
+function isCheckoutRange(before){
+
+  return(
+    before>=2 &&
+    before<=170
+  );
+}
+
+
+/* ==================================================
+   FIRST 9
+================================================== */
+
+function addToFirst9(
+  score,
+  darts
+){
+
+  if(
+    first9Darts>=9
+  ){
+
+    return;
+  }
+
+
+  const available=
+    9-
+    first9Darts;
+
+
+  const dartsToAdd=
+    Math.min(
+      darts,
+      available
+    );
+
+
+  if(
+    dartsToAdd===darts
+  ){
+
+    first9Points+=
+      score;
+
+  }else if(
+    darts>0
+  ){
+
+    first9Points+=
+      score*
+      (
+        dartsToAdd/
+        darts
+      );
+  }
+
+
+  first9Darts+=
+    dartsToAdd;
+}
+
+
+/* ==================================================
+   GLIDE WEBHOOK STORAGE
+================================================== */
+
+async function sendVisitToGlide(visitData){
+
+  const darts=
+    Array.isArray(visitData.darts)
+      ? visitData.darts
+      : [];
+
+  const query=
+    new URLSearchParams({
+      sessionID: visitData.sessionID || "",
+      email: email,
+      visitNumber: String(visitData.visitNumber || 0),
+      visitScore: String(visitData.visitScore || 0),
+      dartsThrown: String(visitData.dartsThrown || 0),
+      legNumber: String(visitData.legNumber || 1),
+      remainingScore: String(visitData.remainingScore ?? 501),
+      checkoutAttempt: String(Boolean(visitData.checkoutAttempt)),
+      checkoutHit: String(Boolean(visitData.checkoutHit)),
+      checkoutScore: String(visitData.checkoutScore || 0),
+      bust: String(Boolean(visitData.bust)),
+      scoringSource: visitData.scoringSource || "Match",
+      dart1Score: String(darts[0]?.score ?? ""),
+      dart1Segment: darts[0]?.label || "",
+      dart2Score: String(darts[1]?.score ?? ""),
+      dart2Segment: darts[1]?.label || "",
+      dart3Score: String(darts[2]?.score ?? ""),
+      dart3Segment: darts[2]?.label || ""
+    });
+
+  try{
+    const response=
+      await fetch(
+        MATCH_VISIT_WEBHOOK+"?"+query.toString(),
+        {
+          method:"POST",
+          headers:{
+            "Content-Type":"application/json"
+          },
+          body:JSON.stringify({
+            event:"match_visit"
+          })
+        }
+      );
+
+    if(!response.ok){
+      throw new Error(
+        "Webhook returned "+response.status
+      );
+    }
+
+    return true;
+
+  }catch(error){
+    console.error(
+      "DARTIQ Match Visit Storage failed:",
+      error
+    );
+
+    showMessage(
+      "Score recorded locally • Glide sync failed."
+    );
+
+    return false;
+  }
+}
+
+/* ==================================================
+   CONFIRM VISIT
+================================================== */
+
+function confirmVisit(){
+
+  if(matchFinished){
+    return;
+  }
+
+
+  let score=
+    0;
+
+  let dartsThisVisit=
+    3;
+
+
+  if(
+    currentMode==="keypad"
+  ){
+
+    if(
+      input===""
+    ){
+
+      showMessage(
+        "Enter a visit score first."
+      );
+
+      return;
+    }
+
+
+    score=
+      Number(input);
+
+
+    dartsThisVisit=
+      3;
+
+
+    if(
+      score<0 ||
+      score>180
+    ){
+
+      showMessage(
+        "Visit score must be between 0 and 180."
+      );
+
+      return;
+    }
+
+  }else{
+
+    if(
+      currentDarts.length===0
+    ){
+
+      showMessage(
+        "Enter at least one dart first."
+      );
+
+      return;
+    }
+
+
+    score=
+      currentDarts.reduce(
+        (
+          sum,
+          dart
+        )=>
+          sum+
+          dart.score,
+        0
+      );
+
+
+    dartsThisVisit=
+      currentDarts.length;
+  }
+
+
+  matchStarted=
+    true;
+
+
+  const before=
+    remaining;
+
+
+  const after=
+    before-
+    score;
+
+
+  const checkoutAttempt=
+    isCheckoutRange(
+      before
+    );
+
+
+  if(
+    checkoutAttempt
+  ){
+
+    checkoutAttempts++;
+  }
+
+
+  if(
+    after<0
+  ){
+
+    registerBust(
+      dartsThisVisit,
+      "BUST • Score exceeded remaining."
+    );
+
+    return;
+  }
+
+
+  if(
+    after===1
+  ){
+
+    registerBust(
+      dartsThisVisit,
+      "BUST • Cannot leave 1."
+    );
+
+    return;
+  }
+
+
+  if(
+    after===0 &&
+    currentMode==="dartboard" &&
+    !isDoubleCheckout()
+  ){
+
+    registerBust(
+      dartsThisVisit,
+      "BUST • Leg must finish on a double."
+    );
+
+    return;
+  }
+
+
+  remaining=
+    after;
+
+
+  totalPoints+=
+    score;
+
+
+  totalDarts+=
+    dartsThisVisit;
+
+
+  addToFirst9(
+    score,
+    dartsThisVisit
+  );
+
+
+  if(
+    score===180
+  ){
+
+    count180++;
+
+  }else if(
+    score>=140
+  ){
+
+    count140++;
+
+  }else if(
+    score>=100
+  ){
+
+    count100++;
+  }
+
+
+  const visitData={
+
+    sessionID:
+      sessionID,
+
+    visitNumber:
+      ++visitNumber,
+
+    scoringSource:
+      "Match",
+
+    bestOf:
+      bestOf,
+
+    legNumber:
+      currentLeg,
+
+    visitScore:
+      score,
+
+    dartsThrown:
+      dartsThisVisit,
+
+    remainingScore:
+      after,
+
+    checkoutAttempt:
+      checkoutAttempt,
+
+    checkoutHit:
+      after===0,
+
+    checkoutScore:
+      after===0
+        ? before
+        : 0,
+
+    bust:
+      false,
+
+    darts:
+      currentMode==="dartboard"
+        ? [...currentDarts]
+        : []
+  };
+
+
+  sendVisitToGlide(visitData);
+
+
+  if(
+    after===0
+  ){
+
+    checkoutHits++;
+
+
+    if(
+      before>
+      highestCheckout
+    ){
+
+      highestCheckout=
+        before;
+    }
+
+
+    resetCurrentVisit();
+
+
+    updateStats();
+
+
+    completeLeg();
+
+
+    return;
+  }
+
+
+  resetCurrentVisit();
+
+
+  updateStats();
+
+
+  showMessage(
+    "Score recorded • "+
+    remaining+
+    " remaining."
+  );
+}
+
+
+/* ==================================================
+   BUST
+================================================== */
+
+function registerBust(
+  dartsThisVisit,
+  message
+){
+
+  totalDarts+=
+    dartsThisVisit;
+
+
+  addToFirst9(
+    0,
+    dartsThisVisit
+  );
+
+
+  const bustVisitData={
+    sessionID:sessionID,
+    visitNumber:++visitNumber,
+    scoringSource:"Match",
+    bestOf:bestOf,
+    legNumber:currentLeg,
+    visitScore:0,
+    dartsThrown:dartsThisVisit,
+    remainingScore:remaining,
+    checkoutAttempt:isCheckoutRange(remaining),
+    checkoutHit:false,
+    checkoutScore:0,
+    bust:true,
+    darts:currentMode==="dartboard"
+      ? [...currentDarts]
+      : []
+  };
+
+
+  sendVisitToGlide(bustVisitData);
+
+
+  resetCurrentVisit();
+
+
+  updateStats();
+
+
+  showMessage(
+    message+
+    " "+
+    remaining+
+    " remaining."
+  );
+}
+
+
+/* ==================================================
+   COMPLETE LEG
+================================================== */
+
+function completeLeg(){
+
+  legsWon++;
+
+
+  updateStats();
+
+
+  if(
+    legsWon>=
+    legsToWin
+  ){
+
+    completeMatch();
+
+    return;
+  }
+
+
+  currentLeg++;
+
+
+  remaining=
+    501;
+
+
+  resetCurrentVisit();
+
+
+  updateStats();
+
+
+  showMessage(
+    "LEG WON • "+
+    legsWon+
+    " of "+
+    legsToWin+
+    " • Starting Leg "+
+    currentLeg+
+    " at 501."
+  );
+}
+
+
+/* ==================================================
+   MATCH COMPLETE
+================================================== */
+
+function completeMatch(){
+
+  matchFinished=
+    true;
+
+
+  remaining=
+    0;
+
+
+  updateStats();
+
+
+  const average=
+    totalDarts>0
+      ?
+        (
+          totalPoints/
+          totalDarts*
+          3
+        ).toFixed(2)
+      :
+        "0.00";
+
+
+  const first9=
+    first9Darts>0
+      ?
+        (
+          first9Points/
+          first9Darts*
+          3
+        ).toFixed(2)
+      :
+        "0.00";
+
+
+  const checkoutPercentage=
+    checkoutAttempts>0
+      ?
+        (
+          checkoutHits/
+          checkoutAttempts*
+          100
+        ).toFixed(1)
+      :
+        "0.0";
+
+
+  document.getElementById(
+    "matchComplete"
+  ).style.display=
+    "block";
+
+
+  document.getElementById(
+    "matchCompleteText"
+  ).innerHTML=
+
+    "<strong>BO"+
+    bestOf+
+    " COMPLETE</strong>"+
+
+    "<br><br>"+
+
+    legsWon+
+    " legs won"+
+
+    "<br>"+
+
+    "Average: "+
+    average+
+
+    "<br>"+
+
+    "First 9: "+
+    first9+
+
+    "<br>"+
+
+    "180s: "+
+    count180+
+
+    " • 140+: "+
+    count140+
+
+    " • 100+: "+
+    count100+
+
+    "<br>"+
+
+    "Checkout: "+
+    checkoutPercentage+
+    "%"+
+
+    "<br>"+
+
+    "Highest checkout: "+
+    highestCheckout;
+
+
+  showMessage(
+    "MATCH COMPLETE • Session statistics ready."
+  );
+
+
+  const sessionResult={
+
+    sessionID:
+      sessionID,
+
+    scoringSource:
+      "Match",
+
+    bestOf:
+      bestOf,
+
+    legsWon:
+      legsWon,
+
+    totalPoints:
+      totalPoints,
+
+    totalDarts:
+      totalDarts,
+
+    average:
+      Number(
+        average
+      ),
+
+    first9Average:
+      Number(
+        first9
+      ),
+
+    count100:
+      count100,
+
+    count140:
+      count140,
+
+    count180:
+      count180,
+
+    checkoutAttempts:
+      checkoutAttempts,
+
+    checkoutHits:
+      checkoutHits,
+
+    checkoutPercentage:
+      Number(
+        checkoutPercentage
+      ),
+
+    highestCheckout:
+      highestCheckout
+  };
+}
+
+
+/* ==================================================
+   NEW MATCH
+================================================== */
+
+function newMatch(){
+
+  remaining=
+    501;
+
+
+  currentLeg=
+    1;
+
+
+  legsWon=
+    0;
+
+
+  totalPoints=
+    0;
+
+
+  totalDarts=
+    0;
+
+
+  first9Points=
+    0;
+
+
+  first9Darts=
+    0;
+
+
+  count100=
+    0;
+
+
+  count140=
+    0;
+
+
+  count180=
+    0;
+
+
+  checkoutAttempts=
+    0;
+
+
+  checkoutHits=
+    0;
+
+
+  highestCheckout=
+    0;
+
+
+  input=
+    "";
+
+
+  currentDarts=
+    [];
+
+
+  matchFinished=
+    false;
+
+
+  matchStarted=
+    false;
+
+
+  visitNumber=
+    0;
+
+
+  document.getElementById(
+    "matchComplete"
+  ).style.display=
+    "none";
+
+
+  resetCurrentVisit();
+
+
+  updateStats();
+
+
+  showMessage(
+    "Choose BO3, BO5, BO7 or BO9 and start scoring."
+  );
+}
+
+
+/* ==================================================
+   RESET VISIT
+================================================== */
+
+function resetCurrentVisit(){
+
+  input=
+    "";
+
+
+  currentDarts=
+    [];
+
+
+  updateInput();
+
+
+  updateDartDisplay();
+}
+
+
+/* ==================================================
+   UPDATE STATS
+================================================== */
+
+function updateStats(){
+
+  document.getElementById(
+    "remaining"
+  ).textContent=
+    remaining;
+
+
+  document.getElementById(
+    "legNumber"
+  ).textContent=
+    currentLeg;
+
+
+  document.getElementById(
+    "legNumberTop"
+  ).textContent=
+    currentLeg;
+
+
+  document.getElementById(
+    "legsWon"
+  ).textContent=
+    legsWon;
+
+
+  document.getElementById(
+    "dartsThrown"
+  ).textContent=
+    totalDarts;
+
+
+  let avg=
+    0;
+
+
+  if(
+    totalDarts>0
+  ){
+
+    avg=
+      (
+        totalPoints/
+        totalDarts
+      )*
+      3;
+  }
+
+
+  document.getElementById(
+    "average"
+  ).textContent=
+    avg.toFixed(2);
+
+
+  let first9Avg=
+    0;
+
+
+  if(
+    first9Darts>0
+  ){
+
+    first9Avg=
+      (
+        first9Points/
+        first9Darts
+      )*
+      3;
+  }
+
+
+  document.getElementById(
+    "first9Average"
+  ).textContent=
+    first9Avg.toFixed(2);
+
+
+  document.getElementById(
+    "stat100"
+  ).textContent=
+    count100;
+
+
+  document.getElementById(
+    "stat140"
+  ).textContent=
+    count140;
+
+
+  document.getElementById(
+    "stat180"
+  ).textContent=
+    count180;
+
+
+  document.getElementById(
+    "checkoutHits"
+  ).textContent=
+    checkoutHits;
+
+
+  let checkoutPercentage=
+    0;
+
+
+  if(
+    checkoutAttempts>0
+  ){
+
+    checkoutPercentage=
+      (
+        checkoutHits/
+        checkoutAttempts
+      )*
+      100;
+  }
+
+
+  document.getElementById(
+    "checkoutPct"
+  ).textContent=
+    checkoutPercentage.toFixed(1)+
+    "%";
+
+
+  document.getElementById(
+    "highestCheckout"
+  ).textContent=
+    highestCheckout;
+
+
+  document.getElementById(
+    "legsTarget"
+  ).textContent=
+    legsToWin;
+}
+
+
+/* ==================================================
+   START
+================================================== */
+
+drawBoard();
+
+updateFormatUI();
+
+updateInput();
+
+updateDartDisplay();
+
+updateStats();
+
+showMessage(
+  "BO"+
+  bestOf+
+  " selected • First to "+
+  legsToWin+
+  " legs."
+);
+
+</script>
+
+</body>
+</html>
