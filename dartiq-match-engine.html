@@ -1139,6 +1139,54 @@ const sessionID=
   param("session") ||
   "SESSION";
 
+const email=
+  param("email");
+
+const WEBHOOK_URL=
+  "https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/5415568e-2eca-408f-a460-572b257d1cdf";
+
+let visitNumber=
+  0;
+
+async function sendVisitToGlide(visitData){
+
+  try{
+
+    const response=
+      await fetch(
+        WEBHOOK_URL,
+        {
+          method:"POST",
+          headers:{
+            "Content-Type":"application/json"
+          },
+          body:JSON.stringify(visitData)
+        }
+      );
+
+    if(!response.ok){
+      throw new Error(
+        "Webhook returned "+response.status
+      );
+    }
+
+    return true;
+
+  }catch(error){
+
+    console.error(
+      "DARTIQ Match Visit Storage failed:",
+      error
+    );
+
+    showMessage(
+      "Score recorded locally • Glide sync failed."
+    );
+
+    return false;
+  }
+}
+
 
 let bestOf=
   Number(
@@ -2451,10 +2499,33 @@ function confirmVisit(){
   }
 
 
+  visitNumber++;
+
+  const dart1=
+    currentMode==="dartboard" && currentDarts[0]
+      ? currentDarts[0]
+      : null;
+
+  const dart2=
+    currentMode==="dartboard" && currentDarts[1]
+      ? currentDarts[1]
+      : null;
+
+  const dart3=
+    currentMode==="dartboard" && currentDarts[2]
+      ? currentDarts[2]
+      : null;
+
   const visitData={
 
     sessionID:
       sessionID,
+
+    email:
+      email,
+
+    visitNumber:
+      visitNumber,
 
     scoringSource:
       "Match",
@@ -2488,11 +2559,28 @@ function confirmVisit(){
     bust:
       false,
 
-    darts:
-      currentMode==="dartboard"
-        ? [...currentDarts]
-        : []
+    dart1Score:
+      dart1 ? dart1.score : "",
+
+    dart1Segment:
+      dart1 ? dart1.label : "",
+
+    dart2Score:
+      dart2 ? dart2.score : "",
+
+    dart2Segment:
+      dart2 ? dart2.label : "",
+
+    dart3Score:
+      dart3 ? dart3.score : "",
+
+    dart3Segment:
+      dart3 ? dart3.label : ""
   };
+
+  sendVisitToGlide(
+    visitData
+  );
 
 
   if(
@@ -2547,6 +2635,109 @@ function registerBust(
   dartsThisVisit,
   message
 ){
+
+  const attemptedScore=
+    currentMode==="dartboard"
+      ? currentDarts.reduce(
+          (
+            sum,
+            dart
+          )=>
+            sum+
+            dart.score,
+          0
+        )
+      : Number(input || 0);
+
+  const checkoutAttempt=
+    isCheckoutRange(
+      remaining
+    );
+
+  const dart1=
+    currentMode==="dartboard" && currentDarts[0]
+      ? currentDarts[0]
+      : null;
+
+  const dart2=
+    currentMode==="dartboard" && currentDarts[1]
+      ? currentDarts[1]
+      : null;
+
+  const dart3=
+    currentMode==="dartboard" && currentDarts[2]
+      ? currentDarts[2]
+      : null;
+
+  visitNumber++;
+
+  const visitData={
+
+    sessionID:
+      sessionID,
+
+    email:
+      email,
+
+    visitNumber:
+      visitNumber,
+
+    scoringSource:
+      "Match",
+
+    bestOf:
+      bestOf,
+
+    legNumber:
+      currentLeg,
+
+    visitScore:
+      0,
+
+    dartsThrown:
+      dartsThisVisit,
+
+    remainingScore:
+      remaining,
+
+    checkoutAttempt:
+      checkoutAttempt,
+
+    checkoutHit:
+      false,
+
+    checkoutScore:
+      0,
+
+    bust:
+      true,
+
+    dart1Score:
+      dart1 ? dart1.score : "",
+
+    dart1Segment:
+      dart1 ? dart1.label : "",
+
+    dart2Score:
+      dart2 ? dart2.score : "",
+
+    dart2Segment:
+      dart2 ? dart2.label : "",
+
+    dart3Score:
+      dart3 ? dart3.score : "",
+
+    dart3Segment:
+      dart3 ? dart3.label : "",
+
+    attemptedScore:
+      attemptedScore
+  };
+
+  sendVisitToGlide(
+    visitData
+  );
+
 
   totalDarts+=
     dartsThisVisit;
@@ -2842,6 +3033,10 @@ function newMatch(){
 
 
   highestCheckout=
+    0;
+
+
+  visitNumber=
     0;
 
 
