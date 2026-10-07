@@ -2304,19 +2304,36 @@ async function sendVisitToGlide(visitData){
     });
 
   try{
-    const response=
-      await fetch(
-        MATCH_VISIT_WEBHOOK+"?"+query.toString(),
-        {
-          method:"POST",
-          headers:{
-            "Content-Type":"application/json"
-          },
-          body:JSON.stringify({
-            event:"match_visit"
-          })
-        }
-      );
+   const response=
+  await fetch(
+    MATCH_VISIT_WEBHOOK,
+    {
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({
+        sessionID: visitData.sessionID || "",
+        email: email,
+        visitNumber: visitData.visitNumber || 0,
+        visitScore: visitData.visitScore || 0,
+        dartsThrown: visitData.dartsThrown || 0,
+        legNumber: visitData.legNumber || 1,
+        remainingScore: visitData.remainingScore ?? 501,
+        checkoutAttempt: Boolean(visitData.checkoutAttempt),
+        checkoutHit: Boolean(visitData.checkoutHit),
+        checkoutScore: visitData.checkoutScore || 0,
+        bust: Boolean(visitData.bust),
+        scoringSource: visitData.scoringSource || "Match",
+        dart1Score: darts[0]?.score ?? "",
+        dart1Segment: darts[0]?.label || "",
+        dart2Score: darts[1]?.score ?? "",
+        dart2Segment: darts[1]?.label || "",
+        dart3Score: darts[2]?.score ?? "",
+        dart3Segment: darts[2]?.label || ""
+      })
+    }
+  );
 
     if(!response.ok){
       throw new Error(
