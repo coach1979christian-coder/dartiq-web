@@ -3,23 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-
 <title>DARTIQ Match Play</title>
 
 <style>
 :root{
   --bg:#02060b;
   --panel:#071421;
-  --panel2:#0b1d2d;
   --line:#174568;
   --blue:#39a9ff;
-  --text:#ffffff;
+  --text:#fff;
   --muted:#8fa9bd;
   --danger:#ff6b72;
 }
-
 *{box-sizing:border-box}
-
 html,body{
   margin:0;
   padding:0;
@@ -29,9 +25,7 @@ html,body{
   color:var(--text);
   font-family:Arial,Helvetica,sans-serif;
 }
-
 body{padding:8px}
-
 .engine{
   width:100%;
   max-width:680px;
@@ -40,30 +34,15 @@ body{padding:8px}
   border-radius:22px;
   padding:14px;
 }
-
-.brand{
-  text-align:center;
-  padding:5px 4px 14px;
-}
-
+.brand{text-align:center;padding:5px 4px 14px}
 .brand-small{
   color:var(--blue);
   font-size:12px;
   font-weight:900;
   letter-spacing:5px;
 }
-
-.brand h1{
-  margin:5px 0 3px;
-  font-size:29px;
-  line-height:1;
-}
-
-.format-selector{
-  margin:14px auto 10px;
-  max-width:420px;
-}
-
+.brand h1{margin:5px 0 3px;font-size:29px;line-height:1}
+.format-selector{margin:14px auto 10px;max-width:420px}
 .format-label{
   color:var(--muted);
   font-size:9px;
@@ -71,13 +50,11 @@ body{padding:8px}
   letter-spacing:1.2px;
   margin-bottom:7px;
 }
-
 .format-buttons{
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:6px;
 }
-
 .format-btn{
   border:1px solid #24577b;
   background:#06111b;
@@ -88,14 +65,12 @@ body{padding:8px}
   font-weight:900;
   cursor:pointer;
 }
-
 .format-btn.active{
   background:var(--blue);
   color:#00101c;
   border-color:var(--blue);
   box-shadow:0 0 12px rgba(57,169,255,.4);
 }
-
 .match-format{
   color:var(--blue);
   font-size:12px;
@@ -103,14 +78,12 @@ body{padding:8px}
   letter-spacing:1.5px;
   margin-top:8px;
 }
-
 .match-progress{
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:7px;
   margin-bottom:12px;
 }
-
 .match-card{
   background:linear-gradient(180deg,#081827,#06121e);
   border:1px solid rgba(57,169,255,.35);
@@ -118,20 +91,17 @@ body{padding:8px}
   padding:10px 6px;
   text-align:center;
 }
-
 .match-label{
   color:var(--blue);
   font-size:8px;
   font-weight:900;
   letter-spacing:1px;
 }
-
 .match-value{
   font-size:25px;
   font-weight:900;
   margin-top:4px;
 }
-
 .live-panel{
   border:1px solid rgba(57,169,255,.4);
   border-radius:15px;
@@ -139,7 +109,6 @@ body{padding:8px}
   background:linear-gradient(180deg,#061523,#030b13);
   box-shadow:0 0 20px rgba(57,169,255,.08);
 }
-
 .live-header{
   display:flex;
   justify-content:space-between;
@@ -147,13 +116,7 @@ body{padding:8px}
   gap:10px;
   margin-bottom:10px;
 }
-
-.live-title{
-  font-size:22px;
-  font-weight:900;
-  line-height:1;
-}
-
+.live-title{font-size:22px;font-weight:900;line-height:1}
 .live-sub{
   color:var(--blue);
   font-size:9px;
@@ -161,14 +124,12 @@ body{padding:8px}
   letter-spacing:.7px;
   margin-top:4px;
 }
-
 .mode-switch{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:6px;
   min-width:205px;
 }
-
 .mode-button{
   border:1px solid #24577b;
   background:#06111b;
@@ -179,27 +140,23 @@ body{padding:8px}
   font-weight:900;
   cursor:pointer;
 }
-
 .mode-button.active{
   background:var(--blue);
   color:#00101c;
   border-color:var(--blue);
   box-shadow:0 0 12px rgba(57,169,255,.4);
 }
-
 .practice-grid{
   display:grid;
   grid-template-columns:170px 1fr;
   gap:10px;
   align-items:start;
 }
-
 .score-column{
   display:flex;
   flex-direction:column;
   gap:7px;
 }
-
 .remaining-card{
   border:1px solid rgba(57,169,255,.35);
   border-radius:11px;
@@ -207,21 +164,18 @@ body{padding:8px}
   background:#071727;
   text-align:center;
 }
-
 .score-label{
   color:var(--blue);
   font-size:9px;
   font-weight:900;
   letter-spacing:1px;
 }
-
 .remaining{
   font-size:48px;
   line-height:1;
   font-weight:900;
   margin-top:5px;
 }
-
 .mini-stat{
   display:grid;
   grid-template-columns:34px 1fr;
@@ -231,7 +185,6 @@ body{padding:8px}
   border-radius:10px;
   padding:7px;
 }
-
 .mini-icon{
   width:28px;
   height:28px;
@@ -244,13 +197,11 @@ body{padding:8px}
   font-size:12px;
   font-weight:900;
 }
-
 .mini-value{
   text-align:center;
   font-size:18px;
   font-weight:900;
 }
-
 .mini-label{
   text-align:center;
   color:var(--blue);
@@ -259,21 +210,18 @@ body{padding:8px}
   text-transform:uppercase;
   letter-spacing:.7px;
 }
-
 .session-small{
   border:1px solid rgba(57,169,255,.22);
   border-radius:9px;
   padding:7px;
   background:#06131f;
 }
-
 .session-label{
   color:var(--blue);
   font-size:8px;
   font-weight:900;
   letter-spacing:1px;
 }
-
 .session-id{
   color:var(--muted);
   font-size:9px;
@@ -282,9 +230,7 @@ body{padding:8px}
   white-space:nowrap;
   margin-top:3px;
 }
-
 .input-column{min-width:0}
-
 .score-display{
   background:#010509;
   border:1px solid #174568;
@@ -297,13 +243,11 @@ body{padding:8px}
   font-weight:900;
   margin-bottom:8px;
 }
-
 .keypad{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:6px;
 }
-
 .key{
   border:1px solid #1b4260;
   background:#0b2031;
@@ -314,20 +258,16 @@ body{padding:8px}
   font-weight:900;
   cursor:pointer;
 }
-
 .key:active{transform:scale(.97)}
 .clear{color:#ff737a}
 .back{color:#b8d9ef}
-
 #dartboardMode{display:none}
-
 .dart-slots{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:5px;
   margin-bottom:7px;
 }
-
 .dart-slot{
   background:#010509;
   border:1px solid #173d59;
@@ -335,20 +275,17 @@ body{padding:8px}
   padding:6px 2px;
   text-align:center;
 }
-
 .dart-slot-label{
   color:var(--muted);
   font-size:7px;
   letter-spacing:.8px;
 }
-
 .dart-slot-value{
   font-size:11px;
   font-weight:900;
   margin-top:3px;
   min-height:14px;
 }
-
 .dartboard-wrap{
   position:relative;
   width:100%;
@@ -358,7 +295,6 @@ body{padding:8px}
   user-select:none;
   touch-action:manipulation;
 }
-
 #dartboard{
   width:100%;
   height:100%;
@@ -366,13 +302,11 @@ body{padding:8px}
   cursor:crosshair;
   filter:drop-shadow(0 0 9px rgba(57,169,255,.4));
 }
-
 .board-actions{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:6px;
 }
-
 .board-action{
   border:1px solid #1c496a;
   background:#0b2031;
@@ -383,9 +317,7 @@ body{padding:8px}
   font-weight:900;
   cursor:pointer;
 }
-
 .board-action.danger{color:#ff7777}
-
 .submit{
   width:100%;
   border:none;
@@ -399,7 +331,6 @@ body{padding:8px}
   cursor:pointer;
   box-shadow:0 0 12px rgba(57,169,255,.25);
 }
-
 .opponent-leg{
   width:100%;
   border:1px solid #ff6b72;
@@ -412,9 +343,6 @@ body{padding:8px}
   font-weight:900;
   cursor:pointer;
 }
-
-.opponent-leg:active{transform:scale(.99)}
-
 .message{
   min-height:30px;
   margin-top:8px;
@@ -423,16 +351,13 @@ body{padding:8px}
   font-size:10px;
   line-height:1.4;
 }
-
 .performance{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:6px;
   margin-top:9px;
 }
-
 .performance.second{margin-top:6px}
-
 .performance-card{
   border:1px solid rgba(57,169,255,.25);
   border-radius:9px;
@@ -440,18 +365,12 @@ body{padding:8px}
   padding:7px;
   text-align:center;
 }
-
-.performance-value{
-  font-size:16px;
-  font-weight:900;
-}
-
+.performance-value{font-size:16px;font-weight:900}
 .performance-label{
   color:var(--muted);
   font-size:8px;
   margin-top:2px;
 }
-
 .match-complete{
   display:none;
   margin-top:10px;
@@ -462,19 +381,16 @@ body{padding:8px}
   text-align:center;
   box-shadow:0 0 18px rgba(57,169,255,.18);
 }
-
 .match-complete-title{
   color:var(--blue);
   font-size:20px;
   font-weight:900;
 }
-
 .match-complete-text{
   margin-top:7px;
   font-size:12px;
   line-height:1.5;
 }
-
 .new-match{
   margin-top:12px;
   width:100%;
@@ -486,7 +402,6 @@ body{padding:8px}
   font-weight:900;
   cursor:pointer;
 }
-
 .footer{
   text-align:center;
   padding:12px 4px 3px;
@@ -495,70 +410,39 @@ body{padding:8px}
   letter-spacing:1.5px;
 }
 
-/* MOBILE ADJUSTMENT */
 @media(max-width:560px){
-
   body{padding:5px}
-
-  .engine{
-    padding:10px;
-    border-radius:16px;
-  }
-
+  .engine{padding:10px;border-radius:16px}
   .brand h1{font-size:25px}
   .live-title{font-size:18px}
   .live-sub{font-size:7px}
-
   .mode-switch{min-width:170px}
-
-  .mode-button{
-    padding:8px 4px;
-    font-size:8px;
-  }
-
-  .practice-grid{
-    grid-template-columns:120px 1fr;
-    gap:7px;
-  }
-
+  .mode-button{padding:8px 4px;font-size:8px}
+  .practice-grid{grid-template-columns:120px 1fr;gap:7px}
   .remaining{font-size:40px}
   .mini-value{font-size:15px}
-
-  /* Reduced from almost full-width to 86% */
   .dartboard-wrap{
     width:86%;
     max-width:360px;
     margin:0 auto 8px;
   }
-
   .engine.dartboard-active .practice-grid{
     grid-template-columns:1fr;
   }
-
   .engine.dartboard-active .score-column{
     display:grid;
     grid-template-columns:repeat(2,1fr);
     gap:7px;
   }
-
   .engine.dartboard-active .remaining-card,
   .engine.dartboard-active .session-small{
-    grid-column:1 / -1;
+    grid-column:1/-1;
   }
 }
-
 @media(max-width:390px){
-
-  .practice-grid{
-    grid-template-columns:105px 1fr;
-  }
-
+  .practice-grid{grid-template-columns:105px 1fr}
   .mode-switch{min-width:155px}
-
-  .format-btn{
-    font-size:10px;
-    padding:9px 2px;
-  }
+  .format-btn{font-size:10px;padding:9px 2px}
 }
 </style>
 </head>
@@ -568,302 +452,231 @@ body{padding:8px}
 <div class="engine">
 
 <header class="brand">
+  <div class="brand-small">DARTIQ</div>
+  <h1>MATCH PLAY</h1>
 
-<div class="brand-small">DARTIQ</div>
+  <div class="format-selector">
+    <div class="format-label">CHOOSE MATCH FORMAT</div>
+    <div class="format-buttons">
+      <button class="format-btn" data-format="3" onclick="selectFormat(3,this)">BO3</button>
+      <button class="format-btn active" data-format="5" onclick="selectFormat(5,this)">BO5</button>
+      <button class="format-btn" data-format="7" onclick="selectFormat(7,this)">BO7</button>
+      <button class="format-btn" data-format="9" onclick="selectFormat(9,this)">BO9</button>
+    </div>
+  </div>
 
-<h1>MATCH PLAY</h1>
-
-<div class="format-selector">
-
-<div class="format-label">CHOOSE MATCH FORMAT</div>
-
-<div class="format-buttons">
-
-<button class="format-btn" data-format="3" onclick="selectFormat(3,this)">
-BO3
-</button>
-
-<button class="format-btn active" data-format="5" onclick="selectFormat(5,this)">
-BO5
-</button>
-
-<button class="format-btn" data-format="7" onclick="selectFormat(7,this)">
-BO7
-</button>
-
-<button class="format-btn" data-format="9" onclick="selectFormat(9,this)">
-BO9
-</button>
-
-</div>
-</div>
-
-<div class="match-format" id="matchFormat">
-BEST OF 5 LEGS • FIRST TO 3
-</div>
-
+  <div class="match-format" id="matchFormat">
+    BEST OF 5 LEGS • FIRST TO 3
+  </div>
 </header>
 
 <div class="match-progress">
+  <div class="match-card">
+    <div class="match-label">LEG</div>
+    <div class="match-value" id="legNumberTop">1</div>
+  </div>
 
-<div class="match-card">
-<div class="match-label">LEG</div>
-<div class="match-value" id="legNumberTop">1</div>
-</div>
+  <div class="match-card">
+    <div class="match-label">LEGS WON</div>
+    <div class="match-value" id="legsWon">0</div>
+  </div>
 
-<div class="match-card">
-<div class="match-label">LEGS WON</div>
-<div class="match-value" id="legsWon">0</div>
-</div>
+  <div class="match-card">
+    <div class="match-label">OPPONENT</div>
+    <div class="match-value" id="legsLost">0</div>
+  </div>
 
-<div class="match-card">
-<div class="match-label">OPPONENT</div>
-<div class="match-value" id="legsLost">0</div>
-</div>
-
-<div class="match-card">
-<div class="match-label">TO WIN</div>
-<div class="match-value" id="legsTarget">3</div>
-</div>
-
+  <div class="match-card">
+    <div class="match-label">TO WIN</div>
+    <div class="match-value" id="legsTarget">3</div>
+  </div>
 </div>
 
 <section class="live-panel">
 
 <div class="live-header">
+  <div>
+    <div class="live-title">LIVE MATCH</div>
+    <div class="live-sub">ENTER YOUR SCORE</div>
+  </div>
 
-<div>
-<div class="live-title">LIVE MATCH</div>
-<div class="live-sub">ENTER YOUR SCORE</div>
-</div>
-
-<div class="mode-switch">
-
-<button
-class="mode-button active"
-id="keypadTab"
-onclick="setMode('keypad')">
-▦ KEYPAD
-</button>
-
-<button
-class="mode-button"
-id="dartboardTab"
-onclick="setMode('dartboard')">
-🎯 DARTBOARD
-</button>
-
-</div>
+  <div class="mode-switch">
+    <button class="mode-button active" id="keypadTab" onclick="setMode('keypad')">▦ KEYPAD</button>
+    <button class="mode-button" id="dartboardTab" onclick="setMode('dartboard')">🎯 DARTBOARD</button>
+  </div>
 </div>
 
 <div class="practice-grid">
 
 <div class="score-column">
 
-<div class="remaining-card">
-<div class="score-label">REMAINING</div>
-<div class="remaining" id="remaining">501</div>
-</div>
+  <div class="remaining-card">
+    <div class="score-label">REMAINING</div>
+    <div class="remaining" id="remaining">501</div>
+  </div>
 
-<div class="mini-stat">
-<div class="mini-icon">#</div>
-<div>
-<div class="mini-label">LEG</div>
-<div class="mini-value" id="legNumber">1</div>
-</div>
-</div>
+  <div class="mini-stat">
+    <div class="mini-icon">#</div>
+    <div>
+      <div class="mini-label">LEG</div>
+      <div class="mini-value" id="legNumber">1</div>
+    </div>
+  </div>
 
-<div class="mini-stat">
-<div class="mini-icon">Ø</div>
-<div>
-<div class="mini-label">AVERAGE</div>
-<div class="mini-value" id="average">0.00</div>
-</div>
-</div>
+  <div class="mini-stat">
+    <div class="mini-icon">Ø</div>
+    <div>
+      <div class="mini-label">AVERAGE</div>
+      <div class="mini-value" id="average">0.00</div>
+    </div>
+  </div>
 
-<div class="mini-stat">
-<div class="mini-icon">9</div>
-<div>
-<div class="mini-label">FIRST 9</div>
-<div class="mini-value" id="first9Average">0.00</div>
-</div>
-</div>
+  <div class="mini-stat">
+    <div class="mini-icon">9</div>
+    <div>
+      <div class="mini-label">FIRST 9</div>
+      <div class="mini-value" id="first9Average">0.00</div>
+    </div>
+  </div>
 
-<div class="mini-stat">
-<div class="mini-icon">3</div>
-<div>
-<div class="mini-label">DARTS</div>
-<div class="mini-value" id="dartsThrown">0</div>
-</div>
-</div>
+  <div class="mini-stat">
+    <div class="mini-icon">3</div>
+    <div>
+      <div class="mini-label">DARTS</div>
+      <div class="mini-value" id="dartsThrown">0</div>
+    </div>
+  </div>
 
-<div class="session-small">
-<div class="session-label">ACTIVE SESSION</div>
-<div class="session-id" id="sessionID">SESSION</div>
-</div>
+  <div class="session-small">
+    <div class="session-label">ACTIVE SESSION</div>
+    <div class="session-id" id="sessionID">SESSION</div>
+  </div>
 
 </div>
 
 <div class="input-column">
 
 <div id="keypadMode">
+  <div class="score-display" id="scoreDisplay">0</div>
 
-<div class="score-display" id="scoreDisplay">0</div>
+  <div class="keypad">
+    <button class="key" onclick="press('1')">1</button>
+    <button class="key" onclick="press('2')">2</button>
+    <button class="key" onclick="press('3')">3</button>
 
-<div class="keypad">
+    <button class="key" onclick="press('4')">4</button>
+    <button class="key" onclick="press('5')">5</button>
+    <button class="key" onclick="press('6')">6</button>
 
-<button class="key" onclick="press('1')">1</button>
-<button class="key" onclick="press('2')">2</button>
-<button class="key" onclick="press('3')">3</button>
+    <button class="key" onclick="press('7')">7</button>
+    <button class="key" onclick="press('8')">8</button>
+    <button class="key" onclick="press('9')">9</button>
 
-<button class="key" onclick="press('4')">4</button>
-<button class="key" onclick="press('5')">5</button>
-<button class="key" onclick="press('6')">6</button>
-
-<button class="key" onclick="press('7')">7</button>
-<button class="key" onclick="press('8')">8</button>
-<button class="key" onclick="press('9')">9</button>
-
-<button class="key clear" onclick="clearScore()">C</button>
-<button class="key" onclick="press('0')">0</button>
-<button class="key back" onclick="backspace()">⌫</button>
-
-</div>
+    <button class="key clear" onclick="clearScore()">C</button>
+    <button class="key" onclick="press('0')">0</button>
+    <button class="key back" onclick="backspace()">⌫</button>
+  </div>
 </div>
 
 <div id="dartboardMode">
 
-<div class="dart-slots">
+  <div class="dart-slots">
+    <div class="dart-slot">
+      <div class="dart-slot-label">DART 1</div>
+      <div class="dart-slot-value" id="dart1">-</div>
+    </div>
 
-<div class="dart-slot">
-<div class="dart-slot-label">DART 1</div>
-<div class="dart-slot-value" id="dart1">-</div>
-</div>
+    <div class="dart-slot">
+      <div class="dart-slot-label">DART 2</div>
+      <div class="dart-slot-value" id="dart2">-</div>
+    </div>
 
-<div class="dart-slot">
-<div class="dart-slot-label">DART 2</div>
-<div class="dart-slot-value" id="dart2">-</div>
-</div>
+    <div class="dart-slot">
+      <div class="dart-slot-label">DART 3</div>
+      <div class="dart-slot-value" id="dart3">-</div>
+    </div>
+  </div>
 
-<div class="dart-slot">
-<div class="dart-slot-label">DART 3</div>
-<div class="dart-slot-value" id="dart3">-</div>
-</div>
+  <div class="score-display">
+    <span id="boardVisitScore">0</span>
+  </div>
 
-</div>
+  <div class="dartboard-wrap">
+    <svg id="dartboard" viewBox="-230 -230 460 460" aria-label="Interactive DARTIQ dartboard"></svg>
+  </div>
 
-<div class="score-display">
-<span id="boardVisitScore">0</span>
-</div>
-
-<div class="dartboard-wrap">
-
-<svg
-id="dartboard"
-viewBox="-230 -230 460 460"
-aria-label="Interactive DARTIQ dartboard">
-</svg>
-
-</div>
-
-<div class="board-actions">
-
-<button class="board-action" onclick="addMiss()">
-MISS
-</button>
-
-<button class="board-action danger" onclick="undoDart()">
-UNDO DART
-</button>
+  <div class="board-actions">
+    <button class="board-action" onclick="addMiss()">MISS</button>
+    <button class="board-action danger" onclick="undoDart()">UNDO DART</button>
+  </div>
 
 </div>
 
-</div>
+<button class="submit" onclick="confirmVisit()">CONFIRM VISIT</button>
 
-<button
-class="submit"
-onclick="confirmVisit()">
-CONFIRM VISIT
-</button>
-
-<button
-class="opponent-leg"
-onclick="opponentWonLeg()">
-OPPONENT WON LEG
+<button class="opponent-leg" onclick="opponentWonLeg()">
+  OPPONENT WON LEG
 </button>
 
 <div class="message" id="message">
-Choose BO3, BO5, BO7 or BO9 and start scoring.
+  Choose BO3, BO5, BO7 or BO9 and start scoring.
 </div>
 
 </div>
 </div>
 
 <div class="performance">
+  <div class="performance-card">
+    <div class="performance-value" id="stat100">0</div>
+    <div class="performance-label">100+</div>
+  </div>
 
-<div class="performance-card">
-<div class="performance-value" id="stat100">0</div>
-<div class="performance-label">100+</div>
-</div>
+  <div class="performance-card">
+    <div class="performance-value" id="stat140">0</div>
+    <div class="performance-label">140+</div>
+  </div>
 
-<div class="performance-card">
-<div class="performance-value" id="stat140">0</div>
-<div class="performance-label">140+</div>
-</div>
-
-<div class="performance-card">
-<div class="performance-value" id="stat180">0</div>
-<div class="performance-label">180</div>
-</div>
-
+  <div class="performance-card">
+    <div class="performance-value" id="stat180">0</div>
+    <div class="performance-label">180</div>
+  </div>
 </div>
 
 <div class="performance second">
+  <div class="performance-card">
+    <div class="performance-value" id="checkoutHits">0</div>
+    <div class="performance-label">CHECKOUT HITS</div>
+  </div>
 
-<div class="performance-card">
-<div class="performance-value" id="checkoutHits">0</div>
-<div class="performance-label">CHECKOUT HITS</div>
-</div>
+  <div class="performance-card">
+    <div class="performance-value" id="checkoutPct">0%</div>
+    <div class="performance-label">CHECKOUT %</div>
+  </div>
 
-<div class="performance-card">
-<div class="performance-value" id="checkoutPct">0%</div>
-<div class="performance-label">CHECKOUT %</div>
-</div>
-
-<div class="performance-card">
-<div class="performance-value" id="highestCheckout">0</div>
-<div class="performance-label">HIGHEST CO</div>
-</div>
-
+  <div class="performance-card">
+    <div class="performance-value" id="highestCheckout">0</div>
+    <div class="performance-label">HIGHEST CO</div>
+  </div>
 </div>
 
 <div class="match-complete" id="matchComplete">
+  <div class="match-complete-title">MATCH COMPLETE</div>
+  <div class="match-complete-text" id="matchCompleteText"></div>
 
-<div class="match-complete-title">
-MATCH COMPLETE
-</div>
-
-<div
-class="match-complete-text"
-id="matchCompleteText">
-</div>
-
-<button class="new-match" onclick="newMatch()">
-START NEW MATCH
-</button>
-
+  <button class="new-match" onclick="newMatch()">
+    START NEW MATCH
+  </button>
 </div>
 
 </section>
 
 <div class="footer">
-DARTIQ • MATCH PLAY • CORE VISION
+  DARTIQ • MATCH PLAY • CORE VISION
 </div>
 
 </div>
 
 <script>
-
 const params=new URLSearchParams(window.location.search);
 
 function param(){
@@ -890,57 +703,53 @@ if(![3,5,7,9].includes(bestOf)){
 
 let legsToWin=Math.floor(bestOf/2)+1;
 
-document.getElementById("sessionID").textContent=sessionID;
-
 let currentMode="keypad";
 let input="";
 let remaining=501;
 let currentLeg=1;
 let legsWon=0;
 let legsLost=0;
+
 let totalPoints=0;
 let totalDarts=0;
+
 let first9Points=0;
 let first9Darts=0;
+
 let count100=0;
 let count140=0;
 let count180=0;
+
 let checkoutAttempts=0;
 let checkoutHits=0;
 let highestCheckout=0;
+
 let currentDarts=[];
+
 let matchFinished=false;
 let matchStarted=false;
 let visitNumber=0;
 
-function updateFormatUI(){
+document.getElementById("sessionID").textContent=sessionID;
 
+function updateFormatUI(){
   document.getElementById("matchFormat").textContent=
-  "BEST OF "+bestOf+" LEGS • FIRST TO "+legsToWin;
+    "BEST OF "+bestOf+" LEGS • FIRST TO "+legsToWin;
 
   document.getElementById("legsTarget").textContent=legsToWin;
 
-  document.querySelectorAll(".format-btn").forEach(function(button){
-
-    const format=Number(button.dataset.format);
-
-    if(format===bestOf){
-      button.classList.add("active");
-    }else{
-      button.classList.remove("active");
-    }
-
+  document.querySelectorAll(".format-btn").forEach(button=>{
+    button.classList.toggle(
+      "active",
+      Number(button.dataset.format)===bestOf
+    );
   });
 }
 
 function selectFormat(format){
 
   if(matchStarted || totalDarts>0 || legsWon>0 || legsLost>0){
-
-    showMessage(
-      "Match format is locked after the match starts."
-    );
-
+    showMessage("Match format is locked after the match starts.");
     return;
   }
 
@@ -959,16 +768,14 @@ function selectFormat(format){
 
 function setMode(mode){
 
-  if(matchFinished){
-    return;
-  }
+  if(matchFinished) return;
 
   currentMode=mode;
 
   document
-  .querySelector(".engine")
-  .classList
-  .toggle("dartboard-active",mode==="dartboard");
+    .querySelector(".engine")
+    .classList
+    .toggle("dartboard-active",mode==="dartboard");
 
   const keypadMode=document.getElementById("keypadMode");
   const dartboardMode=document.getElementById("dartboardMode");
@@ -983,9 +790,7 @@ function setMode(mode){
     keypadTab.classList.add("active");
     dartboardTab.classList.remove("active");
 
-    showMessage(
-      "Enter the total score for this visit."
-    );
+    showMessage("Enter the total score for this visit.");
 
   }else{
 
@@ -995,33 +800,20 @@ function setMode(mode){
     dartboardTab.classList.add("active");
     keypadTab.classList.remove("active");
 
-    showMessage(
-      "Tap the board for Dart 1."
-    );
+    showMessage("Tap the board for Dart 1.");
   }
 }
 
 function press(number){
 
-  if(matchFinished){
-    return;
-  }
-
-  if(input.length>=3){
-    return;
-  }
+  if(matchFinished) return;
+  if(input.length>=3) return;
 
   input+=number;
 
-  const value=Number(input);
-
-  if(value>180){
-
+  if(Number(input)>180){
     input="";
-
-    showMessage(
-      "Maximum visit score is 180."
-    );
+    showMessage("Maximum visit score is 180.");
   }
 
   updateInput();
@@ -1038,9 +830,8 @@ function backspace(){
 }
 
 function updateInput(){
-
   document.getElementById("scoreDisplay").textContent=
-  input==="" ? "0" : input;
+    input==="" ? "0" : input;
 }
 
 function showMessage(text){
@@ -1067,12 +858,7 @@ function polar(radius,angle){
   };
 }
 
-function ringPath(
-  innerRadius,
-  outerRadius,
-  startAngle,
-  endAngle
-){
+function ringPath(innerRadius,outerRadius,startAngle,endAngle){
 
   const p1=polar(outerRadius,startAngle);
   const p2=polar(outerRadius,endAngle);
@@ -1107,12 +893,12 @@ function addSegment(
   );
 
   path.setAttribute("fill",fill);
-  path.setAttribute("stroke","#777777");
+  path.setAttribute("stroke","#777");
   path.setAttribute("stroke-width",".65");
 
   path.style.cursor="pointer";
 
-  path.addEventListener("click",function(){
+  path.addEventListener("click",()=>{
     addDart(number,multiplier,label);
   });
 
@@ -1133,7 +919,7 @@ function drawBoard(){
   surround.setAttribute("stroke-width","4");
 
   surround.style.filter=
-  "drop-shadow(0 0 7px rgba(57,169,255,.9))";
+    "drop-shadow(0 0 7px rgba(57,169,255,.9))";
 
   svg.appendChild(surround);
 
@@ -1146,10 +932,10 @@ function drawBoard(){
     const dark=i%2===0;
 
     const singleColor=
-    dark ? "#090d11" : "#d5c9aa";
+      dark ? "#090d11" : "#d5c9aa";
 
     const scoreColor=
-    dark ? "#c73b43" : "#21865c";
+      dark ? "#c73b43" : "#21865c";
 
     addSegment(
       24,103,start,end,
@@ -1194,7 +980,7 @@ function drawBoard(){
     text.style.pointerEvents="none";
 
     text.style.filter=
-    "drop-shadow(0 0 4px rgba(57,169,255,.95))";
+      "drop-shadow(0 0 4px rgba(57,169,255,.95))";
 
     text.textContent=number;
 
@@ -1212,7 +998,7 @@ function drawBoard(){
 
   outerBull.style.cursor="pointer";
 
-  outerBull.addEventListener("click",function(){
+  outerBull.addEventListener("click",()=>{
     addDart(25,1,"25");
   });
 
@@ -1224,43 +1010,31 @@ function drawBoard(){
   bull.setAttribute("cy","0");
   bull.setAttribute("r","10");
   bull.setAttribute("fill","#c73b43");
-  bull.setAttribute("stroke","#dddddd");
+  bull.setAttribute("stroke","#ddd");
   bull.setAttribute("stroke-width","1");
 
   bull.style.cursor="pointer";
 
-  bull.addEventListener("click",function(){
+  bull.addEventListener("click",()=>{
     addDart(25,2,"BULL");
   });
 
   svg.appendChild(bull);
 }
 
-function addDart(
-  number,
-  multiplier,
-  label
-){
+function addDart(number,multiplier,label){
 
-  if(matchFinished){
-    return;
-  }
+  if(matchFinished) return;
 
   if(currentDarts.length>=3){
-
-    showMessage(
-      "Three darts entered. Confirm the visit."
-    );
-
+    showMessage("Three darts entered. Confirm the visit.");
     return;
   }
-
-  const score=number*multiplier;
 
   currentDarts.push({
     number:number,
     multiplier:multiplier,
-    score:score,
+    score:number*multiplier,
     label:label
   });
 
@@ -1269,16 +1043,10 @@ function addDart(
 
 function addMiss(){
 
-  if(matchFinished){
-    return;
-  }
+  if(matchFinished) return;
 
   if(currentDarts.length>=3){
-
-    showMessage(
-      "Three darts entered. Confirm the visit."
-    );
-
+    showMessage("Three darts entered. Confirm the visit.");
     return;
   }
 
@@ -1295,11 +1063,7 @@ function addMiss(){
 function undoDart(){
 
   if(currentDarts.length===0){
-
-    showMessage(
-      "No dart to undo."
-    );
-
+    showMessage("No dart to undo.");
     return;
   }
 
@@ -1312,17 +1076,14 @@ function updateDartDisplay(){
 
   for(let i=0;i<3;i++){
 
-    const el=
-    document.getElementById(
-      "dart"+(i+1)
-    );
+    const el=document.getElementById("dart"+(i+1));
 
     if(currentDarts[i]){
 
       el.textContent=
-      currentDarts[i].label+
-      " • "+
-      currentDarts[i].score;
+        currentDarts[i].label+
+        " • "+
+        currentDarts[i].score;
 
     }else{
 
@@ -1331,14 +1092,12 @@ function updateDartDisplay(){
   }
 
   const total=
-  currentDarts.reduce(
-    (sum,dart)=>sum+dart.score,
-    0
-  );
+    currentDarts.reduce(
+      (sum,dart)=>sum+dart.score,
+      0
+    );
 
-  document.getElementById(
-    "boardVisitScore"
-  ).textContent=total;
+  document.getElementById("boardVisitScore").textContent=total;
 
   if(currentDarts.length<3){
 
@@ -1368,30 +1127,21 @@ function isDoubleCheckout(){
     return false;
   }
 
-  const lastDart=
-  currentDarts[currentDarts.length-1];
+  const lastDart=currentDarts[currentDarts.length-1];
 
   return lastDart.multiplier===2;
 }
 
 function isCheckoutRange(before){
-
-  return(
-    before>=2 &&
-    before<=170
-  );
+  return before>=2 && before<=170;
 }
 
 function addToFirst9(score,darts){
 
-  if(first9Darts>=9){
-    return;
-  }
+  if(first9Darts>=9) return;
 
   const available=9-first9Darts;
-
-  const dartsToAdd=
-  Math.min(darts,available);
+  const dartsToAdd=Math.min(darts,available);
 
   if(dartsToAdd===darts){
 
@@ -1399,8 +1149,7 @@ function addToFirst9(score,darts){
 
   }else if(darts>0){
 
-    first9Points+=
-    score*(dartsToAdd/darts);
+    first9Points+=score*(dartsToAdd/darts);
   }
 
   first9Darts+=dartsToAdd;
@@ -1409,14 +1158,13 @@ function addToFirst9(score,darts){
 async function sendVisitToGlide(visitData){
 
   const darts=
-  Array.isArray(visitData.darts)
-  ? visitData.darts
-  : [];
+    Array.isArray(visitData.darts)
+    ? visitData.darts
+    : [];
 
   try{
 
-    const response=
-    await fetch(
+    const response=await fetch(
       MATCH_VISIT_WEBHOOK,
       {
         method:"POST",
@@ -1428,73 +1176,89 @@ async function sendVisitToGlide(visitData){
         body:JSON.stringify({
 
           sessionID:
-          visitData.sessionID || "",
+            visitData.sessionID || "",
 
           email:
-          email,
+            email,
 
           visitNumber:
-          visitData.visitNumber || 0,
+            visitData.visitNumber || 0,
 
           visitScore:
-          visitData.visitScore || 0,
+            visitData.visitScore || 0,
 
           dartsThrown:
-          visitData.dartsThrown || 0,
+            visitData.dartsThrown || 0,
 
           legNumber:
-          visitData.legNumber || 1,
+            visitData.legNumber || 1,
 
           remainingScore:
-          visitData.remainingScore ?? 501,
+            visitData.remainingScore ?? 501,
 
           checkoutAttempt:
-          Boolean(visitData.checkoutAttempt),
+            Boolean(visitData.checkoutAttempt),
 
           checkoutHit:
-          Boolean(visitData.checkoutHit),
+            Boolean(visitData.checkoutHit),
 
           checkoutScore:
-          visitData.checkoutScore || 0,
+            visitData.checkoutScore || 0,
 
           bust:
-          Boolean(visitData.bust),
+            Boolean(visitData.bust),
 
           scoringSource:
-          visitData.scoringSource || "Match",
+            visitData.scoringSource || "Match",
+
+          legResult:
+            visitData.legResult || "",
+
+          opponentWonLeg:
+            Boolean(visitData.opponentWonLeg),
+
+          legEnded:
+            Boolean(visitData.legEnded),
+
+          matchResult:
+            visitData.matchResult || "",
+
+          legsWon:
+            visitData.legsWon ?? legsWon,
+
+          legsLost:
+            visitData.legsLost ?? legsLost,
 
           bestDart:
-          visitData.bestDart ?? "",
+            visitData.bestDart ?? "",
 
           scoreBefore:
-          visitData.scoreBefore ?? "",
+            visitData.scoreBefore ?? "",
 
           dart1Score:
-          darts[0]?.score ?? "",
+            darts[0]?.score ?? "",
 
           dart1Segment:
-          darts[0]?.label || "",
+            darts[0]?.label || "",
 
           dart2Score:
-          darts[1]?.score ?? "",
+            darts[1]?.score ?? "",
 
           dart2Segment:
-          darts[1]?.label || "",
+            darts[1]?.label || "",
 
           dart3Score:
-          darts[2]?.score ?? "",
+            darts[2]?.score ?? "",
 
           dart3Segment:
-          darts[2]?.label || ""
+            darts[2]?.label || ""
         })
       }
     );
 
     if(!response.ok){
-
       throw new Error(
-        "Webhook returned "+
-        response.status
+        "Webhook returned "+response.status
       );
     }
 
@@ -1517,9 +1281,7 @@ async function sendVisitToGlide(visitData){
 
 function confirmVisit(){
 
-  if(matchFinished){
-    return;
-  }
+  if(matchFinished) return;
 
   let score=0;
   let dartsThisVisit=3;
@@ -1527,11 +1289,7 @@ function confirmVisit(){
   if(currentMode==="keypad"){
 
     if(input===""){
-
-      showMessage(
-        "Enter a visit score first."
-      );
-
+      showMessage("Enter a visit score first.");
       return;
     }
 
@@ -1539,30 +1297,22 @@ function confirmVisit(){
     dartsThisVisit=3;
 
     if(score<0 || score>180){
-
-      showMessage(
-        "Visit score must be between 0 and 180."
-      );
-
+      showMessage("Visit score must be between 0 and 180.");
       return;
     }
 
   }else{
 
     if(currentDarts.length===0){
-
-      showMessage(
-        "Enter at least one dart first."
-      );
-
+      showMessage("Enter at least one dart first.");
       return;
     }
 
     score=
-    currentDarts.reduce(
-      (sum,dart)=>sum+dart.score,
-      0
-    );
+      currentDarts.reduce(
+        (sum,dart)=>sum+dart.score,
+        0
+      );
 
     dartsThisVisit=currentDarts.length;
   }
@@ -1572,8 +1322,7 @@ function confirmVisit(){
   const before=remaining;
   const after=before-score;
 
-  const checkoutAttempt=
-  isCheckoutRange(before);
+  const checkoutAttempt=isCheckoutRange(before);
 
   if(checkoutAttempt){
     checkoutAttempts++;
@@ -1636,67 +1385,92 @@ function confirmVisit(){
     count100++;
   }
 
+  const winningLeg=after===0;
+  const resultingLegsWon=
+    winningLeg ? legsWon+1 : legsWon;
+
+  const matchWon=
+    winningLeg &&
+    resultingLegsWon>=legsToWin;
+
   const visitData={
 
-    sessionID:sessionID,
+    sessionID:
+      sessionID,
 
     visitNumber:
-    ++visitNumber,
+      ++visitNumber,
 
     scoringSource:
-    "Match",
+      "Match",
 
     bestDart:
-    currentMode==="dartboard" &&
-    currentDarts.length>0
-    ? Math.max(
-        ...currentDarts.map(
-          dart=>dart.score
+      currentMode==="dartboard" &&
+      currentDarts.length>0
+      ? Math.max(
+          ...currentDarts.map(
+            dart=>dart.score
+          )
         )
-      )
-    : "",
+      : "",
 
     scoreBefore:
-    before,
+      before,
 
     bestOf:
-    bestOf,
+      bestOf,
 
     legNumber:
-    currentLeg,
+      currentLeg,
 
     visitScore:
-    score,
+      score,
 
     dartsThrown:
-    dartsThisVisit,
+      dartsThisVisit,
 
     remainingScore:
-    after,
+      after,
 
     checkoutAttempt:
-    checkoutAttempt,
+      checkoutAttempt,
 
     checkoutHit:
-    after===0,
+      winningLeg,
 
     checkoutScore:
-    after===0 ? before : 0,
+      winningLeg ? before : 0,
 
     bust:
-    false,
+      false,
+
+    legResult:
+      winningLeg ? "WON" : "",
+
+    opponentWonLeg:
+      false,
+
+    legEnded:
+      winningLeg,
+
+    matchResult:
+      matchWon ? "WON" : "",
+
+    legsWon:
+      resultingLegsWon,
+
+    legsLost:
+      legsLost,
 
     darts:
-    currentMode==="dartboard"
-    ? [...currentDarts]
-    : []
+      currentMode==="dartboard"
+      ? [...currentDarts]
+      : []
   };
 
-  sendVisitToGlide(
-    visitData
-  );
+  sendVisitToGlide(visitData);
 
-  if(after===0){
+  if(winningLeg){
 
     checkoutHits++;
 
@@ -1724,10 +1498,7 @@ function confirmVisit(){
   );
 }
 
-function registerBust(
-  dartsThisVisit,
-  message
-){
+function registerBust(dartsThisVisit,message){
 
   totalDarts+=dartsThisVisit;
 
@@ -1739,58 +1510,76 @@ function registerBust(
   const bustVisitData={
 
     sessionID:
-    sessionID,
+      sessionID,
 
     visitNumber:
-    ++visitNumber,
+      ++visitNumber,
 
     scoringSource:
-    "Match",
+      "Match",
 
     bestDart:
-    currentMode==="dartboard" &&
-    currentDarts.length>0
-    ? Math.max(
-        ...currentDarts.map(
-          dart=>dart.score
+      currentMode==="dartboard" &&
+      currentDarts.length>0
+      ? Math.max(
+          ...currentDarts.map(
+            dart=>dart.score
+          )
         )
-      )
-    : "",
+      : "",
 
     scoreBefore:
-    remaining,
+      remaining,
 
     bestOf:
-    bestOf,
+      bestOf,
 
     legNumber:
-    currentLeg,
+      currentLeg,
 
     visitScore:
-    0,
+      0,
 
     dartsThrown:
-    dartsThisVisit,
+      dartsThisVisit,
 
     remainingScore:
-    remaining,
+      remaining,
 
     checkoutAttempt:
-    isCheckoutRange(remaining),
+      isCheckoutRange(remaining),
 
     checkoutHit:
-    false,
+      false,
 
     checkoutScore:
-    0,
+      0,
 
     bust:
-    true,
+      true,
+
+    legResult:
+      "",
+
+    opponentWonLeg:
+      false,
+
+    legEnded:
+      false,
+
+    matchResult:
+      "",
+
+    legsWon:
+      legsWon,
+
+    legsLost:
+      legsLost,
 
     darts:
-    currentMode==="dartboard"
-    ? [...currentDarts]
-    : []
+      currentMode==="dartboard"
+      ? [...currentDarts]
+      : []
   };
 
   sendVisitToGlide(
@@ -1840,28 +1629,99 @@ function completeLeg(){
   );
 }
 
-function opponentWonLeg(){
+async function opponentWonLeg(){
 
-  if(matchFinished){
-    return;
-  }
+  if(matchFinished) return;
 
   const confirmed=
-  window.confirm(
-    "Opponent checked out and won this leg?"
-  );
+    window.confirm(
+      "Opponent checked out and won this leg?"
+    );
 
-  if(!confirmed){
-    return;
-  }
+  if(!confirmed) return;
 
   matchStarted=true;
 
+  const lostLegNumber=currentLeg;
+
   legsLost++;
+
+  const matchLost=
+    legsLost>=legsToWin;
+
+  const legLossData={
+
+    sessionID:
+      sessionID,
+
+    visitNumber:
+      ++visitNumber,
+
+    scoringSource:
+      "Match",
+
+    bestDart:
+      "",
+
+    scoreBefore:
+      remaining,
+
+    bestOf:
+      bestOf,
+
+    legNumber:
+      lostLegNumber,
+
+    visitScore:
+      0,
+
+    dartsThrown:
+      0,
+
+    remainingScore:
+      remaining,
+
+    checkoutAttempt:
+      false,
+
+    checkoutHit:
+      false,
+
+    checkoutScore:
+      0,
+
+    bust:
+      false,
+
+    legResult:
+      "LOST",
+
+    opponentWonLeg:
+      true,
+
+    legEnded:
+      true,
+
+    matchResult:
+      matchLost ? "LOST" : "",
+
+    legsWon:
+      legsWon,
+
+    legsLost:
+      legsLost,
+
+    darts:
+      []
+  };
+
+  await sendVisitToGlide(
+    legLossData
+  );
 
   resetCurrentVisit();
 
-  if(legsLost>=legsToWin){
+  if(matchLost){
 
     completeMatch();
 
@@ -1888,38 +1748,43 @@ function completeMatch(){
 
   matchFinished=true;
 
-  if(legsWon>=legsToWin){
+  const matchResult=
+    legsWon>=legsToWin
+    ? "WON"
+    : "LOST";
+
+  if(matchResult==="WON"){
     remaining=0;
   }
 
   updateStats();
 
   const average=
-  totalDarts>0
-  ? (
-      totalPoints/
-      totalDarts*
-      3
-    ).toFixed(2)
-  : "0.00";
+    totalDarts>0
+    ? (
+        totalPoints/
+        totalDarts*
+        3
+      ).toFixed(2)
+    : "0.00";
 
   const first9=
-  first9Darts>0
-  ? (
-      first9Points/
-      first9Darts*
-      3
-    ).toFixed(2)
-  : "0.00";
+    first9Darts>0
+    ? (
+        first9Points/
+        first9Darts*
+        3
+      ).toFixed(2)
+    : "0.00";
 
   const checkoutPercentage=
-  checkoutAttempts>0
-  ? (
-      checkoutHits/
-      checkoutAttempts*
-      100
-    ).toFixed(1)
-  : "0.0";
+    checkoutAttempts>0
+    ? (
+        checkoutHits/
+        checkoutAttempts*
+        100
+      ).toFixed(1)
+    : "0.0";
 
   document.getElementById(
     "matchComplete"
@@ -1929,56 +1794,53 @@ function completeMatch(){
     "matchCompleteText"
   ).innerHTML=
 
-  "<strong>BO"+
-  bestOf+
-  " COMPLETE</strong>"+
+    "<strong>BO"+
+    bestOf+
+    " COMPLETE</strong>"+
 
-  "<br><br>"+
+    "<br><br>"+
 
-  (
-    legsWon>=legsToWin
-    ? "MATCH WON"
-    : "MATCH LOST"
-  )+
+    "MATCH "+
+    matchResult+
 
-  "<br>"+
+    "<br>"+
 
-  legsWon+
-  " legs won • "+
-  legsLost+
-  " legs lost"+
+    legsWon+
+    " legs won • "+
+    legsLost+
+    " legs lost"+
 
-  "<br>"+
+    "<br>"+
 
-  "Average: "+
-  average+
+    "Average: "+
+    average+
 
-  "<br>"+
+    "<br>"+
 
-  "First 9: "+
-  first9+
+    "First 9: "+
+    first9+
 
-  "<br>"+
+    "<br>"+
 
-  "180s: "+
-  count180+
+    "180s: "+
+    count180+
 
-  " • 140+: "+
-  count140+
+    " • 140+: "+
+    count140+
 
-  " • 100+: "+
-  count100+
+    " • 100+: "+
+    count100+
 
-  "<br>"+
+    "<br>"+
 
-  "Checkout: "+
-  checkoutPercentage+
-  "%"+
+    "Checkout: "+
+    checkoutPercentage+
+    "%"+
 
-  "<br>"+
+    "<br>"+
 
-  "Highest checkout: "+
-  highestCheckout;
+    "Highest checkout: "+
+    highestCheckout;
 
   showMessage(
     "MATCH COMPLETE • Session statistics ready."
@@ -1987,52 +1849,55 @@ function completeMatch(){
   const sessionResult={
 
     sessionID:
-    sessionID,
+      sessionID,
 
     scoringSource:
-    "Match",
+      "Match",
 
     bestOf:
-    bestOf,
+      bestOf,
 
     legsWon:
-    legsWon,
+      legsWon,
 
     legsLost:
-    legsLost,
+      legsLost,
+
+    matchResult:
+      matchResult,
 
     totalPoints:
-    totalPoints,
+      totalPoints,
 
     totalDarts:
-    totalDarts,
+      totalDarts,
 
     average:
-    Number(average),
+      Number(average),
 
     first9Average:
-    Number(first9),
+      Number(first9),
 
     count100:
-    count100,
+      count100,
 
     count140:
-    count140,
+      count140,
 
     count180:
-    count180,
+      count180,
 
     checkoutAttempts:
-    checkoutAttempts,
+      checkoutAttempts,
 
     checkoutHits:
-    checkoutHits,
+      checkoutHits,
 
     checkoutPercentage:
-    Number(checkoutPercentage),
+      Number(checkoutPercentage),
 
     highestCheckout:
-    highestCheckout
+      highestCheckout
   };
 
   console.log(
@@ -2045,22 +1910,30 @@ function newMatch(){
 
   remaining=501;
   currentLeg=1;
+
   legsWon=0;
   legsLost=0;
+
   totalPoints=0;
   totalDarts=0;
+
   first9Points=0;
   first9Darts=0;
+
   count100=0;
   count140=0;
   count180=0;
+
   checkoutAttempts=0;
   checkoutHits=0;
   highestCheckout=0;
+
   input="";
   currentDarts=[];
+
   matchFinished=false;
   matchStarted=false;
+
   visitNumber=0;
 
   document.getElementById(
@@ -2114,34 +1987,24 @@ function updateStats(){
   let avg=0;
 
   if(totalDarts>0){
-
-    avg=
-    (
-      totalPoints/
-      totalDarts
-    )*3;
+    avg=(totalPoints/totalDarts)*3;
   }
 
   document.getElementById(
     "average"
   ).textContent=
-  avg.toFixed(2);
+    avg.toFixed(2);
 
   let first9Avg=0;
 
   if(first9Darts>0){
-
-    first9Avg=
-    (
-      first9Points/
-      first9Darts
-    )*3;
+    first9Avg=(first9Points/first9Darts)*3;
   }
 
   document.getElementById(
     "first9Average"
   ).textContent=
-  first9Avg.toFixed(2);
+    first9Avg.toFixed(2);
 
   document.getElementById(
     "stat100"
@@ -2162,29 +2025,24 @@ function updateStats(){
   let checkoutPercentage=0;
 
   if(checkoutAttempts>0){
-
     checkoutPercentage=
-    (
-      checkoutHits/
-      checkoutAttempts
-    )*100;
+      (checkoutHits/checkoutAttempts)*100;
   }
 
   document.getElementById(
     "checkoutPct"
   ).textContent=
-  checkoutPercentage.toFixed(1)+
-  "%";
+    checkoutPercentage.toFixed(1)+"%";
 
   document.getElementById(
     "highestCheckout"
   ).textContent=
-  highestCheckout;
+    highestCheckout;
 
   document.getElementById(
     "legsTarget"
   ).textContent=
-  legsToWin;
+    legsToWin;
 }
 
 drawBoard();
@@ -2200,7 +2058,6 @@ showMessage(
   legsToWin+
   " legs."
 );
-
 </script>
 
 </body>
