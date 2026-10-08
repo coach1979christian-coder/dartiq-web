@@ -3,285 +3,306 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>DARTIQ Sessieanalyse</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>DARTIQ Sessie Analyse</title>
 
 <style>
 :root{
-  --bg:#030303;
-  --panel:#10151e;
-  --text:#ffffff;
-  --muted:#c0cad6;
-  --line:rgba(255,255,255,.16);
-  --blue:#39a9ff;
+  --bg:#07090d;
+  --panel:#0d1118;
+  --text:#f7f9fc;
+  --muted:#aab4c4;
+  --line:rgba(255,255,255,.10);
+  --blue:#4ea7ff;
+  --purple:#9e7cff;
+  --orange:#ff9a45;
 }
 *{box-sizing:border-box}
 html,body{
+  margin:0;
   width:100%;
   min-height:100%;
-  margin:0;
-  padding:0;
   background:var(--bg);
   color:var(--text);
   font-family:Inter,Arial,sans-serif;
   overflow-x:hidden;
 }
-body{
-  display:flex;
-  justify-content:center;
-  align-items:flex-start;
-  padding:6px;
-}
-.phone{
-  width:100%;
-  max-width:430px;
-  min-width:0;
-  padding:12px 10px 18px;
-  border:1px solid rgba(255,255,255,.35);
-  border-radius:22px;
-  background:radial-gradient(
-    circle at top,
-    rgba(255,255,255,.10),
-    rgba(18,18,18,.96) 34%,
-    #020202 100%
-  );
-  box-shadow:0 0 18px rgba(255,255,255,.18);
-}
-.hero{
-  text-align:center;
-  padding:14px 10px;
-  border:1px solid var(--line);
-  border-radius:17px;
-  background:rgba(255,255,255,.035);
-}
-.brand{
-  font-size:14px;
-  font-weight:900;
-  letter-spacing:3px;
-  text-shadow:0 0 12px rgba(255,255,255,.6);
-}
-.sub{
-  margin-top:7px;
-  font-size:11px;
-  font-weight:800;
-  letter-spacing:1px;
-  color:var(--muted);
-}
-h1{
-  margin:10px 0 0;
-  font-size:31px;
-  line-height:1.05;
-  font-weight:950;
-  text-shadow:0 0 15px rgba(255,255,255,.55);
-}
-.date{
-  margin-top:10px;
-  font-size:13px;
-  font-weight:800;
-}
-.score-card{
-  margin-top:10px;
-  padding:13px;
-  border:1px solid var(--line);
-  border-radius:17px;
-  background:rgba(0,0,0,.55);
-}
-.score-row{
+body{padding:12px 10px 22px}
+.wrap{max-width:480px;margin:auto}
+
+.session-strip{
   display:flex;
   justify-content:space-between;
   align-items:center;
   gap:10px;
+  margin-bottom:14px;
+  color:var(--muted);
+  font-size:12px;
+  font-weight:750;
+}
+.session-meta{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.bo{
+  border:1px solid rgba(78,167,255,.3);
+  border-radius:999px;
+  padding:7px 11px;
+  color:#dcecff;
+  white-space:nowrap;
+}
+
+.hero{
+  display:grid;
+  grid-template-columns:115px minmax(0,1fr);
+  gap:10px;
+  margin-bottom:12px;
+}
+
+.score-card,.grade-card,.stats-card,.section{
+  border:1px solid var(--line);
+  border-radius:17px;
+  background:linear-gradient(180deg,#121821,#0b0f15);
+}
+.score-card,.grade-card{
+  min-height:110px;
+  padding:15px;
+}
+.score-card{
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+.grade-card{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
 }
 .label{
-  font-size:12px;
+  color:var(--muted);
+  font-size:11px;
   font-weight:900;
   letter-spacing:1px;
   text-transform:uppercase;
 }
 .score{
-  margin-top:9px;
-  font-size:52px;
+  font-size:46px;
   font-weight:950;
-  line-height:1;
+  margin-top:10px;
 }
-.badge{
-  max-width:65%;
-  padding:10px;
-  border:1px solid var(--line);
-  border-radius:12px;
+.grade{
+  font-size:20px;
+  line-height:1.2;
+  font-weight:950;
+  margin-top:8px;
+  overflow-wrap:anywhere;
+}
+
+.stats-card{
+  padding:14px;
+  margin-bottom:12px;
+}
+.card-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
   font-size:13px;
   font-weight:900;
-  text-align:center;
-  overflow-wrap:anywhere;
+  letter-spacing:1px;
+  color:var(--muted);
+  text-transform:uppercase;
 }
 .stats{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:7px;
-  margin-top:12px;
+  gap:8px;
 }
 .stat{
   min-width:0;
-  padding:12px 4px;
+  padding:13px 5px;
   text-align:center;
-  border:1px solid var(--line);
-  border-radius:12px;
   background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:12px;
 }
-.stat-title{
+.stat-label{
+  color:var(--muted);
   font-size:10px;
   font-weight:900;
-  color:var(--muted);
   text-transform:uppercase;
   overflow-wrap:anywhere;
 }
 .stat-value{
-  margin-top:9px;
   font-size:clamp(16px,5vw,22px);
   font-weight:950;
+  line-height:1.25;
+  margin-top:8px;
   white-space:nowrap;
   font-variant-numeric:tabular-nums;
 }
-.stat-warning{
-  margin-top:7px;
-  color:#ffb55b;
-  font-size:11px;
+.stat-note{
+  font-size:10px;
   line-height:1.4;
-  font-weight:750;
+  margin-top:6px;
+  color:#ffb66b;
 }
+
 .section{
-  margin-top:10px;
-  border:1px solid var(--line);
-  border-radius:15px;
-  background:linear-gradient(180deg,#151b25,#0b0f16);
+  margin-bottom:10px;
   overflow:hidden;
 }
 .section summary{
   display:flex;
   align-items:center;
   gap:12px;
-  padding:16px 13px;
-  min-height:65px;
+  padding:16px 14px;
   cursor:pointer;
   list-style:none;
+  min-height:64px;
 }
-.section summary::-webkit-details-marker{display:none}
+.section summary::-webkit-details-marker{
+  display:none;
+}
 .section summary::after{
   content:"+";
   margin-left:auto;
+  font-size:24px;
   color:var(--blue);
-  font-size:25px;
-  font-weight:800;
+  font-weight:600;
 }
-.section[open] summary::after{content:"−"}
-.icon{
+.section[open] summary::after{
+  content:"−";
+}
+.section-icon{
   display:flex;
   align-items:center;
   justify-content:center;
-  width:39px;
-  height:39px;
+  width:38px;
+  height:38px;
   flex-shrink:0;
   border-radius:12px;
-  background:rgba(57,169,255,.1);
-  font-size:21px;
+  background:rgba(78,167,255,.09);
+  font-size:20px;
 }
-.item-title{
+.section-heading{
   flex:1;
   min-width:0;
   font-size:15px;
+  line-height:1.3;
   font-weight:900;
-  line-height:1.35;
   text-transform:uppercase;
   letter-spacing:.3px;
 }
-.item-text{
-  padding:0 16px 19px;
-  color:#f5f7fa;
+.section-content{
+  padding:0 16px 18px;
   font-size:16px;
-  line-height:1.65;
+  line-height:1.6;
   font-weight:550;
   overflow-wrap:anywhere;
+  color:#f0f4fa;
 }
-.item-text strong{
+.section-content strong{
   font-size:18px;
-  line-height:1.5;
+  line-height:1.4;
 }
 .chips{
   display:flex;
-  flex-wrap:wrap;
   gap:8px;
+  flex-wrap:wrap;
   margin-top:12px;
 }
 .chip{
-  padding:8px 11px;
+  padding:7px 11px;
   border:1px solid var(--line);
   border-radius:999px;
   font-size:13px;
   font-weight:750;
 }
 .footer{
-  margin-top:22px;
+  margin-top:20px;
   padding-bottom:12px;
+  color:#8795a7;
   text-align:center;
-  color:#b9c5d3;
   font-size:10px;
   letter-spacing:1px;
   font-weight:800;
 }
 .hidden{display:none!important}
+
 @media(max-width:360px){
+  .hero{
+    grid-template-columns:100px minmax(0,1fr);
+  }
+  .score-card,.grade-card{padding:11px}
+  .grade{font-size:17px}
   .stat-value{font-size:16px}
-  .stat-title{font-size:9px}
-  .badge{font-size:11px}
+  .stat-label{font-size:9px}
 }
 </style>
 </head>
 
 <body>
-<main class="phone">
+<main class="wrap">
 
-<div class="hero">
-  <div class="brand">AI DARTIQ</div>
-  <div class="sub">BETA V2 • AI COACHRAPPORT</div>
-  <h1>SESSIE<br>ANALYSE</h1>
-  <div class="date" id="date">--</div>
+<div class="session-strip">
+  <div class="session-meta">
+    <span id="date"></span>
+    <span id="sessiontype">Wedstrijd</span>
+  </div>
+  <div class="bo" id="matchformat"></div>
 </div>
 
-<div class="score-card">
-  <div class="score-row">
-    <div>
-      <div class="label">AI Coach Score</div>
-      <div class="score" id="score">--</div>
-    </div>
-    <div class="badge" id="grade">--</div>
+<div class="hero">
+  <div class="score-card">
+    <div class="label">AI Coach Score</div>
+    <div class="score" id="score">--</div>
+  </div>
+
+  <div class="grade-card">
+    <div class="label">Sessiebeoordeling</div>
+    <div class="grade" id="grade">--</div>
+  </div>
+</div>
+
+<div class="stats-card">
+  <div class="card-head">
+    <span>Prestaties</span>
+    <span>📊</span>
   </div>
 
   <div class="stats">
     <div class="stat">
-      <div class="stat-title">Gemiddelde</div>
+      <div class="stat-label">Gemiddelde</div>
       <div class="stat-value" id="average">--</div>
     </div>
+
     <div class="stat">
-      <div class="stat-title">Eerste 9</div>
+      <div class="stat-label">Eerste 9</div>
       <div class="stat-value" id="first9">--</div>
-      <div class="stat-warning hidden" id="first9-warning">
+      <div class="stat-note hidden" id="first9-warning">
         Controleer de Eerste 9-berekening in Glide
       </div>
     </div>
+
     <div class="stat">
-      <div class="stat-title">Finishpercentage</div>
+      <div class="stat-label">Finishpercentage</div>
       <div class="stat-value" id="checkoutpct">--</div>
     </div>
+
     <div class="stat">
-      <div class="stat-title">180s</div>
+      <div class="stat-label">180s</div>
       <div class="stat-value" id="total180">0</div>
     </div>
+
     <div class="stat">
-      <div class="stat-title">140+</div>
+      <div class="stat-label">140+</div>
       <div class="stat-value" id="total140">0</div>
     </div>
+
     <div class="stat">
-      <div class="stat-title">100+</div>
+      <div class="stat-label">100+</div>
       <div class="stat-value" id="total100">0</div>
     </div>
   </div>
@@ -289,34 +310,36 @@ h1{
 
 <details class="section" id="focus-section" open>
   <summary>
-    <span class="icon">🎯</span>
-    <span class="item-title">Hoofdfocus</span>
+    <span class="section-icon">🎯</span>
+    <span class="section-heading">Hoofdfocus</span>
   </summary>
-  <div class="item-text"><strong id="focus"></strong></div>
+  <div class="section-content">
+    <strong id="focus"></strong>
+  </div>
 </details>
 
 <details class="section" id="insight-section">
   <summary>
-    <span class="icon">🤖</span>
-    <span class="item-title">AI-inzicht</span>
+    <span class="section-icon">🤖</span>
+    <span class="section-heading">AI-inzicht</span>
   </summary>
-  <div class="item-text" id="insight"></div>
+  <div class="section-content" id="insight"></div>
 </details>
 
 <details class="section" id="advice-section">
   <summary>
-    <span class="icon">💡</span>
-    <span class="item-title">Coachadvies</span>
+    <span class="section-icon">💡</span>
+    <span class="section-heading">Coachadvies</span>
   </summary>
-  <div class="item-text" id="advice"></div>
+  <div class="section-content" id="advice"></div>
 </details>
 
 <details class="section" id="drill-section">
   <summary>
-    <span class="icon">🔥</span>
-    <span class="item-title">Aanbevolen oefening</span>
+    <span class="section-icon">🔥</span>
+    <span class="section-heading">Jouw volgende stap</span>
   </summary>
-  <div class="item-text">
+  <div class="section-content">
     <strong id="drill"></strong>
     <div class="chips">
       <span class="chip" id="duration"></span>
@@ -327,18 +350,18 @@ h1{
 
 <details class="section" id="improvement-section">
   <summary>
-    <span class="icon">⚡</span>
-    <span class="item-title">Verbeterpotentieel</span>
+    <span class="section-icon">⚡</span>
+    <span class="section-heading">Verbeterpotentieel</span>
   </summary>
-  <div class="item-text" id="improvement"></div>
+  <div class="section-content" id="improvement"></div>
 </details>
 
 <details class="section" id="why-section">
   <summary>
-    <span class="icon">📈</span>
-    <span class="item-title">Waarom dit belangrijk is</span>
+    <span class="section-icon">📈</span>
+    <span class="section-heading">Waarom dit belangrijk is</span>
   </summary>
-  <div class="item-text" id="why"></div>
+  <div class="section-content" id="why"></div>
 </details>
 
 <div class="footer">
@@ -348,11 +371,21 @@ h1{
 </main>
 
 <script>
-const params=new URLSearchParams(window.location.search);
+const params=new URLSearchParams(location.search);
 
-function get(key){
-  const value=params.get(key);
-  return value!==null?value.trim():'';
+function get(...keys){
+  for(const key of keys){
+    const value=params.get(key);
+    if(
+      value!==null &&
+      value.trim()!=='' &&
+      value!=='...' &&
+      value!=='…'
+    ){
+      return value.trim();
+    }
+  }
+  return '';
 }
 
 function put(id,value,fallback=''){
@@ -360,10 +393,10 @@ function put(id,value,fallback=''){
   if(el)el.textContent=value || fallback;
 }
 
-function parseNumber(input){
-  if(input===null || input===undefined)return null;
+function parseNumber(value){
+  if(value===null || value===undefined)return null;
 
-  let raw=String(input)
+  let raw=String(value)
     .trim()
     .replace(/\s/g,'')
     .replace(/%/g,'');
@@ -380,45 +413,148 @@ function parseNumber(input){
     raw=raw.replace(',','.');
   }
 
-  const number=Number(raw);
-  return Number.isFinite(number)?number:null;
+  const n=Number(raw);
+  return Number.isFinite(n)?n:null;
 }
 
-function decimal(input,digits=2,suffix=''){
-  const number=parseNumber(input);
-  if(number===null)return '--';
+function formatNumber(value,decimals=2,suffix=''){
+  const n=parseNumber(value);
+  if(n===null)return '--';
 
-  return number.toLocaleString('nl-BE',{
-    minimumFractionDigits:digits,
-    maximumFractionDigits:digits,
-    useGrouping:false
-  })+suffix;
+  return n.toFixed(decimals).replace('.',',')+suffix;
 }
 
-function count(input){
-  const number=parseNumber(input);
-  return number===null?'0':String(Math.round(number));
+function formatCount(value){
+  const n=parseNumber(value);
+  return n===null?'0':String(Math.round(n));
 }
 
-put('date',get('date'),'Datum niet beschikbaar');
-put('score',get('score'),'--');
-put('grade',get('grade'),'Geen beoordeling');
+function translateGrade(value){
+  const grades={
+    'ELITE':'ELITE',
+    'GREAT':'ZEER GOED',
+    'GOOD':'GOED',
+    'DEVELOPING':'IN ONTWIKKELING',
+    'NEEDS WORK':'AANDACHT NODIG',
+    'IMPROVING':'VERBETEREND'
+  };
 
-put('average',decimal(get('average'),2));
-put('checkoutpct',decimal(get('checkoutpct'),1,'%'));
+  return grades[value.toUpperCase()] || value;
+}
 
-const first9=parseNumber(get('first9'));
+function translateLevel(value){
+  const levels={
+    'BEGINNER':'Beginner',
+    'INTERMEDIATE':'Gemiddeld',
+    'ADVANCED':'Gevorderd',
+    'EXPERT':'Expert'
+  };
 
-if(first9!==null && (first9<0 || first9>180)){
+  return levels[value.toUpperCase()] || value;
+}
+
+function translateSessionType(value){
+  const types={
+    'MATCH':'Wedstrijd',
+    'PRACTICE':'Training',
+    'TRAINING':'Training',
+    'SESSION':'Sessie'
+  };
+
+  return types[value.toUpperCase()] || value;
+}
+
+const values={
+  date:get('date'),
+  sessiontype:get('sessiontype','type')||'Match',
+  matchformat:get('matchformat','format','bo'),
+  score:get('score'),
+  grade:get('grade'),
+  average:get('average'),
+  first9:get('first9'),
+  checkoutpct:get('checkoutpct','checkout'),
+  total180:get('total180'),
+  total140:get('total140'),
+  total100:get('total100'),
+  focus:get('focus'),
+  insight:get('insight'),
+  advice:get('advice'),
+  drill:get('drill'),
+  duration:get('duration'),
+  level:get('level'),
+  improvement:get('improvement'),
+  why:get('why')
+};
+
+put('date',values.date);
+
+put(
+  'sessiontype',
+  translateSessionType(values.sessiontype)
+);
+
+put('matchformat',values.matchformat);
+put('score',values.score,'--');
+
+put(
+  'grade',
+  translateGrade(values.grade),
+  '--'
+);
+
+put(
+  'average',
+  formatNumber(values.average,2)
+);
+
+const first9=parseNumber(values.first9);
+
+if(first9!==null && first9>180){
   put('first9','--');
-  document.getElementById('first9-warning').classList.remove('hidden');
+  document
+    .getElementById('first9-warning')
+    .classList.remove('hidden');
 }else{
-  put('first9',decimal(get('first9'),2));
+  put(
+    'first9',
+    formatNumber(values.first9,2)
+  );
 }
 
-put('total180',count(get('total180')));
-put('total140',count(get('total140')));
-put('total100',count(get('total100')));
+put(
+  'checkoutpct',
+  formatNumber(values.checkoutpct,1,'%')
+);
+
+put('total180',formatCount(values.total180));
+put('total140',formatCount(values.total140));
+put('total100',formatCount(values.total100));
+
+put('focus',values.focus);
+put('insight',values.insight);
+put('advice',values.advice);
+put('drill',values.drill);
+put('duration',values.duration);
+
+put(
+  'level',
+  translateLevel(values.level)
+);
+
+put('improvement',values.improvement);
+put('why',values.why);
+
+if(!values.date){
+  document
+    .getElementById('date')
+    .classList.add('hidden');
+}
+
+if(!values.matchformat){
+  document
+    .getElementById('matchformat')
+    .classList.add('hidden');
+}
 
 const sections=[
   ['focus','focus-section'],
@@ -430,22 +566,25 @@ const sections=[
 ];
 
 sections.forEach(([key,id])=>{
-  const text=get(key);
-  put(key,text);
-  if(!text){
-    document.getElementById(id).classList.add('hidden');
+  if(!values[key]){
+    document
+      .getElementById(id)
+      .classList.add('hidden');
   }
 });
 
-put('duration',get('duration'));
-put('level',get('level'));
-
-if(!get('duration')){
-  document.getElementById('duration').classList.add('hidden');
+if(!values.duration){
+  document
+    .getElementById('duration')
+    .classList.add('hidden');
 }
-if(!get('level')){
-  document.getElementById('level').classList.add('hidden');
+
+if(!values.level){
+  document
+    .getElementById('level')
+    .classList.add('hidden');
 }
 </script>
+
 </body>
 </html>
