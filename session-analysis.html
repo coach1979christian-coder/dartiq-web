@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,16 +27,9 @@ html,body{
   font-family:Inter,Arial,sans-serif;
   overflow-x:hidden;
 }
-body{
-  padding:10px 10px 16px;
-}
-.wrap{
-  width:100%;
-  max-width:430px;
-  margin:0 auto;
-}
+body{padding:10px 10px 16px}
+.wrap{width:100%;max-width:430px;margin:0 auto}
 
-/* Compact session strip */
 .session-strip{
   display:flex;
   align-items:center;
@@ -63,19 +57,13 @@ body{
   font-weight:950;
   letter-spacing:.5px;
 }
-
-/* Hero */
 .hero{
   display:grid;
-  grid-template-columns:112px 1fr;
+  grid-template-columns:112px minmax(0,1fr);
   gap:9px;
   margin-bottom:10px;
 }
-.score-card,
-.grade-card,
-.stats-card,
-.coach-card,
-.action-card{
+.score-card,.grade-card,.stats-card,.coach-card,.action-card{
   background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.018));
   border:1px solid var(--line);
   border-radius:15px;
@@ -90,6 +78,7 @@ body{
 .grade-card{
   padding:12px 14px;
   min-height:96px;
+  min-width:0;
   display:flex;
   flex-direction:column;
   justify-content:center;
@@ -114,13 +103,9 @@ body{
   font-size:18px;
   line-height:1.15;
   font-weight:950;
+  overflow-wrap:anywhere;
 }
-
-/* Stats */
-.stats-card{
-  padding:11px;
-  margin-bottom:10px;
-}
+.stats-card{padding:11px;margin-bottom:10px}
 .card-head{
   display:flex;
   align-items:center;
@@ -141,8 +126,9 @@ body{
 }
 .stat{
   min-width:0;
+  overflow:hidden;
   text-align:center;
-  padding:9px 5px;
+  padding:9px 3px;
   border-radius:10px;
   background:rgba(255,255,255,.023);
   border:1px solid rgba(255,255,255,.055);
@@ -155,16 +141,19 @@ body{
   font-weight:900;
 }
 .stat-value{
+  display:block;
+  width:100%;
+  min-width:0;
   margin-top:5px;
-  font-size:18px;
+  font-size:clamp(13px,4.5vw,18px);
+  line-height:1.2;
   font-weight:950;
-}
-
-/* Coach card */
-.coach-card{
-  margin-bottom:10px;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
   overflow:hidden;
+  text-overflow:ellipsis;
 }
+.coach-card{margin-bottom:10px;overflow:hidden}
 .coach-top{
   display:flex;
   gap:10px;
@@ -195,10 +184,7 @@ body{
   line-height:1.25;
   font-weight:950;
 }
-.row{
-  padding:10px 12px;
-  border-top:1px solid var(--line);
-}
+.row{padding:10px 12px;border-top:1px solid var(--line)}
 .row-title{
   font-size:8px;
   letter-spacing:1px;
@@ -214,11 +200,7 @@ body{
   color:#e6e9ee;
   font-weight:650;
 }
-
-/* Action */
-.action-card{
-  padding:12px;
-}
+.action-card{padding:12px}
 .action-top{
   display:flex;
   gap:10px;
@@ -292,17 +274,16 @@ details[open] summary:after{content:" −"}
   text-transform:uppercase;
 }
 .hidden{display:none!important}
-
 @media(max-width:360px){
   body{padding-left:8px;padding-right:8px}
-  .hero{grid-template-columns:102px 1fr}
+  .hero{grid-template-columns:102px minmax(0,1fr)}
   .score{font-size:40px}
+  .stat-value{font-size:13px}
 }
 </style>
 </head>
 <body>
 <main class="wrap">
-
   <section class="session-strip">
     <div class="session-meta">
       <span id="date"></span>
@@ -346,12 +327,10 @@ details[open] summary:after{content:" −"}
         <div class="focus" id="focus"></div>
       </div>
     </div>
-
     <div class="row" id="insight-block">
       <div class="row-title purple">AI Insight</div>
       <div class="copy" id="insight"></div>
     </div>
-
     <div class="row" id="advice-block">
       <div class="row-title blue">Coach Advice</div>
       <div class="copy" id="advice"></div>
@@ -370,12 +349,10 @@ details[open] summary:after{content:" −"}
         </div>
       </div>
     </div>
-
     <div class="improve" id="improve-block">
       <div class="improve-title">Improvement Potential</div>
       <div class="improve-value" id="improvement"></div>
     </div>
-
     <details id="why-block">
       <summary>Why this matters</summary>
       <div class="copy" id="why"></div>
@@ -392,19 +369,51 @@ function get(...keys){
   for(const key of keys){
     const raw = params.get(key);
     if(raw !== null){
-      const v = decodeURIComponent(String(raw).replace(/\+/g,' ')).trim();
+      const v = String(raw).trim();
       if(v && v !== '...' && v !== '…') return v;
     }
   }
   return '';
 }
 
-function put(id, value, fallback=''){
-  const el = document.getElementById(id);
-  if(el) el.textContent = value || fallback;
+function put(id,value,fallback=''){
+  const el=document.getElementById(id);
+  if(el) el.textContent=value === '' || value === null || value === undefined
+    ? fallback : String(value);
 }
 
-const values = {
+// Accept decimal commas and decimal points from Glide.
+// Return a fixed-width display string without changing the original data.
+function formatNumber(value, decimals=2, suffix=''){
+  if(value === null || value === undefined || String(value).trim()===''){
+    return '--';
+  }
+
+  let raw=String(value).trim().replace(/\s/g,'').replace(/%/g,'');
+
+  // Handle both 54,344262 and 54.344262.
+  if(raw.includes(',') && raw.includes('.')){
+    if(raw.lastIndexOf(',') > raw.lastIndexOf('.')){
+      raw=raw.replace(/\./g,'').replace(',','.');
+    }else{
+      raw=raw.replace(/,/g,'');
+    }
+  }else if(raw.includes(',')){
+    raw=raw.replace(',','.');
+  }
+
+  const number=Number(raw);
+  if(!Number.isFinite(number)) return '--';
+
+  return number.toFixed(decimals)+suffix;
+}
+
+function formatCount(value){
+  const number=Number(String(value || '0').replace(',','.'));
+  return Number.isFinite(number) ? String(Math.round(number)) : '0';
+}
+
+const values={
   date:get('date'),
   sessiontype:get('sessiontype','type') || 'Match',
   matchformat:get('matchformat','format','bo'),
@@ -431,12 +440,15 @@ put('sessiontype',values.sessiontype,'Match');
 put('matchformat',values.matchformat);
 put('score',values.score,'--');
 put('grade',values.grade,'--');
-put('average',values.average,'--');
-put('first9',values.first9,'--');
-put('checkoutpct',values.checkoutpct,'--');
-put('total180',values.total180,'0');
-put('total140',values.total140,'0');
-put('total100',values.total100,'0');
+
+put('average',formatNumber(values.average,2));
+put('first9',formatNumber(values.first9,2));
+put('checkoutpct',formatNumber(values.checkoutpct,1,'%'));
+
+put('total180',formatCount(values.total180));
+put('total140',formatCount(values.total140));
+put('total100',formatCount(values.total100));
+
 put('focus',values.focus);
 put('insight',values.insight);
 put('advice',values.advice);
@@ -450,20 +462,28 @@ if(!values.date){
   document.getElementById('date').classList.add('hidden');
   document.getElementById('sep').classList.add('hidden');
 }
-if(!values.matchformat) document.getElementById('matchformat').classList.add('hidden');
+if(!values.matchformat)
+  document.getElementById('matchformat').classList.add('hidden');
 
-if(!values.focus) document.getElementById('focus-block').classList.add('hidden');
-if(!values.insight) document.getElementById('insight-block').classList.add('hidden');
-if(!values.advice) document.getElementById('advice-block').classList.add('hidden');
-if(!values.focus && !values.insight && !values.advice) document.getElementById('coach-card').classList.add('hidden');
+if(!values.focus)
+  document.getElementById('focus-block').classList.add('hidden');
+if(!values.insight)
+  document.getElementById('insight-block').classList.add('hidden');
+if(!values.advice)
+  document.getElementById('advice-block').classList.add('hidden');
+if(!values.focus && !values.insight && !values.advice)
+  document.getElementById('coach-card').classList.add('hidden');
 
-if(!values.duration) document.getElementById('duration').classList.add('hidden');
-if(!values.level) document.getElementById('level').classList.add('hidden');
-if(!values.improvement) document.getElementById('improve-block').classList.add('hidden');
-if(!values.why) document.getElementById('why-block').classList.add('hidden');
-if(!values.drill && !values.duration && !values.level && !values.improvement && !values.why){
+if(!values.duration)
+  document.getElementById('duration').classList.add('hidden');
+if(!values.level)
+  document.getElementById('level').classList.add('hidden');
+if(!values.improvement)
+  document.getElementById('improve-block').classList.add('hidden');
+if(!values.why)
+  document.getElementById('why-block').classList.add('hidden');
+if(!values.drill && !values.duration && !values.level && !values.improvement && !values.why)
   document.getElementById('action-card').classList.add('hidden');
-}
 </script>
 </body>
 </html>
