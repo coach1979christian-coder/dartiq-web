@@ -4,237 +4,343 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>DARTIQ | AI Throw Analysis</title>
+
 <style>
 :root{
   color-scheme:dark;
-  --bg:#060b12;--panel:#0d1622;--raised:#111e2c;
-  --line:#1a2d40;--blue:#39a9ff;--text:#f4f8fc;
-  --muted:#8ca1b5;--green:#58d6a0
+  --bg:#050a11;
+  --panel:#0c1520;
+  --panel2:#101d2a;
+  --line:#1a2d40;
+  --blue:#39a9ff;
+  --blue-dark:#102a40;
+  --text:#f4f8fc;
+  --muted:#8da2b6;
+  --green:#5be0a5;
 }
 *{box-sizing:border-box}
 body{
-  margin:0;padding:18px 14px 28px;background:var(--bg);
-  color:var(--text);font-family:Arial,Helvetica,sans-serif
+  margin:0;
+  padding:16px 12px 28px;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
 }
-.page{width:min(100%,760px);margin:auto}
+.page{width:min(100%,720px);margin:auto}
 header{
-  display:flex;align-items:center;gap:12px;padding:8px 2px 18px;
-  border-bottom:1px solid var(--line);margin-bottom:22px
+  display:flex;align-items:center;gap:11px;
+  padding:7px 2px 16px;border-bottom:1px solid var(--line);
+  margin-bottom:20px
 }
 .logo{
-  width:40px;height:40px;display:grid;place-items:center;
-  border:1px solid #287fbd;border-radius:12px;color:var(--blue);
-  font-size:21px;font-weight:800
+  width:39px;height:39px;display:grid;place-items:center;
+  border:1px solid #287fbd;border-radius:12px;
+  color:var(--blue);font-size:21px;font-weight:800
 }
 .brand{font-size:12px;font-weight:800;letter-spacing:.2em}
-.brand small{display:block;margin-top:5px;color:var(--muted);
-  font-size:11px;font-weight:500;letter-spacing:0}
+.brand small{
+  display:block;margin-top:5px;color:var(--muted);
+  font-size:10px;font-weight:500;letter-spacing:.08em
+}
 .status{
-  margin-left:auto;padding:8px 11px;border:1px solid #24533f;
+  margin-left:auto;padding:7px 10px;border:1px solid #24533f;
   border-radius:999px;background:#10251e;color:var(--green);
   font-size:10px;font-weight:700;white-space:nowrap
 }
-.status span{display:inline-block;width:7px;height:7px;margin-right:6px;
-  border-radius:50%;background:currentColor}
-.eyebrow{margin:0 0 7px;color:var(--blue);font-size:11px;
-  font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+.status:before{
+  content:"";display:inline-block;width:7px;height:7px;
+  margin-right:6px;border-radius:50%;background:currentColor
+}
+.eyebrow{
+  margin:0 0 7px;color:var(--blue);font-size:10px;
+  font-weight:800;letter-spacing:.15em;text-transform:uppercase
+}
 h1{margin:0;font-size:clamp(25px,6vw,34px);letter-spacing:-.03em}
-.lead{margin:9px 0 18px;color:var(--muted);font-size:14px;line-height:1.55}
-.summary{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.card,.video-card,.coach{
-  border:1px solid var(--line);border-radius:16px;background:var(--panel)
+.lead{margin:8px 0 18px;color:var(--muted);font-size:13px;line-height:1.5}
+.hero{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px
 }
-.summary-card{min-height:135px;padding:16px}
-.label{color:var(--muted);font-size:12px}
-.score-row{display:flex;align-items:center;gap:12px;margin-top:13px}
+.hero-card{
+  min-height:116px;padding:14px;border:1px solid var(--line);
+  border-radius:15px;background:var(--panel)
+}
+.label{color:var(--muted);font-size:11px}
+.score-row{display:flex;align-items:center;gap:11px;margin-top:12px}
 .ring{
-  --score:0;width:66px;height:66px;flex:0 0 66px;position:relative;
-  display:grid;place-items:center;border-radius:50%;
-  background:conic-gradient(var(--blue) calc(var(--score)*1%),#1b2b3b 0)
+  --score:0;width:62px;height:62px;flex:0 0 62px;
+  display:grid;place-items:center;position:relative;border-radius:50%;
+  background:conic-gradient(var(--blue) calc(var(--score)*1%),#1a2b3c 0)
 }
-.ring:before{content:"";position:absolute;inset:5px;border-radius:50%;
-  background:var(--panel)}
-.ring strong{position:relative;font-size:20px}
-.caption{color:var(--muted);font-size:11px;line-height:1.4}
-.confidence{margin-top:12px;font-size:32px;font-weight:800}
-.confidence small{color:var(--blue);font-size:16px}
-.video-card{overflow:hidden;margin-top:18px}
-.section-head{display:flex;justify-content:space-between;align-items:center;
-  gap:10px;padding:15px 16px 12px}
-h2{margin:0;font-size:15px}
-.note{color:var(--muted);font-size:11px}
-.video-wrap{aspect-ratio:16/9;background:#03070c}
-video{display:block;width:100%;height:100%;max-height:430px;
-  object-fit:contain;background:#03070c}
-.empty{display:none;padding:30px 18px;color:var(--muted);
-  text-align:center;font-size:13px}
-.metrics-title{margin:24px 2px 11px;font-size:15px}
-.metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.metric{min-height:90px;padding:13px 14px;border:1px solid var(--line);
-  border-radius:14px;background:var(--raised)}
-.metric-name{color:var(--muted);font-size:11px}
-.metric-value{margin-top:9px;font-size:22px;font-weight:750;
-  overflow-wrap:anywhere}
-.coach{
-  margin-top:22px;padding:17px;border-color:#205a83;
-  background:linear-gradient(135deg,#102a41,#0d1723 72%)
+.ring:before{
+  content:"";position:absolute;inset:5px;border-radius:50%;background:var(--panel)
 }
-.coach-title{display:flex;align-items:center;gap:9px;margin:0 0 15px}
-.ai-icon{width:29px;height:29px;display:grid;place-items:center;
-  border-radius:9px;background:#153957;color:var(--blue);
-  font-size:12px;font-weight:800}
-.advice{margin:0;font-size:15px;line-height:1.6;white-space:pre-wrap}
-.coach-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
-.coach-item{padding:12px;border:1px solid #203b53;border-radius:12px;
-  background:#0a1723}
+.ring strong{position:relative;font-size:19px}
+.caption{color:var(--muted);font-size:10px;line-height:1.4}
+.confidence{margin-top:12px;font-size:29px;font-weight:800}
+.confidence small{color:var(--blue);font-size:15px}
+.issue{
+  display:none;margin:0 0 15px;padding:13px 14px;
+  border:1px solid #205a83;border-radius:13px;
+  background:linear-gradient(110deg,#102a40,#0b1722);
+  font-size:13px;line-height:1.5
+}
+.issue-label{
+  display:block;margin-bottom:5px;color:var(--blue);
+  font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase
+}
+details{
+  margin:10px 0;border:1px solid var(--line);
+  border-radius:15px;background:var(--panel);overflow:hidden
+}
+summary{
+  min-height:52px;padding:15px 15px;display:flex;align-items:center;
+  gap:10px;cursor:pointer;list-style:none;font-size:13px;font-weight:700
+}
+summary::-webkit-details-marker{display:none}
+summary:after{
+  content:"+";margin-left:auto;color:var(--blue);font-size:20px;
+  font-weight:400;line-height:1
+}
+details[open] summary:after{content:"−"}
+.summary-icon{
+  width:27px;height:27px;display:grid;place-items:center;
+  border-radius:8px;background:var(--blue-dark);color:var(--blue);
+  font-size:12px;font-weight:800
+}
+.summary-hint{margin-left:auto;color:var(--muted);font-size:10px;font-weight:500}
+details[open] .summary-hint{display:none}
+.content{padding:0 14px 15px}
+.video-wrap{
+  overflow:hidden;border-radius:11px;background:#02060a;
+  aspect-ratio:16/9
+}
+video{
+  display:block;width:100%;height:100%;max-height:410px;
+  background:#02060a;object-fit:contain
+}
+.no-video{
+  display:none;padding:24px 12px;color:var(--muted);
+  text-align:center;font-size:12px
+}
+.metrics{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px
+}
+.metric{
+  min-height:73px;padding:11px;border:1px solid var(--line);
+  border-radius:11px;background:var(--panel2)
+}
+.metric-name{color:var(--muted);font-size:10px}
+.metric-value{
+  margin-top:7px;font-size:18px;font-weight:750;overflow-wrap:anywhere
+}
+.advice{
+  padding:13px;border:1px solid #205a83;border-radius:12px;
+  background:linear-gradient(120deg,#102a40,#0d1925);
+  font-size:13px;line-height:1.55;white-space:pre-wrap
+}
+.coach-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}
+.coach-item{
+  padding:11px;border:1px solid var(--line);
+  border-radius:11px;background:var(--panel2)
+}
 .coach-item.wide{grid-column:1/-1}
-.coach-label{margin-bottom:6px;color:var(--muted);font-size:10px;
-  font-weight:700;letter-spacing:.08em;text-transform:uppercase}
-.coach-value{font-size:13px;line-height:1.5;overflow-wrap:anywhere;
-  white-space:pre-wrap}
-footer{padding:22px 4px 4px;color:#60778c;text-align:center;
-  font-size:10px;font-weight:700;letter-spacing:.12em}
+.coach-label{
+  margin-bottom:6px;color:var(--muted);font-size:9px;
+  font-weight:800;letter-spacing:.09em;text-transform:uppercase
+}
+.coach-value{font-size:12px;line-height:1.5;overflow-wrap:anywhere;white-space:pre-wrap}
+footer{
+  padding:19px 4px 3px;color:#60778c;text-align:center;
+  font-size:9px;font-weight:700;letter-spacing:.14em
+}
 [hidden]{display:none!important}
-@media(min-width:600px){
-  body{padding:28px 22px 40px}
-  .summary-card{min-height:150px;padding:19px}
+@media(min-width:560px){
+  body{padding:24px 20px 34px}
+  .hero-card{min-height:130px;padding:17px}
   .metrics{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
-@media(max-width:360px){
-  body{padding-inline:10px}
-  .summary-card{padding:12px}
+@media(max-width:340px){
+  body{padding-inline:9px}
+  .hero-card{padding:11px}
   .coach-grid{grid-template-columns:1fr}
   .coach-item.wide{grid-column:auto}
+  .summary-hint{display:none}
 }
 </style>
 </head>
+
 <body>
 <main class="page">
   <header>
     <div class="logo">D</div>
     <div class="brand">DARTIQ<small>CORE VISION · THROW ANALYSIS</small></div>
-    <div class="status"><span></span>ANALYSIS COMPLETE</div>
+    <div class="status">ANALYSIS COMPLETE</div>
   </header>
 
   <section>
     <p class="eyebrow">YOUR THROW, UNDERSTOOD</p>
     <h1>AI Throw Analysis</h1>
-    <p class="lead">A clear breakdown of your throw, with one practical focus for your next session.</p>
+    <p class="lead">Review your results and focus on one practical improvement.</p>
   </section>
 
-  <section class="summary">
-    <article class="card summary-card">
+  <section class="hero">
+    <article class="hero-card">
       <div class="label">Technique score</div>
       <div class="score-row">
         <div class="ring" id="scoreRing"><strong id="score">—</strong></div>
         <div class="caption">Overall technique<br>score</div>
       </div>
     </article>
-    <article class="card summary-card">
+
+    <article class="hero-card">
       <div class="label">Release confidence</div>
       <div class="confidence"><span id="confidence">—</span><small id="confidenceUnit"></small></div>
       <div class="caption">Confidence in release detection</div>
     </article>
   </section>
 
-  <section class="video-card">
-    <div class="section-head">
-      <h2>Your throw</h2>
-      <span class="note">Review the analysed clip</span>
-    </div>
-    <div class="video-wrap">
-      <video id="video" controls playsinline preload="metadata"></video>
-      <div class="empty" id="noVideo">No video was attached to this analysis.</div>
-    </div>
-  </section>
+  <div class="issue" id="issueCard">
+    <span class="issue-label">Main finding</span>
+    <span id="mainIssue"></span>
+  </div>
 
-  <h2 class="metrics-title">Throw metrics</h2>
-  <section class="metrics">
-    <article class="metric" id="metricReleaseTime"><div class="metric-name">Release time</div><div class="metric-value" id="releaseTime">—</div></article>
-    <article class="metric" id="metricElbow"><div class="metric-name">Elbow angle</div><div class="metric-value" id="elbow">—</div></article>
-    <article class="metric" id="metricFollow"><div class="metric-name">Follow-through</div><div class="metric-value" id="follow">—</div></article>
-    <article class="metric" id="metricStability"><div class="metric-name">Body stability</div><div class="metric-value" id="stability">—</div></article>
-    <article class="metric" id="metricHead"><div class="metric-name">Head movement</div><div class="metric-value" id="head">—</div></article>
-    <article class="metric" id="metricShoulder"><div class="metric-name">Shoulder angle</div><div class="metric-value" id="shoulder">—</div></article>
-    <article class="metric" id="metricFrame"><div class="metric-name">Release frame</div><div class="metric-value" id="frame">—</div></article>
-    <article class="metric" id="metricPose"><div class="metric-name">Pose detection</div><div class="metric-value" id="pose">—</div></article>
-    <article class="metric" id="metricFrames"><div class="metric-name">Frames checked</div><div class="metric-value" id="frames">—</div></article>
-  </section>
-
-  <section class="coach">
-    <h2 class="coach-title"><span class="ai-icon">AI</span>AI coach analysis</h2>
-    <p class="advice" id="advice">—</p>
-    <div class="coach-grid">
-      <article class="coach-item"><div class="coach-label">Recommended drill</div><div class="coach-value" id="drill">—</div></article>
-      <article class="coach-item"><div class="coach-label">Practice focus</div><div class="coach-value" id="focus">—</div></article>
-      <article class="coach-item wide"><div class="coach-label">Why this drill</div><div class="coach-value" id="why">—</div></article>
-      <article class="coach-item"><div class="coach-label">Improvement potential</div><div class="coach-value" id="improvement">—</div></article>
-      <article class="coach-item"><div class="coach-label">Analysis summary</div><div class="coach-value" id="summary">—</div></article>
+  <details open>
+    <summary>
+      <span class="summary-icon">▶</span>
+      Your throw video
+      <span class="summary-hint">Tap to collapse</span>
+    </summary>
+    <div class="content">
+      <div class="video-wrap">
+        <video id="video" controls playsinline preload="metadata"></video>
+        <div class="no-video" id="noVideo">No video is attached to this analysis.</div>
+      </div>
     </div>
-  </section>
+  </details>
+
+  <details>
+    <summary>
+      <span class="summary-icon">▦</span>
+      Technique metrics
+      <span class="summary-hint">Tap to expand</span>
+    </summary>
+    <div class="content">
+      <div class="metrics">
+        <article class="metric" id="cardReleaseTime"><div class="metric-name">Release time</div><div class="metric-value" id="releaseTime">—</div></article>
+        <article class="metric" id="cardElbow"><div class="metric-name">Elbow angle</div><div class="metric-value" id="elbow">—</div></article>
+        <article class="metric" id="cardFollow"><div class="metric-name">Follow-through</div><div class="metric-value" id="follow">—</div></article>
+        <article class="metric" id="cardStability"><div class="metric-name">Body stability</div><div class="metric-value" id="stability">—</div></article>
+        <article class="metric" id="cardHead"><div class="metric-name">Head movement</div><div class="metric-value" id="head">—</div></article>
+        <article class="metric" id="cardShoulder"><div class="metric-name">Shoulder angle</div><div class="metric-value" id="shoulder">—</div></article>
+        <article class="metric" id="cardFrame"><div class="metric-name">Release frame</div><div class="metric-value" id="frame">—</div></article>
+        <article class="metric" id="cardPose"><div class="metric-name">Pose detection</div><div class="metric-value" id="pose">—</div></article>
+        <article class="metric" id="cardFrames"><div class="metric-name">Frames checked</div><div class="metric-value" id="frames">—</div></article>
+      </div>
+    </div>
+  </details>
+
+  <details open>
+    <summary>
+      <span class="summary-icon">AI</span>
+      AI coach analysis
+      <span class="summary-hint">Tap to collapse</span>
+    </summary>
+    <div class="content">
+      <div class="advice" id="advice">Your coach advice will appear here.</div>
+      <div class="coach-grid">
+        <article class="coach-item" id="cardDrill"><div class="coach-label">Recommended drill</div><div class="coach-value" id="drill">—</div></article>
+        <article class="coach-item" id="cardFocus"><div class="coach-label">Practice focus</div><div class="coach-value" id="focus">—</div></article>
+        <article class="coach-item wide" id="cardWhy"><div class="coach-label">Why this drill</div><div class="coach-value" id="why">—</div></article>
+        <article class="coach-item" id="cardImprovement"><div class="coach-label">Improvement potential</div><div class="coach-value" id="improvement">—</div></article>
+        <article class="coach-item" id="cardSummary"><div class="coach-label">Analysis summary</div><div class="coach-value" id="summary">—</div></article>
+      </div>
+    </div>
+  </details>
 
   <footer>DARTIQ CORE VISION</footer>
 </main>
 
 <script>
-const p = new URLSearchParams(location.search);
+const params = new URLSearchParams(window.location.search);
 
-function get(...keys){
+function getValue(...keys){
   for(const key of keys){
-    const value = p.get(key);
+    const value = params.get(key);
     if(value !== null && value.trim() !== "") return value.trim();
   }
   return "";
 }
 
-function text(id,value,fallback="—"){
+function setText(id,value,fallback="—"){
   document.getElementById(id).textContent = value || fallback;
 }
 
-function metric(id,cardId,value,unit=""){
+function setMetric(id,cardId,value,unit=""){
   const card = document.getElementById(cardId);
-  const el = document.getElementById(id);
-  if(!value){ card.hidden = true; return; }
+  const field = document.getElementById(id);
+  if(!value){
+    card.hidden = true;
+    return;
+  }
   card.hidden = false;
-  el.textContent = unit && !value.toLowerCase().includes(unit.trim().toLowerCase())
-    ? value + unit : value;
+  field.textContent = unit && !value.toLowerCase().includes(unit.trim().toLowerCase())
+    ? value + unit
+    : value;
 }
 
-const scoreValue = get("score","technique_score","techniqueScore");
-const numericScore = Number.parseFloat(scoreValue);
-if(Number.isFinite(numericScore)){
-  const bounded = Math.max(0,Math.min(100,numericScore));
-  document.getElementById("scoreRing").style.setProperty("--score",bounded);
-  text("score",String(Math.round(bounded)));
+const scoreValue = getValue("score","technique_score","techniqueScore");
+const scoreNumber = Number.parseFloat(scoreValue);
+
+if(Number.isFinite(scoreNumber)){
+  const score = Math.max(0,Math.min(100,scoreNumber));
+  document.getElementById("scoreRing").style.setProperty("--score",score);
+  setText("score",String(Math.round(score)));
 }
 
-const confidenceValue = get("confidence","release_confidence","releaseConfidence");
-const numericConfidence = Number.parseFloat(confidenceValue);
-if(confidenceValue && Number.isFinite(numericConfidence)){
-  text("confidence",String(numericConfidence));
-  text("confidenceUnit",confidenceValue.includes("%") ? "" : "%","");
+const confidenceValue = getValue("confidence","release_confidence","releaseConfidence");
+const confidenceNumber = Number.parseFloat(confidenceValue);
+
+if(confidenceValue && Number.isFinite(confidenceNumber)){
+  setText("confidence",String(confidenceNumber));
+  setText("confidenceUnit",confidenceValue.includes("%") ? "" : "%","");
 }else{
-  text("confidence",confidenceValue);
+  setText("confidence",confidenceValue);
 }
 
-metric("releaseTime","metricReleaseTime",get("releaseTime","release_time_ms")," ms");
-metric("elbow","metricElbow",get("elbowAngle","elbow_angle"),"°");
-metric("follow","metricFollow",get("followThrough","follow_through_score"));
-metric("stability","metricStability",get("bodyStability","stability_score"));
-metric("head","metricHead",get("headMovement","head_movement_flag","head_movement_score"));
-metric("shoulder","metricShoulder",get("shoulderAngle","shoulder_angle"),"°");
-metric("frame","metricFrame",get("releaseFrame","release_frame"));
-metric("pose","metricPose",get("poseDetection","pose_detected"));
-metric("frames","metricFrames",get("framesChecked","frames_checked"));
+setMetric("releaseTime","cardReleaseTime",getValue("releaseTime","release_time_ms")," ms");
+setMetric("elbow","cardElbow",getValue("elbowAngle","elbow_angle"),"°");
+setMetric("follow","cardFollow",getValue("followThrough","follow_through_score"));
+setMetric("stability","cardStability",getValue("bodyStability","stability_score"));
+setMetric("head","cardHead",getValue("headMovement","head_movement_flag","head_movement_score"));
+setMetric("shoulder","cardShoulder",getValue("shoulderAngle","shoulder_angle"),"°");
+setMetric("frame","cardFrame",getValue("releaseFrame","release_frame"));
+setMetric("pose","cardPose",getValue("poseDetection","pose_detected"));
+setMetric("frames","cardFrames",getValue("framesChecked","frames_checked"));
 
-text("advice",get("coachAdvice","coach_advice","ai_coach_advice"));
-text("drill",get("drill","recommended_drill"));
-text("focus",get("focus","practice_focus"));
-text("why",get("why","why_drill","why_this_drill"));
-text("improvement",get("improvement","improvement_potential"));
-text("summary",get("summary","ai_summary"));
+const mainIssue = getValue("mainIssue","main_issue");
+if(mainIssue){
+  document.getElementById("issueCard").style.display = "block";
+  setText("mainIssue",mainIssue);
+}
 
-const videoUrl = get("video","video_url","videoUrl");
+const advice = getValue("coachAdvice","coach_advice","ai_coach_advice");
+if(advice) setText("advice",advice);
+
+const coachFields = [
+  ["drill","cardDrill",["drill","recommended_drill"]],
+  ["focus","cardFocus",["focus","practice_focus"]],
+  ["why","cardWhy",["why","why_drill","why_this_drill"]],
+  ["improvement","cardImprovement",["improvement","improvement_potential"]],
+  ["summary","cardSummary",["summary","ai_summary"]]
+];
+
+coachFields.forEach(([id,cardId,keys])=>{
+  const value = getValue(...keys);
+  if(value) setText(id,value);
+  else document.getElementById(cardId).hidden = true;
+});
+
+const videoUrl = getValue("video","video_url","videoUrl");
 if(videoUrl){
   document.getElementById("video").src = videoUrl;
 }else{
