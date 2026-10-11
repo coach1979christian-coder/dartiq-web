@@ -15,16 +15,16 @@ body{
   justify-content:center;
   align-items:flex-start;
   min-height:100vh;
-  padding:20px 0
+  padding:18px 12px 32px
 }
 .card{
-  width:420px;
-  max-width:95%;
+  width:min(100%,760px);
+  max-width:100%;
   background:#0f1c2f;
   border:1px solid #1ea7ff;
   border-radius:22px;
-  padding:20px;
-  box-shadow:0 0 30px rgba(0,170,255,.35);
+  padding:clamp(18px,4vw,30px);
+  box-shadow:0 0 30px rgba(0,170,255,.28);
 }
 
 h1{
@@ -37,7 +37,61 @@ h1{
 .subtitle{
   text-align:center;
   color:#c8d5e6;
-  margin-bottom:18px;
+  margin-bottom:22px;
+  font-size:16px;
+}
+
+.analysis-info{
+  margin:0 0 22px;
+  overflow:hidden;
+  border:1px solid #24577d;
+  border-radius:16px;
+  background:linear-gradient(135deg,#102947,#0b1929);
+}
+.analysis-info summary{
+  position:relative;
+  padding:16px 48px 16px 17px;
+  color:#eaf7ff;
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer;
+  list-style:none;
+}
+.analysis-info summary::-webkit-details-marker{display:none}
+.analysis-info summary:after{
+  content:"+";
+  position:absolute;
+  right:18px;
+  top:50%;
+  transform:translateY(-50%);
+  color:#66cfff;
+  font-size:24px;
+  font-weight:400;
+}
+.analysis-info[open] summary:after{content:"−"}
+.analysis-content{
+  padding:0 17px 17px;
+  color:#cad8e7;
+  font-size:14px;
+  line-height:1.55;
+}
+.analysis-content p{margin:0 0 12px}
+.analysis-content ul{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:9px 18px;
+  margin:0;
+  padding-left:18px;
+}
+.analysis-content li{padding-left:2px}
+.analysis-note{
+  margin-top:15px!important;
+  padding:11px 12px;
+  border-left:3px solid #39a9ff;
+  border-radius:0 9px 9px 0;
+  background:#071522;
+  color:#a9c5dc;
+  font-size:12px;
 }
 
 input[type=file]{
@@ -54,7 +108,7 @@ video{
   display:none;
   width:100%;
   height:auto;
-  max-height:260px;
+  max-height:460px;
   object-fit:contain;
   background:#000;
   border-radius:16px;
@@ -128,34 +182,39 @@ button:disabled{
   font-weight:700;
   text-align:right;
 }
-  display:none;
-  margin-top:20px;
-  padding:16px;
-  border:1px solid #2c658c;
-  border-radius:16px;
-  background:#0a1727
-}
-.result-row{
-  display:flex;
-  justify-content:space-between;
-  gap:14px;
-  padding:10px 0;
-  border-bottom:1px solid rgba(255,255,255,.12)
-}
-.result-row:last-child{border-bottom:0}
-.result-label{color:#b7c6d8}
-.result-value{
-  color:#5bcaff;
-  font-weight:700;
-  text-align:right
-}
 .hidden-canvas{display:none}
+@media(max-width:520px){
+  body{padding:10px 8px 24px}
+  .card{border-radius:17px}
+  .analysis-content ul{grid-template-columns:1fr;gap:6px}
+  .result-row{align-items:flex-start}
+  .result-label,.result-value{font-size:14px}
+}
 </style>
 </head>
 <body>
 <div class="card">
   <h1>DARTIQ AI Video Analysis</h1>
   <div class="subtitle">Select your throw video</div>
+
+  <details class="analysis-info" open>
+    <summary>What exactly does the analysis check?</summary>
+    <div class="analysis-content">
+      <p>The current analysis samples 10 frames from your video and uses pose landmarks to estimate these parts of your throwing movement:</p>
+      <ul>
+        <li><strong>Pose detection:</strong> whether your body is visible in each sampled frame.</li>
+        <li><strong>Release frame and timing:</strong> an estimated release frame and timestamp.</li>
+        <li><strong>Release confidence:</strong> visibility of the throwing-side shoulder, elbow and wrist.</li>
+        <li><strong>Elbow angle:</strong> estimated angle between shoulder, elbow and wrist.</li>
+        <li><strong>Shoulder and wrist angles:</strong> estimated throwing-arm position at the selected frame.</li>
+        <li><strong>Head movement:</strong> nose position relative to the shoulders.</li>
+        <li><strong>Body stability:</strong> hip landmark position in the selected frame.</li>
+        <li><strong>Arm extension and follow-through:</strong> estimated wrist position relative to the shoulder.</li>
+        <li><strong>Technique score:</strong> a score based on pose visibility and detection across sampled frames.</li>
+      </ul>
+      <p class="analysis-note"><strong>Current limitation:</strong> this version analyses sampled body-pose frames. It does not yet track the dart’s flight or automatically identify where the dart lands on the board.</p>
+    </div>
+  </details>
 
   <input id="videoInput" type="file" accept="video/*">
  <video id="videoPreview" controls playsinline preload="metadata"></video>
