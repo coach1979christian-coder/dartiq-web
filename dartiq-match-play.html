@@ -391,6 +391,22 @@ body{padding:8px}
   font-size:12px;
   line-height:1.5;
 }
+.training-button{
+  display:block;
+  margin-top:12px;
+  width:100%;
+  border:1px solid #80d1ff;
+  border-radius:9px;
+  padding:12px;
+  background:linear-gradient(110deg,#39a9ff,#1678b8);
+  color:#00101c;
+  font-size:13px;
+  font-weight:900;
+  text-align:center;
+  text-decoration:none;
+  box-shadow:0 0 14px rgba(57,169,255,.25)
+}
+.training-button:active{transform:scale(.99)}
 .new-match{
   margin-top:12px;
   width:100%;
@@ -662,6 +678,13 @@ body{padding:8px}
 <div class="match-complete" id="matchComplete">
   <div class="match-complete-title">MATCH COMPLETE</div>
   <div class="match-complete-text" id="matchCompleteText"></div>
+
+  <a
+    class="training-button"
+    href="https://dartiq-core-vision-kqwm.glide.page/dl/6b2fc7"
+    target="_top"
+    rel="noopener"
+  >START MY RECOMMENDED TRAINING →</a>
 
   <button class="new-match" onclick="newMatch()">
     START NEW MATCH
