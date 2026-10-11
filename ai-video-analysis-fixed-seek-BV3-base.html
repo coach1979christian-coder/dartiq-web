@@ -15,16 +15,16 @@ body{
   justify-content:center;
   align-items:flex-start;
   min-height:100vh;
-  padding:18px 12px 32px
+  padding:20px 0
 }
 .card{
-  width:min(100%,760px);
-  max-width:100%;
+  width:420px;
+  max-width:95%;
   background:#0f1c2f;
   border:1px solid #1ea7ff;
   border-radius:22px;
-  padding:clamp(18px,4vw,30px);
-  box-shadow:0 0 30px rgba(0,170,255,.28);
+  padding:20px;
+  box-shadow:0 0 30px rgba(0,170,255,.35);
 }
 
 h1{
@@ -37,61 +37,7 @@ h1{
 .subtitle{
   text-align:center;
   color:#c8d5e6;
-  margin-bottom:22px;
-  font-size:16px;
-}
-
-.analysis-info{
-  margin:0 0 22px;
-  overflow:hidden;
-  border:1px solid #24577d;
-  border-radius:16px;
-  background:linear-gradient(135deg,#102947,#0b1929);
-}
-.analysis-info summary{
-  position:relative;
-  padding:16px 48px 16px 17px;
-  color:#eaf7ff;
-  font-size:16px;
-  font-weight:700;
-  cursor:pointer;
-  list-style:none;
-}
-.analysis-info summary::-webkit-details-marker{display:none}
-.analysis-info summary:after{
-  content:"+";
-  position:absolute;
-  right:18px;
-  top:50%;
-  transform:translateY(-50%);
-  color:#66cfff;
-  font-size:24px;
-  font-weight:400;
-}
-.analysis-info[open] summary:after{content:"−"}
-.analysis-content{
-  padding:0 17px 17px;
-  color:#cad8e7;
-  font-size:14px;
-  line-height:1.55;
-}
-.analysis-content p{margin:0 0 12px}
-.analysis-content ul{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:9px 18px;
-  margin:0;
-  padding-left:18px;
-}
-.analysis-content li{padding-left:2px}
-.analysis-note{
-  margin-top:15px!important;
-  padding:11px 12px;
-  border-left:3px solid #39a9ff;
-  border-radius:0 9px 9px 0;
-  background:#071522;
-  color:#a9c5dc;
-  font-size:12px;
+  margin-bottom:18px;
 }
 
 input[type=file]{
@@ -108,12 +54,47 @@ video{
   display:none;
   width:100%;
   height:auto;
-  max-height:460px;
+  max-height:260px;
   object-fit:contain;
   background:#000;
   border-radius:16px;
   margin-bottom:18px;
 }
+
+.video-stage{
+  display:none;
+  position:relative;
+  width:100%;
+  margin-bottom:18px;
+  background:#000;
+  border-radius:16px;
+  overflow:hidden;
+}
+.video-stage.active{display:block}
+#videoPreview{
+  display:block;
+  width:100%;
+  height:auto;
+  max-height:260px;
+  object-fit:contain;
+  background:#000;
+  border-radius:0;
+  margin:0;
+}
+#skeletonOverlay{
+  position:absolute;
+  z-index:2;
+  display:block;
+  pointer-events:none;
+}
+.skeleton-caption{
+  display:none;
+  margin:-8px 0 16px;
+  color:#8faec7;
+  text-align:center;
+  font-size:12px;
+}
+#analysisVideo{display:none!important}
 
 button{
   width:100%;
@@ -182,14 +163,28 @@ button:disabled{
   font-weight:700;
   text-align:right;
 }
-.hidden-canvas{display:none}
-@media(max-width:520px){
-  body{padding:10px 8px 24px}
-  .card{border-radius:17px}
-  .analysis-content ul{grid-template-columns:1fr;gap:6px}
-  .result-row{align-items:flex-start}
-  .result-label,.result-value{font-size:14px}
+  display:none;
+  margin-top:20px;
+  padding:16px;
+  border:1px solid #2c658c;
+  border-radius:16px;
+  background:#0a1727
 }
+.result-row{
+  display:flex;
+  justify-content:space-between;
+  gap:14px;
+  padding:10px 0;
+  border-bottom:1px solid rgba(255,255,255,.12)
+}
+.result-row:last-child{border-bottom:0}
+.result-label{color:#b7c6d8}
+.result-value{
+  color:#5bcaff;
+  font-weight:700;
+  text-align:right
+}
+.hidden-canvas{display:none}
 </style>
 </head>
 <body>
@@ -197,27 +192,12 @@ button:disabled{
   <h1>DARTIQ AI Video Analysis</h1>
   <div class="subtitle">Select your throw video</div>
 
-  <details class="analysis-info" open>
-    <summary>What exactly does the analysis check?</summary>
-    <div class="analysis-content">
-      <p>The current analysis samples 10 frames from your video and uses pose landmarks to estimate these parts of your throwing movement:</p>
-      <ul>
-        <li><strong>Pose detection:</strong> whether your body is visible in each sampled frame.</li>
-        <li><strong>Release frame and timing:</strong> an estimated release frame and timestamp.</li>
-        <li><strong>Release confidence:</strong> visibility of the throwing-side shoulder, elbow and wrist.</li>
-        <li><strong>Elbow angle:</strong> estimated angle between shoulder, elbow and wrist.</li>
-        <li><strong>Shoulder and wrist angles:</strong> estimated throwing-arm position at the selected frame.</li>
-        <li><strong>Head movement:</strong> nose position relative to the shoulders.</li>
-        <li><strong>Body stability:</strong> hip landmark position in the selected frame.</li>
-        <li><strong>Arm extension and follow-through:</strong> estimated wrist position relative to the shoulder.</li>
-        <li><strong>Technique score:</strong> a score based on pose visibility and detection across sampled frames.</li>
-      </ul>
-      <p class="analysis-note"><strong>Current limitation:</strong> this version analyses sampled body-pose frames. It does not yet track the dart’s flight or automatically identify where the dart lands on the board.</p>
-    </div>
-  </details>
-
   <input id="videoInput" type="file" accept="video/*">
- <video id="videoPreview" controls playsinline preload="metadata"></video>
+ <div id="videoStage" class="video-stage">
+   <video id="videoPreview" controls playsinline preload="metadata"></video>
+   <canvas id="skeletonOverlay" aria-hidden="true"></canvas>
+ </div>
+ <div id="skeletonCaption" class="skeleton-caption">AI skeleton overlay · sampled body pose</div>
 <video id="analysisVideo" playsinline preload="metadata" style="display:none;"></video>
 
   <button id="analyzeBtn" disabled>Analyze My Throw</button>
@@ -286,6 +266,10 @@ const throwId = (window.crypto && crypto.randomUUID)
   : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 const videoInput = document.getElementById("videoInput");
 const videoPreview = document.getElementById("videoPreview");
+const videoStage = document.getElementById("videoStage");
+const skeletonCaption = document.getElementById("skeletonCaption");
+const skeletonOverlay = document.getElementById("skeletonOverlay");
+const skeletonCtx = skeletonOverlay.getContext("2d");
 const analysisVideo = document.getElementById("analysisVideo");
 const analyzeBtn = document.getElementById("analyzeBtn");
 const statusElement = document.getElementById("status");
@@ -299,6 +283,7 @@ const ctx = canvas.getContext("2d", { willReadFrequently:true });
 let poseLandmarker = null;
 let selectedFile = null;
 let selectedVideoUrl = null;
+let analyzedKeypoints = [];
 
 function setStatus(message, type=""){
   statusElement.textContent = message;
@@ -312,6 +297,81 @@ function cleanObjectUrl(){
     selectedVideoUrl = null;
   }
 }
+
+function syncSkeletonOverlayGeometry(){
+  if(!videoPreview.videoWidth || !videoPreview.videoHeight) return false;
+  const videoWidth=videoPreview.videoWidth;
+  const videoHeight=videoPreview.videoHeight;
+  const boxWidth=videoPreview.clientWidth;
+  const boxHeight=videoPreview.clientHeight;
+  if(!boxWidth || !boxHeight) return false;
+
+  if(skeletonOverlay.width!==videoWidth) skeletonOverlay.width=videoWidth;
+  if(skeletonOverlay.height!==videoHeight) skeletonOverlay.height=videoHeight;
+
+  const scale=Math.min(boxWidth/videoWidth,boxHeight/videoHeight);
+  const drawnWidth=videoWidth*scale;
+  const drawnHeight=videoHeight*scale;
+  const videoRect=videoPreview.getBoundingClientRect();
+  const stageRect=videoStage.getBoundingClientRect();
+
+  skeletonOverlay.style.left=`${videoRect.left-stageRect.left+(boxWidth-drawnWidth)/2}px`;
+  skeletonOverlay.style.top=`${videoRect.top-stageRect.top+(boxHeight-drawnHeight)/2}px`;
+  skeletonOverlay.style.width=`${drawnWidth}px`;
+  skeletonOverlay.style.height=`${drawnHeight}px`;
+  return true;
+}
+
+function drawSkeletonOverlay(time){
+  if(!syncSkeletonOverlayGeometry()) return;
+  skeletonCtx.clearRect(0,0,skeletonOverlay.width,skeletonOverlay.height);
+  if(!analyzedKeypoints.length) return;
+
+  let nearest=analyzedKeypoints[0];
+  for(const frame of analyzedKeypoints){
+    if(Math.abs(frame.time_seconds-time)<Math.abs(nearest.time_seconds-time)) nearest=frame;
+  }
+  const points=nearest.landmarks;
+  if(!Array.isArray(points)) return;
+
+  const links=[
+    [11,12],[11,13],[13,15],[15,17],[15,19],[15,21],[17,19],
+    [12,14],[14,16],[16,18],[16,20],[16,22],[18,20],
+    [11,23],[12,24],[23,24],
+    [23,25],[25,27],[27,29],[27,31],[29,31],
+    [24,26],[26,28],[28,30],[28,32],[30,32]
+  ];
+
+  skeletonCtx.lineWidth=Math.max(3,skeletonOverlay.width*.006);
+  skeletonCtx.lineCap="round";
+  skeletonCtx.lineJoin="round";
+  skeletonCtx.strokeStyle="#39a9ff";
+  skeletonCtx.shadowColor="#39a9ff";
+  skeletonCtx.shadowBlur=12;
+  for(const [a,b] of links){
+    const p1=points[a],p2=points[b];
+    if(!p1||!p2||(p1.visibility??1)<.25||(p2.visibility??1)<.25) continue;
+    skeletonCtx.beginPath();
+    skeletonCtx.moveTo(p1.x*skeletonOverlay.width,p1.y*skeletonOverlay.height);
+    skeletonCtx.lineTo(p2.x*skeletonOverlay.width,p2.y*skeletonOverlay.height);
+    skeletonCtx.stroke();
+  }
+
+  skeletonCtx.shadowBlur=8;
+  skeletonCtx.fillStyle="#eaf8ff";
+  for(const point of points){
+    if(!point||(point.visibility??1)<.35) continue;
+    skeletonCtx.beginPath();
+    skeletonCtx.arc(point.x*skeletonOverlay.width,point.y*skeletonOverlay.height,Math.max(3,skeletonOverlay.width*.004),0,Math.PI*2);
+    skeletonCtx.fill();
+  }
+  skeletonCtx.shadowBlur=0;
+}
+
+videoPreview.addEventListener("timeupdate",()=>drawSkeletonOverlay(videoPreview.currentTime));
+videoPreview.addEventListener("seeked",()=>drawSkeletonOverlay(videoPreview.currentTime));
+videoPreview.addEventListener("loadedmetadata",()=>drawSkeletonOverlay(videoPreview.currentTime));
+window.addEventListener("resize",()=>drawSkeletonOverlay(videoPreview.currentTime));
 
 async function loadPoseLandmarker(){
   try{
@@ -369,10 +429,14 @@ videoInput.addEventListener("change",()=>{
   framesCheckedElement.textContent = "0";
   poseFramesElement.textContent = "0";
   detectionQualityElement.textContent = "Waiting";
+  analyzedKeypoints=[];
+  skeletonCtx.clearRect(0,0,skeletonOverlay.width,skeletonOverlay.height);
 
   if(!selectedFile){
     videoPreview.removeAttribute("src");
     videoPreview.style.display = "none";
+    videoStage.classList.remove("active");
+    skeletonCaption.style.display="none";
     analyzeBtn.disabled = true;
     return;
   }
@@ -381,6 +445,8 @@ videoInput.addEventListener("change",()=>{
     selectedFile = null;
     videoInput.value = "";
     videoPreview.style.display = "none";
+    videoStage.classList.remove("active");
+    skeletonCaption.style.display="none";
     analyzeBtn.disabled = true;
     setStatus("Please select a valid video file.","error");
     return;
@@ -389,6 +455,8 @@ videoInput.addEventListener("change",()=>{
   selectedVideoUrl = URL.createObjectURL(selectedFile);
   videoPreview.src = selectedVideoUrl;
   videoPreview.style.display = "block";
+  videoStage.classList.add("active");
+  skeletonCaption.style.display="block";
   videoPreview.load();
 
   analyzeBtn.disabled = !poseLandmarker;
@@ -552,6 +620,9 @@ async function analyzeVideo(){
           leftHip: landmarks[23],
           rightHip: landmarks[24]
         });
+        analyzedKeypoints=keypoints;
+        videoPreview.currentTime=analysisVideo.currentTime;
+        drawSkeletonOverlay(analysisVideo.currentTime);
 
         framesCheckedElement.textContent =
           String(framesChecked);
@@ -579,6 +650,11 @@ const releaseFrame =
         current.rightWrist.x > best.rightWrist.x ? current : best
       )
     : null;
+analyzedKeypoints=keypoints;
+if(releaseFrame){
+  videoPreview.currentTime=releaseFrame.time_seconds;
+  drawSkeletonOverlay(releaseFrame.time_seconds);
+}
 const technique_score = releaseFrame
   ? Math.max(
       0,
@@ -961,7 +1037,7 @@ session_id: detailedRow.session_id
 analyzeBtn.addEventListener("click",async()=>{
       if (playerEmail) {
       try {
-        await fetch("https://go.glideapps.com/api/container/plugin/webhook-trigger/mjlr4gu5eLbtGVZ4AzBJe5e55e46-87c2-4e14-a1fe-a33dta9ab3be", {
+        await fetch("https://go.glideapps.com/api/container/plugin/webhook-trigger/mjlr4gu5eLbtGVZ4JA3B/ab4d12d2-f573-4a1d-9ec3-b2ed9f5ea28e", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email: playerEmail })
@@ -979,7 +1055,9 @@ analyzeBtn.addEventListener("click",async()=>{
    if (!playerEmail) {
   console.warn("No player email supplied. Continuing without email.");
 }
-videoPreview.style.display = "none";
+videoPreview.style.display = "block";
+videoStage.classList.add("active");
+videoPreview.pause();
 resultsElement.style.display = "block";
 setStatus("Analyzing throw...");
 analysisVideo.src = selectedVideoUrl;
