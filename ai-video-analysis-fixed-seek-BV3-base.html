@@ -6,139 +6,22 @@
 <title>DARTIQ AI Video Analysis</title>
 <style>
 *{box-sizing:border-box}
-body{
-  margin:0;
-  min-height:100vh;
-  padding:14px;
-  background:#06111d;
-  color:#fff;
-  font-family:Arial,sans-serif;
-}
-.card{
-  width:min(100%,760px);
-  margin:0 auto;
-  padding:clamp(16px,4vw,28px);
-  background:linear-gradient(155deg,#101f34,#081421 72%);
-  border:1px solid #168de0;
-  border-radius:22px;
-  box-shadow:0 0 30px rgba(0,145,255,.24);
-}
-h1{
-  margin:0 0 8px;
-  text-align:center;
-  color:#66cfff;
-  font-size:clamp(23px,5vw,32px);
-}
-.subtitle{
-  margin:0 auto 20px;
-  max-width:560px;
-  color:#c8d5e6;
-  text-align:center;
-  line-height:1.5;
-}
-input[type=file]{
-  width:100%;
-  padding:12px;
-  background:#091523;
-  color:#fff;
-  border:1px solid #2d4c68;
-  border-radius:12px;
-  margin-bottom:16px;
-}
-video{
-  display:none;
-  width:100%;
-  height:auto;
-  max-height:420px;
-  object-fit:contain;
-  background:#000;
-  border-radius:16px;
-  margin-bottom:18px;
-}
-.video-stage{
-  display:none;
-  position:relative;
-  width:100%;
-  margin-bottom:18px;
-  background:#000;
-  border-radius:16px;
-  overflow:hidden;
-}
+body{margin:0;min-height:100vh;padding:14px;background:#06111d;color:#fff;font-family:Arial,sans-serif}
+.card{width:min(100%,760px);margin:0 auto;padding:clamp(16px,4vw,28px);background:linear-gradient(155deg,#101f34,#081421 72%);border:1px solid #168de0;border-radius:22px;box-shadow:0 0 30px rgba(0,145,255,.24)}
+h1{margin:0 0 8px;text-align:center;color:#66cfff;font-size:clamp(23px,5vw,32px)}
+.subtitle{margin:0 auto 20px;max-width:560px;color:#c8d5e6;text-align:center;line-height:1.5}
+input[type=file]{width:100%;padding:12px;background:#091523;color:#fff;border:1px solid #2d4c68;border-radius:12px;margin-bottom:16px}
+.video-stage{display:none;position:relative;width:100%;margin-bottom:18px;background:#000;border-radius:16px;overflow:hidden}
 .video-stage.active{display:block}
-.scan-badge{
-  position:absolute;
-  z-index:3;
-  top:10px;
-  left:10px;
-  padding:7px 9px;
-  border:1px solid rgba(94,207,255,.55);
-  border-radius:8px;
-  background:rgba(3,12,22,.82);
-  color:#b8eaff;
-  font-size:10px;
-  font-weight:700;
-  letter-spacing:.08em
-}
-.video-stage.scanning:after{
-  content:"";
-  position:absolute;
-  z-index:1;
-  left:0;
-  right:0;
-  top:0;
-  height:2px;
-  background:#55d8ff;
-  box-shadow:0 0 14px #39a9ff;
-  animation:scan 1.3s linear infinite;
-  pointer-events:none
-}
-@keyframes scan{
-  from{transform:translateY(0)}
-  to{transform:translateY(420px)}
-}
-#videoPreview{
-  display:block;
-  width:100%;
-  height:auto;
-  max-height:420px;
-  object-fit:contain;
-  background:#000;
-  border-radius:0;
-  margin:0;
-}
-button{
-  width:100%;
-  border:0;
-  border-radius:14px;
-  padding:16px;
-  font-size:18px;
-  font-weight:700;
-  color:#fff;
-  background:linear-gradient(100deg,#087bc1,#12a9ed);
-  cursor:pointer;
-}
-button:disabled{
-  opacity:.45;
-  cursor:not-allowed;
-}
-.status{
-  min-height:24px;
-  margin:14px 0 4px;
-  text-align:center;
-  font-size:15px;
-  font-weight:700;
-}
-.error{color:#ff8383}
-.success{color:#7ee7ff}
-.analysis-panel,.results{
-  display:none;
-  width:100%;
-  margin-top:18px;
-  padding:18px;
-  background:#091827;
-  border:1px solid #245b82;
-  border-radius:18px;
-}
+.scan-badge{position:absolute;z-index:3;top:10px;left:10px;padding:7px 9px;border:1px solid rgba(94,207,255,.55);border-radius:8px;background:rgba(3,12,22,.82);color:#b8eaff;font-size:10px;font-weight:700;letter-spacing:.08em}
+.video-stage.scanning:after{content:"";position:absolute;z-index:1;left:0;right:0;top:0;height:2px;background:#55d8ff;box-shadow:0 0 14px #39a9ff;animation:scan 1.3s linear infinite;pointer-events:none}
+@keyframes scan{from{transform:translateY(0)}to{transform:translateY(420px)}}
+#videoPreview{display:block;width:100%;height:auto;max-height:420px;object-fit:contain;background:#000;margin:0}
+button{width:100%;border:0;border-radius:14px;padding:16px;font-size:18px;font-weight:700;color:#fff;background:linear-gradient(100deg,#087bc1,#12a9ed);cursor:pointer}
+button:disabled{opacity:.45;cursor:not-allowed}
+.status{min-height:24px;margin:14px 0 4px;text-align:center;font-size:15px;font-weight:700}
+.error{color:#ff8383}.success{color:#7ee7ff}
+.analysis-panel,.results{display:none;width:100%;margin-top:18px;padding:18px;background:#091827;border:1px solid #245b82;border-radius:18px}
 .analysis-panel.active,.results.active{display:block}
 .panel-title{margin:0 0 7px;color:#70d4ff;font-size:18px}
 .panel-copy{margin:0 0 14px;color:#a9bed0;font-size:13px;line-height:1.45}
@@ -165,26 +48,12 @@ button:disabled{
 #currentFrame{margin:10px 0 0;color:#a9bed0;font-size:12px;text-align:center}
 .result-heading{margin:0 0 8px;color:#70d4ff;font-size:18px}
 .result-summary{margin:0 0 10px;color:#d8eaf5;font-size:14px;line-height:1.5}
-@media(max-width:480px){
-  body{padding:8px}
-  .card{padding:15px;border-radius:18px}
-  .analysis-panel,.results{padding:14px}
-  .file-meta{gap:7px}
-  .meta-box{padding:9px}
-  .meta-value{font-size:13px}
-}
-.result-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:16px;
-  padding:13px 0;
-  border-bottom:1px solid rgba(255,255,255,.10);
-}
+.result-row{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.10)}
 .result-row:last-child{border-bottom:0}
 .result-label{color:#c8d5e6;font-size:17px}
 .result-value{color:#5bcaff;font-size:17px;font-weight:700;text-align:right}
 .hidden-canvas{display:none}
+@media(max-width:480px){body{padding:8px}.card{padding:15px;border-radius:18px}.analysis-panel,.results{padding:14px}.file-meta{gap:7px}.meta-box{padding:9px}.meta-value{font-size:13px}}
 </style>
 </head>
 <body>
@@ -200,7 +69,7 @@ button:disabled{
   </div>
 
   <div id="videoStage" class="video-stage">
-    <video id="videoPreview" controls playsinline preload="metadata"></video>
+    <video id="videoPreview" controls playsinline preload="auto"></video>
     <div id="scanBadge" class="scan-badge">VIDEO PREVIEW</div>
   </div>
 
@@ -209,7 +78,7 @@ button:disabled{
 
   <section id="analysisPanel" class="analysis-panel" aria-live="polite">
     <h2 class="panel-title">What DARTIQ is analyzing</h2>
-    <p class="panel-copy">This analyzer checks 10 evenly spaced frames, detects visible body landmarks, estimates a release frame, calculates the displayed movement metrics, then saves the video and analysis.</p>
+    <p class="panel-copy">DARTIQ checks 10 evenly spaced frames, detects visible body landmarks, estimates a release frame, calculates movement indicators, then saves the video and analysis.</p>
     <div class="analysis-top"><strong id="progressTitle">Waiting to start</strong><span id="progressPercent">0%</span></div>
     <div class="progress-track"><div id="progressBar"></div></div>
     <div id="frameRail" aria-label="10 sampled video frames"></div>
@@ -217,7 +86,7 @@ button:disabled{
     <div class="step-list">
       <div class="analysis-step" data-step="0"><span class="step-icon">○</span><span>Load and inspect the selected video</span></div>
       <div class="analysis-step" data-step="1"><span class="step-icon">○</span><span>Scan 10 sample frames for body pose landmarks</span></div>
-      <div class="analysis-step" data-step="2"><span class="step-icon">○</span><span>Estimate the release frame from the detected wrist position</span></div>
+      <div class="analysis-step" data-step="2"><span class="step-icon">○</span><span>Estimate the release frame from detected wrist positions</span></div>
       <div class="analysis-step" data-step="3"><span class="step-icon">○</span><span>Calculate elbow, head, body-stability and follow-through indicators</span></div>
       <div class="analysis-step" data-step="4"><span class="step-icon">○</span><span>Save the video and analysis record</span></div>
     </div>
@@ -237,76 +106,42 @@ button:disabled{
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script type="module">
-import {
-  FilesetResolver,
-  PoseLandmarker
-} from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/+esm";
+import { FilesetResolver, PoseLandmarker } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/+esm";
 
 const SUPABASE_URL = "https://usglrseckxwcdykrwuvh.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_mSQ3imYCnUspBJdpl6ybQA__TdZtZ2a";
 const STORAGE_BUCKET = "Throw videos";
 const TABLE_NAME = "video_analysis";
-const GLIDE_WEBHOOK_URL =
-  "https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/ab4d12d2-f573-4a1d-9ec3-b2ed9f5ea28e";
+const GLIDE_WEBHOOK_URL = "https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/ab4d12d2-f573-4a1d-9ec3-b2ed9f5ea28e";
 
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY
-);
-
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const params = new URLSearchParams(window.location.search);
+const playerEmail = (params.get("email") || params.get("Email") || params.get("player_email") || params.get("Player_Email") || "").trim();
+const glideRowId = (params.get("row_id") || params.get("Row ID") || "").trim();
+const sessionId = (params.get("session_id") || params.get("Session ID") || "").trim();
+const throwId = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 
-const playerEmail = (
-  params.get("email") ||
-  params.get("Email") ||
-  params.get("player_email") ||
-  params.get("Player_Email") ||
-  ""
-).trim();
-
-const glideRowId = (
-  params.get("row_id") ||
-  params.get("Row ID") ||
-  ""
-).trim();
-
-const sessionId = (
-  params.get("session_id") ||
-  params.get("Session ID") ||
-  ""
-).trim();
-
-const throwId = (window.crypto && crypto.randomUUID)
-  ? crypto.randomUUID()
-  : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
-
-const videoInput = document.getElementById("videoInput");
-const videoPreview = document.getElementById("videoPreview");
-const videoStage = document.getElementById("videoStage");
-const analysisVideo = videoPreview;
-const analyzeBtn = document.getElementById("analyzeBtn");
-const statusElement = document.getElementById("status");
-const resultsElement = document.getElementById("results");
-const framesCheckedElement = document.getElementById("framesChecked");
-const poseFramesElement = document.getElementById("poseFrames");
-const detectionQualityElement = document.getElementById("detectionQuality");
-const analysisPanel = document.getElementById("analysisPanel");
-const progressBar = document.getElementById("progressBar");
-const progressTitle = document.getElementById("progressTitle");
-const progressPercent = document.getElementById("progressPercent");
-const currentFrameElement = document.getElementById("currentFrame");
-const frameRail = document.getElementById("frameRail");
-const fileMeta = document.getElementById("fileMeta");
-const fileNameElement = document.getElementById("fileName");
-const videoDurationElement = document.getElementById("videoDuration");
-const scanBadge = document.getElementById("scanBadge");
-const resultSummary = document.getElementById("resultSummary");
-const releaseTimeElement = document.getElementById("releaseTime");
-const techniqueScoreElement = document.getElementById("techniqueScore");
-const canvas = document.getElementById("analysisCanvas");
-const ctx = canvas.getContext("2d", { willReadFrequently:true });
+const $ = id => document.getElementById(id);
+const videoInput = $("videoInput");
+const videoPreview = $("videoPreview");
+const videoStage = $("videoStage");
+const analyzeBtn = $("analyzeBtn");
+const statusElement = $("status");
+const resultsElement = $("results");
+const analysisPanel = $("analysisPanel");
+const progressBar = $("progressBar");
+const progressTitle = $("progressTitle");
+const progressPercent = $("progressPercent");
+const currentFrameElement = $("currentFrame");
+const frameRail = $("frameRail");
+const fileMeta = $("fileMeta");
+const fileNameElement = $("fileName");
+const videoDurationElement = $("videoDuration");
+const scanBadge = $("scanBadge");
+const resultSummary = $("resultSummary");
+const canvas = $("analysisCanvas");
+const ctx = canvas.getContext("2d", {willReadFrequently:true});
 
 let poseLandmarker = null;
 let selectedFile = null;
@@ -317,9 +152,9 @@ function buildFrameRail(){
   frameRail.innerHTML = "";
   frameDots = [];
   for(let i=0;i<10;i++){
-    const dot=document.createElement("span");
-    dot.className="frame-dot";
-    dot.title=`Sample frame ${i+1} of 10`;
+    const dot = document.createElement("span");
+    dot.className = "frame-dot";
+    dot.title = `Sample frame ${i+1} of 10`;
     frameRail.appendChild(dot);
     frameDots.push(dot);
   }
@@ -327,19 +162,19 @@ function buildFrameRail(){
 buildFrameRail();
 
 function setProgress(percent,title,detail,activeStep){
-  const safe=Math.max(0,Math.min(100,Math.round(percent)));
-  progressBar.style.width=`${safe}%`;
-  progressPercent.textContent=`${safe}%`;
-  progressTitle.textContent=title;
-  currentFrameElement.textContent=detail;
+  const safe = Math.max(0,Math.min(100,Math.round(percent)));
+  progressBar.style.width = `${safe}%`;
+  progressPercent.textContent = `${safe}%`;
+  progressTitle.textContent = title;
+  currentFrameElement.textContent = detail;
   document.querySelectorAll(".analysis-step").forEach((row,index)=>{
-    row.classList.toggle("done",index<activeStep);
-    row.classList.toggle("active",index===activeStep);
-    row.querySelector(".step-icon").textContent=index<activeStep?"✓":index===activeStep?"◉":"○";
+    row.classList.toggle("done",index < activeStep);
+    row.classList.toggle("active",index === activeStep);
+    row.querySelector(".step-icon").textContent = index < activeStep ? "✓" : index === activeStep ? "◉" : "○";
   });
 }
 
-function setStatus(message, type=""){
+function setStatus(message,type=""){
   statusElement.textContent = message;
   statusElement.className = "status";
   if(type) statusElement.classList.add(type);
@@ -355,15 +190,10 @@ function cleanObjectUrl(){
 async function loadPoseLandmarker(){
   try{
     setStatus("Loading analysis engine...");
-
-    const vision = await FilesetResolver.forVisionTasks(
-      "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
-    );
-
+    const vision = await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm");
     poseLandmarker = await PoseLandmarker.createFromOptions(vision,{
       baseOptions:{
-        modelAssetPath:
-          "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task",
+        modelAssetPath:"https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task",
         delegate:"GPU"
       },
       runningMode:"VIDEO",
@@ -372,32 +202,24 @@ async function loadPoseLandmarker(){
       minPosePresenceConfidence:0.45,
       minTrackingConfidence:0.45
     });
-
-    setStatus("Analysis engine ready.", "success");
+    setStatus("Analysis engine ready.","success");
     if(selectedFile) analyzeBtn.disabled = false;
   }catch(firstError){
     try{
-      const vision = await FilesetResolver.forVisionTasks(
-        "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
-      );
-
+      const vision = await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm");
       poseLandmarker = await PoseLandmarker.createFromOptions(vision,{
-        baseOptions:{
-          modelAssetPath:
-            "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task"
-        },
+        baseOptions:{modelAssetPath:"https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task"},
         runningMode:"VIDEO",
         numPoses:1,
         minPoseDetectionConfidence:0.4,
         minPosePresenceConfidence:0.4,
         minTrackingConfidence:0.4
       });
-
-      setStatus("Analysis engine ready.", "success");
+      setStatus("Analysis engine ready.","success");
       if(selectedFile) analyzeBtn.disabled = false;
     }catch(error){
       console.error(error);
-      setStatus("Could not load the analysis engine.", "error");
+      setStatus("Could not load the analysis engine.","error");
     }
   }
 }
@@ -408,22 +230,24 @@ videoInput.addEventListener("change",()=>{
   resultsElement.classList.remove("active");
   analysisPanel.classList.remove("active");
   videoStage.classList.remove("scanning");
-  scanBadge.textContent="VIDEO PREVIEW";
-  progressBar.style.width="0%";
-  progressPercent.textContent="0%";
-  progressTitle.textContent="Waiting to start";
-  currentFrameElement.textContent="Choose a video and tap Analyze My Throw to begin.";
-  document.querySelectorAll(".analysis-step").forEach((row,index)=>{
+  scanBadge.textContent = "VIDEO PREVIEW";
+  progressBar.style.width = "0%";
+  progressPercent.textContent = "0%";
+  progressTitle.textContent = "Waiting to start";
+  currentFrameElement.textContent = "Choose a video and tap Analyze My Throw to begin.";
+  document.querySelectorAll(".analysis-step").forEach(row=>{
     row.classList.remove("done","active");
-    row.querySelector(".step-icon").textContent="○";
+    row.querySelector(".step-icon").textContent = "○";
   });
   frameDots.forEach(dot=>dot.classList.remove("done","pose"));
-  framesCheckedElement.textContent = "0";
-  poseFramesElement.textContent = "0";
-  detectionQualityElement.textContent = "Waiting";
+  $("framesChecked").textContent = "0";
+  $("poseFrames").textContent = "0";
+  $("detectionQuality").textContent = "Waiting";
+  $("releaseTime").textContent = "—";
+  $("techniqueScore").textContent = "—";
 
   if(!selectedFile){
-    fileMeta.style.display="none";
+    fileMeta.style.display = "none";
     videoPreview.removeAttribute("src");
     videoPreview.style.display = "none";
     videoStage.classList.remove("active");
@@ -433,158 +257,136 @@ videoInput.addEventListener("change",()=>{
 
   if(!selectedFile.type.startsWith("video/")){
     selectedFile = null;
-    fileMeta.style.display="none";
+    fileMeta.style.display = "none";
     videoInput.value = "";
     videoPreview.style.display = "none";
     videoStage.classList.remove("active");
     analyzeBtn.disabled = true;
-    setStatus("Please select a valid video file.", "error");
+    setStatus("Please select a valid video file.","error");
     return;
   }
 
   selectedVideoUrl = URL.createObjectURL(selectedFile);
-  fileMeta.style.display="grid";
-  fileNameElement.textContent=selectedFile.name;
-  videoDurationElement.textContent="Reading video…";
+  fileMeta.style.display = "grid";
+  fileNameElement.textContent = selectedFile.name;
+  videoDurationElement.textContent = "Reading video…";
   videoPreview.src = selectedVideoUrl;
   videoPreview.style.display = "block";
   videoStage.classList.add("active");
   videoPreview.load();
   videoPreview.addEventListener("loadedmetadata",()=>{
-    const d=videoPreview.duration;
+    const d = videoPreview.duration;
     if(Number.isFinite(d)){
-      const mins=Math.floor(d/60);
-      const secs=Math.floor(d%60).toString().padStart(2,"0");
-      videoDurationElement.textContent=`${mins}:${secs} · ${videoPreview.videoWidth}×${videoPreview.videoHeight}`;
+      const mins = Math.floor(d/60);
+      const secs = Math.floor(d%60).toString().padStart(2,"0");
+      videoDurationElement.textContent = `${mins}:${secs} · ${videoPreview.videoWidth}×${videoPreview.videoHeight}`;
     }
   },{once:true});
 
   analyzeBtn.disabled = !poseLandmarker;
-  setStatus(
-    poseLandmarker ? "Video ready for analysis." : "Loading analysis engine..."
-  );
+  setStatus(poseLandmarker ? "Video ready for analysis." : "Loading analysis engine...");
 });
 
 function waitForMetadata(){
   return new Promise((resolve,reject)=>{
-    if(
-      analysisVideo.readyState >= 1 &&
-      Number.isFinite(analysisVideo.duration) &&
-      analysisVideo.duration > 0
-    ){
+    if(videoPreview.readyState >= 1 && Number.isFinite(videoPreview.duration) && videoPreview.duration > 0){
       resolve();
       return;
     }
-
     const timeout = setTimeout(()=>{
-      analysisVideo.removeEventListener("loadedmetadata", onMetadata);
-      analysisVideo.removeEventListener("error", onError);
-      reject(new Error("Video loading timed out."));
-    }, 20000);
-
-    const onMetadata = ()=>{
+      cleanup();
+      reject(new Error("Video loading timed out. Please choose the video again."));
+    },20000);
+    function cleanup(){
       clearTimeout(timeout);
-      analysisVideo.removeEventListener("error", onError);
+      videoPreview.removeEventListener("loadedmetadata",onMetadata);
+      videoPreview.removeEventListener("error",onError);
+    }
+    function onMetadata(){
+      cleanup();
       resolve();
-    };
-
-    const onError = ()=>{
-      clearTimeout(timeout);
-      analysisVideo.removeEventListener("loadedmetadata", onMetadata);
-      reject(new Error("The selected video could not be decoded."));
-    };
-
-    analysisVideo.addEventListener("loadedmetadata", onMetadata, {once:true});
-    analysisVideo.addEventListener("error", onError, {once:true});
+    }
+    function onError(){
+      cleanup();
+      reject(new Error("The selected video could not be decoded by this browser."));
+    }
+    videoPreview.addEventListener("loadedmetadata",onMetadata);
+    videoPreview.addEventListener("error",onError);
   });
 }
 
-function seekVideo(time){
-  return new Promise((resolve,reject)=>{
-    const targetTime = Math.min(
-      Math.max(0, time),
-      Math.max(0, analysisVideo.duration - 0.02)
-    );
+/*
+  Android browsers can miss or delay the "seeked" event. This waits for the
+  actual video time and decoded frame, then verifies that the frame can be
+  drawn. A sample that still cannot be decoded is skipped so one bad seek
+  does not cancel the entire analysis.
+*/
+async function seekVideo(targetTime){
+  const video = videoPreview;
+  const target = Math.min(Math.max(0,targetTime),Math.max(0,video.duration - 0.04));
+  video.pause();
 
-    if(
-      analysisVideo.readyState >= 2 &&
-      Math.abs(analysisVideo.currentTime - targetTime) < 0.05
-    ){
-      resolve();
-      return;
-    }
+  if(video.readyState >= 2 && Math.abs(video.currentTime-target) < 0.04){
+    try{
+      ctx.drawImage(video,0,0,canvas.width,canvas.height);
+      return true;
+    }catch(e){}
+  }
 
-    const timeout = setTimeout(()=>{
-      cleanup();
-      reject(new Error("Could not read a video frame."));
-    }, 12000);
+  try{
+    video.currentTime = target;
+  }catch(error){
+    console.warn("Could not start video seek:",error);
+    return false;
+  }
 
-    function cleanup(){
-      clearTimeout(timeout);
-      analysisVideo.removeEventListener("seeked", onSeeked);
-      analysisVideo.removeEventListener("canplay", onCanPlay);
-    }
+  const started = performance.now();
+  const timeoutMs = 8000;
 
-    function onCanPlay(){
-      cleanup();
-      resolve();
-    }
+  while(performance.now()-started < timeoutMs){
+    await new Promise(resolve=>requestAnimationFrame(()=>resolve()));
 
-    function onSeeked(){
-      if(analysisVideo.readyState >= 2){
-        cleanup();
-        resolve();
+    const timeClose = Math.abs(video.currentTime-target) < 0.12;
+    const frameReady = video.readyState >= 2 && !video.seeking;
+
+    if(timeClose && frameReady){
+      try{
+        ctx.drawImage(video,0,0,canvas.width,canvas.height);
+        return true;
+      }catch(error){
+        // Keep waiting briefly for Android to finish decoding the frame.
       }
     }
+  }
 
-    analysisVideo.addEventListener("seeked", onSeeked);
-    analysisVideo.addEventListener("canplay", onCanPlay);
-    analysisVideo.currentTime = targetTime;
+  console.warn("Skipping unreadable sample frame",{
+    target,
+    currentTime:video.currentTime,
+    readyState:video.readyState,
+    networkState:video.networkState
   });
+  return false;
 }
 
 function averageVisibility(landmarks){
-  if(!Array.isArray(landmarks) || landmarks.length === 0) return 0;
-
-  const values = landmarks
-    .map(p => Number.isFinite(p.visibility) ? p.visibility : 0)
-    .filter(Number.isFinite);
-
-  if(values.length === 0) return 0;
-
-  return values.reduce((a,b) => a + b, 0) / values.length;
-}
-
-function calculateTechniqueScore(poseFrames, framesChecked, visibilityTotal){
-  if(framesChecked === 0 || poseFrames === 0) return 0;
-
-  const poseRatio = poseFrames / framesChecked;
-  const avgVisibility = visibilityTotal / poseFrames;
-
-  return Math.max(
-    0,
-    Math.min(100, Math.round((poseRatio * 70) + (avgVisibility * 30)))
-  );
+  if(!Array.isArray(landmarks) || !landmarks.length) return 0;
+  const values = landmarks.map(p=>Number.isFinite(p.visibility)?p.visibility:0);
+  return values.reduce((a,b)=>a+b,0)/values.length;
 }
 
 async function analyzeVideo(){
   await waitForMetadata();
 
-  const duration = analysisVideo.duration;
-  const videoWidth = analysisVideo.videoWidth;
-  const videoHeight = analysisVideo.videoHeight;
+  const duration = videoPreview.duration;
+  const videoWidth = videoPreview.videoWidth;
+  const videoHeight = videoPreview.videoHeight;
 
-  if(!Number.isFinite(duration) || duration <= 0){
-    throw new Error("Invalid video duration.");
-  }
-
-  if(!videoWidth || !videoHeight){
-    throw new Error("The selected video has no readable frames.");
-  }
+  if(!Number.isFinite(duration) || duration <= 0) throw new Error("Invalid video duration.");
+  if(!videoWidth || !videoHeight) throw new Error("The selected video has no readable frames.");
 
   canvas.width = videoWidth;
   canvas.height = videoHeight;
-  analysisVideo.pause();
+  videoPreview.pause();
 
   let framesChecked = 0;
   let framesWithPose = 0;
@@ -593,108 +395,83 @@ async function analyzeVideo(){
   const frameCount = 10;
 
   analysisPanel.classList.add("active");
-  setProgress(8,"Reading video frames","The selected clip is loaded. DARTIQ is sampling 10 evenly spaced frames.",1);
   videoStage.classList.add("scanning");
-  scanBadge.textContent="SCANNING VIDEO";
+  scanBadge.textContent = "SCANNING VIDEO";
 
-  for(let i = 0; i < frameCount; i++){
-    const targetTime =
-      frameCount === 1
-        ? 0
-        : (duration * i) / (frameCount - 1);
+  for(let i=0;i<frameCount;i++){
+    const targetTime = frameCount === 1 ? 0 : (duration*i)/(frameCount-1);
+    const percent = 10 + Math.round((i/frameCount)*52);
+    setProgress(percent,"Scanning sample frames",`Preparing frame ${i+1} of ${frameCount} · ${targetTime.toFixed(2)}s`,1);
 
-    await seekVideo(targetTime);
-    const timestamp=`${analysisVideo.currentTime.toFixed(2)}s`;
-    setProgress(10+Math.round(((i+1)/frameCount)*52),"Scanning sample frames",`Frame ${i+1} of ${frameCount} · ${timestamp} · looking for body landmarks`,1);
-    frameDots[i]?.classList.add("done");
-    if(analysisVideo.readyState < 2) continue;
+    const readable = await seekVideo(targetTime);
+    if(!readable){
+      frameDots[i]?.classList.add("done");
+      setProgress(10+Math.round(((i+1)/frameCount)*52),"Scanning sample frames",`Frame ${i+1} of ${frameCount} could not be decoded; continuing with the next sample.`,1);
+      continue;
+    }
 
     try{
-      ctx.drawImage(
-        analysisVideo,
-        0,
-        0,
-        canvas.width,
-        canvas.height
-      );
-
-      const result = poseLandmarker.detectForVideo(
-        canvas,
-        Math.max(1, Math.round(analysisVideo.currentTime * 1000))
-      );
-
+      ctx.drawImage(videoPreview,0,0,canvas.width,canvas.height);
+      const result = poseLandmarker.detectForVideo(canvas,performance.now());
       framesChecked++;
 
       if(result.landmarks?.length){
         framesWithPose++;
-
         const landmarks = result.landmarks[0];
         visibilityTotal += averageVisibility(landmarks);
-
         keypoints.push({
-          frame: framesChecked,
-          time_seconds: Number(analysisVideo.currentTime.toFixed(3)),
+          frame:i+1,
+          time_seconds:Number(videoPreview.currentTime.toFixed(3)),
           landmarks,
-          nose: landmarks[0],
-          leftShoulder: landmarks[11],
-          rightShoulder: landmarks[12],
-          leftElbow: landmarks[13],
-          rightElbow: landmarks[14],
-          leftWrist: landmarks[15],
-          rightWrist: landmarks[16],
-          leftHip: landmarks[23],
-          rightHip: landmarks[24]
+          nose:landmarks[0],
+          leftShoulder:landmarks[11],
+          rightShoulder:landmarks[12],
+          leftElbow:landmarks[13],
+          rightElbow:landmarks[14],
+          leftWrist:landmarks[15],
+          rightWrist:landmarks[16],
+          leftHip:landmarks[23],
+          rightHip:landmarks[24]
         });
-
         frameDots[i]?.classList.add("pose");
-        poseFramesElement.textContent = String(framesWithPose);
       }
     }catch(error){
-      console.warn("Frame skipped", error);
+      console.warn("Pose detection failed for sample frame",i+1,error);
     }
+
+    frameDots[i]?.classList.add("done");
+    $("poseFrames").textContent = String(framesWithPose);
+    setProgress(10+Math.round(((i+1)/frameCount)*52),"Scanning sample frames",`Frame ${i+1} of ${frameCount} · ${videoPreview.currentTime.toFixed(2)}s · checking body landmarks`,1);
   }
 
   videoStage.classList.remove("scanning");
-  scanBadge.textContent="FRAME SCAN COMPLETE";
-  setProgress(70,"Estimating release frame","Comparing the sampled wrist positions to select a release-frame estimate.",2);
+  scanBadge.textContent = "FRAME SCAN COMPLETE";
 
-  const detectionPercentage = framesChecked
-    ? Math.round((framesWithPose / framesChecked) * 100)
-    : 0;
+  if(framesChecked === 0){
+    throw new Error("This browser could not decode any frames from the selected video. Try exporting it as MP4 (H.264) and upload it again.");
+  }
 
+  setProgress(70,"Estimating release frame","Comparing detected wrist positions to estimate the release frame.",2);
+
+  const detectionPercentage = Math.round((framesWithPose/framesChecked)*100);
   let quality = "No pose detected";
   if(detectionPercentage >= 80) quality = "Excellent";
   else if(detectionPercentage >= 60) quality = "Good";
   else if(detectionPercentage >= 30) quality = "Limited";
 
-  const releaseFrame = keypoints.length > 0
-    ? keypoints.reduce((best, current) =>
-        current.rightWrist.x > best.rightWrist.x ? current : best
-      )
+  const releaseFrame = keypoints.length
+    ? keypoints.reduce((best,current)=>current.rightWrist.x > best.rightWrist.x ? current : best)
     : null;
 
   if(releaseFrame){
     videoPreview.currentTime = releaseFrame.time_seconds;
   }
 
-  setProgress(82,"Calculating movement indicators","Using the detected pose landmarks to calculate the displayed technique indicators.",3);
+  setProgress(82,"Calculating movement indicators","Using detected pose landmarks to calculate the displayed technique indicators.",3);
 
   const technique_score = releaseFrame
-    ? Math.max(
-        0,
-        Math.min(
-          100,
-          Math.round(
-            (detectionPercentage * 0.55) +
-            25 +
-            Math.min(20, framesWithPose * 2)
-          )
-        )
-      )
-    : Math.max(
-        0,
-        Math.min(100, Math.round(detectionPercentage * 0.55))
-      );
+    ? Math.max(0,Math.min(100,Math.round((detectionPercentage*0.55)+25+Math.min(20,framesWithPose*2))))
+    : Math.max(0,Math.min(100,Math.round(detectionPercentage*0.55)));
 
   return {
     releaseFrame,
@@ -703,46 +480,32 @@ async function analyzeVideo(){
     detectionPercentage,
     quality,
     technique_score,
-    mainIssue: releaseFrame
-      ? "Release frame detected"
-      : "No release frame detected",
+    mainIssue:releaseFrame ? "Release frame detected" : "No release frame detected",
     keypoints
   };
 }
 
-async function uploadVideo(file, analysisResult){
+async function uploadVideo(file,analysisResult){
   setProgress(90,"Saving analysis","Uploading the selected video and saving its analysis record.",4);
-  scanBadge.textContent="SAVING ANALYSIS";
-  setStatus("Pose scan complete. Saving video and analysis...");
+  scanBadge.textContent = "SAVING ANALYSIS";
+  setStatus("Frame scan complete. Saving video and analysis...");
 
-  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-  const emailFolder = playerEmail
-    ? playerEmail.replace(/[^a-zA-Z0-9@._-]/g, "_")
-    : "unknown-player";
-
+  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+  const emailFolder = playerEmail ? playerEmail.replace(/[^a-zA-Z0-9@._-]/g,"_") : "unknown-player";
   const filename = `${emailFolder}/${Date.now()}_${safeName}`;
 
-  const {error:uploadError} = await supabaseClient.storage
-    .from(STORAGE_BUCKET)
-    .upload(filename, file, {
-      cacheControl:"3600",
-      upsert:false,
-      contentType:file.type || "video/mp4"
-    });
-
+  const {error:uploadError} = await supabaseClient.storage.from(STORAGE_BUCKET).upload(filename,file,{
+    cacheControl:"3600",
+    upsert:false,
+    contentType:file.type || "video/mp4"
+  });
   if(uploadError) throw uploadError;
 
-  const {data:publicUrlData} = supabaseClient.storage
-    .from(STORAGE_BUCKET)
-    .getPublicUrl(filename);
-
+  const {data:publicUrlData} = supabaseClient.storage.from(STORAGE_BUCKET).getPublicUrl(filename);
   const videoUrl = publicUrlData?.publicUrl;
   if(!videoUrl) throw new Error("Could not create video URL.");
 
-  const finalStatus = analysisResult.framesWithPose > 0
-    ? "Pose detected"
-    : "No pose detected";
-
+  const finalStatus = analysisResult.framesWithPose > 0 ? "Pose detected" : "No pose detected";
   let ai_observation = "";
   let coach_advice = "";
   let recommended_drill = "";
@@ -751,177 +514,105 @@ async function uploadVideo(file, analysisResult){
   let improvement_potential = "";
 
   const rf = analysisResult.releaseFrame;
-
-  const elbowAngle = rf
-    ? Math.round(
-        Math.abs(
-          Math.atan2(
-            rf.rightWrist.y - rf.rightElbow.y,
-            rf.rightWrist.x - rf.rightElbow.x
-          ) -
-          Math.atan2(
-            rf.rightShoulder.y - rf.rightElbow.y,
-            rf.rightShoulder.x - rf.rightElbow.x
-          )
-        ) * 180 / Math.PI
-      )
-    : null;
-
-  const headMovement = rf
-    ? Math.round(
-        Math.hypot(
-          rf.nose.x - ((rf.leftShoulder.x + rf.rightShoulder.x) / 2),
-          rf.nose.y - ((rf.leftShoulder.y + rf.rightShoulder.y) / 2)
-        ) * 100
-      )
-    : null;
-
-  const bodyStability = rf
-    ? Math.round(Math.abs(rf.leftHip.x - rf.rightHip.x) * 100)
-    : null;
-
-  const followThrough = rf
-    ? Math.round(Math.abs(rf.rightWrist.y - rf.rightShoulder.y) * 100)
-    : null;
+  const elbowAngle = rf ? Math.round(Math.abs(
+    Math.atan2(rf.rightWrist.y-rf.rightElbow.y,rf.rightWrist.x-rf.rightElbow.x) -
+    Math.atan2(rf.rightShoulder.y-rf.rightElbow.y,rf.rightShoulder.x-rf.rightElbow.x)
+  )*180/Math.PI) : null;
+  const headMovement = rf ? Math.round(Math.hypot(
+    rf.nose.x-((rf.leftShoulder.x+rf.rightShoulder.x)/2),
+    rf.nose.y-((rf.leftShoulder.y+rf.rightShoulder.y)/2)
+  )*100) : null;
+  const bodyStability = rf ? Math.round(Math.abs(rf.leftHip.x-rf.rightHip.x)*100) : null;
+  const followThrough = rf ? Math.round(Math.abs(rf.rightWrist.y-rf.rightShoulder.y)*100) : null;
 
   if(followThrough !== null && followThrough < 40){
-    ai_observation =
-      `Follow-through is currently the weakest part of the throw (${followThrough}).`;
-    coach_advice =
-      "Extend the throwing arm fully toward the target after release. Avoid stopping or pulling the arm back early.";
+    ai_observation = `Follow-through is currently the weakest part of the throw (${followThrough}).`;
+    coach_advice = "Extend the throwing arm fully toward the target after release. Avoid stopping or pulling the arm back early.";
     recommended_drill = "Full Extension Lane";
-    why_this_drill =
-      "Trains a complete, repeatable follow-through and improves directional control.";
+    why_this_drill = "Trains a complete, repeatable follow-through and improves directional control.";
     practice_focus = "Follow-through";
     improvement_potential = "High";
   }else if(bodyStability !== null && bodyStability < 40){
-    ai_observation =
-      `Body stability is currently the weakest part of the throw (${bodyStability}).`;
-    coach_advice =
-      "Keep your torso and lower body stable throughout the throwing motion.";
+    ai_observation = `Body stability is currently the weakest part of the throw (${bodyStability}).`;
+    coach_advice = "Keep your torso and lower body stable throughout the throwing motion.";
     recommended_drill = "Stability Lock";
-    why_this_drill =
-      "Reduces unnecessary body movement and creates a more repeatable throwing platform.";
+    why_this_drill = "Reduces unnecessary body movement and creates a more repeatable throwing platform.";
     practice_focus = "Body stability";
     improvement_potential = "High";
   }else if(headMovement !== null && headMovement > 15){
     ai_observation = `Head movement is higher than desired (${headMovement}).`;
-    coach_advice =
-      "Keep your head fixed on the target throughout the entire throwing motion.";
+    coach_advice = "Keep your head fixed on the target throughout the entire throwing motion.";
     recommended_drill = "Head Stability Drill";
-    why_this_drill =
-      "A stable head improves visual alignment and throwing consistency.";
+    why_this_drill = "A stable head improves visual alignment and throwing consistency.";
     practice_focus = "Head stability";
     improvement_potential = "Medium";
   }else if(elbowAngle !== null && (elbowAngle < 80 || elbowAngle > 120)){
-    ai_observation =
-      `Elbow angle of ${elbowAngle}° indicates the throwing arm position can be improved.`;
-    coach_advice =
-      "Work on maintaining a more controlled elbow position through acceleration and release.";
+    ai_observation = `Elbow angle of ${elbowAngle}° indicates the throwing arm position can be improved.`;
+    coach_advice = "Work on maintaining a more controlled elbow position through acceleration and release.";
     recommended_drill = "Level Elbow Builder";
-    why_this_drill =
-      "Improves elbow control and helps create a straighter, more repeatable throwing path.";
+    why_this_drill = "Improves elbow control and helps create a straighter, more repeatable throwing path.";
     practice_focus = "Elbow position";
     improvement_potential = "Medium";
   }else{
     ai_observation = "No major biomechanical weakness was detected.";
-    coach_advice =
-      "Maintain the current throwing mechanics and focus on repeatability.";
+    coach_advice = "Maintain the current throwing mechanics and focus on repeatability.";
     recommended_drill = "Consistency Builder";
-    why_this_drill =
-      "Reinforces the mechanics that are already performing consistently.";
+    why_this_drill = "Reinforces the mechanics that are already performing consistently.";
     practice_focus = "Consistency";
     improvement_potential = "Low";
   }
 
-  const releaseConfidence = rf
-    ? Math.round(
-        (
-          (rf.rightShoulder.visibility || 0) +
-          (rf.rightElbow.visibility || 0) +
-          (rf.rightWrist.visibility || 0)
-        ) / 3 * 100
-      )
-    : null;
+  const releaseConfidence = rf ? Math.round((
+    (rf.rightShoulder.visibility || 0) +
+    (rf.rightElbow.visibility || 0) +
+    (rf.rightWrist.visibility || 0)
+  )/3*100) : null;
 
   const ai_summary = rf
-    ? `Throw successfully analyzed. Release detected at ${Math.round(
-        rf.time_seconds * 1000
-      )} ms with ${releaseConfidence}% release confidence.`
+    ? `Throw successfully analyzed. Release detected at ${Math.round(rf.time_seconds*1000)} ms with ${releaseConfidence}% release confidence.`
     : "Throw analyzed, but no reliable release frame was detected.";
 
   const detailedRow = {
-    Player_Email: playerEmail || null,
-    video_url: videoUrl,
-    session_id: sessionId || null,
-    throw_id: throwId,
-    processing_status: "COMPLETED",
-    analysis_success: true,
-    failure_reason: null,
+    Player_Email:playerEmail || null,
+    video_url:videoUrl,
+    session_id:sessionId || null,
+    throw_id:throwId,
+    processing_status:"COMPLETED",
+    analysis_success:true,
+    failure_reason:null,
     ai_observation,
     coach_advice,
     recommended_drill,
     why_this_drill,
     practice_focus,
     improvement_potential,
-    elbow_angle: elbowAngle,
-    head_movement_score: headMovement,
-    body_stability_score: bodyStability,
-    follow_through_score: followThrough,
+    elbow_angle:elbowAngle,
+    head_movement_score:headMovement,
+    body_stability_score:bodyStability,
+    follow_through_score:followThrough,
     ai_summary,
-    release_time_ms: rf
-      ? Math.round(rf.time_seconds * 1000)
-      : null,
-    release_confidence: releaseConfidence !== null
-      ? `${releaseConfidence}%`
-      : null,
-    technique_score: analysisResult.technique_score,
-    main_issue: analysisResult.mainIssue,
-    confidence_score: analysisResult.detectionPercentage,
-    status: finalStatus,
-    analysis_complete: true,
-    frames_checked: analysisResult.framesChecked,
-    pose_detected: analysisResult.framesWithPose,
-    detection_percentage: analysisResult.detectionPercentage,
-    release_frame: rf ? rf.frame : null,
-    release_timing: rf ? rf.time_seconds : null,
-    wrist_angle: rf
-      ? Math.round(
-          (
-            Math.atan2(
-              rf.rightWrist.y - rf.rightElbow.y,
-              rf.rightWrist.x - rf.rightElbow.x
-            ) * 180 / Math.PI + 360
-          ) % 360
-        )
-      : null,
-    shoulder_angle: rf
-      ? Math.round(
-          Math.atan2(
-            rf.rightElbow.y - rf.rightShoulder.y,
-            rf.rightElbow.x - rf.rightShoulder.x
-          ) * 180 / Math.PI
-        )
-      : null,
-    arm_extension: rf
-      ? Math.round(
-          Math.hypot(
-            rf.rightWrist.x - rf.rightShoulder.x,
-            rf.rightWrist.y - rf.rightShoulder.y
-          ) * 1000
-        )
-      : null,
-    throw_consistency: rf ? 100 : null
+    release_time_ms:rf ? Math.round(rf.time_seconds*1000) : null,
+    release_confidence:releaseConfidence !== null ? `${releaseConfidence}%` : null,
+    technique_score:analysisResult.technique_score,
+    main_issue:analysisResult.mainIssue,
+    confidence_score:analysisResult.detectionPercentage,
+    status:finalStatus,
+    analysis_complete:true,
+    frames_checked:analysisResult.framesChecked,
+    pose_detected:analysisResult.framesWithPose,
+    detection_percentage:analysisResult.detectionPercentage,
+    release_frame:rf ? rf.frame : null,
+    release_timing:rf ? rf.time_seconds : null,
+    wrist_angle:rf ? Math.round((Math.atan2(rf.rightWrist.y-rf.rightElbow.y,rf.rightWrist.x-rf.rightElbow.x)*180/Math.PI+360)%360) : null,
+    shoulder_angle:rf ? Math.round(Math.atan2(rf.rightElbow.y-rf.rightShoulder.y,rf.rightElbow.x-rf.rightShoulder.x)*180/Math.PI) : null,
+    arm_extension:rf ? Math.round(Math.hypot(rf.rightWrist.x-rf.rightShoulder.x,rf.rightWrist.y-rf.rightShoulder.y)*1000) : null,
+    throw_consistency:rf ? 100 : null
   };
 
-  const {data, error:detailedInsertError} = await supabaseClient
-    .from(TABLE_NAME)
-    .insert(detailedRow)
-    .select();
-
-  console.log("Detailed Row:", detailedRow);
-  console.log("Inserted Data:", data);
-  console.log("Detailed Insert Error:", detailedInsertError);
+  const {data,error:detailedInsertError} = await supabaseClient.from(TABLE_NAME).insert(detailedRow).select();
+  console.log("Detailed Row:",detailedRow);
+  console.log("Inserted Data:",data);
+  console.log("Detailed Insert Error:",detailedInsertError);
 
   if(!detailedInsertError){
     if(glideRowId){
@@ -968,55 +659,45 @@ async function uploadVideo(file, analysisResult){
             session_id:detailedRow.session_id
           })
         });
-
-        console.log("Glide webhook status:", glideResponse.status);
+        console.log("Glide webhook status:",glideResponse.status);
       }catch(glideError){
-        console.error("Glide webhook failed:", glideError);
+        console.error("Glide webhook failed:",glideError);
       }
     }else{
       console.warn("No Glide row_id supplied in URL.");
     }
-
-    return {
-      detailedMetricsSaved:true,
-      warning:null
-    };
+    return {detailedMetricsSaved:true,warning:null};
   }
 
-  console.error("Detailed database insert failed:", detailedInsertError);
+  console.error("Detailed database insert failed:",detailedInsertError);
 
   const coreRow = {
-    Player_Email: playerEmail || null,
-    video_url: videoUrl,
-    session_id: sessionId || null,
-    throw_id: throwId,
-    processing_status: "COMPLETED",
-    analysis_success: true,
-    failure_reason: null,
-    technique_score: analysisResult.technique_score,
-    main_issue: analysisResult.mainIssue,
-    confidence_score: analysisResult.detectionPercentage,
-    status: finalStatus
+    Player_Email:playerEmail || null,
+    video_url:videoUrl,
+    session_id:sessionId || null,
+    throw_id:throwId,
+    processing_status:"COMPLETED",
+    analysis_success:true,
+    failure_reason:null,
+    technique_score:analysisResult.technique_score,
+    main_issue:analysisResult.mainIssue,
+    confidence_score:analysisResult.detectionPercentage,
+    status:finalStatus
   };
 
-  const {error:coreInsertError} = await supabaseClient
-    .from(TABLE_NAME)
-    .insert(coreRow);
-
+  const {error:coreInsertError} = await supabaseClient.from(TABLE_NAME).insert(coreRow);
   if(coreInsertError){
-    throw new Error(
-      `Detailed insert failed: ${detailedInsertError.message}. ` +
-      `Core insert also failed: ${coreInsertError.message}`
-    );
+    throw new Error(`Detailed insert failed: ${detailedInsertError.message}. Core insert also failed: ${coreInsertError.message}`);
   }
-
-  return {
-    detailedMetricsSaved:false,
-    warning:detailedInsertError.message
-  };
+  return {detailedMetricsSaved:false,warning:detailedInsertError.message};
 }
 
-analyzeBtn.addEventListener("click", async ()=>{
+analyzeBtn.addEventListener("click",async()=>{
+  if(!selectedFile || !poseLandmarker) return;
+
+  analyzeBtn.disabled = true;
+  videoInput.disabled = true;
+
   if(playerEmail){
     try{
       await fetch(GLIDE_WEBHOOK_URL,{
@@ -1025,19 +706,12 @@ analyzeBtn.addEventListener("click", async ()=>{
         body:JSON.stringify({email:playerEmail})
       });
     }catch(resetError){
-      console.warn("Reset webhook failed:", resetError);
+      console.warn("Reset webhook failed:",resetError);
     }
   }
 
-  if(!selectedFile || !poseLandmarker) return;
-
-  analyzeBtn.disabled = true;
-  videoInput.disabled = true;
-
   try{
-    if(!playerEmail){
-      console.warn("No player email supplied. Continuing without email.");
-    }
+    if(!playerEmail) console.warn("No player email supplied. Continuing without email.");
 
     videoPreview.style.display = "block";
     videoStage.classList.add("active");
@@ -1045,50 +719,49 @@ analyzeBtn.addEventListener("click", async ()=>{
     analysisPanel.classList.add("active");
     resultsElement.classList.remove("active");
     setProgress(5,"Preparing video scan","Checking the selected clip before scanning its sample frames.",0);
-    scanBadge.textContent="ANALYSIS STARTING";
+    scanBadge.textContent = "ANALYSIS STARTING";
     setStatus("Preparing your video for analysis...");
 
     const analysisResult = await analyzeVideo();
     console.log(analysisResult);
-    const saveResult = await uploadVideo(selectedFile, analysisResult);
+    const saveResult = await uploadVideo(selectedFile,analysisResult);
 
-    framesCheckedElement.textContent=String(analysisResult.framesChecked);
-    poseFramesElement.textContent=String(analysisResult.framesWithPose);
-    detectionQualityElement.textContent=analysisResult.quality;
-    releaseTimeElement.textContent=analysisResult.releaseFrame
+    $("framesChecked").textContent = String(analysisResult.framesChecked);
+    $("poseFrames").textContent = String(analysisResult.framesWithPose);
+    $("detectionQuality").textContent = analysisResult.quality;
+    $("releaseTime").textContent = analysisResult.releaseFrame
       ? `${analysisResult.releaseFrame.time_seconds.toFixed(2)} s`
       : "Not detected";
-    techniqueScoreElement.textContent=`${analysisResult.technique_score}/100`;
-    resultSummary.textContent=analysisResult.releaseFrame
-      ? `${analysisResult.mainIssue}. DARTIQ detected a pose in ${analysisResult.framesWithPose} of ${analysisResult.framesChecked} sampled frames. The video above is positioned at the estimated release time.`
-      : `DARTIQ checked ${analysisResult.framesChecked} frames but could not identify a reliable release frame. Try a brighter side-on video with your throwing arm and upper body visible.`;
+    $("techniqueScore").textContent = `${analysisResult.technique_score}/100`;
+
+    resultSummary.textContent = analysisResult.releaseFrame
+      ? `${analysisResult.mainIssue}. DARTIQ detected a pose in ${analysisResult.framesWithPose} of ${analysisResult.framesChecked} readable frames. The video above is positioned at the estimated release time.`
+      : `DARTIQ checked ${analysisResult.framesChecked} readable frames but could not identify a reliable release frame. Try a brighter side-on video with your throwing arm and upper body visible.`;
+
     setProgress(100,"Analysis complete","The video scan and save have finished. Final results are shown below.",5);
-    scanBadge.textContent="ANALYSIS COMPLETE";
-    resultsElement.classList.add("active");
+    scanBadge.textContent = "ANALYSIS COMPLETE";
 
     if(saveResult.detailedMetricsSaved){
-      setStatus("Analysis complete. Video and results saved.", "success");
+      resultsElement.classList.add("active");
+      setStatus("Analysis complete. Video and results saved.","success");
     }else{
-      setStatus(
-        "Analysis complete. Core results saved; detailed metrics were not saved: " + saveResult.warning,
-        "error"
-      );
+      resultsElement.classList.add("active");
+      setStatus("Analysis complete. Core results saved; detailed metrics were not saved: "+saveResult.warning,"error");
     }
   }catch(error){
     console.error(error);
     videoStage.classList.remove("scanning");
-    scanBadge.textContent="ANALYSIS NEEDS ATTENTION";
-    progressTitle.textContent="Analysis stopped";
-    currentFrameElement.textContent=error?.message || "Analysis failed. Check the video and try again.";
-    setStatus(error?.message || "Analysis failed.", "error");
+    scanBadge.textContent = "ANALYSIS NEEDS ATTENTION";
+    progressTitle.textContent = "Analysis stopped";
+    currentFrameElement.textContent = error?.message || "Analysis failed. Check the video and try again.";
+    setStatus(error?.message || "Analysis failed.","error");
   }finally{
     analyzeBtn.disabled = false;
     videoInput.disabled = false;
   }
 });
 
-window.addEventListener("beforeunload", cleanObjectUrl);
-
+window.addEventListener("beforeunload",cleanObjectUrl);
 loadPoseLandmarker();
 </script>
 </body>
