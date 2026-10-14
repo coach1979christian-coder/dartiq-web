@@ -78,16 +78,16 @@ button:disabled{opacity:.45;cursor:not-allowed}
 
   <section id="analysisPanel" class="analysis-panel" aria-live="polite">
     <h2 class="panel-title">What DARTIQ is analyzing</h2>
-    <p class="panel-copy">DARTIQ checks 10 evenly spaced frames, detects visible body landmarks, estimates a release frame, calculates movement indicators, then saves the video and analysis.</p>
+    <p class="panel-copy">DARTIQ samples the video, tracks both arms and body landmarks, estimates the forward-arm movement peak, measures arm angle and tempo, then saves the evidence and coaching feedback.</p>
     <div class="analysis-top"><strong id="progressTitle">Waiting to start</strong><span id="progressPercent">0%</span></div>
     <div class="progress-track"><div id="progressBar"></div></div>
-    <div id="frameRail" aria-label="10 sampled video frames"></div>
+    <div id="frameRail" aria-label="Sampled video frames"></div>
     <p id="currentFrame">Choose a video and tap Analyze My Throw to begin.</p>
     <div class="step-list">
       <div class="analysis-step" data-step="0"><span class="step-icon">○</span><span>Load and inspect the selected video</span></div>
-      <div class="analysis-step" data-step="1"><span class="step-icon">○</span><span>Scan 10 sample frames for body pose landmarks</span></div>
-      <div class="analysis-step" data-step="2"><span class="step-icon">○</span><span>Estimate the release frame from detected wrist positions</span></div>
-      <div class="analysis-step" data-step="3"><span class="step-icon">○</span><span>Calculate elbow, head, body-stability and follow-through indicators</span></div>
+      <div class="analysis-step" data-step="1"><span class="step-icon">○</span><span>Track body landmarks across the throw</span></div>
+      <div class="analysis-step" data-step="2"><span class="step-icon">○</span><span>Estimate the forward-arm movement peak (release timing proxy)</span></div>
+      <div class="analysis-step" data-step="3"><span class="step-icon">○</span><span>Measure arm angle, delivery tempo and follow-through</span></div>
       <div class="analysis-step" data-step="4"><span class="step-icon">○</span><span>Save the video and analysis record</span></div>
     </div>
   </section>
@@ -98,8 +98,8 @@ button:disabled{opacity:.45;cursor:not-allowed}
     <div class="result-row"><span class="result-label">Frames checked</span><span class="result-value" id="framesChecked">0</span></div>
     <div class="result-row"><span class="result-label">Pose detected</span><span class="result-value" id="poseFrames">0</span></div>
     <div class="result-row"><span class="result-label">Detection quality</span><span class="result-value" id="detectionQuality">Waiting</span></div>
-    <div class="result-row"><span class="result-label">Estimated release</span><span class="result-value" id="releaseTime">—</span></div>
-    <div class="result-row"><span class="result-label">Technique score</span><span class="result-value" id="techniqueScore">—</span></div>
+    <div class="result-row"><span class="result-label">Arm-movement peak estimate</span><span class="result-value" id="releaseTime">—</span></div>
+    <div class="result-row"><span class="result-label">Initial technique estimate</span><span class="result-value" id="techniqueScore">—</span></div>
   </div>
 
   <canvas id="analysisCanvas" class="hidden-canvas"></canvas>
@@ -148,13 +148,14 @@ let selectedFile = null;
 let selectedVideoUrl = null;
 let frameDots = [];
 
-function buildFrameRail(){
+function buildFrameRail(count=10){
   frameRail.innerHTML = "";
   frameDots = [];
-  for(let i=0;i<10;i++){
+  frameRail.setAttribute("aria-label",`${count} sampled video frames`);
+  for(let i=0;i<count;i++){
     const dot = document.createElement("span");
     dot.className = "frame-dot";
-    dot.title = `Sample frame ${i+1} of 10`;
+    dot.title = `Sample frame ${i+1} of ${count}`;
     frameRail.appendChild(dot);
     frameDots.push(dot);
   }
@@ -374,6 +375,164 @@ function averageVisibility(landmarks){
   return values.reduce((a,b)=>a+b,0)/values.length;
 }
 
+// These are coach-tunable starting ranges, not universal definitions of a perfect throw.
+const COACH_TARGETS = {
+  elbowAngleMin:75,
+  elbowAngleMax:125,
+  tempoMinMs:220,
+  tempoMaxMs:650,
+  extensionChangeMin:0.06
+};
+
+function pointDistance(a,b,width,height){
+  if(!a || !b) return null;
+  return Math.hypot((a.x-b.x)*width,(a.y-b.y)*height);
+}
+
+function jointAngle(a,b,c,width,height){
+  if(!a || !b || !c) return null;
+  const abx=(a.x-b.x)*width, aby=(a.y-b.y)*height;
+  const cbx=(c.x-b.x)*width, cby=(c.y-b.y)*height;
+  const denominator=Math.hypot(abx,aby)*Math.hypot(cbx,cby);
+  if(!denominator) return null;
+  const cosine=Math.max(-1,Math.min(1,(abx*cbx+aby*cby)/denominator));
+  return Math.round(Math.acos(cosine)*180/Math.PI);
+}
+
+function analyzePoseSequence(keypoints,width,height){
+  const arms=[
+    {side:"right",shoulder:"rightShoulder",elbow:"rightElbow",wrist:"rightWrist"},
+    {side:"left",shoulder:"leftShoulder",elbow:"leftElbow",wrist:"leftWrist"}
+  ];
+  const usable=keypoints.filter(k=>Number.isFinite(k.time_seconds));
+  if(usable.length<8) return null;
+
+  // Choose the visible arm whose wrist moves most during the sampled throw.
+  const arm=arms.map(candidate=>{
+    let path=0, visible=0, previous=null;
+    for(const frame of usable){
+      const wrist=frame[candidate.wrist];
+      const shoulder=frame[candidate.shoulder];
+      const elbow=frame[candidate.elbow];
+      if(!wrist || !shoulder || !elbow ||
+         (wrist.visibility||0)<0.35 || (shoulder.visibility||0)<0.35 || (elbow.visibility||0)<0.35){
+        previous=null;
+        continue;
+      }
+      visible++;
+      if(previous){
+        path+=pointDistance(wrist,previous,width,height)||0;
+      }
+      previous=wrist;
+    }
+    return {...candidate,path,visible};
+  }).sort((a,b)=>b.path-a.path)[0];
+
+  if(!arm || arm.visible<6) return null;
+  const valid=usable.filter(k=>k[arm.wrist] && k[arm.elbow] && k[arm.shoulder] &&
+    (k[arm.wrist].visibility||0)>=0.35 && (k[arm.elbow].visibility||0)>=0.35 &&
+    (k[arm.shoulder].visibility||0)>=0.35);
+  const segments=[];
+  for(let i=1;i<valid.length;i++){
+    const before=valid[i-1], current=valid[i];
+    const dt=current.time_seconds-before.time_seconds;
+    const torso=pointDistance(before.leftShoulder && before.rightShoulder
+      ? {x:(before.leftShoulder.x+before.rightShoulder.x)/2,y:(before.leftShoulder.y+before.rightShoulder.y)/2}
+      : before[arm.shoulder],
+      before.leftHip && before.rightHip
+      ? {x:(before.leftHip.x+before.rightHip.x)/2,y:(before.leftHip.y+before.rightHip.y)/2}
+      : before[arm.elbow],width,height);
+    const wristTravel=pointDistance(current[arm.wrist],before[arm.wrist],width,height);
+    if(dt>0 && torso>0 && wristTravel!==null){
+      segments.push({index:i,time:current.time_seconds,speed:(wristTravel/torso)/dt});
+    }
+  }
+  if(segments.length<5) return null;
+
+  const maxSpeedSegment=segments.reduce((best,item)=>item.speed>best.speed?item:best,segments[0]);
+  if(!Number.isFinite(maxSpeedSegment.speed) || maxSpeedSegment.speed<0.08) return null;
+  // Use the end of a sustained near-peak speed section so a steady delivery
+  // is not incorrectly reported as a one-frame, ultra-fast throw.
+  let peak=maxSpeedSegment;
+  const nearPeakThreshold=maxSpeedSegment.speed*0.9;
+  const maxIndex=segments.indexOf(maxSpeedSegment);
+  for(let i=maxIndex+1;i<segments.length;i++){
+    if(segments[i].speed<nearPeakThreshold) break;
+    peak=segments[i];
+  }
+  const releaseIndex=Math.min(peak.index,valid.length-1);
+  const releaseFrame=valid[releaseIndex];
+  const onsetThreshold=peak.speed*0.18;
+  let onsetIndex=Math.max(0,releaseIndex-1);
+  while(onsetIndex>0){
+    const priorSegment=segments.find(s=>s.index===onsetIndex);
+    if(!priorSegment || priorSegment.speed<=onsetThreshold) break;
+    onsetIndex--;
+  }
+  const onsetFrame=valid[onsetIndex];
+  const tempoMs=Math.max(0,Math.round((releaseFrame.time_seconds-onsetFrame.time_seconds)*1000));
+  const elbowAngle=jointAngle(releaseFrame[arm.shoulder],releaseFrame[arm.elbow],releaseFrame[arm.wrist],width,height);
+
+  const bodyScale=pointDistance(
+    releaseFrame.leftShoulder && releaseFrame.rightShoulder
+      ? {x:(releaseFrame.leftShoulder.x+releaseFrame.rightShoulder.x)/2,y:(releaseFrame.leftShoulder.y+releaseFrame.rightShoulder.y)/2}
+      : releaseFrame[arm.shoulder],
+    releaseFrame.leftHip && releaseFrame.rightHip
+      ? {x:(releaseFrame.leftHip.x+releaseFrame.rightHip.x)/2,y:(releaseFrame.leftHip.y+releaseFrame.rightHip.y)/2}
+      : releaseFrame[arm.elbow],width,height) || 1;
+  const extensionAtRelease=pointDistance(releaseFrame[arm.shoulder],releaseFrame[arm.wrist],width,height)/bodyScale;
+  const postFrames=valid.slice(releaseIndex+1,Math.min(valid.length,releaseIndex+7));
+  const postExtension=postFrames.map(f=>pointDistance(f[arm.shoulder],f[arm.wrist],width,height)/bodyScale).filter(Number.isFinite);
+  const extensionChange=postExtension.length?Math.max(...postExtension)-extensionAtRelease:null;
+  const confidence=Math.round(Math.max(0,Math.min(100,
+    (((releaseFrame[arm.shoulder].visibility||0)+(releaseFrame[arm.elbow].visibility||0)+(releaseFrame[arm.wrist].visibility||0))/3)*100
+  )));
+  const motionWindow=valid.slice(onsetIndex,Math.min(valid.length,releaseIndex+7));
+  const torsoScaleFor=frame=>pointDistance(
+    frame.leftShoulder && frame.rightShoulder
+      ? {x:(frame.leftShoulder.x+frame.rightShoulder.x)/2,y:(frame.leftShoulder.y+frame.rightShoulder.y)/2}
+      : frame[arm.shoulder],
+    frame.leftHip && frame.rightHip
+      ? {x:(frame.leftHip.x+frame.rightHip.x)/2,y:(frame.leftHip.y+frame.rightHip.y)/2}
+      : frame[arm.elbow],width,height) || 1;
+  const headOffsets=motionWindow.filter(f=>f.nose && f.leftShoulder && f.rightShoulder).map(f=>{
+    const center={x:(f.leftShoulder.x+f.rightShoulder.x)/2,y:(f.leftShoulder.y+f.rightShoulder.y)/2};
+    return {x:(f.nose.x-center.x)*width/torsoScaleFor(f),y:(f.nose.y-center.y)*height/torsoScaleFor(f)};
+  });
+  const hipCenters=motionWindow.filter(f=>f.leftHip && f.rightHip).map(f=>({
+    x:(f.leftHip.x+f.rightHip.x)/2,y:(f.leftHip.y+f.rightHip.y)/2
+  }));
+  const headMovement=headOffsets.length>1?Math.round(Math.max(
+    Math.max(...headOffsets.map(p=>p.x))-Math.min(...headOffsets.map(p=>p.x)),
+    Math.max(...headOffsets.map(p=>p.y))-Math.min(...headOffsets.map(p=>p.y))
+  )*100):null;
+  const bodyMovement=hipCenters.length>1?Math.round(Math.max(...hipCenters.map(p=>p.x*width))-Math.min(...hipCenters.map(p=>p.x*width)) +
+    Math.max(...hipCenters.map(p=>p.y*height))-Math.min(...hipCenters.map(p=>p.y*height))):null;
+  const bodyStabilityScore=bodyMovement===null?null:Math.max(0,Math.min(100,Math.round(100-(bodyMovement/Math.max(1,bodyScale))*150)));
+  const followThroughScore=extensionChange===null?null:Math.max(0,Math.min(100,Math.round((extensionChange/COACH_TARGETS.extensionChangeMin)*100)));
+
+  const angleScore=elbowAngle===null?null:elbowAngle<COACH_TARGETS.elbowAngleMin
+    ? Math.max(0,100-(COACH_TARGETS.elbowAngleMin-elbowAngle)*2)
+    : elbowAngle>COACH_TARGETS.elbowAngleMax
+      ? Math.max(0,100-(elbowAngle-COACH_TARGETS.elbowAngleMax)*2):100;
+  const tempoScore=tempoMs===null?null:tempoMs<COACH_TARGETS.tempoMinMs
+    ? Math.max(0,100-(COACH_TARGETS.tempoMinMs-tempoMs)*0.15)
+    : tempoMs>COACH_TARGETS.tempoMaxMs
+      ? Math.max(0,100-(tempoMs-COACH_TARGETS.tempoMaxMs)*0.15):100;
+  const scoreParts=[
+    {value:angleScore,weight:0.35},
+    {value:tempoScore,weight:0.35},
+    {value:followThroughScore,weight:0.20},
+    {value:bodyStabilityScore,weight:0.10}
+  ].filter(part=>part.value!==null);
+  const techniqueScore=scoreParts.length>=2
+    ? Math.round(scoreParts.reduce((sum,part)=>sum+part.value*part.weight,0)/scoreParts.reduce((sum,part)=>sum+part.weight,0))
+    : null;
+
+  return {arm:arm.side,releaseFrame,elbowAngle,tempoMs,extensionAtRelease,extensionChange,followThroughScore,
+    headMovement,bodyStabilityScore,angleScore,tempoScore,techniqueScore,confidence,samples:valid.length};
+}
+
 async function analyzeVideo(){
   await waitForMetadata();
 
@@ -392,7 +551,8 @@ async function analyzeVideo(){
   let framesWithPose = 0;
   let visibilityTotal = 0;
   const keypoints = [];
-  const frameCount = 10;
+  const frameCount = Math.min(90,Math.max(30,Math.ceil(duration*12)));
+  buildFrameRail(frameCount);
 
   analysisPanel.classList.add("active");
   videoStage.classList.add("scanning");
@@ -451,7 +611,7 @@ async function analyzeVideo(){
     throw new Error("This browser could not decode any frames from the selected video. Try exporting it as MP4 (H.264) and upload it again.");
   }
 
-  setProgress(70,"Estimating release frame","Comparing detected wrist positions to estimate the release frame.",2);
+  setProgress(70,"Estimating arm-movement peak","Comparing wrist movement across samples. This estimates arm tempo; it does not directly see the dart leave the hand.",2);
 
   const detectionPercentage = Math.round((framesWithPose/framesChecked)*100);
   let quality = "No pose detected";
@@ -459,9 +619,8 @@ async function analyzeVideo(){
   else if(detectionPercentage >= 60) quality = "Good";
   else if(detectionPercentage >= 30) quality = "Limited";
 
-  const releaseFrame = keypoints.length
-    ? keypoints.reduce((best,current)=>current.rightWrist.x > best.rightWrist.x ? current : best)
-    : null;
+  const movement = analyzePoseSequence(keypoints,videoWidth,videoHeight);
+  const releaseFrame = movement?.releaseFrame || null;
 
   if(releaseFrame){
     videoPreview.currentTime = releaseFrame.time_seconds;
@@ -469,9 +628,21 @@ async function analyzeVideo(){
 
   setProgress(82,"Calculating movement indicators","Using detected pose landmarks to calculate the displayed technique indicators.",3);
 
-  const technique_score = releaseFrame
-    ? Math.max(0,Math.min(100,Math.round((detectionPercentage*0.55)+25+Math.min(20,framesWithPose*2))))
-    : Math.max(0,Math.min(100,Math.round(detectionPercentage*0.55)));
+  const technique_score = movement?.techniqueScore ?? null;
+  let mainIssue = "Throw movement could not be measured";
+  if(movement){
+    if(movement.elbowAngle !== null && (movement.elbowAngle < COACH_TARGETS.elbowAngleMin || movement.elbowAngle > COACH_TARGETS.elbowAngleMax)){
+      mainIssue = "Arm angle outside initial coaching range";
+    }else if(movement.tempoMs < COACH_TARGETS.tempoMinMs){
+      mainIssue = "Forward-arm tempo faster than initial range";
+    }else if(movement.tempoMs > COACH_TARGETS.tempoMaxMs){
+      mainIssue = "Forward-arm tempo slower than initial range";
+    }else if(movement.followThroughScore !== null && movement.followThroughScore < 70){
+      mainIssue = "Follow-through needs more extension";
+    }else{
+      mainIssue = "No major issue found in the measured cues";
+    }
+  }
 
   return {
     releaseFrame,
@@ -480,7 +651,8 @@ async function analyzeVideo(){
     detectionPercentage,
     quality,
     technique_score,
-    mainIssue:releaseFrame ? "Release frame detected" : "No release frame detected",
+    movement,
+    mainIssue,
     keypoints
   };
 }
@@ -514,63 +686,66 @@ async function uploadVideo(file,analysisResult){
   let improvement_potential = "";
 
   const rf = analysisResult.releaseFrame;
-  const elbowAngle = rf ? Math.round(Math.abs(
-    Math.atan2(rf.rightWrist.y-rf.rightElbow.y,rf.rightWrist.x-rf.rightElbow.x) -
-    Math.atan2(rf.rightShoulder.y-rf.rightElbow.y,rf.rightShoulder.x-rf.rightElbow.x)
-  )*180/Math.PI) : null;
-  const headMovement = rf ? Math.round(Math.hypot(
-    rf.nose.x-((rf.leftShoulder.x+rf.rightShoulder.x)/2),
-    rf.nose.y-((rf.leftShoulder.y+rf.rightShoulder.y)/2)
-  )*100) : null;
-  const bodyStability = rf ? Math.round(Math.abs(rf.leftHip.x-rf.rightHip.x)*100) : null;
-  const followThrough = rf ? Math.round(Math.abs(rf.rightWrist.y-rf.rightShoulder.y)*100) : null;
+  const movement = analysisResult.movement;
+  const elbowAngle = movement?.elbowAngle ?? null;
+  const headMovement = movement?.headMovement ?? null;
+  const bodyStability = movement?.bodyStabilityScore ?? null;
+  const followThrough = movement?.followThroughScore ?? null;
+  const tempoMs = movement?.tempoMs ?? null;
+  const armSide = movement?.arm || "right";
+  const shoulder = rf?.[`${armSide}Shoulder`];
+  const elbow = rf?.[`${armSide}Elbow`];
+  const wrist = rf?.[`${armSide}Wrist`];
 
-  if(followThrough !== null && followThrough < 40){
-    ai_observation = `Follow-through is currently the weakest part of the throw (${followThrough}).`;
-    coach_advice = "Extend the throwing arm fully toward the target after release. Avoid stopping or pulling the arm back early.";
-    recommended_drill = "Full Extension Lane";
-    why_this_drill = "Trains a complete, repeatable follow-through and improves directional control.";
-    practice_focus = "Follow-through";
-    improvement_potential = "High";
-  }else if(bodyStability !== null && bodyStability < 40){
-    ai_observation = `Body stability is currently the weakest part of the throw (${bodyStability}).`;
-    coach_advice = "Keep your torso and lower body stable throughout the throwing motion.";
-    recommended_drill = "Stability Lock";
-    why_this_drill = "Reduces unnecessary body movement and creates a more repeatable throwing platform.";
-    practice_focus = "Body stability";
-    improvement_potential = "High";
-  }else if(headMovement !== null && headMovement > 15){
-    ai_observation = `Head movement is higher than desired (${headMovement}).`;
-    coach_advice = "Keep your head fixed on the target throughout the entire throwing motion.";
-    recommended_drill = "Head Stability Drill";
-    why_this_drill = "A stable head improves visual alignment and throwing consistency.";
-    practice_focus = "Head stability";
-    improvement_potential = "Medium";
-  }else if(elbowAngle !== null && (elbowAngle < 80 || elbowAngle > 120)){
-    ai_observation = `Elbow angle of ${elbowAngle}° indicates the throwing arm position can be improved.`;
-    coach_advice = "Work on maintaining a more controlled elbow position through acceleration and release.";
+  if(!movement){
+    ai_observation = "The throw was visible, but there were not enough clear arm-motion samples to judge technique.";
+    coach_advice = "Record a side-on video with your throwing arm visible from shoulder to hand, and keep the camera still.";
+    recommended_drill = "Video Setup Check";
+    why_this_drill = "A clear view is needed before DARTIQ can give reliable movement feedback.";
+    practice_focus = "Video quality";
+    improvement_potential = "Unrated";
+  }else if(elbowAngle !== null && (elbowAngle < COACH_TARGETS.elbowAngleMin || elbowAngle > COACH_TARGETS.elbowAngleMax)){
+    ai_observation = `At the estimated arm-movement peak, your elbow angle was ${elbowAngle}°. The initial coaching range is ${COACH_TARGETS.elbowAngleMin}°–${COACH_TARGETS.elbowAngleMax}°.`;
+    coach_advice = `Your arm angle is outside the current coaching range (${elbowAngle}°). Keep the elbow path controlled through the forward movement, then review another throw for comparison.`;
     recommended_drill = "Level Elbow Builder";
-    why_this_drill = "Improves elbow control and helps create a straighter, more repeatable throwing path.";
-    practice_focus = "Elbow position";
+    why_this_drill = "Builds a repeatable elbow path through the delivery.";
+    practice_focus = "Arm angle";
+    improvement_potential = "Medium";
+  }else if(tempoMs < COACH_TARGETS.tempoMinMs){
+    ai_observation = `Your forward-arm movement reached its peak in ${tempoMs} ms, faster than the initial ${COACH_TARGETS.tempoMinMs}–${COACH_TARGETS.tempoMaxMs} ms coaching range.`;
+    coach_advice = "Your forward action is very quick. Try a smoother, controlled acceleration and keep the same rhythm from throw to throw.";
+    recommended_drill = "Release Timing";
+    why_this_drill = "Helps make the forward action smoother and more repeatable.";
+    practice_focus = "Delivery tempo";
+    improvement_potential = "Medium";
+  }else if(tempoMs > COACH_TARGETS.tempoMaxMs){
+    ai_observation = `Your forward-arm movement reached its peak in ${tempoMs} ms, slower than the initial ${COACH_TARGETS.tempoMinMs}–${COACH_TARGETS.tempoMaxMs} ms coaching range.`;
+    coach_advice = "Your forward action is taking a long time. Avoid pausing during delivery and practise one smooth movement toward the target.";
+    recommended_drill = "Release Timing";
+    why_this_drill = "Helps reduce pauses and build a smoother delivery rhythm.";
+    practice_focus = "Delivery tempo";
+    improvement_potential = "Medium";
+  }else if(followThrough !== null && followThrough < 70){
+    ai_observation = `Your arm extension changed by ${movement.extensionChange===null?"an unmeasurable amount":`${Math.round(movement.extensionChange*100)}% of your torso length`} after the movement peak.`;
+    coach_advice = "Continue the throwing hand toward the target after the estimated release point. Avoid pulling the arm back early.";
+    recommended_drill = "Full Extension Lane";
+    why_this_drill = "Reinforces a complete, repeatable follow-through.";
+    practice_focus = "Follow-through";
     improvement_potential = "Medium";
   }else{
-    ai_observation = "No major biomechanical weakness was detected.";
-    coach_advice = "Maintain the current throwing mechanics and focus on repeatability.";
+    ai_observation = `Measured arm angle ${elbowAngle}°; forward-arm tempo ${tempoMs} ms; follow-through score ${followThrough ?? "not available"}.`;
+    coach_advice = "The measured movement is within the current starting ranges. Compare several throws to check that the same mechanics repeat.";
     recommended_drill = "Consistency Builder";
-    why_this_drill = "Reinforces the mechanics that are already performing consistently.";
-    practice_focus = "Consistency";
+    why_this_drill = "Reinforces repeatable arm angle, tempo and follow-through.";
+    practice_focus = "Repeatability";
     improvement_potential = "Low";
   }
 
-  const releaseConfidence = rf ? Math.round((
-    (rf.rightShoulder.visibility || 0) +
-    (rf.rightElbow.visibility || 0) +
-    (rf.rightWrist.visibility || 0)
-  )/3*100) : null;
+  const releaseConfidence = movement?.confidence ?? null;
 
-  const ai_summary = rf
-    ? `Throw successfully analyzed. Release detected at ${Math.round(rf.time_seconds*1000)} ms with ${releaseConfidence}% release confidence.`
-    : "Throw analyzed, but no reliable release frame was detected.";
+  const ai_summary = movement
+    ? `Estimated arm-movement peak at ${Math.round(rf.time_seconds*1000)} ms; throwing arm: ${movement.arm}; elbow angle: ${elbowAngle}°; forward-arm tempo: ${tempoMs} ms; pose visibility: ${releaseConfidence}%. This is an estimate from sampled video frames, not a dart-flight release measurement.`
+    : "Video checked, but arm movement could not be measured reliably.";
 
   const detailedRow = {
     Player_Email:playerEmail || null,
@@ -603,10 +778,10 @@ async function uploadVideo(file,analysisResult){
     detection_percentage:analysisResult.detectionPercentage,
     release_frame:rf ? rf.frame : null,
     release_timing:rf ? rf.time_seconds : null,
-    wrist_angle:rf ? Math.round((Math.atan2(rf.rightWrist.y-rf.rightElbow.y,rf.rightWrist.x-rf.rightElbow.x)*180/Math.PI+360)%360) : null,
-    shoulder_angle:rf ? Math.round(Math.atan2(rf.rightElbow.y-rf.rightShoulder.y,rf.rightElbow.x-rf.rightShoulder.x)*180/Math.PI) : null,
-    arm_extension:rf ? Math.round(Math.hypot(rf.rightWrist.x-rf.rightShoulder.x,rf.rightWrist.y-rf.rightShoulder.y)*1000) : null,
-    throw_consistency:rf ? 100 : null
+    wrist_angle:wrist && elbow ? Math.round((Math.atan2(wrist.y-elbow.y,wrist.x-elbow.x)*180/Math.PI+360)%360) : null,
+    shoulder_angle:elbow && shoulder ? Math.round(Math.atan2(elbow.y-shoulder.y,elbow.x-shoulder.x)*180/Math.PI) : null,
+    arm_extension:movement ? Math.round(movement.extensionAtRelease*1000) : null,
+    throw_consistency:null
   };
 
   const {data,error:detailedInsertError} = await supabaseClient.from(TABLE_NAME).insert(detailedRow).select();
@@ -732,11 +907,13 @@ analyzeBtn.addEventListener("click",async()=>{
     $("releaseTime").textContent = analysisResult.releaseFrame
       ? `${analysisResult.releaseFrame.time_seconds.toFixed(2)} s`
       : "Not detected";
-    $("techniqueScore").textContent = `${analysisResult.technique_score}/100`;
+    $("techniqueScore").textContent = analysisResult.technique_score === null
+      ? "Not enough motion data"
+      : `${analysisResult.technique_score}/100`;
 
     resultSummary.textContent = analysisResult.releaseFrame
-      ? `${analysisResult.mainIssue}. DARTIQ detected a pose in ${analysisResult.framesWithPose} of ${analysisResult.framesChecked} readable frames. The video above is positioned at the estimated release time.`
-      : `DARTIQ checked ${analysisResult.framesChecked} readable frames but could not identify a reliable release frame. Try a brighter side-on video with your throwing arm and upper body visible.`;
+      ? `${analysisResult.mainIssue}. DARTIQ tracked ${analysisResult.movement.arm} arm movement across ${analysisResult.movement.samples} usable samples. The marker shows the estimated arm-movement peak, not a directly observed dart release.`
+      : `DARTIQ checked ${analysisResult.framesChecked} readable frames but could not measure a clear arm movement. Try a brighter side-on video with your throwing arm and upper body visible.`;
 
     setProgress(100,"Analysis complete","The video scan and save have finished. Final results are shown below.",5);
     scanBadge.textContent = "ANALYSIS COMPLETE";
