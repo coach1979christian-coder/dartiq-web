@@ -438,14 +438,18 @@ body{padding:8px}
   .remaining{font-size:40px}
   .mini-value{font-size:15px}
   .dartboard-wrap{
-    width:86%;
-    max-width:360px;
+    width:100%;
+    max-width:500px;
     margin:0 auto 8px;
   }
   .engine.dartboard-active .practice-grid{
     grid-template-columns:1fr;
   }
+  .engine.dartboard-active .input-column{
+    order:1;
+  }
   .engine.dartboard-active .score-column{
+    order:2;
     display:grid;
     grid-template-columns:repeat(2,1fr);
     gap:7px;
