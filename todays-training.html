@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -63,7 +64,6 @@ body{
     inset 0 1px 0 rgba(255,255,255,.025);
 }
 
-
 /* =========================
    HEADER
 ========================= */
@@ -118,7 +118,6 @@ body{
     0 0 8px rgba(57,169,255,.20);
 }
 
-
 /* =========================
    PRIMARY STATS
 ========================= */
@@ -160,16 +159,12 @@ body{
 
 .value{
   margin-top:7px;
-
   color:#fff;
-
   font-size:17px;
   line-height:1.2;
   font-weight:900;
-
   overflow-wrap:anywhere;
 }
-
 
 /* =========================
    MAIN FOCUS
@@ -196,12 +191,10 @@ body{
 
 .main-focus .value{
   margin-top:6px;
-
   font-size:15px;
   line-height:1.4;
   font-weight:800;
 }
-
 
 /* =========================
    EQUIPMENT
@@ -228,70 +221,10 @@ body{
 
 .equipment .value{
   margin-top:6px;
-
   font-size:14px;
   line-height:1.4;
   font-weight:800;
 }
-
-
-/* =========================
-   STATUS
-========================= */
-
-.status{
-  margin-top:10px;
-  min-height:44px;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:8px;
-
-  padding:10px 12px;
-
-  border-radius:13px;
-
-  background:
-    rgba(255,255,255,.035);
-
-  border:
-    1px solid rgba(57,169,255,.18);
-
-  color:#d9eaff;
-
-  font-size:14px;
-  font-weight:900;
-}
-
-.status-icon{
-  width:8px;
-  height:8px;
-
-  border:2px solid var(--accent);
-  border-radius:2px;
-
-  box-shadow:
-    0 0 6px rgba(57,169,255,.35);
-}
-
-.status.completed{
-  background:
-    linear-gradient(
-      90deg,
-      #1662d9,
-      #2389ff
-    );
-
-  border-color:
-    rgba(57,169,255,.55);
-
-  color:#fff;
-
-  box-shadow:
-    0 0 16px rgba(57,169,255,.18);
-}
-
 
 /* =========================
    MOBILE
@@ -352,16 +285,13 @@ body{
       Practice Training
     </h1>
 
-    <div
-      class="subtitle"
-      id="focus">
+    <div class="subtitle" id="focus">
       Focused practice
     </div>
 
     <div class="divider"></div>
 
   </div>
-
 
   <!-- DIFFICULTY / DURATION / ROUNDS -->
 
@@ -373,14 +303,11 @@ body{
         Difficulty
       </div>
 
-      <div
-        class="value"
-        id="level">
+      <div class="value" id="level">
         --
       </div>
 
     </div>
-
 
     <div class="card">
 
@@ -388,14 +315,11 @@ body{
         Duration
       </div>
 
-      <div
-        class="value"
-        id="duration">
+      <div class="value" id="duration">
         --
       </div>
 
     </div>
-
 
     <div class="card">
 
@@ -403,16 +327,13 @@ body{
         Rounds
       </div>
 
-      <div
-        class="value"
-        id="rounds">
+      <div class="value" id="rounds">
         --
       </div>
 
     </div>
 
   </div>
-
 
   <!-- MAIN FOCUS -->
 
@@ -422,53 +343,27 @@ body{
       Main Focus
     </div>
 
-    <div
-      class="value"
-      id="focusShort">
+    <div class="value" id="focusShort">
       --
     </div>
 
   </div>
 
-
   <!-- EQUIPMENT -->
 
-  <div
-    class="equipment"
-    id="equipmentWrap">
+  <div class="equipment" id="equipmentWrap">
 
     <div class="label">
       Equipment
     </div>
 
-    <div
-      class="value"
-      id="equipment">
+    <div class="value" id="equipment">
       --
     </div>
 
   </div>
 
-
-  <!-- STATUS -->
-
-  <div
-    class="status"
-    id="status">
-
-    <span
-      class="status-icon"
-      id="statusIcon">
-    </span>
-
-    <span id="statusText">
-      Training in progress
-    </span>
-
-  </div>
-
 </div>
-
 
 <script>
 
@@ -476,7 +371,6 @@ const params =
   new URLSearchParams(
     window.location.search
   );
-
 
 function getValue(
   key,
@@ -509,7 +403,6 @@ function getValue(
 
 }
 
-
 /* =========================
    PARAMETERS
 ========================= */
@@ -523,13 +416,11 @@ const drill =
     )
   );
 
-
 const duration =
   getValue(
     "duration",
     "--"
   );
-
 
 const rounds =
   getValue(
@@ -537,13 +428,11 @@ const rounds =
     "--"
   );
 
-
 const level =
   getValue(
     "level",
     "--"
   );
-
 
 const focus =
   getValue(
@@ -551,20 +440,11 @@ const focus =
     "Focused practice"
   );
 
-
 const equipment =
   getValue(
     "equipment",
     ""
   );
-
-
-const completed =
-  getValue(
-    "completed",
-    "false"
-  );
-
 
 /* =========================
    POPULATE SCREEN
@@ -575,36 +455,30 @@ document
   .textContent =
   drill;
 
-
 document
   .getElementById("duration")
   .textContent =
   duration;
-
 
 document
   .getElementById("rounds")
   .textContent =
   rounds;
 
-
 document
   .getElementById("level")
   .textContent =
   level;
-
 
 document
   .getElementById("focus")
   .textContent =
   focus;
 
-
 document
   .getElementById("focusShort")
   .textContent =
   focus;
-
 
 /* =========================
    EQUIPMENT
@@ -623,64 +497,6 @@ if(equipment){
     .getElementById("equipmentWrap")
     .style.display =
     "none";
-
-}
-
-
-/* =========================
-   STATUS
-========================= */
-
-const status =
-  document.getElementById(
-    "status"
-  );
-
-
-const statusText =
-  document.getElementById(
-    "statusText"
-  );
-
-
-const statusIcon =
-  document.getElementById(
-    "statusIcon"
-  );
-
-
-const isCompleted =
-[
-  "1",
-  "true",
-  "yes",
-  "done",
-  "complete",
-  "completed"
-]
-.includes(
-  String(completed)
-    .toLowerCase()
-    .trim()
-);
-
-
-if(isCompleted){
-
-  statusText.textContent =
-    "Training Completed";
-
-  statusIcon.style.display =
-    "none";
-
-  status.classList.add(
-    "completed"
-  );
-
-}else{
-
-  statusText.textContent =
-    "Training in progress";
 
 }
 
