@@ -1815,6 +1815,179 @@ updateDartDisplay();
 updateStats();
 
 </script>
+<script>
+(() => {
+  const drillName = (param("drill") || "").toLowerCase();
+  if (!drillName.includes("double trouble")) return;
 
+ const webhookUrl = "https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/2876503c-d138-44a2-adfd-7815bd4b834c";
+
+  let wedge = 1;
+  let furthestWedge = 0;
+  let gameEnded = false;
+  let saving = false;
+
+  // Start Keith's Double Trouble scoring.
+  remaining = 27;
+  visit = 1;
+  totalPoints = 0;
+  totalDarts = 0;
+  currentDarts = [];
+
+  // Keep the existing dartboard; hide the 501 keypad and mode tabs.
+  setMode("dartboard");
+  document.getElementById("keypadTab").style.display = "none";
+  document.getElementById("dartboardTab").style.display = "none";
+  document.querySelector(".mode-switch").style.display = "none";
+  document.querySelector(".performance").style.display = "none";
+
+  document.querySelector(".live-title").textContent = "DOUBLE TROUBLE";
+  document.querySelector(".live-sub").textContent =
+    "3 DARTS AT EACH DOUBLE • PROGRESS D1 TO D20";
+
+  document.querySelector(".score-label").textContent = "RUNNING POINTS";
+
+  const miniLabels = document.querySelectorAll(".mini-label");
+  if (miniLabels[0]) miniLabels[0].textContent = "TARGET";
+  if (miniLabels[1]) miniLabels[1].textContent = "FURTHEST";
+  if (miniLabels[2]) miniLabels[2].textContent = "DARTS";
+
+  function refreshDoubleTroubleDisplay() {
+    updateStats();
+    document.getElementById("remaining").textContent = remaining;
+    document.getElementById("visitNumber").textContent =
+      gameEnded ? "DONE" : "D" + wedge;
+    document.getElementById("average").textContent =
+      "D" + furthestWedge;
+    document.getElementById("dartsThrown").textContent = totalDarts;
+  }
+
+  async function saveWedgeAttempt(data) {
+    const response = await fetch(webhookUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+
+    if (!response.ok) {
+      throw new Error("Glide returned " + response.status);
+    }
+  }
+
+  window.confirmVisit = async function () {
+    if (gameEnded) {
+      showMessage("This Double Trouble session has ended.");
+      return;
+    }
+
+    if (saving) {
+      showMessage("Saving this wedge. Please wait.");
+      return;
+    }
+
+    if (currentDarts.length !== 3) {
+      showMessage("Enter all 3 darts for D" + wedge + " first.");
+      return;
+    }
+
+    const scoreBefore = remaining;
+    const doubleHits = currentDarts.filter(
+      dart => dart.number === wedge && dart.multiplier === 2
+    ).length;
+
+    // A hit adds the value of each successful double.
+    // Three misses subtract the wedge number once.
+    const scoreChange =
+      doubleHits > 0 ? doubleHits * (wedge * 2) : -wedge;
+    const scoreAfter = scoreBefore + scoreChange;
+    const wedgeCleared = doubleHits > 0;
+    const newFurthest = wedgeCleared
+      ? Math.max(furthestWedge, wedge)
+      : furthestWedge;
+    const d20Cleared = wedge === 20 && wedgeCleared;
+
+    const attempt = {
+      sessionID: sessionID,
+      email: param("email"),
+      drill: "Double Trouble",
+      roundNumber: wedge,
+      wedgeNumber: wedge,
+      dartsThrown: 3,
+      doubleHits: doubleHits,
+      scoreBefore: scoreBefore,
+      scoreChange: scoreChange,
+      scoreAfter: scoreAfter,
+      wedgeCleared: wedgeCleared,
+      furthestWedge: newFurthest,
+      d20Cleared: d20Cleared,
+      recordScore: d20Cleared ? scoreAfter : 0,
+      createdAt: new Date().toISOString()
+    };
+
+    saving = true;
+    showMessage("Saving D" + wedge + " to Glide…");
+
+    try {
+      await saveWedgeAttempt(attempt);
+    } catch (error) {
+      saving = false;
+      showMessage(
+        "Save failed. Check the Glide workflow and Practice Attempts table before retrying."
+      );
+      console.error("Practice attempt save failed:", error);
+      return;
+    }
+
+    saving = false;
+    remaining = scoreAfter;
+    furthestWedge = newFurthest;
+    totalDarts += 3;
+    totalPoints += scoreChange;
+
+    const completedWedge = wedge;
+    gameEnded = d20Cleared || scoreAfter <= 0 || wedge >= 20;
+
+    if (!gameEnded) {
+      wedge++;
+      visit = wedge;
+    }
+
+    resetCurrentVisit();
+    refreshDoubleTroubleDisplay();
+
+    if (d20Cleared) {
+      gameEnded = true;
+      document.getElementById("visitNumber").textContent = "DONE";
+      showMessage(
+        "D20 cleared! Record score: " + scoreAfter +
+        ". Furthest wedge: D" + furthestWedge + "."
+      );
+    } else if (scoreAfter <= 0) {
+      gameEnded = true;
+      document.getElementById("visitNumber").textContent = "DONE";
+      showMessage(
+        "Session ended after D" + completedWedge +
+        ". Furthest wedge cleared: D" + furthestWedge + "."
+      );
+    } else if (completedWedge >= 20) {
+      gameEnded = true;
+      document.getElementById("visitNumber").textContent = "DONE";
+      showMessage(
+        "D20 attempt saved. Furthest wedge cleared: D" +
+        furthestWedge + "."
+      );
+    } else {
+      showMessage(
+        "D" + completedWedge + " saved. " +
+        (wedgeCleared ? "Double hit." : "No hits.") +
+        " Next target: D" + wedge + "."
+      );
+    }
+  };
+
+  refreshDoubleTroubleDisplay();
+  showMessage("Target D1. Enter 3 darts, then confirm the wedge.");
+})();
+</script>
 </body>
 </html>
