@@ -1,0 +1,737 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DARTIQ | Board Vision</title>
+
+<style>
+:root {
+  color-scheme: dark;
+  font-family: Arial, sans-serif;
+  background: #061321;
+  color: #e7f5ff;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0 auto;
+  padding: 16px;
+  max-width: 820px;
+}
+
+h1 {
+  margin: 0;
+  color: #39bfff;
+  font-size: 28px;
+}
+
+.subtitle {
+  color: #a7c4d8;
+  font-size: 13px;
+  margin: 8px 0 20px;
+}
+
+.panel {
+  background: #10283e;
+  border: 1px solid #23516f;
+  border-radius: 14px;
+  padding: 16px;
+  margin-top: 14px;
+}
+
+h2 {
+  font-size: 17px;
+  margin: 0 0 12px;
+}
+
+p {
+  line-height: 1.5;
+}
+
+.muted {
+  color: #a7c4d8;
+  font-size: 13px;
+}
+
+button, select {
+  background: #155078;
+  color: white;
+  border: 1px solid #4087ac;
+  padding: 12px;
+  border-radius: 9px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button.primary {
+  background: #0877c6;
+}
+
+button:focus-visible, select:focus-visible {
+  outline: 3px solid white;
+}
+
+.controls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+#stage {
+  position: relative;
+  background: #000;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 14px;
+  touch-action: manipulation;
+  min-height: 220px;
+}
+
+video {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 70vh;
+  object-fit: contain;
+}
+
+canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.stat {
+  background: #163a55;
+  border-radius: 10px;
+  padding: 12px 6px;
+  text-align: center;
+  font-size: 12px;
+}
+
+.stat strong {
+  display: block;
+  font-size: 25px;
+  color: #53caff;
+  margin-bottom: 5px;
+}
+
+#log {
+  margin-top: 14px;
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+.log-entry {
+  padding: 7px 0;
+  border-bottom: 1px solid #24475f;
+}
+
+.warning {
+  border-left: 3px solid #f0bd4f;
+  padding-left: 12px;
+}
+
+footer {
+  color: #8cabc2;
+  font-size: 12px;
+  text-align: center;
+  margin: 25px 0;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>DARTIQ BOARD VISION</h1>
+  <p class="subtitle">
+    Smartphone Scoring Prototype | Phase 1
+  </p>
+</header>
+
+<section class="panel">
+  <h2>1. Smartphone Camera</h2>
+
+  <p class="muted">
+    Position your phone securely in front of the dartboard.
+    Ensure the full board is visible and well lit.
+  </p>
+
+  <div class="controls">
+    <button class="primary" id="start">
+      Start Rear Camera
+    </button>
+    <button id="stop">
+      Stop Camera
+    </button>
+  </div>
+
+  <p id="status" class="muted" role="status">
+    Camera not started.
+  </p>
+
+  <div id="stage">
+    <video id="video" autoplay muted playsinline></video>
+    <canvas id="overlay"></canvas>
+  </div>
+</section>
+
+<section class="panel">
+  <h2>2. Board Calibration</h2>
+
+  <p class="muted">
+    Start calibration and tap three reference positions
+    on the camera image in this order:
+  </p>
+
+  <ol>
+    <li>Center of the bullseye</li>
+    <li>Top outer double-wire edge at 20</li>
+    <li>Right outer double-wire edge near 6</li>
+  </ol>
+
+  <p class="muted warning">
+    This first prototype assumes a nearly front-facing camera.
+    Perspective correction and automatic calibration will
+    be added later.
+  </p>
+
+  <div class="controls">
+    <button class="primary" id="calibrate">
+      Start Calibration
+    </button>
+    <button id="reset">
+      Reset Calibration
+    </button>
+  </div>
+
+  <p id="instruction" role="status">
+    Start the camera, then calibrate.
+  </p>
+</section>
+
+<section class="panel">
+  <h2>3. Dart Scoring & Miss Detection</h2>
+
+  <p class="muted">
+    Choose your intended target, then tap the visible
+    dart-tip location on the camera image.
+    DARTIQ calculates the provisional score and
+    directional deviation.
+  </p>
+
+  <label for="target">Intended target:</label>
+
+  <select id="target">
+    <option value="T20">Triple 20</option>
+    <option value="S20">Single 20</option>
+    <option value="D20">Double 20</option>
+    <option value="BULL">Bullseye</option>
+    <option value="T19">Triple 19</option>
+    <option value="D16">Double 16</option>
+  </select>
+
+  <div class="stats">
+    <div class="stat">
+      <strong id="last">—</strong>
+      Last Dart
+    </div>
+
+    <div class="stat">
+      <strong id="visit">0</strong>
+      Visit Score
+    </div>
+
+    <div class="stat">
+      <strong id="count">0</strong>
+      Darts
+    </div>
+  </div>
+
+  <div class="controls">
+    <button id="undo">Undo Dart</button>
+    <button id="clear">New Visit</button>
+    <button class="primary" id="export">
+      Copy Visit JSON
+    </button>
+  </div>
+
+  <div id="log" aria-live="polite"></div>
+</section>
+
+<footer>
+  DARTIQ | Built with players, for players.
+  <p>
+    Phase 1 manual impact prototype.
+    No camera frames or player data are uploaded.
+  </p>
+</footer>
+
+<script>
+(() => {
+  "use strict";
+
+  const $ = id => document.getElementById(id);
+
+  const video = $("video");
+  const canvas = $("overlay");
+  const ctx = canvas.getContext("2d");
+
+  let stream = null;
+  let mode = 0;
+
+  let center = null;
+  let top = null;
+  let right = null;
+
+  let throws = [];
+
+  const sectors = [
+    20, 1, 18, 4, 13,
+    6, 10, 15, 2, 17,
+    3, 19, 7, 16, 8,
+    11, 14, 9, 12, 5
+  ];
+
+  function resizeCanvas() {
+    const rect = video.getBoundingClientRect();
+
+    canvas.width = Math.max(
+      1,
+      Math.round(rect.width * devicePixelRatio)
+    );
+
+    canvas.height = Math.max(
+      1,
+      Math.round(rect.height * devicePixelRatio)
+    );
+
+    draw();
+  }
+
+  function getPoint(event) {
+    const rect = canvas.getBoundingClientRect();
+
+    return {
+      x: (event.clientX - rect.left) / rect.width,
+      y: (event.clientY - rect.top) / rect.height
+    };
+  }
+
+  function drawMarker(point, color, label) {
+    if (!point) return;
+
+    const x = point.x * canvas.width;
+    const y = point.y * canvas.height;
+
+    ctx.fillStyle = color;
+    ctx.beginPath();
+
+    ctx.arc(
+      x,
+      y,
+      7 * devicePixelRatio,
+      0,
+      Math.PI * 2
+    );
+
+    ctx.fill();
+
+    ctx.font = `${13 * devicePixelRatio}px Arial`;
+
+    ctx.fillText(
+      label,
+      x + 10 * devicePixelRatio,
+      y - 9 * devicePixelRatio
+    );
+  }
+
+  function draw() {
+    ctx.clearRect(
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
+
+    drawMarker(center, "#39bfff", "BULL");
+    drawMarker(top, "#f7d154", "TOP 20");
+    drawMarker(right, "#f7d154", "RIGHT");
+
+    throws.forEach((dart, index) => {
+      drawMarker(
+        dart.point,
+        "#ff6b6b",
+        `DART ${index + 1}`
+      );
+    });
+  }
+
+  function calculateScore(point) {
+    const ux = {
+      x: right.x - center.x,
+      y: right.y - center.y
+    };
+
+    const uy = {
+      x: top.x - center.x,
+      y: top.y - center.y
+    };
+
+    const dx = point.x - center.x;
+    const dy = point.y - center.y;
+
+    const determinant =
+      ux.x * uy.y - ux.y * uy.x;
+
+    if (Math.abs(determinant) < 0.00001) {
+      return null;
+    }
+
+    const x =
+      (dx * uy.y - dy * uy.x) / determinant;
+
+    const y =
+      (ux.x * dy - ux.y * dx) / determinant;
+
+    const radius = Math.hypot(x, y);
+
+    const angle =
+      (Math.atan2(x, y) * 180 / Math.PI + 360) % 360;
+
+    const sectorIndex =
+      Math.floor((angle + 9) / 18) % 20;
+
+    const number = sectors[sectorIndex];
+
+    let ring = "S";
+    let value = number;
+
+    if (radius > 1) {
+      ring = "MISS";
+      value = 0;
+    } else if (radius <= 6.35 / 170) {
+      ring = "DB";
+      value = 50;
+    } else if (radius <= 15.9 / 170) {
+      ring = "SB";
+      value = 25;
+    } else if (
+      radius >= 99 / 170 &&
+      radius <= 107 / 170
+    ) {
+      ring = "T";
+      value = number * 3;
+    } else if (radius >= 162 / 170) {
+      ring = "D";
+      value = number * 2;
+    }
+
+    return {
+      ring,
+      number,
+      value,
+      x,
+      y,
+      radius
+    };
+  }
+
+  function getTargetPosition() {
+    const selected = $("target").value;
+
+    if (selected === "BULL") {
+      return { x: 0, y: 0 };
+    }
+
+    const ring = selected.charAt(0);
+    const number = Number(selected.slice(1));
+
+    const index = sectors.indexOf(number);
+
+    const angle = index * 18 * Math.PI / 180;
+
+    let radius = 0.75;
+
+    if (ring === "T") {
+      radius = 103 / 170;
+    }
+
+    if (ring === "D") {
+      radius = 166 / 170;
+    }
+
+    return {
+      x: Math.sin(angle) * radius,
+      y: Math.cos(angle) * radius
+    };
+  }
+
+  function detectMiss(score, intendedTarget) {
+    const dx = score.x - intendedTarget.x;
+    const dy = score.y - intendedTarget.y;
+
+    const distance = Math.hypot(dx, dy);
+
+    if (distance < 0.05) {
+      return "ON TARGET";
+    }
+
+    if (Math.abs(dx) > Math.abs(dy)) {
+      return dx > 0 ? "RIGHT" : "LEFT";
+    }
+
+    return dy > 0 ? "HIGH" : "LOW";
+  }
+
+  function updateDisplay() {
+    const lastDart = throws.at(-1);
+
+    $("last").textContent =
+      lastDart ? lastDart.score.value : "—";
+
+    $("visit").textContent =
+      throws.reduce(
+        (total, dart) => total + dart.score.value,
+        0
+      );
+
+    $("count").textContent = throws.length;
+
+    const log = $("log");
+    log.replaceChildren();
+
+    throws.forEach((dart, index) => {
+      const entry = document.createElement("div");
+      entry.className = "log-entry";
+
+      const ringText = dart.score.ring === "MISS"
+        ? "MISS"
+        : dart.score.ring === "DB"
+          ? "DOUBLE BULL"
+          : dart.score.ring === "SB"
+            ? "SINGLE BULL"
+            : dart.score.ring + dart.score.number;
+
+      entry.textContent =
+        `Dart ${index + 1}: ` +
+        `${dart.score.value} (${ringText}) ` +
+        `| ${dart.miss}`;
+
+      log.appendChild(entry);
+    });
+
+    draw();
+  }
+
+  $("start").onclick = async () => {
+    try {
+      if (!navigator.mediaDevices?.getUserMedia) {
+        throw new Error(
+          "Camera API unavailable. Use HTTPS in a supported browser."
+        );
+      }
+
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+      }
+
+      stream = await navigator.mediaDevices.getUserMedia({
+        audio: false,
+        video: {
+          facingMode: { ideal: "environment" }
+        }
+      });
+
+      video.srcObject = stream;
+      await video.play();
+
+      $("status").textContent =
+        "Camera active. Keep your phone steady.";
+
+      resizeCanvas();
+    } catch (error) {
+      $("status").textContent =
+        "Camera error: " + error.message;
+    }
+  };
+
+  $("stop").onclick = () => {
+    if (stream) {
+      stream.getTracks().forEach(track => track.stop());
+    }
+
+    stream = null;
+    video.srcObject = null;
+
+    $("status").textContent = "Camera stopped.";
+  };
+
+  $("calibrate").onclick = () => {
+    mode = 1;
+
+    center = null;
+    top = null;
+    right = null;
+
+    throws = [];
+
+    updateDisplay();
+
+    $("instruction").textContent =
+      "Tap the CENTER of the bullseye.";
+  };
+
+  $("reset").onclick = () => {
+    mode = 0;
+
+    center = null;
+    top = null;
+    right = null;
+
+    throws = [];
+
+    updateDisplay();
+
+    $("instruction").textContent =
+      "Calibration reset. Start calibration again.";
+  };
+
+  canvas.addEventListener("click", event => {
+    if (!stream) {
+      $("instruction").textContent =
+        "Start the camera first.";
+      return;
+    }
+
+    const point = getPoint(event);
+
+    if (mode === 1) {
+      center = point;
+      mode = 2;
+
+      $("instruction").textContent =
+        "Tap the TOP outer double-wire edge at 20.";
+    } else if (mode === 2) {
+      top = point;
+      mode = 3;
+
+      $("instruction").textContent =
+        "Tap the RIGHT outer double-wire edge near 6.";
+    } else if (mode === 3) {
+      right = point;
+      mode = 4;
+
+      $("instruction").textContent =
+        "Calibration complete. Tap dart tips to score.";
+    } else if (mode === 4) {
+      if (throws.length >= 3) {
+        $("instruction").textContent =
+          "Visit complete. Select New Visit.";
+        return;
+      }
+
+      const score = calculateScore(point);
+
+      if (!score) {
+        $("instruction").textContent =
+          "Invalid calibration. Please recalibrate.";
+        return;
+      }
+
+      const intendedTarget = getTargetPosition();
+
+      const miss = detectMiss(score, intendedTarget);
+
+      throws.push({
+        point,
+        score,
+        miss,
+        target: $("target").value
+      });
+
+      updateDisplay();
+    }
+
+    draw();
+  });
+
+  $("undo").onclick = () => {
+    throws.pop();
+    updateDisplay();
+  };
+
+  $("clear").onclick = () => {
+    throws = [];
+    updateDisplay();
+
+    $("instruction").textContent =
+      "New visit ready. Tap dart tips.";
+  };
+
+  $("export").onclick = async () => {
+    const params = new URLSearchParams(location.search);
+
+    const payload = {
+      version: 1,
+      source: "DARTIQ_BOARD_VISION_MANUAL",
+      session: params.get("session"),
+      player: params.get("player"),
+      throws: throws.map((dart, index) => ({
+        dart: index + 1,
+        target: dart.target,
+        score: dart.score.value,
+        ring: dart.score.ring,
+        sector: dart.score.number,
+        normalized_x: dart.score.x,
+        normalized_y: dart.score.y,
+        miss: dart.miss
+      })),
+      visit_score: throws.reduce(
+        (total, dart) => total + dart.score.value,
+        0
+      )
+    };
+
+    const json = JSON.stringify(payload, null, 2);
+
+    try {
+      await navigator.clipboard.writeText(json);
+
+      $("instruction").textContent =
+        "Visit JSON copied. No data uploaded.";
+    } catch (error) {
+      $("instruction").textContent =
+        "Copy failed: " + error.message;
+    }
+  };
+
+  window.addEventListener("resize", resizeCanvas);
+  video.addEventListener("loadedmetadata", resizeCanvas);
+
+  window.addEventListener("pagehide", () => {
+    if (stream) {
+      stream.getTracks().forEach(track => track.stop());
+    }
+  });
+
+  updateDisplay();
+})();
+</script>
+
+</body>
+</html>
