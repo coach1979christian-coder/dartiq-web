@@ -5,880 +5,713 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#050b16">
-
-<title>DARTIQ | Privacy Policy</title>
-<meta name="description"
-content="DARTIQ Privacy Policy - Information about VIP registration, personal data, referrals and your privacy rights.">
-
+<title>DARTIQ | VIP Founder Registration</title>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <style>
 :root {
   --bg:#050b16;
-  --panel:#0b1628;
   --blue:#00bbff;
-  --muted:#b9cde2;
-  --border:#19558a;
+  --muted:#a6bdd5;
+  --border:#245078;
 }
-
-* {
-  box-sizing:border-box;
-}
-
+* { box-sizing:border-box; }
 body {
   margin:0;
   min-height:100vh;
-  background:
-    radial-gradient(circle at top,#14365c,transparent 60%),
-    var(--bg);
-  color:#e7f1ff;
+  background:radial-gradient(circle at 50% 0%,#12365f,transparent 55%),var(--bg);
+  color:white;
   font-family:Arial,Helvetica,sans-serif;
-  line-height:1.75;
   padding:20px;
 }
-
 .container {
-  max-width:800px;
+  max-width:520px;
   margin:25px auto;
-  background:var(--panel);
+  background:rgba(9,19,36,.97);
   border:1px solid var(--border);
-  border-radius:20px;
-  padding:35px 28px;
-  box-shadow:0 0 35px rgba(0,150,255,.12);
+  border-radius:24px;
+  padding:32px 25px;
+  box-shadow:0 0 45px rgba(0,164,255,.14);
 }
-
 .logo {
-  font-size:42px;
+  text-align:center;
+  font-size:45px;
   font-weight:900;
   letter-spacing:4px;
+  text-shadow:0 0 22px rgba(0,190,255,.45);
+}
+.logo span { color:var(--blue); }
+.tagline {
   text-align:center;
-  color:white;
-  text-shadow:0 0 20px rgba(0,187,255,.3);
+  color:var(--muted);
+  font-size:11px;
+  letter-spacing:3px;
+  margin-top:8px;
 }
-
-.logo span {
-  color:var(--blue);
-}
-
-.subtitle {
-  text-align:center;
-  color:#91abc5;
-  font-size:12px;
-  letter-spacing:2px;
-}
-
 .language {
   display:flex;
   justify-content:center;
-  gap:12px;
-  margin:25px 0;
+  gap:10px;
+  margin:28px 0;
 }
-
 .language button {
-  padding:10px 20px;
-  border:1px solid #226ba8;
+  background:#11243a;
+  color:var(--muted);
+  border:1px solid var(--border);
   border-radius:25px;
-  background:#10233c;
-  color:#fff;
+  padding:10px 20px;
   cursor:pointer;
-  font-weight:bold;
 }
-
 .language button.active {
   background:#0879e6;
-  border-color:#00bbff;
-  box-shadow:0 0 14px rgba(0,187,255,.2);
+  color:white;
+  border-color:var(--blue);
 }
-
 h1 {
-  color:white;
-  font-size:28px;
   text-align:center;
-  margin:20px 0 10px;
+  font-size:30px;
+  line-height:1.2;
 }
-
-h2 {
+.highlight { color:var(--blue); }
+.launch {
+  text-align:center;
   color:var(--blue);
-  font-size:18px;
-  margin-top:30px;
-  margin-bottom:10px;
-}
-
-p,li {
-  color:var(--muted);
-}
-
-ul {
-  padding-left:24px;
-}
-
-li {
-  margin-bottom:7px;
-}
-
-a {
-  color:#45caff;
-  overflow-wrap:anywhere;
-}
-
-.updated {
-  color:#8fa9c3;
   font-size:13px;
+  font-weight:bold;
+  letter-spacing:1px;
+}
+.description {
+  color:var(--muted);
   text-align:center;
-  margin-bottom:30px;
+  font-size:15px;
+  line-height:1.7;
+  margin:22px 0;
 }
-
-.info {
-  background:#102b48;
-  border:1px solid #276ca4;
-  border-radius:12px;
-  padding:17px;
-  margin:20px 0;
-}
-
-.info p {
-  margin:5px 0;
-}
-
-.info strong {
-  color:white;
-}
-
-.footer {
+.offer {
+  background:linear-gradient(135deg,#102c4c,#0b182b);
+  border:1px solid #168de1;
+  border-radius:17px;
+  padding:23px;
   text-align:center;
-  color:#7f9bb6;
-  font-size:12px;
-  margin-top:35px;
+  margin:26px 0;
 }
-
-.back {
-  display:block;
-  text-align:center;
-  margin-top:30px;
-  padding:14px;
-  background:linear-gradient(90deg,#0879e6,#00afea);
-  border-radius:10px;
-  color:white;
-  text-decoration:none;
+.offer-title {
+  color:var(--blue);
+  letter-spacing:2px;
+  font-weight:bold;
+  font-size:13px;
+}
+.price {
+  font-size:43px;
+  font-weight:900;
+  margin:14px 0 4px;
+}
+.price small {
+  font-size:15px;
+  color:var(--muted);
+  font-weight:normal;
+}
+.trial {
+  color:#8fe8ff;
+  font-size:13px;
+  margin-top:12px;
+}
+.features {
+  margin-top:22px;
+  display:grid;
+  gap:12px;
+}
+.feature {
+  display:flex;
+  gap:11px;
+  color:#d4e5f7;
+  font-size:14px;
+  line-height:1.45;
+}
+.check {
+  color:var(--blue);
   font-weight:bold;
 }
-
-.back:hover {
-  filter:brightness(1.1);
+.referral {
+  display:none;
+  background:#102c4b;
+  border:1px solid #22699a;
+  padding:13px;
+  border-radius:10px;
+  text-align:center;
+  color:#93e1ff;
+  margin-bottom:22px;
+  font-size:13px;
 }
-
-[hidden] {
-  display:none!important;
+h2 {
+  font-size:19px;
+  margin:28px 0 18px;
+  text-align:center;
 }
-
-@media(max-width:480px) {
-  .container {
-    padding:26px 19px;
-    margin:10px auto;
-  }
-
-  .logo {
-    font-size:36px;
-  }
-
-  h1 {
-    font-size:25px;
-  }
-
-  h2 {
-    font-size:17px;
-  }
+label {
+  display:block;
+  color:#b7cce2;
+  font-size:13px;
+  margin:15px 0 8px;
+}
+input[type="text"],
+input[type="email"] {
+  width:100%;
+  padding:16px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:#102037;
+  color:white;
+  font-size:16px;
+}
+input:focus {
+  outline-color:var(--blue);
+}
+.consent {
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  margin:22px 0;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.7;
+}
+.consent input {
+  margin-top:4px;
+  flex-shrink:0;
+}
+.consent a {
+  color:#39caff;
+  font-weight:bold;
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+.consent a:hover {
+  color:white;
+}
+.turnstile-wrapper {
+  display:flex;
+  justify-content:center;
+  margin:22px 0;
+  min-height:65px;
+}
+.submit {
+  width:100%;
+  background:linear-gradient(90deg,#0879e6,#00b9f4);
+  border:none;
+  border-radius:11px;
+  padding:17px;
+  color:white;
+  font-weight:800;
+  font-size:14px;
+  cursor:pointer;
+  box-shadow:0 0 24px rgba(0,168,255,.25);
+}
+.submit:disabled {
+  opacity:.55;
+  cursor:not-allowed;
+}
+.status {
+  display:none;
+  margin-top:15px;
+  padding:14px;
+  border-radius:10px;
+  text-align:center;
+  font-size:14px;
+  line-height:1.5;
+}
+.status.visible {
+  display:block;
+  background:#122b46;
+  border:1px solid #2688c5;
+  color:#b4eaff;
+}
+.status.error {
+  background:#361d2a;
+  border-color:#a14d60;
+  color:#ffced7;
+}
+.notice {
+  background:#102239;
+  border-radius:10px;
+  padding:12px;
+  font-size:12px;
+  line-height:1.6;
+  color:#a9bfd8;
+  margin-top:20px;
+  text-align:center;
+}
+.hp {
+  position:absolute;
+  left:-9999px;
+  opacity:0;
+}
+footer {
+  text-align:center;
+  margin-top:30px;
+  font-size:12px;
+  color:#748da9;
+}
+@media(max-width:420px) {
+  .container { padding:28px 18px; }
+  .logo { font-size:38px; }
+  h1 { font-size:27px; }
+  .price { font-size:38px; }
 }
 </style>
 </head>
 
 <body>
-
 <main class="container">
 
-<div class="logo">
-  DART<span>IQ</span>
-</div>
-
-<div class="subtitle">
-  BUILT WITH PLAYERS, FOR PLAYERS.
-</div>
+<div class="logo">DART<span>IQ</span></div>
+<div class="tagline">AI DARTS COACH</div>
 
 <div class="language">
-  <button id="enBtn" class="active"
-    type="button" onclick="changeLanguage('en')">
+  <button id="enBtn" type="button"
+    class="active" onclick="setLanguage('en')">
     ENGLISH
   </button>
-
-  <button id="nlBtn"
-    type="button" onclick="changeLanguage('nl')">
+  <button id="nlBtn" type="button"
+    onclick="setLanguage('nl')">
     NEDERLANDS
   </button>
 </div>
 
-<!-- ENGLISH PRIVACY POLICY -->
+<h1 id="headline">
+  YOUR GAME.<br>
+  <span class="highlight">YOUR NEXT LEVEL.</span>
+</h1>
 
-<section id="en">
-
-<h1>Privacy Policy</h1>
-
-<div class="updated">
-  Last updated: 26 October 2026
+<div class="launch" id="launch">
+  VIP ACCESS OPENS DECEMBER 15, 2026
 </div>
 
-<p>
-At DARTIQ, we respect your privacy.
-This Privacy Policy explains how we collect,
-use, protect and retain personal information
-when you join our VIP waiting list,
-use referral links or interact with
-our registration services.
+<p class="description" id="description">
+  Stop guessing. Start understanding.
+  Join the DARTIQ VIP waiting list
+  and reserve your exclusive Founder offer.
 </p>
 
-<h2>1. Data Controller</h2>
+<section class="offer">
+  <div class="offer-title" id="offerTitle">
+    VIP FOUNDER MEMBERSHIP
+  </div>
 
-<p>
-The person responsible for processing
-personal data for DARTIQ is:
-</p>
+  <div class="price">
+    €19.99 <small id="yearly">/ year</small>
+  </div>
 
-<div class="info">
-  <p><strong>Christian De Pelsmaeker</strong></p>
-  <p>DARTIQ</p>
-  <p>Veldstraat 64 bus 3</p>
-  <p>9100 Sint-Niklaas</p>
-  <p>Belgium</p>
-  <p>
-    <a href="mailto:coach1979christian@gmail.com">
-      coach1979christian@gmail.com
-    </a>
-  </p>
-</div>
+  <div class="trial" id="trial">
+    7 days free · No payment details required
+  </div>
 
-<h2>2. Personal Information We Collect</h2>
-
-<p>
-When you register for DARTIQ VIP Access,
-we collect:
-</p>
-
-<ul>
-  <li>Full name</li>
-  <li>Email address</li>
-  <li>Preferred language</li>
-  <li>Registration date and status</li>
-  <li>VIP membership eligibility</li>
-  <li>Ambassador referral code, where applicable</li>
-  <li>Referral campaign identifier</li>
-  <li>Limited technical and security information needed to prevent abuse</li>
-</ul>
-
-<p>
-We do not require payment card information
-to join the VIP waiting list.
-</p>
-
-<h2>3. How We Use Your Information</h2>
-
-<p>We process your information to:</p>
-
-<ul>
-  <li>Manage your VIP waiting-list registration</li>
-  <li>Record eligibility for the VIP Founder offer</li>
-  <li>Contact you about your requested VIP access</li>
-  <li>Provide information about account activation and launch</li>
-  <li>Attribute registrations to DARTIQ ambassadors</li>
-  <li>Prevent fraudulent or automated registrations</li>
-  <li>Manage requests concerning your personal data</li>
-</ul>
-
-<h2>4. Legal Basis for Processing</h2>
-
-<p>
-We process the information necessary to
-respond to your request to join the
-VIP waiting list and prepare access to
-DARTIQ.
-</p>
-
-<p>
-Where consent is the applicable legal
-basis, you may withdraw it at any time.
-We may also process limited technical
-information based on our legitimate
-interest in protecting our registration
-services against misuse.
-</p>
-
-<p>
-Separate promotional marketing unrelated
-to your requested VIP registration
-will only be sent where an appropriate
-legal basis exists, including consent
-where required.
-</p>
-
-<h2>5. Ambassador Referral Tracking</h2>
-
-<p>
-DARTIQ operates an ambassador referral
-programme.
-</p>
-
-<p>
-When you visit our registration page
-using a unique ambassador link or
-QR code, a referral code and campaign
-identifier may be included in the link.
-</p>
-
-<p>
-If you register, these identifiers
-are stored with your registration
-to record which ambassador referred you.
-</p>
-
-<p>
-Ambassadors may receive aggregated
-statistics such as registration totals.
-We do not automatically disclose your
-name or email address to an ambassador
-solely because they referred you.
-</p>
-
-<h2>6. Service Providers</h2>
-
-<p>
-DARTIQ uses third-party technology
-providers to operate the VIP
-registration system.
-</p>
-
-<ul>
-  <li>
-    <strong>GitHub Pages:</strong>
-    hosting the public registration website.
-  </li>
-  <li>
-    <strong>Supabase:</strong>
-    securely storing and processing
-    VIP registration information.
-  </li>
-  <li>
-    <strong>Cloudflare Turnstile:</strong>
-    verifying registration requests
-    and protecting against automated abuse.
-  </li>
-</ul>
-
-<p>
-These providers may process relevant
-technical or personal data when
-delivering their services.
-Where personal data is transferred
-outside the European Economic Area,
-appropriate safeguards must apply.
-</p>
-
-<h2>7. Data Retention</h2>
-
-<p>
-VIP waiting-list information is retained
-for as long as necessary to administer
-the invitation and registration process.
-</p>
-
-<p>
-For people who do not activate a DARTIQ
-account, we aim to delete or anonymise
-their waiting-list information within
-12 months after the VIP launch on
-15 December 2026, unless a longer period
-is necessary for a legitimate purpose
-or applicable legal obligation.
-</p>
-
-<p>
-If you activate a DARTIQ account,
-relevant account and membership records
-may be retained for the duration of
-your membership and any applicable
-legal retention requirements.
-</p>
-
-<p>
-Security and rate-limiting records
-are retained only as necessary for
-fraud prevention and service protection.
-</p>
-
-<h2>8. Your Privacy Rights</h2>
-
-<p>
-Under applicable data protection law,
-you may have the right to:
-</p>
-
-<ul>
-  <li>Access your personal data</li>
-  <li>Request correction of inaccurate information</li>
-  <li>Request deletion of personal information</li>
-  <li>Restrict certain processing activities</li>
-  <li>Object to certain uses of your data</li>
-  <li>Request data portability where applicable</li>
-  <li>Withdraw consent where processing relies on consent</li>
-</ul>
-
-<p>
-To exercise your rights, contact:
-</p>
-
-<p>
-<a href="mailto:coach1979christian@gmail.com">
-  coach1979christian@gmail.com
-</a>
-</p>
-
-<p>
-You can also lodge a complaint with
-the Belgian Data Protection Authority:
-</p>
-
-<p>
-<a href="https://www.dataprotectionauthority.be/"
-   target="_blank" rel="noopener">
-  www.dataprotectionauthority.be
-</a>
-</p>
-
-<h2>9. VIP Membership and Free Trial</h2>
-
-<p>
-Joining the VIP waiting list does not
-create a paid subscription.
-</p>
-
-<p>
-The DARTIQ VIP Founder offer is
-advertised at €19.99 per year.
-Eligible members can activate a
-seven-day free trial after launch,
-subject to the applicable membership
-terms.
-</p>
-
-<p>
-No payment details are required to
-join the waiting list or begin the
-trial. A paid subscription requires
-a separate payment decision and
-authorisation.
-</p>
-
-<h2>10. Security</h2>
-
-<p>
-We use technical and organisational
-measures intended to protect
-registration data, including restricted
-database access, encrypted connections,
-verification of registration requests,
-and abuse prevention mechanisms.
-</p>
-
-<p>
-No online service can guarantee
-absolute security.
-</p>
-
-<h2>11. Changes to This Policy</h2>
-
-<p>
-We may update this Privacy Policy
-when DARTIQ's services or data
-processing activities change.
-</p>
-
-<p>
-Any updated version will be published
-on this page with a revised date.
-</p>
-
+  <div class="features">
+    <div class="feature">
+      <span class="check">✓</span>
+      <span id="benefit1">AI-powered darts coaching</span>
+    </div>
+    <div class="feature">
+      <span class="check">✓</span>
+      <span id="benefit2">Track your darts performance</span>
+    </div>
+    <div class="feature">
+      <span class="check">✓</span>
+      <span id="benefit3">
+        Personalized training recommendations
+      </span>
+    </div>
+    <div class="feature">
+      <span class="check">✓</span>
+      <span id="benefit4">
+        Exclusive VIP Founder annual rate
+      </span>
+    </div>
+  </div>
 </section>
 
-<!-- NEDERLANDSE PRIVACYVERKLARING -->
+<div class="referral" id="referralBox"></div>
 
-<section id="nl" hidden>
+<h2 id="formTitle">Reserve Your VIP Access</h2>
 
-<h1>Privacyverklaring</h1>
+<form id="vipForm">
 
-<div class="updated">
-  Laatst bijgewerkt: 26 oktober 2026
+  <label for="fullName" id="nameLabel">
+    FULL NAME
+  </label>
+  <input
+    id="fullName"
+    type="text"
+    maxlength="100"
+    autocomplete="name"
+    placeholder="Enter your full name"
+    required
+  >
+
+  <label for="email" id="emailLabel">
+    EMAIL ADDRESS
+  </label>
+  <input
+    id="email"
+    type="email"
+    maxlength="254"
+    autocomplete="email"
+    placeholder="Enter your email address"
+    required
+  >
+
+  <div class="hp" aria-hidden="true">
+    <label for="website">Website</label>
+    <input id="website" type="text"
+      tabindex="-1" autocomplete="off">
+  </div>
+
+  <!-- PRIVACY ACKNOWLEDGMENT -->
+  <div class="consent">
+    <input id="consent" type="checkbox" required>
+    <label id="consentText" for="consent"
+      style="display:inline;margin:0">
+      I acknowledge that I have read the
+      <a
+        id="privacyLink"
+        href="privacy.html?lang=en"
+        target="_blank"
+        rel="noopener noreferrer">
+        DARTIQ Privacy Policy
+      </a>
+      and understand how my VIP registration
+      details are processed.
+    </label>
+  </div>
+
+  <!-- CLOUDFLARE TURNSTILE -->
+  <div class="turnstile-wrapper">
+    <div
+      class="cf-turnstile"
+      data-sitekey="0x4AAAAAAFnBmZTL4Ma2oxeF"
+      data-theme="dark"
+      data-callback="turnstileSuccess"
+      data-expired-callback="turnstileExpired"
+      data-error-callback="turnstileExpired">
+    </div>
+  </div>
+
+  <button
+    id="submitBtn"
+    class="submit"
+    type="submit">
+    JOIN VIP WAITING LIST
+  </button>
+
+</form>
+
+<div id="status" class="status"
+  role="status" aria-live="polite"></div>
+
+<div id="notice" class="notice">
+  Your 7-day free trial starts when you
+  activate it after launch.
+  No payment details are needed now.
+  No subscription charge will be made
+  without your payment authorization.
 </div>
 
-<p>
-Bij DARTIQ respecteren we jouw privacy.
-Deze privacyverklaring legt uit welke
-persoonsgegevens we verzamelen,
-waarvoor we ze gebruiken en hoe
-we ze beschermen wanneer je je
-aanmeldt voor de VIP-wachtlijst.
-</p>
-
-<h2>1. Verwerkingsverantwoordelijke</h2>
-
-<p>
-De verantwoordelijke voor de verwerking
-van persoonsgegevens bij DARTIQ is:
-</p>
-
-<div class="info">
-  <p><strong>Christian De Pelsmaeker</strong></p>
-  <p>DARTIQ</p>
-  <p>Veldstraat 64 bus 3</p>
-  <p>9100 Sint-Niklaas</p>
-  <p>België</p>
-  <p>
-    <a href="mailto:coach1979christian@gmail.com">
-      coach1979christian@gmail.com
-    </a>
-  </p>
-</div>
-
-<h2>2. Welke persoonsgegevens verzamelen we?</h2>
-
-<p>
-Wanneer je je registreert voor
-DARTIQ VIP Access verzamelen we:
-</p>
-
-<ul>
-  <li>Volledige naam</li>
-  <li>E-mailadres</li>
-  <li>Voorkeurstaal</li>
-  <li>Registratiedatum en registratiestatus</li>
-  <li>Gegevens over je VIP-lidmaatschap</li>
-  <li>Ambassadeurscode indien van toepassing</li>
-  <li>Campagne-identificatie</li>
-  <li>Beperkte technische en beveiligingsgegevens om misbruik te voorkomen</li>
-</ul>
-
-<p>
-Je hoeft geen betaalgegevens in te
-vullen om je op de VIP-wachtlijst
-te registreren.
-</p>
-
-<h2>3. Waarvoor gebruiken we je gegevens?</h2>
-
-<ul>
-  <li>Je VIP-registratie beheren</li>
-  <li>Je recht op het VIP Founder-aanbod registreren</li>
-  <li>Je informeren over je aangevraagde VIP-toegang</li>
-  <li>Informatie verstrekken over de lancering en accountactivatie</li>
-  <li>Registraties aan ambassadeurs toewijzen</li>
-  <li>Frauduleuze of automatische registraties voorkomen</li>
-  <li>Privacyverzoeken behandelen</li>
-</ul>
-
-<h2>4. Rechtsgrond voor verwerking</h2>
-
-<p>
-We verwerken de noodzakelijke
-persoonsgegevens om je aanvraag
-voor de VIP-wachtlijst te behandelen
-en de toegang tot DARTIQ voor te bereiden.
-</p>
-
-<p>
-Wanneer de verwerking gebaseerd is
-op toestemming, kun je deze
-toestemming op elk moment intrekken.
-</p>
-
-<p>
-Beperkte technische gegevens kunnen
-worden verwerkt op basis van ons
-gerechtvaardigd belang om de
-registratiedienst te beveiligen.
-</p>
-
-<p>
-Voor bijkomende promotionele
-marketing die losstaat van je
-aangevraagde VIP-registratie
-gebruiken we een afzonderlijke
-passende rechtsgrond, waaronder
-toestemming waar dat vereist is.
-</p>
-
-<h2>5. Ambassadeurs en referentiecodes</h2>
-
-<p>
-DARTIQ werkt met een
-ambassadeursprogramma.
-</p>
-
-<p>
-Wanneer je via een persoonlijke
-QR-code of link van een ambassadeur
-op de registratiepagina terechtkomt,
-kan die link een unieke referentiecode
-en campagnecode bevatten.
-</p>
-
-<p>
-Wanneer je je registreert, worden
-deze codes opgeslagen om vast te
-leggen welke ambassadeur je
-heeft doorverwezen.
-</p>
-
-<p>
-Ambassadeurs kunnen algemene
-statistieken ontvangen, zoals het
-aantal registraties.
-</p>
-
-<p>
-Je naam of e-mailadres wordt
-niet automatisch met de
-ambassadeur gedeeld enkel omdat
-die je heeft doorverwezen.
-</p>
-
-<h2>6. Externe dienstverleners</h2>
-
-<p>
-DARTIQ gebruikt de volgende
-diensten voor zijn registratieproces:
-</p>
-
-<ul>
-  <li>
-    <strong>GitHub Pages:</strong>
-    hosting van de publieke
-    registratiepagina.
-  </li>
-  <li>
-    <strong>Supabase:</strong>
-    opslag en verwerking van
-    VIP-registratiegegevens.
-  </li>
-  <li>
-    <strong>Cloudflare Turnstile:</strong>
-    bescherming tegen bots
-    en automatische registraties.
-  </li>
-</ul>
-
-<p>
-Deze dienstverleners kunnen
-technische of persoonlijke
-gegevens verwerken bij het
-aanbieden van hun diensten.
-</p>
-
-<p>
-Bij doorgifte van persoonsgegevens
-buiten de Europese Economische
-Ruimte moeten passende
-beschermingsmaatregelen gelden.
-</p>
-
-<h2>7. Bewaartermijn</h2>
-
-<p>
-We bewaren VIP-registratiegegevens
-zolang dit nodig is om de
-wachtlijst en uitnodigingen
-te beheren.
-</p>
-
-<p>
-Voor personen die geen DARTIQ-account
-activeren, streven we ernaar de
-gegevens uiterlijk 12 maanden na
-de VIP-lancering op
-15 december 2026 te verwijderen
-of te anonimiseren, tenzij een
-langere bewaartermijn noodzakelijk
-is voor een gerechtvaardigd doel
-of wettelijke verplichting.
-</p>
-
-<p>
-Wanneer je een DARTIQ-account
-activeert, kunnen relevante
-account- en lidmaatschapsgegevens
-langer bewaard worden zolang je
-lidmaatschap loopt en voor
-toepasselijke wettelijke termijnen.
-</p>
-
-<p>
-Beveiligingsgegevens worden niet
-langer bewaard dan noodzakelijk
-om misbruik en fraude tegen te gaan.
-</p>
-
-<h2>8. Jouw privacyrechten</h2>
-
-<p>
-Volgens de toepasselijke
-privacywetgeving kun je,
-afhankelijk van de omstandigheden:
-</p>
-
-<ul>
-  <li>Je persoonsgegevens inkijken</li>
-  <li>Onjuiste gegevens laten verbeteren</li>
-  <li>Verwijdering van gegevens aanvragen</li>
-  <li>De verwerking laten beperken</li>
-  <li>Bezwaar maken tegen bepaalde verwerkingen</li>
-  <li>Gegevensoverdraagbaarheid aanvragen</li>
-  <li>Je toestemming intrekken waar van toepassing</li>
-</ul>
-
-<p>
-Voor privacyvragen of verzoeken:
-</p>
-
-<p>
-<a href="mailto:coach1979christian@gmail.com">
-  coach1979christian@gmail.com
-</a>
-</p>
-
-<p>
-Je kunt ook een klacht indienen bij
-de Belgische Gegevensbeschermingsautoriteit:
-</p>
-
-<p>
-<a href="https://www.gegevensbeschermingsautoriteit.be/"
-   target="_blank" rel="noopener">
-  www.gegevensbeschermingsautoriteit.be
-</a>
-</p>
-
-<h2>9. VIP-lidmaatschap en proefperiode</h2>
-
-<p>
-Een registratie op de VIP-wachtlijst
-is geen betalend abonnement.
-</p>
-
-<p>
-Het DARTIQ VIP Founder-aanbod
-bedraagt €19,99 per jaar.
-In aanmerking komende leden
-kunnen na de lancering een
-gratis proefperiode van zeven
-dagen activeren volgens de
-geldende lidmaatschapsvoorwaarden.
-</p>
-
-<p>
-Voor registratie of het starten
-van de proefperiode zijn geen
-betaalgegevens vereist.
-</p>
-
-<p>
-Een betalend abonnement vereist
-een afzonderlijke keuze en
-toestemming voor betaling.
-</p>
-
-<h2>10. Beveiliging</h2>
-
-<p>
-We gebruiken technische en
-organisatorische maatregelen
-om persoonsgegevens te
-beschermen.
-</p>
-
-<p>
-Daaronder vallen beperkte
-databasetoegang, versleutelde
-verbindingen, beveiligingscontroles
-en maatregelen tegen misbruik.
-</p>
-
-<p>
-Geen enkele online dienst kan
-absolute veiligheid garanderen.
-</p>
-
-<h2>11. Wijzigingen</h2>
-
-<p>
-We kunnen deze privacyverklaring
-aanpassen wanneer de diensten
-of gegevensverwerking van
-DARTIQ veranderen.
-</p>
-
-<p>
-De nieuwste versie wordt op
-deze pagina gepubliceerd,
-samen met de datum van
-de laatste wijziging.
-</p>
-
-</section>
-
-<a
-  class="back"
-  id="backLink"
-  href="dartiq-vip-register.html">
-  Back to VIP Registration
-</a>
-
-<div class="footer">
-  DARTIQ © 2026
-  <p>Built with players, for players.</p>
-</div>
+<footer id="footer">
+  Built with players, for players.
+</footer>
 
 </main>
 
 <script>
 "use strict";
 
-function changeLanguage(lang) {
-  document.documentElement.lang = lang;
-
-  document.getElementById("en").hidden =
-    lang !== "en";
-
-  document.getElementById("nl").hidden =
-    lang !== "nl";
-
-  document.getElementById("enBtn")
-    .classList.toggle(
-      "active", lang === "en"
-    );
-
-  document.getElementById("nlBtn")
-    .classList.toggle(
-      "active", lang === "nl"
-    );
-
-  document.getElementById("backLink").textContent =
-    lang === "nl"
-      ? "Terug naar VIP-registratie"
-      : "Back to VIP Registration";
-}
+const VIP_ENDPOINT =
+  "https://usglrseckxwcdykrwuvh.supabase.co/functions/v1/dartiq-vip-register";
 
 const params = new URLSearchParams(
   window.location.search
 );
 
-changeLanguage(
-  params.get("lang") === "nl"
-    ? "nl"
-    : "en"
+function cleanCode(value) {
+  const code = String(value || "")
+    .trim().toUpperCase();
+
+  return /^[A-Z0-9_-]{1,40}$/.test(code)
+    ? code : "DIRECT";
+}
+
+const referralCode = cleanCode(
+  params.get("ref")
 );
+
+const campaignCode = cleanCode(
+  params.get("campaign")
+);
+
+let currentLanguage = "en";
+let turnstileToken = "";
+let submitting = false;
+let completed = false;
+
+window.turnstileSuccess = function(token) {
+  turnstileToken = token;
+};
+
+window.turnstileExpired = function() {
+  turnstileToken = "";
+};
+
+const translations = {
+  en: {
+    headline:
+      'YOUR GAME.<br><span class="highlight">' +
+      'YOUR NEXT LEVEL.</span>',
+    launch: "VIP ACCESS OPENS DECEMBER 15, 2026",
+    description:
+      "Stop guessing. Start understanding. " +
+      "Join the DARTIQ VIP waiting list " +
+      "and reserve your exclusive Founder offer.",
+    offerTitle: "VIP FOUNDER MEMBERSHIP",
+    yearly: "/ year",
+    trial: "7 days free · No payment details required",
+    benefit1: "AI-powered darts coaching",
+    benefit2: "Track your darts performance",
+    benefit3: "Personalized training recommendations",
+    benefit4: "Exclusive VIP Founder annual rate",
+    formTitle: "Reserve Your VIP Access",
+    nameLabel: "FULL NAME",
+    emailLabel: "EMAIL ADDRESS",
+    namePlaceholder: "Enter your full name",
+    emailPlaceholder: "Enter your email address",
+    consent:
+      'I acknowledge that I have read the ' +
+      '<a id="privacyLink" ' +
+      'href="privacy.html?lang=en" ' +
+      'target="_blank" rel="noopener noreferrer">' +
+      'DARTIQ Privacy Policy</a> ' +
+      'and understand how my VIP registration ' +
+      'details are processed.',
+    button: "JOIN VIP WAITING LIST",
+    processing: "Processing registration...",
+    verification:
+      "Complete the security check first.",
+    success:
+      "Registration received! Your VIP Founder " +
+      "request has been recorded.",
+    error:
+      "Registration failed. Please try again.",
+    notice:
+      "Your 7-day free trial starts when you " +
+      "activate it after launch. " +
+      "No payment details are needed now. " +
+      "No subscription charge will be made " +
+      "without your payment authorization.",
+    referral: "Referral code: ",
+    footer: "Built with players, for players."
+  },
+
+  nl: {
+    headline:
+      'JOUW SPEL.<br><span class="highlight">' +
+      'JOUW VOLGENDE NIVEAU.</span>',
+    launch: "VIP TOEGANG VANAF 15 DECEMBER 2026",
+    description:
+      "Stop met gokken. Begin met begrijpen. " +
+      "Schrijf je in op de DARTIQ VIP-wachtlijst " +
+      "en reserveer het exclusieve Founder-aanbod.",
+    offerTitle: "VIP FOUNDER LIDMAATSCHAP",
+    yearly: "/ jaar",
+    trial:
+      "7 dagen gratis · Geen betaalgegevens nodig",
+    benefit1: "AI-gestuurde dartscoaching",
+    benefit2: "Volg je dartprestaties",
+    benefit3:
+      "Persoonlijke trainingsaanbevelingen",
+    benefit4:
+      "Exclusief jaarlijks VIP Founder-tarief",
+    formTitle: "Reserveer je VIP-toegang",
+    nameLabel: "VOLLEDIGE NAAM",
+    emailLabel: "E-MAILADRES",
+    namePlaceholder: "Vul je volledige naam in",
+    emailPlaceholder: "Vul je e-mailadres in",
+    consent:
+      'Ik bevestig dat ik de ' +
+      '<a id="privacyLink" ' +
+      'href="privacy.html?lang=nl" ' +
+      'target="_blank" rel="noopener noreferrer">' +
+      'DARTIQ Privacyverklaring</a> ' +
+      'heb gelezen en begrijp hoe mijn ' +
+      'VIP-registratiegegevens worden verwerkt.',
+    button: "INSCHRIJVEN VOOR VIP TOEGANG",
+    processing: "Registratie verwerken...",
+    verification:
+      "Voltooi eerst de beveiligingscontrole.",
+    success:
+      "Registratie ontvangen! " +
+      "Je VIP Founder-aanvraag is opgeslagen.",
+    error:
+      "Registratie mislukt. Probeer opnieuw.",
+    notice:
+      "Je gratis proefperiode van 7 dagen " +
+      "begint wanneer je die na de lancering " +
+      "activeert. Nu zijn geen betaalgegevens nodig. " +
+      "Er wordt niets aangerekend zonder " +
+      "jouw toestemming voor betaling.",
+    referral: "Referentiecode: ",
+    footer: "Gemaakt met spelers, voor spelers."
+  }
+};
+
+function setLanguage(lang) {
+  currentLanguage = lang;
+  document.documentElement.lang = lang;
+
+  const t = translations[lang];
+
+  document.getElementById("headline").innerHTML =
+    t.headline;
+
+  [
+    "launch", "description", "offerTitle",
+    "yearly", "trial", "benefit1", "benefit2",
+    "benefit3", "benefit4", "formTitle",
+    "nameLabel", "emailLabel",
+    "notice", "footer"
+  ].forEach(id => {
+    document.getElementById(id).textContent = t[id];
+  });
+
+  // Keep clickable privacy link as HTML.
+  document.getElementById("consentText").innerHTML =
+    t.consent;
+
+  document.getElementById("fullName").placeholder =
+    t.namePlaceholder;
+
+  document.getElementById("email").placeholder =
+    t.emailPlaceholder;
+
+  document.getElementById("submitBtn").textContent =
+    t.button;
+
+  document.getElementById("enBtn")
+    .classList.toggle("active", lang === "en");
+
+  document.getElementById("nlBtn")
+    .classList.toggle("active", lang === "nl");
+
+  const referralBox =
+    document.getElementById("referralBox");
+
+  if (referralCode !== "DIRECT") {
+    referralBox.style.display = "block";
+    referralBox.textContent =
+      t.referral + referralCode;
+  } else {
+    referralBox.style.display = "none";
+  }
+}
+
+document.getElementById("vipForm")
+  .addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    if (submitting || completed) return;
+
+    const button =
+      document.getElementById("submitBtn");
+
+    const status =
+      document.getElementById("status");
+
+    const t = translations[currentLanguage];
+
+    if (!turnstileToken) {
+      status.className = "status visible error";
+      status.textContent = t.verification;
+      return;
+    }
+
+    submitting = true;
+    button.disabled = true;
+
+    status.className = "status visible";
+    status.textContent = t.processing;
+
+    try {
+      const response = await fetch(VIP_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          full_name:
+            document.getElementById("fullName")
+              .value.trim(),
+
+          email:
+            document.getElementById("email")
+              .value.trim(),
+
+          referral_code: referralCode,
+          campaign: campaignCode,
+
+          language:
+            currentLanguage.toUpperCase(),
+
+          turnstile_token: turnstileToken,
+
+          website:
+            document.getElementById("website")
+              .value
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error("Registration failed");
+      }
+
+      const result = await response.json();
+
+      if (result.success !== true) {
+        throw new Error(
+          "Registration not confirmed"
+        );
+      }
+
+      completed = true;
+
+      status.className = "status visible";
+      status.textContent = t.success;
+
+      document.getElementById("vipForm").reset();
+
+      document.getElementById("vipForm")
+        .style.display = "none";
+
+    } catch (error) {
+      console.error(
+        "DARTIQ VIP registration:", error
+      );
+
+      status.className = "status visible error";
+      status.textContent = t.error;
+
+    } finally {
+      submitting = false;
+      turnstileToken = "";
+
+      if (window.turnstile) {
+        window.turnstile.reset();
+      }
+
+      if (!completed) {
+        button.disabled = false;
+      }
+    }
+  });
+
+setLanguage("en");
 </script>
 
 </body>
