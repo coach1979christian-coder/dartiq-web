@@ -3,26 +3,24 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#050b16">
-
 <title>DARTIQ | VIP Founder Registration</title>
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+        async defer></script>
 
 <style>
 :root {
   --bg: #050b16;
   --panel: #0c182a;
-  --panel2: #11243a;
   --blue: #00bbff;
   --blue2: #0879e6;
-  --text: #ffffff;
   --muted: #a6bdd5;
   --border: #245078;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
@@ -30,19 +28,19 @@ body {
   background:
     radial-gradient(circle at 50% 0%, #12365f, transparent 55%),
     var(--bg);
+  color: #fff;
   font-family: Arial, Helvetica, sans-serif;
-  color: var(--text);
   padding: 20px;
 }
 
 .container {
   max-width: 520px;
   margin: 25px auto;
-  background: rgba(9, 19, 36, .97);
+  background: rgba(9,19,36,.97);
   border: 1px solid var(--border);
   border-radius: 24px;
   padding: 32px 25px;
-  box-shadow: 0 0 45px rgba(0, 164, 255, .14);
+  box-shadow: 0 0 45px rgba(0,164,255,.14);
 }
 
 .logo {
@@ -50,12 +48,10 @@ body {
   font-size: 45px;
   font-weight: 900;
   letter-spacing: 4px;
-  text-shadow: 0 0 22px rgba(0, 190, 255, .45);
+  text-shadow: 0 0 22px rgba(0,190,255,.45);
 }
 
-.logo span {
-  color: var(--blue);
-}
+.logo span { color: var(--blue); }
 
 .tagline {
   text-align: center;
@@ -73,7 +69,7 @@ body {
 }
 
 .language button {
-  background: var(--panel2);
+  background: #11243a;
   color: var(--muted);
   border: 1px solid var(--border);
   border-radius: 25px;
@@ -83,7 +79,7 @@ body {
 
 .language button.active {
   background: var(--blue2);
-  color: white;
+  color: #fff;
   border-color: var(--blue);
 }
 
@@ -91,12 +87,9 @@ h1 {
   text-align: center;
   font-size: 30px;
   line-height: 1.2;
-  margin: 18px 0;
 }
 
-.highlight {
-  color: var(--blue);
-}
+.highlight { color: var(--blue); }
 
 .launch {
   text-align: center;
@@ -115,7 +108,7 @@ h1 {
 }
 
 .offer {
-  background: linear-gradient(135deg, #102c4c, #0b182b);
+  background: linear-gradient(135deg,#102c4c,#0b182b);
   border: 1px solid #168de1;
   border-radius: 17px;
   padding: 23px;
@@ -179,7 +172,7 @@ h1 {
   font-size: 13px;
 }
 
-.section-title {
+h2 {
   font-size: 19px;
   margin: 28px 0 18px;
   text-align: center;
@@ -201,12 +194,9 @@ input[type="email"] {
   background: #102037;
   color: white;
   font-size: 16px;
-  outline: none;
 }
 
-input:focus {
-  border-color: var(--blue);
-}
+input:focus { outline-color: var(--blue); }
 
 .consent {
   display: flex;
@@ -223,23 +213,51 @@ input:focus {
   flex-shrink: 0;
 }
 
+.turnstile-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 22px 0;
+  min-height: 65px;
+}
+
 .submit {
   width: 100%;
-  background: linear-gradient(90deg, #0879e6, #00b9f4);
+  background: linear-gradient(90deg,#0879e6,#00b9f4);
   border: none;
   border-radius: 11px;
   padding: 17px;
   color: white;
   font-weight: 800;
   font-size: 14px;
-  letter-spacing: .7px;
   cursor: pointer;
-  box-shadow: 0 0 24px rgba(0, 168, 255, .25);
 }
 
 .submit:disabled {
   opacity: .55;
   cursor: not-allowed;
+}
+
+.status {
+  display: none;
+  margin-top: 15px;
+  padding: 14px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.status.visible {
+  display: block;
+  background: #122b46;
+  border: 1px solid #2688c5;
+  color: #b4eaff;
+}
+
+.status.error {
+  background: #361d2a;
+  border-color: #a14d60;
+  color: #ffced7;
 }
 
 .notice {
@@ -253,21 +271,9 @@ input:focus {
   text-align: center;
 }
 
-.status {
-  display: none;
-  margin-top: 15px;
-  padding: 13px;
-  border-radius: 9px;
-  text-align: center;
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-.status.visible {
-  display: block;
-  background: #122b46;
-  border: 1px solid #2688c5;
-  color: #b4eaff;
+.hp {
+  position: absolute;
+  left: -9999px;
 }
 
 footer {
@@ -284,24 +290,13 @@ footer {
 <main class="container">
 
   <div class="logo">DART<span>IQ</span></div>
-
   <div class="tagline">AI DARTS COACH</div>
 
   <div class="language">
-    <button
-      id="enBtn"
-      type="button"
-      class="active"
-      onclick="setLanguage('en')">
-      ENGLISH
-    </button>
-
-    <button
-      id="nlBtn"
-      type="button"
-      onclick="setLanguage('nl')">
-      NEDERLANDS
-    </button>
+    <button id="enBtn" type="button" class="active"
+            onclick="setLanguage('en')">ENGLISH</button>
+    <button id="nlBtn" type="button"
+            onclick="setLanguage('nl')">NEDERLANDS</button>
   </div>
 
   <h1 id="headline">
@@ -316,18 +311,16 @@ footer {
   <p class="description" id="description">
     Stop guessing. Start understanding.
     Join the DARTIQ VIP waiting list
-    and secure your exclusive Founder offer.
+    and reserve your exclusive Founder offer.
   </p>
 
-  <div class="offer">
-
+  <section class="offer">
     <div class="offer-title" id="offerTitle">
       VIP FOUNDER MEMBERSHIP
     </div>
 
     <div class="price">
-      €19.99
-      <small id="yearly">/ year</small>
+      €19.99 <small id="yearly">/ year</small>
     </div>
 
     <div class="trial" id="trial">
@@ -335,63 +328,315 @@ footer {
     </div>
 
     <div class="features">
-
       <div class="feature">
         <span class="check">✓</span>
-        <span id="benefit1">
-          AI-powered darts coaching
-        </span>
+        <span id="benefit1">AI-powered darts coaching</span>
       </div>
-
       <div class="feature">
         <span class="check">✓</span>
-        <span id="benefit2">
-          Track your darts performance
-        </span>
+        <span id="benefit2">Track your darts performance</span>
       </div>
-
       <div class="feature">
         <span class="check">✓</span>
-        <span id="benefit3">
-          Personalized training recommendations
-        </span>
+        <span id="benefit3">Personalized training recommendations</span>
       </div>
-
       <div class="feature">
         <span class="check">✓</span>
-        <span id="benefit4">
-          Exclusive VIP Founder annual rate
-        </span>
+        <span id="benefit4">Exclusive VIP Founder annual rate</span>
       </div>
-
     </div>
-  </div>
+  </section>
 
   <div class="referral" id="referralBox"></div>
 
-  <h2 class="section-title" id="formTitle">
-    Reserve Your VIP Access
-  </h2>
+  <h2 id="formTitle">Reserve Your VIP Access</h2>
 
   <form id="vipForm">
 
-    <label for="fullName" id="nameLabel">
-      FULL NAME
-    </label>
+    <label for="fullName" id="nameLabel">FULL NAME</label>
+    <input id="fullName" type="text"
+           maxlength="100" autocomplete="name"
+           placeholder="Enter your full name" required>
 
-    <input
-      id="fullName"
-      name="fullName"
-      type="text"
-      maxlength="100"
-      autocomplete="name"
-      placeholder="Enter your full name"
-      required
-    >
+    <label for="email" id="emailLabel">EMAIL ADDRESS</label>
+    <input id="email" type="email"
+           maxlength="254" autocomplete="email"
+           placeholder="Enter your email address" required>
 
-    <label for="email" id="emailLabel">
-      EMAIL ADDRESS
-    </label>
+    <div class="hp" aria-hidden="true">
+      <label for="website">Website</label>
+      <input id="website" type="text"
+             autocomplete="off" tabindex="-1">
+    </div>
 
-    <input
-      id
+    <div class="consent">
+      <input id="consent" type="checkbox" required>
+      <span id="consentText">
+        I agree to DARTIQ processing my details
+        to manage my VIP registration and contact
+        me about access.
+      </span>
+    </div>
+
+    <div class="turnstile-wrapper">
+      <div class="cf-turnstile"
+           data-sitekey="0x4AAAAAAFnBmZTL4Ma2oxeF"
+           data-theme="dark"
+           data-callback="turnstileSuccess"
+           data-expired-callback="turnstileExpired"
+           data-error-callback="turnstileExpired">
+      </div>
+    </div>
+
+    <!-- Keep disabled until launch safeguards are complete -->
+    <button id="submitBtn" class="submit"
+            type="submit" disabled>
+      REGISTRATION COMING SOON
+    </button>
+
+  </form>
+
+  <div id="status" class="status"
+       role="status" aria-live="polite"></div>
+
+  <div id="notice" class="notice">
+    Registration is being prepared.
+    Your 7-day free trial starts when
+    you activate it after launch.
+    No payment details are needed now.
+  </div>
+
+  <footer id="footer">
+    Built with players, for players.
+  </footer>
+
+</main>
+
+<script>
+"use strict";
+
+const VIP_ENDPOINT =
+  "https://usglrseckxwcdykruwvh.supabase.co/functions/v1/dartiq-vip-register";
+
+const params = new URLSearchParams(window.location.search);
+
+function cleanCode(value) {
+  const code = String(value || "").trim().toUpperCase();
+  return /^[A-Z0-9_-]{1,40}$/.test(code)
+    ? code : "DIRECT";
+}
+
+const referralCode = cleanCode(params.get("ref"));
+const campaignCode = cleanCode(params.get("campaign"));
+
+let currentLanguage = "en";
+let turnstileToken = "";
+
+window.turnstileSuccess = function(token) {
+  turnstileToken = token;
+};
+
+window.turnstileExpired = function() {
+  turnstileToken = "";
+};
+
+const translations = {
+  en: {
+    headline:
+      'YOUR GAME.<br><span class="highlight">' +
+      'YOUR NEXT LEVEL.</span>',
+    launch: "VIP ACCESS OPENS DECEMBER 15, 2026",
+    description:
+      "Stop guessing. Start understanding. " +
+      "Join the DARTIQ VIP waiting list " +
+      "and reserve your exclusive Founder offer.",
+    offerTitle: "VIP FOUNDER MEMBERSHIP",
+    yearly: "/ year",
+    trial: "7 days free · No payment details required",
+    benefit1: "AI-powered darts coaching",
+    benefit2: "Track your darts performance",
+    benefit3: "Personalized training recommendations",
+    benefit4: "Exclusive VIP Founder annual rate",
+    formTitle: "Reserve Your VIP Access",
+    nameLabel: "FULL NAME",
+    emailLabel: "EMAIL ADDRESS",
+    namePlaceholder: "Enter your full name",
+    emailPlaceholder: "Enter your email address",
+    consent:
+      "I agree to DARTIQ processing my details " +
+      "to manage my VIP registration and contact " +
+      "me about access.",
+    button: "JOIN VIP WAITING LIST",
+    comingSoon: "REGISTRATION COMING SOON",
+    notice:
+      "Registration is being prepared. " +
+      "Your 7-day free trial starts when " +
+      "you activate it after launch. " +
+      "No payment details are needed now.",
+    verification: "Complete the security check first.",
+    processing: "Processing registration...",
+    success:
+      "Registration received! " +
+      "Your VIP Founder request has been recorded.",
+    error:
+      "Registration failed. Please try again later.",
+    referral: "Referral code: ",
+    footer: "Built with players, for players."
+  },
+
+  nl: {
+    headline:
+      'JOUW SPEL.<br><span class="highlight">' +
+      'JOUW VOLGENDE NIVEAU.</span>',
+    launch: "VIP TOEGANG VANAF 15 DECEMBER 2026",
+    description:
+      "Stop met gokken. Begin met begrijpen. " +
+      "Schrijf je in op de DARTIQ VIP-wachtlijst " +
+      "en reserveer het exclusieve Founder-aanbod.",
+    offerTitle: "VIP FOUNDER LIDMAATSCHAP",
+    yearly: "/ jaar",
+    trial: "7 dagen gratis · Geen betaalgegevens nodig",
+    benefit1: "AI-gestuurde dartscoaching",
+    benefit2: "Volg je dartprestaties",
+    benefit3: "Persoonlijke trainingsaanbevelingen",
+    benefit4: "Exclusief jaarlijks VIP Founder-tarief",
+    formTitle: "Reserveer je VIP-toegang",
+    nameLabel: "VOLLEDIGE NAAM",
+    emailLabel: "E-MAILADRES",
+    namePlaceholder: "Vul je volledige naam in",
+    emailPlaceholder: "Vul je e-mailadres in",
+    consent:
+      "Ik ga akkoord met de verwerking van " +
+      "mijn gegevens voor mijn VIP-registratie " +
+      "en informatie over mijn toegang.",
+    button: "INSCHRIJVEN VOOR VIP TOEGANG",
+    comingSoon: "REGISTRATIE BINNENKORT BESCHIKBAAR",
+    notice:
+      "Registratie wordt voorbereid. " +
+      "Je proefperiode van 7 dagen start pas " +
+      "wanneer je die na de lancering activeert. " +
+      "Nu zijn geen betaalgegevens nodig.",
+    verification: "Voltooi eerst de beveiligingscontrole.",
+    processing: "Registratie verwerken...",
+    success:
+      "Registratie ontvangen! " +
+      "Je VIP Founder-aanvraag is opgeslagen.",
+    error:
+      "Registratie mislukt. Probeer later opnieuw.",
+    referral: "Referentiecode: ",
+    footer: "Gemaakt met spelers, voor spelers."
+  }
+};
+
+function setLanguage(lang) {
+  currentLanguage = lang;
+  document.documentElement.lang = lang;
+
+  const t = translations[lang];
+
+  document.getElementById("headline").innerHTML = t.headline;
+
+  [
+    "launch", "description", "offerTitle",
+    "yearly", "trial", "benefit1", "benefit2",
+    "benefit3", "benefit4", "formTitle",
+    "nameLabel", "emailLabel", "consent",
+    "notice", "footer"
+  ].forEach(id => {
+    document.getElementById(id).textContent = t[id];
+  });
+
+  document.getElementById("fullName").placeholder =
+    t.namePlaceholder;
+
+  document.getElementById("email").placeholder =
+    t.emailPlaceholder;
+
+  document.getElementById("submitBtn").textContent =
+    t.comingSoon;
+
+  document.getElementById("enBtn")
+    .classList.toggle("active", lang === "en");
+
+  document.getElementById("nlBtn")
+    .classList.toggle("active", lang === "nl");
+
+  if (referralCode !== "DIRECT") {
+    const box = document.getElementById("referralBox");
+    box.style.display = "block";
+    box.textContent = t.referral + referralCode;
+  }
+}
+
+document.getElementById("vipForm")
+  .addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const button = document.getElementById("submitBtn");
+    const status = document.getElementById("status");
+    const t = translations[currentLanguage];
+
+    // The form remains disabled during setup.
+    if (button.disabled) return;
+
+    if (!turnstileToken) {
+      status.className = "status visible error";
+      status.textContent = t.verification;
+      return;
+    }
+
+    button.disabled = true;
+    status.className = "status visible";
+    status.textContent = t.processing;
+
+    try {
+      const response = await fetch(VIP_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          full_name:
+            document.getElementById("fullName").value.trim(),
+          email:
+            document.getElementById("email").value.trim(),
+          referral_code: referralCode,
+          campaign: campaignCode,
+          language: currentLanguage.toUpperCase(),
+          turnstile_token: turnstileToken,
+          website: document.getElementById("website").value
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error("Registration unsuccessful");
+      }
+
+      status.className = "status visible";
+      status.textContent = t.success;
+
+      document.getElementById("vipForm").reset();
+
+    } catch (error) {
+      console.error("VIP registration error:", error);
+      status.className = "status visible error";
+      status.textContent = t.error;
+
+    } finally {
+      turnstileToken = "";
+
+      if (window.turnstile) {
+        window.turnstile.reset();
+      }
+
+      // Remains disabled while the registration
+      // system is being prepared for launch.
+      button.disabled = true;
+    }
+  });
+
+setLanguage("en");
+</script>
+
+</body>
+</html>
