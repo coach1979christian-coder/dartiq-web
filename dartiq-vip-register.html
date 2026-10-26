@@ -20,7 +20,9 @@
   --border: #245078;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
@@ -51,7 +53,9 @@ body {
   text-shadow: 0 0 22px rgba(0, 190, 255, .45);
 }
 
-.logo span { color: var(--blue); }
+.logo span {
+  color: var(--blue);
+}
 
 .tagline {
   text-align: center;
@@ -90,7 +94,9 @@ h1 {
   margin: 18px 0;
 }
 
-.highlight { color: var(--blue); }
+.highlight {
+  color: var(--blue);
+}
 
 .launch {
   text-align: center;
@@ -198,7 +204,9 @@ input[type="email"] {
   outline: none;
 }
 
-input:focus { border-color: var(--blue); }
+input:focus {
+  border-color: var(--blue);
+}
 
 .consent {
   display: flex;
@@ -276,15 +284,22 @@ footer {
 <main class="container">
 
   <div class="logo">DART<span>IQ</span></div>
+
   <div class="tagline">AI DARTS COACH</div>
 
   <div class="language">
-    <button id="enBtn" class="active"
-            type="button" onclick="setLanguage('en')">
+    <button
+      id="enBtn"
+      type="button"
+      class="active"
+      onclick="setLanguage('en')">
       ENGLISH
     </button>
-    <button id="nlBtn"
-            type="button" onclick="setLanguage('nl')">
+
+    <button
+      id="nlBtn"
+      type="button"
+      onclick="setLanguage('nl')">
       NEDERLANDS
     </button>
   </div>
@@ -305,12 +320,14 @@ footer {
   </p>
 
   <div class="offer">
+
     <div class="offer-title" id="offerTitle">
       VIP FOUNDER MEMBERSHIP
     </div>
 
     <div class="price">
-      €19.99 <small id="yearly">/ year</small>
+      €19.99
+      <small id="yearly">/ year</small>
     </div>
 
     <div class="trial" id="trial">
@@ -318,30 +335,35 @@ footer {
     </div>
 
     <div class="features">
+
       <div class="feature">
         <span class="check">✓</span>
         <span id="benefit1">
           AI-powered darts coaching
         </span>
       </div>
+
       <div class="feature">
         <span class="check">✓</span>
         <span id="benefit2">
           Track your darts performance
         </span>
       </div>
+
       <div class="feature">
         <span class="check">✓</span>
         <span id="benefit3">
           Personalized training recommendations
         </span>
       </div>
+
       <div class="feature">
         <span class="check">✓</span>
         <span id="benefit4">
           Exclusive VIP Founder annual rate
         </span>
       </div>
+
     </div>
   </div>
 
@@ -372,183 +394,4 @@ footer {
     </label>
 
     <input
-      id="email"
-      name="email"
-      type="email"
-      maxlength="254"
-      autocomplete="email"
-      placeholder="Enter your email address"
-      required
-    >
-
-    <div class="consent">
-      <input id="consent" type="checkbox" required>
-      <span id="consentText">
-        I agree to receive information about
-        my DARTIQ VIP registration and access.
-      </span>
-    </div>
-
-    <button class="submit" id="submitBtn"
-            type="submit" disabled>
-      REGISTRATION COMING SOON
-    </button>
-
-  </form>
-
-  <div id="status" class="status" role="status"
-       aria-live="polite"></div>
-
-  <div class="notice" id="notice">
-    Registration is not yet connected.
-    No payment is required to join the waiting list.
-    Your 7-day free trial begins only when
-    you activate it after launch.
-  </div>
-
-  <footer id="footer">
-    Built with players, for players.
-  </footer>
-
-</main>
-
-<script>
-"use strict";
-
-const params = new URLSearchParams(window.location.search);
-
-function cleanCode(raw) {
-  const code = String(raw || "").trim().toUpperCase();
-  return /^[A-Z0-9_-]{1,40}$/.test(code)
-    ? code
-    : "DIRECT";
-}
-
-const referralCode = cleanCode(params.get("ref"));
-const campaignCode = cleanCode(params.get("campaign"));
-
-let currentLanguage = "en";
-
-const words = {
-  en: {
-    headline:
-      'YOUR GAME.<br><span class="highlight">' +
-      'YOUR NEXT LEVEL.</span>',
-    launch: "VIP ACCESS OPENS DECEMBER 15, 2026",
-    description:
-      "Stop guessing. Start understanding. " +
-      "Join the DARTIQ VIP waiting list " +
-      "and secure your exclusive Founder offer.",
-    offerTitle: "VIP FOUNDER MEMBERSHIP",
-    yearly: "/ year",
-    trial: "7 days free · No payment details required",
-    benefit1: "AI-powered darts coaching",
-    benefit2: "Track your darts performance",
-    benefit3: "Personalized training recommendations",
-    benefit4: "Exclusive VIP Founder annual rate",
-    formTitle: "Reserve Your VIP Access",
-    nameLabel: "FULL NAME",
-    emailLabel: "EMAIL ADDRESS",
-    namePlaceholder: "Enter your full name",
-    emailPlaceholder: "Enter your email address",
-    consent:
-      "I agree to receive information about " +
-      "my DARTIQ VIP registration and access.",
-    submit: "REGISTRATION COMING SOON",
-    notice:
-      "Registration is not yet connected. " +
-      "No payment is required to join the waiting list. " +
-      "Your 7-day free trial begins only when " +
-      "you activate it after launch.",
-    referral: "Referral code: ",
-    footer: "Built with players, for players."
-  },
-  nl: {
-    headline:
-      'JOUW SPEL.<br><span class="highlight">' +
-      'JOUW VOLGENDE NIVEAU.</span>',
-    launch: "VIP TOEGANG VANAF 15 DECEMBER 2026",
-    description:
-      "Stop met gokken. Begin met begrijpen. " +
-      "Schrijf je in voor de DARTIQ VIP-wachtlijst " +
-      "en reserveer jouw exclusieve Founder-aanbod.",
-    offerTitle: "VIP FOUNDER LIDMAATSCHAP",
-    yearly: "/ jaar",
-    trial: "7 dagen gratis · Geen betaalgegevens nodig",
-    benefit1: "AI-gestuurde dartscoaching",
-    benefit2: "Volg je dartprestaties",
-    benefit3: "Persoonlijke trainingsaanbevelingen",
-    benefit4: "Exclusief jaarlijks VIP Founder-tarief",
-    formTitle: "Reserveer je VIP-toegang",
-    nameLabel: "VOLLEDIGE NAAM",
-    emailLabel: "E-MAILADRES",
-    namePlaceholder: "Vul je volledige naam in",
-    emailPlaceholder: "Vul je e-mailadres in",
-    consent:
-      "Ik ga akkoord met het ontvangen van " +
-      "informatie over mijn DARTIQ VIP-registratie " +
-      "en toegang.",
-    submit: "REGISTRATIE BINNENKORT BESCHIKBAAR",
-    notice:
-      "Registratie is nog niet gekoppeld. " +
-      "Je hoeft niet te betalen om op de wachtlijst te komen. " +
-      "Je gratis proefperiode van 7 dagen begint pas " +
-      "wanneer je die na de lancering activeert.",
-    referral: "Referentiecode: ",
-    footer: "Gemaakt met spelers, voor spelers."
-  }
-};
-
-function setLanguage(lang) {
-  currentLanguage = lang;
-  document.documentElement.lang = lang;
-  const t = words[lang];
-
-  document.getElementById("headline").innerHTML =
-    t.headline;
-
-  [
-    "launch", "description", "offerTitle",
-    "yearly", "trial", "benefit1", "benefit2",
-    "benefit3", "benefit4", "formTitle",
-    "nameLabel", "emailLabel",
-    "consent", "notice", "footer"
-  ].forEach(id => {
-    document.getElementById(id).textContent = t[id];
-  });
-
-  document.getElementById("fullName").placeholder =
-    t.namePlaceholder;
-  document.getElementById("email").placeholder =
-    t.emailPlaceholder;
-  document.getElementById("submitBtn").textContent =
-    t.submit;
-
-  document.getElementById("enBtn")
-    .classList.toggle("active", lang === "en");
-  document.getElementById("nlBtn")
-    .classList.toggle("active", lang === "nl");
-
-  if (referralCode !== "DIRECT") {
-    const box = document.getElementById("referralBox");
-    box.style.display = "block";
-    box.textContent = t.referral + referralCode;
-  }
-}
-
-document.getElementById("vipForm")
-  .addEventListener("submit", function(event) {
-    event.preventDefault();
-    // Registration will be enabled after
-    // the secure backend is connected.
-  });
-
-setLanguage("en");
-
-// Reserved for the later registration integration:
-// referralCode
-// campaignCode
-</script>
-
-</body>
-</html>
+      id
