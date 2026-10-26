@@ -5,37 +5,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#050b16">
-
 <title>DARTIQ | VIP Founder Registration</title>
-
-<script
-  src="https://challenges.cloudflare.com/turnstile/v0/api.js"
-  async defer>
-</script>
-
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <style>
 :root {
   --bg:#050b16;
-  --panel:#0c182a;
   --blue:#00bbff;
-  --blue2:#0879e6;
   --muted:#a6bdd5;
   --border:#245078;
 }
-
 * { box-sizing:border-box; }
-
 body {
   margin:0;
   min-height:100vh;
-  background:
-    radial-gradient(circle at 50% 0%,#12365f,transparent 55%),
-    var(--bg);
-  color:#fff;
+  background:radial-gradient(circle at 50% 0%,#12365f,transparent 55%),var(--bg);
+  color:white;
   font-family:Arial,Helvetica,sans-serif;
   padding:20px;
 }
-
 .container {
   max-width:520px;
   margin:25px auto;
@@ -45,7 +32,6 @@ body {
   padding:32px 25px;
   box-shadow:0 0 45px rgba(0,164,255,.14);
 }
-
 .logo {
   text-align:center;
   font-size:45px;
@@ -53,9 +39,7 @@ body {
   letter-spacing:4px;
   text-shadow:0 0 22px rgba(0,190,255,.45);
 }
-
 .logo span { color:var(--blue); }
-
 .tagline {
   text-align:center;
   color:var(--muted);
@@ -63,14 +47,12 @@ body {
   letter-spacing:3px;
   margin-top:8px;
 }
-
 .language {
   display:flex;
   justify-content:center;
   gap:10px;
   margin:28px 0;
 }
-
 .language button {
   background:#11243a;
   color:var(--muted);
@@ -79,21 +61,17 @@ body {
   padding:10px 20px;
   cursor:pointer;
 }
-
 .language button.active {
-  background:var(--blue2);
-  color:#fff;
+  background:#0879e6;
+  color:white;
   border-color:var(--blue);
 }
-
 h1 {
   text-align:center;
   font-size:30px;
   line-height:1.2;
 }
-
 .highlight { color:var(--blue); }
-
 .launch {
   text-align:center;
   color:var(--blue);
@@ -101,7 +79,6 @@ h1 {
   font-weight:bold;
   letter-spacing:1px;
 }
-
 .description {
   color:var(--muted);
   text-align:center;
@@ -109,7 +86,6 @@ h1 {
   line-height:1.7;
   margin:22px 0;
 }
-
 .offer {
   background:linear-gradient(135deg,#102c4c,#0b182b);
   border:1px solid #168de1;
@@ -118,38 +94,32 @@ h1 {
   text-align:center;
   margin:26px 0;
 }
-
 .offer-title {
   color:var(--blue);
   letter-spacing:2px;
   font-weight:bold;
   font-size:13px;
 }
-
 .price {
   font-size:43px;
   font-weight:900;
   margin:14px 0 4px;
 }
-
 .price small {
   font-size:15px;
   color:var(--muted);
   font-weight:normal;
 }
-
 .trial {
   color:#8fe8ff;
   font-size:13px;
   margin-top:12px;
 }
-
 .features {
   margin-top:22px;
   display:grid;
   gap:12px;
 }
-
 .feature {
   display:flex;
   gap:11px;
@@ -157,12 +127,10 @@ h1 {
   font-size:14px;
   line-height:1.45;
 }
-
 .check {
   color:var(--blue);
   font-weight:bold;
 }
-
 .referral {
   display:none;
   background:#102c4b;
@@ -174,20 +142,17 @@ h1 {
   margin-bottom:22px;
   font-size:13px;
 }
-
 h2 {
   font-size:19px;
   margin:28px 0 18px;
   text-align:center;
 }
-
 label {
   display:block;
   color:#b7cce2;
   font-size:13px;
   margin:15px 0 8px;
 }
-
 input[type="text"],
 input[type="email"] {
   width:100%;
@@ -198,9 +163,9 @@ input[type="email"] {
   color:white;
   font-size:16px;
 }
-
-input:focus { outline-color:var(--blue); }
-
+input:focus {
+  outline-color:var(--blue);
+}
 .consent {
   display:flex;
   align-items:flex-start;
@@ -208,21 +173,27 @@ input:focus { outline-color:var(--blue); }
   margin:22px 0;
   color:var(--muted);
   font-size:12px;
-  line-height:1.6;
+  line-height:1.7;
 }
-
 .consent input {
-  margin-top:3px;
+  margin-top:4px;
   flex-shrink:0;
 }
-
+.consent a {
+  color:#39caff;
+  font-weight:bold;
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+.consent a:hover {
+  color:white;
+}
 .turnstile-wrapper {
   display:flex;
   justify-content:center;
   margin:22px 0;
   min-height:65px;
 }
-
 .submit {
   width:100%;
   background:linear-gradient(90deg,#0879e6,#00b9f4);
@@ -235,12 +206,10 @@ input:focus { outline-color:var(--blue); }
   cursor:pointer;
   box-shadow:0 0 24px rgba(0,168,255,.25);
 }
-
 .submit:disabled {
   opacity:.55;
   cursor:not-allowed;
 }
-
 .status {
   display:none;
   margin-top:15px;
@@ -250,20 +219,17 @@ input:focus { outline-color:var(--blue); }
   font-size:14px;
   line-height:1.5;
 }
-
 .status.visible {
   display:block;
   background:#122b46;
   border:1px solid #2688c5;
   color:#b4eaff;
 }
-
 .status.error {
   background:#361d2a;
   border-color:#a14d60;
   color:#ffced7;
 }
-
 .notice {
   background:#102239;
   border-radius:10px;
@@ -274,24 +240,27 @@ input:focus { outline-color:var(--blue); }
   margin-top:20px;
   text-align:center;
 }
-
 .hp {
   position:absolute;
   left:-9999px;
   opacity:0;
 }
-
 footer {
   text-align:center;
   margin-top:30px;
   font-size:12px;
   color:#748da9;
 }
+@media(max-width:420px) {
+  .container { padding:28px 18px; }
+  .logo { font-size:38px; }
+  h1 { font-size:27px; }
+  .price { font-size:38px; }
+}
 </style>
 </head>
 
 <body>
-
 <main class="container">
 
 <div class="logo">DART<span>IQ</span></div>
@@ -369,18 +338,26 @@ footer {
   <label for="fullName" id="nameLabel">
     FULL NAME
   </label>
-
-  <input id="fullName" type="text"
-    maxlength="100" autocomplete="name"
-    placeholder="Enter your full name" required>
+  <input
+    id="fullName"
+    type="text"
+    maxlength="100"
+    autocomplete="name"
+    placeholder="Enter your full name"
+    required
+  >
 
   <label for="email" id="emailLabel">
     EMAIL ADDRESS
   </label>
-
-  <input id="email" type="email"
-    maxlength="254" autocomplete="email"
-    placeholder="Enter your email address" required>
+  <input
+    id="email"
+    type="email"
+    maxlength="254"
+    autocomplete="email"
+    placeholder="Enter your email address"
+    required
+  >
 
   <div class="hp" aria-hidden="true">
     <label for="website">Website</label>
@@ -388,17 +365,28 @@ footer {
       tabindex="-1" autocomplete="off">
   </div>
 
+  <!-- PRIVACY ACKNOWLEDGMENT -->
   <div class="consent">
     <input id="consent" type="checkbox" required>
-    <span id="consentText">
-      I agree to DARTIQ processing my details
-      to manage my VIP registration and contact
-      me about access.
-    </span>
+    <label id="consentText" for="consent"
+      style="display:inline;margin:0">
+      I acknowledge that I have read the
+      <a
+        id="privacyLink"
+        href="privacy.html?lang=en"
+        target="_blank"
+        rel="noopener noreferrer">
+        DARTIQ Privacy Policy
+      </a>
+      and understand how my VIP registration
+      details are processed.
+    </label>
   </div>
 
+  <!-- CLOUDFLARE TURNSTILE -->
   <div class="turnstile-wrapper">
-    <div class="cf-turnstile"
+    <div
+      class="cf-turnstile"
       data-sitekey="0x4AAAAAAFnBmZTL4Ma2oxeF"
       data-theme="dark"
       data-callback="turnstileSuccess"
@@ -407,8 +395,10 @@ footer {
     </div>
   </div>
 
-  <button id="submitBtn"
-    class="submit" type="submit">
+  <button
+    id="submitBtn"
+    class="submit"
+    type="submit">
     JOIN VIP WAITING LIST
   </button>
 
@@ -435,7 +425,7 @@ footer {
 "use strict";
 
 const VIP_ENDPOINT =
-    "https://usglrseckxwcdykrwuvh.supabase.co/functions/v1/dartiq-vip-register";
+  "https://usglrseckxwcdykrwuvh.supabase.co/functions/v1/dartiq-vip-register";
 
 const params = new URLSearchParams(
   window.location.search
@@ -493,12 +483,17 @@ const translations = {
     namePlaceholder: "Enter your full name",
     emailPlaceholder: "Enter your email address",
     consent:
-      "I agree to DARTIQ processing my details " +
-      "to manage my VIP registration and contact " +
-      "me about access.",
+      'I acknowledge that I have read the ' +
+      '<a id="privacyLink" ' +
+      'href="privacy.html?lang=en" ' +
+      'target="_blank" rel="noopener noreferrer">' +
+      'DARTIQ Privacy Policy</a> ' +
+      'and understand how my VIP registration ' +
+      'details are processed.',
     button: "JOIN VIP WAITING LIST",
     processing: "Processing registration...",
-    verification: "Complete the security check first.",
+    verification:
+      "Complete the security check first.",
     success:
       "Registration received! Your VIP Founder " +
       "request has been recorded.",
@@ -525,23 +520,31 @@ const translations = {
       "en reserveer het exclusieve Founder-aanbod.",
     offerTitle: "VIP FOUNDER LIDMAATSCHAP",
     yearly: "/ jaar",
-    trial: "7 dagen gratis · Geen betaalgegevens nodig",
+    trial:
+      "7 dagen gratis · Geen betaalgegevens nodig",
     benefit1: "AI-gestuurde dartscoaching",
     benefit2: "Volg je dartprestaties",
-    benefit3: "Persoonlijke trainingsaanbevelingen",
-    benefit4: "Exclusief jaarlijks VIP Founder-tarief",
+    benefit3:
+      "Persoonlijke trainingsaanbevelingen",
+    benefit4:
+      "Exclusief jaarlijks VIP Founder-tarief",
     formTitle: "Reserveer je VIP-toegang",
     nameLabel: "VOLLEDIGE NAAM",
     emailLabel: "E-MAILADRES",
     namePlaceholder: "Vul je volledige naam in",
     emailPlaceholder: "Vul je e-mailadres in",
     consent:
-      "Ik ga akkoord met de verwerking van " +
-      "mijn gegevens voor mijn VIP-registratie " +
-      "en informatie over mijn toegang.",
+      'Ik bevestig dat ik de ' +
+      '<a id="privacyLink" ' +
+      'href="privacy.html?lang=nl" ' +
+      'target="_blank" rel="noopener noreferrer">' +
+      'DARTIQ Privacyverklaring</a> ' +
+      'heb gelezen en begrijp hoe mijn ' +
+      'VIP-registratiegegevens worden verwerkt.',
     button: "INSCHRIJVEN VOOR VIP TOEGANG",
     processing: "Registratie verwerken...",
-    verification: "Voltooi eerst de beveiligingscontrole.",
+    verification:
+      "Voltooi eerst de beveiligingscontrole.",
     success:
       "Registratie ontvangen! " +
       "Je VIP Founder-aanvraag is opgeslagen.",
@@ -571,11 +574,15 @@ function setLanguage(lang) {
     "launch", "description", "offerTitle",
     "yearly", "trial", "benefit1", "benefit2",
     "benefit3", "benefit4", "formTitle",
-    "nameLabel", "emailLabel", "consent",
+    "nameLabel", "emailLabel",
     "notice", "footer"
   ].forEach(id => {
     document.getElementById(id).textContent = t[id];
   });
+
+  // Keep clickable privacy link as HTML.
+  document.getElementById("consentText").innerHTML =
+    t.consent;
 
   document.getElementById("fullName").placeholder =
     t.namePlaceholder;
@@ -597,7 +604,8 @@ function setLanguage(lang) {
 
   if (referralCode !== "DIRECT") {
     referralBox.style.display = "block";
-    referralBox.textContent = t.referral + referralCode;
+    referralBox.textContent =
+      t.referral + referralCode;
   } else {
     referralBox.style.display = "none";
   }
@@ -654,7 +662,8 @@ document.getElementById("vipForm")
           turnstile_token: turnstileToken,
 
           website:
-            document.getElementById("website").value
+            document.getElementById("website")
+              .value
         })
       });
 
@@ -665,7 +674,9 @@ document.getElementById("vipForm")
       const result = await response.json();
 
       if (result.success !== true) {
-        throw new Error("Registration not confirmed");
+        throw new Error(
+          "Registration not confirmed"
+        );
       }
 
       completed = true;
@@ -674,11 +685,14 @@ document.getElementById("vipForm")
       status.textContent = t.success;
 
       document.getElementById("vipForm").reset();
+
       document.getElementById("vipForm")
         .style.display = "none";
 
     } catch (error) {
-      console.error("DARTIQ VIP registration:", error);
+      console.error(
+        "DARTIQ VIP registration:", error
+      );
 
       status.className = "status visible error";
       status.textContent = t.error;
