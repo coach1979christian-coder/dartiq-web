@@ -6,14 +6,29 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#050b16">
 
-<title>DARTIQ | Privacy Notice</title>
+<title>DARTIQ | Privacy Policy</title>
+<meta name="description"
+content="DARTIQ Privacy Policy - Information about VIP registration, personal data, referrals and your privacy rights.">
 
 <style>
-* { box-sizing:border-box; }
+:root {
+  --bg:#050b16;
+  --panel:#0b1628;
+  --blue:#00bbff;
+  --muted:#b9cde2;
+  --border:#19558a;
+}
+
+* {
+  box-sizing:border-box;
+}
 
 body {
   margin:0;
-  background:#050b16;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at top,#14365c,transparent 60%),
+    var(--bg);
   color:#e7f1ff;
   font-family:Arial,Helvetica,sans-serif;
   line-height:1.75;
@@ -23,21 +38,25 @@ body {
 .container {
   max-width:800px;
   margin:25px auto;
-  background:#0b1628;
-  border:1px solid #19558a;
+  background:var(--panel);
+  border:1px solid var(--border);
   border-radius:20px;
   padding:35px 28px;
+  box-shadow:0 0 35px rgba(0,150,255,.12);
 }
 
 .logo {
-  font-size:40px;
+  font-size:42px;
   font-weight:900;
   letter-spacing:4px;
   text-align:center;
   color:white;
+  text-shadow:0 0 20px rgba(0,187,255,.3);
 }
 
-.logo span { color:#00bbff; }
+.logo span {
+  color:var(--blue);
+}
 
 .subtitle {
   text-align:center;
@@ -53,40 +72,74 @@ body {
   margin:25px 0;
 }
 
-button {
+.language button {
   padding:10px 20px;
   border:1px solid #226ba8;
   border-radius:25px;
   background:#10233c;
   color:#fff;
   cursor:pointer;
+  font-weight:bold;
 }
 
-button.active { background:#0879e6; }
+.language button.active {
+  background:#0879e6;
+  border-color:#00bbff;
+  box-shadow:0 0 14px rgba(0,187,255,.2);
+}
 
 h1 {
-  color:#fff;
+  color:white;
   font-size:28px;
   text-align:center;
+  margin:20px 0 10px;
 }
 
 h2 {
-  color:#00bbff;
+  color:var(--blue);
   font-size:18px;
-  margin-top:28px;
+  margin-top:30px;
+  margin-bottom:10px;
 }
 
-p,li { color:#b9cde2; }
+p,li {
+  color:var(--muted);
+}
 
-a { color:#45caff; }
+ul {
+  padding-left:24px;
+}
 
-.warning {
-  background:#302519;
-  border:1px solid #b88438;
-  border-radius:10px;
-  padding:15px;
-  color:#ffe2ae;
+li {
+  margin-bottom:7px;
+}
+
+a {
+  color:#45caff;
+  overflow-wrap:anywhere;
+}
+
+.updated {
+  color:#8fa9c3;
+  font-size:13px;
+  text-align:center;
+  margin-bottom:30px;
+}
+
+.info {
+  background:#102b48;
+  border:1px solid #276ca4;
+  border-radius:12px;
+  padding:17px;
   margin:20px 0;
+}
+
+.info p {
+  margin:5px 0;
+}
+
+.info strong {
+  color:white;
 }
 
 .footer {
@@ -100,319 +153,716 @@ a { color:#45caff; }
   display:block;
   text-align:center;
   margin-top:30px;
-  padding:13px;
-  background:#0879e6;
+  padding:14px;
+  background:linear-gradient(90deg,#0879e6,#00afea);
   border-radius:10px;
   color:white;
   text-decoration:none;
+  font-weight:bold;
 }
 
-[hidden] { display:none!important; }
+.back:hover {
+  filter:brightness(1.1);
+}
+
+[hidden] {
+  display:none!important;
+}
+
+@media(max-width:480px) {
+  .container {
+    padding:26px 19px;
+    margin:10px auto;
+  }
+
+  .logo {
+    font-size:36px;
+  }
+
+  h1 {
+    font-size:25px;
+  }
+
+  h2 {
+    font-size:17px;
+  }
+}
 </style>
 </head>
 
 <body>
+
 <main class="container">
 
-<div class="logo">DART<span>IQ</span></div>
-<div class="subtitle">BUILT WITH PLAYERS, FOR PLAYERS.</div>
+<div class="logo">
+  DART<span>IQ</span>
+</div>
+
+<div class="subtitle">
+  BUILT WITH PLAYERS, FOR PLAYERS.
+</div>
 
 <div class="language">
   <button id="enBtn" class="active"
-    onclick="changeLanguage('en')">ENGLISH</button>
+    type="button" onclick="changeLanguage('en')">
+    ENGLISH
+  </button>
+
   <button id="nlBtn"
-    onclick="changeLanguage('nl')">NEDERLANDS</button>
+    type="button" onclick="changeLanguage('nl')">
+    NEDERLANDS
+  </button>
 </div>
+
+<!-- ENGLISH PRIVACY POLICY -->
 
 <section id="en">
 
-<h1>Privacy Notice</h1>
+<h1>Privacy Policy</h1>
 
-<p>Last updated: 26 October 2026</p>
-
-<div class="warning">
-  DRAFT: The controller and contact details below
-  must be completed and verified before this notice
-  is published for real registrations.
+<div class="updated">
+  Last updated: 26 October 2026
 </div>
 
-<h2>1. Who is responsible?</h2>
 <p>
-DARTIQ<br>
-Legal operator: [INSERT LEGAL NAME]<br>
-Business address: [INSERT BUSINESS ADDRESS]<br>
-Privacy contact: [INSERT CONTACT EMAIL]
+At DARTIQ, we respect your privacy.
+This Privacy Policy explains how we collect,
+use, protect and retain personal information
+when you join our VIP waiting list,
+use referral links or interact with
+our registration services.
 </p>
 
-<h2>2. What information do we collect?</h2>
-<p>For VIP waiting-list registrations:</p>
+<h2>1. Data Controller</h2>
+
+<p>
+The person responsible for processing
+personal data for DARTIQ is:
+</p>
+
+<div class="info">
+  <p><strong>Christian De Pelsmaeker</strong></p>
+  <p>DARTIQ</p>
+  <p>Veldstraat 64 bus 3</p>
+  <p>9100 Sint-Niklaas</p>
+  <p>Belgium</p>
+  <p>
+    <a href="mailto:coach1979christian@gmail.com">
+      coach1979christian@gmail.com
+    </a>
+  </p>
+</div>
+
+<h2>2. Personal Information We Collect</h2>
+
+<p>
+When you register for DARTIQ VIP Access,
+we collect:
+</p>
+
 <ul>
-<li>Full name</li>
-<li>Email address</li>
-<li>Registration date and status</li>
-<li>Preferred language</li>
-<li>Ambassador referral code and campaign</li>
-<li>Security verification and technical request data</li>
+  <li>Full name</li>
+  <li>Email address</li>
+  <li>Preferred language</li>
+  <li>Registration date and status</li>
+  <li>VIP membership eligibility</li>
+  <li>Ambassador referral code, where applicable</li>
+  <li>Referral campaign identifier</li>
+  <li>Limited technical and security information needed to prevent abuse</li>
 </ul>
 
-<h2>3. Why do we use this information?</h2>
 <p>
-We use registration details to administer the
-DARTIQ VIP waiting list, record eligibility for
-the VIP Founder offer, provide launch and access
-information, prevent abuse, and attribute
-registrations to the appropriate ambassador.
+We do not require payment card information
+to join the VIP waiting list.
 </p>
 
-<h2>4. Legal basis</h2>
+<h2>3. How We Use Your Information</h2>
+
+<p>We process your information to:</p>
+
+<ul>
+  <li>Manage your VIP waiting-list registration</li>
+  <li>Record eligibility for the VIP Founder offer</li>
+  <li>Contact you about your requested VIP access</li>
+  <li>Provide information about account activation and launch</li>
+  <li>Attribute registrations to DARTIQ ambassadors</li>
+  <li>Prevent fraudulent or automated registrations</li>
+  <li>Manage requests concerning your personal data</li>
+</ul>
+
+<h2>4. Legal Basis for Processing</h2>
+
 <p>
-We process registration details to respond
-to your request to join the waiting list and,
-where applicable, based on your consent.
-We use necessary security information to
-protect the registration service under our
-legitimate interests.
-</p>
-<p>
-Optional promotional marketing beyond information
-about your requested registration requires
-a separate appropriate legal basis and,
-where required, separate consent.
+We process the information necessary to
+respond to your request to join the
+VIP waiting list and prepare access to
+DARTIQ.
 </p>
 
-<h2>5. Ambassador referrals</h2>
 <p>
-If you register through an ambassador link,
-we save the referral code and campaign identifier.
-We use these to attribute the registration and
-evaluate our ambassador programme.
-</p>
-<p>
-Ambassadors should not receive your personal
-contact details merely because they referred you.
-Aggregated referral statistics may be shared
-with the relevant ambassador.
+Where consent is the applicable legal
+basis, you may withdraw it at any time.
+We may also process limited technical
+information based on our legitimate
+interest in protecting our registration
+services against misuse.
 </p>
 
-<h2>6. Service providers</h2>
 <p>
-The registration website uses GitHub Pages
-for hosting, Supabase for registration storage
-and processing, and Cloudflare Turnstile for
-security verification.
-</p>
-<p>
-These providers may process technical or
-personal data according to their service
-arrangements. International transfers, where
-applicable, must be covered by appropriate
-data protection safeguards.
+Separate promotional marketing unrelated
+to your requested VIP registration
+will only be sent where an appropriate
+legal basis exists, including consent
+where required.
 </p>
 
-<h2>7. How long do we retain information?</h2>
+<h2>5. Ambassador Referral Tracking</h2>
+
 <p>
-Waiting-list records are retained while needed
-to manage the VIP invitation and registration
-process. Records no longer required are deleted
-or anonymised according to DARTIQ's retention
-schedule, subject to applicable legal obligations.
-</p>
-<p>
-The specific retention schedule must be
-finalised before public launch.
+DARTIQ operates an ambassador referral
+programme.
 </p>
 
-<h2>8. Your rights</h2>
 <p>
-Depending on the circumstances, you may request
-access, correction, deletion, restriction,
-portability or object to processing.
-Where consent is relied upon, you may withdraw
-it at any time.
+When you visit our registration page
+using a unique ambassador link or
+QR code, a referral code and campaign
+identifier may be included in the link.
 </p>
+
 <p>
-Contact us using the privacy email above.
-You may also complain to the Belgian
-Data Protection Authority:
+If you register, these identifiers
+are stored with your registration
+to record which ambassador referred you.
+</p>
+
+<p>
+Ambassadors may receive aggregated
+statistics such as registration totals.
+We do not automatically disclose your
+name or email address to an ambassador
+solely because they referred you.
+</p>
+
+<h2>6. Service Providers</h2>
+
+<p>
+DARTIQ uses third-party technology
+providers to operate the VIP
+registration system.
+</p>
+
+<ul>
+  <li>
+    <strong>GitHub Pages:</strong>
+    hosting the public registration website.
+  </li>
+  <li>
+    <strong>Supabase:</strong>
+    securely storing and processing
+    VIP registration information.
+  </li>
+  <li>
+    <strong>Cloudflare Turnstile:</strong>
+    verifying registration requests
+    and protecting against automated abuse.
+  </li>
+</ul>
+
+<p>
+These providers may process relevant
+technical or personal data when
+delivering their services.
+Where personal data is transferred
+outside the European Economic Area,
+appropriate safeguards must apply.
+</p>
+
+<h2>7. Data Retention</h2>
+
+<p>
+VIP waiting-list information is retained
+for as long as necessary to administer
+the invitation and registration process.
+</p>
+
+<p>
+For people who do not activate a DARTIQ
+account, we aim to delete or anonymise
+their waiting-list information within
+12 months after the VIP launch on
+15 December 2026, unless a longer period
+is necessary for a legitimate purpose
+or applicable legal obligation.
+</p>
+
+<p>
+If you activate a DARTIQ account,
+relevant account and membership records
+may be retained for the duration of
+your membership and any applicable
+legal retention requirements.
+</p>
+
+<p>
+Security and rate-limiting records
+are retained only as necessary for
+fraud prevention and service protection.
+</p>
+
+<h2>8. Your Privacy Rights</h2>
+
+<p>
+Under applicable data protection law,
+you may have the right to:
+</p>
+
+<ul>
+  <li>Access your personal data</li>
+  <li>Request correction of inaccurate information</li>
+  <li>Request deletion of personal information</li>
+  <li>Restrict certain processing activities</li>
+  <li>Object to certain uses of your data</li>
+  <li>Request data portability where applicable</li>
+  <li>Withdraw consent where processing relies on consent</li>
+</ul>
+
+<p>
+To exercise your rights, contact:
+</p>
+
+<p>
+<a href="mailto:coach1979christian@gmail.com">
+  coach1979christian@gmail.com
+</a>
+</p>
+
+<p>
+You can also lodge a complaint with
+the Belgian Data Protection Authority:
+</p>
+
+<p>
 <a href="https://www.dataprotectionauthority.be/"
-target="_blank" rel="noopener">
-www.dataprotectionauthority.be
-</a>.
+   target="_blank" rel="noopener">
+  www.dataprotectionauthority.be
+</a>
 </p>
 
-<h2>9. Payments and free trials</h2>
+<h2>9. VIP Membership and Free Trial</h2>
+
 <p>
-Joining the VIP waiting list does not create a
-paid subscription. Your seven-day free trial
-begins only when you activate it after launch.
-Payment information will be collected separately
-if you choose a paid subscription.
+Joining the VIP waiting list does not
+create a paid subscription.
 </p>
 
-<h2>10. Changes to this notice</h2>
 <p>
-We may update this notice when the registration
-service or its data processing changes.
-The latest version will be available on this page.
+The DARTIQ VIP Founder offer is
+advertised at €19.99 per year.
+Eligible members can activate a
+seven-day free trial after launch,
+subject to the applicable membership
+terms.
+</p>
+
+<p>
+No payment details are required to
+join the waiting list or begin the
+trial. A paid subscription requires
+a separate payment decision and
+authorisation.
+</p>
+
+<h2>10. Security</h2>
+
+<p>
+We use technical and organisational
+measures intended to protect
+registration data, including restricted
+database access, encrypted connections,
+verification of registration requests,
+and abuse prevention mechanisms.
+</p>
+
+<p>
+No online service can guarantee
+absolute security.
+</p>
+
+<h2>11. Changes to This Policy</h2>
+
+<p>
+We may update this Privacy Policy
+when DARTIQ's services or data
+processing activities change.
+</p>
+
+<p>
+Any updated version will be published
+on this page with a revised date.
 </p>
 
 </section>
+
+<!-- NEDERLANDSE PRIVACYVERKLARING -->
 
 <section id="nl" hidden>
 
 <h1>Privacyverklaring</h1>
-<p>Laatst bijgewerkt: 26 oktober 2026</p>
 
-<div class="warning">
-  CONCEPT: De identiteit en contactgegevens
-  van de verwerkingsverantwoordelijke moeten
-  worden aangevuld en gecontroleerd vóór publicatie.
+<div class="updated">
+  Laatst bijgewerkt: 26 oktober 2026
 </div>
 
-<h2>1. Wie is verantwoordelijk?</h2>
 <p>
-DARTIQ<br>
-Juridische verantwoordelijke: [JURIDISCHE NAAM]<br>
-Zakelijk adres: [ZAKELIJK ADRES]<br>
-E-mail voor privacyvragen: [E-MAILADRES]
+Bij DARTIQ respecteren we jouw privacy.
+Deze privacyverklaring legt uit welke
+persoonsgegevens we verzamelen,
+waarvoor we ze gebruiken en hoe
+we ze beschermen wanneer je je
+aanmeldt voor de VIP-wachtlijst.
 </p>
 
-<h2>2. Welke gegevens verzamelen we?</h2>
+<h2>1. Verwerkingsverantwoordelijke</h2>
+
+<p>
+De verantwoordelijke voor de verwerking
+van persoonsgegevens bij DARTIQ is:
+</p>
+
+<div class="info">
+  <p><strong>Christian De Pelsmaeker</strong></p>
+  <p>DARTIQ</p>
+  <p>Veldstraat 64 bus 3</p>
+  <p>9100 Sint-Niklaas</p>
+  <p>België</p>
+  <p>
+    <a href="mailto:coach1979christian@gmail.com">
+      coach1979christian@gmail.com
+    </a>
+  </p>
+</div>
+
+<h2>2. Welke persoonsgegevens verzamelen we?</h2>
+
+<p>
+Wanneer je je registreert voor
+DARTIQ VIP Access verzamelen we:
+</p>
+
 <ul>
-<li>Volledige naam</li>
-<li>E-mailadres</li>
-<li>Registratiedatum en registratiestatus</li>
-<li>Voorkeurstaal</li>
-<li>Ambassadeurscode en campagne</li>
-<li>Beveiligings- en technische aanvraaggegevens</li>
+  <li>Volledige naam</li>
+  <li>E-mailadres</li>
+  <li>Voorkeurstaal</li>
+  <li>Registratiedatum en registratiestatus</li>
+  <li>Gegevens over je VIP-lidmaatschap</li>
+  <li>Ambassadeurscode indien van toepassing</li>
+  <li>Campagne-identificatie</li>
+  <li>Beperkte technische en beveiligingsgegevens om misbruik te voorkomen</li>
 </ul>
 
-<h2>3. Waarom verwerken we deze gegevens?</h2>
 <p>
-We gebruiken de gegevens om de DARTIQ
-VIP-wachtlijst te beheren, het recht op
-het VIP Founder-aanbod te registreren,
-informatie over de lancering en toegang
-te verstrekken, misbruik tegen te gaan
-en registraties aan ambassadeurs toe te wijzen.
+Je hoeft geen betaalgegevens in te
+vullen om je op de VIP-wachtlijst
+te registreren.
 </p>
 
-<h2>4. Rechtsgrond</h2>
+<h2>3. Waarvoor gebruiken we je gegevens?</h2>
+
+<ul>
+  <li>Je VIP-registratie beheren</li>
+  <li>Je recht op het VIP Founder-aanbod registreren</li>
+  <li>Je informeren over je aangevraagde VIP-toegang</li>
+  <li>Informatie verstrekken over de lancering en accountactivatie</li>
+  <li>Registraties aan ambassadeurs toewijzen</li>
+  <li>Frauduleuze of automatische registraties voorkomen</li>
+  <li>Privacyverzoeken behandelen</li>
+</ul>
+
+<h2>4. Rechtsgrond voor verwerking</h2>
+
 <p>
-We verwerken registratiegegevens om je
-aanvraag voor de wachtlijst te behandelen
-en, waar van toepassing, op basis van
-je toestemming.
-</p>
-<p>
-Noodzakelijke beveiligingsgegevens verwerken
-we op basis van ons gerechtvaardigd belang
-om de dienst te beschermen.
-Voor bijkomende reclame gebruiken we een
-afzonderlijke passende rechtsgrond en,
-waar vereist, afzonderlijke toestemming.
+We verwerken de noodzakelijke
+persoonsgegevens om je aanvraag
+voor de VIP-wachtlijst te behandelen
+en de toegang tot DARTIQ voor te bereiden.
 </p>
 
-<h2>5. Ambassadeurs</h2>
 <p>
-Wanneer je je via een ambassadeurslink
-registreert, bewaren we de bijbehorende
-referentiecode en campagne.
-</p>
-<p>
-Ambassadeurs ontvangen niet automatisch
-je persoonlijke contactgegevens.
-Geaggregeerde resultaten kunnen met de
-betreffende ambassadeur worden gedeeld.
+Wanneer de verwerking gebaseerd is
+op toestemming, kun je deze
+toestemming op elk moment intrekken.
 </p>
 
-<h2>6. Dienstverleners</h2>
 <p>
-DARTIQ gebruikt GitHub Pages voor hosting,
-Supabase voor registratieopslag en verwerking,
-en Cloudflare Turnstile voor beveiliging.
+Beperkte technische gegevens kunnen
+worden verwerkt op basis van ons
+gerechtvaardigd belang om de
+registratiedienst te beveiligen.
 </p>
+
 <p>
-Indien gegevens buiten de Europese Unie
-worden doorgegeven, moeten passende
+Voor bijkomende promotionele
+marketing die losstaat van je
+aangevraagde VIP-registratie
+gebruiken we een afzonderlijke
+passende rechtsgrond, waaronder
+toestemming waar dat vereist is.
+</p>
+
+<h2>5. Ambassadeurs en referentiecodes</h2>
+
+<p>
+DARTIQ werkt met een
+ambassadeursprogramma.
+</p>
+
+<p>
+Wanneer je via een persoonlijke
+QR-code of link van een ambassadeur
+op de registratiepagina terechtkomt,
+kan die link een unieke referentiecode
+en campagnecode bevatten.
+</p>
+
+<p>
+Wanneer je je registreert, worden
+deze codes opgeslagen om vast te
+leggen welke ambassadeur je
+heeft doorverwezen.
+</p>
+
+<p>
+Ambassadeurs kunnen algemene
+statistieken ontvangen, zoals het
+aantal registraties.
+</p>
+
+<p>
+Je naam of e-mailadres wordt
+niet automatisch met de
+ambassadeur gedeeld enkel omdat
+die je heeft doorverwezen.
+</p>
+
+<h2>6. Externe dienstverleners</h2>
+
+<p>
+DARTIQ gebruikt de volgende
+diensten voor zijn registratieproces:
+</p>
+
+<ul>
+  <li>
+    <strong>GitHub Pages:</strong>
+    hosting van de publieke
+    registratiepagina.
+  </li>
+  <li>
+    <strong>Supabase:</strong>
+    opslag en verwerking van
+    VIP-registratiegegevens.
+  </li>
+  <li>
+    <strong>Cloudflare Turnstile:</strong>
+    bescherming tegen bots
+    en automatische registraties.
+  </li>
+</ul>
+
+<p>
+Deze dienstverleners kunnen
+technische of persoonlijke
+gegevens verwerken bij het
+aanbieden van hun diensten.
+</p>
+
+<p>
+Bij doorgifte van persoonsgegevens
+buiten de Europese Economische
+Ruimte moeten passende
 beschermingsmaatregelen gelden.
 </p>
 
 <h2>7. Bewaartermijn</h2>
+
 <p>
-We bewaren wachtlijstgegevens zolang dat
-nodig is voor het uitnodigings- en
-registratieproces. Gegevens die niet meer
-nodig zijn, worden verwijderd of
-geanonimiseerd volgens ons bewaarbeleid,
-rekening houdend met wettelijke verplichtingen.
-</p>
-<p>
-De specifieke bewaartermijnen moeten vóór
-de publieke lancering worden vastgelegd.
+We bewaren VIP-registratiegegevens
+zolang dit nodig is om de
+wachtlijst en uitnodigingen
+te beheren.
 </p>
 
-<h2>8. Jouw rechten</h2>
 <p>
-Je kunt, afhankelijk van de omstandigheden,
-inzage, correctie, verwijdering, beperking
-of overdraagbaarheid vragen, of bezwaar maken.
-Je kunt je toestemming ook intrekken wanneer
-de verwerking daarop gebaseerd is.
+Voor personen die geen DARTIQ-account
+activeren, streven we ernaar de
+gegevens uiterlijk 12 maanden na
+de VIP-lancering op
+15 december 2026 te verwijderen
+of te anonimiseren, tenzij een
+langere bewaartermijn noodzakelijk
+is voor een gerechtvaardigd doel
+of wettelijke verplichting.
 </p>
+
 <p>
-Neem hiervoor contact op via het vermelde
-e-mailadres. Je kunt een klacht indienen bij de
+Wanneer je een DARTIQ-account
+activeert, kunnen relevante
+account- en lidmaatschapsgegevens
+langer bewaard worden zolang je
+lidmaatschap loopt en voor
+toepasselijke wettelijke termijnen.
+</p>
+
+<p>
+Beveiligingsgegevens worden niet
+langer bewaard dan noodzakelijk
+om misbruik en fraude tegen te gaan.
+</p>
+
+<h2>8. Jouw privacyrechten</h2>
+
+<p>
+Volgens de toepasselijke
+privacywetgeving kun je,
+afhankelijk van de omstandigheden:
+</p>
+
+<ul>
+  <li>Je persoonsgegevens inkijken</li>
+  <li>Onjuiste gegevens laten verbeteren</li>
+  <li>Verwijdering van gegevens aanvragen</li>
+  <li>De verwerking laten beperken</li>
+  <li>Bezwaar maken tegen bepaalde verwerkingen</li>
+  <li>Gegevensoverdraagbaarheid aanvragen</li>
+  <li>Je toestemming intrekken waar van toepassing</li>
+</ul>
+
+<p>
+Voor privacyvragen of verzoeken:
+</p>
+
+<p>
+<a href="mailto:coach1979christian@gmail.com">
+  coach1979christian@gmail.com
+</a>
+</p>
+
+<p>
+Je kunt ook een klacht indienen bij
+de Belgische Gegevensbeschermingsautoriteit:
+</p>
+
+<p>
 <a href="https://www.gegevensbeschermingsautoriteit.be/"
-target="_blank" rel="noopener">
-Gegevensbeschermingsautoriteit
-</a>.
+   target="_blank" rel="noopener">
+  www.gegevensbeschermingsautoriteit.be
+</a>
 </p>
 
-<h2>9. Betaling en proefperiode</h2>
+<h2>9. VIP-lidmaatschap en proefperiode</h2>
+
 <p>
-Een inschrijving op de VIP-wachtlijst
+Een registratie op de VIP-wachtlijst
 is geen betalend abonnement.
-De gratis proefperiode van zeven dagen
-begint pas na activering bij de lancering.
-Betaalgegevens worden afzonderlijk gevraagd
-als je een betalend abonnement kiest.
 </p>
 
-<h2>10. Wijzigingen</h2>
 <p>
-We kunnen deze privacyverklaring bijwerken
-wanneer onze dienstverlening of
-gegevensverwerking verandert.
-De meest recente versie staat op deze pagina.
+Het DARTIQ VIP Founder-aanbod
+bedraagt €19,99 per jaar.
+In aanmerking komende leden
+kunnen na de lancering een
+gratis proefperiode van zeven
+dagen activeren volgens de
+geldende lidmaatschapsvoorwaarden.
+</p>
+
+<p>
+Voor registratie of het starten
+van de proefperiode zijn geen
+betaalgegevens vereist.
+</p>
+
+<p>
+Een betalend abonnement vereist
+een afzonderlijke keuze en
+toestemming voor betaling.
+</p>
+
+<h2>10. Beveiliging</h2>
+
+<p>
+We gebruiken technische en
+organisatorische maatregelen
+om persoonsgegevens te
+beschermen.
+</p>
+
+<p>
+Daaronder vallen beperkte
+databasetoegang, versleutelde
+verbindingen, beveiligingscontroles
+en maatregelen tegen misbruik.
+</p>
+
+<p>
+Geen enkele online dienst kan
+absolute veiligheid garanderen.
+</p>
+
+<h2>11. Wijzigingen</h2>
+
+<p>
+We kunnen deze privacyverklaring
+aanpassen wanneer de diensten
+of gegevensverwerking van
+DARTIQ veranderen.
+</p>
+
+<p>
+De nieuwste versie wordt op
+deze pagina gepubliceerd,
+samen met de datum van
+de laatste wijziging.
 </p>
 
 </section>
 
-<a class="back" href="dartiq-vip-register.html"
-id="backLink">
-Back to VIP Registration
+<a
+  class="back"
+  id="backLink"
+  href="dartiq-vip-register.html">
+  Back to VIP Registration
 </a>
 
 <div class="footer">
-DARTIQ © 2026
+  DARTIQ © 2026
+  <p>Built with players, for players.</p>
 </div>
 
 </main>
 
 <script>
+"use strict";
+
 function changeLanguage(lang) {
   document.documentElement.lang = lang;
+
   document.getElementById("en").hidden =
     lang !== "en";
+
   document.getElementById("nl").hidden =
     lang !== "nl";
 
   document.getElementById("enBtn")
-    .classList.toggle("active", lang === "en");
+    .classList.toggle(
+      "active", lang === "en"
+    );
 
   document.getElementById("nlBtn")
-    .classList.toggle("active", lang === "nl");
+    .classList.toggle(
+      "active", lang === "nl"
+    );
 
   document.getElementById("backLink").textContent =
     lang === "nl"
@@ -423,8 +873,11 @@ function changeLanguage(lang) {
 const params = new URLSearchParams(
   window.location.search
 );
+
 changeLanguage(
-  params.get("lang") === "nl" ? "nl" : "en"
+  params.get("lang") === "nl"
+    ? "nl"
+    : "en"
 );
 </script>
 
