@@ -1,372 +1,1191 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>DARTIQ | AI Throw Analysis</title>
 
 <style>
-:root{
-  color-scheme:dark;
-  --bg:#050a11;
-  --panel:#0c1520;
-  --panel2:#101d2a;
-  --line:#1a2d40;
-  --blue:#39a9ff;
-  --blue-dark:#102a40;
-  --text:#f4f8fc;
-  --muted:#8da2b6;
-  --green:#5be0a5;
+:root {
+  color-scheme: dark;
+  --bg: #050a11;
+  --panel: #0c1520;
+  --panel2: #101d2a;
+  --line: #1a2d40;
+  --blue: #39a9ff;
+  --text: #f4f8fc;
+  --muted: #93a9bc;
+  --green: #5be0a5;
 }
-*{box-sizing:border-box}
-body{
-  margin:0;
-  padding:16px 12px 28px;
-  background:var(--bg);
-  color:var(--text);
-  font-family:Arial,Helvetica,sans-serif;
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  padding: 16px 12px 32px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
 }
-.page{width:min(100%,720px);margin:auto}
-header{
-  display:flex;align-items:center;gap:11px;
-  padding:7px 2px 16px;border-bottom:1px solid var(--line);
-  margin-bottom:20px
+.page { max-width: 720px; margin: auto; }
+header {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 8px 2px 16px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 20px;
 }
-.logo{
-  width:39px;height:39px;display:grid;place-items:center;
-  border:1px solid #287fbd;border-radius:12px;
-  color:var(--blue);font-size:21px;font-weight:800
+.logo {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--blue);
+  border-radius: 12px;
+  color: var(--blue);
+  font-size: 23px;
+  font-weight: 900;
 }
-.brand{font-size:12px;font-weight:800;letter-spacing:.2em}
-.brand small{
-  display:block;margin-top:5px;color:var(--muted);
-  font-size:10px;font-weight:500;letter-spacing:.08em
+.brand {
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: .15em;
 }
-.status{
-  margin-left:auto;padding:7px 10px;border:1px solid #24533f;
-  border-radius:999px;background:#10251e;color:var(--green);
-  font-size:10px;font-weight:700;white-space:nowrap
+.brand small {
+  display: block;
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: .07em;
 }
-.status:before{
-  content:"";display:inline-block;width:7px;height:7px;
-  margin-right:6px;border-radius:50%;background:currentColor
+.status {
+  margin-left: auto;
+  padding: 7px 9px;
+  border: 1px solid #24533f;
+  border-radius: 20px;
+  background: #10251e;
+  color: var(--green);
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
 }
-.eyebrow{
-  margin:0 0 7px;color:var(--blue);font-size:10px;
-  font-weight:800;letter-spacing:.15em;text-transform:uppercase
+.status:before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: currentColor;
 }
-h1{margin:0;font-size:clamp(25px,6vw,34px);letter-spacing:-.03em}
-.lead{margin:8px 0 18px;color:var(--muted);font-size:13px;line-height:1.5}
-.hero{
-  display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px
+.eyebrow {
+  margin: 0 0 7px;
+  color: var(--blue);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .15em;
 }
-.hero-card{
-  min-height:116px;padding:14px;border:1px solid var(--line);
-  border-radius:15px;background:var(--panel)
+h1 {
+  margin: 0;
+  font-size: clamp(25px,6vw,34px);
 }
-.label{color:var(--muted);font-size:11px}
-.score-row{display:flex;align-items:center;gap:11px;margin-top:12px}
-.ring{
-  --score:0;width:62px;height:62px;flex:0 0 62px;
-  display:grid;place-items:center;position:relative;border-radius:50%;
-  background:conic-gradient(var(--blue) calc(var(--score)*1%),#1a2b3c 0)
+.lead {
+  margin: 9px 0 20px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
 }
-.ring:before{
-  content:"";position:absolute;inset:5px;border-radius:50%;background:var(--panel)
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 15px;
 }
-.ring strong{position:relative;font-size:19px}
-.caption{color:var(--muted);font-size:10px;line-height:1.4}
-.confidence{margin-top:12px;font-size:29px;font-weight:800}
-.confidence small{color:var(--blue);font-size:15px}
-.issue{
-  display:none;margin:0 0 15px;padding:13px 14px;
-  border:1px solid #205a83;border-radius:13px;
-  background:linear-gradient(110deg,#102a40,#0b1722);
-  font-size:13px;line-height:1.5
+.hero-card {
+  min-height: 125px;
+  padding: 15px;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: var(--panel);
 }
-.issue-label{
-  display:block;margin-bottom:5px;color:var(--blue);
-  font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase
+.label {
+  color: var(--muted);
+  font-size: 11px;
 }
-details{
-  margin:10px 0;border:1px solid var(--line);
-  border-radius:15px;background:var(--panel);overflow:hidden
+.score-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
 }
-summary{
-  min-height:52px;padding:15px 15px;display:flex;align-items:center;
-  gap:10px;cursor:pointer;list-style:none;font-size:13px;font-weight:700
+.ring {
+  --score: 0;
+  width: 64px;
+  height: 64px;
+  flex: 0 0 64px;
+  display: grid;
+  place-items: center;
+  position: relative;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--blue) calc(var(--score)*1%),
+    #1a2b3c 0
+  );
 }
-summary::-webkit-details-marker{display:none}
-summary:after{
-  content:"+";margin-left:auto;color:var(--blue);font-size:20px;
-  font-weight:400;line-height:1
+.ring:before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border-radius: 50%;
+  background: var(--panel);
 }
-details[open] summary:after{content:"−"}
-.summary-icon{
-  width:27px;height:27px;display:grid;place-items:center;
-  border-radius:8px;background:var(--blue-dark);color:var(--blue);
-  font-size:12px;font-weight:800
+.ring strong {
+  position: relative;
+  font-size: 20px;
 }
-.summary-hint{margin-left:auto;color:var(--muted);font-size:10px;font-weight:500}
-details[open] .summary-hint{display:none}
-.content{padding:0 14px 15px}
-.video-wrap{
-  overflow:hidden;border-radius:11px;background:#02060a;
-  aspect-ratio:16/9
+.caption {
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.5;
 }
-video{
-  display:block;width:100%;height:100%;max-height:410px;
-  background:#02060a;object-fit:contain
+.confidence {
+  margin-top: 13px;
+  font-size: 30px;
+  font-weight: 800;
 }
-.no-video{
-  display:none;padding:24px 12px;color:var(--muted);
-  text-align:center;font-size:12px
+.confidence small {
+  color: var(--blue);
+  font-size: 15px;
 }
-.metrics{
-  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px
+.issue {
+  display: none;
+  margin-bottom: 15px;
+  padding: 15px;
+  border: 1px solid #205a83;
+  border-radius: 13px;
+  background: #102a40;
+  font-size: 13px;
+  line-height: 1.6;
 }
-.metric{
-  min-height:73px;padding:11px;border:1px solid var(--line);
-  border-radius:11px;background:var(--panel2)
+.issue-label {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--blue);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
 }
-.metric-name{color:var(--muted);font-size:10px}
-.metric-value{
-  margin-top:7px;font-size:18px;font-weight:750;overflow-wrap:anywhere
+
+/* Main collapsible panels */
+details {
+  margin: 11px 0;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: var(--panel);
+  overflow: hidden;
 }
-.advice{
-  padding:13px;border:1px solid #205a83;border-radius:12px;
-  background:linear-gradient(120deg,#102a40,#0d1925);
-  font-size:13px;line-height:1.55;white-space:pre-wrap
+summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 55px;
+  padding: 15px;
+  cursor: pointer;
+  list-style: none;
+  font-size: 13px;
+  font-weight: 800;
 }
-.coach-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}
-.coach-item{
-  padding:11px;border:1px solid var(--line);
-  border-radius:11px;background:var(--panel2)
+summary::-webkit-details-marker {
+  display: none;
 }
-.coach-item.wide{grid-column:1/-1}
-.coach-label{
-  margin-bottom:6px;color:var(--muted);font-size:9px;
-  font-weight:800;letter-spacing:.09em;text-transform:uppercase
+summary:after {
+  content: "+";
+  margin-left: auto;
+  color: var(--blue);
+  font-size: 23px;
+  font-weight: 400;
 }
-.coach-value{font-size:12px;line-height:1.5;overflow-wrap:anywhere;white-space:pre-wrap}
-.next-training{
-  display:block;
-  width:100%;
-  margin:18px 0 4px;
-  padding:15px 18px;
-  border:1px solid #59baff;
-  border-radius:13px;
-  background:linear-gradient(110deg,#168bd0,#126ca8);
-  color:#fff;
-  text-align:center;
-  text-decoration:none;
-  font-size:15px;
-  font-weight:800;
-  box-shadow:0 6px 18px rgba(57,169,255,.2)
+details[open] > summary:after {
+  content: "−";
 }
-.next-training:active{transform:scale(.99)}
-footer{
-  padding:19px 4px 3px;color:#60778c;text-align:center;
-  font-size:9px;font-weight:700;letter-spacing:.14em
+details[open] > summary {
+  border-bottom: 1px solid var(--line);
 }
-[hidden]{display:none!important}
-@media(min-width:560px){
-  body{padding:24px 20px 34px}
-  .hero-card{min-height:130px;padding:17px}
-  .metrics{grid-template-columns:repeat(3,minmax(0,1fr))}
+.summary-icon {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: #102a40;
+  color: var(--blue);
+  font-size: 12px;
 }
-@media(max-width:340px){
-  body{padding-inline:9px}
-  .hero-card{padding:11px}
-  .coach-grid{grid-template-columns:1fr}
-  .coach-item.wide{grid-column:auto}
-  .summary-hint{display:none}
+.content {
+  padding: 15px;
+}
+
+/* Video */
+.video-wrap {
+  overflow: hidden;
+  border-radius: 11px;
+  background: #02060a;
+}
+video {
+  display: block;
+  width: 100%;
+  max-height: 410px;
+  background: #02060a;
+}
+.no-video {
+  display: none;
+  padding: 25px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* Technique metrics */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 9px;
+}
+.metric {
+  min-height: 76px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: var(--panel2);
+}
+.metric-name {
+  color: var(--muted);
+  font-size: 10px;
+}
+.metric-value {
+  margin-top: 9px;
+  font-size: 18px;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+/* Clean readable coaching content */
+.advice {
+  padding: 16px;
+  border: 1px solid #205a83;
+  border-radius: 12px;
+  background: #102a40;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.coach-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+  margin-top: 10px;
+}
+.coach-item {
+  padding: 13px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: var(--panel2);
+}
+.coach-item.wide {
+  grid-column: 1 / -1;
+}
+.coach-label {
+  margin-bottom: 8px;
+  color: #8fcfff;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+.coach-value {
+  font-size: 12px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+.formatted p {
+  margin: 0 0 12px;
+}
+.formatted p:last-child {
+  margin-bottom: 0;
+}
+.formatted ul,
+.formatted ol {
+  margin: 8px 0 14px;
+  padding-left: 22px;
+}
+.formatted li {
+  margin: 7px 0;
+  padding-left: 2px;
+}
+.formatted li::marker {
+  color: var(--blue);
+}
+.formatted strong {
+  font-weight: 800;
+  color: #ffffff;
+}
+.formatted .subheading {
+  margin: 14px 0 8px;
+  color: #75cfff;
+  font-size: 12px;
+  font-weight: 800;
+}
+.formatted .subheading:first-child {
+  margin-top: 0;
+}
+
+/* Keith methodology */
+.keith-methodology {
+  border-color: #256b9e;
+}
+.keith-methodology > summary {
+  background: linear-gradient(110deg,#102c46,#0b1722);
+}
+.methodology-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 2px 0 17px;
+}
+.methodology-mark {
+  width: 39px;
+  height: 39px;
+  flex: 0 0 39px;
+  display: grid;
+  place-items: center;
+  border-radius: 11px;
+  background: #103953;
+  color: #78d2ff;
+  font-size: 20px;
+  font-weight: 900;
+}
+.methodology-name {
+  margin: 0 0 4px;
+  font-size: 14px;
+  font-weight: 800;
+}
+.methodology-intro {
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+.methodology-list {
+  display: grid;
+  gap: 9px;
+}
+.methodology-list details {
+  margin: 0;
+  border: 1px solid #24455e;
+  border-radius: 11px;
+  background: #0f2132;
+}
+.methodology-list summary {
+  padding: 14px;
+  min-height: 49px;
+  font-size: 12px;
+}
+.methodology-list .content {
+  padding: 14px;
+  color: #e7f1fa;
+  font-size: 12px;
+  line-height: 1.7;
+}
+.methodology-empty {
+  padding: 15px;
+  border: 1px dashed #2b4960;
+  border-radius: 10px;
+  background: var(--panel2);
+  color: #a7c2d8;
+  font-size: 12px;
+  line-height: 1.7;
+}
+.next-training {
+  display: block;
+  margin: 20px 0 5px;
+  padding: 16px;
+  border: 1px solid #59baff;
+  border-radius: 13px;
+  background: linear-gradient(110deg,#168bd0,#126ca8);
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 800;
+}
+footer {
+  padding: 20px;
+  color: #60778c;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .12em;
+}
+[hidden] {
+  display: none !important;
+}
+@media (min-width: 560px) {
+  .metrics {
+    grid-template-columns: repeat(3,minmax(0,1fr));
+  }
+}
+@media (max-width: 360px) {
+  .coach-grid {
+    grid-template-columns: 1fr;
+  }
+  .coach-item.wide {
+    grid-column: auto;
+  }
+  .status {
+    font-size: 9px;
+  }
 }
 </style>
 </head>
 
 <body>
 <main class="page">
-  <header>
-    <div class="logo">D</div>
-    <div class="brand">DARTIQ<small>CORE VISION · THROW ANALYSIS</small></div>
-    <div class="status">ANALYSIS COMPLETE</div>
-  </header>
 
-  <section>
-    <p class="eyebrow">YOUR THROW, UNDERSTOOD</p>
-    <h1>AI Throw Analysis</h1>
-    <p class="lead">Review your results and focus on one practical improvement.</p>
-  </section>
-
-  <section class="hero">
-    <article class="hero-card">
-      <div class="label">Initial technique estimate</div>
-      <div class="score-row">
-        <div class="ring" id="scoreRing"><strong id="score">—</strong></div>
-        <div class="caption">Based on starting<br>coaching ranges</div>
-      </div>
-    </article>
-
-    <article class="hero-card">
-      <div class="label">Pose visibility</div>
-      <div class="confidence"><span id="confidence">—</span><small id="confidenceUnit"></small></div>
-      <div class="caption">Landmark visibility at the<br>estimated movement peak</div>
-    </article>
-  </section>
-
-  <div class="issue" id="issueCard">
-    <span class="issue-label">Main finding</span>
-    <span id="mainIssue"></span>
+<header>
+  <div class="logo">D</div>
+  <div class="brand">
+    DARTIQ
+    <small>CORE VISION · THROW ANALYSIS</small>
   </div>
+  <div class="status">ANALYSIS COMPLETE</div>
+</header>
 
-  <details open>
-    <summary>
-      <span class="summary-icon">▶</span>
-      Your throw video
-      <span class="summary-hint">Tap to collapse</span>
-    </summary>
-    <div class="content">
-      <div class="video-wrap">
-        <video id="video" controls playsinline preload="metadata"></video>
-        <div class="no-video" id="noVideo">No video is attached to this analysis.</div>
+<section>
+  <p class="eyebrow">YOUR THROW, UNDERSTOOD</p>
+  <h1>AI Throw Analysis</h1>
+  <p class="lead">
+    Review your results and focus on one practical improvement.
+  </p>
+</section>
+
+<section class="hero">
+  <article class="hero-card">
+    <div class="label">Initial technique estimate</div>
+    <div class="score-row">
+      <div class="ring" id="scoreRing">
+        <strong id="score">—</strong>
+      </div>
+      <div class="caption">
+        Based on starting<br>coaching ranges
       </div>
     </div>
-  </details>
+  </article>
 
-  <details>
-    <summary>
-      <span class="summary-icon">▦</span>
-      Technique metrics
-      <span class="summary-hint">Tap to expand</span>
-    </summary>
-    <div class="content">
-      <div class="metrics">
-        <article class="metric" id="cardReleaseTime"><div class="metric-name">Movement peak time (estimate)</div><div class="metric-value" id="releaseTime">—</div></article>
-        <article class="metric" id="cardElbow"><div class="metric-name">Elbow angle</div><div class="metric-value" id="elbow">—</div></article>
-        <article class="metric" id="cardFollow"><div class="metric-name">Follow-through</div><div class="metric-value" id="follow">—</div></article>
-        <article class="metric" id="cardStability"><div class="metric-name">Body stability</div><div class="metric-value" id="stability">—</div></article>
-        <article class="metric" id="cardHead"><div class="metric-name">Head movement</div><div class="metric-value" id="head">—</div></article>
-        <article class="metric" id="cardShoulder"><div class="metric-name">Shoulder angle</div><div class="metric-value" id="shoulder">—</div></article>
-        <article class="metric" id="cardFrame"><div class="metric-name">Movement peak frame (estimate)</div><div class="metric-value" id="frame">—</div></article>
-        <article class="metric" id="cardPose"><div class="metric-name">Pose detection</div><div class="metric-value" id="pose">—</div></article>
-        <article class="metric" id="cardFrames"><div class="metric-name">Frames checked</div><div class="metric-value" id="frames">—</div></article>
+  <article class="hero-card">
+    <div class="label">Pose visibility</div>
+    <div class="confidence">
+      <span id="confidence">—</span>
+      <small id="confidenceUnit"></small>
+    </div>
+    <div class="caption">
+      Landmark visibility at the<br>
+      estimated movement peak
+    </div>
+  </article>
+</section>
+
+<div class="issue" id="issueCard">
+  <span class="issue-label">Main finding</span>
+  <span id="mainIssue"></span>
+</div>
+
+<details open>
+  <summary>
+    <span class="summary-icon">▶</span>
+    Your throw video
+  </summary>
+  <div class="content">
+    <div class="video-wrap">
+      <video
+        id="video"
+        controls
+        playsinline
+        preload="metadata">
+      </video>
+      <div class="no-video" id="noVideo">
+        No video is attached to this analysis.
       </div>
     </div>
-  </details>
+  </div>
+</details>
 
-  <details open>
-    <summary>
-      <span class="summary-icon">AI</span>
-      AI coach analysis
-      <span class="summary-hint">Tap to collapse</span>
-    </summary>
-    <div class="content">
-      <div class="advice" id="advice">Your coach advice will appear here.</div>
-      <div class="coach-grid">
-        <article class="coach-item" id="cardDrill"><div class="coach-label">Recommended drill</div><div class="coach-value" id="drill">—</div></article>
-        <article class="coach-item" id="cardFocus"><div class="coach-label">Practice focus</div><div class="coach-value" id="focus">—</div></article>
-        <article class="coach-item wide" id="cardWhy"><div class="coach-label">Why this drill</div><div class="coach-value" id="why">—</div></article>
-        <article class="coach-item" id="cardImprovement"><div class="coach-label">Improvement potential</div><div class="coach-value" id="improvement">—</div></article>
-        <article class="coach-item" id="cardSummary"><div class="coach-label">Analysis summary</div><div class="coach-value" id="summary">—</div></article>
+<details>
+  <summary>
+    <span class="summary-icon">▦</span>
+    Technique metrics
+  </summary>
+  <div class="content">
+    <div class="metrics">
+      <article class="metric" id="cardReleaseTime">
+        <div class="metric-name">Movement peak time (estimate)</div>
+        <div class="metric-value" id="releaseTime">—</div>
+      </article>
+      <article class="metric" id="cardElbow">
+        <div class="metric-name">Elbow angle</div>
+        <div class="metric-value" id="elbow">—</div>
+      </article>
+      <article class="metric" id="cardFollow">
+        <div class="metric-name">Follow-through</div>
+        <div class="metric-value" id="follow">—</div>
+      </article>
+      <article class="metric" id="cardStability">
+        <div class="metric-name">Body stability</div>
+        <div class="metric-value" id="stability">—</div>
+      </article>
+      <article class="metric" id="cardHead">
+        <div class="metric-name">Head movement</div>
+        <div class="metric-value" id="head">—</div>
+      </article>
+      <article class="metric" id="cardShoulder">
+        <div class="metric-name">Shoulder angle</div>
+        <div class="metric-value" id="shoulder">—</div>
+      </article>
+      <article class="metric" id="cardFrame">
+        <div class="metric-name">Movement peak frame (estimate)</div>
+        <div class="metric-value" id="frame">—</div>
+      </article>
+      <article class="metric" id="cardPose">
+        <div class="metric-name">Pose detection</div>
+        <div class="metric-value" id="pose">—</div>
+      </article>
+      <article class="metric" id="cardFrames">
+        <div class="metric-name">Frames checked</div>
+        <div class="metric-value" id="frames">—</div>
+      </article>
+    </div>
+  </div>
+</details>
+
+<details open>
+  <summary>
+    <span class="summary-icon">AI</span>
+    AI coach analysis
+  </summary>
+
+  <div class="content">
+    <div class="advice" id="advice">
+      Your coach advice will appear here.
+    </div>
+
+    <div class="coach-grid">
+      <article class="coach-item" id="cardDrill">
+        <div class="coach-label">Recommended drill</div>
+        <div class="coach-value" id="drill"></div>
+      </article>
+
+      <article class="coach-item" id="cardFocus">
+        <div class="coach-label">Practice focus</div>
+        <div class="coach-value" id="focus"></div>
+      </article>
+
+      <article class="coach-item wide" id="cardWhy">
+        <div class="coach-label">Why this drill</div>
+        <div class="coach-value" id="why"></div>
+      </article>
+
+      <article class="coach-item" id="cardImprovement">
+        <div class="coach-label">Improvement potential</div>
+        <div class="coach-value" id="improvement"></div>
+      </article>
+
+      <article class="coach-item" id="cardSummary">
+        <div class="coach-label">Analysis summary</div>
+        <div class="coach-value" id="summary"></div>
+      </article>
+    </div>
+  </div>
+</details>
+
+<!-- COACH KEITH METHODOLOGY -->
+<details id="keithMethodology" class="keith-methodology">
+  <summary>
+    <span class="summary-icon">K</span>
+    Coach Keith Methodology
+  </summary>
+
+  <div class="content">
+
+    <div class="methodology-head">
+      <div class="methodology-mark">K</div>
+      <div>
+        <p class="methodology-name">
+          Coach Keith Allen Guther
+        </p>
+        <p class="methodology-intro">
+          Structured training methodology.
+          Tap any section to expand.
+        </p>
       </div>
     </div>
-  </details>
 
-  <a class="next-training" href="https://dartiq-core-vision-kqwm.glide.page/dl/6b2fc7" target="_top" rel="noopener">
-    Go to AI Training →
-  </a>
+    <div
+      class="methodology-list"
+      id="keithSections">
+    </div>
 
-  <footer>DARTIQ CORE VISION</footer>
+    <div
+      class="methodology-empty"
+      id="keithEmpty"
+      hidden>
+      Keith's training methodology has not been
+      supplied for this session yet.
+      Connect the Final Training fields from Glide
+      to display the coaching instructions here.
+    </div>
+
+  </div>
+</details>
+
+<a
+  class="next-training"
+  href="https://dartiq-core-vision-kqwm.glide.page/dl/6b2fc7"
+  target="_top"
+  rel="noopener">
+  Go to AI Training →
+</a>
+
+<footer>DARTIQ CORE VISION</footer>
+
 </main>
 
 <script>
-const params = new URLSearchParams(window.location.search);
+"use strict";
 
-function getValue(...keys){
-  for(const key of keys){
+const params = new URLSearchParams(
+  window.location.search
+);
+
+function getValue(...keys) {
+  for (const key of keys) {
     const value = params.get(key);
-    if(value !== null && value.trim() !== "") return value.trim();
+    if (value !== null && value.trim() !== "") {
+      return value.trim();
+    }
   }
   return "";
 }
 
-function setText(id,value,fallback="—"){
-  document.getElementById(id).textContent = value || fallback;
+function setText(id, value, fallback = "—") {
+  document.getElementById(id).textContent =
+    value || fallback;
 }
 
-function setMetric(id,cardId,value,unit=""){
+function setMetric(id, cardId, value, unit = "") {
   const card = document.getElementById(cardId);
   const field = document.getElementById(id);
-  if(!value){
+
+  if (!value) {
     card.hidden = true;
     return;
   }
+
   card.hidden = false;
-  field.textContent = unit && !value.toLowerCase().includes(unit.trim().toLowerCase())
-    ? value + unit
-    : value;
+  field.textContent =
+    unit && !value.toLowerCase().includes(
+      unit.trim().toLowerCase()
+    ) ? value + unit : value;
 }
 
-const scoreValue = getValue("score","technique_score","techniqueScore");
+/* Score */
+const scoreValue = getValue(
+  "score",
+  "technique_score",
+  "techniqueScore"
+);
+
 const scoreNumber = Number.parseFloat(scoreValue);
 
-if(Number.isFinite(scoreNumber)){
-  const score = Math.max(0,Math.min(100,scoreNumber));
-  document.getElementById("scoreRing").style.setProperty("--score",score);
-  setText("score",String(Math.round(score)));
+if (Number.isFinite(scoreNumber)) {
+  const score = Math.max(
+    0,
+    Math.min(100, scoreNumber)
+  );
+
+  document.getElementById("scoreRing")
+    .style.setProperty("--score", score);
+
+  setText("score", String(Math.round(score)));
 }
 
-const confidenceValue = getValue("confidence","release_confidence","releaseConfidence");
-const confidenceNumber = Number.parseFloat(confidenceValue);
+/* Pose confidence */
+const confidenceValue = getValue(
+  "confidence",
+  "release_confidence",
+  "releaseConfidence"
+);
 
-if(confidenceValue && Number.isFinite(confidenceNumber)){
-  setText("confidence",String(confidenceNumber));
-  setText("confidenceUnit",confidenceValue.includes("%") ? "" : "%","");
-}else{
-  setText("confidence",confidenceValue);
+const confidenceNumber =
+  Number.parseFloat(confidenceValue);
+
+if (
+  confidenceValue &&
+  Number.isFinite(confidenceNumber)
+) {
+  setText("confidence", String(confidenceNumber));
+
+  setText(
+    "confidenceUnit",
+    confidenceValue.includes("%") ? "" : "%",
+    ""
+  );
+} else {
+  setText("confidence", confidenceValue);
 }
 
-setMetric("releaseTime","cardReleaseTime",getValue("releaseTime","release_time_ms")," ms");
-setMetric("elbow","cardElbow",getValue("elbowAngle","elbow_angle"),"°");
-setMetric("follow","cardFollow",getValue("followThrough","follow_through_score"));
-setMetric("stability","cardStability",getValue("bodyStability","stability_score"));
-setMetric("head","cardHead",getValue("headMovement","head_movement_flag","head_movement_score"));
-setMetric("shoulder","cardShoulder",getValue("shoulderAngle","shoulder_angle"),"°");
-setMetric("frame","cardFrame",getValue("releaseFrame","release_frame"));
-setMetric("pose","cardPose",getValue("poseDetection","pose_detected"));
-setMetric("frames","cardFrames",getValue("framesChecked","frames_checked"));
+/* Technique metrics */
+setMetric(
+  "releaseTime",
+  "cardReleaseTime",
+  getValue("releaseTime", "release_time_ms"),
+  " ms"
+);
+setMetric(
+  "elbow",
+  "cardElbow",
+  getValue("elbowAngle", "elbow_angle"),
+  "°"
+);
+setMetric(
+  "follow",
+  "cardFollow",
+  getValue("followThrough", "follow_through_score")
+);
+setMetric(
+  "stability",
+  "cardStability",
+  getValue("bodyStability", "stability_score")
+);
+setMetric(
+  "head",
+  "cardHead",
+  getValue(
+    "headMovement",
+    "head_movement_flag",
+    "head_movement_score"
+  )
+);
+setMetric(
+  "shoulder",
+  "cardShoulder",
+  getValue("shoulderAngle", "shoulder_angle"),
+  "°"
+);
+setMetric(
+  "frame",
+  "cardFrame",
+  getValue("releaseFrame", "release_frame")
+);
+setMetric(
+  "pose",
+  "cardPose",
+  getValue("poseDetection", "pose_detected")
+);
+setMetric(
+  "frames",
+  "cardFrames",
+  getValue("framesChecked", "frames_checked")
+);
 
-const mainIssue = getValue("mainIssue","main_issue");
-if(mainIssue){
-  document.getElementById("issueCard").style.display = "block";
-  setText("mainIssue",mainIssue);
+/* Main issue */
+const mainIssue = getValue(
+  "mainIssue",
+  "main_issue"
+);
+
+if (mainIssue) {
+  document.getElementById("issueCard")
+    .style.display = "block";
+
+  setText("mainIssue", mainIssue);
 }
 
-const advice = getValue("coachAdvice","coach_advice","ai_coach_advice");
-if(advice) setText("advice",advice);
+/*
+ Clean text formatting.
+ Preserves paragraphs, bullet lists, numbered
+ instructions and markdown-style bold text.
+
+ All values use textContent.
+ No untrusted HTML is injected.
+*/
+function renderCoachingText(target, raw) {
+  target.replaceChildren();
+  target.classList.add("formatted");
+
+  const text = String(raw || "")
+    .replace(/\r\n?/g, "\n")
+    .replace(/\\n/g, "\n")
+    .replace(/<br\s*\/?>/gi, "\n")
+    .trim();
+
+  if (!text) return;
+
+  const lines = text.split("\n");
+  let currentList = null;
+  let currentType = "";
+
+  function resetList() {
+    currentList = null;
+    currentType = "";
+  }
+
+  function createFormatted(tag, value) {
+    const element = document.createElement(tag);
+
+    const parts = value.split(
+      /(\*\*[^*]+\*\*)/g
+    );
+
+    for (const part of parts) {
+      if (
+        part.startsWith("**") &&
+        part.endsWith("**") &&
+        part.length > 4
+      ) {
+        const strong = document.createElement("strong");
+        strong.textContent = part.slice(2, -2);
+        element.append(strong);
+      } else {
+        element.append(
+          document.createTextNode(part)
+        );
+      }
+    }
+
+    return element;
+  }
+
+  for (const item of lines) {
+    const line = item.trim();
+
+    if (!line) {
+      resetList();
+      continue;
+    }
+
+    const numbered = line.match(
+      /^\d+[.)]\s+(.+)$/
+    );
+
+    const bullet = line.match(
+      /^(?:[-*•]|→|✓)\s+(.+)$/
+    );
+
+    if (numbered || bullet) {
+      const type = numbered ? "ol" : "ul";
+
+      if (
+        !currentList ||
+        currentType !== type
+      ) {
+        currentList =
+          document.createElement(type);
+
+        target.append(currentList);
+        currentType = type;
+      }
+
+      currentList.append(
+        createFormatted(
+          "li",
+          numbered ? numbered[1] : bullet[1]
+        )
+      );
+
+      continue;
+    }
+
+    resetList();
+
+    const heading = line.match(
+      /^#{1,3}\s+(.+)$/
+    );
+
+    if (heading) {
+      const item = createFormatted(
+        "div",
+        heading[1]
+      );
+
+      item.className = "subheading";
+      target.append(item);
+
+    } else if (
+      line.endsWith(":") &&
+      line.length < 65
+    ) {
+      const item = createFormatted(
+        "div",
+        line
+      );
+
+      item.className = "subheading";
+      target.append(item);
+
+    } else {
+      target.append(
+        createFormatted("p", line)
+      );
+    }
+  }
+}
+
+/* AI coach analysis */
+const advice = getValue(
+  "coachAdvice",
+  "coach_advice",
+  "ai_coach_advice"
+);
+
+if (advice) {
+  renderCoachingText(
+    document.getElementById("advice"),
+    advice
+  );
+}
 
 const coachFields = [
-  ["drill","cardDrill",["drill","recommended_drill"]],
-  ["focus","cardFocus",["focus","practice_focus"]],
-  ["why","cardWhy",["why","why_drill","why_this_drill"]],
-  ["improvement","cardImprovement",["improvement","improvement_potential"]],
-  ["summary","cardSummary",["summary","ai_summary"]]
+  [
+    "drill",
+    "cardDrill",
+    ["drill", "recommended_drill"]
+  ],
+  [
+    "focus",
+    "cardFocus",
+    ["focus", "practice_focus"]
+  ],
+  [
+    "why",
+    "cardWhy",
+    ["why", "why_drill", "why_this_drill"]
+  ],
+  [
+    "improvement",
+    "cardImprovement",
+    ["improvement", "improvement_potential"]
+  ],
+  [
+    "summary",
+    "cardSummary",
+    ["summary", "ai_summary"]
+  ]
 ];
 
-coachFields.forEach(([id,cardId,keys])=>{
+coachFields.forEach(([id, cardId, keys]) => {
   const value = getValue(...keys);
-  if(value) setText(id,value);
-  else document.getElementById(cardId).hidden = true;
+
+  if (value) {
+    renderCoachingText(
+      document.getElementById(id),
+      value
+    );
+  } else {
+    document.getElementById(cardId)
+      .hidden = true;
+  }
 });
 
-const videoUrl = getValue("video","video_url","videoUrl");
-if(videoUrl){
-  document.getElementById("video").src = videoUrl;
-}else{
-  document.getElementById("video").hidden = true;
-  document.getElementById("noVideo").style.display = "block";
+/*
+ COACH KEITH METHODOLOGY
+
+ This section supports:
+ - Keith-specific URL fields
+ - Existing Final Training fields
+ - Alternative camelCase field names
+
+ No training instructions are fabricated.
+*/
+const keithFields = [
+  [
+    "Practice name",
+    [
+      "keith_practice_name",
+      "keithPracticeName",
+      "keith_drill",
+      "keithDrill",
+      "practice_name",
+      "final_training_drill",
+      "finalTrainingDrill"
+    ]
+  ],
+  [
+    "Objective",
+    [
+      "keith_objective",
+      "keithObjective",
+      "keith_purpose",
+      "keithPurpose",
+      "final_training_objective",
+      "finalTrainingObjective"
+    ]
+  ],
+  [
+    "Focus",
+    [
+      "keith_focus",
+      "keithFocus",
+      "final_training_focus",
+      "finalTrainingFocus"
+    ]
+  ],
+  [
+    "Why this practice",
+    [
+      "keith_why",
+      "keithWhy",
+      "final_training_why",
+      "finalTrainingWhy"
+    ]
+  ],
+  [
+    "Execution · Step by Step",
+    [
+      "keith_execution",
+      "keithExecution",
+      "keith_methodology",
+      "keithMethodology",
+      "final_training_execution",
+      "finalTrainingExecution"
+    ]
+  ],
+  [
+    "Rules",
+    [
+      "keith_rules",
+      "keithRules",
+      "final_training_rules",
+      "finalTrainingRules"
+    ]
+  ],
+  [
+    "Duration",
+    [
+      "keith_duration",
+      "keithDuration",
+      "final_training_duration",
+      "finalTrainingDuration"
+    ]
+  ],
+  [
+    "Rounds",
+    [
+      "keith_rounds",
+      "keithRounds",
+      "final_training_rounds",
+      "finalTrainingRounds"
+    ]
+  ],
+  [
+    "Training target",
+    [
+      "keith_target",
+      "keithTarget",
+      "final_training_target",
+      "finalTrainingTarget"
+    ]
+  ],
+  [
+    "What to track",
+    [
+      "keith_track",
+      "keithTrack",
+      "keith_what_to_track",
+      "keithWhatToTrack",
+      "final_training_track",
+      "finalTrainingTrack"
+    ]
+  ],
+  [
+    "Improvement",
+    [
+      "keith_improvement",
+      "keithImprovement",
+      "final_training_improvement",
+      "finalTrainingImprovement"
+    ]
+  ],
+  [
+    "Coach notes",
+    [
+      "keith_coach_notes",
+      "keithCoachNotes",
+      "coach_notes",
+      "final_training_reminder",
+      "finalTrainingReminder"
+    ]
+  ],
+  [
+    "After training · Next action",
+    [
+      "keith_next_step",
+      "keithNextStep",
+      "final_training_after",
+      "finalTrainingAfter"
+    ]
+  ]
+];
+
+const keithContainer =
+  document.getElementById("keithSections");
+
+let hasKeith = false;
+
+for (const [title, keys] of keithFields) {
+  const value = getValue(...keys);
+
+  if (!value) continue;
+
+  hasKeith = true;
+
+  const panel = document.createElement("details");
+  const summary = document.createElement("summary");
+  const body = document.createElement("div");
+
+  summary.textContent = title;
+  body.className = "content";
+
+  renderCoachingText(body, value);
+
+  panel.append(summary, body);
+  keithContainer.append(panel);
+}
+
+if (hasKeith) {
+  keithContainer.firstElementChild.open = true;
+} else {
+  document.getElementById("keithEmpty")
+    .hidden = false;
+}
+
+/* Existing throw video */
+const videoUrl = getValue(
+  "video",
+  "video_url",
+  "videoUrl"
+);
+
+if (videoUrl) {
+  document.getElementById("video").src =
+    videoUrl;
+} else {
+  document.getElementById("video").hidden =
+    true;
+
+  document.getElementById("noVideo")
+    .style.display = "block";
 }
 </script>
+
 </body>
 </html>
