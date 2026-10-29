@@ -1,0 +1,98 @@
+
+  
+  // ================================================
+  // DARTIQ BV3.1 — IMPROVED THROW SCORING
+  // ================================================
+  // Provisional biomechanical assessment.
+  // Coaching thresholds require validation.
+  // Does not measure dart accuracy or board impact.
+
+  const clampScore = value =>
+    Math.max(0, Math.min(100, Math.round(value)));
+
+  // 1. Evaluate individual measurements
+  const angleScore =
+    elbowAngle === null ? null :
+    elbowAngle < COACH_TARGETS.elbowAngleMin
+      ? clampScore(
+          100 -
+          (COACH_TARGETS.elbowAngleMin - elbowAngle) * 2
+        )
+      : elbowAngle > COACH_TARGETS.elbowAngleMax
+        ? clampScore(
+            100 -
+            (elbowAngle - COACH_TARGETS.elbowAngleMax) * 2
+          )
+        : 100;
+
+  const tempoScore =
+    tempoMs === null ? null :
+    tempoMs < COACH_TARGETS.tempoMinMs
+      ? clampScore(
+          100 -
+          (COACH_TARGETS.tempoMinMs - tempoMs) * 0.15
+        )
+      : tempoMs > COACH_TARGETS.tempoMaxMs
+        ? clampScore(
+            100 -
+            (tempoMs - COACH_TARGETS.tempoMaxMs) * 0.15
+          )
+        : 100;
+
+  // 2. Check video evidence quality
+  const evidenceReliable =
+    confidence >= 65 &&
+    valid.length >= 8 &&
+    Number.isFinite(tempoMs) &&
+    tempoMs > 0 &&
+    releaseIndex > 0 &&
+    releaseIndex < valid.length - 2;
+
+  // 3. Weighted biomechanical measurements
+  const scoreParts = [
+    {
+      value: angleScore,
+      weight: 0.35
+    },
+    {
+      value: tempoScore,
+      weight: 0.35
+    },
+    {
+      value: followThroughScore,
+      weight: 0.20
+    },
+    {
+      value: bodyStabilityScore,
+      weight: 0.10
+    }
+  ].filter(
+    part =>
+      part.value !== null &&
+      Number.isFinite(part.value)
+  );
+
+  // 4. Require sufficient measurements
+  const enoughMeasurements =
+    scoreParts.length >= 3;
+
+  // 5. Calculate provisional technique score
+  const techniqueScore =
+    evidenceReliable && enoughMeasurements
+      ? clampScore(
+          scoreParts.reduce(
+            (total, part) =>
+              total + part.value * part.weight,
+            0
+          ) /
+          scoreParts.reduce(
+            (total, part) =>
+              total + part.weight,
+            0
+          )
+        )
+      : null;
+
+  // ================================================
+  // END DARTIQ BV3.1 SCORING
+  // ================================================
