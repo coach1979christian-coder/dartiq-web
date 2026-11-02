@@ -1,2091 +1,968 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>DARTIQ Match Play</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DARTIQ | Play Match V2</title>
 <style>
 :root{
-  --bg:#02060b;
-  --panel:#071421;
-  --line:#174568;
+  --bg:#02070e;
+  --panel:#091827;
+  --panel2:#0c2236;
   --blue:#39a9ff;
-  --text:#fff;
-  --muted:#8fa9bd;
-  --danger:#ff6b72;
+  --line:#205073;
+  --text:#f4faff;
+  --muted:#8faabe;
+  --green:#49e6ad;
+  --red:#ff737b;
 }
 *{box-sizing:border-box}
-html,body{
+body{
   margin:0;
-  padding:0;
-  width:100%;
-  min-height:100%;
   background:var(--bg);
   color:var(--text);
   font-family:Arial,Helvetica,sans-serif;
+  padding:10px;
 }
-body{padding:8px}
-.engine{
-  width:100%;
-  max-width:680px;
-  margin:0 auto;
-  background:linear-gradient(180deg,#06111d,#02070c);
-  border-radius:22px;
-  padding:14px;
+button,select{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.45;cursor:not-allowed}
+.app{max-width:650px;margin:auto}
+.brand{text-align:center;padding:20px 0}
+.logo{
+  font-size:30px;font-weight:900;
+  letter-spacing:5px;color:var(--blue);
+  text-shadow:0 0 20px #39a9ff65;
 }
-.brand{text-align:center;padding:5px 4px 14px}
-.brand-small{
-  color:var(--blue);
-  font-size:12px;
-  font-weight:900;
-  letter-spacing:5px;
-}
-.brand h1{margin:5px 0 3px;font-size:29px;line-height:1}
-.format-selector{margin:14px auto 10px;max-width:420px}
-.format-label{
+.subtitle{
   color:var(--muted);
-  font-size:9px;
-  font-weight:900;
-  letter-spacing:1.2px;
-  margin-bottom:7px;
-}
-.format-buttons{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:6px;
-}
-.format-btn{
-  border:1px solid #24577b;
-  background:#06111b;
-  color:#9db7ca;
-  border-radius:8px;
-  padding:10px 5px;
   font-size:11px;
-  font-weight:900;
-  cursor:pointer;
-}
-.format-btn.active{
-  background:var(--blue);
-  color:#00101c;
-  border-color:var(--blue);
-  box-shadow:0 0 12px rgba(57,169,255,.4);
-}
-.match-format{
-  color:var(--blue);
-  font-size:12px;
-  font-weight:900;
-  letter-spacing:1.5px;
+  letter-spacing:2px;
   margin-top:8px;
 }
-.match-progress{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:7px;
+.screen{display:none}
+.screen.active{display:block}
+.panel{
+  background:linear-gradient(160deg,#0b2032,#06111d);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:18px;
   margin-bottom:12px;
 }
-.match-card{
-  background:linear-gradient(180deg,#081827,#06121e);
-  border:1px solid rgba(57,169,255,.35);
-  border-radius:12px;
-  padding:10px 6px;
-  text-align:center;
+.center{text-align:center}
+h1{font-size:23px;margin:8px 0 15px}
+h2{font-size:18px;margin:8px 0 15px}
+.small{font-size:12px;color:var(--muted)}
+.eyebrow{
+  font-size:10px;color:var(--blue);
+  font-weight:900;letter-spacing:2px;
 }
-.match-label{
-  color:var(--blue);
-  font-size:8px;
-  font-weight:900;
-  letter-spacing:1px;
+.primary{
+  display:block;width:100%;
+  border:0;border-radius:12px;
+  padding:15px 12px;
+  background:var(--blue);
+  color:#001321;
+  font-size:13px;font-weight:900;
+  margin-top:15px;
 }
-.match-value{
-  font-size:25px;
-  font-weight:900;
-  margin-top:4px;
-}
-.live-panel{
-  border:1px solid rgba(57,169,255,.4);
-  border-radius:15px;
+.secondary{
+  background:var(--panel2);
+  border:1px solid var(--line);
+  border-radius:10px;
+  color:white;
   padding:12px;
-  background:linear-gradient(180deg,#061523,#030b13);
-  box-shadow:0 0 20px rgba(57,169,255,.08);
+  font-weight:bold;
 }
-.live-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  margin-bottom:10px;
+.format-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;margin:20px 0;
 }
-.live-title{font-size:22px;font-weight:900;line-height:1}
-.live-sub{
-  color:var(--blue);
-  font-size:9px;
-  font-weight:800;
-  letter-spacing:.7px;
-  margin-top:4px;
+.format{
+  padding:20px 3px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:var(--panel2);
+  color:white;font-weight:900;
 }
-.mode-switch{
+.format.selected{
+  background:var(--blue);
+  color:#001321;
+  box-shadow:0 0 16px #39a9ff55;
+}
+.scoreboard{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:6px;
-  min-width:205px;
-}
-.mode-button{
-  border:1px solid #24577b;
-  background:#06111b;
-  color:#9db7ca;
-  border-radius:8px;
-  padding:9px 7px;
-  font-size:9px;
-  font-weight:900;
-  cursor:pointer;
-}
-.mode-button.active{
-  background:var(--blue);
-  color:#00101c;
-  border-color:var(--blue);
-  box-shadow:0 0 12px rgba(57,169,255,.4);
-}
-.practice-grid{
-  display:grid;
-  grid-template-columns:170px 1fr;
   gap:10px;
-  align-items:start;
 }
-.score-column{
+.scorebox{
+  background:#061421;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:16px 5px;
+  text-align:center;
+}
+.scorebox .value{
+  font-size:49px;
+  font-weight:900;
+  margin-top:6px;
+}
+.scorebox .value.legs{font-size:39px}
+.scorebox .label{
+  font-size:10px;color:var(--blue);
+  letter-spacing:1px;font-weight:900;
+}
+.match-info{
   display:flex;
-  flex-direction:column;
-  gap:7px;
-}
-.remaining-card{
-  border:1px solid rgba(57,169,255,.35);
-  border-radius:11px;
-  padding:11px 8px;
-  background:#071727;
-  text-align:center;
-}
-.score-label{
-  color:var(--blue);
-  font-size:9px;
-  font-weight:900;
-  letter-spacing:1px;
-}
-.remaining{
-  font-size:48px;
-  line-height:1;
-  font-weight:900;
-  margin-top:5px;
-}
-.mini-stat{
-  display:grid;
-  grid-template-columns:34px 1fr;
-  align-items:center;
-  border:1px solid rgba(57,169,255,.25);
-  background:#071727;
-  border-radius:10px;
-  padding:7px;
-}
-.mini-icon{
-  width:28px;
-  height:28px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#07325a;
-  color:var(--blue);
-  font-size:12px;
-  font-weight:900;
-}
-.mini-value{
-  text-align:center;
-  font-size:18px;
-  font-weight:900;
-}
-.mini-label{
-  text-align:center;
-  color:var(--blue);
-  font-size:8px;
-  font-weight:900;
-  text-transform:uppercase;
-  letter-spacing:.7px;
-}
-.session-small{
-  border:1px solid rgba(57,169,255,.22);
-  border-radius:9px;
-  padding:7px;
-  background:#06131f;
-}
-.session-label{
-  color:var(--blue);
-  font-size:8px;
-  font-weight:900;
-  letter-spacing:1px;
-}
-.session-id{
+  justify-content:space-between;
+  gap:8px;
   color:var(--muted);
-  font-size:9px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-  margin-top:3px;
+  font-size:11px;
+  margin:12px 0;
 }
-.input-column{min-width:0}
-.score-display{
-  background:#010509;
-  border:1px solid #174568;
-  border-radius:10px;
-  min-height:52px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:29px;
-  font-weight:900;
-  margin-bottom:8px;
+.mode-row{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:8px;margin:15px 0;
+}
+.mode.active{
+  background:var(--blue);
+  color:#001321;
+}
+.board-wrap{
+  width:100%;
+  max-width:370px;
+  margin:auto;
+  aspect-ratio:1;
+}
+#board{
+  width:100%;height:100%;
+  touch-action:manipulation;
+  filter:drop-shadow(0 0 10px #39a9ff35);
+}
+.visit{
+  background:#020a12;
+  border:1px solid var(--line);
+  padding:12px;border-radius:12px;
+  text-align:center;
+  margin:12px 0;
+}
+.visit strong{font-size:30px}
+.darts{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:7px;margin:10px 0;
+}
+.dart{
+  background:var(--panel2);
+  border-radius:9px;
+  text-align:center;
+  padding:10px 3px;
+  font-size:12px;
+}
+.actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
 }
 .keypad{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:6px;
+  gap:7px;
 }
 .key{
-  border:1px solid #1b4260;
-  background:#0b2031;
+  background:var(--panel2);
   color:white;
-  border-radius:8px;
-  padding:10px 4px;
-  font-size:16px;
-  font-weight:900;
-  cursor:pointer;
+  border:1px solid var(--line);
+  border-radius:9px;
+  padding:14px 5px;
+  font-size:20px;font-weight:900;
 }
-.key:active{transform:scale(.97)}
-.clear{color:#ff737a}
-.back{color:#b8d9ef}
-#dartboardMode{display:none}
-.dart-slots{
+.stats{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:5px;
-  margin-bottom:7px;
+  gap:8px;
 }
-.dart-slot{
-  background:#010509;
+.stat{
+  background:#071725;
   border:1px solid #173d59;
-  border-radius:8px;
-  padding:6px 2px;
+  border-radius:10px;
+  padding:12px 5px;
   text-align:center;
 }
-.dart-slot-label{
-  color:var(--muted);
-  font-size:7px;
-  letter-spacing:.8px;
-}
-.dart-slot-value{
-  font-size:11px;
-  font-weight:900;
-  margin-top:3px;
-  min-height:14px;
-}
-.dartboard-wrap{
-  position:relative;
-  width:100%;
-  max-width:500px;
-  aspect-ratio:1/1;
-  margin:0 auto 6px;
-  user-select:none;
-  touch-action:manipulation;
-}
-#dartboard{
-  width:100%;
-  height:100%;
+.stat strong{
   display:block;
-  cursor:crosshair;
-  filter:drop-shadow(0 0 9px rgba(57,169,255,.4));
+  font-size:19px;
 }
-.board-actions{
+.stat span{
+  display:block;
+  color:var(--muted);
+  font-size:10px;margin-top:5px;
+}
+.issue-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:6px;
+  gap:9px;
 }
-.board-action{
-  border:1px solid #1c496a;
-  background:#0b2031;
-  color:#b9d0df;
-  border-radius:8px;
-  padding:9px 4px;
-  font-size:10px;
-  font-weight:900;
-  cursor:pointer;
+.issue{
+  background:var(--panel2);
+  color:white;
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:15px 6px;
+  font-size:12px;font-weight:bold;
 }
-.board-action.danger{color:#ff7777}
-.submit{
-  width:100%;
-  border:none;
-  margin-top:9px;
-  padding:12px;
-  border-radius:9px;
-  background:var(--blue);
-  color:#00101c;
-  font-size:13px;
-  font-weight:900;
-  cursor:pointer;
-  box-shadow:0 0 12px rgba(57,169,255,.25);
+.issue.selected{
+  border-color:var(--blue);
+  background:#123b5c;
+  box-shadow:0 0 10px #39a9ff30;
 }
-.opponent-leg{
-  width:100%;
-  border:1px solid #ff6b72;
-  margin-top:7px;
-  padding:11px;
-  border-radius:9px;
-  background:#19090c;
-  color:#ff8a90;
+.notice{
   font-size:11px;
-  font-weight:900;
-  cursor:pointer;
-}
-.message{
-  min-height:30px;
-  margin-top:8px;
-  text-align:center;
   color:var(--muted);
-  font-size:10px;
-  line-height:1.4;
-}
-.performance{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:6px;
-  margin-top:9px;
-}
-.performance.second{margin-top:6px}
-.performance-card{
-  border:1px solid rgba(57,169,255,.25);
-  border-radius:9px;
-  background:#071727;
-  padding:7px;
   text-align:center;
-}
-.performance-value{font-size:16px;font-weight:900}
-.performance-label{
-  color:var(--muted);
-  font-size:8px;
-  margin-top:2px;
-}
-.match-complete{
-  display:none;
-  margin-top:10px;
-  padding:15px;
-  border:1px solid var(--blue);
-  border-radius:12px;
-  background:#071727;
-  text-align:center;
-  box-shadow:0 0 18px rgba(57,169,255,.18);
-}
-.match-complete-title{
-  color:var(--blue);
-  font-size:20px;
-  font-weight:900;
-}
-.match-complete-text{
-  margin-top:7px;
-  font-size:12px;
   line-height:1.5;
+  margin:12px 0;
 }
-.training-button{
-  display:block;
-  margin-top:12px;
-  width:100%;
-  border:1px solid #80d1ff;
-  border-radius:9px;
-  padding:12px;
-  background:linear-gradient(110deg,#39a9ff,#1678b8);
-  color:#00101c;
-  font-size:13px;
-  font-weight:900;
+.success{color:var(--green)}
+.error{color:var(--red)}
+.hidden{display:none!important}
+footer{
   text-align:center;
-  text-decoration:none;
-  box-shadow:0 0 14px rgba(57,169,255,.25)
-}
-.training-button:active{transform:scale(.99)}
-.new-match{
-  margin-top:12px;
-  width:100%;
-  border:none;
-  border-radius:9px;
-  padding:11px;
-  background:var(--blue);
-  color:#00101c;
-  font-weight:900;
-  cursor:pointer;
-}
-.footer{
-  text-align:center;
-  padding:12px 4px 3px;
-  color:#456278;
-  font-size:8px;
-  letter-spacing:1.5px;
-}
-
-@media(max-width:560px){
-  body{padding:5px}
-  .engine{padding:10px;border-radius:16px}
-  .brand h1{font-size:25px}
-  .live-title{font-size:18px}
-  .live-sub{font-size:7px}
-  .mode-switch{min-width:170px}
-  .mode-button{padding:8px 4px;font-size:8px}
-  .practice-grid{grid-template-columns:120px 1fr;gap:7px}
-  .remaining{font-size:40px}
-  .mini-value{font-size:15px}
-  .dartboard-wrap{
-    width:100%;
-    max-width:500px;
-    margin:0 auto 8px;
-  }
-  .engine.dartboard-active .practice-grid{
-    grid-template-columns:1fr;
-  }
-  .engine.dartboard-active .input-column{
-    order:1;
-  }
-  .engine.dartboard-active .score-column{
-    order:2;
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:7px;
-  }
-  .engine.dartboard-active .remaining-card,
-  .engine.dartboard-active .session-small{
-    grid-column:1/-1;
-  }
+  color:#52748c;
+  font-size:9px;
+  letter-spacing:2px;
+  padding:20px 0;
 }
 @media(max-width:390px){
-  .practice-grid{grid-template-columns:105px 1fr}
-  .mode-switch{min-width:155px}
-  .format-btn{font-size:10px;padding:9px 2px}
+  .panel{padding:12px}
+  .scorebox .value{font-size:40px}
+  .stat strong{font-size:16px}
+  .format{padding:17px 2px}
 }
 </style>
 </head>
-
 <body>
-
-<div class="engine">
-
+<div class="app">
 <header class="brand">
-  <div class="brand-small">DARTIQ</div>
-  <h1>MATCH PLAY</h1>
-
-  <div class="format-selector">
-    <div class="format-label">CHOOSE MATCH FORMAT</div>
-    <div class="format-buttons">
-      <button class="format-btn" data-format="3" onclick="selectFormat(3,this)">BO3</button>
-      <button class="format-btn active" data-format="5" onclick="selectFormat(5,this)">BO5</button>
-      <button class="format-btn" data-format="7" onclick="selectFormat(7,this)">BO7</button>
-      <button class="format-btn" data-format="9" onclick="selectFormat(9,this)">BO9</button>
-    </div>
-  </div>
-
-  <div class="match-format" id="matchFormat">
-    BEST OF 5 LEGS • FIRST TO 3
-  </div>
+  <div class="logo">DARTIQ</div>
+  <div class="subtitle">INTELLIGENT DARTS PERFORMANCE</div>
 </header>
 
-<div class="match-progress">
-  <div class="match-card">
-    <div class="match-label">LEG</div>
-    <div class="match-value" id="legNumberTop">1</div>
+<!-- SCREEN 1: SESSION -->
+<section id="setup" class="screen active">
+  <div class="panel center">
+    <div class="eyebrow">PLAYER JOURNEY</div>
+    <h1>READY TO PLAY?</h1>
+    <p class="small">
+      Start your match, track your performance
+      and discover what to improve.
+    </p>
+    <button class="primary" onclick="showScreen('formats')">
+      START SESSION
+    </button>
   </div>
-
-  <div class="match-card">
-    <div class="match-label">LEGS WON</div>
-    <div class="match-value" id="legsWon">0</div>
-  </div>
-
-  <div class="match-card">
-    <div class="match-label">OPPONENT</div>
-    <div class="match-value" id="legsLost">0</div>
-  </div>
-
-  <div class="match-card">
-    <div class="match-label">TO WIN</div>
-    <div class="match-value" id="legsTarget">3</div>
-  </div>
-</div>
-
-<section class="live-panel">
-
-<div class="live-header">
-  <div>
-    <div class="live-title">LIVE MATCH</div>
-    <div class="live-sub">ENTER YOUR SCORE</div>
-  </div>
-
-  <div class="mode-switch">
-    <button class="mode-button active" id="keypadTab" onclick="setMode('keypad')">▦ KEYPAD</button>
-    <button class="mode-button" id="dartboardTab" onclick="setMode('dartboard')">🎯 DARTBOARD</button>
-  </div>
-</div>
-
-<div class="practice-grid">
-
-<div class="score-column">
-
-  <div class="remaining-card">
-    <div class="score-label">REMAINING</div>
-    <div class="remaining" id="remaining">501</div>
-  </div>
-
-  <div class="mini-stat">
-    <div class="mini-icon">#</div>
-    <div>
-      <div class="mini-label">LEG</div>
-      <div class="mini-value" id="legNumber">1</div>
-    </div>
-  </div>
-
-  <div class="mini-stat">
-    <div class="mini-icon">Ø</div>
-    <div>
-      <div class="mini-label">AVERAGE</div>
-      <div class="mini-value" id="average">0.00</div>
-    </div>
-  </div>
-
-  <div class="mini-stat">
-    <div class="mini-icon">9</div>
-    <div>
-      <div class="mini-label">FIRST 9</div>
-      <div class="mini-value" id="first9Average">0.00</div>
-    </div>
-  </div>
-
-  <div class="mini-stat">
-    <div class="mini-icon">3</div>
-    <div>
-      <div class="mini-label">DARTS</div>
-      <div class="mini-value" id="dartsThrown">0</div>
-    </div>
-  </div>
-
-  <div class="session-small">
-    <div class="session-label">ACTIVE SESSION</div>
-    <div class="session-id" id="sessionID">SESSION</div>
-  </div>
-
-</div>
-
-<div class="input-column">
-
-<div id="keypadMode">
-  <div class="score-display" id="scoreDisplay">0</div>
-
-  <div class="keypad">
-    <button class="key" onclick="press('1')">1</button>
-    <button class="key" onclick="press('2')">2</button>
-    <button class="key" onclick="press('3')">3</button>
-
-    <button class="key" onclick="press('4')">4</button>
-    <button class="key" onclick="press('5')">5</button>
-    <button class="key" onclick="press('6')">6</button>
-
-    <button class="key" onclick="press('7')">7</button>
-    <button class="key" onclick="press('8')">8</button>
-    <button class="key" onclick="press('9')">9</button>
-
-    <button class="key clear" onclick="clearScore()">C</button>
-    <button class="key" onclick="press('0')">0</button>
-    <button class="key back" onclick="backspace()">⌫</button>
-  </div>
-</div>
-
-<div id="dartboardMode">
-
-  <div class="dart-slots">
-    <div class="dart-slot">
-      <div class="dart-slot-label">DART 1</div>
-      <div class="dart-slot-value" id="dart1">-</div>
-    </div>
-
-    <div class="dart-slot">
-      <div class="dart-slot-label">DART 2</div>
-      <div class="dart-slot-value" id="dart2">-</div>
-    </div>
-
-    <div class="dart-slot">
-      <div class="dart-slot-label">DART 3</div>
-      <div class="dart-slot-value" id="dart3">-</div>
-    </div>
-  </div>
-
-  <div class="score-display">
-    <span id="boardVisitScore">0</span>
-  </div>
-
-  <div class="dartboard-wrap">
-    <svg id="dartboard" viewBox="-230 -230 460 460" aria-label="Interactive DARTIQ dartboard"></svg>
-  </div>
-
-  <div class="board-actions">
-    <button class="board-action" onclick="addMiss()">MISS</button>
-    <button class="board-action danger" onclick="undoDart()">UNDO DART</button>
-  </div>
-
-</div>
-
-<button class="submit" onclick="confirmVisit()">CONFIRM VISIT</button>
-
-<button class="opponent-leg" onclick="opponentWonLeg()">
-  OPPONENT WON LEG
-</button>
-
-<div class="message" id="message">
-  Choose BO3, BO5, BO7 or BO9 and start scoring.
-</div>
-
-</div>
-</div>
-
-<div class="performance">
-  <div class="performance-card">
-    <div class="performance-value" id="stat100">0</div>
-    <div class="performance-label">100+</div>
-  </div>
-
-  <div class="performance-card">
-    <div class="performance-value" id="stat140">0</div>
-    <div class="performance-label">140+</div>
-  </div>
-
-  <div class="performance-card">
-    <div class="performance-value" id="stat180">0</div>
-    <div class="performance-label">180</div>
-  </div>
-</div>
-
-<div class="performance second">
-  <div class="performance-card">
-    <div class="performance-value" id="checkoutHits">0</div>
-    <div class="performance-label">CHECKOUT HITS</div>
-  </div>
-
-  <div class="performance-card">
-    <div class="performance-value" id="checkoutPct">0%</div>
-    <div class="performance-label">CHECKOUT %</div>
-  </div>
-
-  <div class="performance-card">
-    <div class="performance-value" id="highestCheckout">0</div>
-    <div class="performance-label">HIGHEST CO</div>
-  </div>
-</div>
-
-<div class="match-complete" id="matchComplete">
-  <div class="match-complete-title">MATCH COMPLETE</div>
-  <div class="match-complete-text" id="matchCompleteText"></div>
-
-  <a
-    class="training-button"
-    href="https://dartiq-core-vision-kqwm.glide.page/dl/6b2fc7"
-    target="_top"
-    rel="noopener"
-  >START MY RECOMMENDED TRAINING →</a>
-
-  <button class="new-match" onclick="newMatch()">
-    START NEW MATCH
-  </button>
-</div>
-
 </section>
 
-<div class="footer">
-  DARTIQ • MATCH PLAY • CORE VISION
-</div>
+<!-- SCREEN 2: FORMAT -->
+<section id="formats" class="screen">
+  <div class="panel center">
+    <div class="eyebrow">MATCH SETUP</div>
+    <h1>SELECT YOUR FORMAT</h1>
+    <div class="format-grid">
+      <button class="format" data-format="3" onclick="selectFormat(3)">BO3</button>
+      <button class="format" data-format="5" onclick="selectFormat(5)">BO5</button>
+      <button class="format" data-format="7" onclick="selectFormat(7)">BO7</button>
+      <button class="format" data-format="9" onclick="selectFormat(9)">BO9</button>
+    </div>
+    <p id="formatDescription" class="small">
+      Choose the number of legs.
+    </p>
+    <button id="startGame" class="primary hidden" onclick="startMatch()">
+      START YOUR GAME FOR AI ANALYSIS
+    </button>
+  </div>
+</section>
 
+<!-- SCREEN 3: MATCH -->
+<section id="match" class="screen">
+  <div class="panel">
+    <div class="center">
+      <div class="eyebrow">LIVE MATCH</div>
+      <h2 id="matchTitle">BEST OF 5</h2>
+    </div>
+
+    <div class="scoreboard">
+      <div class="scorebox">
+        <div class="label">REMAINING</div>
+        <div id="remaining" class="value">501</div>
+      </div>
+      <div class="scorebox">
+        <div class="label">LEGS</div>
+        <div id="legScore" class="value legs">0–0</div>
+      </div>
+    </div>
+
+    <div class="match-info">
+      <span id="legInfo">LEG 1</span>
+      <span id="targetInfo">FIRST TO 3</span>
+      <span id="visitInfo">VISIT 1</span>
+    </div>
+
+    <button id="confirmVisitButton" class="primary"
+      onclick="confirmVisit()">
+      CONFIRM VISIT
+    </button>
+    <div id="message" class="notice"></div>
+
+    <div class="mode-row">
+      <button id="boardModeButton" class="secondary mode active"
+        onclick="setMode('board')">🎯 DARTBOARD</button>
+      <button id="keyModeButton" class="secondary mode"
+        onclick="setMode('keypad')">KEYPAD</button>
+    </div>
+
+    <div id="boardPanel">
+      <div class="board-wrap">
+        <svg id="board" viewBox="-230 -230 460 460"
+          aria-label="Interactive dartboard"></svg>
+      </div>
+      <div class="darts">
+        <div class="dart" id="dart1">DART 1: –</div>
+        <div class="dart" id="dart2">DART 2: –</div>
+        <div class="dart" id="dart3">DART 3: –</div>
+      </div>
+      <div class="actions">
+        <button class="secondary" onclick="addDart(0,0,'MISS')">MISS</button>
+        <button class="secondary" onclick="undoDart()">UNDO DART</button>
+      </div>
+    </div>
+
+    <div id="keypadPanel" class="hidden">
+      <div class="visit">
+        <strong id="keyValue">0</strong>
+      </div>
+      <div class="keypad">
+        <button class="key" onclick="keyPress('1')">1</button>
+        <button class="key" onclick="keyPress('2')">2</button>
+        <button class="key" onclick="keyPress('3')">3</button>
+        <button class="key" onclick="keyPress('4')">4</button>
+        <button class="key" onclick="keyPress('5')">5</button>
+        <button class="key" onclick="keyPress('6')">6</button>
+        <button class="key" onclick="keyPress('7')">7</button>
+        <button class="key" onclick="keyPress('8')">8</button>
+        <button class="key" onclick="keyPress('9')">9</button>
+        <button class="key" onclick="keyClear()">C</button>
+        <button class="key" onclick="keyPress('0')">0</button>
+        <button class="key" onclick="keyBack()">⌫</button>
+      </div>
+    </div>
+
+    <div class="visit">
+      <div class="eyebrow">CURRENT VISIT</div>
+      <strong id="visitScore">0</strong>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="eyebrow center">LIVE MATCH STATISTICS</div>
+    <div class="stats">
+      <div class="stat"><strong id="average">0.00</strong><span>AVERAGE</span></div>
+      <div class="stat"><strong id="first9">0.00</strong><span>FIRST 9</span></div>
+      <div class="stat"><strong id="totalDarts">0</strong><span>DARTS</span></div>
+      <div class="stat"><strong id="count100">0</strong><span>100+</span></div>
+      <div class="stat"><strong id="count140">0</strong><span>140+</span></div>
+      <div class="stat"><strong id="count180">0</strong><span>180</span></div>
+      <div class="stat"><strong id="checkoutPct">0%</strong><span>CHECKOUT %</span></div>
+      <div class="stat"><strong id="highestCheckout">0</strong><span>HIGHEST CO</span></div>
+      <div class="stat"><strong id="legsWon">0</strong><span>LEGS WON</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- SCREEN 4: MATCH COMPLETED -->
+<section id="completed" class="screen">
+  <div class="panel center">
+    <div class="eyebrow success">MATCH COMPLETED</div>
+    <h1>YOUR MATCH RESULTS</h1>
+    <div id="finalSummary" class="stats"></div>
+  </div>
+  <div class="panel">
+    <div class="center">
+      <div class="eyebrow">PERFORMANCE ANALYSIS</div>
+      <h2>WHAT WAS YOUR MAIN ISSUE?</h2>
+      <p class="small">
+        Select the biggest challenge you experienced.
+      </p>
+    </div>
+    <div class="issue-grid" id="issues"></div>
+    <button id="analysisButton" class="primary hidden"
+      onclick="finishAnalysis()">
+      YOUR AI ANALYSIS IS READY
+    </button>
+    <div id="analysisMessage" class="notice"></div>
+  </div>
+</section>
+
+<!-- SCREEN 5: ANALYSIS -->
+<section id="analysis" class="screen">
+  <div class="panel center">
+    <div class="eyebrow success">DARTIQ AI COACH</div>
+    <h1>YOUR AI ANALYSIS</h1>
+    <p id="analysisIssue"></p>
+    <div id="analysisAdvice" class="panel"></div>
+    <button class="primary" onclick="openTraining()">
+      GO TO TODAY'S AI TRAINING
+    </button>
+    <div id="trainingMessage" class="notice"></div>
+  </div>
+</section>
+
+<footer>DARTIQ • PERFORMANCE INTELLIGENCE</footer>
 </div>
 
 <script>
-const params=new URLSearchParams(window.location.search);
+"use strict";
 
-function param(){
-  for(let i=0;i<arguments.length;i++){
-    const value=params.get(arguments[i]);
-    if(value && value.trim()!==""){
-      return value.trim();
-    }
+/* CONFIGURATION */
+const params = new URLSearchParams(location.search);
+const param = (...names) => {
+  for(const name of names){
+    const value=params.get(name);
+    if(value && value.trim()) return value.trim();
   }
   return "";
-}
+};
 
-const sessionID=param("session") || "SESSION";
-const email=param("email") || "";
+const WEBHOOK =
+  "https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/5415568e-2eca-408f-a460-572b257d1cdf";
 
-const MATCH_VISIT_WEBHOOK=
-"https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/5415568e-2eca-408f-a460-572b257d1cdf";
+const email=param("email");
+const playerID=param("player","playerid","userid");
+const language=param("lang","language") || "EN";
+const trainingURL=param("trainingUrl","training_url");
 
-let bestOf=Number(param("bestof","legs")) || 5;
-
-if(![3,5,7,9].includes(bestOf)){
-  bestOf=5;
-}
-
-let legsToWin=Math.floor(bestOf/2)+1;
-
-let currentMode="keypad";
-let input="";
+let sessionID=param("session","sessionID");
+let bestOf=0;
+let legsToWin=0;
+let mode="board";
 let remaining=501;
 let currentLeg=1;
 let legsWon=0;
-let legsLost=0;
-
+let opponentLegs=0;
 let totalPoints=0;
 let totalDarts=0;
-
 let first9Points=0;
 let first9Darts=0;
-
-let count100=0;
-let count140=0;
-let count180=0;
-
-let checkoutAttempts=0;
-let checkoutHits=0;
+let count100=0,count140=0,count180=0;
+let checkoutAttempts=0,checkoutHits=0;
 let highestCheckout=0;
-
-let currentDarts=[];
-
-let matchFinished=false;
-let matchStarted=false;
 let visitNumber=0;
+let currentDarts=[];
+let keyInput="";
+let selectedIssue="";
+let finished=false;
+let saving=false;
+let syncFailures=0;
+let matchStartedAt="";
+const visits=[];
 
-document.getElementById("sessionID").textContent=sessionID;
-
-function updateFormatUI(){
-  document.getElementById("matchFormat").textContent=
-    "BEST OF "+bestOf+" LEGS • FIRST TO "+legsToWin;
-
-  document.getElementById("legsTarget").textContent=legsToWin;
-
-  document.querySelectorAll(".format-btn").forEach(button=>{
-    button.classList.toggle(
-      "active",
-      Number(button.dataset.format)===bestOf
-    );
-  });
-}
-
-function selectFormat(format){
-
-  if(matchStarted || totalDarts>0 || legsWon>0 || legsLost>0){
-    showMessage("Match format is locked after the match starts.");
-    return;
-  }
-
-  bestOf=format;
-  legsToWin=Math.floor(bestOf/2)+1;
-
-  updateFormatUI();
-
-  showMessage(
-    "BO"+bestOf+
-    " selected • First to "+
-    legsToWin+
-    " legs."
+const $=id=>document.getElementById(id);
+const fmt=n=>Number(n).toFixed(2);
+const showScreen=id=>{
+  document.querySelectorAll(".screen").forEach(s=>
+    s.classList.toggle("active",s.id===id)
   );
-}
+  window.scrollTo(0,0);
+};
+const message=t=>$("message").textContent=t;
 
-function setMode(mode){
-
-  if(matchFinished) return;
-
-  currentMode=mode;
-
-  document
-    .querySelector(".engine")
-    .classList
-    .toggle("dartboard-active",mode==="dartboard");
-
-  const keypadMode=document.getElementById("keypadMode");
-  const dartboardMode=document.getElementById("dartboardMode");
-  const keypadTab=document.getElementById("keypadTab");
-  const dartboardTab=document.getElementById("dartboardTab");
-
-  if(mode==="keypad"){
-
-    keypadMode.style.display="block";
-    dartboardMode.style.display="none";
-
-    keypadTab.classList.add("active");
-    dartboardTab.classList.remove("active");
-
-    showMessage("Enter the total score for this visit.");
-
-  }else{
-
-    keypadMode.style.display="none";
-    dartboardMode.style.display="block";
-
-    dartboardTab.classList.add("active");
-    keypadTab.classList.remove("active");
-
-    showMessage("Tap the board for Dart 1.");
-  }
-}
-
-function press(number){
-
-  if(matchFinished) return;
-  if(input.length>=3) return;
-
-  input+=number;
-
-  if(Number(input)>180){
-    input="";
-    showMessage("Maximum visit score is 180.");
-  }
-
-  updateInput();
-}
-
-function clearScore(){
-  input="";
-  updateInput();
-}
-
-function backspace(){
-  input=input.slice(0,-1);
-  updateInput();
-}
-
-function updateInput(){
-  document.getElementById("scoreDisplay").textContent=
-    input==="" ? "0" : input;
-}
-
-function showMessage(text){
-  document.getElementById("message").textContent=text;
-}
-
-const boardNumbers=[
-  20,1,18,4,13,
-  6,10,15,2,17,
-  3,19,7,16,8,
-  11,14,9,12,5
-];
-
-const svg=document.getElementById("dartboard");
-const NS="http://www.w3.org/2000/svg";
-
-function polar(radius,angle){
-
-  const rad=(angle-90)*Math.PI/180;
-
-  return{
-    x:radius*Math.cos(rad),
-    y:radius*Math.sin(rad)
+/* GLIDE EVENTS */
+async function sendEvent(eventType,data={}){
+  const payload={
+    eventType,
+    sessionID,
+    email,
+    playerID,
+    language,
+    scoringSource:"Match",
+    bestOf,
+    matchFormat:"BO"+bestOf,
+    legsToWin,
+    ...data
   };
-}
-
-function ringPath(innerRadius,outerRadius,startAngle,endAngle){
-
-  const p1=polar(outerRadius,startAngle);
-  const p2=polar(outerRadius,endAngle);
-  const p3=polar(innerRadius,endAngle);
-  const p4=polar(innerRadius,startAngle);
-
-  return[
-    "M",p1.x,p1.y,
-    "A",outerRadius,outerRadius,0,0,1,p2.x,p2.y,
-    "L",p3.x,p3.y,
-    "A",innerRadius,innerRadius,0,0,0,p4.x,p4.y,
-    "Z"
-  ].join(" ");
-}
-
-function addSegment(
-  inner,
-  outer,
-  start,
-  end,
-  fill,
-  number,
-  multiplier,
-  label
-){
-
-  const path=document.createElementNS(NS,"path");
-
-  path.setAttribute(
-    "d",
-    ringPath(inner,outer,start,end)
-  );
-
-  path.setAttribute("fill",fill);
-  path.setAttribute("stroke","#777");
-  path.setAttribute("stroke-width",".65");
-
-  path.style.cursor="pointer";
-
-  path.addEventListener("click",()=>{
-    addDart(number,multiplier,label);
-  });
-
-  svg.appendChild(path);
-}
-
-function drawBoard(){
-
-  svg.innerHTML="";
-
-  const surround=document.createElementNS(NS,"circle");
-
-  surround.setAttribute("cx","0");
-  surround.setAttribute("cy","0");
-  surround.setAttribute("r","224");
-  surround.setAttribute("fill","#010407");
-  surround.setAttribute("stroke","#39a9ff");
-  surround.setAttribute("stroke-width","4");
-
-  surround.style.filter=
-    "drop-shadow(0 0 7px rgba(57,169,255,.9))";
-
-  svg.appendChild(surround);
-
-  for(let i=0;i<20;i++){
-
-    const number=boardNumbers[i];
-    const center=i*18;
-    const start=center-9;
-    const end=center+9;
-    const dark=i%2===0;
-
-    const singleColor=
-      dark ? "#090d11" : "#d5c9aa";
-
-    const scoreColor=
-      dark ? "#c73b43" : "#21865c";
-
-    addSegment(
-      24,103,start,end,
-      singleColor,
-      number,1,
-      "S"+number
-    );
-
-    addSegment(
-      103,118,start,end,
-      scoreColor,
-      number,3,
-      "T"+number
-    );
-
-    addSegment(
-      118,178,start,end,
-      singleColor,
-      number,1,
-      "S"+number
-    );
-
-    addSegment(
-      178,195,start,end,
-      scoreColor,
-      number,2,
-      "D"+number
-    );
-
-    const textPoint=polar(211,center);
-
-    const text=document.createElementNS(NS,"text");
-
-    text.setAttribute("x",textPoint.x);
-    text.setAttribute("y",textPoint.y);
-    text.setAttribute("fill","#39a9ff");
-    text.setAttribute("font-size","16");
-    text.setAttribute("font-weight","900");
-    text.setAttribute("text-anchor","middle");
-    text.setAttribute("dominant-baseline","middle");
-
-    text.style.pointerEvents="none";
-
-    text.style.filter=
-      "drop-shadow(0 0 4px rgba(57,169,255,.95))";
-
-    text.textContent=number;
-
-    svg.appendChild(text);
-  }
-
-  const outerBull=document.createElementNS(NS,"circle");
-
-  outerBull.setAttribute("cx","0");
-  outerBull.setAttribute("cy","0");
-  outerBull.setAttribute("r","24");
-  outerBull.setAttribute("fill","#21865c");
-  outerBull.setAttribute("stroke","#c5c5c5");
-  outerBull.setAttribute("stroke-width","1");
-
-  outerBull.style.cursor="pointer";
-
-  outerBull.addEventListener("click",()=>{
-    addDart(25,1,"25");
-  });
-
-  svg.appendChild(outerBull);
-
-  const bull=document.createElementNS(NS,"circle");
-
-  bull.setAttribute("cx","0");
-  bull.setAttribute("cy","0");
-  bull.setAttribute("r","10");
-  bull.setAttribute("fill","#c73b43");
-  bull.setAttribute("stroke","#ddd");
-  bull.setAttribute("stroke-width","1");
-
-  bull.style.cursor="pointer";
-
-  bull.addEventListener("click",()=>{
-    addDart(25,2,"BULL");
-  });
-
-  svg.appendChild(bull);
-}
-
-function addDart(number,multiplier,label){
-
-  if(matchFinished) return;
-
-  if(currentDarts.length>=3){
-    showMessage("Three darts entered. Confirm the visit.");
-    return;
-  }
-
-  currentDarts.push({
-    number:number,
-    multiplier:multiplier,
-    score:number*multiplier,
-    label:label
-  });
-
-  updateDartDisplay();
-}
-
-function addMiss(){
-
-  if(matchFinished) return;
-
-  if(currentDarts.length>=3){
-    showMessage("Three darts entered. Confirm the visit.");
-    return;
-  }
-
-  currentDarts.push({
-    number:0,
-    multiplier:0,
-    score:0,
-    label:"MISS"
-  });
-
-  updateDartDisplay();
-}
-
-function undoDart(){
-
-  if(currentDarts.length===0){
-    showMessage("No dart to undo.");
-    return;
-  }
-
-  currentDarts.pop();
-
-  updateDartDisplay();
-}
-
-function updateDartDisplay(){
-
-  for(let i=0;i<3;i++){
-
-    const el=document.getElementById("dart"+(i+1));
-
-    if(currentDarts[i]){
-
-      el.textContent=
-        currentDarts[i].label+
-        " • "+
-        currentDarts[i].score;
-
-    }else{
-
-      el.textContent="-";
-    }
-  }
-
-  const total=
-    currentDarts.reduce(
-      (sum,dart)=>sum+dart.score,
-      0
-    );
-
-  document.getElementById("boardVisitScore").textContent=total;
-
-  if(currentDarts.length<3){
-
-    showMessage(
-      "Enter Dart "+
-      (currentDarts.length+1)+
-      "."
-    );
-
-  }else{
-
-    showMessage(
-      "Visit total: "+
-      total+
-      ". Confirm visit."
-    );
-  }
-}
-
-function isDoubleCheckout(){
-
-  if(currentMode!=="dartboard"){
-    return true;
-  }
-
-  if(currentDarts.length===0){
-    return false;
-  }
-
-  const lastDart=currentDarts[currentDarts.length-1];
-
-  return lastDart.multiplier===2;
-}
-
-function isCheckoutRange(before){
-  return before>=2 && before<=170;
-}
-
-function addToFirst9(score,darts){
-
-  if(first9Darts>=9) return;
-
-  const available=9-first9Darts;
-  const dartsToAdd=Math.min(darts,available);
-
-  if(dartsToAdd===darts){
-
-    first9Points+=score;
-
-  }else if(darts>0){
-
-    first9Points+=score*(dartsToAdd/darts);
-  }
-
-  first9Darts+=dartsToAdd;
-}
-
-async function sendVisitToGlide(visitData){
-
-  const darts=
-    Array.isArray(visitData.darts)
-    ? visitData.darts
-    : [];
-
   try{
-
-    const response=await fetch(
-      MATCH_VISIT_WEBHOOK,
-      {
-        method:"POST",
-
-        headers:{
-          "Content-Type":"application/json"
-        },
-
-        body:JSON.stringify({
-
-          sessionID:
-            visitData.sessionID || "",
-
-          email:
-            email,
-
-          visitNumber:
-            visitData.visitNumber || 0,
-
-          visitScore:
-            visitData.visitScore || 0,
-
-          dartsThrown:
-            visitData.dartsThrown || 0,
-
-          legNumber:
-            visitData.legNumber || 1,
-
-          remainingScore:
-            visitData.remainingScore ?? 501,
-
-          checkoutAttempt:
-            Boolean(visitData.checkoutAttempt),
-
-          checkoutHit:
-            Boolean(visitData.checkoutHit),
-
-          checkoutScore:
-            visitData.checkoutScore || 0,
-
-          bust:
-            Boolean(visitData.bust),
-
-          scoringSource:
-            visitData.scoringSource || "Match",
-
-          legResult:
-            visitData.legResult || "",
-
-          opponentWonLeg:
-            Boolean(visitData.opponentWonLeg),
-
-          legEnded:
-            Boolean(visitData.legEnded),
-
-          matchResult:
-            visitData.matchResult || "",
-
-          legsWon:
-            visitData.legsWon ?? legsWon,
-
-          legsLost:
-            visitData.legsLost ?? legsLost,
-
-          bestDart:
-            visitData.bestDart ?? "",
-
-          scoreBefore:
-            visitData.scoreBefore ?? "",
-
-          dart1Score:
-            darts[0]?.score ?? "",
-
-          dart1Segment:
-            darts[0]?.label || "",
-
-          dart2Score:
-            darts[1]?.score ?? "",
-
-          dart2Segment:
-            darts[1]?.label || "",
-
-          dart3Score:
-            darts[2]?.score ?? "",
-
-          dart3Segment:
-            darts[2]?.label || ""
-        })
-      }
-    );
-
-    if(!response.ok){
-      throw new Error(
-        "Webhook returned "+response.status
-      );
-    }
-
+    const response=await fetch(WEBHOOK,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(payload)
+    });
+    if(!response.ok) throw Error("HTTP "+response.status);
     return true;
-
   }catch(error){
-
-    console.error(
-      "DARTIQ Match Visit Storage failed:",
-      error
-    );
-
-    showMessage(
-      "Score recorded locally • Glide sync failed."
-    );
-
+    console.error("DARTIQ sync:",eventType,error);
+    syncFailures++;
     return false;
   }
 }
 
-function confirmVisit(){
-
-  if(matchFinished) return;
-
-  let score=0;
-  let dartsThisVisit=3;
-
-  if(currentMode==="keypad"){
-
-    if(input===""){
-      showMessage("Enter a visit score first.");
-      return;
-    }
-
-    score=Number(input);
-    dartsThisVisit=3;
-
-    if(score<0 || score>180){
-      showMessage("Visit score must be between 0 and 180.");
-      return;
-    }
-
-  }else{
-
-    if(currentDarts.length===0){
-      showMessage("Enter at least one dart first.");
-      return;
-    }
-
-    score=
-      currentDarts.reduce(
-        (sum,dart)=>sum+dart.score,
-        0
-      );
-
-    dartsThisVisit=currentDarts.length;
-  }
-
-  matchStarted=true;
-
-  const before=remaining;
-  const after=before-score;
-
-  const checkoutAttempt=isCheckoutRange(before);
-
-  if(checkoutAttempt){
-    checkoutAttempts++;
-  }
-
-  if(after<0){
-
-    registerBust(
-      dartsThisVisit,
-      "BUST • Score exceeded remaining."
-    );
-
-    return;
-  }
-
-  if(after===1){
-
-    registerBust(
-      dartsThisVisit,
-      "BUST • Cannot leave 1."
-    );
-
-    return;
-  }
-
-  if(
-    after===0 &&
-    currentMode==="dartboard" &&
-    !isDoubleCheckout()
-  ){
-
-    registerBust(
-      dartsThisVisit,
-      "BUST • Leg must finish on a double."
-    );
-
-    return;
-  }
-
-  remaining=after;
-
-  totalPoints+=score;
-  totalDarts+=dartsThisVisit;
-
-  addToFirst9(
-    score,
-    dartsThisVisit
+/* MATCH SETUP */
+function selectFormat(n){
+  if(![3,5,7,9].includes(n)) return;
+  bestOf=n;
+  legsToWin=Math.floor(n/2)+1;
+  document.querySelectorAll(".format").forEach(b=>
+    b.classList.toggle("selected",Number(b.dataset.format)===n)
   );
-
-  if(score===180){
-
-    count180++;
-
-  }else if(score>=140){
-
-    count140++;
-
-  }else if(score>=100){
-
-    count100++;
-  }
-
-  const winningLeg=after===0;
-  const resultingLegsWon=
-    winningLeg ? legsWon+1 : legsWon;
-
-  const matchWon=
-    winningLeg &&
-    resultingLegsWon>=legsToWin;
-
-  const visitData={
-
-    sessionID:
-      sessionID,
-
-    visitNumber:
-      ++visitNumber,
-
-    scoringSource:
-      "Match",
-
-    bestDart:
-      currentMode==="dartboard" &&
-      currentDarts.length>0
-      ? Math.max(
-          ...currentDarts.map(
-            dart=>dart.score
-          )
-        )
-      : "",
-
-    scoreBefore:
-      before,
-
-    bestOf:
-      bestOf,
-
-    legNumber:
-      currentLeg,
-
-    visitScore:
-      score,
-
-    dartsThrown:
-      dartsThisVisit,
-
-    remainingScore:
-      after,
-
-    checkoutAttempt:
-      checkoutAttempt,
-
-    checkoutHit:
-      winningLeg,
-
-    checkoutScore:
-      winningLeg ? before : 0,
-
-    bust:
-      false,
-
-    legResult:
-      winningLeg ? "WON" : "",
-
-    opponentWonLeg:
-      false,
-
-    legEnded:
-      winningLeg,
-
-    matchResult:
-      matchWon ? "WON" : "",
-
-    legsWon:
-      resultingLegsWon,
-
-    legsLost:
-      legsLost,
-
-    darts:
-      currentMode==="dartboard"
-      ? [...currentDarts]
-      : []
-  };
-
-  sendVisitToGlide(visitData);
-
-  if(winningLeg){
-
-    checkoutHits++;
-
-    if(before>highestCheckout){
-      highestCheckout=before;
-    }
-
-    resetCurrentVisit();
-
-    updateStats();
-
-    completeLeg();
-
-    return;
-  }
-
-  resetCurrentVisit();
-
-  updateStats();
-
-  showMessage(
-    "Score recorded • "+
-    remaining+
-    " remaining."
-  );
+  $("formatDescription").textContent=
+    "BEST OF "+n+" • FIRST TO "+legsToWin+" LEGS";
+  $("startGame").classList.remove("hidden");
 }
 
-function registerBust(dartsThisVisit,message){
-
-  totalDarts+=dartsThisVisit;
-
-  addToFirst9(
-    0,
-    dartsThisVisit
-  );
-
-  const bustVisitData={
-
-    sessionID:
-      sessionID,
-
-    visitNumber:
-      ++visitNumber,
-
-    scoringSource:
-      "Match",
-
-    bestDart:
-      currentMode==="dartboard" &&
-      currentDarts.length>0
-      ? Math.max(
-          ...currentDarts.map(
-            dart=>dart.score
-          )
-        )
-      : "",
-
-    scoreBefore:
-      remaining,
-
-    bestOf:
-      bestOf,
-
-    legNumber:
-      currentLeg,
-
-    visitScore:
-      0,
-
-    dartsThrown:
-      dartsThisVisit,
-
-    remainingScore:
-      remaining,
-
-    checkoutAttempt:
-      isCheckoutRange(remaining),
-
-    checkoutHit:
-      false,
-
-    checkoutScore:
-      0,
-
-    bust:
-      true,
-
-    legResult:
-      "",
-
-    opponentWonLeg:
-      false,
-
-    legEnded:
-      false,
-
-    matchResult:
-      "",
-
-    legsWon:
-      legsWon,
-
-    legsLost:
-      legsLost,
-
-    darts:
-      currentMode==="dartboard"
-      ? [...currentDarts]
-      : []
-  };
-
-  sendVisitToGlide(
-    bustVisitData
-  );
-
-  resetCurrentVisit();
-
+async function startMatch(){
+  if(!bestOf)return;
+  if(!sessionID){
+    sessionID=crypto.randomUUID
+      ? crypto.randomUUID()
+      : "MATCH-"+Date.now();
+  }
+  matchStartedAt=new Date().toISOString();
+  $("startGame").disabled=true;
+  const ok=await sendEvent("match_start",{
+    startedAt:matchStartedAt,
+    matchStatus:"In Progress"
+  });
+  $("startGame").disabled=false;
+  $("matchTitle").textContent="BEST OF "+bestOf;
+  $("targetInfo").textContent="FIRST TO "+legsToWin;
   updateStats();
-
-  showMessage(
-    message+
-    " "+
-    remaining+
-    " remaining."
-  );
+  showScreen("match");
+  if(!ok) message("Match started. Glide connection not confirmed.");
 }
 
-function completeLeg(){
+/* DARTBOARD */
+const numbers=[
+  20,1,18,4,13,6,10,15,2,17,
+  3,19,7,16,8,11,14,9,12,5
+];
+const NS="http://www.w3.org/2000/svg";
+const board=$("board");
 
-  legsWon++;
-
-  updateStats();
-
-  if(legsWon>=legsToWin){
-
-    completeMatch();
-
+function polar(r,a){
+  const rad=(a-90)*Math.PI/180;
+  return [r*Math.cos(rad),r*Math.sin(rad)];
+}
+function pathRing(r1,r2,a1,a2){
+  const p1=polar(r2,a1),p2=polar(r2,a2);
+  const p3=polar(r1,a2),p4=polar(r1,a1);
+  return `M${p1} A${r2} ${r2} 0 0 1 ${p2}
+          L${p3} A${r1} ${r1} 0 0 0 ${p4} Z`;
+}
+function element(tag,attributes,parent=board){
+  const e=document.createElementNS(NS,tag);
+  for(const [k,v] of Object.entries(attributes))
+    e.setAttribute(k,v);
+  parent.appendChild(e);
+  return e;
+}
+function segment(r1,r2,a1,a2,color,n,m,label){
+  const e=element("path",{
+    d:pathRing(r1,r2,a1,a2),
+    fill:color,stroke:"#666","stroke-width":".65"
+  });
+  e.addEventListener("click",()=>addDart(n,m,label));
+}
+function drawBoard(){
+  board.innerHTML="";
+  element("circle",{
+    cx:0,cy:0,r:224,fill:"#02070e",
+    stroke:"#39a9ff","stroke-width":3
+  });
+  numbers.forEach((n,i)=>{
+    const a=i*18;
+    const dark=i%2===0;
+    const single=dark?"#10151a":"#e2d6b8";
+    const multi=dark?"#c83c46":"#27865e";
+    segment(24,103,a-9,a+9,single,n,1,"S"+n);
+    segment(103,118,a-9,a+9,multi,n,3,"T"+n);
+    segment(118,178,a-9,a+9,single,n,1,"S"+n);
+    segment(178,195,a-9,a+9,multi,n,2,"D"+n);
+    const [x,y]=polar(211,a);
+    const t=element("text",{
+      x,y,fill:"#39a9ff",
+      "font-size":16,"font-weight":900,
+      "text-anchor":"middle",
+      "dominant-baseline":"middle"
+    });
+    t.textContent=n;
+  });
+  const outer=element("circle",{
+    cx:0,cy:0,r:24,fill:"#27865e",
+    stroke:"#ddd"
+  });
+  outer.addEventListener("click",()=>addDart(25,1,"25"));
+  const bull=element("circle",{
+    cx:0,cy:0,r:10,fill:"#c83c46",
+    stroke:"#ddd"
+  });
+  bull.addEventListener("click",()=>addDart(25,2,"BULL"));
+}
+function addDart(n,m,label){
+  if(finished || saving || mode!=="board")return;
+  if(currentDarts.length>=3){
+    message("Confirm your visit first.");
     return;
   }
-
-  currentLeg++;
-  remaining=501;
-
-  resetCurrentVisit();
-
-  updateStats();
-
-  showMessage(
-    "LEG WON • "+
-    legsWon+
-    " of "+
-    legsToWin+
-    " • Starting Leg "+
-    currentLeg+
-    " at 501."
-  );
-}
-
-async function opponentWonLeg(){
-
-  if(matchFinished) return;
-
-  const confirmed=
-    window.confirm(
-      "Opponent checked out and won this leg?"
-    );
-
-  if(!confirmed) return;
-
-  matchStarted=true;
-
-  const lostLegNumber=currentLeg;
-
-  legsLost++;
-
-  const matchLost=
-    legsLost>=legsToWin;
-
-  const legLossData={
-
-    sessionID:
-      sessionID,
-
-    visitNumber:
-      ++visitNumber,
-
-    scoringSource:
-      "Match",
-
-    bestDart:
-      "",
-
-    scoreBefore:
-      remaining,
-
-    bestOf:
-      bestOf,
-
-    legNumber:
-      lostLegNumber,
-
-    visitScore:
-      0,
-
-    dartsThrown:
-      0,
-
-    remainingScore:
-      remaining,
-
-    checkoutAttempt:
-      false,
-
-    checkoutHit:
-      false,
-
-    checkoutScore:
-      0,
-
-    bust:
-      false,
-
-    legResult:
-      "LOST",
-
-    opponentWonLeg:
-      true,
-
-    legEnded:
-      true,
-
-    matchResult:
-      matchLost ? "LOST" : "",
-
-    legsWon:
-      legsWon,
-
-    legsLost:
-      legsLost,
-
-    darts:
-      []
-  };
-
-  await sendVisitToGlide(
-    legLossData
-  );
-
-  resetCurrentVisit();
-
-  if(matchLost){
-
-    completeMatch();
-
-    return;
-  }
-
-  currentLeg++;
-  remaining=501;
-
-  updateStats();
-
-  showMessage(
-    "LEG LOST • Opponent "+
-    legsLost+
-    " • You "+
-    legsWon+
-    " • Starting Leg "+
-    currentLeg+
-    " at 501."
-  );
-}
-
-function completeMatch(){
-
-  matchFinished=true;
-
-  const matchResult=
-    legsWon>=legsToWin
-    ? "WON"
-    : "LOST";
-
-  if(matchResult==="WON"){
-    remaining=0;
-  }
-
-  updateStats();
-
-  const average=
-    totalDarts>0
-    ? (
-        totalPoints/
-        totalDarts*
-        3
-      ).toFixed(2)
-    : "0.00";
-
-  const first9=
-    first9Darts>0
-    ? (
-        first9Points/
-        first9Darts*
-        3
-      ).toFixed(2)
-    : "0.00";
-
-  const checkoutPercentage=
-    checkoutAttempts>0
-    ? (
-        checkoutHits/
-        checkoutAttempts*
-        100
-      ).toFixed(1)
-    : "0.0";
-
-  document.getElementById(
-    "matchComplete"
-  ).style.display="block";
-
-  document.getElementById(
-    "matchCompleteText"
-  ).innerHTML=
-
-    "<strong>BO"+
-    bestOf+
-    " COMPLETE</strong>"+
-
-    "<br><br>"+
-
-    "MATCH "+
-    matchResult+
-
-    "<br>"+
-
-    legsWon+
-    " legs won • "+
-    legsLost+
-    " legs lost"+
-
-    "<br>"+
-
-    "Average: "+
-    average+
-
-    "<br>"+
-
-    "First 9: "+
-    first9+
-
-    "<br>"+
-
-    "180s: "+
-    count180+
-
-    " • 140+: "+
-    count140+
-
-    " • 100+: "+
-    count100+
-
-    "<br>"+
-
-    "Checkout: "+
-    checkoutPercentage+
-    "%"+
-
-    "<br>"+
-
-    "Highest checkout: "+
-    highestCheckout;
-
-  showMessage(
-    "MATCH COMPLETE • Session statistics ready."
-  );
-
-  const sessionResult={
-
-    sessionID:
-      sessionID,
-
-    scoringSource:
-      "Match",
-
-    bestOf:
-      bestOf,
-
-    legsWon:
-      legsWon,
-
-    legsLost:
-      legsLost,
-
-    matchResult:
-      matchResult,
-
-    totalPoints:
-      totalPoints,
-
-    totalDarts:
-      totalDarts,
-
-    average:
-      Number(average),
-
-    first9Average:
-      Number(first9),
-
-    count100:
-      count100,
-
-    count140:
-      count140,
-
-    count180:
-      count180,
-
-    checkoutAttempts:
-      checkoutAttempts,
-
-    checkoutHits:
-      checkoutHits,
-
-    checkoutPercentage:
-      Number(checkoutPercentage),
-
-    highestCheckout:
-      highestCheckout
-  };
-
-  console.log(
-    "DARTIQ MATCH RESULT",
-    sessionResult
-  );
-}
-
-function newMatch(){
-
-  remaining=501;
-  currentLeg=1;
-
-  legsWon=0;
-  legsLost=0;
-
-  totalPoints=0;
-  totalDarts=0;
-
-  first9Points=0;
-  first9Darts=0;
-
-  count100=0;
-  count140=0;
-  count180=0;
-
-  checkoutAttempts=0;
-  checkoutHits=0;
-  highestCheckout=0;
-
-  input="";
-  currentDarts=[];
-
-  matchFinished=false;
-  matchStarted=false;
-
-  visitNumber=0;
-
-  document.getElementById(
-    "matchComplete"
-  ).style.display="none";
-
-  resetCurrentVisit();
-
-  updateStats();
-
-  showMessage(
-    "Choose BO3, BO5, BO7 or BO9 and start scoring."
-  );
-}
-
-function resetCurrentVisit(){
-
-  input="";
-  currentDarts=[];
-
+  currentDarts.push({number:n,multiplier:m,score:n*m,label});
   updateInput();
-  updateDartDisplay();
 }
+function undoDart(){
+  if(saving)return;
+  currentDarts.pop();
+  updateInput();
+}
+function setMode(m){
+  if(saving)return;
+  if(currentDarts.length || keyInput){
+    message("Confirm or clear the current visit before switching.");
+    return;
+  }
+  mode=m;
+  $("boardPanel").classList.toggle("hidden",m!=="board");
+  $("keypadPanel").classList.toggle("hidden",m!=="keypad");
+  $("boardModeButton").classList.toggle("active",m==="board");
+  $("keyModeButton").classList.toggle("active",m==="keypad");
+  message("");
+}
+function keyPress(n){
+  if(saving || keyInput.length>=3)return;
+  const next=keyInput+n;
+  if(Number(next)>180)return;
+  keyInput=next;
+  updateInput();
+}
+function keyClear(){if(!saving){keyInput="";updateInput()}}
+function keyBack(){
+  if(!saving){keyInput=keyInput.slice(0,-1);updateInput()}
+}
+function updateInput(){
+  const score=currentDarts.reduce((s,d)=>s+d.score,0);
+  $("visitScore").textContent=mode==="board"
+    ? score : Number(keyInput||0);
+  $("keyValue").textContent=keyInput||"0";
+  for(let i=0;i<3;i++){
+    $("dart"+(i+1)).textContent="DART "+(i+1)+": "+
+      (currentDarts[i]?.label||"–");
+  }
+}
+
+/* STATISTICS */
+const average=()=>totalDarts?totalPoints/totalDarts*3:0;
+const first9=()=>first9Darts?first9Points/first9Darts*3:0;
+const checkoutPct=()=>checkoutAttempts
+  ?checkoutHits/checkoutAttempts*100:0;
 
 function updateStats(){
-
-  document.getElementById(
-    "remaining"
-  ).textContent=remaining;
-
-  document.getElementById(
-    "legNumber"
-  ).textContent=currentLeg;
-
-  document.getElementById(
-    "legNumberTop"
-  ).textContent=currentLeg;
-
-  document.getElementById(
-    "legsWon"
-  ).textContent=legsWon;
-
-  document.getElementById(
-    "legsLost"
-  ).textContent=legsLost;
-
-  document.getElementById(
-    "dartsThrown"
-  ).textContent=totalDarts;
-
-  let avg=0;
-
-  if(totalDarts>0){
-    avg=(totalPoints/totalDarts)*3;
+  $("remaining").textContent=remaining;
+  $("legScore").textContent=legsWon+"–"+opponentLegs;
+  $("legInfo").textContent="LEG "+currentLeg;
+  $("visitInfo").textContent="VISIT "+(visitNumber+1);
+  $("average").textContent=fmt(average());
+  $("first9").textContent=fmt(first9());
+  $("totalDarts").textContent=totalDarts;
+  $("count100").textContent=count100;
+  $("count140").textContent=count140;
+  $("count180").textContent=count180;
+  $("checkoutPct").textContent=checkoutPct().toFixed(1)+"%";
+  $("highestCheckout").textContent=highestCheckout;
+  $("legsWon").textContent=legsWon;
+}
+function recordFirst9(score,darts){
+  const available=Math.max(0,9-first9Darts);
+  const take=Math.min(darts,available);
+  if(take===darts)first9Points+=score;
+  else if(take>0 && mode==="board"){
+    first9Points+=currentDarts
+      .slice(0,take).reduce((s,d)=>s+d.score,0);
   }
-
-  document.getElementById(
-    "average"
-  ).textContent=
-    avg.toFixed(2);
-
-  let first9Avg=0;
-
-  if(first9Darts>0){
-    first9Avg=(first9Points/first9Darts)*3;
-  }
-
-  document.getElementById(
-    "first9Average"
-  ).textContent=
-    first9Avg.toFixed(2);
-
-  document.getElementById(
-    "stat100"
-  ).textContent=count100;
-
-  document.getElementById(
-    "stat140"
-  ).textContent=count140;
-
-  document.getElementById(
-    "stat180"
-  ).textContent=count180;
-
-  document.getElementById(
-    "checkoutHits"
-  ).textContent=checkoutHits;
-
-  let checkoutPercentage=0;
-
-  if(checkoutAttempts>0){
-    checkoutPercentage=
-      (checkoutHits/checkoutAttempts)*100;
-  }
-
-  document.getElementById(
-    "checkoutPct"
-  ).textContent=
-    checkoutPercentage.toFixed(1)+"%";
-
-  document.getElementById(
-    "highestCheckout"
-  ).textContent=
-    highestCheckout;
-
-  document.getElementById(
-    "legsTarget"
-  ).textContent=
-    legsToWin;
+  first9Darts+=take;
 }
 
+/* SCORING */
+async function confirmVisit(){
+  if(finished||saving)return;
+  const boardMode=mode==="board";
+  if(boardMode && !currentDarts.length){
+    message("Enter at least one dart.");
+    return;
+  }
+  if(!boardMode && keyInput===""){
+    message("Enter a visit score.");
+    return;
+  }
+  const darts=boardMode?currentDarts.map(d=>({...d})):[];
+  const score=boardMode
+    ?darts.reduce((s,d)=>s+d.score,0)
+    :Number(keyInput);
+  const before=remaining;
+  const count=boardMode?darts.length:3;
+  const last=darts[darts.length-1];
+  const exact=score===before;
+  const validDouble=boardMode
+    ?last?.multiplier===2
+    :false;
+
+  if(exact && !boardMode){
+    const confirmed=window.confirm(
+      "Did you finish on a double or bull?"
+    );
+    if(!confirmed){
+      message("Checkout not confirmed. Enter a corrected visit.");
+      return;
+    }
+  }
+  const bust=score>before ||
+    before-score===1 ||
+    (exact && boardMode && !validDouble);
+  const checkoutHit=exact&&!bust;
+  const effectiveScore=bust?0:score;
+  const after=bust?before:before-score;
+  const attempt=before>=2&&before<=170;
+
+  const visit={
+    sessionID,email,playerID,
+    visitNumber:visitNumber+1,
+    legNumber:currentLeg,
+    bestOf,
+    scoreBefore:before,
+    visitScore:effectiveScore,
+    attemptedScore:score,
+    dartsThrown:count,
+    remainingScore:after,
+    checkoutAttempt:attempt,
+    checkoutHit,
+    checkoutScore:checkoutHit?before:0,
+    bust,
+    scoringSource:"Match",
+    inputMode:mode,
+    bestDart:boardMode?Math.max(...darts.map(d=>d.score)):null,
+    dart1Score:darts[0]?.score??null,
+    dart1Segment:darts[0]?.label||"",
+    dart2Score:darts[1]?.score??null,
+    dart2Segment:darts[1]?.label||"",
+    dart3Score:darts[2]?.score??null,
+    dart3Segment:darts[2]?.label||"",
+    darts
+  };
+
+  saving=true;
+  $("confirmVisitButton").disabled=true;
+  const ok=await sendEvent("match_visit",visit);
+  saving=false;
+  $("confirmVisitButton").disabled=false;
+
+  visitNumber++;
+  visits.push(visit);
+  totalDarts+=count;
+  totalPoints+=effectiveScore;
+  recordFirst9(effectiveScore,count);
+  if(attempt)checkoutAttempts++;
+
+  if(!bust){
+    remaining=after;
+    if(score===180)count180++;
+    else if(score>=140)count140++;
+    else if(score>=100)count100++;
+  }
+  if(checkoutHit){
+    checkoutHits++;
+    highestCheckout=Math.max(highestCheckout,before);
+    legsWon++;
+  }
+
+  currentDarts=[];
+  keyInput="";
+  updateInput();
+  updateStats();
+
+  if(checkoutHit){
+    if(legsWon>=legsToWin){
+      await completeMatch();
+      return;
+    }
+    currentLeg++;
+    remaining=501;
+    updateStats();
+    message("LEG WON! Start leg "+currentLeg+".");
+  }else{
+    message(bust?"BUST • Score unchanged.":
+      "Visit recorded • "+remaining+" remaining.");
+  }
+  if(!ok)message("Visit recorded locally. Glide sync not confirmed.");
+}
+
+/* MATCH COMPLETION */
+function summaryCard(label,value){
+  const d=document.createElement("div");
+  d.className="stat";
+  const strong=document.createElement("strong");
+  strong.textContent=value;
+  const span=document.createElement("span");
+  span.textContent=label;
+  d.append(strong,span);
+  return d;
+}
+async function completeMatch(){
+  finished=true;
+  const summary=$("finalSummary");
+  summary.replaceChildren(
+    summaryCard("MATCH","BO"+bestOf),
+    summaryCard("LEGS",legsWon+"–"+opponentLegs),
+    summaryCard("AVERAGE",fmt(average())),
+    summaryCard("FIRST 9",fmt(first9())),
+    summaryCard("180",count180),
+    summaryCard("140+",count140),
+    summaryCard("100+",count100),
+    summaryCard("CHECKOUT %",checkoutPct().toFixed(1)+"%"),
+    summaryCard("HIGHEST CO",highestCheckout)
+  );
+  showScreen("completed");
+  const ok=await sendEvent("match_complete",{
+    matchStatus:"Completed",
+    matchResult:"Won",
+    legsWon,legsLost:opponentLegs,
+    totalPoints,totalDarts,
+    average:Number(fmt(average())),
+    first9Average:Number(fmt(first9())),
+    count100,count140,count180,
+    checkoutAttempts,checkoutHits,
+    checkoutPercentage:Number(checkoutPct().toFixed(1)),
+    highestCheckout,
+    visitCount:visitNumber,
+    startedAt:matchStartedAt,
+    completedAt:new Date().toISOString()
+  });
+  if(!ok)$("analysisMessage").textContent=
+    "Match completed locally. Glide sync not confirmed.";
+}
+
+/* MAIN ISSUE + COACHING */
+const issueData=[
+  ["Missing Right","Aim and release alignment"],
+  ["Missing Left","Release consistency"],
+  ["Missing High","Release height and timing"],
+  ["Missing Low","Follow-through and release"],
+  ["Inconsistent Grouping","Repeatable throw mechanics"],
+  ["Release Timing","Release timing consistency"],
+  ["Follow Through","Controlled follow-through"],
+  ["Elbow Movement","Stable throwing mechanics"],
+  ["Body Stability","Consistent stance and balance"],
+  ["Confidence","Match confidence and routine"]
+];
+
+function buildIssues(){
+  const container=$("issues");
+  issueData.forEach(([name])=>{
+    const b=document.createElement("button");
+    b.className="issue";
+    b.textContent=name;
+    b.onclick=()=>{
+      selectedIssue=name;
+      document.querySelectorAll(".issue").forEach(x=>
+        x.classList.toggle("selected",x===b)
+      );
+      $("analysisButton").classList.remove("hidden");
+    };
+    container.appendChild(b);
+  });
+}
+async function finishAnalysis(){
+  if(!selectedIssue)return;
+  const button=$("analysisButton");
+  button.disabled=true;
+  button.textContent="PREPARING YOUR ANALYSIS...";
+  const ok=await sendEvent("match_main_issue",{
+    mainIssue:selectedIssue,
+    matchStatus:"Completed",
+    average:Number(fmt(average())),
+    first9Average:Number(fmt(first9())),
+    legsWon,legsLost:opponentLegs,
+    totalDarts,
+    count100,count140,count180,
+    checkoutPercentage:Number(checkoutPct().toFixed(1)),
+    highestCheckout
+  });
+  button.disabled=false;
+  button.textContent="YOUR AI ANALYSIS IS READY";
+
+  if(!ok){
+    $("analysisMessage").textContent=
+      "Glide did not confirm receipt. Retry before continuing.";
+    return;
+  }
+
+  const item=issueData.find(x=>x[0]===selectedIssue);
+  $("analysisIssue").textContent=selectedIssue;
+  $("analysisAdvice").textContent=
+    "Focus area: "+item[1]+
+    ". Your selected issue and match statistics have been submitted "+
+    "for coaching. Open Today's AI Training for the matched drill.";
+  showScreen("analysis");
+}
+
+/* TRAINING NAVIGATION FIX */
+function openTraining(){
+  const notice=$("trainingMessage");
+
+  try{
+    const query=location.search.slice(1);
+    const marker=/(?:^|&)trainingUrl=/i.exec(query);
+
+    if(!marker){
+      notice.textContent=
+        "Today's AI Training URL is not configured.";
+      return;
+    }
+
+    // Recover the nested URL, including its own parameters.
+    const raw=query.slice(marker.index+marker[0].length);
+    const nested=decodeURIComponent(raw);
+    const url=new URL(nested,location.href);
+
+    if(url.protocol!=="https:" && url.protocol!=="http:"){
+      throw Error("Invalid training URL");
+    }
+
+    const playerName=param("player","playerid");
+    const userID=param("userid");
+
+    // Override unresolved placeholders from Glide.
+    url.searchParams.set("session",sessionID);
+    url.searchParams.set("email",email);
+    url.searchParams.set("player",playerName);
+    url.searchParams.set("userid",userID);
+    url.searchParams.set("source","MATCH");
+    url.searchParams.set("language",language);
+
+    // Pass the issue selected after this match.
+    url.searchParams.set("mainIssue",selectedIssue);
+    url.searchParams.set("focus",selectedIssue);
+
+    notice.textContent="Opening Today's AI Training...";
+    location.assign(url.toString());
+
+  }catch(error){
+    console.error("DARTIQ training navigation:",error);
+    notice.textContent=
+      "Unable to open training. Check the training URL.";
+  }
+}
+
+/* INITIALIZATION */
 drawBoard();
-updateFormatUI();
-updateInput();
-updateDartDisplay();
+buildIssues();
 updateStats();
-
-showMessage(
-  "BO"+
-  bestOf+
-  " selected • First to "+
-  legsToWin+
-  " legs."
-);
+updateInput();
 </script>
-
 </body>
 </html>
