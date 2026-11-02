@@ -309,6 +309,12 @@ footer{
       <span id="visitInfo">VISIT 1</span>
     </div>
 
+    <button id="confirmVisitButton" class="primary"
+      onclick="confirmVisit()">
+      CONFIRM VISIT
+    </button>
+    <div id="message" class="notice"></div>
+
     <div class="mode-row">
       <button id="boardModeButton" class="secondary mode active"
         onclick="setMode('board')">🎯 DARTBOARD</button>
@@ -356,11 +362,6 @@ footer{
       <div class="eyebrow">CURRENT VISIT</div>
       <strong id="visitScore">0</strong>
     </div>
-
-    <button id="confirmVisitButton" class="primary" onclick="confirmVisit()">
-      CONFIRM VISIT
-    </button>
-    <div id="message" class="notice"></div>
   </div>
 
   <div class="panel">
