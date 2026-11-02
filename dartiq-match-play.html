@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>DARTIQ | Play Match V2</title>
 <style>
 :root{
@@ -25,8 +25,7 @@ body{
   font-family:Arial,Helvetica,sans-serif;
   padding:10px;
 }
-button,select{font:inherit}
-button{cursor:pointer}
+button{font:inherit;cursor:pointer}
 button:disabled{opacity:.45;cursor:not-allowed}
 .app{max-width:650px;margin:auto}
 .brand{text-align:center;padding:20px 0}
@@ -225,7 +224,6 @@ h2{font-size:18px;margin:8px 0 15px}
   margin:12px 0;
 }
 .success{color:var(--green)}
-.error{color:var(--red)}
 .hidden{display:none!important}
 footer{
   text-align:center;
@@ -249,7 +247,6 @@ footer{
   <div class="subtitle">INTELLIGENT DARTS PERFORMANCE</div>
 </header>
 
-<!-- SCREEN 1: SESSION -->
 <section id="setup" class="screen active">
   <div class="panel center">
     <div class="eyebrow">PLAYER JOURNEY</div>
@@ -264,7 +261,6 @@ footer{
   </div>
 </section>
 
-<!-- SCREEN 2: FORMAT -->
 <section id="formats" class="screen">
   <div class="panel center">
     <div class="eyebrow">MATCH SETUP</div>
@@ -284,14 +280,12 @@ footer{
   </div>
 </section>
 
-<!-- SCREEN 3: MATCH -->
 <section id="match" class="screen">
   <div class="panel">
     <div class="center">
       <div class="eyebrow">LIVE MATCH</div>
       <h2 id="matchTitle">BEST OF 5</h2>
     </div>
-
     <div class="scoreboard">
       <div class="scorebox">
         <div class="label">REMAINING</div>
@@ -302,26 +296,22 @@ footer{
         <div id="legScore" class="value legs">0–0</div>
       </div>
     </div>
-
     <div class="match-info">
       <span id="legInfo">LEG 1</span>
       <span id="targetInfo">FIRST TO 3</span>
       <span id="visitInfo">VISIT 1</span>
     </div>
-
     <button id="confirmVisitButton" class="primary"
       onclick="confirmVisit()">
       CONFIRM VISIT
     </button>
     <div id="message" class="notice"></div>
-
     <div class="mode-row">
       <button id="boardModeButton" class="secondary mode active"
         onclick="setMode('board')">🎯 DARTBOARD</button>
       <button id="keyModeButton" class="secondary mode"
         onclick="setMode('keypad')">KEYPAD</button>
     </div>
-
     <div id="boardPanel">
       <div class="board-wrap">
         <svg id="board" viewBox="-230 -230 460 460"
@@ -337,11 +327,8 @@ footer{
         <button class="secondary" onclick="undoDart()">UNDO DART</button>
       </div>
     </div>
-
     <div id="keypadPanel" class="hidden">
-      <div class="visit">
-        <strong id="keyValue">0</strong>
-      </div>
+      <div class="visit"><strong id="keyValue">0</strong></div>
       <div class="keypad">
         <button class="key" onclick="keyPress('1')">1</button>
         <button class="key" onclick="keyPress('2')">2</button>
@@ -357,13 +344,11 @@ footer{
         <button class="key" onclick="keyBack()">⌫</button>
       </div>
     </div>
-
     <div class="visit">
       <div class="eyebrow">CURRENT VISIT</div>
       <strong id="visitScore">0</strong>
     </div>
   </div>
-
   <div class="panel">
     <div class="eyebrow center">LIVE MATCH STATISTICS</div>
     <div class="stats">
@@ -380,7 +365,6 @@ footer{
   </div>
 </section>
 
-<!-- SCREEN 4: MATCH COMPLETED -->
 <section id="completed" class="screen">
   <div class="panel center">
     <div class="eyebrow success">MATCH COMPLETED</div>
@@ -391,9 +375,7 @@ footer{
     <div class="center">
       <div class="eyebrow">PERFORMANCE ANALYSIS</div>
       <h2>WHAT WAS YOUR MAIN ISSUE?</h2>
-      <p class="small">
-        Select the biggest challenge you experienced.
-      </p>
+      <p class="small">Select the biggest challenge you experienced.</p>
     </div>
     <div class="issue-grid" id="issues"></div>
     <button id="analysisButton" class="primary hidden"
@@ -404,7 +386,6 @@ footer{
   </div>
 </section>
 
-<!-- SCREEN 5: ANALYSIS -->
 <section id="analysis" class="screen">
   <div class="panel center">
     <div class="eyebrow success">DARTIQ AI COACH</div>
@@ -424,91 +405,70 @@ footer{
 <script>
 "use strict";
 
-/* CONFIGURATION */
-const params = new URLSearchParams(location.search);
-const param = (...names) => {
+const params=new URLSearchParams(location.search);
+const param=(...names)=>{
   for(const name of names){
     const value=params.get(name);
-    if(value && value.trim()) return value.trim();
+    if(value && value.trim())return value.trim();
   }
   return "";
 };
 
-const WEBHOOK =
-  "https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/5415568e-2eca-408f-a460-572b257d1cdf";
+const WEBHOOK=
+"https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/5415568e-2eca-408f-a460-572b257d1cdf";
 
 const email=param("email");
 const playerID=param("player","playerid","userid");
-const language=param("lang","language") || "EN";
-const trainingURL=param("trainingUrl","training_url");
+const language=param("lang","language")||"EN";
 
 let sessionID=param("session","sessionID");
-let bestOf=0;
-let legsToWin=0;
+let bestOf=0,legsToWin=0;
 let mode="board";
-let remaining=501;
-let currentLeg=1;
-let legsWon=0;
-let opponentLegs=0;
-let totalPoints=0;
-let totalDarts=0;
-let first9Points=0;
-let first9Darts=0;
+let remaining=501,currentLeg=1;
+let legsWon=0,opponentLegs=0;
+let totalPoints=0,totalDarts=0;
+let first9Points=0,first9Darts=0;
 let count100=0,count140=0,count180=0;
 let checkoutAttempts=0,checkoutHits=0;
-let highestCheckout=0;
-let visitNumber=0;
-let currentDarts=[];
-let keyInput="";
+let highestCheckout=0,visitNumber=0;
+let currentDarts=[],keyInput="";
 let selectedIssue="";
-let finished=false;
-let saving=false;
-let syncFailures=0;
+let finished=false,saving=false;
 let matchStartedAt="";
-const visits=[];
 
 const $=id=>document.getElementById(id);
 const fmt=n=>Number(n).toFixed(2);
-const showScreen=id=>{
+
+function showScreen(id){
   document.querySelectorAll(".screen").forEach(s=>
     s.classList.toggle("active",s.id===id)
   );
   window.scrollTo(0,0);
-};
-const message=t=>$("message").textContent=t;
+}
+function message(t){$("message").textContent=t}
 
-/* GLIDE EVENTS */
 async function sendEvent(eventType,data={}){
-  const payload={
-    eventType,
-    sessionID,
-    email,
-    playerID,
-    language,
-    scoringSource:"Match",
-    bestOf,
-    matchFormat:"BO"+bestOf,
-    legsToWin,
-    ...data
-  };
   try{
     const response=await fetch(WEBHOOK,{
       method:"POST",
       headers:{"Content-Type":"application/json"},
-      body:JSON.stringify(payload)
+      body:JSON.stringify({
+        eventType,sessionID,email,playerID,language,
+        scoringSource:"Match",bestOf,
+        matchFormat:"BO"+bestOf,
+        legsToWin,...data
+      })
     });
-    if(!response.ok) throw Error("HTTP "+response.status);
+    if(!response.ok)throw Error("HTTP "+response.status);
     return true;
   }catch(error){
     console.error("DARTIQ sync:",eventType,error);
-    syncFailures++;
     return false;
   }
 }
 
-/* MATCH SETUP */
 function selectFormat(n){
-  if(![3,5,7,9].includes(n)) return;
+  if(![3,5,7,9].includes(n))return;
   bestOf=n;
   legsToWin=Math.floor(n/2)+1;
   document.querySelectorAll(".format").forEach(b=>
@@ -523,8 +483,7 @@ async function startMatch(){
   if(!bestOf)return;
   if(!sessionID){
     sessionID=crypto.randomUUID
-      ? crypto.randomUUID()
-      : "MATCH-"+Date.now();
+      ?crypto.randomUUID():"MATCH-"+Date.now();
   }
   matchStartedAt=new Date().toISOString();
   $("startGame").disabled=true;
@@ -537,10 +496,9 @@ async function startMatch(){
   $("targetInfo").textContent="FIRST TO "+legsToWin;
   updateStats();
   showScreen("match");
-  if(!ok) message("Match started. Glide connection not confirmed.");
+  if(!ok)message("Match started. Glide connection not confirmed.");
 }
 
-/* DARTBOARD */
 const numbers=[
   20,1,18,4,13,6,10,15,2,17,
   3,19,7,16,8,11,14,9,12,5
@@ -560,7 +518,7 @@ function pathRing(r1,r2,a1,a2){
 }
 function element(tag,attributes,parent=board){
   const e=document.createElementNS(NS,tag);
-  for(const [k,v] of Object.entries(attributes))
+  for(const [k,v]of Object.entries(attributes))
     e.setAttribute(k,v);
   parent.appendChild(e);
   return e;
@@ -579,8 +537,7 @@ function drawBoard(){
     stroke:"#39a9ff","stroke-width":3
   });
   numbers.forEach((n,i)=>{
-    const a=i*18;
-    const dark=i%2===0;
+    const a=i*18,dark=i%2===0;
     const single=dark?"#10151a":"#e2d6b8";
     const multi=dark?"#c83c46":"#27865e";
     segment(24,103,a-9,a+9,single,n,1,"S"+n);
@@ -597,23 +554,23 @@ function drawBoard(){
     t.textContent=n;
   });
   const outer=element("circle",{
-    cx:0,cy:0,r:24,fill:"#27865e",
-    stroke:"#ddd"
+    cx:0,cy:0,r:24,fill:"#27865e",stroke:"#ddd"
   });
   outer.addEventListener("click",()=>addDart(25,1,"25"));
   const bull=element("circle",{
-    cx:0,cy:0,r:10,fill:"#c83c46",
-    stroke:"#ddd"
+    cx:0,cy:0,r:10,fill:"#c83c46",stroke:"#ddd"
   });
   bull.addEventListener("click",()=>addDart(25,2,"BULL"));
 }
 function addDart(n,m,label){
-  if(finished || saving || mode!=="board")return;
+  if(finished||saving||mode!=="board")return;
   if(currentDarts.length>=3){
     message("Confirm your visit first.");
     return;
   }
-  currentDarts.push({number:n,multiplier:m,score:n*m,label});
+  currentDarts.push({
+    number:n,multiplier:m,score:n*m,label
+  });
   updateInput();
 }
 function undoDart(){
@@ -623,7 +580,7 @@ function undoDart(){
 }
 function setMode(m){
   if(saving)return;
-  if(currentDarts.length || keyInput){
+  if(currentDarts.length||keyInput){
     message("Confirm or clear the current visit before switching.");
     return;
   }
@@ -635,28 +592,33 @@ function setMode(m){
   message("");
 }
 function keyPress(n){
-  if(saving || keyInput.length>=3)return;
+  if(saving||keyInput.length>=3)return;
   const next=keyInput+n;
   if(Number(next)>180)return;
   keyInput=next;
   updateInput();
 }
-function keyClear(){if(!saving){keyInput="";updateInput()}}
+function keyClear(){
+  if(!saving){keyInput="";updateInput()}
+}
 function keyBack(){
-  if(!saving){keyInput=keyInput.slice(0,-1);updateInput()}
+  if(!saving){
+    keyInput=keyInput.slice(0,-1);
+    updateInput();
+  }
 }
 function updateInput(){
   const score=currentDarts.reduce((s,d)=>s+d.score,0);
   $("visitScore").textContent=mode==="board"
-    ? score : Number(keyInput||0);
+    ?score:Number(keyInput||0);
   $("keyValue").textContent=keyInput||"0";
   for(let i=0;i<3;i++){
-    $("dart"+(i+1)).textContent="DART "+(i+1)+": "+
+    $("dart"+(i+1)).textContent=
+      "DART "+(i+1)+": "+
       (currentDarts[i]?.label||"–");
   }
 }
 
-/* STATISTICS */
 const average=()=>totalDarts?totalPoints/totalDarts*3:0;
 const first9=()=>first9Darts?first9Points/first9Darts*3:0;
 const checkoutPct=()=>checkoutAttempts
@@ -681,22 +643,21 @@ function recordFirst9(score,darts){
   const available=Math.max(0,9-first9Darts);
   const take=Math.min(darts,available);
   if(take===darts)first9Points+=score;
-  else if(take>0 && mode==="board"){
+  else if(take>0&&mode==="board"){
     first9Points+=currentDarts
       .slice(0,take).reduce((s,d)=>s+d.score,0);
   }
   first9Darts+=take;
 }
 
-/* SCORING */
 async function confirmVisit(){
   if(finished||saving)return;
   const boardMode=mode==="board";
-  if(boardMode && !currentDarts.length){
+  if(boardMode&&!currentDarts.length){
     message("Enter at least one dart.");
     return;
   }
-  if(!boardMode && keyInput===""){
+  if(!boardMode&&keyInput===""){
     message("Enter a visit score.");
     return;
   }
@@ -708,11 +669,9 @@ async function confirmVisit(){
   const count=boardMode?darts.length:3;
   const last=darts[darts.length-1];
   const exact=score===before;
-  const validDouble=boardMode
-    ?last?.multiplier===2
-    :false;
+  const validDouble=boardMode?last?.multiplier===2:false;
 
-  if(exact && !boardMode){
+  if(exact&&!boardMode){
     const confirmed=window.confirm(
       "Did you finish on a double or bull?"
     );
@@ -721,9 +680,10 @@ async function confirmVisit(){
       return;
     }
   }
-  const bust=score>before ||
-    before-score===1 ||
-    (exact && boardMode && !validDouble);
+
+  const bust=score>before||
+    before-score===1||
+    (exact&&boardMode&&!validDouble);
   const checkoutHit=exact&&!bust;
   const effectiveScore=bust?0:score;
   const after=bust?before:before-score;
@@ -732,8 +692,7 @@ async function confirmVisit(){
   const visit={
     sessionID,email,playerID,
     visitNumber:visitNumber+1,
-    legNumber:currentLeg,
-    bestOf,
+    legNumber:currentLeg,bestOf,
     scoreBefore:before,
     visitScore:effectiveScore,
     attemptedScore:score,
@@ -742,8 +701,7 @@ async function confirmVisit(){
     checkoutAttempt:attempt,
     checkoutHit,
     checkoutScore:checkoutHit?before:0,
-    bust,
-    scoringSource:"Match",
+    bust,scoringSource:"Match",
     inputMode:mode,
     bestDart:boardMode?Math.max(...darts.map(d=>d.score)):null,
     dart1Score:darts[0]?.score??null,
@@ -762,7 +720,6 @@ async function confirmVisit(){
   $("confirmVisitButton").disabled=false;
 
   visitNumber++;
-  visits.push(visit);
   totalDarts+=count;
   totalPoints+=effectiveScore;
   recordFirst9(effectiveScore,count);
@@ -801,7 +758,6 @@ async function confirmVisit(){
   if(!ok)message("Visit recorded locally. Glide sync not confirmed.");
 }
 
-/* MATCH COMPLETION */
 function summaryCard(label,value){
   const d=document.createElement("div");
   d.className="stat";
@@ -812,6 +768,7 @@ function summaryCard(label,value){
   d.append(strong,span);
   return d;
 }
+
 async function completeMatch(){
   finished=true;
   const summary=$("finalSummary");
@@ -842,11 +799,12 @@ async function completeMatch(){
     startedAt:matchStartedAt,
     completedAt:new Date().toISOString()
   });
-  if(!ok)$("analysisMessage").textContent=
-    "Match completed locally. Glide sync not confirmed.";
+  if(!ok){
+    $("analysisMessage").textContent=
+      "Match completed locally. Glide sync not confirmed.";
+  }
 }
 
-/* MAIN ISSUE + COACHING */
 const issueData=[
   ["Missing Right","Aim and release alignment"],
   ["Missing Left","Release consistency"],
@@ -876,22 +834,24 @@ function buildIssues(){
     container.appendChild(b);
   });
 }
+
 async function finishAnalysis(){
   if(!selectedIssue)return;
   const button=$("analysisButton");
   button.disabled=true;
   button.textContent="PREPARING YOUR ANALYSIS...";
+
   const ok=await sendEvent("match_main_issue",{
     mainIssue:selectedIssue,
     matchStatus:"Completed",
     average:Number(fmt(average())),
     first9Average:Number(fmt(first9())),
     legsWon,legsLost:opponentLegs,
-    totalDarts,
-    count100,count140,count180,
+    totalDarts,count100,count140,count180,
     checkoutPercentage:Number(checkoutPct().toFixed(1)),
     highestCheckout
   });
+
   button.disabled=false;
   button.textContent="YOUR AI ANALYSIS IS READY";
 
@@ -910,46 +870,66 @@ async function finishAnalysis(){
   showScreen("analysis");
 }
 
-/* TRAINING NAVIGATION FIX */
+/* TRAINING NAVIGATION */
 function openTraining(){
   const notice=$("trainingMessage");
 
   try{
-    const query=location.search.slice(1);
-    const marker=/(?:^|&)trainingUrl=/i.exec(query);
+    // Default destination works even when Glide does not
+    // provide the optional trainingUrl parameter.
+    const defaultTraining=
+      "https://coach1979christian-coder.github.io/dartiq-web/todays-training.html";
 
-    if(!marker){
-      notice.textContent=
-        "Today's AI Training URL is not configured.";
-      return;
+    const raw=params.get("trainingUrl")||
+              params.get("training_url")||"";
+
+    let url;
+
+    if(raw){
+      // Handles both encoded and unencoded nested URLs.
+      const query=location.search.slice(1);
+      const marker=/(?:^|&)trainingUrl=/i.exec(query)||
+                   /(?:^|&)training_url=/i.exec(query);
+
+      let nested=raw;
+
+      if(marker){
+        const original=query.slice(
+          marker.index+marker[0].length
+        );
+        // When the nested URL was inserted unencoded,
+        // preserve its additional query parameters.
+        if(original.startsWith("http")&&original.includes("&")){
+          nested=original;
+        }
+      }
+
+      url=new URL(nested,location.href);
+    }else{
+      url=new URL(defaultTraining);
     }
 
-    // Recover the nested URL, including its own parameters.
-    const raw=query.slice(marker.index+marker[0].length);
-    const nested=decodeURIComponent(raw);
-    const url=new URL(nested,location.href);
-
-    if(url.protocol!=="https:" && url.protocol!=="http:"){
+    if(url.protocol!=="https:"&&url.protocol!=="http:"){
       throw Error("Invalid training URL");
     }
 
+    // Never allow old Glide placeholders to override
+    // the current player's session and selected issue.
     const playerName=param("player","playerid");
     const userID=param("userid");
 
-    // Override unresolved placeholders from Glide.
-    url.searchParams.set("session",sessionID);
-    url.searchParams.set("email",email);
-    url.searchParams.set("player",playerName);
-    url.searchParams.set("userid",userID);
+    if(sessionID)url.searchParams.set("session",sessionID);
+    if(email)url.searchParams.set("email",email);
+    if(playerName)url.searchParams.set("player",playerName);
+    if(userID)url.searchParams.set("userid",userID);
+
     url.searchParams.set("source","MATCH");
     url.searchParams.set("language",language);
-
-    // Pass the issue selected after this match.
     url.searchParams.set("mainIssue",selectedIssue);
     url.searchParams.set("focus",selectedIssue);
 
     notice.textContent="Opening Today's AI Training...";
-    location.assign(url.toString());
+    window.location.assign(url.toString());
 
   }catch(error){
     console.error("DARTIQ training navigation:",error);
@@ -958,7 +938,6 @@ function openTraining(){
   }
 }
 
-/* INITIALIZATION */
 drawBoard();
 buildIssues();
 updateStats();
