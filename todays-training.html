@@ -4,26 +4,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-
 <title>DARTIQ Today's AI Training</title>
 
 <style>
 :root{
   --bg:#050b18;
   --panel:#10243a;
-  --panel2:#0d2136;
   --accent:#39a9ff;
   --text:#f4fbff;
   --muted:#9db8ce;
   --line:rgba(57,169,255,.24);
 }
-
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
-
+*{box-sizing:border-box;margin:0;padding:0}
 html,body{
   width:100%;
   min-height:100%;
@@ -32,46 +24,22 @@ html,body{
   color:var(--text);
   overflow-x:hidden;
 }
-
-body{
-  padding:6px;
-}
-
+body{padding:6px}
 .wrap{
   width:100%;
   max-width:430px;
   margin:0 auto;
   padding:16px;
-
   border-radius:20px;
-
   background:
-    radial-gradient(
-      circle at 50% 0%,
-      rgba(57,169,255,.10),
-      transparent 35%
-    ),
-    linear-gradient(
-      180deg,
-      #102844 0%,
-      #081a2d 100%
-    );
-
+    radial-gradient(circle at 50% 0%,rgba(57,169,255,.10),transparent 35%),
+    linear-gradient(180deg,#102844 0%,#081a2d 100%);
   border:1px solid rgba(57,169,255,.40);
-
   box-shadow:
     0 0 16px rgba(57,169,255,.18),
     inset 0 1px 0 rgba(255,255,255,.025);
 }
-
-/* =========================
-   HEADER
-========================= */
-
-.header{
-  padding:2px 2px 15px;
-}
-
+.header{padding:2px 2px 15px}
 .kicker{
   font-size:10px;
   font-weight:900;
@@ -80,17 +48,13 @@ body{
   text-transform:uppercase;
   margin-bottom:8px;
 }
-
 .header h1{
-  margin:0;
   font-size:31px;
   line-height:1.05;
   font-weight:900;
   letter-spacing:-.5px;
-  color:#fff;
   overflow-wrap:anywhere;
 }
-
 .subtitle{
   margin-top:8px;
   color:var(--accent);
@@ -99,55 +63,28 @@ body{
   font-weight:700;
   overflow-wrap:anywhere;
 }
-
 .divider{
   width:100%;
   height:2px;
   margin-top:15px;
-
-  background:
-    linear-gradient(
-      90deg,
-      var(--accent),
-      rgba(57,169,255,.12)
-    );
-
+  background:linear-gradient(90deg,var(--accent),rgba(57,169,255,.12));
   border-radius:99px;
-
-  box-shadow:
-    0 0 8px rgba(57,169,255,.20);
+  box-shadow:0 0 8px rgba(57,169,255,.20);
 }
-
-/* =========================
-   PRIMARY STATS
-========================= */
-
 .stats{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
   gap:8px;
   margin-top:14px;
 }
-
-.card{
+.card,.main-focus,.equipment{
   min-width:0;
   padding:12px 10px;
-
   border-radius:13px;
-
-  background:
-    linear-gradient(
-      180deg,
-      #10243a,
-      #0a1929
-    );
-
+  background:linear-gradient(180deg,#10243a,#0a1929);
   border:1px solid var(--line);
-
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.02);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.02);
 }
-
 .label{
   color:var(--muted);
   font-size:9px;
@@ -156,7 +93,6 @@ body{
   letter-spacing:.7px;
   text-transform:uppercase;
 }
-
 .value{
   margin-top:7px;
   color:#fff;
@@ -165,342 +101,214 @@ body{
   font-weight:900;
   overflow-wrap:anywhere;
 }
-
-/* =========================
-   MAIN FOCUS
-========================= */
-
-.main-focus{
+.main-focus,.equipment{
   margin-top:8px;
   padding:13px 14px;
-
-  border-radius:13px;
-
-  background:
-    linear-gradient(
-      180deg,
-      #10243a,
-      #0a1929
-    );
-
-  border:1px solid var(--line);
-
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.02);
 }
-
 .main-focus .value{
-  margin-top:6px;
   font-size:15px;
   line-height:1.4;
-  font-weight:800;
 }
-
-/* =========================
-   EQUIPMENT
-========================= */
-
-.equipment{
-  margin-top:8px;
-  padding:13px 14px;
-
-  border-radius:13px;
-
-  background:
-    linear-gradient(
-      180deg,
-      #10243a,
-      #0a1929
-    );
-
-  border:1px solid var(--line);
-
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.02);
-}
-
 .equipment .value{
-  margin-top:6px;
   font-size:14px;
   line-height:1.4;
-  font-weight:800;
 }
-
-/* =========================
-   MOBILE
-========================= */
-
+.training-action{
+  margin-top:16px;
+}
+.start-button{
+  display:block;
+  width:100%;
+  padding:16px 12px;
+  border:0;
+  border-radius:12px;
+  background:var(--accent);
+  color:#031322;
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:.8px;
+  cursor:pointer;
+  box-shadow:0 0 18px rgba(57,169,255,.30);
+}
+.start-button:active{transform:scale(.99)}
+.start-button:disabled{opacity:.5;cursor:not-allowed}
+.action-note{
+  text-align:center;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.5;
+  margin-top:10px;
+}
+.status{
+  text-align:center;
+  color:#ffd17a;
+  font-size:11px;
+  line-height:1.5;
+  margin-top:10px;
+}
+.hidden{display:none!important}
 @media(max-width:380px){
-
-  body{
-    padding:4px;
-  }
-
-  .wrap{
-    padding:13px;
-  }
-
-  .header h1{
-    font-size:28px;
-  }
-
-  .stats{
-    gap:6px;
-  }
-
-  .card{
-    padding:11px 8px;
-  }
-
-  .label{
-    font-size:8px;
-    letter-spacing:.5px;
-  }
-
-  .value{
-    font-size:15px;
-  }
-
-  .main-focus .value{
-    font-size:14px;
-  }
-
+  body{padding:4px}
+  .wrap{padding:13px}
+  .header h1{font-size:28px}
+  .stats{gap:6px}
+  .card{padding:11px 8px}
+  .label{font-size:8px;letter-spacing:.5px}
+  .value{font-size:15px}
+  .main-focus .value{font-size:14px}
 }
 </style>
 </head>
 
 <body>
-
 <div class="wrap">
 
-  <!-- HEADER -->
-
   <div class="header">
-
-    <div class="kicker">
-      DARTIQ · PRACTICE TRAINING
-    </div>
-
-    <h1 id="drill">
-      Practice Training
-    </h1>
-
-    <div class="subtitle" id="focus">
-      Focused practice
-    </div>
-
+    <div class="kicker">DARTIQ · PRACTICE TRAINING</div>
+    <h1 id="drill">Practice Training</h1>
+    <div class="subtitle" id="focus">Focused practice</div>
     <div class="divider"></div>
-
   </div>
-
-  <!-- DIFFICULTY / DURATION / ROUNDS -->
 
   <div class="stats">
-
     <div class="card">
-
-      <div class="label">
-        Difficulty
-      </div>
-
-      <div class="value" id="level">
-        --
-      </div>
-
+      <div class="label">Difficulty</div>
+      <div class="value" id="level">--</div>
     </div>
-
     <div class="card">
-
-      <div class="label">
-        Duration
-      </div>
-
-      <div class="value" id="duration">
-        --
-      </div>
-
+      <div class="label">Duration</div>
+      <div class="value" id="duration">--</div>
     </div>
-
     <div class="card">
-
-      <div class="label">
-        Rounds
-      </div>
-
-      <div class="value" id="rounds">
-        --
-      </div>
-
+      <div class="label">Rounds</div>
+      <div class="value" id="rounds">--</div>
     </div>
-
   </div>
-
-  <!-- MAIN FOCUS -->
 
   <div class="main-focus">
-
-    <div class="label">
-      Main Focus
-    </div>
-
-    <div class="value" id="focusShort">
-      --
-    </div>
-
+    <div class="label">Main Focus</div>
+    <div class="value" id="focusShort">--</div>
   </div>
 
-  <!-- EQUIPMENT -->
-
   <div class="equipment" id="equipmentWrap">
+    <div class="label">Equipment</div>
+    <div class="value" id="equipment">--</div>
+  </div>
 
-    <div class="label">
-      Equipment
+  <div class="training-action">
+    <button
+      id="startTraining"
+      class="start-button"
+      type="button"
+      onclick="startTraining()"
+    >
+      🎯 START TRAINING
+    </button>
+
+    <div class="action-note">
+      Continue to the DARTIQ Practice Engine
     </div>
 
-    <div class="value" id="equipment">
-      --
-    </div>
-
+    <div class="status hidden" id="status"></div>
   </div>
 
 </div>
 
 <script>
+"use strict";
 
-const params =
-  new URLSearchParams(
-    window.location.search
-  );
+const params=new URLSearchParams(window.location.search);
 
-function getValue(
-  key,
-  fallback
-){
-
-  const value =
-    params.get(key);
-
-  if(
-    value === null ||
-    String(value).trim() === ""
-  ){
-    return fallback;
+function getValue(...keys){
+  for(const key of keys){
+    const value=params.get(key);
+    if(value!==null&&value.trim()!==""){
+      return value.trim();
+    }
   }
-
-  try{
-
-    return decodeURIComponent(
-      String(value)
-        .replace(/\+/g," ")
-    ).trim();
-
-  }catch(e){
-
-    return String(value)
-      .trim();
-
-  }
-
+  return "";
 }
 
-/* =========================
-   PARAMETERS
-========================= */
+const context={
+  session:getValue("session","sessionID"),
+  email:getValue("email"),
+  player:getValue("player","playerid"),
+  userid:getValue("userid"),
+  playerName:getValue("playerName","name"),
+  language:getValue("language","lang")||"EN",
+  source:getValue("source")||"MATCH",
+  mainIssue:getValue("mainIssue","mainissue","focus"),
+  focus:getValue("focus","mainIssue","mainissue"),
+  drill:getValue("drill","practice","trainingName","finalTraining"),
+  level:getValue("level","difficulty"),
+  duration:getValue("duration"),
+  rounds:getValue("rounds"),
+  equipment:getValue("equipment"),
+  practiceID:getValue("practiceID","practiceId","drillID")
+};
 
-const drill =
-  getValue(
-    "drill",
-    getValue(
-      "practice",
-      "Practice Training"
-    )
-  );
+function display(id,value,fallback="--"){
+  document.getElementById(id).textContent=value||fallback;
+}
 
-const duration =
-  getValue(
-    "duration",
-    "--"
-  );
+display("drill",context.drill,"Practice Training");
+display("focus",context.focus,"Focused practice");
+display("focusShort",context.mainIssue||context.focus);
+display("level",context.level);
+display("duration",context.duration);
+display("rounds",context.rounds);
 
-const rounds =
-  getValue(
-    "rounds",
-    "--"
-  );
-
-const level =
-  getValue(
-    "level",
-    "--"
-  );
-
-const focus =
-  getValue(
-    "focus",
-    "Focused practice"
-  );
-
-const equipment =
-  getValue(
-    "equipment",
-    ""
-  );
-
-/* =========================
-   POPULATE SCREEN
-========================= */
-
-document
-  .getElementById("drill")
-  .textContent =
-  drill;
-
-document
-  .getElementById("duration")
-  .textContent =
-  duration;
-
-document
-  .getElementById("rounds")
-  .textContent =
-  rounds;
-
-document
-  .getElementById("level")
-  .textContent =
-  level;
-
-document
-  .getElementById("focus")
-  .textContent =
-  focus;
-
-document
-  .getElementById("focusShort")
-  .textContent =
-  focus;
-
-/* =========================
-   EQUIPMENT
-========================= */
-
-if(equipment){
-
-  document
-    .getElementById("equipment")
-    .textContent =
-    equipment;
-
+if(context.equipment){
+  display("equipment",context.equipment);
 }else{
-
-  document
-    .getElementById("equipmentWrap")
-    .style.display =
-    "none";
-
+  document.getElementById("equipmentWrap").classList.add("hidden");
 }
 
-</script>
+function showStatus(message){
+  const status=document.getElementById("status");
+  status.textContent=message;
+  status.classList.remove("hidden");
+}
 
+function startTraining(){
+  try{
+    const url=new URL(
+      "practice-engine.html",
+      window.location.href
+    );
+
+    const fields={
+      session:context.session,
+      email:context.email,
+      player:context.player,
+      userid:context.userid,
+      playerName:context.playerName,
+      language:context.language,
+      source:context.source,
+      mainIssue:context.mainIssue,
+      focus:context.focus,
+      drill:context.drill,
+      level:context.level,
+      duration:context.duration,
+      rounds:context.rounds,
+      equipment:context.equipment,
+      practiceID:context.practiceID
+    };
+
+    for(const [key,value] of Object.entries(fields)){
+      if(value){
+        url.searchParams.set(key,value);
+      }
+    }
+
+    showStatus("Opening DARTIQ Practice Engine...");
+    window.location.assign(url.toString());
+
+  }catch(error){
+    console.error("DARTIQ training navigation failed:",error);
+    showStatus("Unable to open Practice Engine.");
+  }
+}
+</script>
 </body>
 </html>
