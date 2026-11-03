@@ -252,7 +252,9 @@ h2{font-size:18px;margin:8px 0 15px}
   gap:8px;
   margin-top:10px;
 }
-.voice-buttons button{font-size:11px}
+.voice-buttons button{
+  font-size:11px;
+}
 .caller-line{
   margin-top:10px;
   min-height:20px;
@@ -423,16 +425,14 @@ footer{
         <button class="key" onclick="keyPress('0')">0</button>
         <button class="key" onclick="keyBack()">⌫</button>
       </div>
-    </div>
-
-    <div class="visit">
-      <div class="eyebrow">CURRENT VISIT</div>
-      <strong id="visitScore">0</strong>
+      <p class="small center">
+        Enter your total visit score. A checkout requires confirmation.
+      </p>
     </div>
   </div>
 
   <div class="panel">
-    <div class="eyebrow center">LIVE MATCH STATISTICS</div>
+    <div class="eyebrow">LIVE PERFORMANCE</div>
     <div class="stats">
       <div class="stat"><strong id="average">0.00</strong><span>AVERAGE</span></div>
       <div class="stat"><strong id="first9">0.00</strong><span>FIRST 9</span></div>
@@ -449,22 +449,26 @@ footer{
 
 <section id="completed" class="screen">
   <div class="panel center">
-    <div class="eyebrow success">MATCH COMPLETED</div>
-    <h1>YOUR MATCH RESULTS</h1>
+    <div class="eyebrow">MATCH COMPLETED</div>
+    <h1>YOUR MATCH PERFORMANCE</h1>
     <div id="finalSummary" class="stats"></div>
+    <button class="primary" onclick="showScreen('mainIssue')">
+      CONTINUE TO AI ANALYSIS
+    </button>
   </div>
-  <div class="panel">
-    <div class="center">
-      <div class="eyebrow">PERFORMANCE ANALYSIS</div>
-      <h2>WHAT WAS YOUR MAIN ISSUE?</h2>
-      <p class="small">
-        Select the biggest challenge you experienced.
-      </p>
-    </div>
-    <div class="issue-grid" id="issues"></div>
+</section>
+
+<section id="mainIssue" class="screen">
+  <div class="panel center">
+    <div class="eyebrow">POST-MATCH ANALYSIS</div>
+    <h1>WHAT WAS YOUR MAIN ISSUE?</h1>
+    <p class="small">
+      Select the issue that affected your performance most.
+    </p>
+    <div id="issues" class="issue-grid"></div>
     <button id="analysisButton" class="primary hidden"
       onclick="finishAnalysis()">
-      YOUR AI ANALYSIS IS READY
+      GET MY AI ANALYSIS
     </button>
     <div id="analysisMessage" class="notice"></div>
   </div>
@@ -472,10 +476,10 @@ footer{
 
 <section id="analysis" class="screen">
   <div class="panel center">
-    <div class="eyebrow success">DARTIQ AI COACH</div>
-    <h1>YOUR AI ANALYSIS</h1>
-    <p id="analysisIssue"></p>
-    <div id="analysisAdvice" class="panel"></div>
+    <div class="eyebrow">DARTIQ AI COACH</div>
+    <h1>YOUR MATCH ANALYSIS</h1>
+    <h2 id="analysisIssue"></h2>
+    <p id="analysisAdvice" class="small"></p>
     <button class="primary" onclick="openTraining()">
       GO TO TODAY'S AI TRAINING
     </button>
@@ -483,11 +487,13 @@ footer{
   </div>
 </section>
 
-<footer>DARTIQ • PERFORMANCE INTELLIGENCE</footer>
+<footer>DARTIQ • INTELLIGENT DARTS PERFORMANCE</footer>
 </div>
 
 <script>
-"use strict";
+/* =============================================
+   URL PARAMETERS AND WEBHOOKS
+   ============================================= */
 
 const params=new URLSearchParams(location.search);
 
@@ -499,40 +505,20 @@ const param=(...names)=>{
   return "";
 };
 
-// =============================================
-// DARTIQ WEBHOOK CONFIGURATION
-// =============================================
-
 const WEBHOOK=
 "https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/5415568e-2eca-408f-a460-572b257d1cdf";
+
+const MATCH_START_WEBHOOK=
+"https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/86d46fb2-e26e-43fc-9887-60c5a31e5357";
 
 const MATCH_COMPLETION_WEBHOOK=
 "https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/89ab5acf-6067-4022-ab9d-f5a02ab99698";
 
 const email=param("email");
 const playerID=param("player","playerid","userid");
+const playerName=param("playerName","name")||"PLAYER";
 const language=param("lang","language")||"EN";
-
-const $=id=>document.getElementById(id);
-const fmt=n=>Number(n).toFixed(2);
-
-function getPlayerName(){
-  const explicit=param(
-    "playerName","player_name","name","firstName","firstname"
-  );
-  if(explicit)return explicit.trim().split(/\s+/)[0];
-
-  const candidate=param("player");
-  if(candidate&&
-     !/^[0-9a-f]{8}-[0-9a-f-]{20,}$/i.test(candidate)&&
-     !/^[A-Za-z0-9_-]{18,}$/.test(candidate)&&
-     /^[\p{L}][\p{L}' -]*$/u.test(candidate)){
-    return candidate.trim().split(/\s+/)[0];
-  }
-  return "Player";
-}
-
-const playerName=getPlayerName();
+const isDutch=language.toLowerCase().startsWith("nl");
 
 let sessionID=param("session","sessionID");
 let bestOf=0,legsToWin=0;
@@ -549,117 +535,88 @@ let selectedIssue="";
 let finished=false,saving=false;
 let matchStartedAt="";
 
+const $=id=>document.getElementById(id);
+const fmt=n=>Number(n).toFixed(2);
+
 /* =============================================
-   DARTIQ MASTER CALLER V2
-   Single-player match announcements
+   DARTIQ MASTER CALLER
    ============================================= */
 
 const speechSupported=
   "speechSynthesis" in window&&
   "SpeechSynthesisUtterance" in window;
 
-const isDutch=/^nl/i.test(language);
-
-let voiceEnabled=speechSupported;
-let selectedVoice=null;
+let voiceEnabled=true;
+let callerVoice=null;
 let lastCall=[];
-let callGeneration=0;
-let speechQueue=[];
+let callSequence=0;
 
 function selectCallerVoice(){
   if(!speechSupported)return;
+
   const voices=window.speechSynthesis.getVoices();
-  const prefix=isDutch?"nl":"en";
+  const target=isDutch?"nl":"en";
 
-  const available=voices.filter(v=>
-    v.lang.toLowerCase().startsWith(prefix)
-  );
+  callerVoice=
+    voices.find(v=>v.lang.toLowerCase().startsWith(target)&&v.name.toLowerCase().includes("male"))||
+    voices.find(v=>v.lang.toLowerCase().startsWith(target))||
+    voices.find(v=>v.lang.toLowerCase().startsWith("en-gb"))||
+    voices[0]||
+    null;
 
-  const preferred=available.find(v=>
-    /en-GB/i.test(v.lang)&&
-    /male|daniel|george|ryan|arthur/i.test(v.name)
-  )||available.find(v=>
-    /en-GB/i.test(v.lang)
-  )||available.find(v=>
-    /male|daniel|george|ryan|arthur/i.test(v.name)
-  )||available[0]||null;
-
-  selectedVoice=preferred;
-
-  const status=$("voiceStatus");
-  if(status){
-    status.textContent=!speechSupported
-      ?"Speech unavailable on this device."
-      :preferred
-        ?"Caller voice: "+preferred.name
-        :"Using device default voice.";
-  }
+  $("voiceStatus").textContent=callerVoice
+    ?"CALLER READY • "+callerVoice.name
+    :"CALLER READY";
 }
 
 function updateVoiceButton(){
-  const button=$("voiceToggle");
-  if(!button)return;
-  button.disabled=!speechSupported;
-  button.textContent=!speechSupported
-    ?"UNAVAILABLE"
-    :voiceEnabled?"VOICE ON":"VOICE OFF";
-  button.setAttribute("aria-pressed",String(voiceEnabled));
+  $("voiceToggle").textContent=voiceEnabled?"VOICE ON":"VOICE OFF";
+  $("voiceStatus").textContent=voiceEnabled
+    ?(callerVoice?"CALLER READY • "+callerVoice.name:"CALLER READY")
+    :"CALLER MUTED";
 }
 
 function toggleVoice(){
-  if(!speechSupported)return;
   voiceEnabled=!voiceEnabled;
-  if(!voiceEnabled){
-    callGeneration++;
-    speechQueue=[];
+  if(!voiceEnabled&&speechSupported){
     window.speechSynthesis.cancel();
-  }else{
-    selectCallerVoice();
   }
   updateVoiceButton();
 }
 
-function saySequence(parts,remember=true){
-  if(!speechSupported||!voiceEnabled)return;
+function saySequence(lines){
+  lastCall=lines.map(line=>({...line}));
 
-  if(remember)lastCall=parts.map(p=>({...p}));
-
-  const synth=window.speechSynthesis;
-  const generation=++callGeneration;
-
-  speechQueue=parts.map(part=>({...part}));
-
-  synth.cancel();
-
-  function next(){
-    if(generation!==callGeneration||
-       !voiceEnabled||
-       !speechQueue.length)return;
-
-    const part=speechQueue.shift();
-    const utterance=new SpeechSynthesisUtterance(part.text);
-
-    utterance.lang=isDutch?"nl-NL":"en-GB";
-    if(selectedVoice)utterance.voice=selectedVoice;
-
-    utterance.rate=part.rate??0.91;
-    utterance.pitch=part.pitch??0.87;
-    utterance.volume=1;
-
-    utterance.onend=next;
-    utterance.onerror=next;
-
-    try{
-      synth.speak(utterance);
-    }catch(error){
-      console.warn("DARTIQ caller:",error);
-    }
+  const first=lines[0];
+  if(first){
+    $("callerLine").textContent=first.display||first.text;
   }
 
-  next();
+  if(!voiceEnabled||!speechSupported)return;
 
-  const display=parts.map(p=>p.display||p.text).join(" ");
-  $("callerLine").textContent=display;
+  callSequence++;
+  const currentSequence=callSequence;
+
+  window.speechSynthesis.cancel();
+
+  function play(index){
+    if(currentSequence!==callSequence||index>=lines.length)return;
+
+    const line=lines[index];
+    $("callerLine").textContent=line.display||line.text;
+
+    const utterance=new SpeechSynthesisUtterance(line.text);
+    utterance.lang=isDutch?"nl-NL":"en-GB";
+    if(callerVoice)utterance.voice=callerVoice;
+    utterance.rate=line.rate||0.9;
+    utterance.pitch=line.pitch||0.85;
+
+    utterance.onend=()=>play(index+1);
+    utterance.onerror=()=>play(index+1);
+    window.speechSynthesis.speak(utterance);
+  }
+
+  play(0);
 }
 
 function repeatLastCall(){
@@ -667,29 +624,29 @@ function repeatLastCall(){
 }
 
 function testVoice(){
-  saySequence([
-    {
-      text:"One hundred and eighty!",
-      display:"ONE HUNDRED AND EIGHTYYYY!",
-      rate:0.78,
-      pitch:0.8
-    }
-  ]);
+  saySequence([{
+    text:isDutch
+      ?"DARTIQ master caller is klaar. Game on!"
+      :"DARTIQ master caller is ready. Game on!",
+    rate:0.88
+  }]);
 }
 
 function numberWords(n){
-  if(isDutch)return String(n);
+  n=Math.round(Number(n));
+
   const units=[
-    "zero","one","two","three","four","five",
-    "six","seven","eight","nine","ten",
-    "eleven","twelve","thirteen","fourteen",
-    "fifteen","sixteen","seventeen","eighteen",
-    "nineteen"
+    "zero","one","two","three","four","five","six",
+    "seven","eight","nine","ten","eleven","twelve",
+    "thirteen","fourteen","fifteen","sixteen",
+    "seventeen","eighteen","nineteen"
   ];
   const tens=[
-    "","","twenty","thirty","forty",
-    "fifty","sixty","seventy","eighty","ninety"
+    "","","twenty","thirty","forty","fifty",
+    "sixty","seventy","eighty","ninety"
   ];
+
+  if(n<0)return "minus "+numberWords(-n);
   if(n<20)return units[n];
   if(n<100){
     const t=Math.floor(n/10);
@@ -842,19 +799,12 @@ function message(t){
   $("message").textContent=t;
 }
 
-/* =============================================
-   DARTIQ EVENT ROUTING
-   Match completion uses the new webhook.
-   Other events retain the existing webhook.
-   ============================================= */
-
 async function sendEvent(eventType,data={}){
   try{
-    const webhookURL=
-      eventType==="match_complete"
-        ?MATCH_COMPLETION_WEBHOOK
-        :WEBHOOK;
-
+    const webhookURL =
+      eventType==="match_start" ? MATCH_START_WEBHOOK :
+      eventType==="match_complete" ? MATCH_COMPLETION_WEBHOOK :
+      WEBHOOK;
     const response=await fetch(webhookURL,{
       method:"POST",
       headers:{"Content-Type":"application/json"},
@@ -865,7 +815,6 @@ async function sendEvent(eventType,data={}){
         legsToWin,...data
       })
     });
-
     if(!response.ok)throw Error("HTTP "+response.status);
     return true;
   }catch(error){
@@ -913,6 +862,7 @@ async function startMatch(){
   updateStats();
   showScreen("match");
 
+  // This announcement is initiated from the Start Match action.
   announceStartLeg(1);
 
   if(!ok){
@@ -1272,6 +1222,9 @@ async function confirmVisit(){
 
     message("LEG WON! Start leg "+currentLeg+".");
 
+    // The next leg announcement is played when the player
+    // starts entering the next visit, to avoid interrupting
+    // the game-shot announcement.
     nextLegAnnouncementPending=true;
 
   }else{
@@ -1295,6 +1248,8 @@ function playPendingLegAnnouncement(){
   announceStartLeg(currentLeg);
 }
 
+// Announce the new leg at the next player input.
+// Avoid overriding game-shot audio immediately.
 const originalAddDart=addDart;
 addDart=function(n,m,label){
   if(nextLegAnnouncementPending&&
