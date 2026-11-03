@@ -252,9 +252,7 @@ h2{font-size:18px;margin:8px 0 15px}
   gap:8px;
   margin-top:10px;
 }
-.voice-buttons button{
-  font-size:11px;
-}
+.voice-buttons button{font-size:11px}
 .caller-line{
   margin-top:10px;
   min-height:20px;
@@ -501,8 +499,15 @@ const param=(...names)=>{
   return "";
 };
 
+// =============================================
+// DARTIQ WEBHOOK CONFIGURATION
+// =============================================
+
 const WEBHOOK=
 "https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/5415568e-2eca-408f-a460-572b257d1cdf";
+
+const MATCH_COMPLETION_WEBHOOK=
+"https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/89ab5acf-6067-4022-ab9d-f5a02ab99698";
 
 const email=param("email");
 const playerID=param("player","playerid","userid");
@@ -517,7 +522,6 @@ function getPlayerName(){
   );
   if(explicit)return explicit.trim().split(/\s+/)[0];
 
-  // "player" is often a Glide ID, so don't announce it as a name.
   const candidate=param("player");
   if(candidate&&
      !/^[0-9a-f]{8}-[0-9a-f-]{20,}$/i.test(candidate)&&
@@ -838,9 +842,20 @@ function message(t){
   $("message").textContent=t;
 }
 
+/* =============================================
+   DARTIQ EVENT ROUTING
+   Match completion uses the new webhook.
+   Other events retain the existing webhook.
+   ============================================= */
+
 async function sendEvent(eventType,data={}){
   try{
-    const response=await fetch(WEBHOOK,{
+    const webhookURL=
+      eventType==="match_complete"
+        ?MATCH_COMPLETION_WEBHOOK
+        :WEBHOOK;
+
+    const response=await fetch(webhookURL,{
       method:"POST",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify({
@@ -850,6 +865,7 @@ async function sendEvent(eventType,data={}){
         legsToWin,...data
       })
     });
+
     if(!response.ok)throw Error("HTTP "+response.status);
     return true;
   }catch(error){
@@ -897,7 +913,6 @@ async function startMatch(){
   updateStats();
   showScreen("match");
 
-  // This announcement is initiated from the Start Match action.
   announceStartLeg(1);
 
   if(!ok){
@@ -1257,9 +1272,6 @@ async function confirmVisit(){
 
     message("LEG WON! Start leg "+currentLeg+".");
 
-    // The next leg announcement is played when the player
-    // starts entering the next visit, to avoid interrupting
-    // the game-shot announcement.
     nextLegAnnouncementPending=true;
 
   }else{
@@ -1283,8 +1295,6 @@ function playPendingLegAnnouncement(){
   announceStartLeg(currentLeg);
 }
 
-// Announce the new leg at the next player input.
-// Avoid overriding game-shot audio immediately.
 const originalAddDart=addDart;
 addDart=function(n,m,label){
   if(nextLegAnnouncementPending&&
