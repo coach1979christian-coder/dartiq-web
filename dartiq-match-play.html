@@ -4,9 +4,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>DARTIQ | Match Engine V5</title>
+<title>DARTIQ | Match Engine V6</title>
 <style>
-:root{--bg:#02070e;--panel:#091827;--panel2:#0c2236;--blue:#39a9ff;--line:#205073;--text:#f4faff;--muted:#8faabe;--green:#49e6ad;--red:#ff737b}
+:root{
+--bg:#02070e;--panel:#091827;--panel2:#0c2236;
+--blue:#39a9ff;--line:#205073;--text:#f4faff;
+--muted:#8faabe;--green:#49e6ad;--red:#ff737b
+}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif;padding:10px}
 button{font:inherit;cursor:pointer}
@@ -30,21 +34,21 @@ h2{font-size:18px;margin:8px 0 15px}
 .format{padding:20px 3px;border-radius:12px;border:1px solid var(--line);background:var(--panel2);color:white;font-weight:900}
 .format.selected{background:var(--blue);color:#001321;box-shadow:0 0 16px #39a9ff55}
 .match-info{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:11px;margin:12px 0}
-.mode-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:15px 0}
+.mode-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
 .mode.active{background:var(--blue);color:#001321}
-.dartboard-layout{display:grid;grid-template-columns:minmax(100px,30%) minmax(0,1fr);align-items:center;gap:8px;width:100%}
-.dartboard-side-score{display:flex;flex-direction:column;gap:12px}
-.side-score-box{background:#061421;border:1px solid var(--line);border-radius:12px;padding:14px 5px;text-align:center}
-.side-score-label{color:var(--blue);font-size:10px;font-weight:900;margin-bottom:8px}
-.side-score-value{font-size:43px;font-weight:900}
-.side-legs-value{font-size:30px;font-weight:900;margin:8px 0}
+.dartboard-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,3fr) minmax(0,1fr);align-items:center;gap:8px;width:100%}
+.dartboard-side-score{display:flex;align-items:center;justify-content:center;min-width:0}
+.side-score-box{width:100%;background:#061421;border:1px solid var(--line);border-radius:10px;padding:10px 2px;text-align:center}
+.side-score-label{color:var(--blue);font-size:9px;font-weight:900;margin-bottom:6px}
+.side-score-value{font-size:27px;font-weight:900}
+.side-legs-value{font-size:24px;font-weight:900}
 .board-wrap{width:100%;max-width:370px;margin:auto;aspect-ratio:1}
 #board{width:100%;height:100%;touch-action:manipulation;filter:drop-shadow(0 0 10px #39a9ff35)}
 .visit{background:#020a12;border:1px solid var(--line);padding:12px;border-radius:12px;text-align:center;margin:12px 0}
 .visit strong{font-size:30px}
-.darts{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:10px 0}
+.darts{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:12px 0 8px}
 .dart{background:var(--panel2);border-radius:9px;text-align:center;padding:10px 3px;font-size:12px}
-.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
 .keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
 .key{background:var(--panel2);color:white;border:1px solid var(--line);border-radius:9px;padding:14px 5px;font-size:20px;font-weight:900}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
@@ -77,14 +81,14 @@ h2{font-size:18px;margin:8px 0 15px}
 .hidden{display:none!important}
 footer{text-align:center;color:#52748c;font-size:9px;letter-spacing:2px;padding:20px 0}
 @media(max-width:480px){
-.dartboard-layout{grid-template-columns:95px minmax(0,1fr);gap:5px}
-.side-score-value{font-size:29px}
-.side-legs-value{font-size:23px}
-.side-score-label{font-size:8px}
-.side-score-box{padding:10px 3px}
+.panel{padding:12px}
+.dartboard-layout{grid-template-columns:minmax(0,1fr) minmax(0,3.2fr) minmax(0,1fr);gap:3px}
+.side-score-box{padding:8px 1px}
+.side-score-value{font-size:21px}
+.side-legs-value{font-size:19px}
+.side-score-label{font-size:7px}
 }
 @media(max-width:390px){
-.panel{padding:12px}
 .stat strong{font-size:16px}
 .format{padding:17px 2px}
 .checkout-route{font-size:19px}
@@ -155,19 +159,41 @@ footer{text-align:center;color:#52748c;font-size:9px;letter-spacing:2px;padding:
 </div>
 </div>
 
-<div class="visit">
-<div class="eyebrow">CURRENT VISIT SCORE</div>
-<strong id="visitScore">0</strong>
-</div>
-
 <div class="match-info">
 <span id="legInfo">LEG 1</span>
 <span id="targetInfo">FIRST TO 3</span>
 <span id="visitInfo">VISIT 1</span>
 </div>
 
-<button id="confirmVisitButton" class="primary" onclick="confirmVisit()">CONFIRM VISIT</button>
-<div id="message" class="notice"></div>
+<div class="dartboard-layout">
+<div class="dartboard-side-score">
+<div class="side-score-box">
+<div class="side-score-label">REMAINING</div>
+<div id="boardRemaining" class="side-score-value">501</div>
+</div>
+</div>
+<div class="board-wrap">
+<svg id="board" viewBox="-230 -230 460 460" aria-label="Interactive dartboard"></svg>
+</div>
+<div class="dartboard-side-score">
+<div class="side-score-box">
+<div class="side-score-label">LEGS</div>
+<div id="boardLegs" class="side-legs-value">0–0</div>
+<div class="side-score-label">YOU / OPP.</div>
+</div>
+</div>
+</div>
+
+<div class="visit">
+<div class="eyebrow">CURRENT VISIT SCORE</div>
+<strong id="visitScore">0</strong>
+</div>
+
+<div class="darts">
+<div class="dart" id="dart1">DART 1: –</div>
+<div class="dart" id="dart2">DART 2: –</div>
+<div class="dart" id="dart3">DART 3: –</div>
+</div>
 
 <div class="mode-row">
 <button id="boardModeButton" class="secondary mode active" onclick="setMode('board')">🎯 DARTBOARD</button>
@@ -175,27 +201,6 @@ footer{text-align:center;color:#52748c;font-size:9px;letter-spacing:2px;padding:
 </div>
 
 <div id="boardPanel">
-<div class="dartboard-layout">
-<div class="dartboard-side-score">
-<div class="side-score-box">
-<div class="side-score-label">REMAINING</div>
-<div id="boardRemaining" class="side-score-value">501</div>
-</div>
-<div class="side-score-box">
-<div class="side-score-label">LEGS</div>
-<div id="boardLegs" class="side-legs-value">0–0</div>
-<div class="side-score-label">YOU / OPPONENT</div>
-</div>
-</div>
-<div class="board-wrap">
-<svg id="board" viewBox="-230 -230 460 460" aria-label="Interactive dartboard"></svg>
-</div>
-</div>
-<div class="darts">
-<div class="dart" id="dart1">DART 1: –</div>
-<div class="dart" id="dart2">DART 2: –</div>
-<div class="dart" id="dart3">DART 3: –</div>
-</div>
 <div class="actions">
 <button class="secondary" onclick="addDart(0,0,'MISS')">MISS</button>
 <button class="secondary" onclick="undoDart()">UNDO DART</button>
@@ -221,6 +226,8 @@ footer{text-align:center;color:#52748c;font-size:9px;letter-spacing:2px;padding:
 <p class="small center">Enter your total visit score. A checkout requires confirmation.</p>
 </div>
 
+<button id="confirmVisitButton" class="primary" onclick="confirmVisit()">CONFIRM VISIT</button>
+<div id="message" class="notice"></div>
 <button id="opponentWonButton" class="danger" onclick="opponentWonLeg()">OPPONENT WON LEG</button>
 </div>
 </section>
@@ -295,9 +302,8 @@ let selectedIssue="",finished=false,saving=false;
 let matchStartedAt="",nextLegAnnouncementPending=false;
 let matchResult="",completionSyncConfirmed=false;
 
-const RECOVERY_KEY="DARTIQ_MATCH_RECOVERY_V5_"+(email||playerID||"guest");
+const RECOVERY_KEY="DARTIQ_MATCH_RECOVERY_V6_"+(email||playerID||"guest");
 
-/* CHECKOUT ROUTES */
 const checkoutRoutes={
 170:"T20 → T20 → BULL",167:"T20 → T19 → BULL",
 164:"T20 → T18 → BULL",161:"T20 → T17 → BULL",
@@ -460,7 +466,6 @@ showScreen(saved.stage==="analysis"?"mainIssue":saved.stage);
 }catch(e){console.warn("Recovery failed",e);}
 }
 
-/* MASTER CALLER */
 const speechSupported="speechSynthesis" in window&&"SpeechSynthesisUtterance" in window;
 let voiceEnabled=true,callerVoice=null,lastCall=[],callSequence=0;
 
@@ -476,19 +481,16 @@ candidates.find(v=>!/female/i.test(v.name))||
 candidates[0]||null;
 updateVoiceButton();
 }
-
 function updateVoiceButton(){
 $("voiceToggle").textContent=voiceEnabled?"VOICE ON":"VOICE OFF";
 $("voiceStatus").textContent=!voiceEnabled?"CALLER MUTED":
 callerVoice?"CALLER READY • "+callerVoice.name:"CALLER READY";
 }
-
 function toggleVoice(){
 voiceEnabled=!voiceEnabled;
 if(!voiceEnabled&&speechSupported)window.speechSynthesis.cancel();
 updateVoiceButton();
 }
-
 function saySequence(lines){
 lastCall=lines.map(line=>({...line}));
 if(lines[0])$("callerLine").textContent=lines[0].display||lines[0].text;
@@ -511,13 +513,11 @@ window.speechSynthesis.speak(utterance);
 }
 play(0);
 }
-
 function repeatLastCall(){if(lastCall.length)saySequence(lastCall);}
 function testVoice(){
 saySequence([{text:isDutch?"DARTIQ master caller is klaar. Game on!":
 "DARTIQ master caller is ready. Game on!",rate:0.88}]);
 }
-
 function numberWords(n){
 n=Math.round(Number(n));
 const units=["zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"];
@@ -576,7 +576,6 @@ return;
 announceScore(score);
 }
 
-/* MATCH CONTROLS */
 function showScreen(id){
 document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("active",s.id===id));
 window.scrollTo(0,0);
@@ -613,7 +612,6 @@ b.classList.toggle("selected",Number(b.dataset.format)===n));
 $("formatDescription").textContent="BEST OF "+n+" • FIRST TO "+legsToWin+" LEGS";
 $("startGame").classList.remove("hidden");
 }
-
 async function startMatch(){
 if(!bestOf)return;
 try{sessionStorage.removeItem(RECOVERY_KEY);}catch(e){}
@@ -635,7 +633,6 @@ announceStartLeg(1);
 if(!ok)message("Match started. Glide connection not confirmed.");
 }
 
-/* DARTBOARD */
 const numbers=[20,1,18,4,13,6,10,15,2,17,3,19,7,16,8,11,14,9,12,5];
 const NS="http://www.w3.org/2000/svg";
 const board=$("board");
@@ -728,7 +725,6 @@ $("dart"+(i+1)).textContent="DART "+(i+1)+": "+(currentDarts[i]?.label||"–");
 }
 }
 
-/* STATISTICS */
 const average=()=>totalDarts?totalPoints/totalDarts*3:0;
 const first9=()=>first9Darts?first9Points/first9Darts*3:0;
 const checkoutPct=()=>checkoutAttempts?checkoutHits/checkoutAttempts*100:0;
@@ -740,7 +736,6 @@ $("legInfo").textContent="LEG "+currentLeg;
 $("visitInfo").textContent="VISIT "+(visitNumber+1);
 updateCheckoutRoute();
 }
-
 function recordFirst9(score,darts,dartScores=[]){
 const available=Math.max(0,9-first9Darts);
 const take=Math.min(darts,available);
@@ -751,16 +746,11 @@ first9Points+=dartScores.slice(0,take).reduce((s,v)=>s+v,0);
 first9Darts+=take;
 }
 
-/* CONFIRM VISIT */
 async function confirmVisit(){
 if(finished||saving)return;
 const boardMode=mode==="board";
-if(boardMode&&!currentDarts.length){
-message("Enter at least one dart.");return;
-}
-if(!boardMode&&keyInput===""){
-message("Enter a visit score.");return;
-}
+if(boardMode&&!currentDarts.length){message("Enter at least one dart.");return;}
+if(!boardMode&&keyInput===""){message("Enter a visit score.");return;}
 const darts=boardMode?currentDarts.map(d=>({...d})):[];
 const score=boardMode?darts.reduce((s,d)=>s+d.score,0):Number(keyInput);
 const before=remaining;
@@ -768,20 +758,17 @@ const count=boardMode?darts.length:3;
 const last=darts[darts.length-1];
 const exact=score===before;
 const validDouble=boardMode?last?.multiplier===2:false;
-
 if(exact&&!boardMode){
 if(!window.confirm("Did you finish on a double or bull?")){
 message("Checkout not confirmed. Enter a corrected visit.");
 return;
 }
 }
-
 const bust=score>before||before-score===1||(exact&&boardMode&&!validDouble);
 const checkoutHit=exact&&!bust;
 const effectiveScore=bust?0:score;
 const after=bust?before:before-score;
 const attempt=before>=2&&before<=170;
-
 const visit={
 sessionID,email,playerID,visitNumber:visitNumber+1,
 legNumber:currentLeg,bestOf,scoreBefore:before,
@@ -796,7 +783,6 @@ dart2Score:darts[1]?.score??null,dart2Segment:darts[1]?.label||"",
 dart3Score:darts[2]?.score??null,dart3Segment:darts[2]?.label||"",
 darts
 };
-
 saving=true;
 $("confirmVisitButton").disabled=true;
 $("opponentWonButton").disabled=true;
@@ -804,7 +790,6 @@ const ok=await sendEvent("match_visit",visit);
 saving=false;
 $("confirmVisitButton").disabled=false;
 $("opponentWonButton").disabled=false;
-
 visitNumber++;
 totalDarts+=count;
 totalPoints+=effectiveScore;
@@ -825,11 +810,9 @@ currentDarts=[];
 keyInput="";
 updateInput();
 updateStats();
-
 const matchWon=checkoutHit&&legsWon>=legsToWin;
 announceVisitResult({score,bust,checkout:checkoutHit,
 matchWon,leg:currentLeg,remainingScore:remaining});
-
 if(checkoutHit){
 if(matchWon){await completeMatch();return;}
 currentLeg++;
@@ -838,13 +821,11 @@ updateStats();
 message("LEG WON! Start leg "+currentLeg+".");
 nextLegAnnouncementPending=true;
 }else{
-message(bust?"BUST • Score unchanged.":
-"Visit recorded • "+remaining+" remaining.");
+message(bust?"BUST • Score unchanged.":"Visit recorded • "+remaining+" remaining.");
 }
 if(!ok)message("Visit recorded locally. Glide sync not confirmed.");
 }
 
-/* OPPONENT LEG */
 async function opponentWonLeg(){
 if(finished||saving)return;
 if(!window.confirm("Confirm opponent won leg "+currentLeg+"?"))return;
@@ -883,7 +864,6 @@ message("OPPONENT WON LEG • Start leg "+currentLeg+".");
 if(!ok)message("Opponent leg recorded locally. Glide sync not confirmed.");
 }
 
-/* MATCH RESULT */
 function summaryCard(label,value){
 const d=document.createElement("div");
 d.className="stat";
@@ -948,7 +928,6 @@ saveRecovery("mainIssue");
 showScreen("mainIssue");
 }
 
-/* MAIN ISSUE AND AI ANALYSIS */
 const issueData=[
 ["Missing Right","Aim and release alignment"],
 ["Missing Left","Release consistency"],
@@ -961,7 +940,6 @@ const issueData=[
 ["Body Stability","Consistent stance and balance"],
 ["Confidence","Match confidence and routine"]
 ];
-
 function buildIssues(){
 issueData.forEach(([name])=>{
 const b=document.createElement("button");
@@ -969,8 +947,7 @@ b.className="issue";
 b.textContent=name;
 b.onclick=()=>{
 selectedIssue=name;
-document.querySelectorAll(".issue").forEach(x=>
-x.classList.toggle("selected",x===b));
+document.querySelectorAll(".issue").forEach(x=>x.classList.toggle("selected",x===b));
 $("analysisButton").classList.remove("hidden");
 saveRecovery("mainIssue");
 };
@@ -1001,27 +978,22 @@ highestCheckout
 button.disabled=false;
 button.textContent="GET MY AI ANALYSIS";
 if(!ok){
-$("analysisMessage").textContent=
-"Glide did not confirm receipt. Retry before continuing.";
+$("analysisMessage").textContent="Glide did not confirm receipt. Retry before continuing.";
 return;
 }
 renderAnalysis();
 saveRecovery("analysis");
 showScreen("analysis");
 }
-
-/* TRAINING */
 function openTraining(){
 const notice=$("trainingMessage");
 try{
-const defaultTraining=
-"https://coach1979christian-coder.github.io/dartiq-web/todays-training.html";
+const defaultTraining="https://coach1979christian-coder.github.io/dartiq-web/todays-training.html";
 const raw=params.get("trainingUrl")||params.get("training_url")||"";
 let url;
 if(raw){
 const query=location.search.slice(1);
-const marker=/(?:^|&)trainingUrl=/i.exec(query)||
-/(?:^|&)training_url=/i.exec(query);
+const marker=/(?:^|&)trainingUrl=/i.exec(query)||/(?:^|&)training_url=/i.exec(query);
 let nested=raw;
 if(marker){
 const original=query.slice(marker.index+marker[0].length);
@@ -1050,7 +1022,6 @@ notice.textContent="Unable to open training. Check the training URL.";
 }
 }
 
-/* INITIALIZE */
 if(speechSupported){
 selectCallerVoice();
 if(typeof window.speechSynthesis.addEventListener==="function"){
