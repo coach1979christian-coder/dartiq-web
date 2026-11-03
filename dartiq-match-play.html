@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>DARTIQ | Match Engine V6</title>
+<title>DARTIQ | Match Engine V7</title>
 <style>
 :root{
 --bg:#02070e;--panel:#091827;--panel2:#0c2236;
@@ -59,9 +59,9 @@ h2{font-size:18px;margin:8px 0 15px}
 .issue{background:var(--panel2);color:white;border:1px solid var(--line);border-radius:10px;padding:15px 6px;font-size:12px;font-weight:bold}
 .issue.selected{border-color:var(--blue);background:#123b5c;box-shadow:0 0 10px #39a9ff30}
 .notice{font-size:11px;color:var(--muted);text-align:center;line-height:1.5;margin:12px 0}
-.voice-panel{margin:12px 0;background:#061421;border:1px solid var(--line);border-radius:12px;overflow:hidden}
-.voice-header{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:transparent;color:var(--blue);border:0;padding:14px;font-size:12px;font-weight:900;text-align:left}
-.voice-content{padding:0 12px 12px}
+.voice-panel,.scoring-panel{margin:12px 0;background:#061421;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.voice-header,.scoring-header{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:transparent;color:var(--blue);border:0;padding:14px;font-size:12px;font-weight:900;text-align:left}
+.voice-content,.scoring-content{padding:0 12px 12px}
 .voice-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .voice-top span{color:var(--blue);font-size:12px;font-weight:900}
 .voice-status{margin-top:8px;font-size:11px;color:var(--muted)}
@@ -134,12 +134,6 @@ footer{text-align:center;color:#52748c;font-size:9px;letter-spacing:2px;padding:
 <div class="player-tag">PLAYER: <strong id="displayPlayerName">PLAYER</strong></div>
 </div>
 
-<div class="checkout-panel">
-<div class="checkout-label">DARTIQ CHECKOUT ROUTE</div>
-<div id="checkoutRoute" class="checkout-route">NO CHECKOUT AVAILABLE</div>
-<div id="checkoutHint" class="checkout-hint">Checkout routes appear from 170 remaining.</div>
-</div>
-
 <div class="voice-panel">
 <button class="voice-header" onclick="toggleCallerPanel()">
 <span>🎙 DARTIQ MASTER CALLER</span>
@@ -159,10 +153,58 @@ footer{text-align:center;color:#52748c;font-size:9px;letter-spacing:2px;padding:
 </div>
 </div>
 
+<div class="scoring-panel">
+<button class="scoring-header" onclick="toggleScoringPanel()">
+<span>🎯 DARTBOARD / KEYPAD</span>
+<span id="scoringArrow">▼</span>
+</button>
+<div id="scoringContent" class="scoring-content hidden">
+<div class="mode-row">
+<button id="boardModeButton" class="secondary mode active" onclick="setMode('board')">🎯 DARTBOARD</button>
+<button id="keyModeButton" class="secondary mode" onclick="setMode('keypad')">KEYPAD</button>
+</div>
+<div id="boardPanel">
+<div class="actions">
+<button class="secondary" onclick="addDart(0,0,'MISS')">MISS</button>
+<button class="secondary" onclick="undoDart()">UNDO DART</button>
+</div>
+</div>
+<div id="keypadPanel" class="hidden">
+<div class="visit"><strong id="keyValue">0</strong></div>
+<div class="keypad">
+<button class="key" onclick="keyPress('1')">1</button>
+<button class="key" onclick="keyPress('2')">2</button>
+<button class="key" onclick="keyPress('3')">3</button>
+<button class="key" onclick="keyPress('4')">4</button>
+<button class="key" onclick="keyPress('5')">5</button>
+<button class="key" onclick="keyPress('6')">6</button>
+<button class="key" onclick="keyPress('7')">7</button>
+<button class="key" onclick="keyPress('8')">8</button>
+<button class="key" onclick="keyPress('9')">9</button>
+<button class="key" onclick="keyClear()">C</button>
+<button class="key" onclick="keyPress('0')">0</button>
+<button class="key" onclick="keyBack()">⌫</button>
+</div>
+<p class="small center">Enter your total visit score. A checkout requires confirmation.</p>
+</div>
+</div>
+</div>
+
 <div class="match-info">
 <span id="legInfo">LEG 1</span>
 <span id="targetInfo">FIRST TO 3</span>
 <span id="visitInfo">VISIT 1</span>
+</div>
+
+<div class="visit">
+<div class="eyebrow">CURRENT VISIT SCORE</div>
+<strong id="visitScore">0</strong>
+</div>
+
+<div class="darts">
+<div class="dart" id="dart1">DART 1: –</div>
+<div class="dart" id="dart2">DART 2: –</div>
+<div class="dart" id="dart3">DART 3: –</div>
 </div>
 
 <div class="dartboard-layout">
@@ -184,46 +226,10 @@ footer{text-align:center;color:#52748c;font-size:9px;letter-spacing:2px;padding:
 </div>
 </div>
 
-<div class="visit">
-<div class="eyebrow">CURRENT VISIT SCORE</div>
-<strong id="visitScore">0</strong>
-</div>
-
-<div class="darts">
-<div class="dart" id="dart1">DART 1: –</div>
-<div class="dart" id="dart2">DART 2: –</div>
-<div class="dart" id="dart3">DART 3: –</div>
-</div>
-
-<div class="mode-row">
-<button id="boardModeButton" class="secondary mode active" onclick="setMode('board')">🎯 DARTBOARD</button>
-<button id="keyModeButton" class="secondary mode" onclick="setMode('keypad')">KEYPAD</button>
-</div>
-
-<div id="boardPanel">
-<div class="actions">
-<button class="secondary" onclick="addDart(0,0,'MISS')">MISS</button>
-<button class="secondary" onclick="undoDart()">UNDO DART</button>
-</div>
-</div>
-
-<div id="keypadPanel" class="hidden">
-<div class="visit"><strong id="keyValue">0</strong></div>
-<div class="keypad">
-<button class="key" onclick="keyPress('1')">1</button>
-<button class="key" onclick="keyPress('2')">2</button>
-<button class="key" onclick="keyPress('3')">3</button>
-<button class="key" onclick="keyPress('4')">4</button>
-<button class="key" onclick="keyPress('5')">5</button>
-<button class="key" onclick="keyPress('6')">6</button>
-<button class="key" onclick="keyPress('7')">7</button>
-<button class="key" onclick="keyPress('8')">8</button>
-<button class="key" onclick="keyPress('9')">9</button>
-<button class="key" onclick="keyClear()">C</button>
-<button class="key" onclick="keyPress('0')">0</button>
-<button class="key" onclick="keyBack()">⌫</button>
-</div>
-<p class="small center">Enter your total visit score. A checkout requires confirmation.</p>
+<div class="checkout-panel">
+<div class="checkout-label">DARTIQ CHECKOUT ROUTE</div>
+<div id="checkoutRoute" class="checkout-route">NO CHECKOUT AVAILABLE</div>
+<div id="checkoutHint" class="checkout-hint">Checkout routes appear from 170 remaining.</div>
 </div>
 
 <button id="confirmVisitButton" class="primary" onclick="confirmVisit()">CONFIRM VISIT</button>
@@ -302,7 +308,7 @@ let selectedIssue="",finished=false,saving=false;
 let matchStartedAt="",nextLegAnnouncementPending=false;
 let matchResult="",completionSyncConfirmed=false;
 
-const RECOVERY_KEY="DARTIQ_MATCH_RECOVERY_V6_"+(email||playerID||"guest");
+const RECOVERY_KEY="DARTIQ_MATCH_RECOVERY_V7_"+(email||playerID||"guest");
 
 const checkoutRoutes={
 170:"T20 → T20 → BULL",167:"T20 → T19 → BULL",
@@ -411,6 +417,10 @@ hint.textContent="Suggested checkout route • Double out";
 function toggleCallerPanel(){
 const hidden=$("callerContent").classList.toggle("hidden");
 $("callerArrow").textContent=hidden?"▼":"▲";
+}
+function toggleScoringPanel(){
+const hidden=$("scoringContent").classList.toggle("hidden");
+$("scoringArrow").textContent=hidden?"▼":"▲";
 }
 
 function saveRecovery(stage){
