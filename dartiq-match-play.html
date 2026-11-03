@@ -4,329 +4,95 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>DARTIQ | Play Match Master Caller V3</title>
+<title>DARTIQ | Match Engine V5</title>
 <style>
-:root{
---bg:#02070e;
---panel:#091827;
---panel2:#0c2236;
---blue:#39a9ff;
---line:#205073;
---text:#f4faff;
---muted:#8faabe;
---green:#49e6ad;
---red:#ff737b
-}
+:root{--bg:#02070e;--panel:#091827;--panel2:#0c2236;--blue:#39a9ff;--line:#205073;--text:#f4faff;--muted:#8faabe;--green:#49e6ad;--red:#ff737b}
 *{box-sizing:border-box}
-body{
-margin:0;
-background:var(--bg);
-color:var(--text);
-font-family:Arial,Helvetica,sans-serif;
-padding:10px
-}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif;padding:10px}
 button{font:inherit;cursor:pointer}
 button:disabled{opacity:.45;cursor:not-allowed}
 .app{max-width:650px;margin:auto}
 .brand{text-align:center;padding:20px 0}
-.logo{
-font-size:30px;
-font-weight:900;
-letter-spacing:5px;
-color:var(--blue);
-text-shadow:0 0 20px #39a9ff65
-}
-.subtitle{
-color:var(--muted);
-font-size:11px;
-letter-spacing:2px;
-margin-top:8px
-}
+.logo{font-size:30px;font-weight:900;letter-spacing:5px;color:var(--blue);text-shadow:0 0 20px #39a9ff65}
+.subtitle{color:var(--muted);font-size:11px;letter-spacing:2px;margin-top:8px}
 .screen{display:none}
 .screen.active{display:block}
-.panel{
-background:linear-gradient(160deg,#0b2032,#06111d);
-border:1px solid var(--line);
-border-radius:18px;
-padding:18px;
-margin-bottom:12px
-}
+.panel{background:linear-gradient(160deg,#0b2032,#06111d);border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:12px}
 .center{text-align:center}
 h1{font-size:23px;margin:8px 0 15px}
 h2{font-size:18px;margin:8px 0 15px}
 .small{font-size:12px;color:var(--muted)}
-.eyebrow{
-font-size:10px;
-color:var(--blue);
-font-weight:900;
-letter-spacing:2px
-}
-.primary{
-display:block;
-width:100%;
-border:0;
-border-radius:12px;
-padding:15px 12px;
-background:var(--blue);
-color:#001321;
-font-size:13px;
-font-weight:900;
-margin-top:15px
-}
-.secondary{
-background:var(--panel2);
-border:1px solid var(--line);
-border-radius:10px;
-color:white;
-padding:12px;
-font-weight:bold
-}
-.danger{
-background:#391722;
-border:1px solid var(--red);
-color:white;
-border-radius:12px;
-padding:14px;
-font-weight:900;
-width:100%;
-margin-top:12px
-}
-.format-grid{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:8px;
-margin:20px 0
-}
-.format{
-padding:20px 3px;
-border-radius:12px;
-border:1px solid var(--line);
-background:var(--panel2);
-color:white;
-font-weight:900
-}
-.format.selected{
-background:var(--blue);
-color:#001321;
-box-shadow:0 0 16px #39a9ff55
-}
-.scoreboard{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px
-}
-.scorebox{
-background:#061421;
-border:1px solid var(--line);
-border-radius:14px;
-padding:16px 5px;
-text-align:center
-}
-.scorebox .value{
-font-size:49px;
-font-weight:900;
-margin-top:6px
-}
-.scorebox .value.legs{font-size:39px}
-.scorebox .label{
-font-size:10px;
-color:var(--blue);
-letter-spacing:1px;
-font-weight:900
-}
-.match-info{
-display:flex;
-justify-content:space-between;
-gap:8px;
-color:var(--muted);
-font-size:11px;
-margin:12px 0
-}
-.mode-row{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:8px;
-margin:15px 0
-}
+.eyebrow{font-size:10px;color:var(--blue);font-weight:900;letter-spacing:2px}
+.primary{display:block;width:100%;border:0;border-radius:12px;padding:15px 12px;background:var(--blue);color:#001321;font-size:13px;font-weight:900;margin-top:15px}
+.secondary{background:var(--panel2);border:1px solid var(--line);border-radius:10px;color:white;padding:12px;font-weight:bold}
+.danger{background:#391722;border:1px solid var(--red);color:white;border-radius:12px;padding:14px;font-weight:900;width:100%;margin-top:12px}
+.format-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:20px 0}
+.format{padding:20px 3px;border-radius:12px;border:1px solid var(--line);background:var(--panel2);color:white;font-weight:900}
+.format.selected{background:var(--blue);color:#001321;box-shadow:0 0 16px #39a9ff55}
+.match-info{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:11px;margin:12px 0}
+.mode-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:15px 0}
 .mode.active{background:var(--blue);color:#001321}
-.board-wrap{
-width:100%;
-max-width:370px;
-margin:auto;
-aspect-ratio:1
-}
-#board{
-width:100%;
-height:100%;
-touch-action:manipulation;
-filter:drop-shadow(0 0 10px #39a9ff35)
-}
-.visit{
-background:#020a12;
-border:1px solid var(--line);
-padding:12px;
-border-radius:12px;
-text-align:center;
-margin:12px 0
-}
+.dartboard-layout{display:grid;grid-template-columns:minmax(100px,30%) minmax(0,1fr);align-items:center;gap:8px;width:100%}
+.dartboard-side-score{display:flex;flex-direction:column;gap:12px}
+.side-score-box{background:#061421;border:1px solid var(--line);border-radius:12px;padding:14px 5px;text-align:center}
+.side-score-label{color:var(--blue);font-size:10px;font-weight:900;margin-bottom:8px}
+.side-score-value{font-size:43px;font-weight:900}
+.side-legs-value{font-size:30px;font-weight:900;margin:8px 0}
+.board-wrap{width:100%;max-width:370px;margin:auto;aspect-ratio:1}
+#board{width:100%;height:100%;touch-action:manipulation;filter:drop-shadow(0 0 10px #39a9ff35)}
+.visit{background:#020a12;border:1px solid var(--line);padding:12px;border-radius:12px;text-align:center;margin:12px 0}
 .visit strong{font-size:30px}
-.darts{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:7px;
-margin:10px 0
-}
-.dart{
-background:var(--panel2);
-border-radius:9px;
-text-align:center;
-padding:10px 3px;
-font-size:12px
-}
-.actions{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:8px
-}
-.keypad{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:7px
-}
-.key{
-background:var(--panel2);
-color:white;
-border:1px solid var(--line);
-border-radius:9px;
-padding:14px 5px;
-font-size:20px;
-font-weight:900
-}
-.stats{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:8px
-}
-.stat{
-background:#071725;
-border:1px solid #173d59;
-border-radius:10px;
-padding:12px 5px;
-text-align:center
-}
+.darts{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:10px 0}
+.dart{background:var(--panel2);border-radius:9px;text-align:center;padding:10px 3px;font-size:12px}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.key{background:var(--panel2);color:white;border:1px solid var(--line);border-radius:9px;padding:14px 5px;font-size:20px;font-weight:900}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:#071725;border:1px solid #173d59;border-radius:10px;padding:12px 5px;text-align:center}
 .stat strong{display:block;font-size:19px}
-.stat span{
-display:block;
-color:var(--muted);
-font-size:10px;
-margin-top:5px
-}
-.issue-grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:9px
-}
-.issue{
-background:var(--panel2);
-color:white;
-border:1px solid var(--line);
-border-radius:10px;
-padding:15px 6px;
-font-size:12px;
-font-weight:bold
-}
-.issue.selected{
-border-color:var(--blue);
-background:#123b5c;
-box-shadow:0 0 10px #39a9ff30
-}
-.notice{
-font-size:11px;
-color:var(--muted);
-text-align:center;
-line-height:1.5;
-margin:12px 0
-}
-.voice-panel{
-margin:12px 0;
-padding:12px;
-background:#061421;
-border:1px solid var(--line);
-border-radius:12px
-}
-.voice-top{
-display:flex;
-align-items:center;
-justify-content:space-between;
-gap:10px
-}
-.voice-top span{
-color:var(--blue);
-font-size:12px;
-font-weight:900
-}
-.voice-status{
-margin-top:8px;
-font-size:11px;
-color:var(--muted)
-}
-.voice-buttons{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:8px;
-margin-top:10px
-}
+.stat span{display:block;color:var(--muted);font-size:10px;margin-top:5px}
+.issue-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.issue{background:var(--panel2);color:white;border:1px solid var(--line);border-radius:10px;padding:15px 6px;font-size:12px;font-weight:bold}
+.issue.selected{border-color:var(--blue);background:#123b5c;box-shadow:0 0 10px #39a9ff30}
+.notice{font-size:11px;color:var(--muted);text-align:center;line-height:1.5;margin:12px 0}
+.voice-panel{margin:12px 0;background:#061421;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.voice-header{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:transparent;color:var(--blue);border:0;padding:14px;font-size:12px;font-weight:900;text-align:left}
+.voice-content{padding:0 12px 12px}
+.voice-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.voice-top span{color:var(--blue);font-size:12px;font-weight:900}
+.voice-status{margin-top:8px;font-size:11px;color:var(--muted)}
+.voice-buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
 .voice-buttons button{font-size:11px}
-.caller-line{
-margin-top:10px;
-min-height:20px;
-color:var(--green);
-font-size:12px;
-font-weight:bold;
-text-align:center
-}
-.player-tag{
-text-align:center;
-font-size:12px;
-color:var(--muted);
-margin:8px 0 12px
-}
+.caller-line{margin-top:10px;min-height:20px;color:var(--green);font-size:12px;font-weight:bold;text-align:center}
+.player-tag{text-align:center;font-size:12px;color:var(--muted);margin:8px 0 12px}
 .player-tag strong{color:white}
-.result{
-font-size:46px;
-font-weight:900;
-letter-spacing:3px;
-margin:16px 0
-}
+.result{font-size:46px;font-weight:900;letter-spacing:3px;margin:16px 0}
 .result.win{color:var(--green)}
 .result.loss{color:var(--red)}
-.final-score{
-font-size:35px;
-font-weight:900;
-color:var(--blue);
-margin:12px 0 22px
-}
-.success{color:var(--green)}
+.final-score{font-size:35px;font-weight:900;color:var(--blue);margin:12px 0 22px}
+.checkout-panel{background:#061421;border:1px solid var(--blue);border-radius:12px;padding:13px;text-align:center;margin:12px 0}
+.checkout-label{color:var(--blue);font-size:10px;font-weight:900;letter-spacing:2px}
+.checkout-route{font-size:22px;font-weight:900;margin-top:8px;letter-spacing:1px}
+.checkout-hint{font-size:10px;color:var(--muted);margin-top:6px}
 .hidden{display:none!important}
-footer{
-text-align:center;
-color:#52748c;
-font-size:9px;
-letter-spacing:2px;
-padding:20px 0
+footer{text-align:center;color:#52748c;font-size:9px;letter-spacing:2px;padding:20px 0}
+@media(max-width:480px){
+.dartboard-layout{grid-template-columns:95px minmax(0,1fr);gap:5px}
+.side-score-value{font-size:29px}
+.side-legs-value{font-size:23px}
+.side-score-label{font-size:8px}
+.side-score-box{padding:10px 3px}
 }
 @media(max-width:390px){
 .panel{padding:12px}
-.scorebox .value{font-size:40px}
 .stat strong{font-size:16px}
 .format{padding:17px 2px}
+.checkout-route{font-size:19px}
 }
 </style>
 </head>
 <body>
-
 <div class="app">
-
 <header class="brand">
 <div class="logo">DARTIQ</div>
 <div class="subtitle">INTELLIGENT DARTS PERFORMANCE</div>
@@ -336,12 +102,8 @@ padding:20px 0
 <div class="panel center">
 <div class="eyebrow">PLAYER JOURNEY</div>
 <h1>READY TO PLAY?</h1>
-<p class="small">
-Start your match, track your performance and discover what to improve.
-</p>
-<button class="primary" onclick="showScreen('formats')">
-START SESSION
-</button>
+<p class="small">Start your match, track your performance and discover what to improve.</p>
+<button class="primary" onclick="showScreen('formats')">START SESSION</button>
 </div>
 </section>
 
@@ -355,59 +117,45 @@ START SESSION
 <button class="format" data-format="7" onclick="selectFormat(7)">BO7</button>
 <button class="format" data-format="9" onclick="selectFormat(9)">BO9</button>
 </div>
-<p id="formatDescription" class="small">
-Choose the number of legs.
-</p>
-<button id="startGame" class="primary hidden" onclick="startMatch()">
-START YOUR GAME FOR AI ANALYSIS
-</button>
+<p id="formatDescription" class="small">Choose the number of legs.</p>
+<button id="startGame" class="primary hidden" onclick="startMatch()">START YOUR GAME FOR AI ANALYSIS</button>
 </div>
 </section>
 
 <section id="match" class="screen">
 <div class="panel">
-
 <div class="center">
 <div class="eyebrow">LIVE MATCH</div>
 <h2 id="matchTitle">BEST OF 5</h2>
-<div class="player-tag">
-PLAYER: <strong id="displayPlayerName">PLAYER</strong>
-</div>
+<div class="player-tag">PLAYER: <strong id="displayPlayerName">PLAYER</strong></div>
 </div>
 
-<div class="scoreboard">
-<div class="scorebox">
-<div class="label">REMAINING</div>
-<div id="remaining" class="value">501</div>
-</div>
-<div class="scorebox">
-<div class="label">LEGS • YOU / OPPONENT</div>
-<div id="legScore" class="value legs">0–0</div>
-</div>
+<div class="checkout-panel">
+<div class="checkout-label">DARTIQ CHECKOUT ROUTE</div>
+<div id="checkoutRoute" class="checkout-route">NO CHECKOUT AVAILABLE</div>
+<div id="checkoutHint" class="checkout-hint">Checkout routes appear from 170 remaining.</div>
 </div>
 
 <div class="voice-panel">
-<div class="voice-top">
+<button class="voice-header" onclick="toggleCallerPanel()">
 <span>🎙 DARTIQ MASTER CALLER</span>
-<button id="voiceToggle" class="secondary" onclick="toggleVoice()">
-VOICE ON
+<span id="callerArrow">▼</span>
 </button>
+<div id="callerContent" class="voice-content hidden">
+<div class="voice-top">
+<span>VOICE CONTROLS</span>
+<button id="voiceToggle" class="secondary" onclick="toggleVoice()">VOICE ON</button>
 </div>
-<div id="voiceStatus" class="voice-status">
-Preparing caller...
-</div>
+<div id="voiceStatus" class="voice-status">Preparing caller...</div>
 <div class="voice-buttons">
-<button class="secondary" onclick="testVoice()">
-TEST CALLER
-</button>
-<button class="secondary" onclick="repeatLastCall()">
-REPEAT LAST CALL
-</button>
+<button class="secondary" onclick="testVoice()">TEST CALLER</button>
+<button class="secondary" onclick="repeatLastCall()">REPEAT LAST CALL</button>
 </div>
 <div id="callerLine" class="caller-line"></div>
 </div>
+</div>
 
-<div class="visit" aria-live="polite">
+<div class="visit">
 <div class="eyebrow">CURRENT VISIT SCORE</div>
 <strong id="visitScore">0</strong>
 </div>
@@ -418,24 +166,30 @@ REPEAT LAST CALL
 <span id="visitInfo">VISIT 1</span>
 </div>
 
-<button id="confirmVisitButton" class="primary" onclick="confirmVisit()">
-CONFIRM VISIT
-</button>
-
+<button id="confirmVisitButton" class="primary" onclick="confirmVisit()">CONFIRM VISIT</button>
 <div id="message" class="notice"></div>
 
 <div class="mode-row">
-<button id="boardModeButton" class="secondary mode active" onclick="setMode('board')">
-🎯 DARTBOARD
-</button>
-<button id="keyModeButton" class="secondary mode" onclick="setMode('keypad')">
-KEYPAD
-</button>
+<button id="boardModeButton" class="secondary mode active" onclick="setMode('board')">🎯 DARTBOARD</button>
+<button id="keyModeButton" class="secondary mode" onclick="setMode('keypad')">KEYPAD</button>
 </div>
 
 <div id="boardPanel">
+<div class="dartboard-layout">
+<div class="dartboard-side-score">
+<div class="side-score-box">
+<div class="side-score-label">REMAINING</div>
+<div id="boardRemaining" class="side-score-value">501</div>
+</div>
+<div class="side-score-box">
+<div class="side-score-label">LEGS</div>
+<div id="boardLegs" class="side-legs-value">0–0</div>
+<div class="side-score-label">YOU / OPPONENT</div>
+</div>
+</div>
 <div class="board-wrap">
 <svg id="board" viewBox="-230 -230 460 460" aria-label="Interactive dartboard"></svg>
+</div>
 </div>
 <div class="darts">
 <div class="dart" id="dart1">DART 1: –</div>
@@ -443,19 +197,13 @@ KEYPAD
 <div class="dart" id="dart3">DART 3: –</div>
 </div>
 <div class="actions">
-<button class="secondary" onclick="addDart(0,0,'MISS')">
-MISS
-</button>
-<button class="secondary" onclick="undoDart()">
-UNDO DART
-</button>
+<button class="secondary" onclick="addDart(0,0,'MISS')">MISS</button>
+<button class="secondary" onclick="undoDart()">UNDO DART</button>
 </div>
 </div>
 
 <div id="keypadPanel" class="hidden">
-<div class="visit">
-<strong id="keyValue">0</strong>
-</div>
+<div class="visit"><strong id="keyValue">0</strong></div>
 <div class="keypad">
 <button class="key" onclick="keyPress('1')">1</button>
 <button class="key" onclick="keyPress('2')">2</button>
@@ -470,30 +218,10 @@ UNDO DART
 <button class="key" onclick="keyPress('0')">0</button>
 <button class="key" onclick="keyBack()">⌫</button>
 </div>
-<p class="small center">
-Enter your total visit score. A checkout requires confirmation.
-</p>
+<p class="small center">Enter your total visit score. A checkout requires confirmation.</p>
 </div>
 
-<button id="opponentWonButton" class="danger" onclick="opponentWonLeg()">
-OPPONENT WON LEG
-</button>
-
-</div>
-
-<div class="panel">
-<div class="eyebrow">LIVE PERFORMANCE</div>
-<div class="stats">
-<div class="stat"><strong id="average">0.00</strong><span>AVERAGE</span></div>
-<div class="stat"><strong id="first9">0.00</strong><span>FIRST 9</span></div>
-<div class="stat"><strong id="totalDarts">0</strong><span>DARTS</span></div>
-<div class="stat"><strong id="count100">0</strong><span>100+</span></div>
-<div class="stat"><strong id="count140">0</strong><span>140+</span></div>
-<div class="stat"><strong id="count180">0</strong><span>180</span></div>
-<div class="stat"><strong id="checkoutPct">0%</strong><span>CHECKOUT %</span></div>
-<div class="stat"><strong id="highestCheckout">0</strong><span>HIGHEST CO</span></div>
-<div class="stat"><strong id="legsWon">0</strong><span>LEGS WON</span></div>
-</div>
+<button id="opponentWonButton" class="danger" onclick="opponentWonLeg()">OPPONENT WON LEG</button>
 </div>
 </section>
 
@@ -505,9 +233,7 @@ OPPONENT WON LEG
 <div id="finalScore" class="final-score"></div>
 <div class="eyebrow">YOUR MATCH PERFORMANCE</div>
 <div id="finalSummary" class="stats"></div>
-<button class="primary" onclick="continueToMainIssue()">
-CONTINUE TO MAIN ISSUE SELECTION
-</button>
+<button class="primary" onclick="continueToMainIssue()">CONTINUE TO MAIN ISSUE SELECTION</button>
 <div id="completionMessage" class="notice"></div>
 </div>
 </section>
@@ -516,13 +242,9 @@ CONTINUE TO MAIN ISSUE SELECTION
 <div class="panel center">
 <div class="eyebrow">POST-MATCH ANALYSIS</div>
 <h1>WHAT WAS YOUR MAIN ISSUE?</h1>
-<p class="small">
-Select the issue that affected your performance most.
-</p>
+<p class="small">Select the issue that affected your performance most.</p>
 <div id="issues" class="issue-grid"></div>
-<button id="analysisButton" class="primary hidden" onclick="finishAnalysis()">
-GET MY AI ANALYSIS
-</button>
+<button id="analysisButton" class="primary hidden" onclick="finishAnalysis()">GET MY AI ANALYSIS</button>
 <div id="analysisMessage" class="notice"></div>
 </div>
 </section>
@@ -533,19 +255,15 @@ GET MY AI ANALYSIS
 <h1>YOUR MATCH ANALYSIS</h1>
 <h2 id="analysisIssue"></h2>
 <p id="analysisAdvice" class="small"></p>
-<button class="primary" onclick="openTraining()">
-GO TO TODAY'S AI TRAINING
-</button>
+<button class="primary" onclick="openTraining()">GO TO TODAY'S AI TRAINING</button>
 <div id="trainingMessage" class="notice"></div>
 </div>
 </section>
-
 <footer>DARTIQ • INTELLIGENT DARTS PERFORMANCE</footer>
 </div>
 
 <script>
 const params=new URLSearchParams(location.search);
-
 const param=(...names)=>{
 for(const name of names){
 const value=params.get(name);
@@ -554,97 +272,157 @@ if(value&&value.trim())return value.trim();
 return "";
 };
 
-const WEBHOOK=
-"https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/5415568e-2eca-408f-a460-572b257d1cdf";
-
-const MATCH_START_WEBHOOK=
-"https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/86d46fb2-e26e-43fc-9887-60c5a31e5357";
-
-const MATCH_COMPLETION_WEBHOOK=
-"https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/89ab5acf-6067-4022-ab9d-f5a02ab99698";
+const WEBHOOK="https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/5415568e-2eca-408f-a460-572b257d1cdf";
+const MATCH_START_WEBHOOK="https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/86d46fb2-e26e-43fc-9887-60c5a31e5357";
+const MATCH_COMPLETION_WEBHOOK="https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/89ab5acf-6067-4022-ab9d-f5a02ab99698";
 
 const email=param("email");
 const playerID=param("player","playerid","userid");
 const playerName=param("playerName","name")||"PLAYER";
 const language=param("lang","language")||"EN";
 const isDutch=language.toLowerCase().startsWith("nl");
-
-let sessionID=param("session","sessionID");
-let bestOf=0;
-let legsToWin=0;
-let mode="board";
-let remaining=501;
-let currentLeg=1;
-let legsWon=0;
-let opponentLegs=0;
-let totalPoints=0;
-let totalDarts=0;
-let first9Points=0;
-let first9Darts=0;
-let count100=0;
-let count140=0;
-let count180=0;
-let checkoutAttempts=0;
-let checkoutHits=0;
-let highestCheckout=0;
-let visitNumber=0;
-let currentDarts=[];
-let keyInput="";
-let selectedIssue="";
-let finished=false;
-let saving=false;
-let matchStartedAt="";
-let nextLegAnnouncementPending=false;
-let matchResult="";
-let completionSyncConfirmed=false;
-
-const RECOVERY_KEY=
-"DARTIQ_MATCH_RECOVERY_V3_"+(email||playerID||"guest");
-
 const $=id=>document.getElementById(id);
 const fmt=n=>Number(n).toFixed(2);
+
+let sessionID=param("session","sessionID");
+let bestOf=0,legsToWin=0,mode="board";
+let remaining=501,currentLeg=1,legsWon=0,opponentLegs=0;
+let totalPoints=0,totalDarts=0,first9Points=0,first9Darts=0;
+let count100=0,count140=0,count180=0;
+let checkoutAttempts=0,checkoutHits=0,highestCheckout=0;
+let visitNumber=0,currentDarts=[],keyInput="";
+let selectedIssue="",finished=false,saving=false;
+let matchStartedAt="",nextLegAnnouncementPending=false;
+let matchResult="",completionSyncConfirmed=false;
+
+const RECOVERY_KEY="DARTIQ_MATCH_RECOVERY_V5_"+(email||playerID||"guest");
+
+/* CHECKOUT ROUTES */
+const checkoutRoutes={
+170:"T20 → T20 → BULL",167:"T20 → T19 → BULL",
+164:"T20 → T18 → BULL",161:"T20 → T17 → BULL",
+160:"T20 → T20 → D20",158:"T20 → T20 → D19",
+157:"T20 → T19 → D20",156:"T20 → T20 → D18",
+155:"T20 → T19 → D19",154:"T20 → T18 → D20",
+153:"T20 → T19 → D18",152:"T20 → T20 → D16",
+151:"T20 → T17 → D20",150:"T20 → T18 → D18",
+149:"T20 → T19 → D16",148:"T20 → T16 → D20",
+147:"T20 → T17 → D18",146:"T20 → T18 → D16",
+145:"T20 → T15 → D20",144:"T20 → T20 → D12",
+143:"T20 → T17 → D16",142:"T20 → T14 → D20",
+141:"T20 → T19 → D12",140:"T20 → T20 → D10",
+139:"T20 → T13 → D20",138:"T20 → T18 → D12",
+137:"T20 → T19 → D10",136:"T20 → T20 → D8",
+135:"T20 → T17 → D12",134:"T20 → T14 → D16",
+133:"T20 → T19 → D8",132:"T20 → T16 → D12",
+131:"T20 → T13 → D16",130:"T20 → T20 → D5",
+129:"T19 → T16 → D12",128:"T18 → T14 → D16",
+127:"T20 → T17 → D8",126:"T19 → T19 → D6",
+125:"25 → T20 → D20",124:"T20 → T16 → D8",
+123:"T19 → T16 → D9",122:"T18 → T20 → D4",
+121:"T20 → T11 → D14",120:"T20 → S20 → D20",
+119:"T19 → T12 → D13",118:"T20 → S18 → D20",
+117:"T20 → S17 → D20",116:"T20 → S16 → D20",
+115:"T20 → S15 → D20",114:"T20 → S14 → D20",
+113:"T20 → S13 → D20",112:"T20 → S12 → D20",
+111:"T20 → S11 → D20",110:"T20 → S10 → D20",
+109:"T20 → S9 → D20",108:"T20 → S8 → D20",
+107:"T19 → S10 → D20",106:"T20 → S6 → D20",
+105:"T20 → S5 → D20",104:"T18 → S10 → D20",
+103:"T19 → S6 → D20",102:"T20 → S10 → D16",
+101:"T17 → S10 → D20",100:"T20 → D20",
+99:"T19 → S10 → D16",98:"T20 → D19",
+97:"T19 → D20",96:"T20 → D18",
+95:"T19 → D19",94:"T18 → D20",
+93:"T19 → D18",92:"T20 → D16",
+91:"T17 → D20",90:"T18 → D18",
+89:"T19 → D16",88:"T16 → D20",
+87:"T17 → D18",86:"T18 → D16",
+85:"T15 → D20",84:"T20 → D12",
+83:"T17 → D16",82:"BULL → D16",
+81:"T19 → D12",80:"T20 → D10",
+79:"T13 → D20",78:"T18 → D12",
+77:"T19 → D10",76:"T20 → D8",
+75:"T17 → D12",74:"T14 → D16",
+73:"T19 → D8",72:"T16 → D12",
+71:"T13 → D16",70:"T10 → D20",
+69:"T19 → D6",68:"T20 → D4",
+67:"T17 → D8",66:"T10 → D18",
+65:"T19 → D4",64:"T16 → D8",
+63:"T13 → D12",62:"T10 → D16",
+61:"T15 → D8",60:"S20 → D20",
+59:"S19 → D20",58:"S18 → D20",
+57:"S17 → D20",56:"S16 → D20",
+55:"S15 → D20",54:"S14 → D20",
+53:"S13 → D20",52:"S12 → D20",
+51:"S11 → D20",50:"BULL",
+49:"S9 → D20",48:"S16 → D16",
+47:"S7 → D20",46:"S6 → D20",
+45:"S5 → D20",44:"S12 → D16",
+43:"S3 → D20",42:"S10 → D16",
+41:"S9 → D16",40:"D20",
+39:"S7 → D16",38:"D19",
+37:"S5 → D16",36:"D18",
+35:"S3 → D16",34:"D17",
+33:"S1 → D16",32:"D16",
+31:"S15 → D8",30:"D15",
+29:"S13 → D8",28:"D14",
+27:"S11 → D8",26:"D13",
+25:"S9 → D8",24:"D12",
+23:"S7 → D8",22:"D11",
+21:"S5 → D8",20:"D10",
+19:"S3 → D8",18:"D9",
+17:"S1 → D8",16:"D8",
+15:"S7 → D4",14:"D7",
+13:"S5 → D4",12:"D6",
+11:"S3 → D4",10:"D5",
+9:"S1 → D4",8:"D4",
+7:"S3 → D2",6:"D3",
+5:"S1 → D2",4:"D2",
+3:"S1 → D1",2:"D1"
+};
+
+function updateCheckoutRoute(){
+const route=$("checkoutRoute"),hint=$("checkoutHint");
+if(remaining>170){
+route.textContent="NO CHECKOUT AVAILABLE";
+hint.textContent="Checkout routes appear from 170 remaining.";
+}else if([169,168,166,165,163,162,159].includes(remaining)){
+route.textContent="NO 3-DART FINISH";
+hint.textContent="Set up your preferred double.";
+}else if(remaining===1){
+route.textContent="BUST";
+hint.textContent="You must finish on a double.";
+}else if(remaining===0){
+route.textContent="GAME SHOT";
+hint.textContent="Leg completed.";
+}else{
+route.textContent=checkoutRoutes[remaining]||"SET UP DOUBLE";
+hint.textContent="Suggested checkout route • Double out";
+}
+}
+
+function toggleCallerPanel(){
+const hidden=$("callerContent").classList.toggle("hidden");
+$("callerArrow").textContent=hidden?"▼":"▲";
+}
 
 function saveRecovery(stage){
 try{
 sessionStorage.setItem(RECOVERY_KEY,JSON.stringify({
-stage,
-sessionID,
-bestOf,
-legsToWin,
-legsWon,
-opponentLegs,
-totalPoints,
-totalDarts,
-first9Points,
-first9Darts,
-count100,
-count140,
-count180,
-checkoutAttempts,
-checkoutHits,
-highestCheckout,
-visitNumber,
-selectedIssue,
-matchResult,
+stage,sessionID,bestOf,legsToWin,legsWon,opponentLegs,
+totalPoints,totalDarts,first9Points,first9Darts,
+count100,count140,count180,checkoutAttempts,checkoutHits,
+highestCheckout,visitNumber,selectedIssue,matchResult,
 completionSyncConfirmed
 }));
-}catch(error){
-console.warn("Recovery unavailable",error);
-}
+}catch(e){console.warn("Recovery unavailable",e);}
 }
 
 function restoreRecovery(){
 try{
-const saved=JSON.parse(
-sessionStorage.getItem(RECOVERY_KEY)||"null"
-);
-
-if(!saved)return;
-
-if(!["completed","mainIssue","analysis"].includes(saved.stage)){
-return;
-}
-
+const saved=JSON.parse(sessionStorage.getItem(RECOVERY_KEY)||"null");
+if(!saved||!["completed","mainIssue","analysis"].includes(saved.stage))return;
 sessionID=saved.sessionID||sessionID;
 bestOf=saved.bestOf||0;
 legsToWin=saved.legsToWin||0;
@@ -662,733 +440,367 @@ checkoutHits=saved.checkoutHits||0;
 highestCheckout=saved.highestCheckout||0;
 visitNumber=saved.visitNumber||0;
 selectedIssue=saved.selectedIssue||"";
-matchResult=saved.matchResult||
-(legsWon>opponentLegs?"Won":"Lost");
+matchResult=saved.matchResult||(legsWon>opponentLegs?"Won":"Lost");
 completionSyncConfirmed=!!saved.completionSyncConfirmed;
-
 finished=true;
 updateStats();
 renderMatchResults();
-
 if(selectedIssue){
-document.querySelectorAll(".issue").forEach(button=>{
-button.classList.toggle(
-"selected",
-button.textContent===selectedIssue
-);
+document.querySelectorAll(".issue").forEach(b=>{
+b.classList.toggle("selected",b.textContent===selectedIssue);
 });
 $("analysisButton").classList.remove("hidden");
 }
-
 if(saved.stage==="analysis"&&selectedIssue){
 renderAnalysis();
 showScreen("analysis");
 }else{
 showScreen(saved.stage==="analysis"?"mainIssue":saved.stage);
 }
-
-}catch(error){
-console.warn("Recovery failed",error);
-}
+}catch(e){console.warn("Recovery failed",e);}
 }
 
-const speechSupported=
-"speechSynthesis" in window &&
-"SpeechSynthesisUtterance" in window;
-
-let voiceEnabled=true;
-let callerVoice=null;
-let lastCall=[];
-let callSequence=0;
+/* MASTER CALLER */
+const speechSupported="speechSynthesis" in window&&"SpeechSynthesisUtterance" in window;
+let voiceEnabled=true,callerVoice=null,lastCall=[],callSequence=0;
 
 function selectCallerVoice(){
 if(!speechSupported)return;
-
 const voices=window.speechSynthesis.getVoices();
 const target=isDutch?"nl":"en";
-
+const candidates=voices.filter(v=>v.lang.toLowerCase().startsWith(target));
 callerVoice=
-voices.find(v=>
-v.lang.toLowerCase().startsWith(target)&&
-v.name.toLowerCase().includes("male")
-)||
-voices.find(v=>v.lang.toLowerCase().startsWith(target))||
-voices.find(v=>v.lang.toLowerCase().startsWith("en-gb"))||
-voices[0]||null;
-
-$("voiceStatus").textContent=callerVoice
-?"CALLER READY • "+callerVoice.name
-:"CALLER READY";
+candidates.find(v=>/\bmale\b/i.test(v.name)&&!/\bfemale\b/i.test(v.name))||
+candidates.find(v=>/daniel|george|arthur|oliver|ryan|david|james|thomas|mark/i.test(v.name))||
+candidates.find(v=>!/female/i.test(v.name))||
+candidates[0]||null;
+updateVoiceButton();
 }
 
 function updateVoiceButton(){
-$("voiceToggle").textContent=voiceEnabled
-?"VOICE ON"
-:"VOICE OFF";
-
-$("voiceStatus").textContent=voiceEnabled
-?(callerVoice?"CALLER READY • "+callerVoice.name:"CALLER READY")
-:"CALLER MUTED";
+$("voiceToggle").textContent=voiceEnabled?"VOICE ON":"VOICE OFF";
+$("voiceStatus").textContent=!voiceEnabled?"CALLER MUTED":
+callerVoice?"CALLER READY • "+callerVoice.name:"CALLER READY";
 }
 
 function toggleVoice(){
 voiceEnabled=!voiceEnabled;
-if(!voiceEnabled&&speechSupported){
-window.speechSynthesis.cancel();
-}
+if(!voiceEnabled&&speechSupported)window.speechSynthesis.cancel();
 updateVoiceButton();
 }
 
 function saySequence(lines){
 lastCall=lines.map(line=>({...line}));
-
-const first=lines[0];
-if(first){
-$("callerLine").textContent=first.display||first.text;
-}
-
+if(lines[0])$("callerLine").textContent=lines[0].display||lines[0].text;
 if(!voiceEnabled||!speechSupported)return;
-
 callSequence++;
-const currentSequence=callSequence;
-
+const sequence=callSequence;
 window.speechSynthesis.cancel();
-
 function play(index){
-if(currentSequence!==callSequence||index>=lines.length){
-return;
-}
-
+if(sequence!==callSequence||index>=lines.length)return;
 const line=lines[index];
 $("callerLine").textContent=line.display||line.text;
-
 const utterance=new SpeechSynthesisUtterance(line.text);
 utterance.lang=isDutch?"nl-NL":"en-GB";
-
 if(callerVoice)utterance.voice=callerVoice;
-
 utterance.rate=line.rate||0.9;
-utterance.pitch=line.pitch||0.85;
+utterance.pitch=line.pitch||0.78;
 utterance.onend=()=>play(index+1);
 utterance.onerror=()=>play(index+1);
-
 window.speechSynthesis.speak(utterance);
 }
-
 play(0);
 }
 
-function repeatLastCall(){
-if(lastCall.length)saySequence(lastCall);
-}
-
+function repeatLastCall(){if(lastCall.length)saySequence(lastCall);}
 function testVoice(){
-saySequence([{
-text:isDutch
-?"DARTIQ master caller is klaar. Game on!"
-:"DARTIQ master caller is ready. Game on!",
-rate:0.88
-}]);
+saySequence([{text:isDutch?"DARTIQ master caller is klaar. Game on!":
+"DARTIQ master caller is ready. Game on!",rate:0.88}]);
 }
 
 function numberWords(n){
 n=Math.round(Number(n));
-
-const units=[
-"zero","one","two","three","four","five",
-"six","seven","eight","nine","ten","eleven",
-"twelve","thirteen","fourteen","fifteen",
-"sixteen","seventeen","eighteen","nineteen"
-];
-
-const tens=[
-"","","twenty","thirty","forty",
-"fifty","sixty","seventy","eighty","ninety"
-];
-
+const units=["zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"];
+const tens=["","","twenty","thirty","forty","fifty","sixty","seventy","eighty","ninety"];
 if(n<0)return "minus "+numberWords(-n);
 if(n<20)return units[n];
-
-if(n<100){
-const t=Math.floor(n/10);
-const u=n%10;
-return tens[t]+(u?" "+units[u]:"");
-}
-
-if(n<1000){
-const h=Math.floor(n/100);
-const r=n%100;
-return units[h]+" hundred"+
-(r?" and "+numberWords(r):"");
-}
-
+if(n<100)return tens[Math.floor(n/10)]+(n%10?" "+units[n%10]:"");
+if(n<1000)return units[Math.floor(n/100)]+" hundred"+(n%100?" and "+numberWords(n%100):"");
 return String(n);
 }
-
 function legOrdinal(n){
-const words=[
-"","first","second","third","fourth",
-"fifth","sixth","seventh","eighth",
-"ninth","tenth"
-];
-return words[n]||n+"th";
+return ["","first","second","third","fourth","fifth","sixth","seventh","eighth","ninth","tenth"][n]||n+"th";
 }
-
 function dutchOrdinal(n){
-const words=[
-"","eerste","tweede","derde","vierde",
-"vijfde","zesde","zevende","achtste",
-"negende","tiende"
-];
-return words[n]||n+"de";
+return ["","eerste","tweede","derde","vierde","vijfde","zesde","zevende","achtste","negende","tiende"][n]||n+"de";
 }
-
 function announceStartLeg(n){
-const text=isDutch
-?`${dutchOrdinal(n)} leg, ${playerName} begint.`
-:`${legOrdinal(n)} leg, ${playerName} to throw first.`;
-
-saySequence([{text,rate:0.91}]);
+saySequence([{text:isDutch?`${dutchOrdinal(n)} leg, ${playerName} begint.`:
+`${legOrdinal(n)} leg, ${playerName} to throw first.`,rate:0.91}]);
 }
-
 function announceScore(score){
-if(score===180){
-saySequence([{
-text:isDutch
-?"Honderd en tachtig!"
-:"One hundred and eighty!",
-display:"ONE HUNDRED AND EIGHTYYYY!",
-rate:0.72,
-pitch:0.78
-}]);
-return;
+saySequence([{text:score===180?
+(isDutch?"Honderd en tachtig!":"One hundred and eighty!"):
+numberWords(score)+"!",
+display:score===180?"ONE HUNDRED AND EIGHTYYYY!":undefined,
+rate:score===180?0.72:0.91,pitch:0.78}]);
 }
-
-saySequence([{
-text:numberWords(score)+"!",
-rate:0.91,
-pitch:0.84
-}]);
-}
-
-function announceBust(){
-saySequence([{text:"Bust!",rate:0.87,pitch:0.82}]);
-}
-
-function announceRequire(score){
-if(score<2||score>170)return;
-
-const text=isDutch
-?`${playerName}, je hebt ${score} nodig.`
-:`${playerName}, you require ${numberWords(score)}.`;
-
-saySequence([{text,rate:0.88,pitch:0.86}]);
-}
-
+function announceBust(){saySequence([{text:"Bust!",rate:0.87}]);}
 function announceCheckout(leg,matchWon){
-const text=matchWon
-?(isDutch
-?`Game shot, en de wedstrijd! ${playerName}!`
-:`Game shot, and the match! ${playerName}!`)
-:(isDutch
-?`Game shot! ${dutchOrdinal(leg)} leg, ${playerName}!`
-:`Game shot! ${legOrdinal(leg)} leg, ${playerName}!`);
-
-saySequence([{text,rate:0.84,pitch:0.84}]);
+const text=matchWon?
+(isDutch?`Game shot, en de wedstrijd! ${playerName}!`:
+`Game shot, and the match! ${playerName}!`):
+(isDutch?`Game shot! ${dutchOrdinal(leg)} leg, ${playerName}!`:
+`Game shot! ${legOrdinal(leg)} leg, ${playerName}!`);
+saySequence([{text,rate:0.84}]);
 }
-
 function announceOpponentLeg(matchLost){
-const text=matchLost
-?(isDutch
-?"Game shot, en de wedstrijd voor de tegenstander."
-:"Game shot, and the match to your opponent.")
-:(isDutch
-?"Game shot, leg voor de tegenstander."
-:"Game shot, leg to your opponent.");
-
-saySequence([{text,rate:0.87,pitch:0.85}]);
+saySequence([{text:matchLost?
+(isDutch?"Game shot, en de wedstrijd voor de tegenstander.":
+"Game shot, and the match to your opponent."):
+(isDutch?"Game shot, leg voor de tegenstander.":
+"Game shot, leg to your opponent."),rate:0.87}]);
 }
-
-function announceVisitResult({
-score,bust,checkout,matchWon,leg,remainingScore
-}){
-if(checkout){
-announceCheckout(leg,matchWon);
-return;
-}
-
-if(bust){
-announceBust();
-return;
-}
-
+function announceVisitResult({score,bust,checkout,matchWon,leg,remainingScore}){
+if(checkout){announceCheckout(leg,matchWon);return;}
+if(bust){announceBust();return;}
 if(remainingScore>=2&&remainingScore<=170){
-const scoreText=score===180
-?(isDutch?"Honderd en tachtig!":"One hundred and eighty!")
-:numberWords(score)+"!";
-
-const requireText=isDutch
-?`${playerName}, je hebt ${remainingScore} nodig.`
-:`${playerName}, you require ${numberWords(remainingScore)}.`;
-
 saySequence([
-{
-text:scoreText,
-display:score===180
-?"ONE HUNDRED AND EIGHTYYYY!"
-:scoreText,
-rate:score===180?0.72:0.91,
-pitch:score===180?0.78:0.84
-},
-{
-text:requireText,
-rate:0.88,
-pitch:0.86
-}
+{text:score===180?"One hundred and eighty!":numberWords(score)+"!",
+rate:score===180?0.72:0.91},
+{text:isDutch?`${playerName}, je hebt ${remainingScore} nodig.`:
+`${playerName}, you require ${numberWords(remainingScore)}.`,rate:0.88}
 ]);
 return;
 }
-
 announceScore(score);
 }
 
+/* MATCH CONTROLS */
 function showScreen(id){
-document.querySelectorAll(".screen").forEach(screen=>{
-screen.classList.toggle("active",screen.id===id);
-});
+document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("active",s.id===id));
 window.scrollTo(0,0);
 }
-
-function message(text){
-$("message").textContent=text;
-}
+function message(t){$("message").textContent=t;}
 
 async function sendEvent(eventType,data={}){
 try{
-const webhookURL=eventType==="match_start"
-?MATCH_START_WEBHOOK
-:eventType==="match_complete"
-?MATCH_COMPLETION_WEBHOOK
-:WEBHOOK;
-
-const response=await fetch(webhookURL,{
+const url=eventType==="match_start"?MATCH_START_WEBHOOK:
+eventType==="match_complete"?MATCH_COMPLETION_WEBHOOK:WEBHOOK;
+const response=await fetch(url,{
 method:"POST",
 headers:{"Content-Type":"application/json"},
 body:JSON.stringify({
-eventType,
-sessionID,
-email,
-playerID,
-language,
-scoringSource:"Match",
-bestOf,
-matchFormat:"BO"+bestOf,
-legsToWin,
-...data
+eventType,sessionID,email,playerID,language,
+scoringSource:"Match",bestOf,matchFormat:"BO"+bestOf,
+legsToWin,...data
 })
 });
-
-if(!response.ok){
-throw Error("HTTP "+response.status);
-}
-
+if(!response.ok)throw Error("HTTP "+response.status);
 return true;
-
-}catch(error){
-console.error("DARTIQ sync:",eventType,error);
+}catch(e){
+console.error("DARTIQ sync:",eventType,e);
 return false;
 }
 }
 
 function selectFormat(n){
 if(![3,5,7,9].includes(n))return;
-
 bestOf=n;
 legsToWin=Math.floor(n/2)+1;
-
-document.querySelectorAll(".format").forEach(button=>{
-button.classList.toggle(
-"selected",
-Number(button.dataset.format)===n
-);
-});
-
-$("formatDescription").textContent=
-"BEST OF "+n+" • FIRST TO "+legsToWin+" LEGS";
-
+document.querySelectorAll(".format").forEach(b=>
+b.classList.toggle("selected",Number(b.dataset.format)===n));
+$("formatDescription").textContent="BEST OF "+n+" • FIRST TO "+legsToWin+" LEGS";
 $("startGame").classList.remove("hidden");
 }
 
 async function startMatch(){
 if(!bestOf)return;
-
-try{
-sessionStorage.removeItem(RECOVERY_KEY);
-}catch(error){}
-
+try{sessionStorage.removeItem(RECOVERY_KEY);}catch(e){}
 if(!sessionID){
-sessionID=typeof crypto.randomUUID==="function"
-?crypto.randomUUID()
-:"MATCH-"+Date.now();
+sessionID=typeof crypto.randomUUID==="function"?crypto.randomUUID():"MATCH-"+Date.now();
 }
-
 matchStartedAt=new Date().toISOString();
-
 $("startGame").disabled=true;
-
 const ok=await sendEvent("match_start",{
-startedAt:matchStartedAt,
-matchStatus:"In Progress"
+startedAt:matchStartedAt,matchStatus:"In Progress"
 });
-
 $("startGame").disabled=false;
-
 $("matchTitle").textContent="BEST OF "+bestOf;
 $("targetInfo").textContent="FIRST TO "+legsToWin;
 $("displayPlayerName").textContent=playerName;
-
 updateStats();
 showScreen("match");
 announceStartLeg(1);
-
-if(!ok){
-message("Match started. Glide connection not confirmed.");
-}
+if(!ok)message("Match started. Glide connection not confirmed.");
 }
 
-const numbers=[
-20,1,18,4,13,6,10,15,2,17,
-3,19,7,16,8,11,14,9,12,5
-];
-
+/* DARTBOARD */
+const numbers=[20,1,18,4,13,6,10,15,2,17,3,19,7,16,8,11,14,9,12,5];
 const NS="http://www.w3.org/2000/svg";
 const board=$("board");
 
 function polar(r,a){
 const rad=(a-90)*Math.PI/180;
-return [
-r*Math.cos(rad),
-r*Math.sin(rad)
-];
+return [r*Math.cos(rad),r*Math.sin(rad)];
 }
-
 function pathRing(r1,r2,a1,a2){
-const p1=polar(r2,a1);
-const p2=polar(r2,a2);
-const p3=polar(r1,a2);
-const p4=polar(r1,a1);
-
+const p1=polar(r2,a1),p2=polar(r2,a2),p3=polar(r1,a2),p4=polar(r1,a1);
 return `M${p1} A${r2} ${r2} 0 0 1 ${p2} L${p3} A${r1} ${r1} 0 0 0 ${p4} Z`;
 }
-
 function element(tag,attributes,parent=board){
 const e=document.createElementNS(NS,tag);
-
-for(const [key,value] of Object.entries(attributes)){
-e.setAttribute(key,value);
-}
-
+for(const [k,v] of Object.entries(attributes))e.setAttribute(k,v);
 parent.appendChild(e);
 return e;
 }
-
 function segment(r1,r2,a1,a2,color,n,m,label){
-const e=element("path",{
-d:pathRing(r1,r2,a1,a2),
-fill:color,
-stroke:"#666",
-"stroke-width":".65"
-});
-
-e.addEventListener("click",()=>{
-addDart(n,m,label);
-});
+const e=element("path",{d:pathRing(r1,r2,a1,a2),fill:color,stroke:"#666","stroke-width":".65"});
+e.addEventListener("click",()=>addDart(n,m,label));
 }
-
 function drawBoard(){
 board.innerHTML="";
-
-element("circle",{
-cx:0,cy:0,r:224,
-fill:"#02070e",
-stroke:"#39a9ff",
-"stroke-width":3
-});
-
+element("circle",{cx:0,cy:0,r:224,fill:"#02070e",stroke:"#39a9ff","stroke-width":3});
 numbers.forEach((n,i)=>{
-const a=i*18;
-const dark=i%2===0;
+const a=i*18,dark=i%2===0;
 const single=dark?"#10151a":"#e2d6b8";
 const multi=dark?"#c83c46":"#27865e";
-
 segment(24,103,a-9,a+9,single,n,1,"S"+n);
 segment(103,118,a-9,a+9,multi,n,3,"T"+n);
 segment(118,178,a-9,a+9,single,n,1,"S"+n);
 segment(178,195,a-9,a+9,multi,n,2,"D"+n);
-
 const [x,y]=polar(211,a);
-
-const t=element("text",{
-x,y,
-fill:"#39a9ff",
-"font-size":16,
-"font-weight":900,
-"text-anchor":"middle",
-"dominant-baseline":"middle",
-"pointer-events":"none"
-});
-
+const t=element("text",{x,y,fill:"#39a9ff","font-size":16,
+"font-weight":900,"text-anchor":"middle","dominant-baseline":"middle",
+"pointer-events":"none"});
 t.textContent=n;
 });
-
-const outer=element("circle",{
-cx:0,cy:0,r:24,
-fill:"#27865e",
-stroke:"#ddd"
-});
-
-outer.addEventListener("click",()=>{
-addDart(25,1,"25");
-});
-
-const bull=element("circle",{
-cx:0,cy:0,r:10,
-fill:"#c83c46",
-stroke:"#ddd"
-});
-
-bull.addEventListener("click",()=>{
-addDart(25,2,"BULL");
-});
+const outer=element("circle",{cx:0,cy:0,r:24,fill:"#27865e",stroke:"#ddd"});
+outer.addEventListener("click",()=>addDart(25,1,"25"));
+const bull=element("circle",{cx:0,cy:0,r:10,fill:"#c83c46",stroke:"#ddd"});
+bull.addEventListener("click",()=>addDart(25,2,"BULL"));
 }
-
 function playPendingLegAnnouncement(){
 if(!nextLegAnnouncementPending)return;
-
 nextLegAnnouncementPending=false;
 announceStartLeg(currentLeg);
 }
-
 function addDart(n,m,label){
 if(finished||saving||mode!=="board")return;
-
-if(currentDarts.length>=3){
-message("Confirm your visit first.");
-return;
-}
-
+if(currentDarts.length>=3){message("Confirm your visit first.");return;}
 playPendingLegAnnouncement();
-
-currentDarts.push({
-number:n,
-multiplier:m,
-score:n*m,
-label
-});
-
+currentDarts.push({number:n,multiplier:m,score:n*m,label});
 updateInput();
 }
-
 function undoDart(){
 if(saving)return;
 currentDarts.pop();
 updateInput();
 }
-
 function setMode(m){
-if(saving||finished||!["board","keypad"].includes(m)){
-return;
-}
-
-if(mode===m)return;
-
+if(saving||finished||!["board","keypad"].includes(m)||mode===m)return;
 currentDarts=[];
 keyInput="";
 mode=m;
-
 $("boardPanel").classList.toggle("hidden",m!=="board");
 $("keypadPanel").classList.toggle("hidden",m!=="keypad");
 $("boardModeButton").classList.toggle("active",m==="board");
 $("keyModeButton").classList.toggle("active",m==="keypad");
-
 updateInput();
 message("");
 }
-
 function keyPress(n){
-if(saving||finished||mode!=="keypad"||keyInput.length>=3){
-return;
-}
-
+if(saving||finished||mode!=="keypad"||keyInput.length>=3)return;
 const next=keyInput+n;
 if(Number(next)>180)return;
-
 playPendingLegAnnouncement();
-
 keyInput=next;
 updateInput();
 }
-
-function keyClear(){
-if(!saving){
-keyInput="";
-updateInput();
-}
-}
-
-function keyBack(){
-if(!saving){
-keyInput=keyInput.slice(0,-1);
-updateInput();
-}
-}
-
+function keyClear(){if(!saving){keyInput="";updateInput();}}
+function keyBack(){if(!saving){keyInput=keyInput.slice(0,-1);updateInput();}}
 function updateInput(){
-const score=currentDarts.reduce(
-(sum,dart)=>sum+dart.score,0
-);
-
-$("visitScore").textContent=mode==="board"
-?score
-:Number(keyInput||0);
-
+const score=currentDarts.reduce((s,d)=>s+d.score,0);
+$("visitScore").textContent=mode==="board"?score:Number(keyInput||0);
 $("keyValue").textContent=keyInput||"0";
-
 for(let i=0;i<3;i++){
-$("dart"+(i+1)).textContent=
-"DART "+(i+1)+": "+(currentDarts[i]?.label||"–");
+$("dart"+(i+1)).textContent="DART "+(i+1)+": "+(currentDarts[i]?.label||"–");
 }
 }
 
-const average=()=>
-totalDarts?totalPoints/totalDarts*3:0;
-
-const first9=()=>
-first9Darts?first9Points/first9Darts*3:0;
-
-const checkoutPct=()=>
-checkoutAttempts?checkoutHits/checkoutAttempts*100:0;
+/* STATISTICS */
+const average=()=>totalDarts?totalPoints/totalDarts*3:0;
+const first9=()=>first9Darts?first9Points/first9Darts*3:0;
+const checkoutPct=()=>checkoutAttempts?checkoutHits/checkoutAttempts*100:0;
 
 function updateStats(){
-$("remaining").textContent=remaining;
-$("legScore").textContent=legsWon+"–"+opponentLegs;
+$("boardRemaining").textContent=remaining;
+$("boardLegs").textContent=legsWon+"–"+opponentLegs;
 $("legInfo").textContent="LEG "+currentLeg;
 $("visitInfo").textContent="VISIT "+(visitNumber+1);
-$("average").textContent=fmt(average());
-$("first9").textContent=fmt(first9());
-$("totalDarts").textContent=totalDarts;
-$("count100").textContent=count100;
-$("count140").textContent=count140;
-$("count180").textContent=count180;
-$("checkoutPct").textContent=checkoutPct().toFixed(1)+"%";
-$("highestCheckout").textContent=highestCheckout;
-$("legsWon").textContent=legsWon;
+updateCheckoutRoute();
 }
 
 function recordFirst9(score,darts,dartScores=[]){
 const available=Math.max(0,9-first9Darts);
 const take=Math.min(darts,available);
-
-if(take===darts){
-first9Points+=score;
-}else if(take>0&&mode==="board"){
-first9Points+=dartScores.slice(0,take).reduce(
-(sum,value)=>sum+value,0
-);
+if(take===darts)first9Points+=score;
+else if(take>0&&mode==="board"){
+first9Points+=dartScores.slice(0,take).reduce((s,v)=>s+v,0);
 }
-
 first9Darts+=take;
 }
 
+/* CONFIRM VISIT */
 async function confirmVisit(){
 if(finished||saving)return;
-
 const boardMode=mode==="board";
-
 if(boardMode&&!currentDarts.length){
-message("Enter at least one dart.");
-return;
+message("Enter at least one dart.");return;
 }
-
 if(!boardMode&&keyInput===""){
-message("Enter a visit score.");
-return;
+message("Enter a visit score.");return;
 }
-
-const darts=boardMode
-?currentDarts.map(d=>({...d}))
-:[];
-
-const score=boardMode
-?darts.reduce((sum,d)=>sum+d.score,0)
-:Number(keyInput);
-
+const darts=boardMode?currentDarts.map(d=>({...d})):[];
+const score=boardMode?darts.reduce((s,d)=>s+d.score,0):Number(keyInput);
 const before=remaining;
 const count=boardMode?darts.length:3;
 const last=darts[darts.length-1];
 const exact=score===before;
-const validDouble=boardMode
-?last?.multiplier===2
-:false;
+const validDouble=boardMode?last?.multiplier===2:false;
 
 if(exact&&!boardMode){
-const confirmed=window.confirm(
-"Did you finish on a double or bull?"
-);
-
-if(!confirmed){
+if(!window.confirm("Did you finish on a double or bull?")){
 message("Checkout not confirmed. Enter a corrected visit.");
 return;
 }
 }
 
-const bust=
-score>before||
-before-score===1||
-(exact&&boardMode&&!validDouble);
-
+const bust=score>before||before-score===1||(exact&&boardMode&&!validDouble);
 const checkoutHit=exact&&!bust;
 const effectiveScore=bust?0:score;
 const after=bust?before:before-score;
 const attempt=before>=2&&before<=170;
 
 const visit={
-sessionID,
-email,
-playerID,
-visitNumber:visitNumber+1,
-legNumber:currentLeg,
-bestOf,
-scoreBefore:before,
-visitScore:effectiveScore,
-attemptedScore:score,
-dartsThrown:count,
-remainingScore:after,
-checkoutAttempt:attempt,
-checkoutHit,
-legEnded:checkoutHit,
-checkoutScore:checkoutHit?before:0,
-bust,
-scoringSource:"Match",
-inputMode:mode,
-bestDart:boardMode
-?Math.max(...darts.map(d=>d.score))
-:null,
-dart1Score:darts[0]?.score??null,
-dart1Segment:darts[0]?.label||"",
-dart2Score:darts[1]?.score??null,
-dart2Segment:darts[1]?.label||"",
-dart3Score:darts[2]?.score??null,
-dart3Segment:darts[2]?.label||"",
+sessionID,email,playerID,visitNumber:visitNumber+1,
+legNumber:currentLeg,bestOf,scoreBefore:before,
+visitScore:effectiveScore,attemptedScore:score,
+dartsThrown:count,remainingScore:after,
+checkoutAttempt:attempt,checkoutHit,legEnded:checkoutHit,
+checkoutScore:checkoutHit?before:0,bust,
+scoringSource:"Match",inputMode:mode,
+bestDart:boardMode?Math.max(...darts.map(d=>d.score)):null,
+dart1Score:darts[0]?.score??null,dart1Segment:darts[0]?.label||"",
+dart2Score:darts[1]?.score??null,dart2Segment:darts[1]?.label||"",
+dart3Score:darts[2]?.score??null,dart3Segment:darts[2]?.label||"",
 darts
 };
 
 saving=true;
 $("confirmVisitButton").disabled=true;
 $("opponentWonButton").disabled=true;
-
 const ok=await sendEvent("match_visit",visit);
-
 saving=false;
 $("confirmVisitButton").disabled=false;
 $("opponentWonButton").disabled=false;
@@ -1396,183 +808,98 @@ $("opponentWonButton").disabled=false;
 visitNumber++;
 totalDarts+=count;
 totalPoints+=effectiveScore;
-
-recordFirst9(
-effectiveScore,
-count,
-darts.map(d=>d.score)
-);
-
+recordFirst9(effectiveScore,count,darts.map(d=>d.score));
 if(attempt)checkoutAttempts++;
-
 if(!bust){
 remaining=after;
-
-if(score===180){
-count180++;
-}else if(score>=140){
-count140++;
-}else if(score>=100){
-count100++;
+if(score===180)count180++;
+else if(score>=140)count140++;
+else if(score>=100)count100++;
 }
-}
-
 if(checkoutHit){
 checkoutHits++;
 highestCheckout=Math.max(highestCheckout,before);
 legsWon++;
 }
-
 currentDarts=[];
 keyInput="";
-
 updateInput();
 updateStats();
 
 const matchWon=checkoutHit&&legsWon>=legsToWin;
-
-announceVisitResult({
-score,
-bust,
-checkout:checkoutHit,
-matchWon,
-leg:currentLeg,
-remainingScore:remaining
-});
+announceVisitResult({score,bust,checkout:checkoutHit,
+matchWon,leg:currentLeg,remainingScore:remaining});
 
 if(checkoutHit){
-if(matchWon){
-await completeMatch();
-return;
-}
-
+if(matchWon){await completeMatch();return;}
 currentLeg++;
 remaining=501;
 updateStats();
-
 message("LEG WON! Start leg "+currentLeg+".");
 nextLegAnnouncementPending=true;
-
 }else{
-message(
-bust
-?"BUST • Score unchanged."
-:"Visit recorded • "+remaining+" remaining."
-);
+message(bust?"BUST • Score unchanged.":
+"Visit recorded • "+remaining+" remaining.");
+}
+if(!ok)message("Visit recorded locally. Glide sync not confirmed.");
 }
 
-if(!ok){
-message("Visit recorded locally. Glide sync not confirmed.");
-}
-}
-
+/* OPPONENT LEG */
 async function opponentWonLeg(){
 if(finished||saving)return;
-
-const confirmed=window.confirm(
-"Confirm opponent won leg "+currentLeg+"?"
-);
-
-if(!confirmed)return;
-
+if(!window.confirm("Confirm opponent won leg "+currentLeg+"?"))return;
 saving=true;
 $("opponentWonButton").disabled=true;
 $("confirmVisitButton").disabled=true;
-
-const legNumber=currentLeg;
-const scoreBefore=remaining;
-
 const ok=await sendEvent("match_visit",{
-sessionID,
-email,
-playerID,
-visitNumber:visitNumber+1,
-legNumber,
-bestOf,
-scoreBefore,
-visitScore:0,
-attemptedScore:0,
-dartsThrown:0,
-remainingScore:scoreBefore,
-checkoutAttempt:false,
-checkoutHit:false,
-legEnded:true,
-checkoutScore:0,
-bust:false,
-scoringSource:"Match",
-inputMode:"opponent",
-legWinner:"Opponent",
-opponentWonLeg:true,
-bestDart:null,
-dart1Score:null,
-dart1Segment:"",
-dart2Score:null,
-dart2Segment:"",
-dart3Score:null,
-dart3Segment:"",
-darts:[]
+sessionID,email,playerID,visitNumber:visitNumber+1,
+legNumber:currentLeg,bestOf,scoreBefore:remaining,
+visitScore:0,attemptedScore:0,dartsThrown:0,
+remainingScore:remaining,checkoutAttempt:false,
+checkoutHit:false,legEnded:true,checkoutScore:0,
+bust:false,scoringSource:"Match",inputMode:"opponent",
+legWinner:"Opponent",opponentWonLeg:true,
+bestDart:null,dart1Score:null,dart1Segment:"",
+dart2Score:null,dart2Segment:"",
+dart3Score:null,dart3Segment:"",darts:[]
 });
-
 saving=false;
 $("opponentWonButton").disabled=false;
 $("confirmVisitButton").disabled=false;
-
 opponentLegs++;
 visitNumber++;
-
 currentDarts=[];
 keyInput="";
 updateInput();
 updateStats();
-
 const matchLost=opponentLegs>=legsToWin;
-
 announceOpponentLeg(matchLost);
-
-if(matchLost){
-await completeMatch();
-return;
-}
-
+if(matchLost){await completeMatch();return;}
 currentLeg++;
 remaining=501;
 nextLegAnnouncementPending=true;
-
 updateStats();
 message("OPPONENT WON LEG • Start leg "+currentLeg+".");
-
-if(!ok){
-message("Opponent leg recorded locally. Glide sync not confirmed.");
-}
+if(!ok)message("Opponent leg recorded locally. Glide sync not confirmed.");
 }
 
+/* MATCH RESULT */
 function summaryCard(label,value){
-const element=document.createElement("div");
-element.className="stat";
-
+const d=document.createElement("div");
+d.className="stat";
 const strong=document.createElement("strong");
 strong.textContent=value;
-
 const span=document.createElement("span");
 span.textContent=label;
-
-element.append(strong,span);
-return element;
+d.append(strong,span);
+return d;
 }
-
 function renderMatchResults(){
 matchResult=legsWon>=legsToWin?"Won":"Lost";
-
-const result=$("finalResult");
-result.textContent=matchResult==="Won"?"YOU WON":"YOU LOST";
-result.className="result "+(matchResult==="Won"?"win":"loss");
-
-$("finalScore").textContent=
-legsWon+" – "+opponentLegs;
-
-const summary=$("finalSummary");
-
-summary.replaceChildren(
+$("finalResult").textContent=matchResult==="Won"?"YOU WON":"YOU LOST";
+$("finalResult").className="result "+(matchResult==="Won"?"win":"loss");
+$("finalScore").textContent=legsWon+" – "+opponentLegs;
+$("finalSummary").replaceChildren(
 summaryCard("MATCH","BO"+bestOf),
 summaryCard("RESULT",matchResult.toUpperCase()),
 summaryCard("LEGS WON",legsWon),
@@ -1590,53 +917,38 @@ summaryCard("CO ATTEMPTS",checkoutAttempts),
 summaryCard("TOTAL POINTS",totalPoints)
 );
 }
-
 async function completeMatch(){
 if(finished)return;
-
 finished=true;
 matchResult=legsWon>=legsToWin?"Won":"Lost";
-
 renderMatchResults();
 saveRecovery("completed");
 showScreen("completed");
-
 $("completionMessage").textContent="Saving match results...";
-
 const ok=await sendEvent("match_complete",{
-matchStatus:"Completed",
-matchResult,
-legsWon,
-legsLost:opponentLegs,
-totalPoints,
-totalDarts,
+matchStatus:"Completed",matchResult,
+legsWon,legsLost:opponentLegs,totalPoints,totalDarts,
 average:Number(fmt(average())),
 first9Average:Number(fmt(first9())),
-count100,
-count140,
-count180,
-checkoutAttempts,
-checkoutHits,
+count100,count140,count180,
+checkoutAttempts,checkoutHits,
 checkoutPercentage:Number(checkoutPct().toFixed(1)),
-highestCheckout,
-visitCount:visitNumber,
+highestCheckout,visitCount:visitNumber,
 startedAt:matchStartedAt,
 completedAt:new Date().toISOString()
 });
-
 completionSyncConfirmed=ok;
 saveRecovery("completed");
-
-$("completionMessage").textContent=ok
-?"Match completion sent to Glide."
-:"Match completed locally. Glide sync not confirmed.";
+$("completionMessage").textContent=ok?
+"Match completion sent to Glide.":
+"Match completed locally. Glide sync not confirmed.";
 }
-
 function continueToMainIssue(){
 saveRecovery("mainIssue");
 showScreen("mainIssue");
 }
 
+/* MAIN ISSUE AND AI ANALYSIS */
 const issueData=[
 ["Missing Right","Aim and release alignment"],
 ["Missing Left","Release consistency"],
@@ -1651,164 +963,100 @@ const issueData=[
 ];
 
 function buildIssues(){
-const container=$("issues");
-
 issueData.forEach(([name])=>{
-const button=document.createElement("button");
-button.className="issue";
-button.textContent=name;
-
-button.onclick=()=>{
+const b=document.createElement("button");
+b.className="issue";
+b.textContent=name;
+b.onclick=()=>{
 selectedIssue=name;
-
-document.querySelectorAll(".issue").forEach(item=>{
-item.classList.toggle("selected",item===button);
-});
-
+document.querySelectorAll(".issue").forEach(x=>
+x.classList.toggle("selected",x===b));
 $("analysisButton").classList.remove("hidden");
 saveRecovery("mainIssue");
 };
-
-container.appendChild(button);
+$("issues").appendChild(b);
 });
 }
-
 function renderAnalysis(){
 const item=issueData.find(x=>x[0]===selectedIssue);
-
 $("analysisIssue").textContent=selectedIssue;
-
 $("analysisAdvice").textContent=
 "Focus area: "+(item?item[1]:selectedIssue)+
 ". Your selected issue and match statistics have been submitted for coaching. Open Today's AI Training for the matched drill.";
 }
-
 async function finishAnalysis(){
 if(!selectedIssue)return;
-
 const button=$("analysisButton");
 button.disabled=true;
 button.textContent="PREPARING YOUR ANALYSIS...";
-
 const ok=await sendEvent("match_main_issue",{
-mainIssue:selectedIssue,
-matchStatus:"Completed",
-matchResult,
+mainIssue:selectedIssue,matchStatus:"Completed",matchResult,
 average:Number(fmt(average())),
 first9Average:Number(fmt(first9())),
-legsWon,
-legsLost:opponentLegs,
-totalDarts,
-count100,
-count140,
-count180,
+legsWon,legsLost:opponentLegs,totalDarts,
+count100,count140,count180,
 checkoutPercentage:Number(checkoutPct().toFixed(1)),
 highestCheckout
 });
-
 button.disabled=false;
 button.textContent="GET MY AI ANALYSIS";
-
 if(!ok){
 $("analysisMessage").textContent=
 "Glide did not confirm receipt. Retry before continuing.";
 return;
 }
-
 renderAnalysis();
 saveRecovery("analysis");
 showScreen("analysis");
 }
 
+/* TRAINING */
 function openTraining(){
 const notice=$("trainingMessage");
-
 try{
 const defaultTraining=
 "https://coach1979christian-coder.github.io/dartiq-web/todays-training.html";
-
-const raw=
-params.get("trainingUrl")||
-params.get("training_url")||
-"";
-
+const raw=params.get("trainingUrl")||params.get("training_url")||"";
 let url;
-
 if(raw){
 const query=location.search.slice(1);
-
-const marker=
-/(?:^|&)trainingUrl=/i.exec(query)||
+const marker=/(?:^|&)trainingUrl=/i.exec(query)||
 /(?:^|&)training_url=/i.exec(query);
-
 let nested=raw;
-
 if(marker){
-const original=query.slice(
-marker.index+marker[0].length
-);
-
-if(original.startsWith("http")&&original.includes("&")){
-nested=original;
+const original=query.slice(marker.index+marker[0].length);
+if(original.startsWith("http")&&original.includes("&"))nested=original;
 }
-}
-
 url=new URL(nested,location.href);
-
 }else{
 url=new URL(defaultTraining);
 }
-
-if(url.protocol!=="https:"&&url.protocol!=="http:"){
-throw Error("Invalid training URL");
-}
-
-const playerNameParam=param("player","playerid");
+if(!["https:","http:"].includes(url.protocol))throw Error("Invalid training URL");
+const playerParam=param("player","playerid");
 const userID=param("userid");
-
-if(sessionID){
-url.searchParams.set("session",sessionID);
-}
-
-if(email){
-url.searchParams.set("email",email);
-}
-
-if(playerNameParam){
-url.searchParams.set("player",playerNameParam);
-}
-
-if(userID){
-url.searchParams.set("userid",userID);
-}
-
+if(sessionID)url.searchParams.set("session",sessionID);
+if(email)url.searchParams.set("email",email);
+if(playerParam)url.searchParams.set("player",playerParam);
+if(userID)url.searchParams.set("userid",userID);
 url.searchParams.set("source","MATCH");
 url.searchParams.set("language",language);
 url.searchParams.set("mainIssue",selectedIssue);
 url.searchParams.set("focus",selectedIssue);
-
 notice.textContent="Opening Today's AI Training...";
 window.location.assign(url.toString());
-
 }catch(error){
 console.error("DARTIQ training navigation:",error);
-
-notice.textContent=
-"Unable to open training. Check the training URL.";
+notice.textContent="Unable to open training. Check the training URL.";
 }
 }
 
+/* INITIALIZE */
 if(speechSupported){
 selectCallerVoice();
-
 if(typeof window.speechSynthesis.addEventListener==="function"){
-window.speechSynthesis.addEventListener(
-"voiceschanged",
-selectCallerVoice
-);
+window.speechSynthesis.addEventListener("voiceschanged",selectCallerVoice);
 }
 }
-
 updateVoiceButton();
 drawBoard();
 buildIssues();
