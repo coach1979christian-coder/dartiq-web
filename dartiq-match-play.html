@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -253,6 +254,53 @@ let selectedIssue="";
 let finished=false,saving=false;
 let matchStartedAt="";
 let nextLegAnnouncementPending=false;
+const RECOVERY_KEY="DARTIQ_MATCH_RECOVERY_V2_"+(email||playerID||"guest");
+
+function saveRecovery(stage){
+try{
+sessionStorage.setItem(RECOVERY_KEY,JSON.stringify({
+stage,sessionID,bestOf,legsToWin,legsWon,opponentLegs,
+totalPoints,totalDarts,first9Points,first9Darts,
+count100,count140,count180,checkoutAttempts,checkoutHits,
+highestCheckout,visitNumber,selectedIssue
+}));
+}catch(e){console.warn("Recovery unavailable",e);}
+}
+
+function restoreRecovery(){
+try{
+const saved=JSON.parse(sessionStorage.getItem(RECOVERY_KEY)||"null");
+if(!saved||!["mainIssue","analysis"].includes(saved.stage))return;
+sessionID=saved.sessionID||sessionID;
+bestOf=saved.bestOf||0;
+legsToWin=saved.legsToWin||0;
+legsWon=saved.legsWon||0;
+opponentLegs=saved.opponentLegs||0;
+totalPoints=saved.totalPoints||0;
+totalDarts=saved.totalDarts||0;
+first9Points=saved.first9Points||0;
+first9Darts=saved.first9Darts||0;
+count100=saved.count100||0;
+count140=saved.count140||0;
+count180=saved.count180||0;
+checkoutAttempts=saved.checkoutAttempts||0;
+checkoutHits=saved.checkoutHits||0;
+highestCheckout=saved.highestCheckout||0;
+visitNumber=saved.visitNumber||0;
+selectedIssue=saved.selectedIssue||"";
+finished=true;
+updateStats();
+if(saved.stage==="analysis"&&selectedIssue){
+const item=issueData.find(x=>x[0]===selectedIssue);
+$("analysisIssue").textContent=selectedIssue;
+$("analysisAdvice").textContent="Focus area: "+(item?item[1]:selectedIssue)+
+". Your selected issue and match statistics have been submitted for coaching. Open Today's AI Training for the matched drill.";
+showScreen("analysis");
+}else{
+showScreen("mainIssue");
+}
+}catch(e){console.warn("Recovery failed",e);}
+}
 
 const $=id=>document.getElementById(id);
 const fmt=n=>Number(n).toFixed(2);
@@ -460,6 +508,7 @@ $("startGame").classList.remove("hidden");
 
 async function startMatch(){
 if(!bestOf)return;
+try{sessionStorage.removeItem(RECOVERY_KEY);}catch(e){}
 if(!sessionID){
 sessionID=typeof crypto.randomUUID==="function"
 ?crypto.randomUUID()
@@ -784,7 +833,8 @@ summaryCard("100+",count100),
 summaryCard("CHECKOUT %",checkoutPct().toFixed(1)+"%"),
 summaryCard("HIGHEST CO",highestCheckout)
 );
-showScreen("completed");
+saveRecovery("mainIssue");
+showScreen("mainIssue");
 
 const ok=await sendEvent("match_complete",{
 matchStatus:"Completed",
@@ -833,6 +883,7 @@ b.onclick=()=>{
 selectedIssue=name;
 document.querySelectorAll(".issue").forEach(x=>x.classList.toggle("selected",x===b));
 $("analysisButton").classList.remove("hidden");
+saveRecovery("mainIssue");
 };
 container.appendChild(b);
 });
@@ -870,6 +921,7 @@ $("analysisIssue").textContent=selectedIssue;
 $("analysisAdvice").textContent=
 "Focus area: "+item[1]+
 ". Your selected issue and match statistics have been submitted for coaching. Open Today's AI Training for the matched drill.";
+saveRecovery("analysis");
 showScreen("analysis");
 }
 
@@ -928,6 +980,7 @@ drawBoard();
 buildIssues();
 updateStats();
 updateInput();
+restoreRecovery();
 </script>
 </body>
 </html>
