@@ -7,81 +7,311 @@
 <meta name="theme-color" content="#050b18">
 <title>DARTIQ | PERFORMANS INSTRUCTION</title>
 <style>
-:root{--bg:#050b18;--panel:#10243a;--blue:#39a9ff;--white:#f5fbff;--muted:#9cb7cc;--line:#39a9ff44;--green:#35c978;--red:#ff6573}
+:root{
+ --bg:#050b18;
+ --panel:#10243a;
+ --blue:#39a9ff;
+ --white:#f5fbff;
+ --muted:#9cb7cc;
+ --line:#39a9ff44;
+ --green:#35c978;
+ --red:#ff6573
+}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--white);font-family:Arial,sans-serif}
+body{
+ margin:0;background:var(--bg);color:var(--white);
+ font-family:Arial,sans-serif
+}
 button{cursor:pointer;font:inherit}
 button:disabled{opacity:.45;cursor:not-allowed}
 .hidden{display:none!important}
 .app{max-width:760px;margin:auto;padding:12px 12px 35px}
 header{text-align:center;padding:20px 0}
-.logo{color:var(--blue);font-size:19px;font-weight:900;letter-spacing:6px;text-shadow:0 0 18px #39a9ff80}
+.logo{
+ color:var(--blue);font-size:19px;font-weight:900;
+ letter-spacing:6px;text-shadow:0 0 18px #39a9ff80
+}
 h1{font-size:24px;margin:12px 0;font-weight:900}
 .subtitle{color:var(--muted);font-size:10px;letter-spacing:2px}
-.screen-heading{display:flex;justify-content:space-between;align-items:center;margin:12px 0 16px;color:var(--blue);font-size:12px;font-weight:900}
-.step{border:1px solid var(--line);border-radius:20px;padding:8px;color:var(--muted);font-size:10px}
-.panel,details{background:linear-gradient(180deg,#10243a,#081827);border:1px solid var(--line);border-radius:15px;margin-bottom:12px;overflow:hidden}
+.screen-heading{
+ display:flex;justify-content:space-between;
+ align-items:center;margin:12px 0 16px;
+ color:var(--blue);font-size:12px;font-weight:900
+}
+.step{
+ border:1px solid var(--line);border-radius:20px;
+ padding:8px;color:var(--muted);font-size:10px
+}
+.panel,details{
+ background:linear-gradient(180deg,#10243a,#081827);
+ border:1px solid var(--line);border-radius:15px;
+ margin-bottom:12px;overflow:hidden
+}
 .panel{padding:16px}
-.eyebrow{font-size:10px;color:var(--blue);font-weight:900;letter-spacing:1px}
+.eyebrow{
+ font-size:10px;color:var(--blue);
+ font-weight:900;letter-spacing:1px
+}
 .training-name{font-size:23px;font-weight:900;margin:12px 0}
 .muted{color:var(--muted);font-size:11px;line-height:1.6}
-.info-grid,.stats,.performance{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:13px}
-.info,.stat{background:#071827;border:1px solid var(--line);border-radius:11px;padding:12px 8px;text-align:center}
-.info small,.stat small{display:block;color:var(--muted);font-size:9px;font-weight:900}
-.info strong{display:block;margin-top:9px;font-size:11px;overflow-wrap:anywhere}
+.info-grid,.stats,.performance{
+ display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:8px;margin-top:13px
+}
+.info,.stat{
+ background:#071827;border:1px solid var(--line);
+ border-radius:11px;padding:12px 8px;text-align:center
+}
+.info small,.stat small{
+ display:block;color:var(--muted);
+ font-size:9px;font-weight:900
+}
+.info strong{
+ display:block;margin-top:9px;font-size:11px;
+ overflow-wrap:anywhere
+}
 .stat strong{display:block;margin-top:8px;font-size:25px}
 .stat:first-child strong{color:var(--blue)}
-summary{list-style:none;cursor:pointer;padding:18px 15px;font-size:13px;font-weight:900;background:#12324c}
+summary{
+ list-style:none;cursor:pointer;padding:18px 15px;
+ font-size:13px;font-weight:900;background:#12324c
+}
 summary::-webkit-details-marker{display:none}
-summary:after{content:"⌄";float:right;color:var(--blue);font-size:19px}
+summary:after{
+ content:"⌄";float:right;color:var(--blue);font-size:19px
+}
 details[open] summary:after{content:"⌃"}
-.summary-sub{display:block;font-size:10px;font-weight:400;color:var(--muted);margin-top:5px}
+.summary-sub{
+ display:block;font-size:10px;font-weight:400;
+ color:var(--muted);margin-top:5px
+}
 .content{padding:16px;border-top:1px solid var(--line)}
 .field{margin-bottom:17px}
 .field:last-child{margin-bottom:0}
-.field label{display:block;color:var(--blue);font-size:10px;font-weight:900;text-transform:uppercase;margin-bottom:7px}
-.field div{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;line-height:1.7;color:#d2e7f5}
+.field label{
+ display:block;color:var(--blue);font-size:10px;
+ font-weight:900;text-transform:uppercase;margin-bottom:7px
+}
+.field div{
+ white-space:pre-wrap;overflow-wrap:anywhere;
+ font-size:12px;line-height:1.7;color:#d2e7f5
+}
 .grades{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.grade{background:#071827;padding:12px;border-radius:9px;font-size:11px;line-height:1.6}
+.grade{
+ background:#071827;padding:12px;
+ border-radius:9px;font-size:11px;line-height:1.6
+}
 .grade strong{display:block;margin-bottom:5px}
 .grade.red{border-left:4px solid #ff6573}
 .grade.orange{border-left:4px solid #ff9f43}
 .grade.yellow{border-left:4px solid #ffd447}
 .grade.green{border-left:4px solid #35c978}
-.primary{width:100%;background:var(--blue);color:#031322;border:0;border-radius:11px;padding:17px;font-size:13px;font-weight:900;margin-top:12px}
-.secondary{width:100%;background:#102b43;border:1px solid var(--line);color:var(--blue);border-radius:11px;padding:13px;font-size:11px;font-weight:900;margin-top:10px}
-.tabs{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:15px 0}
-.tab{background:#081827;border:1px solid var(--line);border-radius:10px;color:var(--muted);padding:15px;font-size:12px;font-weight:900}
+.primary{
+ width:100%;background:var(--blue);color:#031322;
+ border:0;border-radius:11px;padding:17px;
+ font-size:13px;font-weight:900;margin-top:12px
+}
+.secondary{
+ width:100%;background:#102b43;border:1px solid var(--line);
+ color:var(--blue);border-radius:11px;padding:13px;
+ font-size:11px;font-weight:900;margin-top:10px
+}
+.tabs{
+ display:grid;grid-template-columns:1fr 1fr;
+ gap:9px;margin:15px 0
+}
+.tab{
+ background:#081827;border:1px solid var(--line);
+ border-radius:10px;color:var(--muted);
+ padding:15px;font-size:12px;font-weight:900
+}
 .tab.active{background:var(--blue);color:#031322}
-.visit-display{text-align:center;background:#030b15;border:1px solid var(--line);border-radius:11px;padding:16px;margin:12px 0}
+.visit-display{
+ text-align:center;background:#030b15;
+ border:1px solid var(--line);border-radius:11px;
+ padding:16px;margin:12px 0
+}
 .visit-display strong{display:block;font-size:42px}
 .visit-display small{color:var(--muted);font-size:10px}
 .keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.key{min-height:54px;background:#15324b;color:white;border:1px solid #28516f;border-radius:10px;font-size:21px;font-weight:900}
-.dart-slots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.dart-slot{background:#071827;border:1px solid var(--line);border-radius:10px;padding:12px 5px;text-align:center}
-.dart-slot small{display:block;color:var(--muted);font-size:9px;margin-bottom:7px}
+.key{
+ min-height:54px;background:#15324b;color:white;
+ border:1px solid #28516f;border-radius:10px;
+ font-size:21px;font-weight:900
+}
+.dart-slots{
+ display:grid;grid-template-columns:repeat(3,1fr);gap:8px
+}
+.dart-slot{
+ background:#071827;border:1px solid var(--line);
+ border-radius:10px;padding:12px 5px;text-align:center
+}
+.dart-slot small{
+ display:block;color:var(--muted);
+ font-size:9px;margin-bottom:7px
+}
 .dart-slot strong{font-size:12px}
+
+/* ORIGINAL DARTBOARD PRESENTATION */
 .board-wrap{max-width:440px;margin:auto;aspect-ratio:1}
 #dartboard{width:100%;height:100%;touch-action:manipulation}
-.board-actions,.caller-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
-.board-actions button,.caller-actions button{background:#102b43;color:var(--blue);border:1px solid var(--line);border-radius:10px;padding:13px 5px;font-size:11px;font-weight:900}
-.mastercaller{margin-top:17px;padding:16px;background:linear-gradient(180deg,#12324d,#071725);border:1px solid #39a9ff90;border-radius:13px}
-.caller-heading{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.board-actions,.caller-actions{
+ display:grid;grid-template-columns:1fr 1fr;
+ gap:9px;margin-top:12px
+}
+.board-actions button,.caller-actions button{
+ background:#102b43;color:var(--blue);
+ border:1px solid var(--line);border-radius:10px;
+ padding:13px 5px;font-size:11px;font-weight:900
+}
+
+/* SCREEN 2: MASTERCALLER FIRST */
+.mastercaller{
+ padding:16px;
+ background:linear-gradient(180deg,#12324d,#071725);
+ border:1px solid #39a9ff90;border-radius:13px
+}
+.caller-heading{
+ display:flex;justify-content:space-between;
+ align-items:center;gap:8px
+}
 .caller-heading strong{color:var(--blue);font-size:14px}
-.caller-badge{font-size:9px;color:#77e8a8;border:1px solid #35c97870;border-radius:20px;padding:7px}
-.caller-text{text-align:center;font-size:18px;font-weight:900;line-height:1.5;padding:18px 0}
-.caller-sub{text-align:center;color:var(--muted);font-size:10px;line-height:1.5}
-.caller-toggle{display:flex;align-items:center;gap:9px;margin-top:15px;font-size:11px;color:var(--muted)}
+.caller-badge{
+ font-size:9px;color:#77e8a8;
+ border:1px solid #35c97870;border-radius:20px;padding:7px
+}
+.caller-text{
+ text-align:center;font-size:18px;
+ font-weight:900;line-height:1.5;padding:18px 0
+}
+.caller-sub{
+ text-align:center;color:var(--muted);
+ font-size:10px;line-height:1.5
+}
+.caller-toggle{
+ display:flex;align-items:center;gap:9px;
+ margin-top:15px;font-size:11px;color:var(--muted)
+}
 .caller-toggle input{accent-color:var(--blue)}
-.message{text-align:center;font-size:11px;color:var(--muted);line-height:1.6;margin-top:12px}
+.message{
+ text-align:center;font-size:11px;
+ color:var(--muted);line-height:1.6;margin-top:12px
+}
+
+/* COMPACT MATCH-STYLE SCOREBOARD */
+.match-scoreboard{
+ background:linear-gradient(180deg,#102a43,#061421);
+ border:1px solid #39a9ff77;
+ border-radius:14px;
+ padding:14px;
+ margin-bottom:12px
+}
+.match-topline{
+ display:flex;justify-content:space-between;
+ align-items:center;gap:8px;margin-bottom:12px
+}
+.match-topline span{
+ font-size:10px;font-weight:900;
+ color:var(--blue);letter-spacing:1px
+}
+.match-topline .format{
+ color:var(--muted);
+ border:1px solid var(--line);
+ border-radius:20px;padding:6px 10px
+}
+.match-player-row{
+ display:grid;
+ grid-template-columns:minmax(0,1fr) auto auto;
+ gap:10px;align-items:center;
+ background:#061321;border:1px solid var(--line);
+ border-radius:11px;padding:12px
+}
+.match-player-name{
+ font-size:13px;font-weight:900;
+ overflow-wrap:anywhere
+}
+.match-player-name small{
+ display:block;color:var(--muted);
+ font-size:9px;margin-top:6px
+}
+.match-legs{
+ text-align:center;min-width:55px
+}
+.match-legs strong{
+ display:block;color:var(--white);font-size:23px
+}
+.match-legs small{
+ color:var(--muted);font-size:9px
+}
+.match-remaining{
+ text-align:center;min-width:90px;
+ border-left:1px solid var(--line);padding-left:12px
+}
+.match-remaining strong{
+ display:block;color:var(--blue);
+ font-size:36px;line-height:1.1
+}
+.match-remaining small{
+ color:var(--muted);font-size:9px
+}
+.match-mini-stats{
+ display:grid;grid-template-columns:repeat(3,1fr);
+ gap:8px;margin-top:10px
+}
+.match-mini-stat{
+ background:#071827;border-radius:9px;
+ text-align:center;padding:9px 4px
+}
+.match-mini-stat strong{
+ display:block;font-size:16px;color:var(--white)
+}
+.match-mini-stat small{
+ display:block;font-size:9px;color:var(--muted);
+ margin-top:5px
+}
+
+/* COLLAPSIBLE LIVE PRACTICE */
+.practice-section{
+ margin-bottom:12px;
+ border:1px solid var(--line);
+ border-radius:14px;overflow:hidden;
+ background:#081827
+}
+.practice-section>summary{
+ background:#102a43;
+ padding:15px;font-size:12px
+}
+.practice-section>.content{
+ background:#071827
+}
+.practice-section[open]>summary{
+ color:var(--blue)
+}
+.practice-section .panel{
+ margin:0;border:0;background:transparent;padding:0
+}
+.section-note{
+ color:var(--muted);font-size:10px;
+ line-height:1.5;margin:0 0 12px
+}
 .result{text-align:center;display:none}
 .result.show{display:block}
 .result h2{color:var(--green)}
-.footer{text-align:center;color:#68879d;font-size:9px;margin-top:25px;letter-spacing:1px}
-@media(max-width:390px){.app{padding:8px}.panel,.content{padding:12px}.stat strong{font-size:21px}.key{min-height:48px}}
+.footer{
+ text-align:center;color:#68879d;
+ font-size:9px;margin-top:25px;letter-spacing:1px
+}
+@media(max-width:390px){
+ .app{padding:8px}
+ .panel,.content{padding:12px}
+ .stat strong{font-size:21px}
+ .key{min-height:48px}
+ .match-remaining strong{font-size:30px}
+ .match-remaining{min-width:74px}
+}
 </style>
 </head>
+
 <body>
 <main class="app">
 <header>
@@ -106,25 +336,57 @@ details[open] summary:after{content:"⌃"}
 <div class="info"><small>TARGET</small><strong id="targetValue">—</strong></div>
 <div class="info"><small>COACH FOCUS</small><strong id="focusValue">—</strong></div>
 </div>
-<div class="muted" style="margin-top:14px" id="coachName">COACH KEITH ALLEN GUTHER</div>
+<div class="muted" style="margin-top:14px" id="coachName">
+COACH KEITH ALLEN GUTHER
+</div>
 </div>
 
 <details open>
-<summary>◉ AI COACH<span class="summary-sub">Personalized text-based coaching and recommendations</span></summary>
-<div class="content" id="aiCoachContent"></div>
+<summary>
+◉ AI COACH
+<span class="summary-sub">
+Personalized coaching and recommendations
+</span>
+</summary>
+<div class="content">
+<div id="aiCoachContent"></div>
+<div class="caller-actions">
+<button onclick="playInstructionVoice()">▶ PLAY INSTRUCTIONS</button>
+<button onclick="pauseInstructionVoice()">⏸ PAUSE / RESUME</button>
+<button onclick="stopInstructionVoice()">■ STOP</button>
+</div>
+<div class="message" id="instructionVoiceStatus">
+Voice instructions ready
+</div>
+</div>
 </details>
 
 <details open>
-<summary>🎯 PRACTICE INSTRUCTIONS<span class="summary-sub">Purpose, execution and technique</span></summary>
+<summary>
+🎯 PRACTICE INSTRUCTIONS
+<span class="summary-sub">Purpose, execution and technique</span>
+</summary>
 <div class="content">
-<div class="field"><label>Why This Practice</label><div id="whyValue">—</div></div>
-<div class="field"><label>How To Practice</label><div id="executionValue">—</div></div>
-<div class="field"><label>Watch For</label><div id="avoidValue">—</div></div>
+<div class="field">
+<label>Why This Practice</label>
+<div id="whyValue">—</div>
+</div>
+<div class="field">
+<label>How To Practice</label>
+<div id="executionValue">—</div>
+</div>
+<div class="field">
+<label>Watch For</label>
+<div id="avoidValue">—</div>
+</div>
 </div>
 </details>
 
 <details>
-<summary>🎓 KEITH'S METHODOLOGY<span class="summary-sub">Professional training framework</span></summary>
+<summary>
+🎓 KEITH'S METHODOLOGY
+<span class="summary-sub">Professional training framework</span>
+</summary>
 <div class="content">
 <div class="field"><label>Coach</label><div id="keithCoachValue">—</div></div>
 <div class="field"><label>Training Rules</label><div id="keithRulesValue">—</div></div>
@@ -135,57 +397,193 @@ details[open] summary:after{content:"⌃"}
 </details>
 
 <details>
-<summary>📊 GRADING & COACHING ACTIONS<span class="summary-sub">Performance levels and next actions</span></summary>
+<summary>
+📊 GRADING & COACHING ACTIONS
+<span class="summary-sub">Performance levels and next actions</span>
+</summary>
 <div class="content">
 <div class="grades">
-<div class="grade red"><strong>RED</strong><span id="redValue">—</span><p id="redActionValue"></p></div>
-<div class="grade orange"><strong>ORANGE</strong><span id="orangeValue">—</span><p id="orangeActionValue"></p></div>
-<div class="grade yellow"><strong>YELLOW</strong><span id="yellowValue">—</span><p id="yellowActionValue"></p></div>
-<div class="grade green"><strong>GREEN</strong><span id="greenValue">—</span><p id="greenActionValue"></p></div>
+<div class="grade red">
+<strong>RED</strong>
+<span id="redValue">—</span>
+<p id="redActionValue"></p>
 </div>
-<div class="field" style="margin-top:15px"><label>Coaching Logic</label><div id="improvementValue">—</div></div>
+<div class="grade orange">
+<strong>ORANGE</strong>
+<span id="orangeValue">—</span>
+<p id="orangeActionValue"></p>
+</div>
+<div class="grade yellow">
+<strong>YELLOW</strong>
+<span id="yellowValue">—</span>
+<p id="yellowActionValue"></p>
+</div>
+<div class="grade green">
+<strong>GREEN</strong>
+<span id="greenValue">—</span>
+<p id="greenActionValue"></p>
+</div>
+</div>
+<div class="field" style="margin-top:15px">
+<label>Coaching Logic</label>
+<div id="improvementValue">—</div>
+</div>
 </div>
 </details>
 
 <details>
-<summary>📈 WHAT TO TRACK<span class="summary-sub">Your performance measurements</span></summary>
-<div class="content"><div class="field"><div id="trackValue">—</div></div></div>
-</details>
-
-<details>
-<summary>🏁 AFTER PRACTICE<span class="summary-sub">Review, reflect and retest</span></summary>
+<summary>
+📈 WHAT TO TRACK
+<span class="summary-sub">Performance measurements</span>
+</summary>
 <div class="content">
-<div class="field"><label>Reminder</label><div id="reminderValue">—</div></div>
-<div class="field"><label>Next Step</label><div id="afterValue">—</div></div>
+<div class="field"><div id="trackValue">—</div></div>
 </div>
 </details>
 
-<button class="primary" onclick="startPractice()">🎯 START PRACTICE</button>
+<details>
+<summary>
+🏁 AFTER PRACTICE
+<span class="summary-sub">Review, reflect and retest</span>
+</summary>
+<div class="content">
+<div class="field">
+<label>Reminder</label>
+<div id="reminderValue">—</div>
+</div>
+<div class="field">
+<label>Next Step</label>
+<div id="afterValue">—</div>
+</div>
+</div>
+</details>
+
+<button class="primary" onclick="startPractice()">
+🎯 START PRACTICE
+</button>
 </section>
 
 <!-- SCREEN 2 -->
 <section id="practiceScreen" class="hidden">
+
 <div class="screen-heading">
 <span>LIVE PRACTICE</span>
 <span class="step">STEP 2 OF 2</span>
 </div>
 
-<div class="stats">
-<div class="stat"><small id="remainingLabel">REMAINING</small><strong id="remaining">501</strong></div>
-<div class="stat"><small id="averageLabel">AVERAGE</small><strong id="average">0.00</strong></div>
-<div class="stat"><small>DARTS</small><strong id="dartsThrown">0</strong></div>
+<!-- MASTERCALLER FIRST -->
+<details class="practice-section" open id="mastercallerSection">
+<summary>
+🎙 AI MASTERCALLER
+<span class="summary-sub">
+Player announcements and live score calling
+</span>
+</summary>
+<div class="content">
+<div class="mastercaller">
+<div class="caller-heading">
+<strong>AI MASTERCALLER</strong>
+<span class="caller-badge" id="callerBadge">● READY</span>
 </div>
 
-<div class="panel" id="scoringPanel">
+<div class="caller-text" id="callerAnnouncement">
+Welcome to the oche
+</div>
+
+<div class="caller-sub" id="callerPlayer">
+Player announcement ready
+</div>
+
+<div class="caller-toggle">
+<input
+ type="checkbox"
+ id="callerEnabled"
+ checked
+ onchange="toggleMastercaller()"
+>
+<label for="callerEnabled">
+Enable Mastercaller announcements
+</label>
+</div>
+
+<div class="caller-actions">
+<button onclick="announcePlayer()">ANNOUNCE PLAYER</button>
+<button onclick="stopMastercaller()">STOP CALLER</button>
+</div>
+
+<div class="caller-sub" id="callerStatus" style="margin-top:12px">
+Ready for announcements
+</div>
+</div>
+</div>
+</details>
+
+<!-- MATCH-STYLE SCORE AND LEGS -->
+<div class="match-scoreboard">
+<div class="match-topline">
+<span>🎯 LIVE SCOREBOARD</span>
+<span class="format" id="matchFormat">501 • DOUBLE OUT</span>
+</div>
+
+<div class="match-player-row">
+<div class="match-player-name" id="scoreboardPlayer">
+PLAYER
+<small id="scoreboardTurn">AT THE OCHE</small>
+</div>
+
+<div class="match-legs">
+<strong id="legsWon">0</strong>
+<small>LEGS</small>
+</div>
+
+<div class="match-remaining">
+<strong id="remaining">501</strong>
+<small id="remainingLabel">REMAINING</small>
+</div>
+</div>
+
+<div class="match-mini-stats">
+<div class="match-mini-stat">
+<strong id="average">0.00</strong>
+<small id="averageLabel">3-DART AVG</small>
+</div>
+<div class="match-mini-stat">
+<strong id="dartsThrown">0</strong>
+<small>DARTS</small>
+</div>
+<div class="match-mini-stat">
+<strong id="scoreboardVisit">1</strong>
+<small id="scoreboardVisitLabel">VISIT</small>
+</div>
+</div>
+</div>
+
+<!-- COLLAPSIBLE SCORING -->
+<details class="practice-section" open id="scoringPanel">
+<summary>
+🎯 LIVE SCORING
+<span class="summary-sub" id="scoringSubtitle">
+Choose keypad or dartboard
+</span>
+</summary>
+
+<div class="content">
 <div class="screen-heading">
 <span id="scoringTitle">LIVE SCORING</span>
 <span id="visitNumber">VISIT 1</span>
 </div>
-<div class="muted" id="scoringSubtitle">Select your scoring method</div>
 
 <div class="tabs" id="modeTabs">
-<button class="tab active" id="keypadTab" onclick="setMode('keypad')">▦ KEYPAD</button>
-<button class="tab" id="dartboardTab" onclick="setMode('dartboard')">🎯 DARTBOARD</button>
+<button
+ class="tab active"
+ id="keypadTab"
+ onclick="setMode('keypad')"
+>▦ KEYPAD</button>
+<button
+ class="tab"
+ id="dartboardTab"
+ onclick="setMode('dartboard')"
+>🎯 DARTBOARD</button>
 </div>
 
 <div id="keypadMode">
@@ -193,6 +591,7 @@ details[open] summary:after{content:"⌃"}
 <strong id="scoreDisplay">0</strong>
 <small>CURRENT VISIT SCORE</small>
 </div>
+
 <div class="keypad">
 <button class="key" onclick="press('1')">1</button>
 <button class="key" onclick="press('2')">2</button>
@@ -209,70 +608,141 @@ details[open] summary:after{content:"⌃"}
 </div>
 </div>
 
+<!-- ORIGINAL DARTBOARD UNCHANGED -->
 <div id="dartboardMode" class="hidden">
 <div class="dart-slots">
-<div class="dart-slot"><small>DART 1</small><strong id="dart1">—</strong></div>
-<div class="dart-slot"><small>DART 2</small><strong id="dart2">—</strong></div>
-<div class="dart-slot"><small>DART 3</small><strong id="dart3">—</strong></div>
+<div class="dart-slot">
+<small>DART 1</small><strong id="dart1">—</strong>
 </div>
+<div class="dart-slot">
+<small>DART 2</small><strong id="dart2">—</strong>
+</div>
+<div class="dart-slot">
+<small>DART 3</small><strong id="dart3">—</strong>
+</div>
+</div>
+
 <div class="visit-display">
 <strong id="boardVisitScore">0</strong>
 <small>CURRENT VISIT SCORE</small>
 </div>
+
 <div class="board-wrap">
-<svg id="dartboard" viewBox="-230 -230 460 460" aria-label="Interactive dartboard"></svg>
+<svg
+ id="dartboard"
+ viewBox="-230 -230 460 460"
+ aria-label="Interactive dartboard"
+></svg>
 </div>
+
 <div class="board-actions">
 <button onclick="addMiss()">MISS</button>
 <button onclick="undoDart()">UNDO DART</button>
 </div>
-
-<!-- AI MASTERCALLER INSIDE DARTBOARD -->
-<div class="mastercaller">
-<div class="caller-heading">
-<strong>🎙 AI MASTERCALLER</strong>
-<span class="caller-badge" id="callerBadge">● READY</span>
-</div>
-<div class="caller-text" id="callerAnnouncement">Welcome to the oche</div>
-<div class="caller-sub" id="callerPlayer">Player announcement ready</div>
-<div class="caller-toggle">
-<input type="checkbox" id="callerEnabled" checked onchange="toggleMastercaller()">
-<label for="callerEnabled">Enable Mastercaller announcements</label>
-</div>
-<div class="caller-actions">
-<button onclick="announcePlayer()">ANNOUNCE PLAYER</button>
-<button onclick="stopMastercaller()">STOP CALLER</button>
-</div>
-<div class="caller-sub" id="callerStatus" style="margin-top:12px">Ready for announcements</div>
-</div>
 </div>
 
-<button class="primary" id="confirmButton" onclick="confirmVisit()">CONFIRM VISIT</button>
-<div class="message" id="message">Enter your first visit.</div>
+<button class="primary" id="confirmButton" onclick="confirmVisit()">
+CONFIRM VISIT
+</button>
+<div class="message" id="message">
+Enter your first visit.
+</div>
+</div>
+</details>
 
+<!-- COLLAPSIBLE PERFORMANCE STATS -->
+<details class="practice-section">
+<summary>
+📊 LIVE PERFORMANCE
+<span class="summary-sub">
+Scoring milestones and statistics
+</span>
+</summary>
+<div class="content">
 <div class="performance">
-<div class="stat"><strong id="stat100">0</strong><small>100+</small></div>
-<div class="stat"><strong id="stat140">0</strong><small>140+</small></div>
-<div class="stat"><strong id="stat180">0</strong><small>180</small></div>
+<div class="stat">
+<strong id="stat100">0</strong><small>100+</small>
+</div>
+<div class="stat">
+<strong id="stat140">0</strong><small>140+</small>
+</div>
+<div class="stat">
+<strong id="stat180">0</strong><small>180</small>
 </div>
 </div>
+</div>
+</details>
 
-<button class="secondary" id="backButton" onclick="showInstructions()">← VIEW PERFORMANCE INSTRUCTIONS</button>
+<!-- COLLAPSIBLE VISIT HISTORY -->
+<details class="practice-section">
+<summary>
+📋 VISIT HISTORY
+<span class="summary-sub">
+Review recorded scoring visits
+</span>
+</summary>
+<div class="content">
+<div id="visitHistory" class="muted">
+No visits recorded yet.
+</div>
+</div>
+</details>
 
+<!-- COLLAPSIBLE INSTRUCTIONS -->
+<details class="practice-section" id="instructionsReview">
+<summary>
+🎓 TRAINING REFERENCE
+<span class="summary-sub">
+Review the current coaching objective
+</span>
+</summary>
+<div class="content">
+<div class="field">
+<label>Current Drill</label>
+<div id="liveDrill">—</div>
+</div>
+<div class="field">
+<label>Main Issue</label>
+<div id="liveIssue">—</div>
+</div>
+<div class="field">
+<label>Success Target</label>
+<div id="liveTarget">—</div>
+</div>
+<button class="secondary" onclick="showInstructions()">
+VIEW FULL PERFORMANCE INSTRUCTIONS
+</button>
+</div>
+</details>
+
+<!-- RESULT -->
 <div class="panel result" id="resultPanel">
 <h2 id="resultTitle">TRAINING COMPLETE</h2>
-<p class="muted" id="resultDescription">Review your performance.</p>
+<p class="muted" id="resultDescription">
+Review your performance.
+</p>
 <div class="stats">
-<div class="stat"><strong id="resultAverage">0.00</strong><small>AVERAGE</small></div>
-<div class="stat"><strong id="resultDarts">0</strong><small>DARTS</small></div>
-<div class="stat"><strong id="resultVisits">0</strong><small>VISITS</small></div>
+<div class="stat">
+<strong id="resultAverage">0.00</strong><small>AVERAGE</small>
 </div>
-<button class="primary" id="saveButton" onclick="saveSession()">SAVE SESSION</button>
+<div class="stat">
+<strong id="resultDarts">0</strong><small>DARTS</small>
+</div>
+<div class="stat">
+<strong id="resultVisits">0</strong><small>VISITS</small>
+</div>
+</div>
+<button class="primary" id="saveButton" onclick="saveSession()">
+SAVE SESSION
+</button>
 <div class="message" id="saveStatus"></div>
 </div>
+
 </section>
 
-<div class="footer">DARTIQ • INTELLIGENT DARTS COACHING</div>
+<div class="footer">
+DARTIQ • INTELLIGENT DARTS COACHING
+</div>
 </main>
 
 <script>
@@ -288,7 +758,9 @@ const get=(...keys)=>{
 };
 const $=id=>document.getElementById(id);
 const put=(id,value,fallback="—")=>{
- $(id).textContent=value===undefined||value===null||value===""?fallback:String(value);
+ $(id).textContent=
+  value===undefined||value===null||value===""?
+  fallback:String(value);
 };
 
 const sessionID=get("session","sessionID");
@@ -333,7 +805,11 @@ const fields={
  improvementValue:get("improvement"),
  trackValue:get("track"),
  reminderValue:get("reminder"),
- afterValue:get("after")
+ afterValue:get("after"),
+ scoreboardPlayer:playerName,
+ liveDrill:drill,
+ liveIssue:mainIssue,
+ liveTarget:get("keithtarget","target")
 };
 
 Object.entries(fields).forEach(([id,value])=>put(id,value));
@@ -365,75 +841,136 @@ function buildCoach(){
   root.append(field);
  }
  if(!count){
-  root.textContent="Follow your assigned practice instructions. Complete the training, track the results and review your performance against the success target.";
+  root.textContent=
+   "Follow your assigned practice instructions. "+
+   "Complete the training, track the results and "+
+   "review your performance against the success target.";
  }
 }
 buildCoach();
 
-function startPractice(){
- $("instructionsScreen").classList.add("hidden");
- $("practiceScreen").classList.remove("hidden");
- window.scrollTo(0,0);
-}
-function showInstructions(){
- $("practiceScreen").classList.add("hidden");
- $("instructionsScreen").classList.remove("hidden");
- window.scrollTo(0,0);
-}
-
-/* MASTERCALLER */
-const speechSupported="speechSynthesis" in window &&
+/* SHARED SPEECH ENGINE */
+const speechSupported=
+ "speechSynthesis" in window &&
  "SpeechSynthesisUtterance" in window;
+
 let callerEnabled=true;
 let callerVoice=null;
 let callerToken=0;
+let activeVoiceType=null;
+let instructionPaused=false;
 
 function chooseVoice(){
  if(!speechSupported)return null;
  const voices=speechSynthesis.getVoices();
  const english=voices.filter(v=>v.lang.toLowerCase().startsWith("en"));
  return english.find(v=>/david|daniel|ryan|george|guy|male/i.test(v.name))||
- english.find(v=>v.lang.toLowerCase()==="en-gb")||
- english[0]||null;
+  english.find(v=>v.lang.toLowerCase()==="en-gb")||
+  english[0]||null;
 }
 
-function speak(text){
- put("callerAnnouncement",text);
- if(!callerEnabled)return;
+function speakWithType(text,type){
+ if(type==="caller"){
+  put("callerAnnouncement",text);
+  if(!callerEnabled)return;
+ }
  if(!speechSupported){
-  put("callerStatus","Speech unavailable in this browser.");
+  if(type==="caller")
+   put("callerStatus","Speech unavailable in this browser.");
+  else
+   put("instructionVoiceStatus","Speech unavailable in this browser.");
   return;
  }
  const token=++callerToken;
  speechSynthesis.cancel();
+ activeVoiceType=type;
+ instructionPaused=false;
+
  const utterance=new SpeechSynthesisUtterance(text);
  utterance.lang="en-GB";
- utterance.rate=.88;
- utterance.pitch=.85;
+ utterance.rate=type==="caller"?.88:.93;
+ utterance.pitch=type==="caller"?.85:1;
  utterance.volume=1;
+
  callerVoice=chooseVoice();
  if(callerVoice){
   utterance.voice=callerVoice;
   utterance.lang=callerVoice.lang;
  }
  utterance.onstart=()=>{
-  if(token===callerToken)put("callerBadge","● SPEAKING");
+  if(token!==callerToken)return;
+  if(type==="caller")put("callerBadge","● SPEAKING");
+  else put("instructionVoiceStatus","Reading instructions...");
  };
  utterance.onend=()=>{
-  if(token===callerToken)put("callerBadge","● READY");
+  if(token!==callerToken)return;
+  if(type==="caller")put("callerBadge","● READY");
+  else put("instructionVoiceStatus","Instructions completed.");
+  activeVoiceType=null;
  };
  utterance.onerror=()=>{
-  if(token===callerToken)put("callerBadge","● READY");
+  if(token!==callerToken)return;
+  if(type==="caller")put("callerBadge","● READY");
+  else put("instructionVoiceStatus","Voice playback stopped.");
+  activeVoiceType=null;
  };
  speechSynthesis.speak(utterance);
 }
 
+function buildInstructionSpeech(){
+ const sections=[
+  ["Training",drill],
+  ["Your main focus",focus],
+  ["Training objective",get("objective")],
+  ["Practice instructions",get("execution")],
+  ["Things to watch for",get("avoid")],
+  ["Coach Keith's training rules",get("keithrules","rules")],
+  ["Success target",get("keithtarget","successtarget","target")],
+  ["Coach advice",get("aiAdvice","coachAdvice","advice")],
+  ["Next action",get("nextAction","aiNextAction")]
+ ];
+ let speech="Hello "+playerName+". Welcome to your DARTIQ training session. ";
+ for(const [label,value] of sections){
+  if(value)speech+=label+". "+value+". ";
+ }
+ speech+="Focus on quality and consistency. Good luck.";
+ return speech;
+}
+
+function playInstructionVoice(){
+ speakWithType(buildInstructionSpeech(),"instruction");
+}
+function pauseInstructionVoice(){
+ if(!speechSupported||activeVoiceType!=="instruction")return;
+ if(speechSynthesis.paused){
+  speechSynthesis.resume();
+  instructionPaused=false;
+  put("instructionVoiceStatus","Reading instructions...");
+ }else if(speechSynthesis.speaking){
+  speechSynthesis.pause();
+  instructionPaused=true;
+  put("instructionVoiceStatus","Instructions paused.");
+ }
+}
+function stopInstructionVoice(){
+ if(!speechSupported)return;
+ callerToken++;
+ speechSynthesis.cancel();
+ activeVoiceType=null;
+ instructionPaused=false;
+ put("instructionVoiceStatus","Voice instructions stopped.");
+}
+
+function speak(text){
+ speakWithType(text,"caller");
+}
 function announcePlayer(){
  speak("Ladies and gentlemen. At the oche. "+playerName+". Game on!");
 }
 function stopMastercaller(){
  callerToken++;
  if(speechSupported)speechSynthesis.cancel();
+ activeVoiceType=null;
  put("callerBadge","● STOPPED");
 }
 function toggleMastercaller(){
@@ -451,7 +988,20 @@ function announceCheckout(score){
 }
 put("callerPlayer","PLAYER: "+playerName.toUpperCase());
 
-/* SCORING */
+function startPractice(){
+ stopInstructionVoice();
+ $("instructionsScreen").classList.add("hidden");
+ $("practiceScreen").classList.remove("hidden");
+ window.scrollTo(0,0);
+}
+function showInstructions(){
+ stopMastercaller();
+ $("practiceScreen").classList.add("hidden");
+ $("instructionsScreen").classList.remove("hidden");
+ window.scrollTo(0,0);
+}
+
+/* ORIGINAL SCORING STATE */
 let mode="keypad";
 let input="";
 let remaining=doubleTrouble?27:501;
@@ -468,6 +1018,7 @@ let wedge=1;
 let furthestWedge=0;
 let checkoutDarts=null;
 let highestCheckout=0;
+let legsWon=0;
 
 function message(text){put("message",text);}
 
@@ -527,7 +1078,7 @@ function undoDart(){
  updateDartDisplay();
 }
 
-/* DARTBOARD */
+/* ORIGINAL DARTBOARD CODE: UNCHANGED */
 const boardNumbers=[20,1,18,4,13,6,10,15,2,17,3,19,7,16,8,11,14,9,12,5];
 const svg=$("dartboard");
 const NS="http://www.w3.org/2000/svg";
@@ -584,6 +1135,7 @@ function drawBoard(){
 }
 drawBoard();
 
+/* MATCH-STYLE SCOREBOARD UPDATES */
 function average(){
  return totalDarts?totalPoints/totalDarts*3:0;
 }
@@ -592,9 +1144,36 @@ function updateStats(){
  put("average",doubleTrouble?"D"+furthestWedge:average().toFixed(2));
  put("dartsThrown",totalDarts);
  put("visitNumber",doubleTrouble?"D"+wedge:"VISIT "+visit);
+ put("scoreboardVisit",doubleTrouble?"D"+wedge:visit);
+ put("legsWon",legsWon);
  put("stat100",count100);
  put("stat140",count140);
  put("stat180",count180);
+}
+function updateVisitHistory(){
+ const root=$("visitHistory");
+ root.replaceChildren();
+ if(!visits.length){
+  root.textContent="No visits recorded yet.";
+  return;
+ }
+ [...visits].reverse().forEach(v=>{
+  const row=document.createElement("div");
+  row.style.cssText=
+   "display:flex;justify-content:space-between;"+
+   "gap:10px;padding:12px 4px;"+
+   "border-bottom:1px solid #39a9ff22";
+  const left=document.createElement("strong");
+  left.textContent=
+   doubleTrouble?"D"+v.wedgeNumber:"VISIT "+v.visitNumber;
+  const right=document.createElement("span");
+  right.textContent=doubleTrouble?
+   v.scoreChange+" pts • "+v.doubleHits+" hits":
+   v.score+" pts • "+v.remainingAfter+" remaining"+
+   (v.bust?" • BUST":"");
+  row.append(left,right);
+  root.append(row);
+ });
 }
 function isDouble(d){
  return d&&d.multiplier===2&&d.number>=1&&d.number<=25;
@@ -618,11 +1197,13 @@ function confirmVisit(){
    const answer=prompt("Darts used in final visit (1, 2 or 3):","3");
    if(answer===null)return;
    dartsUsed=Number(answer);
-   if(![1,2,3].includes(dartsUsed))return message("Enter 1, 2 or 3.");
+   if(![1,2,3].includes(dartsUsed))
+    return message("Enter 1, 2 or 3.");
    checkout=true;
   }
  }else{
-  if(!currentDarts.length)return message("Select at least one dart.");
+  if(!currentDarts.length)
+   return message("Select at least one dart.");
   score=currentDarts.reduce((s,d)=>s+d.score,0);
   dartsUsed=currentDarts.length;
   let running=remaining;
@@ -661,12 +1242,21 @@ function confirmVisit(){
   createdAt:new Date().toISOString()
  });
 
+ if(remaining===0){
+  legsWon++;
+  put("scoreboardTurn","LEG COMPLETE");
+ }else{
+  put("scoreboardTurn","AT THE OCHE");
+ }
+
  if(mode==="dartboard"){
   if(remaining===0)announceCheckout(score);
   else announceScore(actual,bust);
  }
+
  resetVisit();
  updateStats();
+ updateVisitHistory();
 
  if(remaining===0){
   checkoutDarts=totalDarts;
@@ -681,10 +1271,10 @@ function confirmVisit(){
 }
 
 function completeSession(){
- $("scoringPanel").classList.add("hidden");
- $("backButton").classList.add("hidden");
+ $("scoringPanel").open=false;
  $("resultPanel").classList.add("show");
- put("resultAverage",doubleTrouble?"D"+furthestWedge:average().toFixed(2));
+ put("resultAverage",
+  doubleTrouble?"D"+furthestWedge:average().toFixed(2));
  put("resultDarts",totalDarts);
  put("resultVisits",visits.length);
  $("resultPanel").scrollIntoView({behavior:"smooth"});
@@ -716,6 +1306,7 @@ async function saveSession(){
   average:Number(average().toFixed(2)),
   totalVisits:visits.length,count100,count140,count180,
   checkoutDarts,highestCheckout,visits,
+  legsWon,
   completedAt:new Date().toISOString()
  };
  saving=true;
@@ -741,15 +1332,20 @@ async function saveSession(){
 /* DOUBLE TROUBLE */
 async function confirmDoubleTrouble(){
  if(completed||saving)return;
- if(currentDarts.length!==3)return message("Enter all 3 darts for D"+wedge+".");
+ if(currentDarts.length!==3)
+  return message("Enter all 3 darts for D"+wedge+".");
 
- const hits=currentDarts.filter(d=>d.number===wedge&&d.multiplier===2).length;
+ const hits=currentDarts.filter(
+  d=>d.number===wedge&&d.multiplier===2
+ ).length;
  const before=remaining;
  const change=hits?hits*wedge*2:-wedge;
  const after=before+change;
  const cleared=hits>0;
- const nextFurthest=cleared?Math.max(furthestWedge,wedge):furthestWedge;
+ const nextFurthest=cleared?
+  Math.max(furthestWedge,wedge):furthestWedge;
  const finished=(wedge===20)||after<=0;
+
  const record={
   sessionID,email,player,userid,
   drill:"Double Trouble",
@@ -794,11 +1390,13 @@ async function confirmDoubleTrouble(){
  }
 
  resetVisit();
+ updateVisitHistory();
 
  if(finished){
   completed=true;
   put("resultTitle","DOUBLE TROUBLE COMPLETE");
-  put("resultDescription","Wedge requests accepted. Verify records in Glide.");
+  put("resultDescription",
+   "Wedge requests accepted. Verify records in Glide.");
   completeSession();
   $("saveButton").classList.add("hidden");
   put("saveStatus","No additional session save required.");
@@ -816,12 +1414,17 @@ if(doubleTrouble){
  put("scoringSubtitle","3 darts at each double • D1 to D20");
  put("remainingLabel","RUNNING POINTS");
  put("averageLabel","FURTHEST");
+ put("matchFormat","DOUBLE TROUBLE • D1-D20");
+ put("scoreboardVisitLabel","TARGET");
+ put("scoreboardTurn","DOUBLE TROUBLE");
  $("modeTabs").classList.add("hidden");
  mode="dartboard";
  $("keypadMode").classList.add("hidden");
  $("dartboardMode").classList.remove("hidden");
 }
+
 updateStats();
+updateVisitHistory();
 </script>
 </body>
 </html>
