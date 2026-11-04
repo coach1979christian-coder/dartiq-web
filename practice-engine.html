@@ -447,6 +447,81 @@ details[open] summary:after{content:"−"}
  margin-top:11px;
  color:var(--muted);
 }
+.voice-panel{
+ border-color:#39a9ff70;
+ box-shadow:0 0 20px #39a9ff13;
+}
+.voice-icon{
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ width:35px;
+ height:35px;
+ border:1px solid #39a9ff70;
+ border-radius:50%;
+ background:#0b2944;
+ color:var(--blue);
+ font-size:18px;
+}
+.voice-heading{
+ display:flex;
+ align-items:center;
+ gap:9px;
+}
+.voice-description{
+ color:var(--muted);
+ font-size:11px;
+ line-height:1.5;
+ margin:8px 0 0;
+}
+.voice-preview{
+ background:#061523;
+ border:1px solid var(--line);
+ border-radius:10px;
+ padding:11px;
+ margin-top:12px;
+ font-size:11px;
+ line-height:1.6;
+ color:#d2e7f5;
+}
+.voice-preview strong{
+ color:var(--blue);
+ display:block;
+ margin-bottom:5px;
+ font-size:9px;
+ letter-spacing:.7px;
+}
+.voice-actions{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:8px;
+ margin-top:8px;
+}
+.voice-actions button{
+ background:#102b43;
+ border:1px solid #39a9ff60;
+ color:var(--blue);
+ border-radius:10px;
+ padding:12px 5px;
+ font-size:11px;
+ font-weight:900;
+}
+.voice-status{
+ color:var(--muted);
+ text-align:center;
+ font-size:10px;
+ padding-top:10px;
+ min-height:23px;
+}
+.voice-badge{
+ color:var(--blue);
+ border:1px solid #39a9ff60;
+ background:#0b2944;
+ border-radius:30px;
+ padding:6px 9px;
+ font-size:9px;
+ font-weight:900;
+}
 .footer{
  text-align:center;
  color:#66859c;
@@ -476,6 +551,46 @@ details[open] summary:after{content:"−"}
  <h1>PERFORMANCE LAB</h1>
  <p>TRAIN SMARTER • IMPROVE FASTER</p>
 </header>
+
+<section class="panel voice-panel" id="voiceCoachPanel">
+ <div class="panel-heading">
+  <div class="voice-heading">
+   <div class="voice-icon">◖))</div>
+   <div>
+    <div class="eyebrow">DARTIQ AI VOICE COACH</div>
+    <div class="section-sub">PERSONAL TRAINING BRIEFING</div>
+   </div>
+  </div>
+  <span class="voice-badge" id="voiceStatus">READY</span>
+ </div>
+
+ <p class="voice-description">
+  Hear your personalized training, goal, target,
+  and Coach Keith's instructions.
+ </p>
+
+ <div class="voice-preview">
+  <strong>TODAY'S AI TRAINING</strong>
+  <span id="voiceTrainingPreview">
+   Preparing your training briefing...
+  </span>
+ </div>
+
+ <button class="primary-button"
+  id="startVoiceButton"
+  onclick="startAICoach()">
+  ▶ START AI COACH
+ </button>
+
+ <div class="voice-actions">
+  <button onclick="startAICoach()">↻ REPLAY BRIEFING</button>
+  <button onclick="stopAICoach()">■ STOP VOICE</button>
+ </div>
+
+ <div class="voice-status" id="voiceMessage">
+  Tap Start AI Coach to hear your briefing.
+ </div>
+</section>
 
 <section class="panel">
  <div class="panel-heading">
@@ -852,7 +967,255 @@ put("afterValue",after);
 
 if(!avoid)el("avoidBlock").classList.add("hidden");
 
-/* SCORING STATE */
+/* =========================================
+   DARTIQ AI VOICE COACH
+========================================= */
+
+const speechAvailable=
+ "speechSynthesis" in window &&
+ "SpeechSynthesisUtterance" in window;
+
+let voiceRequestID=0;
+let activeSpeech=null;
+
+function getMaleVoice(){
+ if(!speechAvailable)return null;
+
+ const voices=window.speechSynthesis.getVoices();
+ const english=voices.filter(v=>
+  v.lang.toLowerCase().startsWith("en")
+ );
+
+ const malePatterns=[
+  /\b(david|mark|guy|ryan|daniel|george|james|oliver|thomas|arthur|brian|male)\b/i
+ ];
+
+ for(const pattern of malePatterns){
+  const match=english.find(v=>pattern.test(v.name));
+  if(match)return match;
+ }
+
+ return english.find(v=>
+  v.lang.toLowerCase()==="en-gb"
+ )||english[0]||null;
+}
+
+function cleanVoiceText(value){
+ return String(value||"")
+  .replace(/<[^>]*>/g," ")
+  .replace(/[_*#]/g," ")
+  .replace(/\s+/g," ")
+  .trim();
+}
+
+function buildTrainingBriefing(){
+ const name=cleanVoiceText(
+  isDoubleTrouble
+   ?"Double Trouble"
+   :drill||focus||"501 Focused Practice"
+ );
+
+ const lines=[
+  "Welcome to the DARTIQ Performance Lab.",
+  "Your AI training for today is ready.",
+  "Today's training is "+name+"."
+ ];
+
+ if(focus&&focus.toLowerCase()!==name.toLowerCase()){
+  lines.push(
+   "Your training focus is "+cleanVoiceText(focus)+"."
+  );
+ }
+
+ if(objective){
+  lines.push(
+   "Your goal is "+cleanVoiceText(objective)+"."
+  );
+ }
+
+ if(target){
+  lines.push(
+   "Your target is "+cleanVoiceText(target)+"."
+  );
+ }
+
+ if(why){
+  lines.push(
+   "Why this practice matters. "+
+   cleanVoiceText(why)
+  );
+ }
+
+ if(execution){
+  lines.push(
+   "Here is how to complete your training. "+
+   cleanVoiceText(execution)
+  );
+ }
+
+ if(keithRules){
+  lines.push(
+   "Coach Keith's training rules are. "+
+   cleanVoiceText(keithRules)
+  );
+ }
+
+ if(keithTarget){
+  lines.push(
+   "Your success target is "+
+   cleanVoiceText(keithTarget)+"."
+  );
+ }
+
+ if(!execution&&!keithRules){
+  if(isDoubleTrouble){
+   lines.push(
+    "Start on double one. Throw three darts at each double. "+
+    "Score points when you hit the correct double. "+
+    "Move through the doubles toward double twenty."
+   );
+  }else{
+   lines.push(
+    "Use the keypad or interactive dartboard "+
+    "to record your visits."
+   );
+  }
+ }
+
+ lines.push(
+  "Stay focused, trust your process, "+
+  "and enjoy your training."
+ );
+
+ return lines.join(" ");
+}
+
+function updateVoicePreview(){
+ const name=isDoubleTrouble
+  ?"Double Trouble"
+  :drill||focus||"501 Focused Practice";
+
+ const pieces=[name];
+
+ if(focus&&focus!==name)pieces.push("Focus: "+focus);
+ if(objective)pieces.push("Goal: "+objective);
+ if(target)pieces.push("Target: "+target);
+
+ put("voiceTrainingPreview",pieces.join(" • "));
+}
+
+function setVoiceStatus(status,message){
+ put("voiceStatus",status);
+ put("voiceMessage",message);
+}
+
+function stopAICoach(){
+ voiceRequestID++;
+
+ if(speechAvailable){
+  window.speechSynthesis.cancel();
+ }
+
+ activeSpeech=null;
+
+ setVoiceStatus(
+  "STOPPED",
+  "Voice stopped. Tap Replay to listen again."
+ );
+}
+
+function startAICoach(){
+ if(!speechAvailable){
+  setVoiceStatus(
+   "UNAVAILABLE",
+   "Speech playback is not supported in this browser."
+  );
+  return;
+ }
+
+ const requestID=++voiceRequestID;
+ const synth=window.speechSynthesis;
+
+ synth.cancel();
+
+ const speech=new SpeechSynthesisUtterance(
+  buildTrainingBriefing()
+ );
+
+ speech.lang="en-GB";
+ speech.rate=0.92;
+ speech.pitch=0.88;
+ speech.volume=1;
+
+ const selectedVoice=getMaleVoice();
+
+ if(selectedVoice){
+  speech.voice=selectedVoice;
+  speech.lang=selectedVoice.lang;
+ }
+
+ activeSpeech=speech;
+
+ speech.onstart=()=>{
+  if(requestID!==voiceRequestID)return;
+  setVoiceStatus(
+   "SPEAKING",
+   "Your AI coach is reading today's training."
+  );
+  el("startVoiceButton").textContent=
+   "◖)) COACH SPEAKING";
+ };
+
+ speech.onend=()=>{
+  if(requestID!==voiceRequestID)return;
+  activeSpeech=null;
+  setVoiceStatus(
+   "READY",
+   "Briefing complete. You are ready to train."
+  );
+  el("startVoiceButton").textContent=
+   "▶ START AI COACH";
+ };
+
+ speech.onerror=event=>{
+  if(requestID!==voiceRequestID)return;
+  activeSpeech=null;
+  if(event.error==="canceled"||
+     event.error==="interrupted")return;
+
+  setVoiceStatus(
+   "ERROR",
+   "Voice playback failed. Tap Replay to try again."
+  );
+  el("startVoiceButton").textContent=
+   "▶ START AI COACH";
+ };
+
+ setVoiceStatus(
+  "STARTING",
+  "Preparing your training briefing..."
+ );
+
+ synth.speak(speech);
+}
+
+if(speechAvailable){
+ window.speechSynthesis.onvoiceschanged=()=>{
+  // Voice selection is refreshed when playback begins.
+ };
+}else{
+ el("startVoiceButton").disabled=true;
+ setVoiceStatus(
+  "UNAVAILABLE",
+  "This browser does not support voice playback."
+ );
+}
+
+updateVoicePreview();
+
+/* =========================================
+   SCORING STATE
+========================================= */
 
 let currentMode="keypad";
 let input="";
@@ -880,17 +1243,6 @@ let gameEnded=false;
 const doubleTroubleWebhook=
  "https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/2876503c-d138-44a2-adfd-7815bd4b834c";
 
-/*
-  Optional 501 completion webhook.
-
-  Pass a configured URL using:
-  ?saveWebhook=https%3A%2F%2F...
-
-  This must be a Glide workflow designed to
-  accept the completed 501 session payload.
-
-  The Double Trouble webhook is separate.
-*/
 const saveWebhook=param("saveWebhook","sessionWebhook");
 
 function showMessage(text){
@@ -915,11 +1267,14 @@ function setMode(mode){
 
 function press(number){
  if(completed||input.length>=3)return;
+
  const next=input+number;
+
  if(Number(next)>180){
   showMessage("Maximum visit score is 180.");
   return;
  }
+
  input=next;
  updateInput();
 }
@@ -938,7 +1293,9 @@ function updateInput(){
  put("scoreDisplay",input||"0");
 }
 
-/* DARTBOARD */
+/* =========================================
+   INTERACTIVE DARTBOARD
+========================================= */
 
 const boardNumbers=[
  20,1,18,4,13,6,10,15,2,17,
@@ -950,6 +1307,7 @@ const NS="http://www.w3.org/2000/svg";
 
 function polar(radius,angle){
  const radians=(angle-90)*Math.PI/180;
+
  return {
   x:radius*Math.cos(radians),
   y:radius*Math.sin(radians)
@@ -961,6 +1319,7 @@ function ringPath(inner,outer,start,end){
  const b=polar(outer,end);
  const c=polar(inner,end);
  const d=polar(inner,start);
+
  return [
   "M",a.x,a.y,
   "A",outer,outer,0,0,1,b.x,b.y,
@@ -972,23 +1331,30 @@ function ringPath(inner,outer,start,end){
 
 function createSVG(tag,attributes){
  const node=document.createElementNS(NS,tag);
+
  for(const [key,value] of Object.entries(attributes)){
   node.setAttribute(key,String(value));
  }
+
  return node;
 }
 
-function addSegment(inner,outer,start,end,color,number,multiplier,label){
+function addSegment(
+ inner,outer,start,end,color,number,multiplier,label
+){
  const path=createSVG("path",{
   d:ringPath(inner,outer,start,end),
   fill:color,
   stroke:"#888",
   "stroke-width":".7"
  });
+
  path.style.cursor="pointer";
+
  path.addEventListener("click",()=>{
   addDart(number,multiplier,label);
  });
+
  svg.appendChild(path);
 }
 
@@ -1017,6 +1383,7 @@ function drawBoard(){
   addSegment(178,195,start,end,colored,number,2,"D"+number);
 
   const position=polar(211,center);
+
   const text=createSVG("text",{
    x:position.x,
    y:position.y,
@@ -1026,6 +1393,7 @@ function drawBoard(){
    "text-anchor":"middle",
    "dominant-baseline":"middle"
   });
+
   text.textContent=number;
   svg.appendChild(text);
  }
@@ -1036,7 +1404,11 @@ function drawBoard(){
   stroke:"#ddd",
   "stroke-width":1
  });
- outerBull.addEventListener("click",()=>addDart(25,1,"25"));
+
+ outerBull.addEventListener("click",()=>{
+  addDart(25,1,"25");
+ });
+
  svg.appendChild(outerBull);
 
  const bull=createSVG("circle",{
@@ -1045,22 +1417,29 @@ function drawBoard(){
   stroke:"#fff",
   "stroke-width":1
  });
- bull.addEventListener("click",()=>addDart(25,2,"BULL"));
+
+ bull.addEventListener("click",()=>{
+  addDart(25,2,"BULL");
+ });
+
  svg.appendChild(bull);
 }
 
 function addDart(number,multiplier,label){
  if(completed||gameEnded)return;
+
  if(currentDarts.length>=3){
   showMessage("Three darts entered. Confirm the visit.");
   return;
  }
+
  currentDarts.push({
   number,
   multiplier,
   score:number*multiplier,
   label
  });
+
  updateDartDisplay();
 }
 
@@ -1070,6 +1449,7 @@ function addMiss(){
 
 function undoDart(){
  if(!currentDarts.length)return;
+
  currentDarts.pop();
  updateDartDisplay();
 }
@@ -1077,10 +1457,17 @@ function undoDart(){
 function updateDartDisplay(){
  for(let i=0;i<3;i++){
   const dart=currentDarts[i];
-  put("dart"+(i+1),
-   dart?dart.label+" • "+dart.score:"—");
+
+  put(
+   "dart"+(i+1),
+   dart?dart.label+" • "+dart.score:"—"
+  );
  }
- const score=currentDarts.reduce((sum,d)=>sum+d.score,0);
+
+ const score=currentDarts.reduce(
+  (sum,d)=>sum+d.score,0
+ );
+
  put("boardVisitScore",String(score));
 }
 
@@ -1101,9 +1488,14 @@ function updateStats(){
  put("remaining",String(remaining));
  put("average",average().toFixed(2));
  put("dartsThrown",String(totalDarts));
- put("visitNumber",isDoubleTrouble
-  ?(gameEnded?"DONE":"D"+wedge)
-  :"VISIT "+visit);
+
+ put(
+  "visitNumber",
+  isDoubleTrouble
+   ?(gameEnded?"DONE":"D"+wedge)
+   :"VISIT "+visit
+ );
+
  put("stat100",String(count100));
  put("stat140",String(count140));
  put("stat180",String(count180));
@@ -1113,11 +1505,17 @@ function updateStats(){
  }
 }
 
-/* 501 VISIT VALIDATION */
+/* =========================================
+   501 SCORING
+========================================= */
 
 function isDoubleFinish(dart){
- return !!dart&&dart.multiplier===2&&
-  (dart.number>=1&&dart.number<=20||dart.number===25);
+ return !!dart &&
+  dart.multiplier===2 &&
+  (
+   (dart.number>=1&&dart.number<=20) ||
+   dart.number===25
+  );
 }
 
 function confirmVisit(){
@@ -1139,35 +1537,42 @@ function confirmVisit(){
    showMessage("Enter a visit score first.");
    return;
   }
+
   score=Number(input);
+
   if(!Number.isInteger(score)||score<0||score>180){
    showMessage("Invalid visit score.");
    return;
   }
 
-  /*
-    Keypad enters a visit total, not dart-by-dart
-    segments. A checkout requires confirmation.
-  */
   if(score===remaining&&remaining>=2){
    const answer=window.confirm(
     "Did you finish this leg on a double or bull?"
    );
+
    if(!answer){
-    showMessage("Checkout not confirmed. Enter the correct visit.");
+    showMessage(
+     "Checkout not confirmed. Enter the correct visit."
+    );
     return;
    }
+
    checkoutVerified=true;
+
    const entered=window.prompt(
     "How many darts did you use in this final visit? (1, 2 or 3)",
     "3"
    );
+
    if(entered===null)return;
+
    const count=Number(entered);
+
    if(![1,2,3].includes(count)){
     showMessage("Enter 1, 2 or 3 darts.");
     return;
    }
+
    dartsThisVisit=count;
   }
  }else{
@@ -1176,7 +1581,10 @@ function confirmVisit(){
    return;
   }
 
-  score=currentDarts.reduce((sum,d)=>sum+d.score,0);
+  score=currentDarts.reduce(
+   (sum,d)=>sum+d.score,0
+  );
+
   dartsThisVisit=currentDarts.length;
 
   let running=remaining;
@@ -1184,6 +1592,7 @@ function confirmVisit(){
 
   for(let i=0;i<currentDarts.length;i++){
    const dart=currentDarts[i];
+
    running-=dart.score;
 
    if(running<0||running===1){
@@ -1191,12 +1600,15 @@ function confirmVisit(){
     reason="BUST • Visit scored 0.";
     break;
    }
+
    if(running===0){
     if(!isDoubleFinish(dart)){
      bust=true;
      reason="BUST • Checkout must finish on a double.";
     }else if(i!==currentDarts.length-1){
-     showMessage("Remove darts entered after the checkout.");
+     showMessage(
+      "Remove darts entered after the checkout."
+     );
      return;
     }else{
      finished=true;
@@ -1204,6 +1616,7 @@ function confirmVisit(){
     break;
    }
   }
+
   checkoutVerified=finished;
  }
 
@@ -1249,6 +1662,7 @@ function confirmVisit(){
   checkoutDarts=totalDarts;
   lastCheckout=score;
   completed=true;
+
   resetCurrentVisit();
   updateStats();
   complete501();
@@ -1259,34 +1673,47 @@ function confirmVisit(){
  resetCurrentVisit();
  updateStats();
 
- showMessage(bust
-  ?reason
-  :"Visit recorded: "+confirmedScore);
+ showMessage(
+  bust
+   ?reason
+   :"Visit recorded: "+confirmedScore
+ );
 }
 
-/* 501 COMPLETION */
+/* =========================================
+   501 COMPLETION
+========================================= */
 
 function complete501(){
+ stopAICoach();
+
  el("confirmButton").disabled=true;
  el("modeTabs").classList.add("hidden");
  el("sessionBadge").textContent="✓ COMPLETED";
  el("scoringPanel").classList.add("hidden");
 
  put("resultTitle","501 LEG COMPLETE");
- put("resultDescription",
-  "Checkout confirmed. Review your performance and save the session.");
+
+ put(
+  "resultDescription",
+  "Checkout confirmed. Review your performance and save the session."
+ );
+
  put("resultAverage",average().toFixed(2));
  put("resultDarts",String(totalDarts));
  put("resultVisits",String(visits.length));
 
  el("resultPanel").classList.add("show");
+
  el("resultPanel").scrollIntoView({
   behavior:"smooth",
   block:"start"
  });
 }
 
-/* 501 SAVE */
+/* =========================================
+   501 SAVE
+========================================= */
 
 async function saveSession(){
  if(!completed||isDoubleTrouble||saving||saved)return;
@@ -1320,14 +1747,18 @@ async function saveSession(){
  };
 
  if(!saveWebhook){
-  put("saveStatus",
-   "Session completed locally. Glide save is not configured. No data has been sent.");
+  put(
+   "saveStatus",
+   "Session completed locally. Glide save is not configured. No data has been sent."
+  );
   return;
  }
 
  let url;
+
  try{
   url=new URL(saveWebhook,location.href);
+
   if(url.protocol!=="https:"){
    throw new Error("HTTPS required");
   }
@@ -1352,20 +1783,30 @@ async function saveSession(){
   }
 
   saved=true;
-  put("saveStatus",
-   "Save request accepted. Verify the session record in Glide.");
+
+  put(
+   "saveStatus",
+   "Save request accepted. Verify the session record in Glide."
+  );
+
   el("saveButton").textContent="SAVE REQUEST SENT";
  }catch(error){
   console.error("DARTIQ save failed:",error);
-  put("saveStatus",
-   "Save failed. Check the Glide workflow before retrying.");
+
+  put(
+   "saveStatus",
+   "Save failed. Check the Glide workflow before retrying."
+  );
+
   el("saveButton").disabled=false;
  }finally{
   saving=false;
  }
 }
 
-/* DOUBLE TROUBLE */
+/* =========================================
+   DOUBLE TROUBLE
+========================================= */
 
 async function confirmDoubleTrouble(){
  if(gameEnded||saving)return;
@@ -1380,15 +1821,19 @@ async function confirmDoubleTrouble(){
  ).length;
 
  const scoreBefore=remaining;
+
  const scoreChange=doubleHits>0
   ?doubleHits*wedge*2
   :-wedge;
 
  const scoreAfter=scoreBefore+scoreChange;
+
  const wedgeCleared=doubleHits>0;
+
  const newFurthest=wedgeCleared
   ?Math.max(furthestWedge,wedge)
   :furthestWedge;
+
  const d20Cleared=wedge===20&&wedgeCleared;
 
  const attempt={
@@ -1411,6 +1856,7 @@ async function confirmDoubleTrouble(){
 
  saving=true;
  el("confirmButton").disabled=true;
+
  showMessage("Saving D"+wedge+" to Glide...");
 
  try{
@@ -1425,7 +1871,9 @@ async function confirmDoubleTrouble(){
   }
  }catch(error){
   console.error("Double Trouble save failed:",error);
+
   showMessage("Save failed. Check the Glide workflow.");
+
   saving=false;
   el("confirmButton").disabled=false;
   return;
@@ -1440,7 +1888,11 @@ async function confirmDoubleTrouble(){
  totalPoints+=scoreChange;
 
  const completedWedge=wedge;
- gameEnded=d20Cleared||scoreAfter<=0||wedge>=20;
+
+ gameEnded=
+  d20Cleared ||
+  scoreAfter<=0 ||
+  wedge>=20;
 
  visits.push(attempt);
 
@@ -1464,31 +1916,43 @@ async function confirmDoubleTrouble(){
 }
 
 function completeDoubleTrouble(){
+ stopAICoach();
+
  completed=true;
  el("confirmButton").disabled=true;
  el("scoringPanel").classList.add("hidden");
  el("sessionBadge").textContent="✓ COMPLETED";
 
  put("resultTitle","DOUBLE TROUBLE COMPLETE");
- put("resultDescription",
-  "All recorded wedge attempts were submitted to Glide.");
+
+ put(
+  "resultDescription",
+  "All recorded wedge attempts were submitted to Glide."
+ );
+
  put("resultAverage","D"+furthestWedge);
  put("resultAverageLabel","FURTHEST");
  put("resultDarts",String(totalDarts));
  put("resultVisits",String(visits.length));
 
  el("saveButton").classList.add("hidden");
- put("saveStatus",
-  "Wedge save requests accepted. Verify the records in Glide.");
+
+ put(
+  "saveStatus",
+  "Wedge save requests accepted. Verify the records in Glide."
+ );
 
  el("resultPanel").classList.add("show");
+
  el("resultPanel").scrollIntoView({
   behavior:"smooth",
   block:"start"
  });
 }
 
-/* INITIALIZE */
+/* =========================================
+   INITIALIZE
+========================================= */
 
 drawBoard();
 updateInput();
@@ -1497,12 +1961,20 @@ updateDartDisplay();
 if(isDoubleTrouble){
  put("practiceName","Double Trouble");
  put("scoringTitle","DOUBLE TROUBLE");
- put("scoringSubtitle","3 darts at each double • D1 to D20");
+
+ put(
+  "scoringSubtitle",
+  "3 darts at each double • D1 to D20"
+ );
+
  put("remainingLabel","RUNNING POINTS");
  put("averageLabel","FURTHEST");
+
  el("modeTabs").classList.add("hidden");
  el("performanceStats").classList.add("hidden");
+
  setMode("dartboard");
+
  showMessage("Target D1. Enter 3 darts.");
 }
 
