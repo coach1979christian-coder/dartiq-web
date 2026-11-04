@@ -1,1011 +1,803 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>DARTIQ Today's Practice</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#050b18">
+<title>DARTIQ | Performance Lab</title>
 
 <style>
 :root{
-  --bg:#02060b;
-  --panel:#071421;
-  --panel2:#0b1d2d;
-  --panel3:#0d2234;
-  --line:#174568;
-  --blue:#39a9ff;
-  --text:#ffffff;
-  --muted:#8fa9bd;
-  --danger:#ff6b72;
-  --red:#e74c55;
-  --orange:#ff9f43;
-  --yellow:#ffd447;
-  --green:#35c978;
+ --bg:#050b18;
+ --panel:#0b1d30;
+ --panel2:#102740;
+ --blue:#39a9ff;
+ --white:#f5fbff;
+ --muted:#96b2c8;
+ --line:rgba(57,169,255,.26);
+ --green:#35c978;
+ --red:#ff6b72;
+ --orange:#ff9f43;
+ --yellow:#ffd447;
 }
-
 *{box-sizing:border-box}
-
 html,body{
-  margin:0;
-  padding:0;
-  width:100%;
-  min-height:100%;
-  background:var(--bg);
-  color:var(--text);
-  font-family:Arial,Helvetica,sans-serif;
+ margin:0;
+ min-height:100%;
+ background:var(--bg);
+ color:var(--white);
+ font-family:Arial,Helvetica,sans-serif;
 }
-
-body{
-  padding:8px;
+button{font:inherit;cursor:pointer}
+button:disabled{opacity:.45;cursor:not-allowed}
+.app{
+ width:100%;
+ max-width:680px;
+ margin:auto;
+ padding:10px 10px 35px;
 }
-
-.engine{
-  width:100%;
-  max-width:680px;
-  margin:0 auto;
-  background:linear-gradient(180deg,#06111d,#02070c);
-  border-radius:22px;
-  padding:14px;
-}
-
-/* HEADER */
-
 .brand{
-  text-align:center;
-  padding:5px 4px 14px;
+ text-align:center;
+ padding:20px 5px 23px;
 }
-
-.brand-small{
-  color:var(--blue);
-  font-size:12px;
-  font-weight:900;
-  letter-spacing:5px;
+.logo{
+ color:var(--blue);
+ font-size:15px;
+ font-weight:900;
+ letter-spacing:6px;
+ text-shadow:0 0 18px #39a9ff80;
 }
-
 .brand h1{
-  margin:5px 0 3px;
-  font-size:29px;
-  line-height:1;
-  letter-spacing:.5px;
+ margin:9px 0 6px;
+ font-size:27px;
+ font-weight:900;
+ letter-spacing:.3px;
 }
-
-.practice-name{
-  color:var(--blue);
-  font-size:13px;
-  font-weight:900;
-  letter-spacing:1.5px;
-  text-transform:uppercase;
-  margin-top:9px;
+.brand p{
+ margin:0;
+ color:var(--muted);
+ font-size:10px;
+ font-weight:800;
+ letter-spacing:1.4px;
 }
-
-.coach-name{
-  color:#aebbc6;
-  font-size:10px;
-  letter-spacing:1.3px;
-  text-transform:uppercase;
-  margin-top:5px;
+.panel{
+ background:linear-gradient(180deg,#10243a,#081827);
+ border:1px solid var(--line);
+ border-radius:16px;
+ padding:15px;
+ margin-bottom:11px;
+ box-shadow:0 5px 22px #0004;
 }
-
-/* TOP THREE CARDS */
-
-.top-cards{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:8px;
-  margin-bottom:12px;
+.panel-heading{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:8px;
+ margin-bottom:11px;
 }
-
-.top-card{
-  min-width:0;
-  background:linear-gradient(180deg,#081827,#06121e);
-  border:1px solid rgba(57,169,255,.35);
-  border-radius:12px;
-  padding:11px;
-  box-shadow:0 0 12px rgba(57,169,255,.05);
+.eyebrow{
+ color:var(--blue);
+ font-size:10px;
+ font-weight:900;
+ letter-spacing:1.1px;
 }
-
-.top-label{
-  color:var(--blue);
-  font-size:9px;
-  font-weight:900;
-  letter-spacing:.8px;
-  text-transform:uppercase;
-  margin-bottom:7px;
-  display:flex;
-  align-items:center;
-  gap:5px;
+.live-badge{
+ color:#77e8a8;
+ border:1px solid #35c97870;
+ background:#123729;
+ padding:6px 9px;
+ border-radius:30px;
+ font-size:9px;
+ font-weight:900;
 }
-
-.top-value{
-  font-size:12px;
-  font-weight:700;
-  line-height:1.35;
-  color:white;
+.training-title{
+ font-size:23px;
+ font-weight:900;
+ line-height:1.15;
+ overflow-wrap:anywhere;
 }
-
-/* LIVE PRACTICE */
-
-.live-panel{
-  border:1px solid rgba(57,169,255,.4);
-  border-radius:15px;
-  padding:12px;
-  background:linear-gradient(180deg,#061523,#030b13);
-  box-shadow:0 0 20px rgba(57,169,255,.08);
+.training-sub{
+ color:var(--muted);
+ font-size:12px;
+ line-height:1.5;
+ margin-top:7px;
 }
-
-.live-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  margin-bottom:10px;
+.coach{
+ margin-top:12px;
+ padding-top:11px;
+ border-top:1px solid var(--line);
+ color:#b6d4e8;
+ font-size:10px;
+ font-weight:800;
 }
-
-.live-title{
-  font-size:22px;
-  font-weight:900;
-  line-height:1;
+.info-grid,.stats,.performance{
+ display:grid;
+ grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:8px;
 }
-
-.live-sub{
-  color:var(--blue);
-  font-size:9px;
-  font-weight:800;
-  letter-spacing:.7px;
-  margin-top:4px;
+.info-grid{margin-top:13px}
+.info-card{
+ background:#081827;
+ border:1px solid #234865;
+ padding:11px 8px;
+ border-radius:10px;
 }
-
-.mode-switch{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:6px;
-  min-width:205px;
+.info-label,.stat-label{
+ color:var(--muted);
+ font-size:9px;
+ font-weight:900;
+ letter-spacing:.5px;
 }
-
-.mode-button{
-  border:1px solid #24577b;
-  background:#06111b;
-  color:#9db7ca;
-  border-radius:8px;
-  padding:9px 7px;
-  font-size:9px;
-  font-weight:900;
-  letter-spacing:.5px;
-  cursor:pointer;
+.info-value{
+ font-size:11px;
+ font-weight:800;
+ margin-top:7px;
+ overflow-wrap:anywhere;
+ line-height:1.4;
 }
-
-.mode-button.active{
-  background:var(--blue);
-  color:#00101c;
-  border-color:var(--blue);
-  box-shadow:0 0 12px rgba(57,169,255,.4);
+.stats{margin-bottom:11px}
+.stat{
+ background:linear-gradient(180deg,#10243a,#081827);
+ border:1px solid var(--line);
+ border-radius:13px;
+ padding:15px 5px;
+ text-align:center;
 }
-
-/* MAIN SCORING AREA */
-
-.practice-grid{
-  display:grid;
-  grid-template-columns:170px 1fr;
-  gap:10px;
-  align-items:start;
+.stat-number{
+ font-size:24px;
+ font-weight:900;
+ margin-top:8px;
 }
-
-.score-column{
-  display:flex;
-  flex-direction:column;
-  gap:7px;
+.stat.primary{
+ border-color:#39a9ff90;
+ box-shadow:0 0 17px #39a9ff18;
 }
-
-.remaining-card{
-  border:1px solid rgba(57,169,255,.35);
-  border-radius:11px;
-  padding:11px 8px;
-  background:#071727;
-  text-align:center;
+.stat.primary .stat-number{
+ color:var(--blue);
+ font-size:32px;
 }
-
-.score-label{
-  color:var(--blue);
-  font-size:9px;
-  font-weight:900;
-  letter-spacing:1px;
-  text-transform:uppercase;
+.section-title{
+ font-size:15px;
+ font-weight:900;
 }
-
-.remaining{
-  font-size:48px;
-  line-height:1;
-  font-weight:900;
-  margin-top:5px;
+.section-sub{
+ color:var(--muted);
+ font-size:10px;
+ margin-top:5px;
 }
-
-.mini-stat{
-  display:grid;
-  grid-template-columns:34px 1fr;
-  align-items:center;
-  border:1px solid rgba(57,169,255,.25);
-  background:#071727;
-  border-radius:10px;
-  padding:7px;
+.mode-tabs{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:7px;
+ margin:14px 0;
 }
-
-.mini-icon{
-  width:28px;
-  height:28px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#07325a;
-  color:var(--blue);
-  font-size:12px;
-  font-weight:900;
+.mode-btn{
+ padding:12px 5px;
+ border-radius:9px;
+ border:1px solid #28516f;
+ background:#091a2a;
+ color:#b1c8d8;
+ font-size:11px;
+ font-weight:900;
 }
-
-.mini-value{
-  text-align:center;
-  font-size:18px;
-  font-weight:900;
+.mode-btn.active{
+ color:#031322;
+ background:var(--blue);
+ border-color:var(--blue);
 }
-
-.mini-label{
-  text-align:center;
-  color:var(--blue);
-  font-size:8px;
-  font-weight:900;
-  text-transform:uppercase;
-  letter-spacing:.7px;
+.visit-header{
+ display:flex;
+ justify-content:space-between;
+ color:var(--muted);
+ font-size:10px;
+ font-weight:900;
+ margin-bottom:8px;
 }
-
-.session-small{
-  border:1px solid rgba(57,169,255,.22);
-  border-radius:9px;
-  padding:7px;
-  background:#06131f;
+.visit-display{
+ background:#030b15;
+ border:1px solid #28516f;
+ border-radius:12px;
+ padding:15px;
+ text-align:center;
+ margin-bottom:10px;
 }
-
-.session-label{
-  color:var(--blue);
-  font-size:8px;
-  font-weight:900;
-  letter-spacing:1px;
+.visit-number{
+ font-size:42px;
+ font-weight:900;
 }
-
-.session-id{
-  color:var(--muted);
-  font-size:9px;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-  margin-top:3px;
+.visit-label{
+ color:var(--muted);
+ font-size:9px;
+ font-weight:900;
+ margin-top:5px;
 }
-
-/* INPUT */
-
-.input-column{
-  min-width:0;
-}
-
-.score-display{
-  background:#010509;
-  border:1px solid #174568;
-  border-radius:10px;
-  min-height:52px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:29px;
-  font-weight:900;
-  margin-bottom:8px;
-}
-
 .keypad{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:6px;
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:8px;
 }
-
 .key{
-  border:1px solid #1b4260;
-  background:#0b2031;
-  color:white;
-  border-radius:8px;
-  padding:10px 4px;
-  font-size:16px;
-  font-weight:900;
-  cursor:pointer;
+ min-height:52px;
+ border:1px solid #28516f;
+ border-radius:10px;
+ background:#15324b;
+ color:white;
+ font-size:20px;
+ font-weight:900;
 }
-
-.key:active{
-  transform:scale(.97);
+.key:active{background:#23577f}
+.key.clear{color:var(--red)}
+.key.back{color:var(--blue)}
+.primary-button{
+ width:100%;
+ background:var(--blue);
+ color:#031322;
+ border:0;
+ border-radius:11px;
+ padding:16px;
+ font-size:13px;
+ font-weight:900;
+ letter-spacing:.5px;
+ margin-top:12px;
+ box-shadow:0 0 16px #39a9ff35;
 }
-
-.clear{color:#ff737a}
-.back{color:#b8d9ef}
-
-#dartboardMode{
-  display:none;
+.secondary-button{
+ width:100%;
+ background:#102b43;
+ color:var(--blue);
+ border:1px solid #39a9ff70;
+ border-radius:11px;
+ padding:13px;
+ font-size:12px;
+ font-weight:900;
+ margin-top:9px;
 }
-
-.dart-slots{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:5px;
-  margin-bottom:7px;
-}
-
-.dart-slot{
-  background:#010509;
-  border:1px solid #173d59;
-  border-radius:8px;
-  padding:6px 2px;
-  text-align:center;
-}
-
-.dart-slot-label{
-  color:var(--muted);
-  font-size:7px;
-  letter-spacing:.8px;
-  text-transform:uppercase;
-}
-
-.dart-slot-value{
-  font-size:11px;
-  font-weight:900;
-  margin-top:3px;
-  min-height:14px;
-}
-
-.dartboard-wrap{
-  position:relative;
-  width:100%;
-  max-width:340px;
-  aspect-ratio:1/1;
-  margin:0 auto 6px;
-  user-select:none;
-  touch-action:manipulation;
-}
-
-#dartboard{
-  width:100%;
-  height:100%;
-  display:block;
-  cursor:crosshair;
-  filter:drop-shadow(0 0 9px rgba(57,169,255,.4));
-}
-
-.board-actions{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:6px;
-}
-
-.board-action{
-  border:1px solid #1c496a;
-  background:#0b2031;
-  color:#b9d0df;
-  border-radius:8px;
-  padding:9px 4px;
-  font-size:10px;
-  font-weight:900;
-  cursor:pointer;
-}
-
-.board-action.danger{
-  color:#ff7777;
-}
-
-.submit{
-  width:100%;
-  border:none;
-  margin-top:9px;
-  padding:12px;
-  border-radius:9px;
-  background:var(--blue);
-  color:#00101c;
-  font-size:13px;
-  font-weight:900;
-  cursor:pointer;
-  box-shadow:0 0 12px rgba(57,169,255,.25);
-}
-
 .message{
-  min-height:15px;
-  margin-top:7px;
-  text-align:center;
-  color:var(--muted);
-  font-size:9px;
+ text-align:center;
+ color:var(--muted);
+ font-size:11px;
+ line-height:1.5;
+ padding:12px 3px 2px;
+ min-height:30px;
 }
-
-.performance{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:6px;
-  margin-top:9px;
+.dart-slots{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:7px;
+ margin-bottom:10px;
 }
-
+.dart-slot{
+ background:#071827;
+ border:1px solid var(--line);
+ padding:9px 4px;
+ border-radius:9px;
+ text-align:center;
+}
+.dart-slot small{
+ display:block;
+ color:var(--muted);
+ font-size:9px;
+ margin-bottom:5px;
+}
+.dart-slot strong{font-size:11px}
+.board-wrap{
+ width:100%;
+ max-width:440px;
+ aspect-ratio:1;
+ margin:auto;
+}
+#dartboard{
+ display:block;
+ width:100%;
+ height:100%;
+ filter:drop-shadow(0 0 12px #39a9ff35);
+ touch-action:manipulation;
+}
+.board-actions{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:8px;
+ margin-top:9px;
+}
+.board-actions button{
+ padding:12px;
+ border:1px solid #28516f;
+ border-radius:9px;
+ background:#15324b;
+ color:white;
+ font-size:11px;
+ font-weight:900;
+}
+.performance{margin-top:12px}
 .performance-card{
-  border:1px solid rgba(57,169,255,.25);
-  border-radius:9px;
-  background:#071727;
-  padding:7px;
-  text-align:center;
+ background:#081827;
+ border:1px solid var(--line);
+ border-radius:10px;
+ padding:12px 5px;
+ text-align:center;
 }
-
-.performance-value{
-  font-size:16px;
-  font-weight:900;
+.performance-card strong{
+ font-size:20px;
+ display:block;
 }
-
-.performance-label{
-  color:var(--muted);
-  font-size:8px;
-  margin-top:2px;
+.performance-card small{
+ color:var(--muted);
+ font-size:9px;
+ display:block;
+ margin-top:5px;
 }
-
-/* ACCORDIONS */
-
-.accordions{
-  margin-top:10px;
-}
-
 details{
-  margin-bottom:7px;
-  border:1px solid rgba(57,169,255,.35);
-  border-radius:10px;
-  background:linear-gradient(180deg,#081827,#05111c);
-  overflow:hidden;
+ border:1px solid var(--line);
+ border-radius:12px;
+ background:linear-gradient(180deg,#10243a,#081827);
+ margin-bottom:9px;
+ overflow:hidden;
 }
-
 summary{
-  list-style:none;
-  cursor:pointer;
-  padding:12px 13px;
-  font-size:10px;
-  font-weight:900;
-  letter-spacing:1px;
-  text-transform:uppercase;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
+ cursor:pointer;
+ padding:15px;
+ font-size:11px;
+ font-weight:900;
+ letter-spacing:.5px;
+ list-style:none;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
 }
-
-summary::-webkit-details-marker{
-  display:none;
+summary::-webkit-details-marker{display:none}
+summary:after{
+ content:"+";
+ color:var(--blue);
+ font-size:19px;
 }
-
-summary::before{
-  content:"●";
-  color:var(--blue);
-  margin-right:8px;
-  text-shadow:0 0 7px var(--blue);
-}
-
-summary::after{
-  content:"⌄";
-  color:var(--blue);
-  font-size:16px;
-  margin-left:auto;
-}
-
-details[open] summary::after{
-  content:"⌃";
-}
-
+details[open] summary:after{content:"−"}
 .detail-body{
-  padding:0 13px 13px;
-  border-top:1px solid rgba(57,169,255,.15);
+ padding:0 15px 15px;
+ border-top:1px solid var(--line);
 }
-
-.detail-item{
-  padding-top:11px;
-}
-
+.detail-item{padding-top:12px}
 .detail-label{
-  color:var(--blue);
-  font-size:8px;
-  font-weight:900;
-  letter-spacing:1px;
-  text-transform:uppercase;
-  margin-bottom:4px;
+ color:var(--blue);
+ font-size:9px;
+ font-weight:900;
+ letter-spacing:.7px;
+ text-transform:uppercase;
+ margin-bottom:5px;
 }
-
 .detail-value{
-  color:#e7f2f9;
-  font-size:11px;
-  line-height:1.45;
-  white-space:pre-wrap;
+ color:#d6e8f4;
+ font-size:12px;
+ line-height:1.55;
+ white-space:pre-wrap;
+ overflow-wrap:anywhere;
 }
-
 .grading-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:7px;
-  margin-top:10px;
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:8px;
+ margin-top:12px;
 }
-
 .grade{
-  border-radius:8px;
-  padding:9px;
-  background:#06111b;
+ background:#071827;
+ border-radius:9px;
+ padding:12px;
 }
-
 .grade.red{border-left:4px solid var(--red)}
 .grade.orange{border-left:4px solid var(--orange)}
 .grade.yellow{border-left:4px solid var(--yellow)}
 .grade.green{border-left:4px solid var(--green)}
-
-.grade-title{
-  font-size:9px;
-  font-weight:900;
-  margin-bottom:4px;
+.grade strong{
+ display:block;
+ font-size:10px;
+ margin-bottom:6px;
 }
-
-.grade.red .grade-title{color:var(--red)}
-.grade.orange .grade-title{color:var(--orange)}
-.grade.yellow .grade-title{color:var(--yellow)}
-.grade.green .grade-title{color:var(--green)}
-
-.grade-value{
-  font-size:10px;
-  line-height:1.4;
+.grade p{
+ margin:0;
+ font-size:11px;
+ line-height:1.5;
+ white-space:pre-wrap;
 }
-
+.grade .action{
+ color:var(--muted);
+ margin-top:7px;
+}
+.result{
+ display:none;
+ text-align:center;
+ border-color:#35c97890;
+}
+.result.show{display:block}
+.result-icon{
+ font-size:42px;
+ margin:5px 0 12px;
+}
+.result h2{
+ font-size:25px;
+ margin:0 0 9px;
+}
+.result p{
+ color:var(--muted);
+ font-size:12px;
+ line-height:1.6;
+}
+.result-grid{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:8px;
+ margin-top:16px;
+}
+.result-item{
+ background:#071827;
+ border:1px solid var(--line);
+ border-radius:10px;
+ padding:12px 5px;
+}
+.result-item strong{
+ display:block;
+ font-size:20px;
+}
+.result-item small{
+ color:var(--muted);
+ font-size:9px;
+}
+.save-status{
+ font-size:11px;
+ line-height:1.5;
+ margin-top:11px;
+ color:var(--muted);
+}
 .footer{
-  text-align:center;
-  padding:12px 4px 3px;
-  color:#456278;
-  font-size:8px;
-  letter-spacing:1.5px;
+ text-align:center;
+ color:#66859c;
+ font-size:9px;
+ letter-spacing:1px;
+ margin-top:20px;
 }
-
-@media(max-width:560px){
-  body{padding:5px}
-  .engine{padding:10px;border-radius:16px}
-
-  .brand h1{font-size:25px}
-
-  .top-cards{
-    grid-template-columns:repeat(3,minmax(0,1fr));
-    gap:5px;
-  }
-
-  .top-card{
-    padding:8px 6px;
-  }
-
-  .top-label{
-    font-size:7px;
-    letter-spacing:.2px;
-  }
-
-  .top-value{
-    font-size:9px;
-  }
-
-  .live-title{
-    font-size:18px;
-  }
-
-  .live-sub{
-    font-size:7px;
-  }
-
-  .mode-switch{
-    min-width:170px;
-  }
-
-  .mode-button{
-    padding:8px 4px;
-    font-size:8px;
-  }
-
-  .practice-grid{
-    grid-template-columns:120px 1fr;
-    gap:7px;
-  }
-
-  .remaining{
-    font-size:40px;
-  }
-
-  .mini-value{
-    font-size:15px;
-  }
-
-  .dartboard-wrap{
-    max-width:300px;
-  }
-}
-
+.hidden{display:none!important}
 @media(max-width:390px){
-  .top-cards{
-    grid-template-columns:1fr;
-  }
-
-  .top-card{
-    padding:9px;
-  }
-
-  .top-value{
-    font-size:11px;
-  }
-
-  .live-header{
-    align-items:flex-start;
-  }
-
-  .mode-switch{
-    min-width:155px;
-  }
-
-  .practice-grid{
-    grid-template-columns:105px 1fr;
-  }
+ .app{padding:7px}
+ .panel{padding:12px}
+ .brand h1{font-size:24px}
+ .stat-number{font-size:21px}
+ .stat.primary .stat-number{font-size:27px}
+ .info-grid,.stats{gap:5px}
+ .info-card{padding:9px 6px}
+ .key{min-height:48px}
 }
 </style>
 </head>
 
 <body>
-
-<div class="engine">
-
-  <header class="brand">
-    <div class="brand-small">DARTIQ</div>
-    <h1>TODAY'S PRACTICE</h1>
-    <div class="practice-name" id="practiceName"></div>
-    <div class="coach-name" id="coachName"></div>
-  </header>
-
-  <section class="top-cards">
-
-    <div class="top-card">
-      <div class="top-label">🎯 GOAL</div>
-      <div class="top-value" id="objectiveValue">-</div>
-    </div>
-
-    <div class="top-card">
-      <div class="top-label">📈 TODAY'S TARGET</div>
-      <div class="top-value" id="targetValue">-</div>
-    </div>
-
-    <div class="top-card">
-      <div class="top-label">🎓 COACH KEITH'S FOCUS</div>
-      <div class="top-value" id="focusValue">-</div>
-    </div>
-
-  </section>
-
-  <section class="live-panel">
-
-    <div class="live-header">
-
-      <div>
-        <div class="live-title">LIVE PRACTICE</div>
-        <div class="live-sub">TRACK YOUR PROGRESS IN REAL TIME</div>
-      </div>
-
-      <div class="mode-switch">
-
-        <button
-          class="mode-button active"
-          id="keypadTab"
-          onclick="setMode('keypad')">
-          ▦ KEYPAD
-        </button>
-
-        <button
-          class="mode-button"
-          id="dartboardTab"
-          onclick="setMode('dartboard')">
-          🎯 DARTBOARD
-        </button>
-
-      </div>
-
-    </div>
-
-    <div class="practice-grid">
-
-      <div class="score-column">
-
-        <div class="remaining-card">
-          <div class="score-label">Remaining</div>
-          <div class="remaining" id="remaining">501</div>
-        </div>
-
-        <div class="mini-stat">
-          <div class="mini-icon">#</div>
-          <div>
-            <div class="mini-label">Visit</div>
-            <div class="mini-value" id="visitNumber">1</div>
-          </div>
-        </div>
-
-        <div class="mini-stat">
-          <div class="mini-icon">Ø</div>
-          <div>
-            <div class="mini-label">Average</div>
-            <div class="mini-value" id="average">0.00</div>
-          </div>
-        </div>
-
-        <div class="mini-stat">
-          <div class="mini-icon">3</div>
-          <div>
-            <div class="mini-label">Darts</div>
-            <div class="mini-value" id="dartsThrown">0</div>
-          </div>
-        </div>
-
-        <div class="session-small">
-          <div class="session-label">ACTIVE SESSION</div>
-          <div class="session-id" id="sessionID">SESSION</div>
-        </div>
-
-      </div>
-
-      <div class="input-column">
-
-        <div id="keypadMode">
-
-          <div class="score-display" id="scoreDisplay">0</div>
-
-          <div class="keypad">
-            <button class="key" onclick="press('1')">1</button>
-            <button class="key" onclick="press('2')">2</button>
-            <button class="key" onclick="press('3')">3</button>
-
-            <button class="key" onclick="press('4')">4</button>
-            <button class="key" onclick="press('5')">5</button>
-            <button class="key" onclick="press('6')">6</button>
-
-            <button class="key" onclick="press('7')">7</button>
-            <button class="key" onclick="press('8')">8</button>
-            <button class="key" onclick="press('9')">9</button>
-
-            <button class="key clear" onclick="clearScore()">C</button>
-            <button class="key" onclick="press('0')">0</button>
-            <button class="key back" onclick="backspace()">⌫</button>
-          </div>
-
-        </div>
-
-        <div id="dartboardMode">
-
-          <div class="dart-slots">
-
-            <div class="dart-slot">
-              <div class="dart-slot-label">Dart 1</div>
-              <div class="dart-slot-value" id="dart1">-</div>
-            </div>
-
-            <div class="dart-slot">
-              <div class="dart-slot-label">Dart 2</div>
-              <div class="dart-slot-value" id="dart2">-</div>
-            </div>
-
-            <div class="dart-slot">
-              <div class="dart-slot-label">Dart 3</div>
-              <div class="dart-slot-value" id="dart3">-</div>
-            </div>
-
-          </div>
-
-          <div class="score-display">
-            <span id="boardVisitScore">0</span>
-          </div>
-
-          <div class="dartboard-wrap">
-            <svg
-              id="dartboard"
-              viewBox="-230 -230 460 460"
-              aria-label="Interactive DARTIQ dartboard">
-            </svg>
-          </div>
-
-          <div class="board-actions">
-
-            <button class="board-action" onclick="addMiss()">
-              MISS
-            </button>
-
-            <button class="board-action danger" onclick="undoDart()">
-              UNDO DART
-            </button>
-
-          </div>
-
-        </div>
-
-        <button class="submit" onclick="confirmVisit()">
-          CONFIRM VISIT
-        </button>
-
-        <div class="message" id="message">
-          Enter the total score for this visit.
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="performance">
-
-      <div class="performance-card">
-        <div class="performance-value" id="stat100">0</div>
-        <div class="performance-label">100+</div>
-      </div>
-
-      <div class="performance-card">
-        <div class="performance-value" id="stat140">0</div>
-        <div class="performance-label">140+</div>
-      </div>
-
-      <div class="performance-card">
-        <div class="performance-value" id="stat180">0</div>
-        <div class="performance-label">180</div>
-      </div>
-
-    </div>
-
-  </section>
-
-  <section class="accordions">
-
-    <details>
-      <summary>PRACTICE INSTRUCTIONS</summary>
-
-      <div class="detail-body">
-
-        <div class="detail-item">
-          <div class="detail-label">Why This Practice</div>
-          <div class="detail-value" id="whyValue">-</div>
-        </div>
-
-        <div class="detail-item">
-          <div class="detail-label">How To Practice</div>
-          <div class="detail-value" id="executionValue">-</div>
-        </div>
-
-        <div class="detail-item" id="avoidBlock">
-          <div class="detail-label">Watch For</div>
-          <div class="detail-value" id="avoidValue">-</div>
-        </div>
-
-      </div>
-    </details>
-
-    <details>
-      <summary>KEITH ALLEN GUTHER METHODOLOGY</summary>
-
-      <div class="detail-body">
-
-        <div class="detail-item">
-          <div class="detail-label">Coach</div>
-          <div class="detail-value" id="keithCoachValue">-</div>
-        </div>
-
-        <div class="detail-item">
-          <div class="detail-label">Rules</div>
-          <div class="detail-value" id="keithRulesValue">-</div>
-        </div>
-
-        <div class="detail-item">
-          <div class="detail-label">Primary Metric</div>
-          <div class="detail-value" id="primaryValue">-</div>
-        </div>
-
-        <div class="detail-item">
-          <div class="detail-label">Secondary Metric</div>
-          <div class="detail-value" id="secondaryValue">-</div>
-        </div>
-
-        <div class="detail-item">
-          <div class="detail-label">Success Target</div>
-          <div class="detail-value" id="keithTargetValue">-</div>
-        </div>
-
-      </div>
-    </details>
-
-    <details>
-      <summary>GRADING &amp; COACHING ACTIONS</summary>
-
-      <div class="detail-body">
-
-        <div class="grading-grid">
-
-          <div class="grade red">
-            <div class="grade-title">RED</div>
-            <div class="grade-value" id="redValue">-</div>
-            <div class="grade-value" id="redActionValue"></div>
-          </div>
-
-          <div class="grade orange">
-            <div class="grade-title">ORANGE</div>
-            <div class="grade-value" id="orangeValue">-</div>
-            <div class="grade-value" id="orangeActionValue"></div>
-          </div>
-
-          <div class="grade yellow">
-            <div class="grade-title">YELLOW</div>
-            <div class="grade-value" id="yellowValue">-</div>
-            <div class="grade-value" id="yellowActionValue"></div>
-          </div>
-
-          <div class="grade green">
-            <div class="grade-title">GREEN</div>
-            <div class="grade-value" id="greenValue">-</div>
-            <div class="grade-value" id="greenActionValue"></div>
-          </div>
-
-        </div>
-
-        <div class="detail-item">
-          <div class="detail-label">DARTIQ Coaching Logic / Improvement Potential</div>
-          <div class="detail-value" id="improvementValue">-</div>
-        </div>
-
-      </div>
-    </details>
-
-    <details>
-      <summary>WHAT TO TRACK</summary>
-
-      <div class="detail-body">
-        <div class="detail-item">
-          <div class="detail-value" id="trackValue">-</div>
-        </div>
-      </div>
-
-    </details>
-
-    <details>
-      <summary>AFTER PRACTICE</summary>
-
-      <div class="detail-body">
-
-        <div class="detail-item">
-          <div class="detail-label">Reminder</div>
-          <div class="detail-value" id="reminderValue">-</div>
-        </div>
-
-        <div class="detail-item">
-          <div class="detail-label">Next Step</div>
-          <div class="detail-value" id="afterValue">-</div>
-        </div>
-
-      </div>
-    </details>
-
-  </section>
-
-  <div class="footer">
-    DARTIQ • PRACTICE SESSION • CORE VISION
+<main class="app">
+
+<header class="brand">
+ <div class="logo">DARTIQ</div>
+ <h1>PERFORMANCE LAB</h1>
+ <p>TRAIN SMARTER • IMPROVE FASTER</p>
+</header>
+
+<section class="panel">
+ <div class="panel-heading">
+  <span class="eyebrow">TODAY'S TRAINING</span>
+  <span class="live-badge" id="sessionBadge">● LIVE SESSION</span>
+ </div>
+
+ <div class="training-title" id="practiceName">
+  Focused Practice
+ </div>
+
+ <div class="training-sub" id="trainingFocus">
+  Your personalized training session
+ </div>
+
+ <div class="info-grid">
+  <div class="info-card">
+   <div class="info-label">GOAL</div>
+   <div class="info-value" id="objectiveValue">—</div>
+  </div>
+  <div class="info-card">
+   <div class="info-label">TARGET</div>
+   <div class="info-value" id="targetValue">—</div>
+  </div>
+  <div class="info-card">
+   <div class="info-label">COACH FOCUS</div>
+   <div class="info-value" id="focusValue">—</div>
+  </div>
+ </div>
+
+ <div class="coach" id="coachName">
+  COACH KEITH ALLEN GUTHER
+ </div>
+</section>
+
+<section class="stats">
+ <div class="stat primary">
+  <div class="stat-label" id="remainingLabel">REMAINING</div>
+  <div class="stat-number" id="remaining">501</div>
+ </div>
+ <div class="stat">
+  <div class="stat-label" id="averageLabel">AVERAGE</div>
+  <div class="stat-number" id="average">0.00</div>
+ </div>
+ <div class="stat">
+  <div class="stat-label">DARTS</div>
+  <div class="stat-number" id="dartsThrown">0</div>
+ </div>
+</section>
+
+<section class="panel" id="scoringPanel">
+ <div class="panel-heading">
+  <div>
+   <div class="section-title" id="scoringTitle">
+    LIVE SCORING
+   </div>
+   <div class="section-sub" id="scoringSubtitle">
+    Track every visit
+   </div>
+  </div>
+  <span class="eyebrow" id="visitNumber">VISIT 1</span>
+ </div>
+
+ <div class="mode-tabs" id="modeTabs">
+  <button class="mode-btn active" id="keypadTab"
+   onclick="setMode('keypad')">▦ KEYPAD</button>
+  <button class="mode-btn" id="dartboardTab"
+   onclick="setMode('dartboard')">🎯 DARTBOARD</button>
+ </div>
+
+ <div id="keypadMode">
+  <div class="visit-header">
+   <span>ENTER VISIT SCORE</span>
+   <span>MAX 180</span>
   </div>
 
-</div>
+  <div class="visit-display">
+   <div class="visit-number" id="scoreDisplay">0</div>
+   <div class="visit-label">CURRENT VISIT</div>
+  </div>
+
+  <div class="keypad">
+   <button class="key" onclick="press('1')">1</button>
+   <button class="key" onclick="press('2')">2</button>
+   <button class="key" onclick="press('3')">3</button>
+   <button class="key" onclick="press('4')">4</button>
+   <button class="key" onclick="press('5')">5</button>
+   <button class="key" onclick="press('6')">6</button>
+   <button class="key" onclick="press('7')">7</button>
+   <button class="key" onclick="press('8')">8</button>
+   <button class="key" onclick="press('9')">9</button>
+   <button class="key clear" onclick="clearScore()">C</button>
+   <button class="key" onclick="press('0')">0</button>
+   <button class="key back" onclick="backspace()">⌫</button>
+  </div>
+ </div>
+
+ <div id="dartboardMode" class="hidden">
+  <div class="dart-slots">
+   <div class="dart-slot">
+    <small>DART 1</small><strong id="dart1">—</strong>
+   </div>
+   <div class="dart-slot">
+    <small>DART 2</small><strong id="dart2">—</strong>
+   </div>
+   <div class="dart-slot">
+    <small>DART 3</small><strong id="dart3">—</strong>
+   </div>
+  </div>
+
+  <div class="visit-display">
+   <div class="visit-number" id="boardVisitScore">0</div>
+   <div class="visit-label">CURRENT VISIT</div>
+  </div>
+
+  <div class="board-wrap">
+   <svg id="dartboard"
+    viewBox="-230 -230 460 460"
+    aria-label="Interactive dartboard">
+   </svg>
+  </div>
+
+  <div class="board-actions">
+   <button onclick="addMiss()">MISS</button>
+   <button onclick="undoDart()">UNDO DART</button>
+  </div>
+ </div>
+
+ <button class="primary-button" id="confirmButton"
+  onclick="confirmVisit()">
+  CONFIRM VISIT
+ </button>
+
+ <div class="message" id="message">
+  Enter your first visit.
+ </div>
+
+ <div class="performance" id="performanceStats">
+  <div class="performance-card">
+   <strong id="stat100">0</strong><small>100+</small>
+  </div>
+  <div class="performance-card">
+   <strong id="stat140">0</strong><small>140+</small>
+  </div>
+  <div class="performance-card">
+   <strong id="stat180">0</strong><small>180</small>
+  </div>
+ </div>
+</section>
+
+<section class="panel result" id="resultPanel">
+ <div class="result-icon">🏆</div>
+ <h2 id="resultTitle">TRAINING COMPLETE</h2>
+ <p id="resultDescription">
+  Your training session is complete.
+ </p>
+
+ <div class="result-grid">
+  <div class="result-item">
+   <strong id="resultAverage">0.00</strong>
+   <small id="resultAverageLabel">AVERAGE</small>
+  </div>
+  <div class="result-item">
+   <strong id="resultDarts">0</strong>
+   <small>DARTS</small>
+  </div>
+  <div class="result-item">
+   <strong id="resultVisits">0</strong>
+   <small>VISITS</small>
+  </div>
+ </div>
+
+ <button class="primary-button" id="saveButton"
+  onclick="saveSession()">
+  SAVE SESSION
+ </button>
+
+ <div class="save-status" id="saveStatus">
+  Session completed locally. Save to continue.
+ </div>
+</section>
+
+<section id="coachingSections">
+
+<details>
+ <summary>🎯 PRACTICE INSTRUCTIONS</summary>
+ <div class="detail-body">
+  <div class="detail-item">
+   <div class="detail-label">Why This Practice</div>
+   <div class="detail-value" id="whyValue">—</div>
+  </div>
+  <div class="detail-item">
+   <div class="detail-label">How To Practice</div>
+   <div class="detail-value" id="executionValue">—</div>
+  </div>
+  <div class="detail-item" id="avoidBlock">
+   <div class="detail-label">Watch For</div>
+   <div class="detail-value" id="avoidValue">—</div>
+  </div>
+ </div>
+</details>
+
+<details>
+ <summary>🎓 KEITH ALLEN GUTHER METHODOLOGY</summary>
+ <div class="detail-body">
+  <div class="detail-item">
+   <div class="detail-label">Coach</div>
+   <div class="detail-value" id="keithCoachValue">—</div>
+  </div>
+  <div class="detail-item">
+   <div class="detail-label">Rules</div>
+   <div class="detail-value" id="keithRulesValue">—</div>
+  </div>
+  <div class="detail-item">
+   <div class="detail-label">Primary Metric</div>
+   <div class="detail-value" id="primaryValue">—</div>
+  </div>
+  <div class="detail-item">
+   <div class="detail-label">Secondary Metric</div>
+   <div class="detail-value" id="secondaryValue">—</div>
+  </div>
+  <div class="detail-item">
+   <div class="detail-label">Success Target</div>
+   <div class="detail-value" id="keithTargetValue">—</div>
+  </div>
+ </div>
+</details>
+
+<details>
+ <summary>📊 GRADING & COACHING ACTIONS</summary>
+ <div class="detail-body">
+  <div class="grading-grid">
+   <div class="grade red">
+    <strong>RED</strong>
+    <p id="redValue">—</p>
+    <p class="action" id="redActionValue"></p>
+   </div>
+   <div class="grade orange">
+    <strong>ORANGE</strong>
+    <p id="orangeValue">—</p>
+    <p class="action" id="orangeActionValue"></p>
+   </div>
+   <div class="grade yellow">
+    <strong>YELLOW</strong>
+    <p id="yellowValue">—</p>
+    <p class="action" id="yellowActionValue"></p>
+   </div>
+   <div class="grade green">
+    <strong>GREEN</strong>
+    <p id="greenValue">—</p>
+    <p class="action" id="greenActionValue"></p>
+   </div>
+  </div>
+  <div class="detail-item">
+   <div class="detail-label">DARTIQ Coaching Logic</div>
+   <div class="detail-value" id="improvementValue">—</div>
+  </div>
+ </div>
+</details>
+
+<details>
+ <summary>📈 WHAT TO TRACK</summary>
+ <div class="detail-body">
+  <div class="detail-item">
+   <div class="detail-value" id="trackValue">—</div>
+  </div>
+ </div>
+</details>
+
+<details>
+ <summary>🏁 AFTER PRACTICE</summary>
+ <div class="detail-body">
+  <div class="detail-item">
+   <div class="detail-label">Reminder</div>
+   <div class="detail-value" id="reminderValue">—</div>
+  </div>
+  <div class="detail-item">
+   <div class="detail-label">Next Step</div>
+   <div class="detail-value" id="afterValue">—</div>
+  </div>
+ </div>
+</details>
+
+</section>
+
+<footer class="footer">
+ DARTIQ • PERFORMANCE LAB • INTELLIGENT TRAINING
+</footer>
+
+</main>
 
 <script>
-const params = new URLSearchParams(window.location.search);
+"use strict";
 
-function param(){
-  for(let i=0;i<arguments.length;i++){
-    const value=params.get(arguments[i]);
-    if(value && value.trim()!==""){
-      return value.trim();
-    }
-  }
-  return "";
+const params=new URLSearchParams(location.search);
+
+function param(...keys){
+ for(const key of keys){
+  const value=params.get(key);
+  if(value&&value.trim())return value.trim();
+ }
+ return "";
 }
 
-function put(id,value,fallback="-"){
-  const el=document.getElementById(id);
-  if(el) el.textContent=value || fallback;
+function el(id){
+ return document.getElementById(id);
 }
 
-const sessionID=param("session") || "SESSION";
+function put(id,value,fallback="—"){
+ const node=el(id);
+ if(node)node.textContent=value||fallback;
+}
 
+const sessionID=param("session","sessionID");
+const email=param("email");
+const player=param("player","playerid");
+const userid=param("userid");
+const playerName=param("playerName");
+const language=param("language","lang")||"EN";
+const mainIssue=param("mainIssue","focus");
+const drill=param("drill","practice");
+const focus=param("focus","mainIssue");
 const objective=param("objective");
 const target=param("target");
 const execution=param("execution");
@@ -1015,8 +807,6 @@ const why=param("why");
 const improvement=param("improvement");
 const reminder=param("reminder");
 const after=param("after");
-const focus=param("focus");
-
 const keithCoach=param("keithcoach","coach");
 const keithRules=param("keithrules","rules");
 const keithRed=param("keithred","red");
@@ -1025,969 +815,699 @@ const keithYellow=param("keithyellow","yellow");
 const keithGreen=param("keithgreen","green");
 const keithPrimary=param("keithprimary","primarymetric");
 const keithSecondary=param("keithsecondary","secondarymetric");
+const keithTarget=param("keithtarget","successtarget");
 const redAction=param("redaction");
 const orangeAction=param("orangeaction");
 const yellowAction=param("yellowaction");
 const greenAction=param("greenaction");
-const keithTarget=param("keithtarget","successtarget");
 
-const coachFocus=
-  focus ||
-  keithRules ||
-  reminder ||
-  improvement ||
-  "-";
+const isDoubleTrouble=drill.toLowerCase().includes("double trouble");
 
-put("sessionID",sessionID);
+put("practiceName",drill||focus||"501 Focused Practice");
+put("trainingFocus",focus||"Your personalized training session");
 put("objectiveValue",objective);
 put("targetValue",target);
-put("focusValue",coachFocus);
-
+put("focusValue",focus||keithRules||reminder);
+put("coachName","COACH "+(keithCoach||"KEITH ALLEN GUTHER"));
 put("whyValue",why);
 put("executionValue",execution);
 put("avoidValue",avoid);
-
-put("keithCoachValue",keithCoach || "Keith Allen Guther");
+put("keithCoachValue",keithCoach||"Keith Allen Guther");
 put("keithRulesValue",keithRules);
 put("primaryValue",keithPrimary);
 put("secondaryValue",keithSecondary);
 put("keithTargetValue",keithTarget);
-
 put("redValue",keithRed);
 put("orangeValue",keithOrange);
 put("yellowValue",keithYellow);
 put("greenValue",keithGreen);
-
 put("redActionValue",redAction,"");
 put("orangeActionValue",orangeAction,"");
 put("yellowActionValue",yellowAction,"");
 put("greenActionValue",greenAction,"");
-
 put("improvementValue",improvement);
 put("trackValue",track);
 put("reminderValue",reminder);
 put("afterValue",after);
 
-if(!avoid){
-  const block=document.getElementById("avoidBlock");
-  if(block) block.style.display="none";
-}
+if(!avoid)el("avoidBlock").classList.add("hidden");
 
-if(keithCoach){
-  put("coachName","COACH " + keithCoach,"");
-}else{
-  put("coachName","COACH KEITH ALLEN GUTHER","");
-}
-
-if(focus){
-  put("practiceName",focus,"");
-}else if(objective){
-  const shortObjective=objective.length>38
-    ? objective.substring(0,38)+"…"
-    : objective;
-  put("practiceName",shortObjective,"");
-}
-
-
-/* ==================================================
-   EXISTING 501 PRACTICE ENGINE
-   ================================================== */
+/* SCORING STATE */
 
 let currentMode="keypad";
 let input="";
-
-let remaining=501;
+let remaining=isDoubleTrouble?27:501;
 let visit=1;
-
 let totalPoints=0;
 let totalDarts=0;
-
 let count100=0;
 let count140=0;
 let count180=0;
-
 let currentDarts=[];
+let completed=false;
+let saving=false;
+let saved=false;
+let visits=[];
+let checkoutDarts=null;
+let lastCheckout=null;
 
+/* DOUBLE TROUBLE STATE */
 
-function setMode(mode){
+let wedge=1;
+let furthestWedge=0;
+let gameEnded=false;
 
-  currentMode=mode;
+const doubleTroubleWebhook=
+ "https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/2876503c-d138-44a2-adfd-7815bd4b834c";
 
-  const keypadMode=document.getElementById("keypadMode");
-  const dartboardMode=document.getElementById("dartboardMode");
-  const keypadTab=document.getElementById("keypadTab");
-  const dartboardTab=document.getElementById("dartboardTab");
+/*
+  Optional 501 completion webhook.
 
-  if(mode==="keypad"){
+  Pass a configured URL using:
+  ?saveWebhook=https%3A%2F%2F...
 
-    keypadMode.style.display="block";
-    dartboardMode.style.display="none";
+  This must be a Glide workflow designed to
+  accept the completed 501 session payload.
 
-    keypadTab.classList.add("active");
-    dartboardTab.classList.remove("active");
-
-    showMessage("Enter the total score for this visit.");
-
-  }else{
-
-    keypadMode.style.display="none";
-    dartboardMode.style.display="block";
-
-    dartboardTab.classList.add("active");
-    keypadTab.classList.remove("active");
-
-    showMessage("Tap the board for Dart 1.");
-  }
-}
-
-
-function press(number){
-
-  if(input.length>=3) return;
-
-  input+=number;
-
-  const value=Number(input);
-
-  if(value>180){
-    input="";
-    showMessage("Maximum visit score is 180.");
-  }
-
-  updateInput();
-}
-
-
-function clearScore(){
-  input="";
-  updateInput();
-}
-
-
-function backspace(){
-  input=input.slice(0,-1);
-  updateInput();
-}
-
-
-function updateInput(){
-  document.getElementById("scoreDisplay").textContent=
-    input==="" ? "0" : input;
-}
-
+  The Double Trouble webhook is separate.
+*/
+const saveWebhook=param("saveWebhook","sessionWebhook");
 
 function showMessage(text){
-  document.getElementById("message").textContent=text;
+ put("message",text,"");
 }
 
+function setMode(mode){
+ if(completed||gameEnded)return;
+ if(isDoubleTrouble&&mode!=="dartboard")return;
 
-/* ==================================================
-   INTERACTIVE DARTBOARD
-   ================================================== */
+ currentMode=mode;
+
+ el("keypadMode").classList.toggle("hidden",mode!=="keypad");
+ el("dartboardMode").classList.toggle("hidden",mode!=="dartboard");
+ el("keypadTab").classList.toggle("active",mode==="keypad");
+ el("dartboardTab").classList.toggle("active",mode==="dartboard");
+
+ showMessage(mode==="keypad"
+  ?"Enter the total score for this visit."
+  :"Tap the dartboard to enter your darts.");
+}
+
+function press(number){
+ if(completed||input.length>=3)return;
+ const next=input+number;
+ if(Number(next)>180){
+  showMessage("Maximum visit score is 180.");
+  return;
+ }
+ input=next;
+ updateInput();
+}
+
+function clearScore(){
+ input="";
+ updateInput();
+}
+
+function backspace(){
+ input=input.slice(0,-1);
+ updateInput();
+}
+
+function updateInput(){
+ put("scoreDisplay",input||"0");
+}
+
+/* DARTBOARD */
 
 const boardNumbers=[
-  20,1,18,4,13,6,10,15,2,17,
-  3,19,7,16,8,11,14,9,12,5
+ 20,1,18,4,13,6,10,15,2,17,
+ 3,19,7,16,8,11,14,9,12,5
 ];
 
-const svg=document.getElementById("dartboard");
+const svg=el("dartboard");
 const NS="http://www.w3.org/2000/svg";
 
-
 function polar(radius,angle){
-
-  const rad=(angle-90)*Math.PI/180;
-
-  return{
-    x:radius*Math.cos(rad),
-    y:radius*Math.sin(rad)
-  };
+ const radians=(angle-90)*Math.PI/180;
+ return {
+  x:radius*Math.cos(radians),
+  y:radius*Math.sin(radians)
+ };
 }
 
-
-function ringPath(innerRadius,outerRadius,startAngle,endAngle){
-
-  const p1=polar(outerRadius,startAngle);
-  const p2=polar(outerRadius,endAngle);
-  const p3=polar(innerRadius,endAngle);
-  const p4=polar(innerRadius,startAngle);
-
-  return[
-    "M",p1.x,p1.y,
-    "A",outerRadius,outerRadius,0,0,1,p2.x,p2.y,
-    "L",p3.x,p3.y,
-    "A",innerRadius,innerRadius,0,0,0,p4.x,p4.y,
-    "Z"
-  ].join(" ");
+function ringPath(inner,outer,start,end){
+ const a=polar(outer,start);
+ const b=polar(outer,end);
+ const c=polar(inner,end);
+ const d=polar(inner,start);
+ return [
+  "M",a.x,a.y,
+  "A",outer,outer,0,0,1,b.x,b.y,
+  "L",c.x,c.y,
+  "A",inner,inner,0,0,0,d.x,d.y,
+  "Z"
+ ].join(" ");
 }
 
-
-function addSegment(
-  inner,
-  outer,
-  start,
-  end,
-  fill,
-  number,
-  multiplier,
-  label
-){
-
-  const path=document.createElementNS(NS,"path");
-
-  path.setAttribute(
-    "d",
-    ringPath(inner,outer,start,end)
-  );
-
-  path.setAttribute("fill",fill);
-
-  path.setAttribute(
-    "stroke",
-    "#777777"
-  );
-
-  path.setAttribute(
-    "stroke-width",
-    ".65"
-  );
-
-  path.style.cursor="pointer";
-
-  path.addEventListener(
-    "click",
-    function(){
-      addDart(number,multiplier,label);
-    }
-  );
-
-  svg.appendChild(path);
+function createSVG(tag,attributes){
+ const node=document.createElementNS(NS,tag);
+ for(const [key,value] of Object.entries(attributes)){
+  node.setAttribute(key,String(value));
+ }
+ return node;
 }
 
+function addSegment(inner,outer,start,end,color,number,multiplier,label){
+ const path=createSVG("path",{
+  d:ringPath(inner,outer,start,end),
+  fill:color,
+  stroke:"#888",
+  "stroke-width":".7"
+ });
+ path.style.cursor="pointer";
+ path.addEventListener("click",()=>{
+  addDart(number,multiplier,label);
+ });
+ svg.appendChild(path);
+}
 
 function drawBoard(){
+ svg.innerHTML="";
 
-  svg.innerHTML="";
+ svg.appendChild(createSVG("circle",{
+  cx:0,cy:0,r:224,
+  fill:"#020509",
+  stroke:"#39a9ff",
+  "stroke-width":4
+ }));
 
+ for(let i=0;i<20;i++){
+  const number=boardNumbers[i];
+  const center=i*18;
+  const start=center-9;
+  const end=center+9;
+  const dark=i%2===0;
+  const single=dark?"#101419":"#d8c9a7";
+  const colored=dark?"#c73b43":"#21865c";
 
-  /* BLUE OUTER RING */
+  addSegment(24,103,start,end,single,number,1,"S"+number);
+  addSegment(103,118,start,end,colored,number,3,"T"+number);
+  addSegment(118,178,start,end,single,number,1,"S"+number);
+  addSegment(178,195,start,end,colored,number,2,"D"+number);
 
-  const surround=document.createElementNS(NS,"circle");
+  const position=polar(211,center);
+  const text=createSVG("text",{
+   x:position.x,
+   y:position.y,
+   fill:"#39a9ff",
+   "font-size":16,
+   "font-weight":900,
+   "text-anchor":"middle",
+   "dominant-baseline":"middle"
+  });
+  text.textContent=number;
+  svg.appendChild(text);
+ }
 
-  surround.setAttribute("cx","0");
-  surround.setAttribute("cy","0");
-  surround.setAttribute("r","224");
+ const outerBull=createSVG("circle",{
+  cx:0,cy:0,r:24,
+  fill:"#21865c",
+  stroke:"#ddd",
+  "stroke-width":1
+ });
+ outerBull.addEventListener("click",()=>addDart(25,1,"25"));
+ svg.appendChild(outerBull);
 
-  surround.setAttribute(
-    "fill",
-    "#010407"
-  );
-
-  surround.setAttribute(
-    "stroke",
-    "#39a9ff"
-  );
-
-  surround.setAttribute(
-    "stroke-width",
-    "4"
-  );
-
-  surround.style.filter=
-    "drop-shadow(0 0 7px rgba(57,169,255,.9))";
-
-  svg.appendChild(surround);
-
-
-  for(let i=0;i<20;i++){
-
-    const number=boardNumbers[i];
-    const center=i*18;
-    const start=center-9;
-    const end=center+9;
-    const dark=i%2===0;
-
-    const singleColor=
-      dark
-        ? "#090d11"
-        : "#d5c9aa";
-
-    const scoreColor=
-      dark
-        ? "#c73b43"
-        : "#21865c";
-
-
-    addSegment(
-      24,
-      103,
-      start,
-      end,
-      singleColor,
-      number,
-      1,
-      "S"+number
-    );
-
-
-    addSegment(
-      103,
-      118,
-      start,
-      end,
-      scoreColor,
-      number,
-      3,
-      "T"+number
-    );
-
-
-    addSegment(
-      118,
-      178,
-      start,
-      end,
-      singleColor,
-      number,
-      1,
-      "S"+number
-    );
-
-
-    addSegment(
-      178,
-      195,
-      start,
-      end,
-      scoreColor,
-      number,
-      2,
-      "D"+number
-    );
-
-
-    /* BLUE NUMBERS */
-
-    const textPoint=polar(211,center);
-
-    const text=document.createElementNS(NS,"text");
-
-    text.setAttribute("x",textPoint.x);
-    text.setAttribute("y",textPoint.y);
-
-    text.setAttribute(
-      "fill",
-      "#39a9ff"
-    );
-
-    text.setAttribute(
-      "font-size",
-      "16"
-    );
-
-    text.setAttribute(
-      "font-weight",
-      "900"
-    );
-
-    text.setAttribute(
-      "text-anchor",
-      "middle"
-    );
-
-    text.setAttribute(
-      "dominant-baseline",
-      "middle"
-    );
-
-    text.style.pointerEvents="none";
-
-    text.style.filter=
-      "drop-shadow(0 0 4px rgba(57,169,255,.95))";
-
-    text.textContent=number;
-
-    svg.appendChild(text);
-  }
-
-
-  /* OUTER BULL */
-
-  const outerBull=document.createElementNS(NS,"circle");
-
-  outerBull.setAttribute("cx","0");
-  outerBull.setAttribute("cy","0");
-  outerBull.setAttribute("r","24");
-
-  outerBull.setAttribute(
-    "fill",
-    "#21865c"
-  );
-
-  outerBull.setAttribute(
-    "stroke",
-    "#c5c5c5"
-  );
-
-  outerBull.setAttribute(
-    "stroke-width",
-    "1"
-  );
-
-  outerBull.style.cursor="pointer";
-
-  outerBull.addEventListener(
-    "click",
-    function(){
-      addDart(25,1,"25");
-    }
-  );
-
-  svg.appendChild(outerBull);
-
-
-  /* INNER BULL */
-
-  const bull=document.createElementNS(NS,"circle");
-
-  bull.setAttribute("cx","0");
-  bull.setAttribute("cy","0");
-  bull.setAttribute("r","10");
-
-  bull.setAttribute(
-    "fill",
-    "#c73b43"
-  );
-
-  bull.setAttribute(
-    "stroke",
-    "#dddddd"
-  );
-
-  bull.setAttribute(
-    "stroke-width",
-    "1"
-  );
-
-  bull.style.cursor="pointer";
-
-  bull.addEventListener(
-    "click",
-    function(){
-      addDart(25,2,"BULL");
-    }
-  );
-
-  svg.appendChild(bull);
-
-  /*
-    IMPORTANT:
-    NO DARTIQ TEXT IS DRAWN INSIDE THE BOARD.
-    OUTER BLUE RING AND BLUE NUMBERS REMAIN.
-  */
+ const bull=createSVG("circle",{
+  cx:0,cy:0,r:10,
+  fill:"#c73b43",
+  stroke:"#fff",
+  "stroke-width":1
+ });
+ bull.addEventListener("click",()=>addDart(25,2,"BULL"));
+ svg.appendChild(bull);
 }
-
-
-/* ==================================================
-   DART INPUT
-   ================================================== */
 
 function addDart(number,multiplier,label){
-
-  if(currentDarts.length>=3){
-
-    showMessage(
-      "Three darts entered. Confirm the visit."
-    );
-
-    return;
-  }
-
-  const score=number*multiplier;
-
-  currentDarts.push({
-    number:number,
-    multiplier:multiplier,
-    score:score,
-    label:label
-  });
-
-  updateDartDisplay();
+ if(completed||gameEnded)return;
+ if(currentDarts.length>=3){
+  showMessage("Three darts entered. Confirm the visit.");
+  return;
+ }
+ currentDarts.push({
+  number,
+  multiplier,
+  score:number*multiplier,
+  label
+ });
+ updateDartDisplay();
 }
-
 
 function addMiss(){
-
-  if(currentDarts.length>=3){
-
-    showMessage(
-      "Three darts entered. Confirm the visit."
-    );
-
-    return;
-  }
-
-  currentDarts.push({
-    number:0,
-    multiplier:0,
-    score:0,
-    label:"MISS"
-  });
-
-  updateDartDisplay();
+ addDart(0,0,"MISS");
 }
-
 
 function undoDart(){
-
-  if(currentDarts.length===0){
-
-    showMessage(
-      "No dart to undo."
-    );
-
-    return;
-  }
-
-  currentDarts.pop();
-
-  updateDartDisplay();
+ if(!currentDarts.length)return;
+ currentDarts.pop();
+ updateDartDisplay();
 }
-
 
 function updateDartDisplay(){
-
-  for(let i=0;i<3;i++){
-
-    const el=
-      document.getElementById(
-        "dart"+(i+1)
-      );
-
-    if(currentDarts[i]){
-
-      el.textContent=
-        currentDarts[i].label+
-        " • "+
-        currentDarts[i].score;
-
-    }else{
-
-      el.textContent="-";
-    }
-  }
-
-
-  const total=
-    currentDarts.reduce(
-      (sum,dart)=>sum+dart.score,
-      0
-    );
-
-
-  document.getElementById(
-    "boardVisitScore"
-  ).textContent=total;
-
-
-  if(currentDarts.length<3){
-
-    showMessage(
-      "Enter Dart "+
-      (currentDarts.length+1)+
-      "."
-    );
-
-  }else{
-
-    showMessage(
-      "Visit total: "+
-      total+
-      ". Confirm visit."
-    );
-  }
+ for(let i=0;i<3;i++){
+  const dart=currentDarts[i];
+  put("dart"+(i+1),
+   dart?dart.label+" • "+dart.score:"—");
+ }
+ const score=currentDarts.reduce((sum,d)=>sum+d.score,0);
+ put("boardVisitScore",String(score));
 }
-
-
-/* ==================================================
-   CONFIRM VISIT
-   ================================================== */
-
-function confirmVisit(){
-
-  let score=0;
-  let dartsThisVisit=3;
-
-
-  if(currentMode==="keypad"){
-
-    if(input===""){
-
-      showMessage(
-        "Enter a visit score first."
-      );
-
-      return;
-    }
-
-    score=Number(input);
-
-    dartsThisVisit=3;
-
-
-    if(
-      score<0 ||
-      score>180
-    ){
-
-      showMessage(
-        "Visit score must be between 0 and 180."
-      );
-
-      return;
-    }
-
-  }else{
-
-    if(currentDarts.length===0){
-
-      showMessage(
-        "Enter at least one dart first."
-      );
-
-      return;
-    }
-
-
-    score=
-      currentDarts.reduce(
-        (sum,dart)=>sum+dart.score,
-        0
-      );
-
-
-    dartsThisVisit=currentDarts.length;
-  }
-
-
-  /* EXISTING BUST BEHAVIOUR */
-
-  if(score>remaining){
-
-    showMessage(
-      "BUST • Visit scored 0."
-    );
-
-    totalDarts+=dartsThisVisit;
-
-    visit++;
-
-    resetCurrentVisit();
-
-    updateStats();
-
-    return;
-  }
-
-
-  remaining-=score;
-
-  totalPoints+=score;
-
-  totalDarts+=dartsThisVisit;
-
-
-  if(score===180){
-
-    count180++;
-
-  }else if(score>=140){
-
-    count140++;
-
-  }else if(score>=100){
-
-    count100++;
-  }
-
-
-  const confirmedScore=score;
-
-
-  /*
-    BACKEND BRIDGE READY:
-
-    sessionID
-    confirmedScore
-    dartsThisVisit
-    currentDarts
-  */
-
-
-  visit++;
-
-  resetCurrentVisit();
-
-  updateStats();
-
-
-  if(remaining===0){
-
-    showMessage(
-      "LEG COMPLETE • Checkout!"
-    );
-
-  }else{
-
-    showMessage(
-      "Visit recorded locally: "+
-      confirmedScore
-    );
-  }
-}
-
 
 function resetCurrentVisit(){
-
-  input="";
-
-  currentDarts=[];
-
-  updateInput();
-
-  updateDartDisplay();
+ input="";
+ currentDarts=[];
+ updateInput();
+ updateDartDisplay();
 }
 
+function average(){
+ return totalDarts
+  ?(totalPoints/totalDarts)*3
+  :0;
+}
 
 function updateStats(){
+ put("remaining",String(remaining));
+ put("average",average().toFixed(2));
+ put("dartsThrown",String(totalDarts));
+ put("visitNumber",isDoubleTrouble
+  ?(gameEnded?"DONE":"D"+wedge)
+  :"VISIT "+visit);
+ put("stat100",String(count100));
+ put("stat140",String(count140));
+ put("stat180",String(count180));
 
-  document.getElementById(
-    "remaining"
-  ).textContent=remaining;
-
-  document.getElementById(
-    "visitNumber"
-  ).textContent=visit;
-
-  document.getElementById(
-    "dartsThrown"
-  ).textContent=totalDarts;
-
-
-  let avg=0;
-
-
-  if(totalDarts>0){
-
-    avg=
-      (totalPoints/totalDarts)*3;
-  }
-
-
-  document.getElementById(
-    "average"
-  ).textContent=
-    avg.toFixed(2);
-
-
-  document.getElementById(
-    "stat100"
-  ).textContent=count100;
-
-  document.getElementById(
-    "stat140"
-  ).textContent=count140;
-
-  document.getElementById(
-    "stat180"
-  ).textContent=count180;
+ if(isDoubleTrouble){
+  put("average","D"+furthestWedge);
+ }
 }
 
+/* 501 VISIT VALIDATION */
 
-/* START */
+function isDoubleFinish(dart){
+ return !!dart&&dart.multiplier===2&&
+  (dart.number>=1&&dart.number<=20||dart.number===25);
+}
+
+function confirmVisit(){
+ if(isDoubleTrouble){
+  confirmDoubleTrouble();
+  return;
+ }
+
+ if(completed)return;
+
+ let score=0;
+ let dartsThisVisit=3;
+ let checkoutVerified=false;
+ let bust=false;
+ let reason="";
+
+ if(currentMode==="keypad"){
+  if(input===""){
+   showMessage("Enter a visit score first.");
+   return;
+  }
+  score=Number(input);
+  if(!Number.isInteger(score)||score<0||score>180){
+   showMessage("Invalid visit score.");
+   return;
+  }
+
+  /*
+    Keypad enters a visit total, not dart-by-dart
+    segments. A checkout requires confirmation.
+  */
+  if(score===remaining&&remaining>=2){
+   const answer=window.confirm(
+    "Did you finish this leg on a double or bull?"
+   );
+   if(!answer){
+    showMessage("Checkout not confirmed. Enter the correct visit.");
+    return;
+   }
+   checkoutVerified=true;
+   const entered=window.prompt(
+    "How many darts did you use in this final visit? (1, 2 or 3)",
+    "3"
+   );
+   if(entered===null)return;
+   const count=Number(entered);
+   if(![1,2,3].includes(count)){
+    showMessage("Enter 1, 2 or 3 darts.");
+    return;
+   }
+   dartsThisVisit=count;
+  }
+ }else{
+  if(!currentDarts.length){
+   showMessage("Enter at least one dart.");
+   return;
+  }
+
+  score=currentDarts.reduce((sum,d)=>sum+d.score,0);
+  dartsThisVisit=currentDarts.length;
+
+  let running=remaining;
+  let finished=false;
+
+  for(let i=0;i<currentDarts.length;i++){
+   const dart=currentDarts[i];
+   running-=dart.score;
+
+   if(running<0||running===1){
+    bust=true;
+    reason="BUST • Visit scored 0.";
+    break;
+   }
+   if(running===0){
+    if(!isDoubleFinish(dart)){
+     bust=true;
+     reason="BUST • Checkout must finish on a double.";
+    }else if(i!==currentDarts.length-1){
+     showMessage("Remove darts entered after the checkout.");
+     return;
+    }else{
+     finished=true;
+    }
+    break;
+   }
+  }
+  checkoutVerified=finished;
+ }
+
+ if(score>remaining||remaining-score===1){
+  bust=true;
+  reason="BUST • Visit scored 0.";
+ }
+
+ if(remaining-score===0&&!checkoutVerified){
+  bust=true;
+  reason="BUST • Double-out required.";
+ }
+
+ const scoreBefore=remaining;
+ const confirmedScore=bust?0:score;
+
+ totalDarts+=dartsThisVisit;
+
+ if(!bust){
+  remaining-=score;
+  totalPoints+=score;
+
+  if(score===180)count180++;
+  else if(score>=140)count140++;
+  else if(score>=100)count100++;
+ }
+
+ visits.push({
+  visitNumber:visit,
+  score:confirmedScore,
+  attemptedScore:score,
+  dartsThrown:dartsThisVisit,
+  bust,
+  remainingBefore:scoreBefore,
+  remainingAfter:remaining,
+  darts:currentMode==="dartboard"
+   ?currentDarts.map(d=>({...d}))
+   :[],
+  createdAt:new Date().toISOString()
+ });
+
+ if(remaining===0){
+  checkoutDarts=totalDarts;
+  lastCheckout=score;
+  completed=true;
+  resetCurrentVisit();
+  updateStats();
+  complete501();
+  return;
+ }
+
+ visit++;
+ resetCurrentVisit();
+ updateStats();
+
+ showMessage(bust
+  ?reason
+  :"Visit recorded: "+confirmedScore);
+}
+
+/* 501 COMPLETION */
+
+function complete501(){
+ el("confirmButton").disabled=true;
+ el("modeTabs").classList.add("hidden");
+ el("sessionBadge").textContent="✓ COMPLETED";
+ el("scoringPanel").classList.add("hidden");
+
+ put("resultTitle","501 LEG COMPLETE");
+ put("resultDescription",
+  "Checkout confirmed. Review your performance and save the session.");
+ put("resultAverage",average().toFixed(2));
+ put("resultDarts",String(totalDarts));
+ put("resultVisits",String(visits.length));
+
+ el("resultPanel").classList.add("show");
+ el("resultPanel").scrollIntoView({
+  behavior:"smooth",
+  block:"start"
+ });
+}
+
+/* 501 SAVE */
+
+async function saveSession(){
+ if(!completed||isDoubleTrouble||saving||saved)return;
+
+ const payload={
+  sessionID,
+  email,
+  player,
+  userid,
+  playerName,
+  language,
+  source:param("source")||"TRAINING",
+  mainIssue,
+  focus,
+  drill:drill||"501 Focused Practice",
+  practiceType:"501",
+  status:"completed",
+  startingScore:501,
+  remainingScore:remaining,
+  totalPoints,
+  totalDarts,
+  average:Number(average().toFixed(2)),
+  totalVisits:visits.length,
+  count100,
+  count140,
+  count180,
+  checkoutDarts,
+  highestCheckout:lastCheckout,
+  visits,
+  completedAt:new Date().toISOString()
+ };
+
+ if(!saveWebhook){
+  put("saveStatus",
+   "Session completed locally. Glide save is not configured. No data has been sent.");
+  return;
+ }
+
+ let url;
+ try{
+  url=new URL(saveWebhook,location.href);
+  if(url.protocol!=="https:"){
+   throw new Error("HTTPS required");
+  }
+ }catch(error){
+  put("saveStatus","Invalid save webhook URL.");
+  return;
+ }
+
+ saving=true;
+ el("saveButton").disabled=true;
+ put("saveStatus","Saving session to Glide...");
+
+ try{
+  const response=await fetch(url.toString(),{
+   method:"POST",
+   headers:{"Content-Type":"application/json"},
+   body:JSON.stringify(payload)
+  });
+
+  if(!response.ok){
+   throw new Error("HTTP "+response.status);
+  }
+
+  saved=true;
+  put("saveStatus",
+   "Save request accepted. Verify the session record in Glide.");
+  el("saveButton").textContent="SAVE REQUEST SENT";
+ }catch(error){
+  console.error("DARTIQ save failed:",error);
+  put("saveStatus",
+   "Save failed. Check the Glide workflow before retrying.");
+  el("saveButton").disabled=false;
+ }finally{
+  saving=false;
+ }
+}
+
+/* DOUBLE TROUBLE */
+
+async function confirmDoubleTrouble(){
+ if(gameEnded||saving)return;
+
+ if(currentDarts.length!==3){
+  showMessage("Enter all 3 darts for D"+wedge+".");
+  return;
+ }
+
+ const doubleHits=currentDarts.filter(d=>
+  d.number===wedge&&d.multiplier===2
+ ).length;
+
+ const scoreBefore=remaining;
+ const scoreChange=doubleHits>0
+  ?doubleHits*wedge*2
+  :-wedge;
+
+ const scoreAfter=scoreBefore+scoreChange;
+ const wedgeCleared=doubleHits>0;
+ const newFurthest=wedgeCleared
+  ?Math.max(furthestWedge,wedge)
+  :furthestWedge;
+ const d20Cleared=wedge===20&&wedgeCleared;
+
+ const attempt={
+  sessionID,
+  email,
+  drill:"Double Trouble",
+  roundNumber:wedge,
+  wedgeNumber:wedge,
+  dartsThrown:3,
+  doubleHits,
+  scoreBefore,
+  scoreChange,
+  scoreAfter,
+  wedgeCleared,
+  furthestWedge:newFurthest,
+  d20Cleared,
+  recordScore:d20Cleared?scoreAfter:0,
+  createdAt:new Date().toISOString()
+ };
+
+ saving=true;
+ el("confirmButton").disabled=true;
+ showMessage("Saving D"+wedge+" to Glide...");
+
+ try{
+  const response=await fetch(doubleTroubleWebhook,{
+   method:"POST",
+   headers:{"Content-Type":"application/json"},
+   body:JSON.stringify(attempt)
+  });
+
+  if(!response.ok){
+   throw new Error("HTTP "+response.status);
+  }
+ }catch(error){
+  console.error("Double Trouble save failed:",error);
+  showMessage("Save failed. Check the Glide workflow.");
+  saving=false;
+  el("confirmButton").disabled=false;
+  return;
+ }
+
+ saving=false;
+ el("confirmButton").disabled=false;
+
+ remaining=scoreAfter;
+ furthestWedge=newFurthest;
+ totalDarts+=3;
+ totalPoints+=scoreChange;
+
+ const completedWedge=wedge;
+ gameEnded=d20Cleared||scoreAfter<=0||wedge>=20;
+
+ visits.push(attempt);
+
+ if(!gameEnded){
+  wedge++;
+  visit=wedge;
+ }
+
+ resetCurrentVisit();
+ updateStats();
+
+ if(gameEnded){
+  completeDoubleTrouble();
+ }else{
+  showMessage(
+   "D"+completedWedge+" saved. "+
+   (wedgeCleared?"Double hit.":"No hits.")+
+   " Next target: D"+wedge+"."
+  );
+ }
+}
+
+function completeDoubleTrouble(){
+ completed=true;
+ el("confirmButton").disabled=true;
+ el("scoringPanel").classList.add("hidden");
+ el("sessionBadge").textContent="✓ COMPLETED";
+
+ put("resultTitle","DOUBLE TROUBLE COMPLETE");
+ put("resultDescription",
+  "All recorded wedge attempts were submitted to Glide.");
+ put("resultAverage","D"+furthestWedge);
+ put("resultAverageLabel","FURTHEST");
+ put("resultDarts",String(totalDarts));
+ put("resultVisits",String(visits.length));
+
+ el("saveButton").classList.add("hidden");
+ put("saveStatus",
+  "Wedge save requests accepted. Verify the records in Glide.");
+
+ el("resultPanel").classList.add("show");
+ el("resultPanel").scrollIntoView({
+  behavior:"smooth",
+  block:"start"
+ });
+}
+
+/* INITIALIZE */
 
 drawBoard();
-
 updateInput();
-
 updateDartDisplay();
+
+if(isDoubleTrouble){
+ put("practiceName","Double Trouble");
+ put("scoringTitle","DOUBLE TROUBLE");
+ put("scoringSubtitle","3 darts at each double • D1 to D20");
+ put("remainingLabel","RUNNING POINTS");
+ put("averageLabel","FURTHEST");
+ el("modeTabs").classList.add("hidden");
+ el("performanceStats").classList.add("hidden");
+ setMode("dartboard");
+ showMessage("Target D1. Enter 3 darts.");
+}
 
 updateStats();
 
-</script>
-<script>
-(() => {
-  const drillName = (param("drill") || "").toLowerCase();
-  if (!drillName.includes("double trouble")) return;
-
- const webhookUrl = "https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/2876503c-d138-44a2-adfd-7815bd4b834c";
-
-  let wedge = 1;
-  let furthestWedge = 0;
-  let gameEnded = false;
-  let saving = false;
-
-  // Start Keith's Double Trouble scoring.
-  remaining = 27;
-  visit = 1;
-  totalPoints = 0;
-  totalDarts = 0;
-  currentDarts = [];
-
-  // Keep the existing dartboard; hide the 501 keypad and mode tabs.
-  setMode("dartboard");
-  document.getElementById("keypadTab").style.display = "none";
-  document.getElementById("dartboardTab").style.display = "none";
-  document.querySelector(".mode-switch").style.display = "none";
-  document.querySelector(".performance").style.display = "none";
-
-  document.querySelector(".live-title").textContent = "DOUBLE TROUBLE";
-  document.querySelector(".live-sub").textContent =
-    "3 DARTS AT EACH DOUBLE • PROGRESS D1 TO D20";
-
-  document.querySelector(".score-label").textContent = "RUNNING POINTS";
-
-  const miniLabels = document.querySelectorAll(".mini-label");
-  if (miniLabels[0]) miniLabels[0].textContent = "TARGET";
-  if (miniLabels[1]) miniLabels[1].textContent = "FURTHEST";
-  if (miniLabels[2]) miniLabels[2].textContent = "DARTS";
-
-  function refreshDoubleTroubleDisplay() {
-    updateStats();
-    document.getElementById("remaining").textContent = remaining;
-    document.getElementById("visitNumber").textContent =
-      gameEnded ? "DONE" : "D" + wedge;
-    document.getElementById("average").textContent =
-      "D" + furthestWedge;
-    document.getElementById("dartsThrown").textContent = totalDarts;
-  }
-
-  async function saveWedgeAttempt(data) {
-    const response = await fetch(webhookUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
-    });
-
-    if (!response.ok) {
-      throw new Error("Glide returned " + response.status);
-    }
-  }
-
-  window.confirmVisit = async function () {
-    if (gameEnded) {
-      showMessage("This Double Trouble session has ended.");
-      return;
-    }
-
-    if (saving) {
-      showMessage("Saving this wedge. Please wait.");
-      return;
-    }
-
-    if (currentDarts.length !== 3) {
-      showMessage("Enter all 3 darts for D" + wedge + " first.");
-      return;
-    }
-
-    const scoreBefore = remaining;
-    const doubleHits = currentDarts.filter(
-      dart => dart.number === wedge && dart.multiplier === 2
-    ).length;
-
-    // A hit adds the value of each successful double.
-    // Three misses subtract the wedge number once.
-    const scoreChange =
-      doubleHits > 0 ? doubleHits * (wedge * 2) : -wedge;
-    const scoreAfter = scoreBefore + scoreChange;
-    const wedgeCleared = doubleHits > 0;
-    const newFurthest = wedgeCleared
-      ? Math.max(furthestWedge, wedge)
-      : furthestWedge;
-    const d20Cleared = wedge === 20 && wedgeCleared;
-
-    const attempt = {
-      sessionID: sessionID,
-      email: param("email"),
-      drill: "Double Trouble",
-      roundNumber: wedge,
-      wedgeNumber: wedge,
-      dartsThrown: 3,
-      doubleHits: doubleHits,
-      scoreBefore: scoreBefore,
-      scoreChange: scoreChange,
-      scoreAfter: scoreAfter,
-      wedgeCleared: wedgeCleared,
-      furthestWedge: newFurthest,
-      d20Cleared: d20Cleared,
-      recordScore: d20Cleared ? scoreAfter : 0,
-      createdAt: new Date().toISOString()
-    };
-
-    saving = true;
-    showMessage("Saving D" + wedge + " to Glide…");
-
-    try {
-      await saveWedgeAttempt(attempt);
-    } catch (error) {
-      saving = false;
-      showMessage(
-        "Save failed. Check the Glide workflow and Practice Attempts table before retrying."
-      );
-      console.error("Practice attempt save failed:", error);
-      return;
-    }
-
-    saving = false;
-    remaining = scoreAfter;
-    furthestWedge = newFurthest;
-    totalDarts += 3;
-    totalPoints += scoreChange;
-
-    const completedWedge = wedge;
-    gameEnded = d20Cleared || scoreAfter <= 0 || wedge >= 20;
-
-    if (!gameEnded) {
-      wedge++;
-      visit = wedge;
-    }
-
-    resetCurrentVisit();
-    refreshDoubleTroubleDisplay();
-
-    if (d20Cleared) {
-      gameEnded = true;
-      document.getElementById("visitNumber").textContent = "DONE";
-      showMessage(
-        "D20 cleared! Record score: " + scoreAfter +
-        ". Furthest wedge: D" + furthestWedge + "."
-      );
-    } else if (scoreAfter <= 0) {
-      gameEnded = true;
-      document.getElementById("visitNumber").textContent = "DONE";
-      showMessage(
-        "Session ended after D" + completedWedge +
-        ". Furthest wedge cleared: D" + furthestWedge + "."
-      );
-    } else if (completedWedge >= 20) {
-      gameEnded = true;
-      document.getElementById("visitNumber").textContent = "DONE";
-      showMessage(
-        "D20 attempt saved. Furthest wedge cleared: D" +
-        furthestWedge + "."
-      );
-    } else {
-      showMessage(
-        "D" + completedWedge + " saved. " +
-        (wedgeCleared ? "Double hit." : "No hits.") +
-        " Next target: D" + wedge + "."
-      );
-    }
-  };
-
-  refreshDoubleTroubleDisplay();
-  showMessage("Target D1. Enter 3 darts, then confirm the wedge.");
-})();
 </script>
 </body>
 </html>
