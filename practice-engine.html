@@ -29,12 +29,10 @@ h1{font-size:24px;margin:12px 0;font-weight:900}
 .eyebrow{font-size:10px;color:var(--blue);font-weight:900;letter-spacing:1px}
 .training-name{font-size:23px;font-weight:900;margin:12px 0}
 .muted{color:var(--muted);font-size:11px;line-height:1.6}
-.info-grid,.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:13px}
-.info,.stat{background:#071827;border:1px solid var(--line);border-radius:11px;padding:12px 8px;text-align:center}
-.info small,.stat small{display:block;color:var(--muted);font-size:9px;font-weight:900}
+.info-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:13px}
+.info{background:#071827;border:1px solid var(--line);border-radius:11px;padding:12px 8px;text-align:center}
+.info small{display:block;color:var(--muted);font-size:9px;font-weight:900}
 .info strong{display:block;margin-top:9px;font-size:11px;overflow-wrap:anywhere}
-.stat strong{display:block;margin-top:8px;font-size:25px}
-.stat:first-child strong{color:var(--blue)}
 summary{list-style:none;cursor:pointer;padding:17px 15px;font-size:13px;font-weight:900;background:#12324c}
 summary::-webkit-details-marker{display:none}
 summary:after{content:"⌄";float:right;color:var(--blue);font-size:19px}
@@ -54,7 +52,6 @@ details[open] summary:after{content:"⌃"}
 .grade.green{border-left:4px solid #35c978}
 .primary{width:100%;background:var(--blue);color:#031322;border:0;border-radius:11px;padding:17px;font-size:13px;font-weight:900;margin-top:12px}
 .secondary{width:100%;background:#102b43;border:1px solid var(--line);color:var(--blue);border-radius:11px;padding:13px;font-size:11px;font-weight:900;margin-top:10px}
-.danger{border-color:#ff657355;color:#ff9da6}
 .tabs{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:15px 0}
 .tab{background:#081827;border:1px solid var(--line);border-radius:10px;color:var(--muted);padding:15px;font-size:12px;font-weight:900}
 .tab.active{background:var(--blue);color:#031322}
@@ -68,7 +65,7 @@ details[open] summary:after{content:"⌃"}
 .dart-slot small{display:block;color:var(--muted);font-size:9px;margin-bottom:7px}
 .dart-slot strong{font-size:12px}
 
-/* DARTBOARD: ORIGINAL STYLING */
+/* DARTBOARD UNCHANGED */
 .board-wrap{max-width:440px;margin:auto;aspect-ratio:1}
 #dartboard{width:100%;height:100%;touch-action:manipulation}
 .board-actions,.voice-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
@@ -85,69 +82,115 @@ details[open] summary:after{content:"⌃"}
 .caller-text{text-align:center;font-size:17px;font-weight:900;line-height:1.5;padding:15px 0 8px}
 .caller-sub{text-align:center;color:var(--muted);font-size:10px;line-height:1.5}
 
-/* MATCH-STYLE SCOREBOARD */
-.match-scoreboard{background:linear-gradient(180deg,#102a43,#061421);border:1px solid #39a9ff77;border-radius:14px;padding:14px;margin-bottom:12px}
-.match-topline{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px}
-.match-topline span{font-size:10px;font-weight:900;color:var(--blue);letter-spacing:1px}
-.match-topline .format{color:var(--muted);border:1px solid var(--line);border-radius:20px;padding:6px 10px}
-.match-player-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:center;background:#061321;border:1px solid var(--line);border-radius:11px;padding:12px}
-
+/* MATCH-STYLE SCOREBOARD: REMAINING SCORE ON LEFT */
+.match-scoreboard{
+ background:linear-gradient(180deg,#102a43,#061421);
+ border:1px solid #39a9ff77;
+ border-radius:14px;
+ padding:14px;
+ margin-bottom:12px
+}
+.match-topline{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:8px;
+ margin-bottom:12px
+}
+.match-topline span{
+ font-size:10px;
+ font-weight:900;
+ color:var(--blue);
+ letter-spacing:1px
+}
+.match-topline .format{
+ color:var(--muted);
+ border:1px solid var(--line);
+ border-radius:20px;
+ padding:6px 10px
+}
 .match-player-row{
  display:grid;
- grid-template-columns:minmax(0,1fr) auto;
+ grid-template-columns:minmax(0,1fr) auto auto;
+ grid-template-areas:"remaining player legs";
  gap:12px;
  align-items:center;
  background:#061321;
  border:1px solid var(--line);
  border-radius:11px;
- padding:12px;
+ padding:15px 12px
+}
+.match-remaining{
+ grid-area:remaining;
+ text-align:left;
+ min-width:0;
+ border:0;
+ padding:0
+}
+.match-remaining strong{
+ display:block;
+ color:var(--blue);
+ font-size:clamp(40px,10vw,60px);
+ font-weight:900;
+ line-height:1
+}
+.match-remaining small{
+ display:block;
+ color:var(--muted);
+ font-size:9px;
+ font-weight:900;
+ margin-top:7px
 }
 .match-player-name{
+ grid-area:player;
  font-size:13px;
  font-weight:900;
- overflow-wrap:anywhere;
+ text-align:right;
+ overflow-wrap:anywhere
 }
 .match-player-name small{
  display:block;
  color:var(--muted);
  font-size:9px;
- margin-top:6px;
-}
-.match-remaining{
- grid-column:1;
- grid-row:2;
- text-align:left;
- min-width:0;
- border-left:0;
- border-top:1px solid var(--line);
- padding:12px 0 0;
-}
-.match-remaining strong{
- display:block;
- color:var(--blue);
- font-size:52px;
- line-height:1;
-}
-.match-remaining small{
- display:block;
- color:var(--muted);
- font-size:10px;
- margin-top:5px;
+ margin-top:6px
 }
 .match-legs{
- grid-column:2;
- grid-row:1 / 3;
+ grid-area:legs;
  text-align:center;
  min-width:55px;
+ border-left:1px solid var(--line);
+ padding-left:12px
 }
-
-.match-remaining{text-align:center;min-width:90px;border-left:1px solid var(--line);padding-left:12px}
-.match-remaining strong{display:block;color:var(--blue);font-size:36px;line-height:1.1}
-.match-remaining small{color:var(--muted);font-size:9px}
-.match-mini-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
-.match-mini-stat{background:#071827;border-radius:9px;text-align:center;padding:9px 4px}
-.match-mini-stat strong{display:block;font-size:16px}
-.match-mini-stat small{display:block;font-size:9px;color:var(--muted);margin-top:5px}
+.match-legs strong{
+ display:block;
+ font-size:23px
+}
+.match-legs small{
+ color:var(--muted);
+ font-size:9px
+}
+.match-mini-stats{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:8px;
+ margin-top:10px
+}
+.match-mini-stat{
+ background:#071827;
+ border-radius:9px;
+ text-align:center;
+ padding:9px 4px
+}
+.match-mini-stat strong{
+ display:block;
+ font-size:16px
+}
+.match-mini-stat small{
+ display:block;
+ font-size:9px;
+ color:var(--muted);
+ margin-top:5px
+}
 .practice-section>summary{background:#102a43;padding:15px;font-size:12px}
 .practice-section>.content{background:#071827}
 .practice-section[open]>summary{color:var(--blue)}
@@ -166,10 +209,13 @@ details[open] summary:after{content:"⌃"}
 .history-row{display:flex;justify-content:space-between;gap:10px;padding:12px 4px;border-bottom:1px solid #39a9ff22;font-size:11px}
 .history-row strong{color:var(--blue)}
 @media(max-width:390px){
- .app{padding:8px}.panel,.content{padding:12px}
- .stat strong{font-size:21px}.key{min-height:48px}
- .match-remaining strong{font-size:30px}
- .match-remaining{min-width:74px}
+ .app{padding:8px}
+ .panel,.content{padding:12px}
+ .key{min-height:48px}
+ .match-player-row{gap:8px;padding:12px 9px}
+ .match-legs{min-width:40px;padding-left:8px}
+ .match-player-name{font-size:11px}
+ .match-remaining strong{font-size:39px}
 }
 </style>
 </head>
@@ -181,7 +227,7 @@ details[open] summary:after{content:"⌃"}
 <div class="subtitle">TRAIN SMARTER • IMPROVE FASTER</div>
 </header>
 
-<!-- SCREEN 1: PERFORMANCE INSTRUCTION -->
+<!-- SCREEN 1 -->
 <section id="instructionsScreen">
 <div class="screen-heading">
 <span>PERFORMANS INSTRUCTION</span>
@@ -262,14 +308,13 @@ details[open] summary:after{content:"⌃"}
 <button class="primary" type="button" onclick="startPractice()">🎯 START PRACTICE</button>
 </section>
 
-<!-- SCREEN 2: LIVE PRACTICE -->
+<!-- SCREEN 2 -->
 <section id="practiceScreen" class="hidden">
 <div class="screen-heading">
 <span>LIVE PRACTICE</span>
 <span class="step">STEP 2 OF 3</span>
 </div>
 
-<!-- AUTOMATIC MASTERCALLER, NO BUTTONS -->
 <div class="mastercaller">
 <div class="caller-heading">
 <strong>🎙 AI MASTERCALLER</strong>
@@ -279,26 +324,30 @@ details[open] summary:after{content:"⌃"}
 <div class="caller-sub" id="callerPlayer">Automatic score announcements</div>
 </div>
 
-<!-- COMPACT LIVE SCOREBOARD -->
+<!-- REMAINING SCORE NOW ON LEFT -->
 <div class="match-scoreboard">
 <div class="match-topline">
 <span>🎯 LIVE SCOREBOARD</span>
 <span class="format" id="matchFormat">501 • DOUBLE OUT</span>
 </div>
+
 <div class="match-player-row">
-<div class="match-player-name" id="scoreboardPlayer">
-PLAYER
-<small id="scoreboardTurn">AT THE OCHE</small>
-</div>
-<div class="match-legs">
-<strong id="legsWon">0</strong>
-<small>LEGS</small>
-</div>
 <div class="match-remaining">
 <strong id="remaining">501</strong>
 <small id="remainingLabel">REMAINING</small>
 </div>
+
+<div class="match-player-name" id="scoreboardPlayer">
+PLAYER
+<small id="scoreboardTurn">AT THE OCHE</small>
 </div>
+
+<div class="match-legs">
+<strong id="legsWon">0</strong>
+<small>LEGS</small>
+</div>
+</div>
+
 <div class="match-mini-stats">
 <div class="match-mini-stat"><strong id="average">0.00</strong><small id="averageLabel">3-DART AVG</small></div>
 <div class="match-mini-stat"><strong id="dartsThrown">0</strong><small>DARTS</small></div>
@@ -306,7 +355,6 @@ PLAYER
 </div>
 </div>
 
-<!-- COLLAPSIBLE SCORING -->
 <details class="practice-section" id="scoringPanel" open>
 <summary>🎯 LIVE SCORING<span class="summary-sub" id="scoringSubtitle">Choose keypad or dartboard</span></summary>
 <div class="content">
@@ -341,7 +389,7 @@ PLAYER
 </div>
 </div>
 
-<!-- DARTBOARD: ORIGINAL MARKUP -->
+<!-- ORIGINAL DARTBOARD -->
 <div id="dartboardMode" class="hidden">
 <div class="dart-slots">
 <div class="dart-slot"><small>DART 1</small><strong id="dart1">—</strong></div>
@@ -368,9 +416,7 @@ PLAYER
 
 <details class="practice-section">
 <summary>📋 VISIT HISTORY<span class="summary-sub">Recorded visits</span></summary>
-<div class="content">
-<div id="visitHistory" class="muted">No visits recorded yet.</div>
-</div>
+<div class="content"><div id="visitHistory" class="muted">No visits recorded yet.</div></div>
 </details>
 
 <details class="practice-section">
@@ -387,7 +433,7 @@ PLAYER
 <div class="message" id="finishMessage">Your results will appear on Screen 3.</div>
 </section>
 
-<!-- SCREEN 3: PERFORMANCE RESULTS -->
+<!-- SCREEN 3 -->
 <section id="resultsScreen" class="hidden">
 <div class="screen-heading">
 <span>PERFORMANCE RESULTS</span>
@@ -404,7 +450,6 @@ PLAYER
 <div class="eyebrow">PLAYER PERFORMANCE</div>
 <div class="training-name" id="resultPlayer">PLAYER</div>
 <div class="muted" id="resultDrill">Training session</div>
-
 <div class="result-grid">
 <div class="result-tile"><strong id="resultAverage">0.00</strong><small>3-DART AVERAGE</small></div>
 <div class="result-tile"><strong id="resultDarts">0</strong><small>DARTS THROWN</small></div>
@@ -426,29 +471,15 @@ PLAYER
 <strong id="resultStatus">COMPLETE</strong>
 <small id="resultStatusDescription">Training reviewed</small>
 </div>
-<div class="field" style="margin-top:20px">
-<label>Main Training Issue</label>
-<div id="resultIssue">—</div>
-</div>
-<div class="field">
-<label>Coach Advice</label>
-<div id="resultAdvice">—</div>
-</div>
-<div class="field">
-<label>Success Target</label>
-<div id="resultTarget">—</div>
-</div>
-<div class="field">
-<label>Next Action</label>
-<div id="resultNextAction">—</div>
-</div>
+<div class="field" style="margin-top:20px"><label>Main Training Issue</label><div id="resultIssue">—</div></div>
+<div class="field"><label>Coach Advice</label><div id="resultAdvice">—</div></div>
+<div class="field"><label>Success Target</label><div id="resultTarget">—</div></div>
+<div class="field"><label>Next Action</label><div id="resultNextAction">—</div></div>
 </div>
 
 <details class="practice-section">
 <summary>📋 FULL VISIT HISTORY<span class="summary-sub">Your recorded performance</span></summary>
-<div class="content">
-<div id="resultHistory">—</div>
-</div>
+<div class="content"><div id="resultHistory">—</div></div>
 </details>
 
 <button type="button" class="primary" id="saveButton" onclick="saveSession()">SAVE SESSION TO GLIDE</button>
@@ -461,7 +492,6 @@ PLAYER
 <script>
 "use strict";
 
-/* URL DATA */
 const q=new URLSearchParams(location.search);
 const get=(...keys)=>{
  for(const key of keys){
@@ -532,7 +562,6 @@ const fields={
  resultTarget:get("keithtarget","successtarget","target"),
  resultNextAction:get("nextAction","aiNextAction","after")
 };
-
 Object.entries(fields).forEach(([id,value])=>put(id,value));
 
 function buildCoach(){
@@ -570,7 +599,7 @@ function buildCoach(){
 }
 buildCoach();
 
-/* SPEECH ENGINE */
+/* VOICE ENGINE */
 const speechSupported=
  "speechSynthesis" in window &&
  "SpeechSynthesisUtterance" in window;
@@ -588,13 +617,11 @@ function chooseVoice(){
   english.find(v=>v.lang.toLowerCase()==="en-gb")||
   english[0]||null;
 }
-
 function stopSpeech(){
  speechToken++;
  if(speechSupported)speechSynthesis.cancel();
  speechType=null;
 }
-
 function speakText(text,type="caller"){
  if(type==="caller")put("callerAnnouncement",text);
  if(!speechSupported){
@@ -653,7 +680,6 @@ function buildInstructionSpeech(){
  }
  return text+"Focus on quality and consistency. Good luck.";
 }
-
 function playInstructionVoice(){
  speakText(buildInstructionSpeech(),"instruction");
 }
@@ -687,7 +713,6 @@ function announceCheckout(score){
 }
 put("callerPlayer","PLAYER: "+playerName.toUpperCase());
 
-/* SCREEN NAVIGATION */
 function showScreen(number){
  $("instructionsScreen").classList.toggle("hidden",number!==1);
  $("practiceScreen").classList.toggle("hidden",number!==2);
@@ -709,7 +734,7 @@ function showInstructions(){
  showScreen(1);
 }
 
-/* SCORING STATE */
+/* SCORING */
 let mode="keypad";
 let input="";
 let remaining=doubleTrouble?27:501;
@@ -730,7 +755,6 @@ let legsWon=0;
 let finishedManually=false;
 
 function message(text){put("message",text);}
-
 function setMode(next){
  if(completed)return;
  if(doubleTrouble&&next!=="dartboard")return;
@@ -745,7 +769,6 @@ function setMode(next){
  $("dartboardTab").classList.toggle("active",mode==="dartboard");
  message(mode==="keypad"?"Enter your visit score.":"Tap the dartboard to enter your darts.");
 }
-
 function press(n){
  if(completed||input.length>=3)return;
  if(Number(input+n)>180){
@@ -786,7 +809,7 @@ function undoDart(){
  updateDartDisplay();
 }
 
-/* ORIGINAL DARTBOARD: UNCHANGED */
+/* ORIGINAL DARTBOARD CODE */
 const boardNumbers=[20,1,18,4,13,6,10,15,2,17,3,19,7,16,8,11,14,9,12,5];
 const svg=$("dartboard");
 const NS="http://www.w3.org/2000/svg";
@@ -843,7 +866,6 @@ function drawBoard(){
 }
 drawBoard();
 
-/* LIVE SCOREBOARD */
 function average(){
  return totalDarts?totalPoints/totalDarts*3:0;
 }
@@ -884,7 +906,7 @@ function updateVisitHistory(){
  createHistory("visitHistory");
 }
 
-/* FIXED CONFIRM VISIT */
+/* CONFIRM VISIT */
 function confirmVisit(){
  if(completed||saving)return;
  if(doubleTrouble){
@@ -980,7 +1002,6 @@ function confirmVisit(){
   createdAt:new Date().toISOString()
  });
 
- /* AUTOMATIC ANNOUNCEMENT */
  if(remaining===0){
   legsWon=1;
   checkoutDarts=totalDarts;
@@ -993,9 +1014,7 @@ function confirmVisit(){
  }
 
  resetVisit();
-
  if(!completed)visit++;
-
  updateStats();
  updateVisitHistory();
 
@@ -1011,10 +1030,8 @@ function confirmVisit(){
  }
 }
 
-/* FINISH PRACTICE */
 function finishPractice(){
  if(saving)return;
-
  if(!completed){
   if(input!==""||currentDarts.length>0){
    message("Confirm or clear your current visit before finishing.");
@@ -1030,16 +1047,13 @@ function finishPractice(){
   completed=true;
   finishedManually=true;
  }
-
  stopSpeech();
  populateResults();
  showScreen(3);
 }
 
-/* SCREEN 3 RESULTS */
 function populateResults(){
- put("resultAverage",
-  doubleTrouble?"D"+furthestWedge:average().toFixed(2));
+ put("resultAverage",doubleTrouble?"D"+furthestWedge:average().toFixed(2));
  put("resultDarts",totalDarts);
  put("resultVisits",visits.length);
  put("resultRemaining",remaining);
@@ -1059,35 +1073,27 @@ function populateResults(){
   put("resultTitle","LEG COMPLETE");
   put("resultDescription","Checkout completed successfully.");
   put("resultStatus","CHECKOUT");
-  put("resultStatusDescription",
-   "Finished in "+totalDarts+" darts.");
+  put("resultStatusDescription","Finished in "+totalDarts+" darts.");
  }else{
   put("resultTitle","PRACTICE COMPLETE");
   put("resultDescription","Your recorded training performance.");
   put("resultStatus","FINISHED");
-  put("resultStatusDescription",
-   "Session finished with "+remaining+" remaining.");
+  put("resultStatusDescription","Session finished with "+remaining+" remaining.");
  }
-
  createHistory("resultHistory");
 }
 
-/* GLIDE SESSION SAVE */
 async function saveSession(){
  if(!completed||saving||saved)return;
 
  if(doubleTrouble){
-  put("saveStatus",
-   "Double Trouble visits were saved individually. Verify the records in Glide.");
+  put("saveStatus","Double Trouble visits were saved individually. Verify the records in Glide.");
   return;
  }
-
  if(!saveWebhook){
-  put("saveStatus",
-   "Save webhook missing from the URL. No session data was sent.");
+  put("saveStatus","Save webhook missing from the URL. No session data was sent.");
   return;
  }
-
  let url;
  try{
   url=new URL(saveWebhook,location.href);
@@ -1110,16 +1116,13 @@ async function saveSession(){
   totalVisits:visits.length,
   count100,count140,count180,
   checkoutDarts,highestCheckout,
-  legsWon,
-  finishedManually,
-  visits,
+  legsWon,finishedManually,visits,
   completedAt:new Date().toISOString()
  };
 
  saving=true;
  $("saveButton").disabled=true;
  put("saveStatus","Sending to Glide...");
-
  try{
   const res=await fetch(url.toString(),{
    method:"POST",
@@ -1139,10 +1142,8 @@ async function saveSession(){
  }
 }
 
-/* DOUBLE TROUBLE: ORIGINAL RULES AND WEBHOOK */
 async function confirmDoubleTrouble(){
  if(completed||saving)return;
-
  if(currentDarts.length!==3){
   message("Enter all 3 darts for D"+wedge+".");
   return;
@@ -1192,14 +1193,12 @@ async function confirmDoubleTrouble(){
 
  saving=false;
  $("confirmButton").disabled=false;
-
  remaining=after;
  furthestWedge=nextFurthest;
  totalDarts+=3;
  totalPoints+=change;
  visits.push(record);
 
- /* AUTOMATIC DOUBLE ANNOUNCEMENT */
  speakText(
   playerName+". Double "+wedge+". "+hits+
   (hits===1?" hit.":" hits.")
@@ -1219,11 +1218,9 @@ async function confirmDoubleTrouble(){
   wedge++;
   message("Next target: D"+wedge);
  }
-
  updateStats();
 }
 
-/* INITIAL STATE */
 if(doubleTrouble){
  put("practiceName","Double Trouble");
  put("scoringTitle","DOUBLE TROUBLE");
@@ -1233,7 +1230,6 @@ if(doubleTrouble){
  put("matchFormat","DOUBLE TROUBLE • D1-D20");
  put("scoreboardVisitLabel","TARGET");
  put("scoreboardTurn","DOUBLE TROUBLE");
-
  $("modeTabs").classList.add("hidden");
  mode="dartboard";
  $("keypadMode").classList.add("hidden");
