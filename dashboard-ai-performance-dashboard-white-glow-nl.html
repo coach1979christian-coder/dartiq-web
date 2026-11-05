@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="nl">
 <head>
@@ -23,23 +24,14 @@ html,body{
   margin:0;
   padding:0;
   width:100%;
-  min-height:100%;
-  background:linear-gradient(180deg,var(--bg2),var(--bg));
+  background:transparent;
   color:var(--text);
   font-family:Inter,Arial,Helvetica,sans-serif;
 }
 
-body{
-  min-height:100vh;
-}
-
 .page{
   width:100%;
-  min-height:100vh;
-  background:
-    radial-gradient(circle at 20% 0%,rgba(41,185,255,.09),transparent 28%),
-    linear-gradient(180deg,#07101e,#050b18);
-  padding:6px;
+  padding:4px;
 }
 
 .wrap{
@@ -49,38 +41,87 @@ body{
   background:
     radial-gradient(circle at 20% 0%,rgba(41,185,255,.09),transparent 28%),
     linear-gradient(180deg,#07101e,#050b18);
-  border:1px solid rgba(41,185,255,.18);
-  border-radius:20px;
-  padding:12px;
+  border:1px solid rgba(41,185,255,.28);
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 0 18px rgba(41,185,255,.06);
 }
 
-.top{
+/* COLLAPSIBLE DASHBOARD */
+
+.dashboard-toggle{
+  width:100%;
+}
+
+.dashboard-header{
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:10px;
-  margin-bottom:10px;
+  padding:17px 15px;
+  cursor:pointer;
+  list-style:none;
+  user-select:none;
+  background:linear-gradient(
+    135deg,
+    rgba(41,185,255,.12),
+    rgba(7,16,30,.95)
+  );
+  transition:background .2s ease;
 }
 
-.brand{
+.dashboard-header::-webkit-details-marker{
+  display:none;
+}
+
+.dashboard-header::marker{
+  content:"";
+}
+
+.dashboard-header:hover{
+  background:linear-gradient(
+    135deg,
+    rgba(41,185,255,.19),
+    rgba(7,16,30,.95)
+  );
+}
+
+.dashboard-header:focus-visible{
+  outline:2px solid var(--blue);
+  outline-offset:-3px;
+  border-radius:15px;
+}
+
+.header-left{
   display:flex;
   align-items:center;
-  gap:8px;
+  gap:10px;
+  min-width:0;
 }
 
 .dot{
-  width:7px;
-  height:7px;
+  width:8px;
+  height:8px;
+  flex:0 0 8px;
   border-radius:50%;
   background:var(--blue);
-  box-shadow:0 0 10px rgba(41,185,255,.8);
+  box-shadow:0 0 12px rgba(41,185,255,.9);
 }
 
-.brand strong{
+.brand{
   font-size:12px;
-  letter-spacing:.12em;
-  text-transform:uppercase;
+  font-weight:900;
+  letter-spacing:.1em;
   color:#83d5ff;
+  text-transform:uppercase;
+  line-height:1.4;
+}
+
+.header-right{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-shrink:0;
 }
 
 .live{
@@ -94,9 +135,35 @@ body{
   background:rgba(41,185,255,.08);
 }
 
+.collapse-arrow{
+  width:10px;
+  height:10px;
+  border-right:2px solid var(--blue);
+  border-bottom:2px solid var(--blue);
+  transform:rotate(45deg);
+  transition:transform .25s ease;
+  margin-right:4px;
+  margin-top:-5px;
+}
+
+.dashboard-toggle[open] .collapse-arrow{
+  transform:rotate(225deg);
+  margin-top:5px;
+}
+
+.dashboard-toggle[open] .dashboard-header{
+  border-bottom:1px solid rgba(41,185,255,.18);
+}
+
+/* EXPANDED DASHBOARD */
+
+.dashboard-content{
+  padding:12px;
+}
+
 .hero{
   display:grid;
-  grid-template-columns:130px 1fr;
+  grid-template-columns:130px minmax(0,1fr);
   gap:10px;
   margin-bottom:10px;
 }
@@ -155,6 +222,7 @@ body{
 
 .insight-card{
   min-height:138px;
+  min-width:0;
   padding:13px;
   display:flex;
   flex-direction:column;
@@ -171,6 +239,7 @@ body{
   font-size:12.5px;
   line-height:1.38;
   color:#dbeeff;
+  overflow-wrap:anywhere;
 }
 
 .focus{
@@ -182,11 +251,12 @@ body{
   color:#94ddff;
   background:rgba(41,185,255,.07);
   border:1px solid rgba(41,185,255,.15);
+  overflow-wrap:anywhere;
 }
 
 .stats{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
+  grid-template-columns:repeat(3,minmax(0,1fr));
   gap:8px;
 }
 
@@ -221,6 +291,7 @@ body{
 
 .info{
   padding:10px 11px;
+  min-width:0;
 }
 
 .info .head{
@@ -233,6 +304,7 @@ body{
   font-size:11.5px;
   line-height:1.35;
   color:#d6e8f6;
+  overflow-wrap:anywhere;
 }
 
 .status{
@@ -257,7 +329,7 @@ body{
 }
 
 .footer{
-  margin-top:9px;
+  margin-top:12px;
   text-align:center;
   font-size:8px;
   letter-spacing:.18em;
@@ -265,16 +337,29 @@ body{
   font-weight:800;
 }
 
-@media(max-width:430px){
-  .page{padding:4px}
+/* MOBILE */
 
-  .wrap{
+@media(max-width:430px){
+
+  .page{
+    padding:3px;
+  }
+
+  .dashboard-header{
+    padding:16px 12px;
+  }
+
+  .brand{
+    font-size:11px;
+    letter-spacing:.07em;
+  }
+
+  .dashboard-content{
     padding:10px;
-    border-radius:18px;
   }
 
   .hero{
-    grid-template-columns:112px 1fr;
+    grid-template-columns:112px minmax(0,1fr);
     gap:8px;
   }
 
@@ -292,7 +377,7 @@ body{
   }
 
   .stats{
-    grid-template-columns:repeat(2,1fr);
+    grid-template-columns:repeat(2,minmax(0,1fr));
   }
 
   .stat{
@@ -315,120 +400,263 @@ body{
 </head>
 
 <body>
+
 <div class="page">
 
 <main class="wrap">
 
-  <div class="top">
-    <div class="brand">
+<details class="dashboard-toggle" id="performanceDashboard">
+
+  <!-- COLLAPSIBLE HEADER -->
+
+  <summary class="dashboard-header">
+
+    <div class="header-left">
       <span class="dot"></span>
-      <strong>DARTIQ Prestaties</strong>
+      <span class="brand">DARTIQ PERFORMANCE</span>
     </div>
-    <div class="live">LIVE</div>
+
+    <div class="header-right">
+      <span class="live">LIVE</span>
+      <span class="collapse-arrow" aria-hidden="true"></span>
+    </div>
+
+  </summary>
+
+  <!-- DASHBOARD CONTENT -->
+
+  <div class="dashboard-content">
+
+    <section class="hero">
+
+      <div class="score-card">
+        <div class="kicker">AI Coach Score</div>
+        <div class="score" id="score">--</div>
+        <div class="grade" id="grade">GEEN DATA</div>
+      </div>
+
+      <div class="insight-card">
+        <div>
+          <div class="title">AI Inzicht</div>
+          <div class="insight" id="insight">
+            Je AI-inzicht verschijnt hier.
+          </div>
+        </div>
+
+        <div class="focus" id="focus">
+          Focus: Niet beschikbaar
+        </div>
+      </div>
+
+    </section>
+
+    <!-- PERFORMANCE STATISTICS -->
+
+    <section class="stats">
+
+      <div class="stat">
+        <div class="name">Beste Gem.</div>
+        <div class="value" id="bestavg">--</div>
+      </div>
+
+      <div class="stat">
+        <div class="name">Sessies</div>
+        <div class="value" id="sessions">--</div>
+      </div>
+
+      <div class="stat">
+        <div class="name">Hoogste Checkout</div>
+        <div class="value" id="highcheckout">--</div>
+      </div>
+
+      <div class="stat">
+        <div class="name">Eerste 9 Gem.</div>
+        <div class="value" id="first9">--</div>
+      </div>
+
+      <div class="stat">
+        <div class="name">Checkout %</div>
+        <div class="value" id="checkoutpct">--</div>
+      </div>
+
+      <div class="stat">
+        <div class="name">180's</div>
+        <div class="value" id="total180">--</div>
+      </div>
+
+    </section>
+
+    <!-- GOALS AND FOCUS -->
+
+    <section class="info-grid">
+
+      <div class="info">
+        <div class="head">🎯 Volgend Doel</div>
+        <div class="copy" id="goal">
+          Geen doel beschikbaar.
+        </div>
+      </div>
+
+      <div class="info">
+        <div class="head">⚡ Focus Deze Week</div>
+        <div class="copy" id="focusCard">
+          Geen focus beschikbaar.
+        </div>
+      </div>
+
+    </section>
+
+    <!-- AI PERFORMANCE STATUS -->
+
+    <section class="status">
+      <div class="status-badge">↗</div>
+
+      <div class="status-text" id="statusText">
+        Dien je volgende sessie in om dit dashboard bij te werken.
+      </div>
+    </section>
+
+    <div class="footer">
+      MOGELIJK GEMAAKT DOOR DARTIQ AI
+    </div>
+
   </div>
 
-  <section class="hero">
-    <div class="score-card">
-      <div class="kicker">AI Coach Score</div>
-      <div class="score" id="score">--</div>
-      <div class="grade" id="grade">GEEN DATA</div>
-    </div>
-
-    <div class="insight-card">
-      <div>
-        <div class="title">AI Inzicht</div>
-        <div class="insight" id="insight">Je AI-inzicht verschijnt hier.</div>
-      </div>
-      <div class="focus" id="focus">Focus: Niet beschikbaar</div>
-    </div>
-  </section>
-
-  <section class="stats">
-    <div class="stat"><div class="name">Beste Gem.</div><div class="value" id="bestavg">--</div></div>
-    <div class="stat"><div class="name">Sessies</div><div class="value" id="sessions">--</div></div>
-    <div class="stat"><div class="name">Hoogste Checkout</div><div class="value" id="highcheckout">--</div></div>
-    <div class="stat"><div class="name">Eerste 9 Gem.</div><div class="value" id="first9">--</div></div>
-    <div class="stat"><div class="name">Checkout %</div><div class="value" id="checkoutpct">--</div></div>
-    <div class="stat"><div class="name">180's</div><div class="value" id="total180">--</div></div>
-  </section>
-
-  <section class="info-grid">
-    <div class="info">
-      <div class="head">🎯 Volgend Doel</div>
-      <div class="copy" id="goal">Geen doel beschikbaar.</div>
-    </div>
-
-    <div class="info">
-      <div class="head">⚡ Focus Deze Week</div>
-      <div class="copy" id="focusCard">Geen focus beschikbaar.</div>
-    </div>
-  </section>
-
-  <section class="status">
-    <div class="status-badge">↗</div>
-    <div class="status-text" id="statusText">Dien je volgende sessie in om dit dashboard bij te werken.</div>
-  </section>
-
-  <div class="footer">MOGELIJK GEMAAKT DOOR DARTIQ AI</div>
+</details>
 
 </main>
+
 </div>
 
 <script>
 (function(){
+
   const p = new URLSearchParams(window.location.search);
 
   function safe(key, fallback){
+
     const raw = p.get(key);
-    if(raw === null || raw.trim() === "") return fallback;
+
+    if(raw === null || raw.trim() === ""){
+      return fallback;
+    }
+
     try{
-      return decodeURIComponent(raw.replace(/\+/g," ")).replace(/[{}]/g,"").trim() || fallback;
+      return decodeURIComponent(
+        raw.replace(/\+/g," ")
+      ).replace(/[{}]/g,"").trim() || fallback;
     }catch(e){
       return raw.replace(/[{}]/g,"").trim() || fallback;
     }
   }
 
   const d = {
+
     score:safe("score","--"),
+
     grade:safe("grade","GEEN DATA"),
+
     bestavg:safe("bestavg","--"),
+
     sessions:safe("sessions","--"),
+
     highcheckout:safe("highcheckout","--"),
+
     first9:safe("first9","--"),
+
     checkoutpct:safe("checkoutpct","--"),
+
     total180:safe("total180","--"),
-    insight:safe("insight","Je AI-inzicht verschijnt hier."),
-    goal:safe("goal","Geen doel beschikbaar."),
-    focus:safe("focus","Geen focus beschikbaar.")
+
+    insight:safe(
+      "insight",
+      "Je AI-inzicht verschijnt hier."
+    ),
+
+    goal:safe(
+      "goal",
+      "Geen doel beschikbaar."
+    ),
+
+    focus:safe(
+      "focus",
+      "Geen focus beschikbaar."
+    )
   };
 
-  const set = (id,val) => document.getElementById(id).textContent = val;
+  const set = (id,val) => {
+    document.getElementById(id).textContent = val;
+  };
 
   set("score",d.score);
+
   set("grade",d.grade.toUpperCase());
+
   set("bestavg",d.bestavg);
+
   set("sessions",d.sessions);
+
   set("highcheckout",d.highcheckout);
+
   set("first9",d.first9);
-  set("checkoutpct",d.checkoutpct==="--" ? "--" : d.checkoutpct.replace(/%$/,"")+"%");
+
+  set(
+    "checkoutpct",
+    d.checkoutpct==="--"
+      ? "--"
+      : d.checkoutpct.replace(/%$/,"")+"%"
+  );
+
   set("total180",d.total180);
+
   set("insight",d.insight);
+
   set("goal",d.goal);
+
   set("focus","Focus: " + d.focus);
+
   set("focusCard",d.focus);
 
-  const n = Number(String(d.score).replace(",","."));
-  let status = "Dien je volgende sessie in om dit dashboard bij te werken.";
+  /* AI COACH STATUS */
 
-  if(!Number.isNaN(n)){
-    if(n >= 90) status = "Eliteprestatie. Behoud je consistentie en controle onder druk.";
-    else if(n >= 80) status = "Sterke prestatie. Kleine verfijningen kunnen je naar het volgende niveau brengen.";
-    else if(n >= 70) status = "Goede vooruitgang. Blijf trainen op het aangegeven verbeterpunt.";
-    else if(n >= 60) status = "Je ontwikkelt goed. Focus op één correctie tegelijk.";
-    else status = "Verbeterfase. Volg de aanbevolen focus en herhaal de oefening.";
+  const n = Number(
+    String(d.score).replace(",",".")
+  );
+
+  let status =
+    "Dien je volgende sessie in om dit dashboard bij te werken.";
+
+  if(d.score !== "--" && Number.isFinite(n)){
+
+    if(n >= 90){
+      status =
+        "Eliteprestatie. Behoud je consistentie en controle onder druk.";
+    }
+
+    else if(n >= 80){
+      status =
+        "Sterke prestatie. Kleine verfijningen kunnen je naar het volgende niveau brengen.";
+    }
+
+    else if(n >= 70){
+      status =
+        "Goede vooruitgang. Blijf trainen op het aangegeven verbeterpunt.";
+    }
+
+    else if(n >= 60){
+      status =
+        "Je ontwikkelt goed. Focus op één correctie tegelijk.";
+    }
+
+    else{
+      status =
+        "Verbeterfase. Volg de aanbevolen focus en herhaal de oefening.";
+    }
+
   }
 
   set("statusText",status);
+
 })();
 </script>
 
