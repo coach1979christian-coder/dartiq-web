@@ -12,7 +12,7 @@
   --bg2:#07101e;
   --panel:#0b1728;
   --panel2:#0e1d31;
-  --line:rgba(44,177,255,.22);
+  --line:rgba(44,177,255,.24);
   --blue:#29b9ff;
   --text:#f6fbff;
   --muted:#9fb3c7;
@@ -37,69 +37,51 @@ body{
   width:100%;
   min-height:100vh;
   overflow-x:hidden;
-  background:
-    radial-gradient(
-      circle at 20% 0%,
-      rgba(41,185,255,.09),
-      transparent 28%
-    ),
-    linear-gradient(
-      180deg,
-      #07101e,
-      #050b18
-    ) !important;
+  background:#050b18 !important;
   color:var(--text);
   font-family:Inter,Arial,Helvetica,sans-serif;
 }
 
 .page{
+  display:flex;
   width:100%;
   min-height:100vh;
-  padding:6px;
+  padding:5px;
   background:
     radial-gradient(
       circle at 20% 0%,
       rgba(41,185,255,.09),
-      transparent 28%
+      transparent 35%
     ),
-    linear-gradient(
-      180deg,
-      #07101e,
-      #050b18
-    ) !important;
+    linear-gradient(180deg,#07101e,#050b18);
 }
 
 .wrap{
   width:100%;
   max-width:760px;
+  min-height:calc(100vh - 10px);
   margin:0 auto;
   padding:12px;
-  background:
-    radial-gradient(
-      circle at 20% 0%,
-      rgba(41,185,255,.07),
-      transparent 30%
-    ),
-    linear-gradient(180deg,#07101e,#050b18);
+  background:linear-gradient(180deg,#07101e,#050b18);
   border:1px solid rgba(41,185,255,.28);
   border-radius:18px;
-  box-shadow:0 0 18px rgba(41,185,255,.07);
+  box-shadow:0 0 18px rgba(41,185,255,.08);
 }
 
-/* MAIN DASHBOARD HEADER */
+/* DASHBOARD HEADING */
 
 .top{
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:10px;
-  padding:8px 3px 15px;
+  padding:8px 3px 12px;
 }
 
 .brand{
   display:flex;
   align-items:center;
-  gap:9px;
+  gap:8px;
   min-width:0;
 }
 
@@ -115,8 +97,7 @@ body{
 .brand strong{
   font-size:12px;
   line-height:1.4;
-  letter-spacing:.08em;
-  text-transform:uppercase;
+  letter-spacing:.07em;
   color:#83d5ff;
   font-weight:900;
 }
@@ -124,32 +105,94 @@ body{
 .live{
   font-size:10px;
   font-weight:800;
-  letter-spacing:.1em;
   color:#8fe1ff;
   padding:5px 8px;
   border-radius:999px;
-  border:1px solid rgba(41,185,255,.22);
+  border:1px solid var(--line);
   background:rgba(41,185,255,.08);
-  flex-shrink:0;
 }
 
-/* SIX INDEPENDENT COLLAPSIBLE PANELS */
+/* AI MALE VOICE */
+
+.voice-panel{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:10px;
+  padding:12px;
+  margin-bottom:12px;
+  border:1px solid rgba(41,185,255,.32);
+  border-radius:13px;
+  background:linear-gradient(135deg,#10233c,#091525);
+}
+
+.voice-info{
+  flex:1;
+  min-width:130px;
+}
+
+.voice-title{
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.07em;
+  color:#83d5ff;
+}
+
+.voice-description{
+  margin-top:5px;
+  font-size:10px;
+  line-height:1.4;
+  color:var(--muted);
+}
+
+.voice-actions{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.voice-button{
+  border:1px solid var(--blue);
+  border-radius:999px;
+  background:rgba(41,185,255,.1);
+  color:#83d5ff;
+  padding:9px 12px;
+  font-family:inherit;
+  font-size:10px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.voice-button.active{
+  color:#04101c;
+  background:var(--blue);
+  box-shadow:0 0 12px rgba(41,185,255,.25);
+}
+
+.voice-button:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+
+.voice-button:focus-visible{
+  outline:2px solid white;
+  outline-offset:3px;
+}
+
+/* INDEPENDENT COLLAPSIBLE PANELS */
 
 .panel{
   width:100%;
   margin-bottom:9px;
-  background:linear-gradient(
-    180deg,
-    var(--panel2),
-    var(--panel)
-  );
+  background:linear-gradient(180deg,var(--panel2),var(--panel));
   border:1px solid var(--line);
   border-radius:15px;
   overflow:hidden;
 }
 
 .panel[open]{
-  border-color:rgba(41,185,255,.4);
+  border-color:rgba(41,185,255,.45);
 }
 
 .panel-header{
@@ -177,28 +220,22 @@ body{
   outline-offset:-3px;
 }
 
-.panel-header:hover{
-  background:rgba(41,185,255,.09);
-}
-
 .panel[open] .panel-header{
+  background:rgba(41,185,255,.09);
   border-bottom:1px solid var(--line);
-  background:rgba(41,185,255,.08);
 }
 
 .panel-title{
   display:flex;
   align-items:center;
   gap:10px;
-  min-width:0;
   color:#d9f2ff;
   font-size:12px;
   font-weight:850;
-  letter-spacing:.035em;
 }
 
 .panel-icon{
-  width:19px;
+  width:20px;
   flex-shrink:0;
   text-align:center;
   font-size:15px;
@@ -208,12 +245,12 @@ body{
   display:flex;
   align-items:center;
   justify-content:center;
-  width:24px;
-  height:24px;
+  width:25px;
+  height:25px;
   flex-shrink:0;
-  border:1px solid rgba(41,185,255,.18);
+  border:1px solid rgba(41,185,255,.2);
   border-radius:50%;
-  background:rgba(41,185,255,.06);
+  background:rgba(41,185,255,.07);
 }
 
 .chevron{
@@ -231,11 +268,7 @@ body{
 
 .panel-content{
   padding:13px;
-  background:linear-gradient(
-    180deg,
-    #0b1728,
-    #081321
-  );
+  background:linear-gradient(180deg,#0b1728,#081321);
 }
 
 /* AI COACH SCORE */
@@ -245,30 +278,25 @@ body{
   display:flex;
   flex-direction:column;
   align-items:center;
-  justify-content:center;
   text-align:center;
 }
 
 .kicker{
   font-size:10px;
-  line-height:1.3;
   letter-spacing:.13em;
-  text-transform:uppercase;
   color:var(--muted);
   font-weight:800;
 }
 
 .score{
   font-size:54px;
-  line-height:1;
   margin:10px 0;
   font-weight:900;
-  color:#fff;
+  color:white;
   text-shadow:0 0 18px rgba(41,185,255,.35);
 }
 
 .grade{
-  display:inline-block;
   max-width:100%;
   padding:6px 13px;
   border-radius:999px;
@@ -276,7 +304,6 @@ body{
   color:#04101c;
   font-size:10px;
   font-weight:900;
-  text-transform:uppercase;
   overflow-wrap:anywhere;
 }
 
@@ -297,7 +324,7 @@ body{
   line-height:1.4;
   color:#94ddff;
   background:rgba(41,185,255,.07);
-  border:1px solid rgba(41,185,255,.15);
+  border:1px solid var(--line);
   overflow-wrap:anywhere;
 }
 
@@ -310,13 +337,9 @@ body{
 }
 
 .stat{
-  min-width:0;
   padding:11px;
-  background:linear-gradient(
-    180deg,
-    #102038,
-    #0b1728
-  );
+  min-width:0;
+  background:linear-gradient(180deg,#102038,#0b1728);
   border:1px solid var(--line);
   border-radius:12px;
 }
@@ -324,9 +347,9 @@ body{
 .stat .name{
   font-size:9px;
   letter-spacing:.07em;
-  text-transform:uppercase;
   color:var(--muted);
   font-weight:800;
+  text-transform:uppercase;
   line-height:1.4;
 }
 
@@ -339,7 +362,7 @@ body{
   overflow-wrap:anywhere;
 }
 
-/* NEXT GOAL AND WEEKLY FOCUS */
+/* GOALS AND STATUS */
 
 .copy{
   font-size:12px;
@@ -348,33 +371,27 @@ body{
   overflow-wrap:anywhere;
 }
 
-/* AI PERFORMANCE STATUS */
-
 .status{
   display:flex;
-  align-items:flex-start;
   gap:10px;
+  align-items:flex-start;
 }
 
 .status-badge{
   color:var(--blue);
   font-size:17px;
   font-weight:900;
-  flex-shrink:0;
 }
 
 .status-text{
-  color:#cfe2f2;
   font-size:12px;
   line-height:1.5;
+  color:#cfe2f2;
   overflow-wrap:anywhere;
 }
 
-/* FOOTER */
-
 .footer{
   margin-top:12px;
-  padding:5px 0;
   text-align:center;
   font-size:8px;
   letter-spacing:.18em;
@@ -382,26 +399,17 @@ body{
   font-weight:800;
 }
 
-/* MOBILE RESPONSIVE */
+/* MOBILE */
 
 @media(max-width:430px){
 
-  .page{
-    padding:4px;
-  }
-
   .wrap{
     padding:10px;
-    border-radius:16px;
-  }
-
-  .top{
-    padding:8px 2px 14px;
   }
 
   .brand strong{
     font-size:10.5px;
-    letter-spacing:.055em;
+    letter-spacing:.045em;
   }
 
   .panel-header{
@@ -431,6 +439,10 @@ body{
   .score{
     font-size:48px;
   }
+
+  .voice-button{
+    padding:9px 10px;
+  }
 }
 </style>
 </head>
@@ -438,10 +450,9 @@ body{
 <body>
 
 <div class="page">
-
 <main class="wrap">
 
-  <!-- DARTIQ PERFORMANCE DASHBOARD -->
+  <!-- MAIN HEADER -->
 
   <header class="top">
 
@@ -450,11 +461,49 @@ body{
       <strong>DARTIQ PERFORMANCE DASHBOARD</strong>
     </div>
 
-    <div class="live">LIVE</div>
+    <span class="live">LIVE</span>
 
   </header>
 
-  <!-- SECTION 1: AI COACH SCORE -->
+  <!-- AI VOICE CONTROL -->
+
+  <section class="voice-panel">
+
+    <div class="voice-info">
+
+      <div class="voice-title">
+        🔊 DARTIQ AI VOICE COACH
+      </div>
+
+      <div class="voice-description" id="voiceStatus">
+        Enable voice to hear your performance information.
+      </div>
+
+    </div>
+
+    <div class="voice-actions">
+
+      <button
+        class="voice-button"
+        id="voiceToggle"
+        type="button"
+        aria-pressed="false">
+        VOICE OFF
+      </button>
+
+      <button
+        class="voice-button"
+        id="voiceReplay"
+        type="button"
+        disabled>
+        REPLAY
+      </button>
+
+    </div>
+
+  </section>
+
+  <!-- 1. AI COACH SCORE -->
 
   <details class="panel" id="section-score">
 
@@ -475,15 +524,11 @@ body{
 
       <div class="score-card">
 
-        <div class="kicker">
-          AI COACH SCORE
-        </div>
+        <div class="kicker">AI COACH SCORE</div>
 
         <div class="score" id="score">--</div>
 
-        <div class="grade" id="grade">
-          NO DATA
-        </div>
+        <div class="grade" id="grade">NO DATA</div>
 
       </div>
 
@@ -491,7 +536,7 @@ body{
 
   </details>
 
-  <!-- SECTION 2: AI INSIGHT -->
+  <!-- 2. AI INSIGHT -->
 
   <details class="panel" id="section-insight">
 
@@ -522,7 +567,7 @@ body{
 
   </details>
 
-  <!-- SECTION 3: PERFORMANCE STATISTICS -->
+  <!-- 3. PERFORMANCE STATISTICS -->
 
   <details class="panel" id="section-statistics">
 
@@ -579,7 +624,7 @@ body{
 
   </details>
 
-  <!-- SECTION 4: NEXT GOAL -->
+  <!-- 4. NEXT GOAL -->
 
   <details class="panel" id="section-goal">
 
@@ -606,7 +651,7 @@ body{
 
   </details>
 
-  <!-- SECTION 5: FOCUS THIS WEEK -->
+  <!-- 5. FOCUS THIS WEEK -->
 
   <details class="panel" id="section-weekly-focus">
 
@@ -633,7 +678,7 @@ body{
 
   </details>
 
-  <!-- SECTION 6: AI PERFORMANCE STATUS -->
+  <!-- 6. AI PERFORMANCE STATUS -->
 
   <details class="panel" id="section-status">
 
@@ -666,20 +711,19 @@ body{
 
   </details>
 
-  <div class="footer">
-    POWERED BY DARTIQ AI
-  </div>
+  <div class="footer">POWERED BY DARTIQ AI</div>
 
 </main>
-
 </div>
 
 <script>
 (function(){
 
+  /* GLIDE DATA */
+
   const p = new URLSearchParams(window.location.search);
 
-  function safe(key, fallback){
+  function safe(key,fallback){
 
     const raw = p.get(key);
 
@@ -687,13 +731,7 @@ body{
       return fallback;
     }
 
-    try{
-      return decodeURIComponent(
-        raw.replace(/\+/g," ")
-      ).replace(/[{}]/g,"").trim() || fallback;
-    }catch(e){
-      return raw.replace(/[{}]/g,"").trim() || fallback;
-    }
+    return raw.replace(/[{}]/g,"").trim() || fallback;
 
   }
 
@@ -732,22 +770,17 @@ body{
 
   };
 
-  const set = (id,val) => {
-    document.getElementById(id).textContent = val;
+  const get = id => document.getElementById(id);
+
+  const set = (id,value) => {
+    get(id).textContent = value;
   };
 
-  /* GLIDE DATA CONNECTIONS */
-
   set("score",d.score);
-
   set("grade",d.grade.toUpperCase());
-
   set("bestavg",d.bestavg);
-
   set("sessions",d.sessions);
-
   set("highcheckout",d.highcheckout);
-
   set("first9",d.first9);
 
   set(
@@ -758,20 +791,14 @@ body{
   );
 
   set("total180",d.total180);
-
   set("insight",d.insight);
-
   set("goal",d.goal);
-
-  set("focus","Focus: " + d.focus);
-
+  set("focus","Focus: "+d.focus);
   set("focusCard",d.focus);
 
   /* AI PERFORMANCE STATUS */
 
-  const n = Number(
-    String(d.score).replace(",",".")
-  );
+  const n = Number(String(d.score).replace(",","."));
 
   let status =
     "Submit your next session to update this dashboard.";
@@ -779,43 +806,313 @@ body{
   if(d.score !== "--" && Number.isFinite(n)){
 
     if(n >= 90){
-
       status =
         "Elite performance. Maintain consistency and pressure control.";
-
     }
 
     else if(n >= 80){
-
       status =
         "Great performance. Small refinements can unlock the next level.";
-
     }
 
     else if(n >= 70){
-
       status =
         "Good progress. Keep training the highlighted weakness.";
-
     }
 
     else if(n >= 60){
-
       status =
         "Developing well. Stay focused on one correction at a time.";
-
     }
 
     else{
-
       status =
         "Improvement phase. Follow the recommended focus and repeat the drill.";
-
     }
 
   }
 
   set("statusText",status);
+
+  /* AI VOICE COACH */
+
+  const voiceToggle = get("voiceToggle");
+  const voiceReplay = get("voiceReplay");
+  const voiceStatus = get("voiceStatus");
+
+  const supported =
+    "speechSynthesis" in window &&
+    "SpeechSynthesisUtterance" in window;
+
+  let voiceEnabled = false;
+  let activeSection = null;
+  let maleVoice = null;
+
+  const synth = supported ? window.speechSynthesis : null;
+
+  /* PREFER AVAILABLE ENGLISH MALE VOICES */
+
+  function selectMaleVoice(){
+
+    if(!supported) return null;
+
+    const voices = synth.getVoices();
+
+    const english = voices.filter(v =>
+      /^en([-_]|$)/i.test(v.lang)
+    );
+
+    const preferred = [
+      /microsoft david/i,
+      /microsoft guy/i,
+      /microsoft andrew/i,
+      /google uk english male/i,
+      /\bdaniel\b/i,
+      /\balex\b/i,
+      /\boliver\b/i,
+      /\baaron\b/i,
+      /\bfred\b/i,
+      /\bbrian\b/i,
+      /\bnathan\b/i,
+      /\breed\b/i,
+      /\brishi\b/i,
+      /\bmale\b/i
+    ];
+
+    for(const pattern of preferred){
+
+      const match = english.find(v =>
+        pattern.test(v.name)
+      );
+
+      if(match) return match;
+
+    }
+
+    return english.find(v => v.default) ||
+           english[0] ||
+           null;
+
+  }
+
+  if(supported){
+
+    maleVoice = selectMaleVoice();
+
+    if(typeof synth.addEventListener === "function"){
+
+      synth.addEventListener("voiceschanged",()=>{
+        maleVoice = selectMaleVoice();
+      });
+
+    }
+
+  }
+
+  function speak(message){
+
+    if(!supported || !voiceEnabled) return;
+
+    synth.cancel();
+
+    if(!message || !message.trim()) return;
+
+    maleVoice = selectMaleVoice();
+
+    const utterance =
+      new SpeechSynthesisUtterance(message);
+
+    utterance.lang =
+      maleVoice ? maleVoice.lang : "en-US";
+
+    if(maleVoice){
+      utterance.voice = maleVoice;
+    }
+
+    utterance.rate = 0.94;
+    utterance.pitch = 0.85;
+    utterance.volume = 1;
+
+    synth.speak(utterance);
+
+  }
+
+  /* VOICE READS ACTUAL DISPLAYED DATA */
+
+  function sectionSpeech(id){
+
+    const value = key => get(key).textContent.trim();
+
+    const spokenValue = key => {
+      const v = value(key);
+      return v === "--" ? "not available" : v;
+    };
+
+    switch(id){
+
+      case "section-score":
+        return (
+          "AI Coach Score. " +
+          "Your score is " + spokenValue("score") + ". " +
+          "Your grade is " + value("grade") + "."
+        );
+
+      case "section-insight":
+        return (
+          "AI Insight. " +
+          value("insight") + ". " +
+          value("focus") + "."
+        );
+
+      case "section-statistics":
+        return (
+          "Performance Statistics. " +
+          "Best average: " + spokenValue("bestavg") + ". " +
+          "Sessions: " + spokenValue("sessions") + ". " +
+          "Highest checkout: " + spokenValue("highcheckout") + ". " +
+          "First nine average: " + spokenValue("first9") + ". " +
+          "Checkout percentage: " + spokenValue("checkoutpct") + ". " +
+          "One hundred and eighties: " + spokenValue("total180") + "."
+        );
+
+      case "section-goal":
+        return (
+          "Your next goal. " +
+          value("goal")
+        );
+
+      case "section-weekly-focus":
+        return (
+          "Your focus this week. " +
+          value("focusCard")
+        );
+
+      case "section-status":
+        return (
+          "AI Performance Status. " +
+          value("statusText")
+        );
+
+      default:
+        return "";
+
+    }
+
+  }
+
+  /* VOICE BUTTON */
+
+  if(!supported){
+
+    voiceToggle.disabled = true;
+    voiceToggle.textContent = "UNAVAILABLE";
+
+    voiceStatus.textContent =
+      "Speech is not supported in this browser.";
+
+  }else{
+
+    voiceToggle.addEventListener("click",()=>{
+
+      voiceEnabled = !voiceEnabled;
+
+      voiceToggle.classList.toggle(
+        "active",
+        voiceEnabled
+      );
+
+      voiceToggle.setAttribute(
+        "aria-pressed",
+        String(voiceEnabled)
+      );
+
+      voiceToggle.textContent =
+        voiceEnabled ? "VOICE ON" : "VOICE OFF";
+
+      voiceReplay.disabled = !voiceEnabled;
+
+      if(voiceEnabled){
+
+        voiceStatus.textContent =
+          "Voice enabled. Open a section to hear its information.";
+
+        if(activeSection){
+
+          speak(sectionSpeech(activeSection));
+
+        }else{
+
+          speak(
+            "DARTIQ Performance Dashboard. " +
+            "Voice coaching is enabled. " +
+            "Select a section to hear your performance information."
+          );
+
+        }
+
+      }else{
+
+        synth.cancel();
+
+        voiceStatus.textContent =
+          "Voice disabled. Enable to hear your performance information.";
+
+      }
+
+    });
+
+    /* REPLAY MOST RECENT SECTION */
+
+    voiceReplay.addEventListener("click",()=>{
+
+      if(!voiceEnabled) return;
+
+      if(activeSection){
+
+        speak(sectionSpeech(activeSection));
+
+      }else{
+
+        speak(
+          "DARTIQ Performance Dashboard. " +
+          "Open a section to hear your information."
+        );
+
+      }
+
+    });
+
+    /* SPEAK WHEN EACH SECTION IS OPENED */
+
+    document.querySelectorAll(".panel").forEach(panel=>{
+
+      const summary = panel.querySelector("summary");
+
+      summary.addEventListener("click",()=>{
+
+        if(!panel.open){
+
+          activeSection = panel.id;
+
+          if(voiceEnabled){
+            speak(sectionSpeech(panel.id));
+          }
+
+        }else if(voiceEnabled){
+
+          synth.cancel();
+
+        }
+
+      });
+
+    });
+
+    window.addEventListener("pagehide",()=>{
+      synth.cancel();
+    });
+
+  }
 
 })();
 </script>
