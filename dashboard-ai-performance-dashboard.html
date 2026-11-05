@@ -18,7 +18,9 @@
   --muted:#9fb3c7;
 }
 
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
 html{
   margin:0;
@@ -45,7 +47,11 @@ body{
   min-height:100vh;
   padding:5px;
   background:
-    radial-gradient(circle at 20% 0%,rgba(41,185,255,.09),transparent 35%),
+    radial-gradient(
+      circle at 20% 0%,
+      rgba(41,185,255,.09),
+      transparent 35%
+    ),
     linear-gradient(180deg,#07101e,#050b18);
 }
 
@@ -60,7 +66,7 @@ body{
   border-radius:18px;
 }
 
-/* HEADER */
+/* DASHBOARD HEADER */
 
 .top{
   display:flex;
@@ -102,9 +108,10 @@ body{
   border-radius:999px;
   border:1px solid var(--line);
   background:rgba(41,185,255,.08);
+  flex-shrink:0;
 }
 
-/* AUTOMATIC AI VOICE */
+/* AUTOMATIC PERSONAL AI VOICE */
 
 .voice-panel{
   display:flex;
@@ -164,7 +171,12 @@ body{
   background:rgba(255,255,255,.04);
 }
 
-/* SEPARATE COLLAPSIBLE PANELS */
+.voice-button:focus-visible{
+  outline:2px solid var(--blue);
+  outline-offset:3px;
+}
+
+/* INDEPENDENT COLLAPSIBLE PANELS */
 
 .panel{
   margin-bottom:9px;
@@ -198,8 +210,7 @@ body{
   content:"";
 }
 
-.panel-header:focus-visible,
-.voice-button:focus-visible{
+.panel-header:focus-visible{
   outline:2px solid var(--blue);
   outline-offset:-3px;
 }
@@ -312,7 +323,7 @@ body{
   overflow-wrap:anywhere;
 }
 
-/* STATISTICS */
+/* PERFORMANCE STATISTICS */
 
 .stats{
   display:grid;
@@ -385,17 +396,52 @@ body{
 /* MOBILE */
 
 @media(max-width:430px){
-  .wrap{padding:10px}
-  .brand strong{font-size:10.5px;letter-spacing:.04em}
-  .panel-header{padding:14px 12px}
-  .panel-title{font-size:11.5px}
-  .panel-content{padding:11px}
-  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .stat{padding:10px}
-  .stat .value{font-size:20px}
-  .score{font-size:48px}
-  .voice-panel{padding:10px}
-  .voice-button{padding:9px}
+
+  .wrap{
+    padding:10px;
+  }
+
+  .brand strong{
+    font-size:10.5px;
+    letter-spacing:.04em;
+  }
+
+  .panel-header{
+    padding:14px 12px;
+  }
+
+  .panel-title{
+    font-size:11.5px;
+  }
+
+  .panel-content{
+    padding:11px;
+  }
+
+  .stats{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .stat{
+    padding:10px;
+  }
+
+  .stat .value{
+    font-size:20px;
+  }
+
+  .score{
+    font-size:48px;
+  }
+
+  .voice-panel{
+    padding:10px;
+  }
+
+  .voice-button{
+    padding:9px;
+  }
+
 }
 </style>
 </head>
@@ -404,6 +450,8 @@ body{
 
 <div class="page">
 <main class="wrap">
+
+<!-- MAIN DASHBOARD HEADER -->
 
 <header class="top">
 
@@ -416,7 +464,7 @@ body{
 
 </header>
 
-<!-- AUTOMATIC PERSONAL AI VOICE -->
+<!-- AUTOMATIC PERSONAL VOICE COACH -->
 
 <section class="voice-panel">
 
@@ -427,10 +475,10 @@ body{
     </div>
 
     <div class="voice-player" id="playerGreeting">
-      DARTIQ Player
+      DARTIQ PLAYER
     </div>
 
-    <div class="voice-status" id="voiceStatus" aria-live="polite">
+    <div class="voice-status" id="voiceStatus">
       Automatic voice coaching enabled
     </div>
 
@@ -446,7 +494,7 @@ body{
 
 </section>
 
-<!-- AI COACH SCORE -->
+<!-- SECTION 1: AI COACH SCORE -->
 
 <details class="panel" id="section-score">
 
@@ -479,7 +527,7 @@ body{
 
 </details>
 
-<!-- AI INSIGHT -->
+<!-- SECTION 2: AI INSIGHT -->
 
 <details class="panel" id="section-insight">
 
@@ -510,7 +558,7 @@ body{
 
 </details>
 
-<!-- PERFORMANCE STATISTICS -->
+<!-- SECTION 3: PERFORMANCE STATISTICS -->
 
 <details class="panel" id="section-statistics">
 
@@ -567,7 +615,7 @@ body{
 
 </details>
 
-<!-- NEXT GOAL -->
+<!-- SECTION 4: NEXT GOAL -->
 
 <details class="panel" id="section-goal">
 
@@ -594,7 +642,7 @@ body{
 
 </details>
 
-<!-- FOCUS THIS WEEK -->
+<!-- SECTION 5: FOCUS THIS WEEK -->
 
 <details class="panel" id="section-weekly-focus">
 
@@ -621,7 +669,7 @@ body{
 
 </details>
 
-<!-- AI PERFORMANCE STATUS -->
+<!-- SECTION 6: AI PERFORMANCE STATUS -->
 
 <details class="panel" id="section-status">
 
@@ -679,7 +727,10 @@ body{
     const cleaned = raw.replace(/[{}]/g,"").trim();
 
     return cleaned || fallback;
+
   }
+
+  /* PLAYER NAME FROM GLIDE */
 
   function getPlayerName(){
 
@@ -707,7 +758,7 @@ body{
       if(
         !trimmed ||
         /^\{.*\}$/.test(trimmed) ||
-        /^(undefined|null|unknown|nan)$/i.test(trimmed)
+        /^(undefined|null|unknown|nan|PLAYERNAME)$/i.test(trimmed)
       ){
         continue;
       }
@@ -721,6 +772,7 @@ body{
     }
 
     return "";
+
   }
 
   const playerFullName = getPlayerName();
@@ -729,15 +781,26 @@ body{
     ? playerFullName.split(/\s+/)[0]
     : "";
 
+  const spokenName = playerFirstName || "player";
+
+  /* PERFORMANCE DATA */
+
   const d = {
 
     score:safe("score","--"),
+
     grade:safe("grade","NO DATA"),
+
     bestavg:safe("bestavg","--"),
+
     sessions:safe("sessions","--"),
+
     highcheckout:safe("highcheckout","--"),
+
     first9:safe("first9","--"),
+
     checkoutpct:safe("checkoutpct","--"),
+
     total180:safe("total180","--"),
 
     insight:safe(
@@ -763,13 +826,18 @@ body{
     get(id).textContent = value;
   };
 
-  /* POPULATE DASHBOARD */
+  /* DISPLAY GLIDE DATA */
 
   set("score",d.score);
+
   set("grade",d.grade.toUpperCase());
+
   set("bestavg",d.bestavg);
+
   set("sessions",d.sessions);
+
   set("highcheckout",d.highcheckout);
+
   set("first9",d.first9);
 
   set(
@@ -780,9 +848,13 @@ body{
   );
 
   set("total180",d.total180);
+
   set("insight",d.insight);
+
   set("goal",d.goal);
+
   set("focus","Focus: "+d.focus);
+
   set("focusCard",d.focus);
 
   set(
@@ -794,7 +866,9 @@ body{
 
   /* AI PERFORMANCE STATUS */
 
-  const n = Number(String(d.score).replace(",","."));
+  const n = Number(
+    String(d.score).replace(",",".")
+  );
 
   let status =
     "Submit your next session to update this dashboard.";
@@ -802,35 +876,45 @@ body{
   if(d.score !== "--" && Number.isFinite(n)){
 
     if(n >= 90){
+
       status =
         "Elite performance. Maintain consistency and pressure control.";
+
     }
 
     else if(n >= 80){
+
       status =
         "Great performance. Small refinements can unlock the next level.";
+
     }
 
     else if(n >= 70){
+
       status =
         "Good progress. Keep training the highlighted weakness.";
+
     }
 
     else if(n >= 60){
+
       status =
         "Developing well. Stay focused on one correction at a time.";
+
     }
 
     else{
+
       status =
         "Improvement phase. Follow the recommended focus and repeat the drill.";
+
     }
 
   }
 
   set("statusText",status);
 
-  /* AUTOMATIC PERSONAL AI VOICE COACH */
+  /* AUTOMATIC AI VOICE COACH */
 
   const supported =
     "speechSynthesis" in window &&
@@ -841,7 +925,6 @@ body{
     : null;
 
   const voiceToggle = get("voiceToggle");
-  const voiceStatus = get("voiceStatus");
 
   let voiceEnabled = true;
   let selectedVoice = null;
@@ -849,9 +932,18 @@ body{
   let activeSection = null;
   let activeUtterance = null;
 
-  const spokenName = playerFirstName || "player";
+  /* NATURAL DARTIQ PRONUNCIATION */
 
-  /* SELECT AN ENGLISH MALE VOICE IF AVAILABLE */
+  function prepareSpeech(text){
+
+    return String(text)
+      .replace(/\bDARTIQ\b/gi,"Dart eye cue")
+      .replace(/\s+/g," ")
+      .trim();
+
+  }
+
+  /* PREFER ENGLISH MALE VOICE */
 
   function chooseVoice(){
 
@@ -863,7 +955,7 @@ body{
       /^en([-_]|$)/i.test(v.lang)
     );
 
-    const malePatterns = [
+    const preferred = [
       /microsoft guy/i,
       /microsoft andrew/i,
       /microsoft david/i,
@@ -880,17 +972,19 @@ body{
       /\bmale\b/i
     ];
 
-    for(const pattern of malePatterns){
+    for(const pattern of preferred){
 
       const match = english.find(v =>
         pattern.test(v.name)
       );
 
-      if(match) return match;
+      if(match){
+        return match;
+      }
 
     }
 
-    return english.find(v => v.default) ||
+    return english.find(v=>v.default) ||
            english[0] ||
            null;
 
@@ -900,7 +994,7 @@ body{
 
     selectedVoice = chooseVoice();
 
-    if(typeof synth.addEventListener === "function"){
+    if(typeof synth.addEventListener==="function"){
 
       synth.addEventListener("voiceschanged",()=>{
         selectedVoice = chooseVoice();
@@ -910,7 +1004,7 @@ body{
 
   }
 
-  /* SPEAK TEXT */
+  /* SPEAK USING NATURAL BRAND PRONUNCIATION */
 
   function speak(text){
 
@@ -920,8 +1014,12 @@ body{
 
     selectedVoice = chooseVoice();
 
+    const spokenText = prepareSpeech(text);
+
+    if(!spokenText) return;
+
     const utterance =
-      new SpeechSynthesisUtterance(text);
+      new SpeechSynthesisUtterance(spokenText);
 
     activeUtterance = utterance;
 
@@ -957,7 +1055,12 @@ body{
       activeUtterance = null;
 
       if(voiceEnabled){
-        set("voiceStatus","Automatic voice coaching active");
+
+        set(
+          "voiceStatus",
+          "Automatic voice coaching active"
+        );
+
       }
 
     };
@@ -972,10 +1075,14 @@ body{
 
         set(
           "voiceStatus",
-          "Tap a dashboard section to start voice coaching"
+          "Open a section to activate voice coaching"
         );
 
-      }else if(voiceEnabled && event.error !== "canceled"){
+      }else if(
+        voiceEnabled &&
+        event.error !== "canceled" &&
+        event.error !== "interrupted"
+      ){
 
         set(
           "voiceStatus",
@@ -990,12 +1097,13 @@ body{
 
   }
 
-  /* AUTOMATIC PERSONAL GREETING */
+  /* PERSONALIZED AUTOMATIC GREETING */
 
   function welcomeMessage(){
 
     let message = playerFirstName
-      ? "Hello "+spokenName+". Welcome back to your DARTIQ Performance Dashboard. "
+      ? "Hello "+spokenName+
+        ". Welcome back to your DARTIQ Performance Dashboard. "
       : "Welcome to your DARTIQ Performance Dashboard. ";
 
     if(d.score !== "--"){
@@ -1007,7 +1115,8 @@ body{
     }
 
     if(
-      d.insight !== "Your AI insight will appear here."
+      d.insight !==
+      "Your AI insight will appear here."
     ){
 
       message +=
@@ -1025,7 +1134,7 @@ body{
     }
 
     message +=
-      "Open any section to hear your individual performance feedback, statistics, goals and recommendations.";
+      "Open any section to hear your individual performance feedback, statistics, goals, and coaching recommendations.";
 
     return message;
 
@@ -1033,21 +1142,33 @@ body{
 
   function automaticWelcome(){
 
-    if(!voiceEnabled || voiceHasStarted) return;
+    if(
+      !supported ||
+      !voiceEnabled ||
+      voiceHasStarted
+    ){
+      return;
+    }
 
     speak(welcomeMessage());
 
   }
 
-  /* AUTOMATIC SECTION INSTRUCTIONS */
+  /* AUTOMATIC SPOKEN SECTION FEEDBACK */
 
   function sectionMessage(sectionId){
 
-    const value = id => get(id).textContent.trim();
+    const value = id =>
+      get(id).textContent.trim();
 
     const spokenValue = id => {
+
       const v = value(id);
-      return v === "--" ? "not available" : v;
+
+      return v === "--"
+        ? "not available"
+        : v;
+
     };
 
     const intro = playerFirstName
@@ -1126,23 +1247,24 @@ body{
 
   }
 
-  /* VOICE ENABLED AUTOMATICALLY */
+  /* AUTOMATIC VOICE ACTIVATION */
 
   if(!supported){
 
     voiceEnabled = false;
 
     voiceToggle.disabled = true;
+
     voiceToggle.textContent = "UNAVAILABLE";
 
     set(
       "voiceStatus",
-      "Voice is not supported by this browser"
+      "Speech is not supported by this browser"
     );
 
   }else{
 
-    /* TRY SPEAKING ON DASHBOARD LOAD */
+    /* ATTEMPT AUTOMATIC GREETING */
 
     window.addEventListener("load",()=>{
 
@@ -1152,7 +1274,7 @@ body{
 
     },{once:true});
 
-    /* FALLBACK IF BROWSER REQUIRES INTERACTION */
+    /* BROWSER INTERACTION FALLBACK */
 
     function gestureFallback(event){
 
@@ -1181,7 +1303,7 @@ body{
       true
     );
 
-    /* AUTOMATIC VOICE WHEN A SECTION OPENS */
+    /* AUTOMATIC SPEECH WHEN SECTIONS OPEN */
 
     document.querySelectorAll(".panel").forEach(panel=>{
 
@@ -1211,7 +1333,7 @@ body{
 
     });
 
-    /* OPTIONAL MUTE CONTROL */
+    /* OPTIONAL MUTE BUTTON */
 
     voiceToggle.addEventListener("click",()=>{
 
