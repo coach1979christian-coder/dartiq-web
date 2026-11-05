@@ -18,16 +18,14 @@
   --muted:#9fb3c7;
 }
 
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 html{
   margin:0;
   padding:0;
   width:100%;
   min-height:100%;
-  background:#050b18 !important;
+  background:#050b18!important;
   color-scheme:dark;
 }
 
@@ -37,22 +35,17 @@ body{
   width:100%;
   min-height:100vh;
   overflow-x:hidden;
-  background:#050b18 !important;
+  background:#050b18!important;
   color:var(--text);
   font-family:Inter,Arial,Helvetica,sans-serif;
 }
 
 .page{
-  display:flex;
   width:100%;
   min-height:100vh;
   padding:5px;
   background:
-    radial-gradient(
-      circle at 20% 0%,
-      rgba(41,185,255,.09),
-      transparent 35%
-    ),
+    radial-gradient(circle at 20% 0%,rgba(41,185,255,.09),transparent 35%),
     linear-gradient(180deg,#07101e,#050b18);
 }
 
@@ -65,23 +58,22 @@ body{
   background:linear-gradient(180deg,#07101e,#050b18);
   border:1px solid rgba(41,185,255,.28);
   border-radius:18px;
-  box-shadow:0 0 18px rgba(41,185,255,.08);
 }
 
-/* DASHBOARD HEADING */
+/* HEADER */
 
 .top{
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:10px;
-  padding:8px 3px 12px;
+  padding:8px 3px 14px;
 }
 
 .brand{
   display:flex;
   align-items:center;
-  gap:8px;
+  gap:9px;
   min-width:0;
 }
 
@@ -91,15 +83,15 @@ body{
   flex-shrink:0;
   border-radius:50%;
   background:var(--blue);
-  box-shadow:0 0 12px rgba(41,185,255,.9);
+  box-shadow:0 0 12px var(--blue);
 }
 
 .brand strong{
   font-size:12px;
-  line-height:1.4;
-  letter-spacing:.07em;
-  color:#83d5ff;
   font-weight:900;
+  color:#83d5ff;
+  letter-spacing:.07em;
+  line-height:1.4;
 }
 
 .live{
@@ -112,78 +104,69 @@ body{
   background:rgba(41,185,255,.08);
 }
 
-/* AI MALE VOICE */
+/* AUTOMATIC AI VOICE */
 
 .voice-panel{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  flex-wrap:wrap;
   gap:10px;
-  padding:12px;
   margin-bottom:12px;
-  border:1px solid rgba(41,185,255,.32);
+  padding:12px;
+  border:1px solid rgba(41,185,255,.35);
   border-radius:13px;
   background:linear-gradient(135deg,#10233c,#091525);
 }
 
 .voice-info{
   flex:1;
-  min-width:130px;
+  min-width:0;
 }
 
 .voice-title{
-  font-size:12px;
-  font-weight:900;
-  letter-spacing:.07em;
   color:#83d5ff;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.06em;
 }
 
-.voice-description{
+.voice-player{
   margin-top:5px;
+  color:white;
+  font-size:12px;
+  font-weight:800;
+  overflow-wrap:anywhere;
+}
+
+.voice-status{
+  margin-top:4px;
+  color:var(--muted);
   font-size:10px;
   line-height:1.4;
-  color:var(--muted);
-}
-
-.voice-actions{
-  display:flex;
-  align-items:center;
-  gap:6px;
 }
 
 .voice-button{
+  flex-shrink:0;
   border:1px solid var(--blue);
   border-radius:999px;
-  background:rgba(41,185,255,.1);
+  background:rgba(41,185,255,.12);
   color:#83d5ff;
-  padding:9px 12px;
-  font-family:inherit;
   font-size:10px;
   font-weight:900;
+  font-family:inherit;
+  padding:10px 12px;
   cursor:pointer;
 }
 
-.voice-button.active{
-  color:#04101c;
-  background:var(--blue);
-  box-shadow:0 0 12px rgba(41,185,255,.25);
+.voice-button.muted{
+  border-color:#506579;
+  color:#9fb3c7;
+  background:rgba(255,255,255,.04);
 }
 
-.voice-button:disabled{
-  opacity:.45;
-  cursor:not-allowed;
-}
-
-.voice-button:focus-visible{
-  outline:2px solid white;
-  outline-offset:3px;
-}
-
-/* INDEPENDENT COLLAPSIBLE PANELS */
+/* SEPARATE COLLAPSIBLE PANELS */
 
 .panel{
-  width:100%;
   margin-bottom:9px;
   background:linear-gradient(180deg,var(--panel2),var(--panel));
   border:1px solid var(--line);
@@ -215,14 +198,15 @@ body{
   content:"";
 }
 
-.panel-header:focus-visible{
+.panel-header:focus-visible,
+.voice-button:focus-visible{
   outline:2px solid var(--blue);
   outline-offset:-3px;
 }
 
 .panel[open] .panel-header{
-  background:rgba(41,185,255,.09);
   border-bottom:1px solid var(--line);
+  background:rgba(41,185,255,.09);
 }
 
 .panel-title{
@@ -292,7 +276,7 @@ body{
   font-size:54px;
   margin:10px 0;
   font-weight:900;
-  color:white;
+  color:#fff;
   text-shadow:0 0 18px rgba(41,185,255,.35);
 }
 
@@ -328,7 +312,7 @@ body{
   overflow-wrap:anywhere;
 }
 
-/* PERFORMANCE STATISTICS */
+/* STATISTICS */
 
 .stats{
   display:grid;
@@ -337,8 +321,8 @@ body{
 }
 
 .stat{
-  padding:11px;
   min-width:0;
+  padding:11px;
   background:linear-gradient(180deg,#102038,#0b1728);
   border:1px solid var(--line);
   border-radius:12px;
@@ -356,7 +340,6 @@ body{
 .stat .value{
   margin-top:7px;
   font-size:22px;
-  line-height:1.1;
   font-weight:900;
   color:var(--blue);
   overflow-wrap:anywhere;
@@ -373,8 +356,8 @@ body{
 
 .status{
   display:flex;
-  gap:10px;
   align-items:flex-start;
+  gap:10px;
 }
 
 .status-badge{
@@ -402,47 +385,17 @@ body{
 /* MOBILE */
 
 @media(max-width:430px){
-
-  .wrap{
-    padding:10px;
-  }
-
-  .brand strong{
-    font-size:10.5px;
-    letter-spacing:.045em;
-  }
-
-  .panel-header{
-    padding:14px 12px;
-  }
-
-  .panel-title{
-    font-size:11.5px;
-  }
-
-  .panel-content{
-    padding:11px;
-  }
-
-  .stats{
-    grid-template-columns:repeat(2,minmax(0,1fr));
-  }
-
-  .stat{
-    padding:10px;
-  }
-
-  .stat .value{
-    font-size:20px;
-  }
-
-  .score{
-    font-size:48px;
-  }
-
-  .voice-button{
-    padding:9px 10px;
-  }
+  .wrap{padding:10px}
+  .brand strong{font-size:10.5px;letter-spacing:.04em}
+  .panel-header{padding:14px 12px}
+  .panel-title{font-size:11.5px}
+  .panel-content{padding:11px}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stat{padding:10px}
+  .stat .value{font-size:20px}
+  .score{font-size:48px}
+  .voice-panel{padding:10px}
+  .voice-button{padding:9px}
 }
 </style>
 </head>
@@ -452,266 +405,258 @@ body{
 <div class="page">
 <main class="wrap">
 
-  <!-- MAIN HEADER -->
+<header class="top">
 
-  <header class="top">
+  <div class="brand">
+    <span class="dot"></span>
+    <strong>DARTIQ PERFORMANCE DASHBOARD</strong>
+  </div>
 
-    <div class="brand">
-      <span class="dot"></span>
-      <strong>DARTIQ PERFORMANCE DASHBOARD</strong>
+  <span class="live">LIVE</span>
+
+</header>
+
+<!-- AUTOMATIC PERSONAL AI VOICE -->
+
+<section class="voice-panel">
+
+  <div class="voice-info">
+
+    <div class="voice-title">
+      🔊 DARTIQ AI VOICE COACH
     </div>
 
-    <span class="live">LIVE</span>
-
-  </header>
-
-  <!-- AI VOICE CONTROL -->
-
-  <section class="voice-panel">
-
-    <div class="voice-info">
-
-      <div class="voice-title">
-        🔊 DARTIQ AI VOICE COACH
-      </div>
-
-      <div class="voice-description" id="voiceStatus">
-        Enable voice to hear your performance information.
-      </div>
-
+    <div class="voice-player" id="playerGreeting">
+      DARTIQ Player
     </div>
 
-    <div class="voice-actions">
-
-      <button
-        class="voice-button"
-        id="voiceToggle"
-        type="button"
-        aria-pressed="false">
-        VOICE OFF
-      </button>
-
-      <button
-        class="voice-button"
-        id="voiceReplay"
-        type="button"
-        disabled>
-        REPLAY
-      </button>
-
+    <div class="voice-status" id="voiceStatus" aria-live="polite">
+      Automatic voice coaching enabled
     </div>
 
-  </section>
+  </div>
 
-  <!-- 1. AI COACH SCORE -->
+  <button
+    class="voice-button"
+    id="voiceToggle"
+    type="button"
+    aria-pressed="false">
+    🔊 MUTE
+  </button>
 
-  <details class="panel" id="section-score">
+</section>
 
-    <summary class="panel-header">
+<!-- AI COACH SCORE -->
 
-      <span class="panel-title">
-        <span class="panel-icon">🎯</span>
-        AI Coach Score
-      </span>
+<details class="panel" id="section-score">
 
-      <span class="panel-arrow" aria-hidden="true">
-        <span class="chevron"></span>
-      </span>
+  <summary class="panel-header">
 
-    </summary>
+    <span class="panel-title">
+      <span class="panel-icon">🎯</span>
+      AI Coach Score
+    </span>
 
-    <div class="panel-content">
+    <span class="panel-arrow" aria-hidden="true">
+      <span class="chevron"></span>
+    </span>
 
-      <div class="score-card">
+  </summary>
 
-        <div class="kicker">AI COACH SCORE</div>
+  <div class="panel-content">
 
-        <div class="score" id="score">--</div>
+    <div class="score-card">
 
-        <div class="grade" id="grade">NO DATA</div>
+      <div class="kicker">AI COACH SCORE</div>
 
-      </div>
+      <div class="score" id="score">--</div>
+
+      <div class="grade" id="grade">NO DATA</div>
 
     </div>
 
-  </details>
+  </div>
 
-  <!-- 2. AI INSIGHT -->
+</details>
 
-  <details class="panel" id="section-insight">
+<!-- AI INSIGHT -->
 
-    <summary class="panel-header">
+<details class="panel" id="section-insight">
 
-      <span class="panel-title">
-        <span class="panel-icon">🧠</span>
-        AI Insight
-      </span>
+  <summary class="panel-header">
 
-      <span class="panel-arrow" aria-hidden="true">
-        <span class="chevron"></span>
-      </span>
+    <span class="panel-title">
+      <span class="panel-icon">🧠</span>
+      AI Insight
+    </span>
 
-    </summary>
+    <span class="panel-arrow" aria-hidden="true">
+      <span class="chevron"></span>
+    </span>
 
-    <div class="panel-content">
+  </summary>
 
-      <div class="insight" id="insight">
-        Your AI insight will appear here.
-      </div>
+  <div class="panel-content">
 
-      <div class="focus" id="focus">
-        Focus: Not available
-      </div>
-
+    <div class="insight" id="insight">
+      Your AI insight will appear here.
     </div>
 
-  </details>
+    <div class="focus" id="focus">
+      Focus: Not available
+    </div>
 
-  <!-- 3. PERFORMANCE STATISTICS -->
+  </div>
 
-  <details class="panel" id="section-statistics">
+</details>
 
-    <summary class="panel-header">
+<!-- PERFORMANCE STATISTICS -->
 
-      <span class="panel-title">
-        <span class="panel-icon">📊</span>
-        Performance Statistics
-      </span>
+<details class="panel" id="section-statistics">
 
-      <span class="panel-arrow" aria-hidden="true">
-        <span class="chevron"></span>
-      </span>
+  <summary class="panel-header">
 
-    </summary>
+    <span class="panel-title">
+      <span class="panel-icon">📊</span>
+      Performance Statistics
+    </span>
 
-    <div class="panel-content">
+    <span class="panel-arrow" aria-hidden="true">
+      <span class="chevron"></span>
+    </span>
 
-      <div class="stats">
+  </summary>
 
-        <div class="stat">
-          <div class="name">Best Avg</div>
-          <div class="value" id="bestavg">--</div>
-        </div>
+  <div class="panel-content">
 
-        <div class="stat">
-          <div class="name">Sessions</div>
-          <div class="value" id="sessions">--</div>
-        </div>
+    <div class="stats">
 
-        <div class="stat">
-          <div class="name">High Checkout</div>
-          <div class="value" id="highcheckout">--</div>
-        </div>
+      <div class="stat">
+        <div class="name">Best Avg</div>
+        <div class="value" id="bestavg">--</div>
+      </div>
 
-        <div class="stat">
-          <div class="name">First 9 Avg</div>
-          <div class="value" id="first9">--</div>
-        </div>
+      <div class="stat">
+        <div class="name">Sessions</div>
+        <div class="value" id="sessions">--</div>
+      </div>
 
-        <div class="stat">
-          <div class="name">Checkout %</div>
-          <div class="value" id="checkoutpct">--</div>
-        </div>
+      <div class="stat">
+        <div class="name">High Checkout</div>
+        <div class="value" id="highcheckout">--</div>
+      </div>
 
-        <div class="stat">
-          <div class="name">180s</div>
-          <div class="value" id="total180">--</div>
-        </div>
+      <div class="stat">
+        <div class="name">First 9 Avg</div>
+        <div class="value" id="first9">--</div>
+      </div>
 
+      <div class="stat">
+        <div class="name">Checkout %</div>
+        <div class="value" id="checkoutpct">--</div>
+      </div>
+
+      <div class="stat">
+        <div class="name">180s</div>
+        <div class="value" id="total180">--</div>
       </div>
 
     </div>
 
-  </details>
+  </div>
 
-  <!-- 4. NEXT GOAL -->
+</details>
 
-  <details class="panel" id="section-goal">
+<!-- NEXT GOAL -->
 
-    <summary class="panel-header">
+<details class="panel" id="section-goal">
 
-      <span class="panel-title">
-        <span class="panel-icon">🎯</span>
-        Next Goal
-      </span>
+  <summary class="panel-header">
 
-      <span class="panel-arrow" aria-hidden="true">
-        <span class="chevron"></span>
-      </span>
+    <span class="panel-title">
+      <span class="panel-icon">🎯</span>
+      Next Goal
+    </span>
 
-    </summary>
+    <span class="panel-arrow" aria-hidden="true">
+      <span class="chevron"></span>
+    </span>
 
-    <div class="panel-content">
+  </summary>
 
-      <div class="copy" id="goal">
-        No goal available.
+  <div class="panel-content">
+
+    <div class="copy" id="goal">
+      No goal available.
+    </div>
+
+  </div>
+
+</details>
+
+<!-- FOCUS THIS WEEK -->
+
+<details class="panel" id="section-weekly-focus">
+
+  <summary class="panel-header">
+
+    <span class="panel-title">
+      <span class="panel-icon">⚡</span>
+      Focus This Week
+    </span>
+
+    <span class="panel-arrow" aria-hidden="true">
+      <span class="chevron"></span>
+    </span>
+
+  </summary>
+
+  <div class="panel-content">
+
+    <div class="copy" id="focusCard">
+      No focus available.
+    </div>
+
+  </div>
+
+</details>
+
+<!-- AI PERFORMANCE STATUS -->
+
+<details class="panel" id="section-status">
+
+  <summary class="panel-header">
+
+    <span class="panel-title">
+      <span class="panel-icon">📈</span>
+      AI Performance Status
+    </span>
+
+    <span class="panel-arrow" aria-hidden="true">
+      <span class="chevron"></span>
+    </span>
+
+  </summary>
+
+  <div class="panel-content">
+
+    <div class="status">
+
+      <span class="status-badge">↗</span>
+
+      <div class="status-text" id="statusText">
+        Submit your next session to update this dashboard.
       </div>
 
     </div>
 
-  </details>
+  </div>
 
-  <!-- 5. FOCUS THIS WEEK -->
+</details>
 
-  <details class="panel" id="section-weekly-focus">
-
-    <summary class="panel-header">
-
-      <span class="panel-title">
-        <span class="panel-icon">⚡</span>
-        Focus This Week
-      </span>
-
-      <span class="panel-arrow" aria-hidden="true">
-        <span class="chevron"></span>
-      </span>
-
-    </summary>
-
-    <div class="panel-content">
-
-      <div class="copy" id="focusCard">
-        No focus available.
-      </div>
-
-    </div>
-
-  </details>
-
-  <!-- 6. AI PERFORMANCE STATUS -->
-
-  <details class="panel" id="section-status">
-
-    <summary class="panel-header">
-
-      <span class="panel-title">
-        <span class="panel-icon">📈</span>
-        AI Performance Status
-      </span>
-
-      <span class="panel-arrow" aria-hidden="true">
-        <span class="chevron"></span>
-      </span>
-
-    </summary>
-
-    <div class="panel-content">
-
-      <div class="status">
-
-        <div class="status-badge">↗</div>
-
-        <div class="status-text" id="statusText">
-          Submit your next session to update this dashboard.
-        </div>
-
-      </div>
-
-    </div>
-
-  </details>
-
-  <div class="footer">POWERED BY DARTIQ AI</div>
+<div class="footer">
+  POWERED BY DARTIQ AI
+</div>
 
 </main>
 </div>
@@ -719,7 +664,7 @@ body{
 <script>
 (function(){
 
-  /* GLIDE DATA */
+  /* GLIDE URL DATA */
 
   const p = new URLSearchParams(window.location.search);
 
@@ -731,26 +676,68 @@ body{
       return fallback;
     }
 
-    return raw.replace(/[{}]/g,"").trim() || fallback;
+    const cleaned = raw.replace(/[{}]/g,"").trim();
 
+    return cleaned || fallback;
   }
+
+  function getPlayerName(){
+
+    const keys = [
+      "playername",
+      "playerName",
+      "player_name",
+      "firstname",
+      "firstName",
+      "first_name",
+      "name",
+      "full_name",
+      "fullName",
+      "player"
+    ];
+
+    for(const key of keys){
+
+      const raw = p.get(key);
+
+      if(!raw) continue;
+
+      const trimmed = raw.trim();
+
+      if(
+        !trimmed ||
+        /^\{.*\}$/.test(trimmed) ||
+        /^(undefined|null|unknown|nan)$/i.test(trimmed)
+      ){
+        continue;
+      }
+
+      const cleaned = trimmed.replace(/[{}]/g,"").trim();
+
+      if(cleaned){
+        return cleaned.slice(0,80);
+      }
+
+    }
+
+    return "";
+  }
+
+  const playerFullName = getPlayerName();
+
+  const playerFirstName = playerFullName
+    ? playerFullName.split(/\s+/)[0]
+    : "";
 
   const d = {
 
     score:safe("score","--"),
-
     grade:safe("grade","NO DATA"),
-
     bestavg:safe("bestavg","--"),
-
     sessions:safe("sessions","--"),
-
     highcheckout:safe("highcheckout","--"),
-
     first9:safe("first9","--"),
-
     checkoutpct:safe("checkoutpct","--"),
-
     total180:safe("total180","--"),
 
     insight:safe(
@@ -776,6 +763,8 @@ body{
     get(id).textContent = value;
   };
 
+  /* POPULATE DASHBOARD */
+
   set("score",d.score);
   set("grade",d.grade.toUpperCase());
   set("bestavg",d.bestavg);
@@ -795,6 +784,13 @@ body{
   set("goal",d.goal);
   set("focus","Focus: "+d.focus);
   set("focusCard",d.focus);
+
+  set(
+    "playerGreeting",
+    playerFullName
+      ? "PLAYER: "+playerFullName
+      : "DARTIQ PLAYER"
+  );
 
   /* AI PERFORMANCE STATUS */
 
@@ -834,25 +830,30 @@ body{
 
   set("statusText",status);
 
-  /* AI VOICE COACH */
-
-  const voiceToggle = get("voiceToggle");
-  const voiceReplay = get("voiceReplay");
-  const voiceStatus = get("voiceStatus");
+  /* AUTOMATIC PERSONAL AI VOICE COACH */
 
   const supported =
     "speechSynthesis" in window &&
     "SpeechSynthesisUtterance" in window;
 
-  let voiceEnabled = false;
+  const synth = supported
+    ? window.speechSynthesis
+    : null;
+
+  const voiceToggle = get("voiceToggle");
+  const voiceStatus = get("voiceStatus");
+
+  let voiceEnabled = true;
+  let selectedVoice = null;
+  let voiceHasStarted = false;
   let activeSection = null;
-  let maleVoice = null;
+  let activeUtterance = null;
 
-  const synth = supported ? window.speechSynthesis : null;
+  const spokenName = playerFirstName || "player";
 
-  /* PREFER AVAILABLE ENGLISH MALE VOICES */
+  /* SELECT AN ENGLISH MALE VOICE IF AVAILABLE */
 
-  function selectMaleVoice(){
+  function chooseVoice(){
 
     if(!supported) return null;
 
@@ -862,24 +863,24 @@ body{
       /^en([-_]|$)/i.test(v.lang)
     );
 
-    const preferred = [
-      /microsoft david/i,
+    const malePatterns = [
       /microsoft guy/i,
       /microsoft andrew/i,
+      /microsoft david/i,
+      /microsoft mark/i,
       /google uk english male/i,
       /\bdaniel\b/i,
       /\balex\b/i,
       /\boliver\b/i,
-      /\baaron\b/i,
-      /\bfred\b/i,
       /\bbrian\b/i,
       /\bnathan\b/i,
-      /\breed\b/i,
-      /\brishi\b/i,
+      /\baaron\b/i,
+      /\bfred\b/i,
+      /\bre ed\b/i,
       /\bmale\b/i
     ];
 
-    for(const pattern of preferred){
+    for(const pattern of malePatterns){
 
       const match = english.find(v =>
         pattern.test(v.name)
@@ -897,100 +898,225 @@ body{
 
   if(supported){
 
-    maleVoice = selectMaleVoice();
+    selectedVoice = chooseVoice();
 
     if(typeof synth.addEventListener === "function"){
 
       synth.addEventListener("voiceschanged",()=>{
-        maleVoice = selectMaleVoice();
+        selectedVoice = chooseVoice();
       });
 
     }
 
   }
 
-  function speak(message){
+  /* SPEAK TEXT */
 
-    if(!supported || !voiceEnabled) return;
+  function speak(text){
+
+    if(!supported || !voiceEnabled || !text) return;
 
     synth.cancel();
 
-    if(!message || !message.trim()) return;
-
-    maleVoice = selectMaleVoice();
+    selectedVoice = chooseVoice();
 
     const utterance =
-      new SpeechSynthesisUtterance(message);
+      new SpeechSynthesisUtterance(text);
 
-    utterance.lang =
-      maleVoice ? maleVoice.lang : "en-US";
+    activeUtterance = utterance;
 
-    if(maleVoice){
-      utterance.voice = maleVoice;
+    utterance.lang = selectedVoice
+      ? selectedVoice.lang
+      : "en-US";
+
+    if(selectedVoice){
+      utterance.voice = selectedVoice;
     }
 
-    utterance.rate = 0.94;
-    utterance.pitch = 0.85;
+    utterance.rate = 0.92;
+    utterance.pitch = 0.82;
     utterance.volume = 1;
+
+    utterance.onstart = function(){
+
+      if(activeUtterance !== utterance) return;
+
+      voiceHasStarted = true;
+
+      set(
+        "voiceStatus",
+        "DARTIQ AI Coach is speaking"
+      );
+
+    };
+
+    utterance.onend = function(){
+
+      if(activeUtterance !== utterance) return;
+
+      activeUtterance = null;
+
+      if(voiceEnabled){
+        set("voiceStatus","Automatic voice coaching active");
+      }
+
+    };
+
+    utterance.onerror = function(event){
+
+      if(activeUtterance !== utterance) return;
+
+      activeUtterance = null;
+
+      if(event.error === "not-allowed"){
+
+        set(
+          "voiceStatus",
+          "Tap a dashboard section to start voice coaching"
+        );
+
+      }else if(voiceEnabled && event.error !== "canceled"){
+
+        set(
+          "voiceStatus",
+          "Voice is temporarily unavailable"
+        );
+
+      }
+
+    };
 
     synth.speak(utterance);
 
   }
 
-  /* VOICE READS ACTUAL DISPLAYED DATA */
+  /* AUTOMATIC PERSONAL GREETING */
 
-  function sectionSpeech(id){
+  function welcomeMessage(){
 
-    const value = key => get(key).textContent.trim();
+    let message = playerFirstName
+      ? "Hello "+spokenName+". Welcome back to your DARTIQ Performance Dashboard. "
+      : "Welcome to your DARTIQ Performance Dashboard. ";
 
-    const spokenValue = key => {
-      const v = value(key);
+    if(d.score !== "--"){
+
+      message +=
+        "Your current AI Coach Score is "+
+        d.score+". ";
+
+    }
+
+    if(
+      d.insight !== "Your AI insight will appear here."
+    ){
+
+      message +=
+        "Here is your latest AI insight. "+
+        d.insight+". ";
+
+    }
+
+    if(d.focus !== "No focus available."){
+
+      message +=
+        "Your current training focus is "+
+        d.focus+". ";
+
+    }
+
+    message +=
+      "Open any section to hear your individual performance feedback, statistics, goals and recommendations.";
+
+    return message;
+
+  }
+
+  function automaticWelcome(){
+
+    if(!voiceEnabled || voiceHasStarted) return;
+
+    speak(welcomeMessage());
+
+  }
+
+  /* AUTOMATIC SECTION INSTRUCTIONS */
+
+  function sectionMessage(sectionId){
+
+    const value = id => get(id).textContent.trim();
+
+    const spokenValue = id => {
+      const v = value(id);
       return v === "--" ? "not available" : v;
     };
 
-    switch(id){
+    const intro = playerFirstName
+      ? spokenName+", "
+      : "";
+
+    switch(sectionId){
 
       case "section-score":
+
         return (
-          "AI Coach Score. " +
-          "Your score is " + spokenValue("score") + ". " +
-          "Your grade is " + value("grade") + "."
+          intro+
+          "here is your AI Coach Score. "+
+          "Your current score is "+
+          spokenValue("score")+". "+
+          "Your performance grade is "+
+          value("grade")+"."
         );
 
       case "section-insight":
+
         return (
-          "AI Insight. " +
-          value("insight") + ". " +
-          value("focus") + "."
+          intro+
+          "here is your latest AI insight. "+
+          value("insight")+". "+
+          value("focus")+"."
         );
 
       case "section-statistics":
+
         return (
-          "Performance Statistics. " +
-          "Best average: " + spokenValue("bestavg") + ". " +
-          "Sessions: " + spokenValue("sessions") + ". " +
-          "Highest checkout: " + spokenValue("highcheckout") + ". " +
-          "First nine average: " + spokenValue("first9") + ". " +
-          "Checkout percentage: " + spokenValue("checkoutpct") + ". " +
-          "One hundred and eighties: " + spokenValue("total180") + "."
+          intro+
+          "here are your performance statistics. "+
+          "Best average: "+
+          spokenValue("bestavg")+". "+
+          "Total sessions: "+
+          spokenValue("sessions")+". "+
+          "Highest checkout: "+
+          spokenValue("highcheckout")+". "+
+          "First nine average: "+
+          spokenValue("first9")+". "+
+          "Checkout percentage: "+
+          spokenValue("checkoutpct")+". "+
+          "Total one hundred and eighties: "+
+          spokenValue("total180")+"."
         );
 
       case "section-goal":
+
         return (
-          "Your next goal. " +
-          value("goal")
+          intro+
+          "here is your next goal. "+
+          value("goal")+"."
         );
 
       case "section-weekly-focus":
+
         return (
-          "Your focus this week. " +
-          value("focusCard")
+          intro+
+          "here is your focus for this week. "+
+          value("focusCard")+"."
         );
 
       case "section-status":
+
         return (
-          "AI Performance Status. " +
-          value("statusText")
+          intro+
+          "here is your AI performance status. "+
+          value("statusText")+"."
         );
 
       default:
@@ -1000,53 +1126,123 @@ body{
 
   }
 
-  /* VOICE BUTTON */
+  /* VOICE ENABLED AUTOMATICALLY */
 
   if(!supported){
+
+    voiceEnabled = false;
 
     voiceToggle.disabled = true;
     voiceToggle.textContent = "UNAVAILABLE";
 
-    voiceStatus.textContent =
-      "Speech is not supported in this browser.";
+    set(
+      "voiceStatus",
+      "Voice is not supported by this browser"
+    );
 
   }else{
+
+    /* TRY SPEAKING ON DASHBOARD LOAD */
+
+    window.addEventListener("load",()=>{
+
+      setTimeout(()=>{
+        automaticWelcome();
+      },350);
+
+    },{once:true});
+
+    /* FALLBACK IF BROWSER REQUIRES INTERACTION */
+
+    function gestureFallback(event){
+
+      if(
+        !voiceEnabled ||
+        voiceHasStarted ||
+        event.target.closest(".voice-button") ||
+        event.target.closest("summary")
+      ){
+        return;
+      }
+
+      automaticWelcome();
+
+    }
+
+    document.addEventListener(
+      "pointerdown",
+      gestureFallback,
+      {capture:true,passive:true}
+    );
+
+    document.addEventListener(
+      "keydown",
+      gestureFallback,
+      true
+    );
+
+    /* AUTOMATIC VOICE WHEN A SECTION OPENS */
+
+    document.querySelectorAll(".panel").forEach(panel=>{
+
+      panel.addEventListener("toggle",()=>{
+
+        if(panel.open){
+
+          activeSection = panel.id;
+
+          if(voiceEnabled){
+
+            speak(sectionMessage(panel.id));
+
+          }
+
+        }else if(activeSection === panel.id){
+
+          activeSection = null;
+
+          if(voiceEnabled){
+            synth.cancel();
+          }
+
+        }
+
+      });
+
+    });
+
+    /* OPTIONAL MUTE CONTROL */
 
     voiceToggle.addEventListener("click",()=>{
 
       voiceEnabled = !voiceEnabled;
 
       voiceToggle.classList.toggle(
-        "active",
-        voiceEnabled
+        "muted",
+        !voiceEnabled
       );
 
       voiceToggle.setAttribute(
         "aria-pressed",
-        String(voiceEnabled)
+        String(!voiceEnabled)
       );
-
-      voiceToggle.textContent =
-        voiceEnabled ? "VOICE ON" : "VOICE OFF";
-
-      voiceReplay.disabled = !voiceEnabled;
 
       if(voiceEnabled){
 
-        voiceStatus.textContent =
-          "Voice enabled. Open a section to hear its information.";
+        voiceToggle.textContent = "🔊 MUTE";
+
+        set(
+          "voiceStatus",
+          "Automatic voice coaching active"
+        );
 
         if(activeSection){
 
-          speak(sectionSpeech(activeSection));
+          speak(sectionMessage(activeSection));
 
         }else{
 
-          speak(
-            "DARTIQ Performance Dashboard. " +
-            "Voice coaching is enabled. " +
-            "Select a section to hear your performance information."
-          );
+          speak(welcomeMessage());
 
         }
 
@@ -1054,57 +1250,14 @@ body{
 
         synth.cancel();
 
-        voiceStatus.textContent =
-          "Voice disabled. Enable to hear your performance information.";
+        voiceToggle.textContent = "🔇 UNMUTE";
 
-      }
-
-    });
-
-    /* REPLAY MOST RECENT SECTION */
-
-    voiceReplay.addEventListener("click",()=>{
-
-      if(!voiceEnabled) return;
-
-      if(activeSection){
-
-        speak(sectionSpeech(activeSection));
-
-      }else{
-
-        speak(
-          "DARTIQ Performance Dashboard. " +
-          "Open a section to hear your information."
+        set(
+          "voiceStatus",
+          "Voice coaching muted"
         );
 
       }
-
-    });
-
-    /* SPEAK WHEN EACH SECTION IS OPENED */
-
-    document.querySelectorAll(".panel").forEach(panel=>{
-
-      const summary = panel.querySelector("summary");
-
-      summary.addEventListener("click",()=>{
-
-        if(!panel.open){
-
-          activeSection = panel.id;
-
-          if(voiceEnabled){
-            speak(sectionSpeech(panel.id));
-          }
-
-        }else if(voiceEnabled){
-
-          synth.cancel();
-
-        }
-
-      });
 
     });
 
