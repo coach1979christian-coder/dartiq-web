@@ -3,9 +3,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#02070e">
-<title>DARTIQ | Match Engine V8.3</title>
+<title>DARTIQ | Match Engine V8.4</title>
 
 <style>
 :root{
@@ -20,26 +20,23 @@
  --red:#ff737b;
 }
 *{box-sizing:border-box}
-html,body{
- min-height:100%;
- background:var(--bg);
- color-scheme:dark;
-}
+html,body{min-height:100%;background:var(--bg)}
 body{
  margin:0;
+ padding:10px;
  color:var(--text);
  font-family:Arial,Helvetica,sans-serif;
- padding:10px;
 }
 button{font:inherit;cursor:pointer}
 button:disabled{opacity:.45;cursor:not-allowed}
+.hidden{display:none!important}
 .app{max-width:650px;margin:auto}
 .brand{text-align:center;padding:20px 0}
 .logo{
+ color:var(--blue);
  font-size:30px;
  font-weight:900;
  letter-spacing:5px;
- color:var(--blue);
  text-shadow:0 0 20px #39a9ff65;
 }
 .subtitle{
@@ -54,16 +51,16 @@ button:disabled{opacity:.45;cursor:not-allowed}
  background:linear-gradient(160deg,#0b2032,#06111d);
  border:1px solid var(--line);
  border-radius:18px;
- padding:18px;
+ padding:16px;
  margin-bottom:12px;
 }
 .center{text-align:center}
 h1{font-size:23px;margin:8px 0 15px}
 h2{font-size:18px;margin:8px 0 15px}
-.small{font-size:12px;color:var(--muted)}
+.small{font-size:12px;color:var(--muted);line-height:1.6}
 .eyebrow{
- font-size:10px;
  color:var(--blue);
+ font-size:10px;
  font-weight:900;
  letter-spacing:2px;
 }
@@ -72,7 +69,7 @@ h2{font-size:18px;margin:8px 0 15px}
  width:100%;
  border:0;
  border-radius:12px;
- padding:15px 12px;
+ padding:15px 10px;
  background:var(--blue);
  color:#001321;
  font-size:13px;
@@ -83,9 +80,9 @@ h2{font-size:18px;margin:8px 0 15px}
  background:var(--panel2);
  border:1px solid var(--line);
  border-radius:10px;
- color:white;
  padding:12px;
- font-weight:bold;
+ color:white;
+ font-weight:900;
 }
 .danger{
  background:#391722;
@@ -104,9 +101,9 @@ h2{font-size:18px;margin:8px 0 15px}
  margin:20px 0;
 }
 .format{
- padding:20px 3px;
- border-radius:12px;
+ padding:19px 3px;
  border:1px solid var(--line);
+ border-radius:12px;
  background:var(--panel2);
  color:white;
  font-weight:900;
@@ -114,7 +111,6 @@ h2{font-size:18px;margin:8px 0 15px}
 .format.selected{
  background:var(--blue);
  color:#001321;
- box-shadow:0 0 16px #39a9ff55;
 }
 .match-info{
  display:flex;
@@ -124,121 +120,76 @@ h2{font-size:18px;margin:8px 0 15px}
  font-size:11px;
  margin:12px 0;
 }
-.mode-row{
+.player-tag{
+ text-align:center;
+ font-size:12px;
+ color:var(--muted);
+ margin:8px 0;
+}
+.player-tag strong{color:white}
+.welcome-call{
+ background:#102a43;
+ border:1px solid var(--line);
+ border-radius:10px;
+ padding:12px;
+ color:var(--green);
+ font-size:12px;
+ text-align:center;
+ line-height:1.5;
+ margin:10px 0;
+}
+.voice-panel,.scoring-panel{
+ margin:12px 0;
+ background:#061421;
+ border:1px solid var(--line);
+ border-radius:12px;
+ overflow:hidden;
+}
+.voice-header,.scoring-header{
+ width:100%;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ background:transparent;
+ color:var(--blue);
+ border:0;
+ padding:14px;
+ font-size:12px;
+ font-weight:900;
+ text-align:left;
+}
+.voice-content,.scoring-content{padding:12px}
+.voice-top{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:8px;
+}
+.voice-status,.notice{
+ color:var(--muted);
+ font-size:11px;
+ line-height:1.6;
+ margin-top:10px;
+ text-align:center;
+}
+.voice-buttons,.mode-row{
  display:grid;
  grid-template-columns:1fr 1fr;
  gap:8px;
- margin:10px 0;
+ margin-top:10px;
 }
+.voice-buttons button{font-size:11px}
 .mode.active{
  background:var(--blue);
  color:#001321;
 }
-
-/* V8.3 DARTBOARD */
-.dartboard-layout{
- display:flex;
- justify-content:center;
- align-items:center;
- width:100%;
- margin:4px auto 8px;
-}
-.board-wrap{
- width:100%;
- max-width:420px;
- margin:auto;
- aspect-ratio:1;
-}
-#board{
- width:100%;
- height:100%;
- touch-action:manipulation;
- filter:drop-shadow(0 0 10px #39a9ff35);
-}
-
-/* V8.3 SCORE + CHECKOUT + LEGS */
-.score-checkout-row{
- display:grid;
- grid-template-columns:minmax(0,1fr) minmax(0,1.45fr) minmax(0,1fr);
- gap:6px;
- align-items:stretch;
- width:100%;
- margin:7px 0;
-}
-.score-box{
- display:flex;
- flex-direction:column;
- align-items:center;
- justify-content:center;
- min-width:0;
- min-height:65px;
- background:#061421;
- border:1px solid var(--line);
- border-radius:9px;
- padding:7px 3px;
+.caller-line{
+ color:var(--green);
+ font-size:12px;
  text-align:center;
+ padding-top:12px;
+ min-height:25px;
 }
-.score-label{
- color:var(--blue);
- font-size:9px;
- font-weight:900;
- letter-spacing:.5px;
-}
-.score-number{
- color:white;
- font-size:28px;
- font-weight:900;
- line-height:1.15;
- margin-top:4px;
-}
-.legs-number{
- color:white;
- font-size:24px;
- font-weight:900;
- line-height:1.15;
- margin-top:4px;
-}
-.score-sub{
- font-size:8px;
- color:var(--muted);
- margin-top:3px;
- font-weight:700;
-}
-
-/* SMALL CHECKOUT ROUTE */
-.checkout-panel{
- display:flex;
- flex-direction:column;
- align-items:center;
- justify-content:center;
- min-width:0;
- min-height:65px;
- background:#061421;
- border:1px solid var(--blue);
- border-radius:9px;
- padding:6px 4px;
- text-align:center;
- margin:0;
-}
-.checkout-label{
- color:var(--blue);
- font-size:8px;
- font-weight:900;
- letter-spacing:.5px;
- line-height:1.2;
-}
-.checkout-route{
- font-size:11px;
- font-weight:900;
- margin-top:4px;
- letter-spacing:0;
- line-height:1.2;
- overflow-wrap:anywhere;
-}
-.checkout-hint{
- display:none;
-}
-
 .visit{
  background:#020a12;
  border:1px solid var(--line);
@@ -257,9 +208,101 @@ h2{font-size:18px;margin:8px 0 15px}
 .dart{
  background:var(--panel2);
  border-radius:9px;
- text-align:center;
  padding:10px 3px;
+ text-align:center;
  font-size:12px;
+}
+
+/* DARTBOARD */
+.dartboard-layout{
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ width:100%;
+ margin:4px auto 8px;
+}
+.board-wrap{
+ width:100%;
+ max-width:420px;
+ aspect-ratio:1;
+ margin:auto;
+}
+#board{
+ width:100%;
+ height:100%;
+ touch-action:manipulation;
+ filter:drop-shadow(0 0 10px #39a9ff35);
+}
+
+/* SCOREBOARD BELOW DARTBOARD */
+.score-checkout-row{
+ display:grid;
+ grid-template-columns:minmax(0,1fr) minmax(0,1.45fr) minmax(0,1fr);
+ gap:6px;
+ width:100%;
+ margin:7px 0;
+}
+.score-box,.checkout-panel{
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ min-width:0;
+ min-height:64px;
+ background:#061421;
+ border:1px solid var(--line);
+ border-radius:9px;
+ padding:7px 3px;
+ text-align:center;
+}
+.checkout-panel{border-color:var(--blue)}
+.score-label,.checkout-label{
+ color:var(--blue);
+ font-size:9px;
+ font-weight:900;
+ letter-spacing:.5px;
+}
+.score-number{
+ font-size:28px;
+ font-weight:900;
+ margin-top:4px;
+}
+.legs-number{
+ font-size:24px;
+ font-weight:900;
+ margin-top:4px;
+}
+.score-sub{
+ font-size:8px;
+ color:var(--muted);
+ margin-top:3px;
+}
+.checkout-route{
+ font-size:11px;
+ font-weight:900;
+ line-height:1.2;
+ margin-top:4px;
+ overflow-wrap:anywhere;
+}
+.checkout-hint{display:none}
+
+/* THREE BUTTON ROW */
+.visit-actions{
+ display:grid;
+ grid-template-columns:.85fr 1.5fr .85fr;
+ gap:7px;
+ width:100%;
+ margin-top:14px;
+}
+.visit-actions button{
+ width:100%;
+ min-width:0;
+ min-height:50px;
+ padding:10px 4px;
+ margin:0;
+ font-size:11px;
+ font-weight:900;
+ border-radius:10px;
 }
 .keypad{
  display:grid;
@@ -271,7 +314,7 @@ h2{font-size:18px;margin:8px 0 15px}
  color:white;
  border:1px solid var(--line);
  border-radius:9px;
- padding:14px 5px;
+ padding:14px;
  font-size:20px;
  font-weight:900;
 }
@@ -287,14 +330,11 @@ h2{font-size:18px;margin:8px 0 15px}
  padding:12px 5px;
  text-align:center;
 }
-.stat strong{
- display:block;
- font-size:19px;
-}
+.stat strong{display:block;font-size:19px}
 .stat span{
  display:block;
- color:var(--muted);
  font-size:10px;
+ color:var(--muted);
  margin-top:5px;
 }
 .issue-grid{
@@ -314,94 +354,10 @@ h2{font-size:18px;margin:8px 0 15px}
 .issue.selected{
  border-color:var(--blue);
  background:#123b5c;
- box-shadow:0 0 10px #39a9ff30;
-}
-.notice{
- font-size:11px;
- color:var(--muted);
- text-align:center;
- line-height:1.5;
- margin:12px 0;
-}
-.voice-panel,.scoring-panel{
- margin:12px 0;
- background:#061421;
- border:1px solid var(--line);
- border-radius:12px;
- overflow:hidden;
-}
-.voice-header,.scoring-header{
- width:100%;
- display:flex;
- align-items:center;
- justify-content:space-between;
- gap:10px;
- background:transparent;
- color:var(--blue);
- border:0;
- padding:14px;
- font-size:12px;
- font-weight:900;
- text-align:left;
-}
-.voice-content,.scoring-content{
- padding:0 12px 12px;
-}
-.voice-top{
- display:flex;
- align-items:center;
- justify-content:space-between;
- gap:10px;
-}
-.voice-top span{
- color:var(--blue);
- font-size:12px;
- font-weight:900;
-}
-.voice-status{
- margin-top:8px;
- font-size:11px;
- color:var(--muted);
-}
-.voice-buttons{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:8px;
- margin-top:10px;
-}
-.voice-buttons button{font-size:11px}
-.caller-line{
- margin-top:10px;
- min-height:20px;
- color:var(--green);
- font-size:12px;
- font-weight:bold;
- text-align:center;
- line-height:1.5;
-}
-.player-tag{
- text-align:center;
- font-size:12px;
- color:var(--muted);
- margin:8px 0 12px;
-}
-.player-tag strong{color:white}
-.welcome-call{
- background:rgba(57,169,255,.07);
- border:1px solid var(--line);
- border-radius:10px;
- padding:12px;
- color:var(--green);
- font-size:12px;
- line-height:1.5;
- text-align:center;
- font-weight:bold;
- margin:10px 0;
 }
 .result{
  font-size:46px;
  font-weight:900;
- letter-spacing:3px;
  margin:16px 0;
 }
 .result.win{color:var(--green)}
@@ -412,37 +368,6 @@ h2{font-size:18px;margin:8px 0 15px}
  color:var(--blue);
  margin:12px 0 22px;
 }
-.visit-actions{
- display:grid;
- grid-template-columns:minmax(0,.85fr) minmax(0,1.5fr) minmax(0,.85fr);
- align-items:stretch;
- gap:7px;
- width:100%;
- margin-top:14px;
-}
-.visit-actions button{
- width:100%;
- min-width:0;
- min-height:50px;
- margin:0;
- padding:10px 4px;
- border-radius:10px;
- font-size:11px;
- font-weight:900;
- line-height:1.2;
- text-align:center;
- white-space:normal;
-}
-.visit-actions .primary{
- background:var(--blue);
- color:#001321;
-}
-.visit-actions .secondary{
- background:var(--panel2);
- border:1px solid var(--line);
- color:white;
-}
-.hidden{display:none!important}
 footer{
  text-align:center;
  color:#52748c;
@@ -461,14 +386,9 @@ footer{
  .checkout-label{font-size:7px}
  .checkout-route{font-size:10px}
  .visit-actions{gap:5px}
- .visit-actions button{
-  padding:10px 2px;
-  font-size:10px;
- }
+ .visit-actions button{font-size:10px;padding:10px 2px}
 }
 @media(max-width:390px){
- .stat strong{font-size:16px}
- .format{padding:17px 2px}
  .checkout-route{font-size:9px}
  .score-number{font-size:22px}
  .legs-number{font-size:20px}
@@ -484,6 +404,7 @@ footer{
  <div class="subtitle">INTELLIGENT DARTS PERFORMANCE</div>
 </header>
 
+<!-- READY TO PLAY -->
 <section id="setup" class="screen active">
  <div class="panel center">
   <div class="eyebrow">PLAYER JOURNEY</div>
@@ -491,198 +412,171 @@ footer{
   <p class="small">
    Start your match, track your performance and discover what to improve.
   </p>
-  <button class="primary" onclick="showScreen('formats')">
+  <button type="button" class="primary" onclick="startSession()">
    START SESSION
   </button>
  </div>
 </section>
 
+<!-- FORMAT -->
 <section id="formats" class="screen">
  <div class="panel center">
   <div class="eyebrow">MATCH SETUP</div>
   <h1>SELECT YOUR FORMAT</h1>
+
   <div class="format-grid">
    <button class="format" data-format="3" onclick="selectFormat(3)">BO3</button>
    <button class="format" data-format="5" onclick="selectFormat(5)">BO5</button>
    <button class="format" data-format="7" onclick="selectFormat(7)">BO7</button>
    <button class="format" data-format="9" onclick="selectFormat(9)">BO9</button>
   </div>
-  <p id="formatDescription" class="small">
-   Choose the number of legs.
-  </p>
+
+  <p id="formatDescription" class="small">Choose your match format.</p>
+
   <button id="startGame" class="primary hidden" onclick="startMatch()">
    START YOUR GAME FOR AI ANALYSIS
   </button>
  </div>
 </section>
 
+<!-- LIVE MATCH -->
 <section id="match" class="screen">
-<div class="panel">
+ <div class="panel">
 
- <div class="center">
-  <div class="eyebrow">LIVE MATCH</div>
-  <h2 id="matchTitle">BEST OF 5</h2>
-  <div class="player-tag">
-   PLAYER: <strong id="displayPlayerName">PLAYER</strong>
+  <div class="center">
+   <div class="eyebrow">LIVE MATCH</div>
+   <h2 id="matchTitle">BEST OF 5</h2>
+   <div class="player-tag">
+    PLAYER: <strong id="displayPlayerName">PLAYER</strong>
+   </div>
   </div>
- </div>
 
- <div class="welcome-call" id="matchWelcome">
-  Welcome to the DARTIQ oche.
- </div>
-
- <div class="voice-panel">
-  <button class="voice-header" onclick="toggleCallerPanel()">
-   <span>🎙 DARTIQ MASTER CALLER</span>
-   <span id="callerArrow">▼</span>
-  </button>
-  <div id="callerContent" class="voice-content hidden">
-   <div class="voice-top">
-    <span>VOICE CONTROLS</span>
-    <button id="voiceToggle" class="secondary" onclick="toggleVoice()">
-     VOICE ON
-    </button>
-   </div>
-   <div id="voiceStatus" class="voice-status">
-    Preparing caller...
-   </div>
-   <div class="voice-buttons">
-    <button class="secondary" onclick="testVoice()">
-     TEST CALLER
-    </button>
-    <button class="secondary" onclick="repeatLastCall()">
-     REPEAT LAST CALL
-    </button>
-   </div>
-   <div id="callerLine" class="caller-line"></div>
+  <div id="matchWelcome" class="welcome-call">
+   Welcome to the DARTIQ oche.
   </div>
- </div>
 
- <div class="scoring-panel">
-  <button class="scoring-header" onclick="toggleScoringPanel()">
-   <span>🎯 DARTBOARD / KEYPAD</span>
-   <span id="scoringArrow">▼</span>
-  </button>
-  <div id="scoringContent" class="scoring-content hidden">
-   <div class="mode-row">
-    <button id="boardModeButton"
-     class="secondary mode active"
-     onclick="setMode('board')">
-     🎯 DARTBOARD
-    </button>
-    <button id="keyModeButton"
-     class="secondary mode"
-     onclick="setMode('keypad')">
-     KEYPAD
-    </button>
-   </div>
+  <div class="voice-panel">
+   <button class="voice-header" onclick="toggleCallerPanel()">
+    <span>🎙 DARTIQ MASTER CALLER</span>
+    <span id="callerArrow">▼</span>
+   </button>
 
-   <div id="boardPanel"></div>
-
-   <div id="keypadPanel" class="hidden">
-    <div class="visit">
-     <strong id="keyValue">0</strong>
+   <div id="callerContent" class="voice-content hidden">
+    <div class="voice-top">
+     <span id="voiceStatus" class="small">CALLER READY</span>
+     <button id="voiceToggle" class="secondary" onclick="toggleVoice()">
+      VOICE ON
+     </button>
     </div>
-    <div class="keypad">
-     <button class="key" onclick="keyPress('1')">1</button>
-     <button class="key" onclick="keyPress('2')">2</button>
-     <button class="key" onclick="keyPress('3')">3</button>
-     <button class="key" onclick="keyPress('4')">4</button>
-     <button class="key" onclick="keyPress('5')">5</button>
-     <button class="key" onclick="keyPress('6')">6</button>
-     <button class="key" onclick="keyPress('7')">7</button>
-     <button class="key" onclick="keyPress('8')">8</button>
-     <button class="key" onclick="keyPress('9')">9</button>
-     <button class="key" onclick="keyClear()">C</button>
-     <button class="key" onclick="keyPress('0')">0</button>
-     <button class="key" onclick="keyBack()">⌫</button>
+
+    <div class="voice-buttons">
+     <button class="secondary" onclick="testVoice()">TEST CALLER</button>
+     <button class="secondary" onclick="repeatLastCall()">REPEAT LAST CALL</button>
     </div>
-    <p class="small center">
-     Enter your total visit score. A checkout requires confirmation.
-    </p>
-   </div>
-  </div>
- </div>
 
- <div class="match-info">
-  <span id="legInfo">LEG 1</span>
-  <span id="targetInfo">FIRST TO 3</span>
-  <span id="visitInfo">VISIT 1</span>
- </div>
-
- <div class="visit">
-  <div class="eyebrow">CURRENT VISIT SCORE</div>
-  <strong id="visitScore">0</strong>
- </div>
-
- <div class="darts">
-  <div class="dart" id="dart1">DART 1: –</div>
-  <div class="dart" id="dart2">DART 2: –</div>
-  <div class="dart" id="dart3">DART 3: –</div>
- </div>
-
- <!-- FULL WIDTH DARTBOARD -->
- <div class="dartboard-layout">
-  <div class="board-wrap">
-   <svg id="board"
-    viewBox="-230 -230 460 460"
-    aria-label="Interactive dartboard">
-   </svg>
-  </div>
- </div>
-
- <!-- SCORE AND LEGS IN FORMER CHECKOUT AREA -->
- <div class="score-checkout-row">
-  <div class="score-box">
-   <div class="score-label">REMAINING</div>
-   <div id="boardRemaining" class="score-number">501</div>
-  </div>
-
-  <div class="checkout-panel">
-   <div class="checkout-label">DARTIQ CHECKOUT</div>
-   <div id="checkoutRoute" class="checkout-route">
-    NO CHECKOUT AVAILABLE
-   </div>
-   <div id="checkoutHint" class="checkout-hint">
-    Checkout routes appear from 170 remaining.
+    <div id="callerLine" class="caller-line"></div>
    </div>
   </div>
 
-  <div class="score-box">
-   <div class="score-label">LEGS</div>
-   <div id="boardLegs" class="legs-number">0–0</div>
-   <div class="score-sub">YOU / OPP.</div>
+  <div class="scoring-panel">
+   <button class="scoring-header" onclick="toggleScoringPanel()">
+    <span>🎯 DARTBOARD / KEYPAD</span>
+    <span id="scoringArrow">▼</span>
+   </button>
+
+   <div id="scoringContent" class="scoring-content hidden">
+    <div class="mode-row">
+     <button id="boardModeButton" class="secondary mode active"
+      onclick="setMode('board')">DARTBOARD</button>
+     <button id="keyModeButton" class="secondary mode"
+      onclick="setMode('keypad')">KEYPAD</button>
+    </div>
+
+    <div id="keypadPanel" class="hidden">
+     <div class="visit">
+      <strong id="keyValue">0</strong>
+     </div>
+     <div class="keypad">
+      <button class="key" onclick="keyPress('1')">1</button>
+      <button class="key" onclick="keyPress('2')">2</button>
+      <button class="key" onclick="keyPress('3')">3</button>
+      <button class="key" onclick="keyPress('4')">4</button>
+      <button class="key" onclick="keyPress('5')">5</button>
+      <button class="key" onclick="keyPress('6')">6</button>
+      <button class="key" onclick="keyPress('7')">7</button>
+      <button class="key" onclick="keyPress('8')">8</button>
+      <button class="key" onclick="keyPress('9')">9</button>
+      <button class="key" onclick="keyClear()">C</button>
+      <button class="key" onclick="keyPress('0')">0</button>
+      <button class="key" onclick="keyBack()">⌫</button>
+     </div>
+    </div>
+   </div>
   </div>
+
+  <div class="match-info">
+   <span id="legInfo">LEG 1</span>
+   <span id="targetInfo">FIRST TO 3</span>
+   <span id="visitInfo">VISIT 1</span>
+  </div>
+
+  <div class="visit">
+   <div class="eyebrow">CURRENT VISIT SCORE</div>
+   <strong id="visitScore">0</strong>
+  </div>
+
+  <div class="darts">
+   <div class="dart" id="dart1">DART 1: –</div>
+   <div class="dart" id="dart2">DART 2: –</div>
+   <div class="dart" id="dart3">DART 3: –</div>
+  </div>
+
+  <div class="dartboard-layout">
+   <div class="board-wrap">
+    <svg id="board" viewBox="-230 -230 460 460"
+     aria-label="Interactive dartboard"></svg>
+   </div>
+  </div>
+
+  <div class="score-checkout-row">
+   <div class="score-box">
+    <div class="score-label">REMAINING</div>
+    <div id="boardRemaining" class="score-number">501</div>
+   </div>
+
+   <div class="checkout-panel">
+    <div class="checkout-label">DARTIQ CHECKOUT</div>
+    <div id="checkoutRoute" class="checkout-route">
+     NO CHECKOUT AVAILABLE
+    </div>
+    <div id="checkoutHint" class="checkout-hint"></div>
+   </div>
+
+   <div class="score-box">
+    <div class="score-label">LEGS</div>
+    <div id="boardLegs" class="legs-number">0–0</div>
+    <div class="score-sub">YOU / OPP.</div>
+   </div>
+  </div>
+
+  <div class="visit-actions">
+   <button class="secondary" id="missButton" onclick="addMiss()">MISS</button>
+   <button class="primary" id="confirmVisitButton" onclick="confirmVisit()">
+    CONFIRM VISIT
+   </button>
+   <button class="secondary" id="undoButton" onclick="undoVisitEntry()">UNDO</button>
+  </div>
+
+  <div id="message" class="notice"></div>
+
+  <button id="opponentWonButton" class="danger" onclick="opponentWonLeg()">
+   OPPONENT WON LEG
+  </button>
+
  </div>
-
- <div class="visit-actions">
-  <button id="missButton"
-   class="secondary"
-   onclick="addMiss()">
-   MISS
-  </button>
-  <button id="confirmVisitButton"
-   class="primary"
-   onclick="confirmVisit()">
-   CONFIRM VISIT
-  </button>
-  <button id="undoButton"
-   class="secondary"
-   onclick="undoVisitEntry()">
-   UNDO
-  </button>
- </div>
-
- <div id="message" class="notice"></div>
-
- <button id="opponentWonButton"
-  class="danger"
-  onclick="opponentWonLeg()">
-  OPPONENT WON LEG
- </button>
-</div>
 </section>
 
+<!-- MATCH COMPLETED -->
 <section id="completed" class="screen">
  <div class="panel center">
   <div class="eyebrow">MATCH COMPLETED</div>
@@ -691,39 +585,43 @@ footer{
   <div id="finalScore" class="final-score"></div>
   <div class="eyebrow">YOUR MATCH PERFORMANCE</div>
   <div id="finalSummary" class="stats"></div>
+
   <button class="primary" onclick="continueToMainIssue()">
    CONTINUE TO MAIN ISSUE SELECTION
   </button>
+
   <div id="completionMessage" class="notice"></div>
  </div>
 </section>
 
+<!-- MAIN ISSUE -->
 <section id="mainIssue" class="screen">
  <div class="panel center">
   <div class="eyebrow">POST-MATCH ANALYSIS</div>
   <h1>WHAT WAS YOUR MAIN ISSUE?</h1>
-  <p class="small">
-   Select the issue that affected your performance most.
-  </p>
+  <p class="small">Select the issue that affected your performance most.</p>
   <div id="issues" class="issue-grid"></div>
-  <button id="analysisButton"
-   class="primary hidden"
-   onclick="finishAnalysis()">
+
+  <button id="analysisButton" class="primary hidden" onclick="finishAnalysis()">
    GET MY AI ANALYSIS
   </button>
+
   <div id="analysisMessage" class="notice"></div>
  </div>
 </section>
 
+<!-- AI ANALYSIS -->
 <section id="analysis" class="screen">
  <div class="panel center">
   <div class="eyebrow">DARTIQ AI COACH</div>
   <h1>YOUR MATCH ANALYSIS</h1>
   <h2 id="analysisIssue"></h2>
   <p id="analysisAdvice" class="small"></p>
+
   <button class="primary" onclick="openTraining()">
    GO TO TODAY'S AI TRAINING
   </button>
+
   <div id="trainingMessage" class="notice"></div>
  </div>
 </section>
@@ -734,8 +632,8 @@ footer{
 <script>
 "use strict";
 
+/* PARAMETERS */
 const params=new URLSearchParams(location.search);
-
 const param=(...names)=>{
  for(const name of names){
   const value=params.get(name);
@@ -743,6 +641,8 @@ const param=(...names)=>{
  }
  return "";
 };
+
+const $=id=>document.getElementById(id);
 
 const WEBHOOK=
 "https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/5415568e-2eca-408f-a460-572b257d1cdf";
@@ -755,36 +655,17 @@ const MATCH_COMPLETION_WEBHOOK=
 
 const email=param("email");
 const playerID=param("player","playerid","userid");
+const playerName=(
+ param("playername","playerName","name","firstName")||"Player"
+).replace(/[{}]/g,"");
 
-function readPlayerName(){
- const value=param(
-  "playername","playerName","player_name",
-  "name","fullName","full_name",
-  "firstName","firstname"
- );
-
- if(!value)return "";
-
- if(
-  /^\{.*\}$/.test(value)||
-  /^(PLAYER|PLAYERNAME|undefined|null|unknown)$/i.test(value)
- ){
-  return "";
- }
-
- return value.replace(/[{}]/g,"").trim().slice(0,80);
-}
-
-const playerName=readPlayerName();
-const spokenName=playerName?
- playerName.split(/\s+/)[0]:"";
-
+const spokenName=playerName.split(/\s+/)[0];
 const language=param("lang","language")||"EN";
 const isDutch=language.toLowerCase().startsWith("nl");
 
-const $=id=>document.getElementById(id);
-const fmt=n=>Number(n).toFixed(2);
+const fmt=n=>Number(n||0).toFixed(2);
 
+/* STATE */
 let sessionID=param("session","sessionID");
 let bestOf=0;
 let legsToWin=0;
@@ -811,105 +692,723 @@ let highestCheckout=0;
 let visitNumber=0;
 let currentDarts=[];
 let keyInput="";
-
 let selectedIssue="";
 let finished=false;
 let saving=false;
-
-let matchStartedAt="";
-let nextLegAnnouncementPending=false;
-let matchResult="";
-let completionSyncConfirmed=false;
 let matchLaunching=false;
+let matchResult="";
+let matchStartedAt="";
+let completionSyncConfirmed=false;
+let nextLegAnnouncementPending=false;
 
+/* RECOVERY */
 function recoveryKey(){
- return "DARTIQ_MATCH_RECOVERY_V8_"+
-  (sessionID||"NO_SESSION")+"_"+
-  (email||playerID||"guest");
+ return "DARTIQ_MATCH_RECOVERY_V84_"+
+  (sessionID||"NO_SESSION")+"_"+(email||playerID||"guest");
 }
 
+function saveRecovery(stage){
+ if(!sessionID)return;
+
+ try{
+  sessionStorage.setItem(recoveryKey(),JSON.stringify({
+   stage,
+   sessionID,bestOf,legsToWin,
+   legsWon,opponentLegs,
+   totalPoints,totalDarts,
+   first9Points,first9Darts,
+   count100,count140,count180,
+   checkoutAttempts,checkoutHits,
+   highestCheckout,visitNumber,
+   selectedIssue,matchResult,
+   completionSyncConfirmed
+  }));
+ }catch(error){
+  console.warn("Recovery unavailable",error);
+ }
+}
+
+function restoreRecovery(){
+ if(!sessionID){
+  showScreen("setup");
+  return;
+ }
+
+ try{
+  const saved=JSON.parse(
+   sessionStorage.getItem(recoveryKey())||"null"
+  );
+
+  if(
+   !saved||
+   saved.sessionID!==sessionID||
+   !["completed","mainIssue","analysis"].includes(saved.stage)
+  ){
+   showScreen("setup");
+   return;
+  }
+
+  bestOf=saved.bestOf||0;
+  legsToWin=saved.legsToWin||0;
+  legsWon=saved.legsWon||0;
+  opponentLegs=saved.opponentLegs||0;
+  totalPoints=saved.totalPoints||0;
+  totalDarts=saved.totalDarts||0;
+  first9Points=saved.first9Points||0;
+  first9Darts=saved.first9Darts||0;
+  count100=saved.count100||0;
+  count140=saved.count140||0;
+  count180=saved.count180||0;
+  checkoutAttempts=saved.checkoutAttempts||0;
+  checkoutHits=saved.checkoutHits||0;
+  highestCheckout=saved.highestCheckout||0;
+  visitNumber=saved.visitNumber||0;
+  selectedIssue=saved.selectedIssue||"";
+  matchResult=saved.matchResult||"Lost";
+  completionSyncConfirmed=!!saved.completionSyncConfirmed;
+  finished=true;
+
+  renderMatchResults();
+
+  if(saved.stage==="analysis"&&selectedIssue){
+   renderAnalysis();
+   showScreen("analysis");
+  }else{
+   showScreen(saved.stage==="analysis"?"mainIssue":saved.stage);
+  }
+
+  if(selectedIssue){
+   document.querySelectorAll(".issue").forEach(button=>{
+    button.classList.toggle(
+     "selected",button.textContent===selectedIssue
+    );
+   });
+   $("analysisButton").classList.remove("hidden");
+  }
+
+ }catch(error){
+  showScreen("setup");
+ }
+}
+
+/* SCREEN NAVIGATION */
+function showScreen(id){
+ document.querySelectorAll(".screen").forEach(screen=>{
+  screen.classList.toggle("active",screen.id===id);
+ });
+ window.scrollTo(0,0);
+}
+
+/* START SESSION FIX */
+function startSession(){
+ if(finished){
+  finished=false;
+  selectedIssue="";
+ }
+
+ showScreen("formats");
+}
+
+/* MATCH FORMAT */
+function selectFormat(n){
+ if(![3,5,7,9].includes(n))return;
+
+ bestOf=n;
+ legsToWin=Math.floor(n/2)+1;
+
+ document.querySelectorAll(".format").forEach(button=>{
+  button.classList.toggle(
+   "selected",Number(button.dataset.format)===n
+  );
+ });
+
+ $("formatDescription").textContent=
+  "BEST OF "+bestOf+" • FIRST TO "+legsToWin+" LEGS";
+
+ $("startGame").classList.remove("hidden");
+}
+
+/* GLIDE */
+async function sendEvent(eventType,data={}){
+ try{
+  const url=eventType==="match_start"?
+   MATCH_START_WEBHOOK:
+   eventType==="match_complete"?
+   MATCH_COMPLETION_WEBHOOK:
+   WEBHOOK;
+
+  const response=await fetch(url,{
+   method:"POST",
+   headers:{"Content-Type":"application/json"},
+   body:JSON.stringify({
+    eventType,
+    sessionID,
+    email,
+    playerID,
+    language,
+    scoringSource:"Match",
+    bestOf,
+    matchFormat:"BO"+bestOf,
+    legsToWin,
+    ...data
+   })
+  });
+
+  if(!response.ok)throw Error("HTTP "+response.status);
+  return true;
+
+ }catch(error){
+  console.error("Glide sync:",error);
+  return false;
+ }
+}
+
+/* MASTER CALLER */
+const speechSupported=
+ "speechSynthesis" in window &&
+ "SpeechSynthesisUtterance" in window;
+
+let voiceEnabled=true;
+let callerVoice=null;
+let lastCall=[];
+
+function selectCallerVoice(){
+ if(!speechSupported)return;
+
+ const voices=speechSynthesis.getVoices();
+ const candidates=voices.filter(v=>
+  v.lang.toLowerCase().startsWith(isDutch?"nl":"en")
+ );
+
+ callerVoice=
+  candidates.find(v=>/daniel|david|george|ryan|guy|male/i.test(v.name))||
+  candidates[0]||null;
+}
+
+function numberWords(n){
+ n=Math.round(Number(n));
+
+ const units=[
+  "zero","one","two","three","four","five",
+  "six","seven","eight","nine","ten","eleven",
+  "twelve","thirteen","fourteen","fifteen",
+  "sixteen","seventeen","eighteen","nineteen"
+ ];
+ const tens=[
+  "","","twenty","thirty","forty",
+  "fifty","sixty","seventy","eighty","ninety"
+ ];
+
+ if(n<0)return "minus "+numberWords(-n);
+ if(n<20)return units[n];
+ if(n<100){
+  return tens[Math.floor(n/10)]+
+   (n%10?" "+units[n%10]:"");
+ }
+ if(n<1000){
+  return units[Math.floor(n/100)]+" hundred"+
+   (n%100?" and "+numberWords(n%100):"");
+ }
+ return String(n);
+}
+
+function speak(text,rate=.88){
+ lastCall=[{text,rate}];
+ $("callerLine").textContent=text;
+
+ if(!voiceEnabled||!speechSupported)return;
+
+ speechSynthesis.cancel();
+
+ const utterance=new SpeechSynthesisUtterance(
+  text.replace(/\bDARTIQ\b/gi,"Dart IQ")
+ );
+
+ utterance.lang=isDutch?"nl-NL":"en-GB";
+ utterance.rate=rate;
+ utterance.pitch=.8;
+
+ if(callerVoice)utterance.voice=callerVoice;
+
+ speechSynthesis.speak(utterance);
+}
+
+function repeatLastCall(){
+ if(lastCall.length){
+  speak(lastCall[0].text,lastCall[0].rate);
+ }
+}
+
+function testVoice(){
+ speak("Dart IQ master caller is ready. Game on!");
+}
+
+function toggleVoice(){
+ voiceEnabled=!voiceEnabled;
+ $("voiceToggle").textContent=voiceEnabled?
+  "VOICE ON":"VOICE OFF";
+
+ if(!voiceEnabled&&speechSupported){
+  speechSynthesis.cancel();
+ }
+}
+
+function toggleCallerPanel(){
+ const hidden=$("callerContent").classList.toggle("hidden");
+ $("callerArrow").textContent=hidden?"▼":"▲";
+}
+
+function toggleScoringPanel(){
+ const hidden=$("scoringContent").classList.toggle("hidden");
+ $("scoringArrow").textContent=hidden?"▼":"▲";
+}
+
+function announceWelcome(){
+ const text=
+  "Welcome "+spokenName+
+  " to the DARTIQ oche. "+
+  "You play best of "+bestOf+". Game on!";
+
+ $("matchWelcome").textContent=text;
+ speak(text);
+}
+
+function announceScore(score){
+ if(score===180){
+  speak("One hundred and eighty!",.75);
+ }else{
+  speak(numberWords(score));
+ }
+}
+
+function announceCheckout(matchWon){
+ speak(
+  matchWon?
+  "Game shot "+spokenName+"! And the match!":
+  "Game shot "+spokenName+"! And the leg!"
+ );
+}
+
+/* START MATCH */
+async function startMatch(){
+ if(!bestOf||matchLaunching)return;
+
+ matchLaunching=true;
+
+ if(!sessionID){
+  sessionID=typeof crypto.randomUUID==="function"?
+   crypto.randomUUID():
+   "MATCH-"+Date.now();
+ }
+
+ try{
+  sessionStorage.removeItem(recoveryKey());
+ }catch(error){}
+
+ remaining=501;
+ currentLeg=1;
+ legsWon=0;
+ opponentLegs=0;
+ totalPoints=0;
+ totalDarts=0;
+ first9Points=0;
+ first9Darts=0;
+ count100=0;
+ count140=0;
+ count180=0;
+ checkoutAttempts=0;
+ checkoutHits=0;
+ highestCheckout=0;
+ visitNumber=0;
+ currentDarts=[];
+ keyInput="";
+ finished=false;
+ selectedIssue="";
+ mode="board";
+
+ matchStartedAt=new Date().toISOString();
+
+ $("matchTitle").textContent="BEST OF "+bestOf;
+ $("targetInfo").textContent="FIRST TO "+legsToWin;
+ $("displayPlayerName").textContent=playerName;
+
+ updateInput();
+ updateStats();
+ showScreen("match");
+ announceWelcome();
+
+ const ok=await sendEvent("match_start",{
+  startedAt:matchStartedAt,
+  matchStatus:"In Progress"
+ });
+
+ matchLaunching=false;
+
+ if(!ok){
+  message("Match started. Glide sync not confirmed.");
+ }
+}
+
+/* DARTBOARD */
+const numbers=[
+ 20,1,18,4,13,6,10,15,2,17,
+ 3,19,7,16,8,11,14,9,12,5
+];
+
+const NS="http://www.w3.org/2000/svg";
+const board=$("board");
+
+function polar(r,a){
+ const rad=(a-90)*Math.PI/180;
+ return [r*Math.cos(rad),r*Math.sin(rad)];
+}
+
+function ringPath(r1,r2,a1,a2){
+ const p1=polar(r2,a1);
+ const p2=polar(r2,a2);
+ const p3=polar(r1,a2);
+ const p4=polar(r1,a1);
+
+ return `M${p1} A${r2} ${r2} 0 0 1 ${p2} L${p3} A${r1} ${r1} 0 0 0 ${p4} Z`;
+}
+
+function svgElement(tag,attributes){
+ const element=document.createElementNS(NS,tag);
+
+ for(const [key,value] of Object.entries(attributes)){
+  element.setAttribute(key,value);
+ }
+
+ board.appendChild(element);
+ return element;
+}
+
+function segment(r1,r2,a1,a2,color,n,m,label){
+ const element=svgElement("path",{
+  d:ringPath(r1,r2,a1,a2),
+  fill:color,
+  stroke:"#666",
+  "stroke-width":".65"
+ });
+
+ element.style.cursor="pointer";
+
+ element.addEventListener("click",()=>{
+  addDart(n,m,label);
+ });
+}
+
+function drawBoard(){
+ board.replaceChildren();
+
+ svgElement("circle",{
+  cx:0,cy:0,r:224,
+  fill:"#02070e",
+  stroke:"#39a9ff",
+  "stroke-width":3
+ });
+
+ numbers.forEach((n,i)=>{
+  const a=i*18;
+  const dark=i%2===0;
+  const single=dark?"#10151a":"#e2d6b8";
+  const multi=dark?"#c83c46":"#27865e";
+
+  segment(24,103,a-9,a+9,single,n,1,"S"+n);
+  segment(103,118,a-9,a+9,multi,n,3,"T"+n);
+  segment(118,178,a-9,a+9,single,n,1,"S"+n);
+  segment(178,195,a-9,a+9,multi,n,2,"D"+n);
+
+  const [x,y]=polar(211,a);
+
+  const text=svgElement("text",{
+   x,y,
+   fill:"#39a9ff",
+   "font-size":16,
+   "font-weight":900,
+   "text-anchor":"middle",
+   "dominant-baseline":"middle",
+   "pointer-events":"none"
+  });
+
+  text.textContent=n;
+ });
+
+ const outer=svgElement("circle",{
+  cx:0,cy:0,r:24,
+  fill:"#27865e",
+  stroke:"#ddd"
+ });
+ outer.addEventListener("click",()=>addDart(25,1,"25"));
+
+ const bull=svgElement("circle",{
+  cx:0,cy:0,r:10,
+  fill:"#c83c46",
+  stroke:"#ddd"
+ });
+ bull.addEventListener("click",()=>addDart(25,2,"BULL"));
+}
+
+/* SCORING INPUT */
+function message(text){
+ $("message").textContent=text;
+}
+
+function updateInput(){
+ const score=currentDarts.reduce((sum,d)=>sum+d.score,0);
+
+ $("visitScore").textContent=
+  mode==="board"?score:Number(keyInput||0);
+
+ $("keyValue").textContent=keyInput||"0";
+
+ for(let i=0;i<3;i++){
+  $("dart"+(i+1)).textContent=
+   "DART "+(i+1)+": "+
+   (currentDarts[i]?.label||"–");
+ }
+}
+
+function addDart(number,multiplier,label){
+ if(finished||saving||mode!=="board")return;
+
+ if(currentDarts.length>=3){
+  message("Confirm your visit first.");
+  return;
+ }
+
+ currentDarts.push({
+  number,
+  multiplier,
+  score:number*multiplier,
+  label
+ });
+
+ updateInput();
+}
+
+function addMiss(){
+ if(finished||saving)return;
+
+ if(mode==="board"){
+  addDart(0,0,"MISS");
+ }else if(keyInput===""){
+  keyInput="0";
+  updateInput();
+ }
+}
+
+function undoVisitEntry(){
+ if(finished||saving)return;
+
+ if(mode==="board"){
+  currentDarts.pop();
+ }else{
+  keyInput=keyInput.slice(0,-1);
+ }
+
+ updateInput();
+}
+
+function setMode(next){
+ if(saving||finished)return;
+ if(!["board","keypad"].includes(next))return;
+
+ mode=next;
+ currentDarts=[];
+ keyInput="";
+
+ $("keypadPanel").classList.toggle("hidden",mode!=="keypad");
+ $("boardModeButton").classList.toggle("active",mode==="board");
+ $("keyModeButton").classList.toggle("active",mode==="keypad");
+
+ updateInput();
+}
+
+function keyPress(n){
+ if(mode!=="keypad"||saving||finished)return;
+ if(keyInput.length>=3)return;
+
+ const next=keyInput+n;
+ if(Number(next)>180)return;
+
+ keyInput=next;
+ updateInput();
+}
+
+function keyClear(){
+ keyInput="";
+ updateInput();
+}
+
+function keyBack(){
+ keyInput=keyInput.slice(0,-1);
+ updateInput();
+}
+
+/* CHECKOUT ROUTES */
 const checkoutRoutes={
-170:"T20 → T20 → BULL",167:"T20 → T19 → BULL",
-164:"T20 → T18 → BULL",161:"T20 → T17 → BULL",
-160:"T20 → T20 → D20",158:"T20 → T20 → D19",
-157:"T20 → T19 → D20",156:"T20 → T20 → D18",
-155:"T20 → T19 → D19",154:"T20 → T18 → D20",
-153:"T20 → T19 → D18",152:"T20 → T20 → D16",
-151:"T20 → T17 → D20",150:"T20 → T18 → D18",
-149:"T20 → T19 → D16",148:"T20 → T16 → D20",
-147:"T20 → T17 → D18",146:"T20 → T18 → D16",
-145:"T20 → T15 → D20",144:"T20 → T20 → D12",
-143:"T20 → T17 → D16",142:"T20 → T14 → D20",
-141:"T20 → T19 → D12",140:"T20 → T20 → D10",
-139:"T20 → T13 → D20",138:"T20 → T18 → D12",
-137:"T20 → T19 → D10",136:"T20 → T20 → D8",
-135:"T20 → T17 → D12",134:"T20 → T14 → D16",
-133:"T20 → T19 → D8",132:"T20 → T16 → D12",
-131:"T20 → T13 → D16",130:"T20 → T20 → D5",
-129:"T19 → T16 → D12",128:"T18 → T14 → D16",
-127:"T20 → T17 → D8",126:"T19 → T19 → D6",
-125:"25 → T20 → D20",124:"T20 → T16 → D8",
-123:"T19 → T16 → D9",122:"T18 → T20 → D4",
-121:"T20 → T11 → D14",120:"T20 → S20 → D20",
-119:"T19 → T12 → D13",118:"T20 → S18 → D20",
-117:"T20 → S17 → D20",116:"T20 → S16 → D20",
-115:"T20 → S15 → D20",114:"T20 → S14 → D20",
-113:"T20 → S13 → D20",112:"T20 → S12 → D20",
-111:"T20 → S11 → D20",110:"T20 → S10 → D20",
-109:"T20 → S9 → D20",108:"T20 → S8 → D20",
-107:"T19 → S10 → D20",106:"T20 → S6 → D20",
-105:"T20 → S5 → D20",104:"T18 → S10 → D20",
-103:"T19 → S6 → D20",102:"T20 → S10 → D16",
-101:"T17 → S10 → D20",100:"T20 → D20",
-99:"T19 → S10 → D16",98:"T20 → D19",
-97:"T19 → D20",96:"T20 → D18",
-95:"T19 → D19",94:"T18 → D20",
-93:"T19 → D18",92:"T20 → D16",
-91:"T17 → D20",90:"T18 → D18",
-89:"T19 → D16",88:"T16 → D20",
-87:"T17 → D18",86:"T18 → D16",
-85:"T15 → D20",84:"T20 → D12",
-83:"T17 → D16",82:"BULL → D16",
-81:"T19 → D12",80:"T20 → D10",
-79:"T13 → D20",78:"T18 → D12",
-77:"T19 → D10",76:"T20 → D8",
-75:"T17 → D12",74:"T14 → D16",
-73:"T19 → D8",72:"T16 → D12",
-71:"T13 → D16",70:"T10 → D20",
-69:"T19 → D6",68:"T20 → D4",
-67:"T17 → D8",66:"T10 → D18",
-65:"T19 → D4",64:"T16 → D8",
-63:"T13 → D12",62:"T10 → D16",
-61:"T15 → D8",60:"S20 → D20",
-59:"S19 → D20",58:"S18 → D20",
-57:"S17 → D20",56:"S16 → D20",
-55:"S15 → D20",54:"S14 → D20",
-53:"S13 → D20",52:"S12 → D20",
-51:"S11 → D20",50:"BULL",
-49:"S9 → D20",48:"S16 → D16",
-47:"S7 → D20",46:"S6 → D20",
-45:"S5 → D20",44:"S12 → D16",
-43:"S3 → D20",42:"S10 → D16",
-41:"S9 → D16",40:"D20",
-39:"S7 → D16",38:"D19",
-37:"S5 → D16",36:"D18",
-35:"S3 → D16",34:"D17",
-33:"S1 → D16",32:"D16",
-31:"S15 → D8",30:"D15",
-29:"S13 → D8",28:"D14",
-27:"S11 → D8",26:"D13",
-25:"S9 → D8",24:"D12",
-23:"S7 → D8",22:"D11",
-21:"S5 → D8",20:"D10",
-19:"S3 → D8",18:"D9",
-17:"S1 → D8",16:"D8",
-15:"S7 → D4",14:"D7",
-13:"S5 → D4",12:"D6",
-11:"S3 → D4",10:"D5",
-9:"S1 → D4",8:"D4",
-7:"S3 → D2",6:"D3",
-5:"S1 → D2",4:"D2",
-3:"S1 → D1",2:"D1"
+170:"T20 T20 BULL",
+167:"T20 T19 BULL",
+164:"T20 T18 BULL",
+161:"T20 T17 BULL",
+160:"T20 T20 D20",
+158:"T20 T20 D19",
+157:"T20 T19 D20",
+156:"T20 T20 D18",
+155:"T20 T19 D19",
+154:"T20 T18 D20",
+153:"T20 T19 D18",
+152:"T20 T20 D16",
+151:"T20 T17 D20",
+150:"T20 T18 D18",
+149:"T20 T19 D16",
+148:"T20 T16 D20",
+147:"T20 T17 D18",
+146:"T20 T18 D16",
+145:"T20 T15 D20",
+144:"T20 T20 D12",
+143:"T20 T17 D16",
+142:"T20 T14 D20",
+141:"T20 T19 D12",
+140:"T20 T20 D10",
+139:"T20 T13 D20",
+138:"T20 T18 D12",
+137:"T20 T19 D10",
+136:"T20 T20 D8",
+135:"T20 T17 D12",
+134:"T20 T14 D16",
+133:"T20 T19 D8",
+132:"T20 T16 D12",
+131:"T20 T13 D16",
+130:"T20 T20 D5",
+129:"T19 T16 D12",
+128:"T18 T14 D16",
+127:"T20 T17 D8",
+126:"T19 T19 D6",
+125:"25 T20 D20",
+124:"T20 T16 D8",
+123:"T19 T16 D9",
+122:"T18 T20 D4",
+121:"T20 T11 D14",
+120:"T20 S20 D20",
+119:"T19 T12 D13",
+118:"T20 S18 D20",
+117:"T20 S17 D20",
+116:"T20 S16 D20",
+115:"T20 S15 D20",
+114:"T20 S14 D20",
+113:"T20 S13 D20",
+112:"T20 S12 D20",
+111:"T20 S11 D20",
+110:"T20 S10 D20",
+109:"T20 S9 D20",
+108:"T20 S8 D20",
+107:"T19 S10 D20",
+106:"T20 S6 D20",
+105:"T20 S5 D20",
+104:"T18 S10 D20",
+103:"T19 S6 D20",
+102:"T20 S10 D16",
+101:"T17 S10 D20",
+100:"T20 D20",
+98:"T20 D19",
+97:"T19 D20",
+96:"T20 D18",
+95:"T19 D19",
+94:"T18 D20",
+93:"T19 D18",
+92:"T20 D16",
+91:"T17 D20",
+90:"T18 D18",
+89:"T19 D16",
+88:"T16 D20",
+87:"T17 D18",
+86:"T18 D16",
+85:"T15 D20",
+84:"T20 D12",
+83:"T17 D16",
+82:"BULL D16",
+81:"T19 D12",
+80:"T20 D10",
+79:"T13 D20",
+78:"T18 D12",
+77:"T19 D10",
+76:"T20 D8",
+75:"T17 D12",
+74:"T14 D16",
+73:"T19 D8",
+72:"T16 D12",
+71:"T13 D16",
+70:"T10 D20",
+69:"T19 D6",
+68:"T20 D4",
+67:"T17 D8",
+66:"T10 D18",
+65:"T19 D4",
+64:"T16 D8",
+63:"T13 D12",
+62:"T10 D16",
+61:"T15 D8",
+60:"S20 D20",
+59:"S19 D20",
+58:"S18 D20",
+57:"S17 D20",
+56:"S16 D20",
+55:"S15 D20",
+54:"S14 D20",
+53:"S13 D20",
+52:"S12 D20",
+51:"S11 D20",
+50:"BULL",
+49:"S9 D20",
+48:"S16 D16",
+47:"S7 D20",
+46:"S6 D20",
+45:"S5 D20",
+44:"S12 D16",
+43:"S3 D20",
+42:"S10 D16",
+41:"S9 D16",
+40:"D20",
+39:"S7 D16",
+38:"D19",
+37:"S5 D16",
+36:"D18",
+35:"S3 D16",
+34:"D17",
+33:"S1 D16",
+32:"D16",
+31:"S15 D8",
+30:"D15",
+29:"S13 D8",
+28:"D14",
+27:"S11 D8",
+26:"D13",
+25:"S9 D8",
+24:"D12",
+23:"S7 D8",
+22:"D11",
+21:"S5 D8",
+20:"D10",
+19:"S3 D8",
+18:"D9",
+17:"S1 D8",
+16:"D8",
+15:"S7 D4",
+14:"D7",
+13:"S5 D4",
+12:"D6",
+11:"S3 D4",
+10:"D5",
+9:"S1 D4",
+8:"D4",
+7:"S3 D2",
+6:"D3",
+5:"S1 D2",
+4:"D2",
+3:"S1 D1",
+2:"D1"
 };
 
 function updateCheckoutRoute(){
@@ -917,10 +1416,527 @@ function updateCheckoutRoute(){
  const hint=$("checkoutHint");
 
  if(remaining>170){
-  route.textContent="NO CHECKOUT AVAILABLE";
-  hint.textContent="Checkout routes appear from 170 remaining.";
+  route.textContent="NO CHECKOUT";
+  hint.textContent="";
  }else if([169,168,166,165,163,162,159].includes(remaining)){
   route.textContent="NO 3-DART FINISH";
-  hint.textContent="Set up your preferred double.";
+  hint.textContent="";
  }else if(remaining===1){
   route.textContent="BUST";
+ }else if(remaining===0){
+  route.textContent="GAME SHOT";
+ }else{
+  route.textContent=checkoutRoutes[remaining]||"SET UP DOUBLE";
+ }
+}
+
+/* STATS */
+const average=()=>totalDarts?
+ totalPoints/totalDarts*3:0;
+
+const first9=()=>first9Darts?
+ first9Points/first9Darts*3:0;
+
+const checkoutPct=()=>checkoutAttempts?
+ checkoutHits/checkoutAttempts*100:0;
+
+function updateStats(){
+ $("boardRemaining").textContent=remaining;
+ $("boardLegs").textContent=legsWon+"–"+opponentLegs;
+ $("legInfo").textContent="LEG "+currentLeg;
+ $("visitInfo").textContent="VISIT "+(visitNumber+1);
+
+ updateCheckoutRoute();
+}
+
+function recordFirst9(score,darts,scores=[]){
+ const available=Math.max(0,9-first9Darts);
+ const take=Math.min(darts,available);
+
+ if(take<=0)return;
+
+ if(take===darts){
+  first9Points+=score;
+ }else if(mode==="board"){
+  first9Points+=scores.slice(0,take).reduce(
+   (sum,n)=>sum+n,0
+  );
+ }
+
+ first9Darts+=take;
+}
+
+/* CONFIRM VISIT */
+async function confirmVisit(){
+ if(finished||saving)return;
+
+ const boardMode=mode==="board";
+
+ if(boardMode&&!currentDarts.length){
+  message("Enter your darts first.");
+  return;
+ }
+
+ if(!boardMode&&keyInput===""){
+  message("Enter a visit score.");
+  return;
+ }
+
+ const darts=boardMode?
+  currentDarts.map(d=>({...d})):[];
+
+ const score=boardMode?
+  darts.reduce((sum,d)=>sum+d.score,0):
+  Number(keyInput);
+
+ const before=remaining;
+ let count=boardMode?darts.length:3;
+
+ const last=darts[darts.length-1];
+ const exact=score===before;
+
+ if(exact&&!boardMode){
+  if(!confirm("Did you finish on a double or bull?")){
+   message("Checkout not confirmed.");
+   return;
+  }
+
+  const used=prompt(
+   "Darts used in final visit (1, 2 or 3):","3"
+  );
+
+  if(used===null)return;
+
+  count=Number(used);
+
+  if(![1,2,3].includes(count)){
+   message("Enter 1, 2 or 3 darts.");
+   return;
+  }
+ }
+
+ const bust=
+  score>before||
+  before-score===1||
+  (exact&&boardMode&&last?.multiplier!==2);
+
+ const checkoutHit=exact&&!bust;
+ const actual=bust?0:score;
+ const after=bust?before:before-score;
+ const attempt=before>=2&&before<=170;
+
+ const record={
+  sessionID,
+  email,
+  playerID,
+  visitNumber:visitNumber+1,
+  legNumber:currentLeg,
+  bestOf,
+  scoreBefore:before,
+  visitScore:actual,
+  attemptedScore:score,
+  dartsThrown:count,
+  remainingScore:after,
+  checkoutAttempt:attempt,
+  checkoutHit,
+  legEnded:checkoutHit,
+  checkoutScore:checkoutHit?before:0,
+  bust,
+  scoringSource:"Match",
+  inputMode:mode,
+  bestDart:boardMode?
+   Math.max(...darts.map(d=>d.score)):null,
+  dart1Score:darts[0]?.score??null,
+  dart1Segment:darts[0]?.label||"",
+  dart2Score:darts[1]?.score??null,
+  dart2Segment:darts[1]?.label||"",
+  dart3Score:darts[2]?.score??null,
+  dart3Segment:darts[2]?.label||"",
+  darts
+ };
+
+ saving=true;
+
+ $("confirmVisitButton").disabled=true;
+
+ const ok=await sendEvent("match_visit",record);
+
+ saving=false;
+ $("confirmVisitButton").disabled=false;
+
+ visitNumber++;
+ totalDarts+=count;
+ totalPoints+=actual;
+
+ recordFirst9(actual,count,darts.map(d=>d.score));
+
+ if(attempt)checkoutAttempts++;
+
+ if(!bust){
+  remaining=after;
+
+  if(score===180)count180++;
+  else if(score>=140)count140++;
+  else if(score>=100)count100++;
+ }
+
+ if(checkoutHit){
+  checkoutHits++;
+  highestCheckout=Math.max(highestCheckout,before);
+  legsWon++;
+ }
+
+ currentDarts=[];
+ keyInput="";
+
+ updateInput();
+ updateStats();
+
+ const matchWon=checkoutHit&&legsWon>=legsToWin;
+
+ if(checkoutHit){
+  announceCheckout(matchWon);
+
+  if(matchWon){
+   await completeMatch();
+   return;
+  }
+
+  currentLeg++;
+  remaining=501;
+  updateStats();
+  message("LEG WON! Start leg "+currentLeg+".");
+
+ }else if(bust){
+  speak("Bust!");
+  message("BUST • Score unchanged.");
+
+ }else{
+  announceScore(actual);
+  message("Visit recorded • "+remaining+" remaining.");
+ }
+
+ if(!ok){
+  message("Visit recorded locally. Glide sync not confirmed.");
+ }
+}
+
+/* OPPONENT LEG */
+async function opponentWonLeg(){
+ if(finished||saving)return;
+
+ if(!confirm("Confirm opponent won leg "+currentLeg+"?")){
+  return;
+ }
+
+ saving=true;
+
+ const ok=await sendEvent("match_visit",{
+  sessionID,
+  email,
+  playerID,
+  visitNumber:visitNumber+1,
+  legNumber:currentLeg,
+  bestOf,
+  scoreBefore:remaining,
+  visitScore:0,
+  attemptedScore:0,
+  dartsThrown:0,
+  remainingScore:remaining,
+  checkoutAttempt:false,
+  checkoutHit:false,
+  legEnded:true,
+  checkoutScore:0,
+  bust:false,
+  scoringSource:"Match",
+  inputMode:"opponent",
+  legWinner:"Opponent",
+  opponentWonLeg:true,
+  dart1Score:null,
+  dart2Score:null,
+  dart3Score:null,
+  darts:[]
+ });
+
+ saving=false;
+
+ opponentLegs++;
+ visitNumber++;
+
+ currentDarts=[];
+ keyInput="";
+
+ updateInput();
+ updateStats();
+
+ const matchLost=opponentLegs>=legsToWin;
+
+ speak(matchLost?
+  "Game shot, and the match to your opponent!":
+  "Game shot, leg to your opponent!"
+ );
+
+ if(matchLost){
+  await completeMatch();
+  return;
+ }
+
+ currentLeg++;
+ remaining=501;
+ updateStats();
+
+ message("OPPONENT WON LEG • Start leg "+currentLeg+".");
+
+ if(!ok){
+  message("Glide sync not confirmed.");
+ }
+}
+
+/* MATCH RESULTS */
+function summaryCard(label,value){
+ const element=document.createElement("div");
+ element.className="stat";
+
+ const number=document.createElement("strong");
+ number.textContent=value;
+
+ const caption=document.createElement("span");
+ caption.textContent=label;
+
+ element.append(number,caption);
+ return element;
+}
+
+function renderMatchResults(){
+ matchResult=legsWon>=legsToWin?"Won":"Lost";
+
+ $("finalResult").textContent=
+  matchResult==="Won"?"YOU WON":"YOU LOST";
+
+ $("finalResult").className=
+  "result "+(matchResult==="Won"?"win":"loss");
+
+ $("finalScore").textContent=legsWon+" – "+opponentLegs;
+
+ $("finalSummary").replaceChildren(
+  summaryCard("MATCH","BO"+bestOf),
+  summaryCard("RESULT",matchResult.toUpperCase()),
+  summaryCard("LEGS WON",legsWon),
+  summaryCard("LEGS LOST",opponentLegs),
+  summaryCard("AVERAGE",fmt(average())),
+  summaryCard("FIRST 9",fmt(first9())),
+  summaryCard("TOTAL DARTS",totalDarts),
+  summaryCard("180",count180),
+  summaryCard("140+",count140),
+  summaryCard("100+",count100),
+  summaryCard("CHECKOUT %",checkoutPct().toFixed(1)+"%"),
+  summaryCard("HIGHEST CO",highestCheckout),
+  summaryCard("CHECKOUT HITS",checkoutHits),
+  summaryCard("CO ATTEMPTS",checkoutAttempts),
+  summaryCard("TOTAL POINTS",totalPoints)
+ );
+}
+
+async function completeMatch(){
+ if(finished)return;
+
+ finished=true;
+ matchResult=legsWon>=legsToWin?"Won":"Lost";
+
+ renderMatchResults();
+ saveRecovery("completed");
+ showScreen("completed");
+
+ $("completionMessage").textContent="Saving match results...";
+
+ const ok=await sendEvent("match_complete",{
+  matchStatus:"Completed",
+  matchResult,
+  legsWon,
+  legsLost:opponentLegs,
+  totalPoints,
+  totalDarts,
+  average:Number(fmt(average())),
+  first9Average:Number(fmt(first9())),
+  first9Points,
+  count100,
+  count140,
+  count180,
+  checkoutAttempts,
+  checkoutHits,
+  checkoutPercentage:Number(checkoutPct().toFixed(1)),
+  highestCheckout,
+  visitCount:visitNumber,
+  startedAt:matchStartedAt,
+  completedAt:new Date().toISOString()
+ });
+
+ completionSyncConfirmed=ok;
+ saveRecovery("completed");
+
+ $("completionMessage").textContent=ok?
+  "Match completion sent to Glide.":
+  "Match completed locally. Glide sync not confirmed.";
+}
+
+function continueToMainIssue(){
+ saveRecovery("mainIssue");
+ showScreen("mainIssue");
+}
+
+/* MAIN ISSUE */
+const issueData=[
+ ["Missing Right","Aim and release alignment"],
+ ["Missing Left","Release consistency"],
+ ["Missing High","Release height and timing"],
+ ["Missing Low","Follow-through and release"],
+ ["Inconsistent Grouping","Repeatable throw mechanics"],
+ ["Release Timing","Release timing consistency"],
+ ["Follow Through","Controlled follow-through"],
+ ["Elbow Movement","Stable throwing mechanics"],
+ ["Body Stability","Consistent stance and balance"],
+ ["Confidence","Match confidence and routine"]
+];
+
+function buildIssues(){
+ const root=$("issues");
+
+ issueData.forEach(([name])=>{
+  const button=document.createElement("button");
+
+  button.className="issue";
+  button.textContent=name;
+
+  button.onclick=()=>{
+   selectedIssue=name;
+
+   document.querySelectorAll(".issue").forEach(b=>{
+    b.classList.toggle("selected",b===button);
+   });
+
+   $("analysisButton").classList.remove("hidden");
+   saveRecovery("mainIssue");
+  };
+
+  root.appendChild(button);
+ });
+}
+
+function renderAnalysis(){
+ const issue=issueData.find(x=>x[0]===selectedIssue);
+
+ $("analysisIssue").textContent=selectedIssue;
+
+ $("analysisAdvice").textContent=
+  "Focus area: "+
+  (issue?issue[1]:selectedIssue)+
+  ". Your selected issue and match statistics have been submitted for coaching. "+
+  "Open Today's AI Training for your matched drill.";
+}
+
+async function finishAnalysis(){
+ if(!selectedIssue)return;
+
+ const button=$("analysisButton");
+ button.disabled=true;
+
+ const ok=await sendEvent("match_main_issue",{
+  mainIssue:selectedIssue,
+  matchStatus:"Completed",
+  matchResult,
+  average:Number(fmt(average())),
+  first9Average:Number(fmt(first9())),
+  legsWon,
+  legsLost:opponentLegs,
+  totalDarts,
+  count100,
+  count140,
+  count180,
+  checkoutPercentage:Number(checkoutPct().toFixed(1)),
+  highestCheckout
+ });
+
+ button.disabled=false;
+
+ if(!ok){
+  $("analysisMessage").textContent=
+   "Glide did not confirm receipt. Retry.";
+  return;
+ }
+
+ renderAnalysis();
+ saveRecovery("analysis");
+ showScreen("analysis");
+}
+
+/* TODAY'S AI TRAINING */
+function openTraining(){
+ const notice=$("trainingMessage");
+
+ try{
+  const defaultURL=
+   "https://coach1979christian-coder.github.io/dartiq-web/todays-training.html";
+
+  const raw=param("trainingUrl","training_url");
+  const url=new URL(raw||defaultURL,location.href);
+
+  if(!["https:","http:"].includes(url.protocol)){
+   throw Error("Invalid URL");
+  }
+
+  if(sessionID){
+   url.searchParams.set("session",sessionID);
+  }
+
+  if(email){
+   url.searchParams.set("email",email);
+  }
+
+  if(playerID){
+   url.searchParams.set("player",playerID);
+  }
+
+  if(playerName){
+   url.searchParams.set("playername",playerName);
+  }
+
+  const userID=param("userid");
+  if(userID){
+   url.searchParams.set("userid",userID);
+  }
+
+  url.searchParams.set("source","MATCH");
+  url.searchParams.set("language",language);
+  url.searchParams.set("mainIssue",selectedIssue);
+  url.searchParams.set("focus",selectedIssue);
+
+  notice.textContent="Opening Today's AI Training...";
+
+  window.location.assign(url.toString());
+
+ }catch(error){
+  console.error(error);
+  notice.textContent="Unable to open training.";
+ }
+}
+
+/* INITIALIZATION */
+if(speechSupported){
+ selectCallerVoice();
+
+ if(typeof speechSynthesis.addEventListener==="function"){
+  speechSynthesis.addEventListener(
+   "voiceschanged",selectCallerVoice
+  );
+ }
+}
+
+drawBoard();
+buildIssues();
+updateInput();
+updateStats();
+restoreRecovery();
+
+</script>
+</body>
+</html>
