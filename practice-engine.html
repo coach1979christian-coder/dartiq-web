@@ -517,7 +517,10 @@ const language=get("language","lang")||"EN";
 const drill=get("drill","practice")||"501 Focused Practice";
 const mainIssue=get("mainIssue","focus");
 const focus=get("focus","mainIssue");
-const saveWebhook=get("saveWebhook","sessionWebhook");
+
+const saveWebhook =
+  get("saveWebhook", "sessionWebhook") ||
+  "https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/1f5b0080-03fb-4493-940c-19cb032615b2";
 
 const doubleTroubleWebhook=
 "https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/2876503c-d138-44a2-adfd-7815bd4b834c";
