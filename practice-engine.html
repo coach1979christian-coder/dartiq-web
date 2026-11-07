@@ -65,16 +65,13 @@ details[open] summary:after{content:"⌃"}
 .dart-slot small{display:block;color:var(--muted);font-size:9px;margin-bottom:7px}
 .dart-slot strong{font-size:12px}
 
-/* DARTBOARD UNCHANGED */
 .board-wrap{max-width:440px;margin:auto;aspect-ratio:1}
 #dartboard{width:100%;height:100%;touch-action:manipulation}
 .board-actions,.voice-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
 .board-actions button,.voice-actions button{background:#102b43;color:var(--blue);border:1px solid var(--line);border-radius:10px;padding:13px 5px;font-size:11px;font-weight:900}
-
 .message{text-align:center;font-size:11px;color:var(--muted);line-height:1.6;margin-top:12px}
 .footer{text-align:center;color:#68879d;font-size:9px;margin-top:25px;letter-spacing:1px}
 
-/* AUTOMATIC MASTERCALLER */
 .mastercaller{background:linear-gradient(180deg,#12324d,#071725);border:1px solid #39a9ff90;border-radius:14px;padding:15px;margin-bottom:12px}
 .caller-heading{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .caller-heading strong{color:var(--blue);font-size:13px}
@@ -82,7 +79,6 @@ details[open] summary:after{content:"⌃"}
 .caller-text{text-align:center;font-size:17px;font-weight:900;line-height:1.5;padding:15px 0 8px}
 .caller-sub{text-align:center;color:var(--muted);font-size:10px;line-height:1.5}
 
-/* MATCH-STYLE SCOREBOARD: REMAINING SCORE ON LEFT */
 .match-scoreboard{
  background:linear-gradient(180deg,#102a43,#061421);
  border:1px solid #39a9ff77;
@@ -195,7 +191,6 @@ details[open] summary:after{content:"⌃"}
 .practice-section>.content{background:#071827}
 .practice-section[open]>summary{color:var(--blue)}
 
-/* PERFORMANCE RESULTS */
 .results-hero{text-align:center;padding:24px 15px}
 .results-hero h2{color:var(--blue);font-size:23px}
 .results-hero p{color:var(--muted);font-size:12px;line-height:1.7}
@@ -227,7 +222,6 @@ details[open] summary:after{content:"⌃"}
 <div class="subtitle">TRAIN SMARTER • IMPROVE FASTER</div>
 </header>
 
-<!-- SCREEN 1 -->
 <section id="instructionsScreen">
 <div class="screen-heading">
 <span>PERFORMANS INSTRUCTION</span>
@@ -308,7 +302,6 @@ details[open] summary:after{content:"⌃"}
 <button class="primary" type="button" onclick="startPractice()">🎯 START PRACTICE</button>
 </section>
 
-<!-- SCREEN 2 -->
 <section id="practiceScreen" class="hidden">
 <div class="screen-heading">
 <span>LIVE PRACTICE</span>
@@ -324,7 +317,6 @@ details[open] summary:after{content:"⌃"}
 <div class="caller-sub" id="callerPlayer">Automatic score announcements</div>
 </div>
 
-<!-- REMAINING SCORE NOW ON LEFT -->
 <div class="match-scoreboard">
 <div class="match-topline">
 <span>🎯 LIVE SCOREBOARD</span>
@@ -389,7 +381,6 @@ PLAYER
 </div>
 </div>
 
-<!-- ORIGINAL DARTBOARD -->
 <div id="dartboardMode" class="hidden">
 <div class="dart-slots">
 <div class="dart-slot"><small>DART 1</small><strong id="dart1">—</strong></div>
@@ -433,7 +424,6 @@ PLAYER
 <div class="message" id="finishMessage">Your results will appear on Screen 3.</div>
 </section>
 
-<!-- SCREEN 3 -->
 <section id="resultsScreen" class="hidden">
 <div class="screen-heading">
 <span>PERFORMANCE RESULTS</span>
@@ -518,12 +508,12 @@ const drill=get("drill","practice")||"501 Focused Practice";
 const mainIssue=get("mainIssue","focus");
 const focus=get("focus","mainIssue");
 
-const saveWebhook =
-  get("saveWebhook", "sessionWebhook") ||
-  "https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/1f5b0080-03fb-4493-940c-19cb032615b2";
+const saveWebhook=
+ get("saveWebhook","sessionWebhook")||
+ "https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/1f5b0080-03fb-4493-940c-19cb032615b2";
 
 const doubleTroubleWebhook=
-"https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/2876503c-d138-44a2-adfd-7815bd4b834c";
+ "https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/2876503c-d138-44a2-adfd-7815bd4b834c";
 
 const doubleTrouble=drill.toLowerCase().includes("double trouble");
 
@@ -602,7 +592,6 @@ function buildCoach(){
 }
 buildCoach();
 
-/* VOICE ENGINE */
 const speechSupported=
  "speechSynthesis" in window &&
  "SpeechSynthesisUtterance" in window;
@@ -701,7 +690,6 @@ function stopInstructionVoice(){
  put("instructionVoiceStatus","Voice instructions stopped.");
 }
 
-/* AUTOMATIC MASTERCALLER */
 function announcePlayer(){
  speakText("Ladies and gentlemen. At the oche. "+
   playerName+". Game on!");
@@ -737,7 +725,6 @@ function showInstructions(){
  showScreen(1);
 }
 
-/* SCORING */
 let mode="keypad";
 let input="";
 let remaining=doubleTrouble?27:501;
@@ -812,7 +799,6 @@ function undoDart(){
  updateDartDisplay();
 }
 
-/* ORIGINAL DARTBOARD CODE */
 const boardNumbers=[20,1,18,4,13,6,10,15,2,17,3,19,7,16,8,11,14,9,12,5];
 const svg=$("dartboard");
 const NS="http://www.w3.org/2000/svg";
@@ -872,6 +858,51 @@ drawBoard();
 function average(){
  return totalDarts?totalPoints/totalDarts*3:0;
 }
+
+/* FIRST 9 STATISTICS */
+function calculateFirst9(){
+ let darts=0;
+ let points=0;
+
+ for(const v of visits){
+  if(darts>=9)break;
+
+  const used=Number(v.dartsThrown)||0;
+  if(used<=0)continue;
+
+  const count=Math.min(used,9-darts);
+
+  if(count===used){
+   points+=Number(v.score)||0;
+  }else if(v.bust){
+   // Bust contributes zero scored points.
+  }else if(
+   Array.isArray(v.darts)&&
+   v.darts.length>=count
+  ){
+   points+=v.darts
+    .slice(0,count)
+    .reduce((sum,d)=>sum+(Number(d.score)||0),0);
+  }else{
+   // An incomplete keypad visit has no dart-by-dart scores.
+   // Never invent the partial visit's points.
+   return {
+    first9Points:null,
+    first9Average:null
+   };
+  }
+
+  darts+=count;
+ }
+
+ return {
+  first9Points:points,
+  first9Average:darts
+   ? Number((points/darts*3).toFixed(2))
+   : 0
+ };
+}
+
 function updateStats(){
  put("remaining",remaining);
  put("average",doubleTrouble?"D"+furthestWedge:average().toFixed(2));
@@ -909,7 +940,6 @@ function updateVisitHistory(){
  createHistory("visitHistory");
 }
 
-/* CONFIRM VISIT */
 function confirmVisit(){
  if(completed||saving)return;
  if(doubleTrouble){
@@ -1106,6 +1136,8 @@ async function saveSession(){
   return;
  }
 
+ const first9=calculateFirst9();
+
  const payload={
   sessionID,email,player,userid,playerName,language,
   source:get("source")||"TRAINING",
@@ -1116,6 +1148,8 @@ async function saveSession(){
   remainingScore:remaining,
   totalPoints,totalDarts,
   average:Number(average().toFixed(2)),
+  first9Points:first9.first9Points,
+  first9Average:first9.first9Average,
   totalVisits:visits.length,
   count100,count140,count180,
   checkoutDarts,highestCheckout,
