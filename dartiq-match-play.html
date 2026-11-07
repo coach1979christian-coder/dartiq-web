@@ -5,443 +5,473 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#02070e">
-<title>DARTIQ | Match Engine V8.2</title>
+<title>DARTIQ | Match Engine V8.3</title>
 
 <style>
 :root{
-  --bg:#02070e;
-  --panel:#091827;
-  --panel2:#0c2236;
-  --blue:#39a9ff;
-  --line:#205073;
-  --text:#f4faff;
-  --muted:#8faabe;
-  --green:#49e6ad;
-  --red:#ff737b;
+ --bg:#02070e;
+ --panel:#091827;
+ --panel2:#0c2236;
+ --blue:#39a9ff;
+ --line:#205073;
+ --text:#f4faff;
+ --muted:#8faabe;
+ --green:#49e6ad;
+ --red:#ff737b;
 }
 *{box-sizing:border-box}
 html,body{
-  min-height:100%;
-  background:var(--bg);
-  color-scheme:dark;
+ min-height:100%;
+ background:var(--bg);
+ color-scheme:dark;
 }
 body{
-  margin:0;
-  color:var(--text);
-  font-family:Arial,Helvetica,sans-serif;
-  padding:10px;
+ margin:0;
+ color:var(--text);
+ font-family:Arial,Helvetica,sans-serif;
+ padding:10px;
 }
 button{font:inherit;cursor:pointer}
 button:disabled{opacity:.45;cursor:not-allowed}
 .app{max-width:650px;margin:auto}
 .brand{text-align:center;padding:20px 0}
 .logo{
-  font-size:30px;
-  font-weight:900;
-  letter-spacing:5px;
-  color:var(--blue);
-  text-shadow:0 0 20px #39a9ff65;
+ font-size:30px;
+ font-weight:900;
+ letter-spacing:5px;
+ color:var(--blue);
+ text-shadow:0 0 20px #39a9ff65;
 }
 .subtitle{
-  color:var(--muted);
-  font-size:11px;
-  letter-spacing:2px;
-  margin-top:8px;
+ color:var(--muted);
+ font-size:11px;
+ letter-spacing:2px;
+ margin-top:8px;
 }
 .screen{display:none}
 .screen.active{display:block}
 .panel{
-  background:linear-gradient(160deg,#0b2032,#06111d);
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:18px;
-  margin-bottom:12px;
+ background:linear-gradient(160deg,#0b2032,#06111d);
+ border:1px solid var(--line);
+ border-radius:18px;
+ padding:18px;
+ margin-bottom:12px;
 }
 .center{text-align:center}
 h1{font-size:23px;margin:8px 0 15px}
 h2{font-size:18px;margin:8px 0 15px}
 .small{font-size:12px;color:var(--muted)}
 .eyebrow{
-  font-size:10px;
-  color:var(--blue);
-  font-weight:900;
-  letter-spacing:2px;
+ font-size:10px;
+ color:var(--blue);
+ font-weight:900;
+ letter-spacing:2px;
 }
 .primary{
-  display:block;
-  width:100%;
-  border:0;
-  border-radius:12px;
-  padding:15px 12px;
-  background:var(--blue);
-  color:#001321;
-  font-size:13px;
-  font-weight:900;
-  margin-top:15px;
+ display:block;
+ width:100%;
+ border:0;
+ border-radius:12px;
+ padding:15px 12px;
+ background:var(--blue);
+ color:#001321;
+ font-size:13px;
+ font-weight:900;
+ margin-top:15px;
 }
 .secondary{
-  background:var(--panel2);
-  border:1px solid var(--line);
-  border-radius:10px;
-  color:white;
-  padding:12px;
-  font-weight:bold;
+ background:var(--panel2);
+ border:1px solid var(--line);
+ border-radius:10px;
+ color:white;
+ padding:12px;
+ font-weight:bold;
 }
 .danger{
-  background:#391722;
-  border:1px solid var(--red);
-  color:white;
-  border-radius:12px;
-  padding:14px;
-  font-weight:900;
-  width:100%;
-  margin-top:12px;
+ background:#391722;
+ border:1px solid var(--red);
+ color:white;
+ border-radius:12px;
+ padding:14px;
+ font-weight:900;
+ width:100%;
+ margin-top:12px;
 }
 .format-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:8px;
-  margin:20px 0;
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:8px;
+ margin:20px 0;
 }
 .format{
-  padding:20px 3px;
-  border-radius:12px;
-  border:1px solid var(--line);
-  background:var(--panel2);
-  color:white;
-  font-weight:900;
+ padding:20px 3px;
+ border-radius:12px;
+ border:1px solid var(--line);
+ background:var(--panel2);
+ color:white;
+ font-weight:900;
 }
 .format.selected{
-  background:var(--blue);
-  color:#001321;
-  box-shadow:0 0 16px #39a9ff55;
+ background:var(--blue);
+ color:#001321;
+ box-shadow:0 0 16px #39a9ff55;
 }
 .match-info{
-  display:flex;
-  justify-content:space-between;
-  gap:8px;
-  color:var(--muted);
-  font-size:11px;
-  margin:12px 0;
+ display:flex;
+ justify-content:space-between;
+ gap:8px;
+ color:var(--muted);
+ font-size:11px;
+ margin:12px 0;
 }
 .mode-row{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-  margin:10px 0;
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:8px;
+ margin:10px 0;
 }
 .mode.active{
-  background:var(--blue);
-  color:#001321;
+ background:var(--blue);
+ color:#001321;
 }
+
+/* V8.3 DARTBOARD */
 .dartboard-layout{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) minmax(0,3fr) minmax(0,1fr);
-  align-items:center;
-  gap:8px;
-  width:100%;
-}
-.dartboard-side-score{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  min-width:0;
-}
-.side-score-box{
-  width:100%;
-  background:#061421;
-  border:1px solid var(--line);
-  border-radius:10px;
-  padding:10px 2px;
-  text-align:center;
-}
-.side-score-label{
-  color:var(--blue);
-  font-size:9px;
-  font-weight:900;
-  margin-bottom:6px;
-}
-.side-score-value{
-  font-size:27px;
-  font-weight:900;
-}
-.side-legs-value{
-  font-size:24px;
-  font-weight:900;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ width:100%;
+ margin:4px auto 8px;
 }
 .board-wrap{
-  width:100%;
-  max-width:370px;
-  margin:auto;
-  aspect-ratio:1;
+ width:100%;
+ max-width:420px;
+ margin:auto;
+ aspect-ratio:1;
 }
 #board{
-  width:100%;
-  height:100%;
-  touch-action:manipulation;
-  filter:drop-shadow(0 0 10px #39a9ff35);
+ width:100%;
+ height:100%;
+ touch-action:manipulation;
+ filter:drop-shadow(0 0 10px #39a9ff35);
 }
+
+/* V8.3 SCORE + CHECKOUT + LEGS */
+.score-checkout-row{
+ display:grid;
+ grid-template-columns:minmax(0,1fr) minmax(0,1.45fr) minmax(0,1fr);
+ gap:6px;
+ align-items:stretch;
+ width:100%;
+ margin:7px 0;
+}
+.score-box{
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ min-width:0;
+ min-height:65px;
+ background:#061421;
+ border:1px solid var(--line);
+ border-radius:9px;
+ padding:7px 3px;
+ text-align:center;
+}
+.score-label{
+ color:var(--blue);
+ font-size:9px;
+ font-weight:900;
+ letter-spacing:.5px;
+}
+.score-number{
+ color:white;
+ font-size:28px;
+ font-weight:900;
+ line-height:1.15;
+ margin-top:4px;
+}
+.legs-number{
+ color:white;
+ font-size:24px;
+ font-weight:900;
+ line-height:1.15;
+ margin-top:4px;
+}
+.score-sub{
+ font-size:8px;
+ color:var(--muted);
+ margin-top:3px;
+ font-weight:700;
+}
+
+/* SMALL CHECKOUT ROUTE */
+.checkout-panel{
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ min-width:0;
+ min-height:65px;
+ background:#061421;
+ border:1px solid var(--blue);
+ border-radius:9px;
+ padding:6px 4px;
+ text-align:center;
+ margin:0;
+}
+.checkout-label{
+ color:var(--blue);
+ font-size:8px;
+ font-weight:900;
+ letter-spacing:.5px;
+ line-height:1.2;
+}
+.checkout-route{
+ font-size:11px;
+ font-weight:900;
+ margin-top:4px;
+ letter-spacing:0;
+ line-height:1.2;
+ overflow-wrap:anywhere;
+}
+.checkout-hint{
+ display:none;
+}
+
 .visit{
-  background:#020a12;
-  border:1px solid var(--line);
-  padding:12px;
-  border-radius:12px;
-  text-align:center;
-  margin:12px 0;
+ background:#020a12;
+ border:1px solid var(--line);
+ padding:12px;
+ border-radius:12px;
+ text-align:center;
+ margin:12px 0;
 }
 .visit strong{font-size:30px}
 .darts{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:7px;
-  margin:12px 0 8px;
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:7px;
+ margin:12px 0 8px;
 }
 .dart{
-  background:var(--panel2);
-  border-radius:9px;
-  text-align:center;
-  padding:10px 3px;
-  font-size:12px;
+ background:var(--panel2);
+ border-radius:9px;
+ text-align:center;
+ padding:10px 3px;
+ font-size:12px;
 }
 .keypad{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:7px;
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:7px;
 }
 .key{
-  background:var(--panel2);
-  color:white;
-  border:1px solid var(--line);
-  border-radius:9px;
-  padding:14px 5px;
-  font-size:20px;
-  font-weight:900;
+ background:var(--panel2);
+ color:white;
+ border:1px solid var(--line);
+ border-radius:9px;
+ padding:14px 5px;
+ font-size:20px;
+ font-weight:900;
 }
 .stats{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:8px;
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:8px;
 }
 .stat{
-  background:#071725;
-  border:1px solid #173d59;
-  border-radius:10px;
-  padding:12px 5px;
-  text-align:center;
+ background:#071725;
+ border:1px solid #173d59;
+ border-radius:10px;
+ padding:12px 5px;
+ text-align:center;
 }
 .stat strong{
-  display:block;
-  font-size:19px;
+ display:block;
+ font-size:19px;
 }
 .stat span{
-  display:block;
-  color:var(--muted);
-  font-size:10px;
-  margin-top:5px;
+ display:block;
+ color:var(--muted);
+ font-size:10px;
+ margin-top:5px;
 }
 .issue-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:9px;
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:9px;
 }
 .issue{
-  background:var(--panel2);
-  color:white;
-  border:1px solid var(--line);
-  border-radius:10px;
-  padding:15px 6px;
-  font-size:12px;
-  font-weight:bold;
+ background:var(--panel2);
+ color:white;
+ border:1px solid var(--line);
+ border-radius:10px;
+ padding:15px 6px;
+ font-size:12px;
+ font-weight:bold;
 }
 .issue.selected{
-  border-color:var(--blue);
-  background:#123b5c;
-  box-shadow:0 0 10px #39a9ff30;
+ border-color:var(--blue);
+ background:#123b5c;
+ box-shadow:0 0 10px #39a9ff30;
 }
 .notice{
-  font-size:11px;
-  color:var(--muted);
-  text-align:center;
-  line-height:1.5;
-  margin:12px 0;
+ font-size:11px;
+ color:var(--muted);
+ text-align:center;
+ line-height:1.5;
+ margin:12px 0;
 }
 .voice-panel,.scoring-panel{
-  margin:12px 0;
-  background:#061421;
-  border:1px solid var(--line);
-  border-radius:12px;
-  overflow:hidden;
+ margin:12px 0;
+ background:#061421;
+ border:1px solid var(--line);
+ border-radius:12px;
+ overflow:hidden;
 }
 .voice-header,.scoring-header{
-  width:100%;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  background:transparent;
-  color:var(--blue);
-  border:0;
-  padding:14px;
-  font-size:12px;
-  font-weight:900;
-  text-align:left;
+ width:100%;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:10px;
+ background:transparent;
+ color:var(--blue);
+ border:0;
+ padding:14px;
+ font-size:12px;
+ font-weight:900;
+ text-align:left;
 }
 .voice-content,.scoring-content{
-  padding:0 12px 12px;
+ padding:0 12px 12px;
 }
 .voice-top{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:10px;
 }
 .voice-top span{
-  color:var(--blue);
-  font-size:12px;
-  font-weight:900;
+ color:var(--blue);
+ font-size:12px;
+ font-weight:900;
 }
 .voice-status{
-  margin-top:8px;
-  font-size:11px;
-  color:var(--muted);
+ margin-top:8px;
+ font-size:11px;
+ color:var(--muted);
 }
 .voice-buttons{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-  margin-top:10px;
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:8px;
+ margin-top:10px;
 }
 .voice-buttons button{font-size:11px}
 .caller-line{
-  margin-top:10px;
-  min-height:20px;
-  color:var(--green);
-  font-size:12px;
-  font-weight:bold;
-  text-align:center;
-  line-height:1.5;
+ margin-top:10px;
+ min-height:20px;
+ color:var(--green);
+ font-size:12px;
+ font-weight:bold;
+ text-align:center;
+ line-height:1.5;
 }
 .player-tag{
-  text-align:center;
-  font-size:12px;
-  color:var(--muted);
-  margin:8px 0 12px;
+ text-align:center;
+ font-size:12px;
+ color:var(--muted);
+ margin:8px 0 12px;
 }
 .player-tag strong{color:white}
 .welcome-call{
-  background:rgba(57,169,255,.07);
-  border:1px solid var(--line);
-  border-radius:10px;
-  padding:12px;
-  color:var(--green);
-  font-size:12px;
-  line-height:1.5;
-  text-align:center;
-  font-weight:bold;
-  margin:10px 0;
+ background:rgba(57,169,255,.07);
+ border:1px solid var(--line);
+ border-radius:10px;
+ padding:12px;
+ color:var(--green);
+ font-size:12px;
+ line-height:1.5;
+ text-align:center;
+ font-weight:bold;
+ margin:10px 0;
 }
 .result{
-  font-size:46px;
-  font-weight:900;
-  letter-spacing:3px;
-  margin:16px 0;
+ font-size:46px;
+ font-weight:900;
+ letter-spacing:3px;
+ margin:16px 0;
 }
 .result.win{color:var(--green)}
 .result.loss{color:var(--red)}
 .final-score{
-  font-size:35px;
-  font-weight:900;
-  color:var(--blue);
-  margin:12px 0 22px;
-}
-
-/* COMPACT CHECKOUT ROUTE */
-.checkout-panel{
-  background:#061421;
-  border:1px solid var(--blue);
-  border-radius:9px;
-  padding:6px 10px;
-  text-align:center;
-  margin:7px 0;
-}
-.checkout-label{
-  color:var(--blue);
-  font-size:9px;
-  font-weight:900;
-  letter-spacing:1.5px;
-  line-height:1.2;
-}
-.checkout-route{
-  font-size:16px;
-  font-weight:900;
-  margin-top:3px;
-  letter-spacing:.4px;
-  line-height:1.15;
-}
-.checkout-hint{
-  font-size:9px;
-  color:var(--muted);
-  margin-top:2px;
-  line-height:1.15;
+ font-size:35px;
+ font-weight:900;
+ color:var(--blue);
+ margin:12px 0 22px;
 }
 .visit-actions{
-  display:grid;
-  grid-template-columns:minmax(0,.85fr) minmax(0,1.5fr) minmax(0,.85fr);
-  align-items:stretch;
-  gap:7px;
-  width:100%;
-  margin-top:14px;
+ display:grid;
+ grid-template-columns:minmax(0,.85fr) minmax(0,1.5fr) minmax(0,.85fr);
+ align-items:stretch;
+ gap:7px;
+ width:100%;
+ margin-top:14px;
 }
 .visit-actions button{
-  width:100%;
-  min-width:0;
-  min-height:50px;
-  margin:0;
-  padding:10px 4px;
-  border-radius:10px;
-  font-size:11px;
-  font-weight:900;
-  line-height:1.2;
-  text-align:center;
-  white-space:normal;
+ width:100%;
+ min-width:0;
+ min-height:50px;
+ margin:0;
+ padding:10px 4px;
+ border-radius:10px;
+ font-size:11px;
+ font-weight:900;
+ line-height:1.2;
+ text-align:center;
+ white-space:normal;
 }
 .visit-actions .primary{
-  background:var(--blue);
-  color:#001321;
+ background:var(--blue);
+ color:#001321;
 }
 .visit-actions .secondary{
-  background:var(--panel2);
-  border:1px solid var(--line);
-  color:white;
+ background:var(--panel2);
+ border:1px solid var(--line);
+ color:white;
 }
 .hidden{display:none!important}
 footer{
-  text-align:center;
-  color:#52748c;
-  font-size:9px;
-  letter-spacing:2px;
-  padding:20px 0;
+ text-align:center;
+ color:#52748c;
+ font-size:9px;
+ letter-spacing:2px;
+ padding:20px 0;
 }
 @media(max-width:480px){
-  .panel{padding:12px}
-  .dartboard-layout{
-    grid-template-columns:minmax(0,1fr) minmax(0,3.2fr) minmax(0,1fr);
-    gap:3px;
-  }
-  .side-score-box{padding:8px 1px}
-  .side-score-value{font-size:21px}
-  .side-legs-value{font-size:19px}
-  .side-score-label{font-size:7px}
-  .visit-actions{gap:5px}
-  .visit-actions button{
-    padding:10px 2px;
-    font-size:10px;
-  }
+ .panel{padding:12px}
+ .board-wrap{max-width:390px}
+ .score-checkout-row{gap:5px}
+ .score-box,.checkout-panel{min-height:60px}
+ .score-label{font-size:8px}
+ .score-number{font-size:25px}
+ .legs-number{font-size:22px}
+ .checkout-label{font-size:7px}
+ .checkout-route{font-size:10px}
+ .visit-actions{gap:5px}
+ .visit-actions button{
+  padding:10px 2px;
+  font-size:10px;
+ }
 }
 @media(max-width:390px){
-  .stat strong{font-size:16px}
-  .format{padding:17px 2px}
-  .checkout-route{font-size:15px}
+ .stat strong{font-size:16px}
+ .format{padding:17px 2px}
+ .checkout-route{font-size:9px}
+ .score-number{font-size:22px}
+ .legs-number{font-size:20px}
 }
 </style>
 </head>
@@ -450,258 +480,252 @@ footer{
 <div class="app">
 
 <header class="brand">
-  <div class="logo">DARTIQ</div>
-  <div class="subtitle">INTELLIGENT DARTS PERFORMANCE</div>
+ <div class="logo">DARTIQ</div>
+ <div class="subtitle">INTELLIGENT DARTS PERFORMANCE</div>
 </header>
 
-<!-- SCREEN 1 -->
 <section id="setup" class="screen active">
-  <div class="panel center">
-    <div class="eyebrow">PLAYER JOURNEY</div>
-    <h1>READY TO PLAY?</h1>
-    <p class="small">
-      Start your match, track your performance and discover what to improve.
-    </p>
-    <button class="primary" onclick="showScreen('formats')">
-      START SESSION
-    </button>
-  </div>
+ <div class="panel center">
+  <div class="eyebrow">PLAYER JOURNEY</div>
+  <h1>READY TO PLAY?</h1>
+  <p class="small">
+   Start your match, track your performance and discover what to improve.
+  </p>
+  <button class="primary" onclick="showScreen('formats')">
+   START SESSION
+  </button>
+ </div>
 </section>
 
-<!-- SCREEN 2 -->
 <section id="formats" class="screen">
-  <div class="panel center">
-    <div class="eyebrow">MATCH SETUP</div>
-    <h1>SELECT YOUR FORMAT</h1>
-    <div class="format-grid">
-      <button class="format" data-format="3" onclick="selectFormat(3)">BO3</button>
-      <button class="format" data-format="5" onclick="selectFormat(5)">BO5</button>
-      <button class="format" data-format="7" onclick="selectFormat(7)">BO7</button>
-      <button class="format" data-format="9" onclick="selectFormat(9)">BO9</button>
-    </div>
-    <p id="formatDescription" class="small">
-      Choose the number of legs.
-    </p>
-    <button id="startGame" class="primary hidden" onclick="startMatch()">
-      START YOUR GAME FOR AI ANALYSIS
-    </button>
+ <div class="panel center">
+  <div class="eyebrow">MATCH SETUP</div>
+  <h1>SELECT YOUR FORMAT</h1>
+  <div class="format-grid">
+   <button class="format" data-format="3" onclick="selectFormat(3)">BO3</button>
+   <button class="format" data-format="5" onclick="selectFormat(5)">BO5</button>
+   <button class="format" data-format="7" onclick="selectFormat(7)">BO7</button>
+   <button class="format" data-format="9" onclick="selectFormat(9)">BO9</button>
   </div>
+  <p id="formatDescription" class="small">
+   Choose the number of legs.
+  </p>
+  <button id="startGame" class="primary hidden" onclick="startMatch()">
+   START YOUR GAME FOR AI ANALYSIS
+  </button>
+ </div>
 </section>
 
-<!-- SCREEN 3 -->
 <section id="match" class="screen">
 <div class="panel">
 
-  <div class="center">
-    <div class="eyebrow">LIVE MATCH</div>
-    <h2 id="matchTitle">BEST OF 5</h2>
-    <div class="player-tag">
-      PLAYER: <strong id="displayPlayerName">PLAYER</strong>
-    </div>
+ <div class="center">
+  <div class="eyebrow">LIVE MATCH</div>
+  <h2 id="matchTitle">BEST OF 5</h2>
+  <div class="player-tag">
+   PLAYER: <strong id="displayPlayerName">PLAYER</strong>
   </div>
+ </div>
 
-  <div class="welcome-call" id="matchWelcome">
-    Welcome to the DARTIQ oche.
-  </div>
+ <div class="welcome-call" id="matchWelcome">
+  Welcome to the DARTIQ oche.
+ </div>
 
-  <div class="voice-panel">
-    <button class="voice-header" onclick="toggleCallerPanel()">
-      <span>🎙 DARTIQ MASTER CALLER</span>
-      <span id="callerArrow">▼</span>
+ <div class="voice-panel">
+  <button class="voice-header" onclick="toggleCallerPanel()">
+   <span>🎙 DARTIQ MASTER CALLER</span>
+   <span id="callerArrow">▼</span>
+  </button>
+  <div id="callerContent" class="voice-content hidden">
+   <div class="voice-top">
+    <span>VOICE CONTROLS</span>
+    <button id="voiceToggle" class="secondary" onclick="toggleVoice()">
+     VOICE ON
     </button>
-    <div id="callerContent" class="voice-content hidden">
-      <div class="voice-top">
-        <span>VOICE CONTROLS</span>
-        <button id="voiceToggle" class="secondary" onclick="toggleVoice()">
-          VOICE ON
-        </button>
-      </div>
-      <div id="voiceStatus" class="voice-status">
-        Preparing caller...
-      </div>
-      <div class="voice-buttons">
-        <button class="secondary" onclick="testVoice()">
-          TEST CALLER
-        </button>
-        <button class="secondary" onclick="repeatLastCall()">
-          REPEAT LAST CALL
-        </button>
-      </div>
-      <div id="callerLine" class="caller-line"></div>
-    </div>
-  </div>
-
-  <div class="scoring-panel">
-    <button class="scoring-header" onclick="toggleScoringPanel()">
-      <span>🎯 DARTBOARD / KEYPAD</span>
-      <span id="scoringArrow">▼</span>
+   </div>
+   <div id="voiceStatus" class="voice-status">
+    Preparing caller...
+   </div>
+   <div class="voice-buttons">
+    <button class="secondary" onclick="testVoice()">
+     TEST CALLER
     </button>
-    <div id="scoringContent" class="scoring-content hidden">
-      <div class="mode-row">
-        <button id="boardModeButton"
-          class="secondary mode active"
-          onclick="setMode('board')">
-          🎯 DARTBOARD
-        </button>
-        <button id="keyModeButton"
-          class="secondary mode"
-          onclick="setMode('keypad')">
-          KEYPAD
-        </button>
-      </div>
-
-      <div id="boardPanel"></div>
-
-      <div id="keypadPanel" class="hidden">
-        <div class="visit">
-          <strong id="keyValue">0</strong>
-        </div>
-        <div class="keypad">
-          <button class="key" onclick="keyPress('1')">1</button>
-          <button class="key" onclick="keyPress('2')">2</button>
-          <button class="key" onclick="keyPress('3')">3</button>
-          <button class="key" onclick="keyPress('4')">4</button>
-          <button class="key" onclick="keyPress('5')">5</button>
-          <button class="key" onclick="keyPress('6')">6</button>
-          <button class="key" onclick="keyPress('7')">7</button>
-          <button class="key" onclick="keyPress('8')">8</button>
-          <button class="key" onclick="keyPress('9')">9</button>
-          <button class="key" onclick="keyClear()">C</button>
-          <button class="key" onclick="keyPress('0')">0</button>
-          <button class="key" onclick="keyBack()">⌫</button>
-        </div>
-        <p class="small center">
-          Enter your total visit score. A checkout requires confirmation.
-        </p>
-      </div>
-    </div>
+    <button class="secondary" onclick="repeatLastCall()">
+     REPEAT LAST CALL
+    </button>
+   </div>
+   <div id="callerLine" class="caller-line"></div>
   </div>
+ </div>
 
-  <div class="match-info">
-    <span id="legInfo">LEG 1</span>
-    <span id="targetInfo">FIRST TO 3</span>
-    <span id="visitInfo">VISIT 1</span>
-  </div>
+ <div class="scoring-panel">
+  <button class="scoring-header" onclick="toggleScoringPanel()">
+   <span>🎯 DARTBOARD / KEYPAD</span>
+   <span id="scoringArrow">▼</span>
+  </button>
+  <div id="scoringContent" class="scoring-content hidden">
+   <div class="mode-row">
+    <button id="boardModeButton"
+     class="secondary mode active"
+     onclick="setMode('board')">
+     🎯 DARTBOARD
+    </button>
+    <button id="keyModeButton"
+     class="secondary mode"
+     onclick="setMode('keypad')">
+     KEYPAD
+    </button>
+   </div>
 
-  <div class="visit">
-    <div class="eyebrow">CURRENT VISIT SCORE</div>
-    <strong id="visitScore">0</strong>
-  </div>
+   <div id="boardPanel"></div>
 
-  <div class="darts">
-    <div class="dart" id="dart1">DART 1: –</div>
-    <div class="dart" id="dart2">DART 2: –</div>
-    <div class="dart" id="dart3">DART 3: –</div>
-  </div>
-
-  <div class="dartboard-layout">
-    <div class="dartboard-side-score">
-      <div class="side-score-box">
-        <div class="side-score-label">REMAINING</div>
-        <div id="boardRemaining" class="side-score-value">501</div>
-      </div>
+   <div id="keypadPanel" class="hidden">
+    <div class="visit">
+     <strong id="keyValue">0</strong>
     </div>
-
-    <div class="board-wrap">
-      <svg id="board"
-        viewBox="-230 -230 460 460"
-        aria-label="Interactive dartboard">
-      </svg>
+    <div class="keypad">
+     <button class="key" onclick="keyPress('1')">1</button>
+     <button class="key" onclick="keyPress('2')">2</button>
+     <button class="key" onclick="keyPress('3')">3</button>
+     <button class="key" onclick="keyPress('4')">4</button>
+     <button class="key" onclick="keyPress('5')">5</button>
+     <button class="key" onclick="keyPress('6')">6</button>
+     <button class="key" onclick="keyPress('7')">7</button>
+     <button class="key" onclick="keyPress('8')">8</button>
+     <button class="key" onclick="keyPress('9')">9</button>
+     <button class="key" onclick="keyClear()">C</button>
+     <button class="key" onclick="keyPress('0')">0</button>
+     <button class="key" onclick="keyBack()">⌫</button>
     </div>
+    <p class="small center">
+     Enter your total visit score. A checkout requires confirmation.
+    </p>
+   </div>
+  </div>
+ </div>
 
-    <div class="dartboard-side-score">
-      <div class="side-score-box">
-        <div class="side-score-label">LEGS</div>
-        <div id="boardLegs" class="side-legs-value">0–0</div>
-        <div class="side-score-label">YOU / OPP.</div>
-      </div>
-    </div>
+ <div class="match-info">
+  <span id="legInfo">LEG 1</span>
+  <span id="targetInfo">FIRST TO 3</span>
+  <span id="visitInfo">VISIT 1</span>
+ </div>
+
+ <div class="visit">
+  <div class="eyebrow">CURRENT VISIT SCORE</div>
+  <strong id="visitScore">0</strong>
+ </div>
+
+ <div class="darts">
+  <div class="dart" id="dart1">DART 1: –</div>
+  <div class="dart" id="dart2">DART 2: –</div>
+  <div class="dart" id="dart3">DART 3: –</div>
+ </div>
+
+ <!-- FULL WIDTH DARTBOARD -->
+ <div class="dartboard-layout">
+  <div class="board-wrap">
+   <svg id="board"
+    viewBox="-230 -230 460 460"
+    aria-label="Interactive dartboard">
+   </svg>
+  </div>
+ </div>
+
+ <!-- SCORE AND LEGS IN FORMER CHECKOUT AREA -->
+ <div class="score-checkout-row">
+  <div class="score-box">
+   <div class="score-label">REMAINING</div>
+   <div id="boardRemaining" class="score-number">501</div>
   </div>
 
   <div class="checkout-panel">
-    <div class="checkout-label">DARTIQ CHECKOUT ROUTE</div>
-    <div id="checkoutRoute" class="checkout-route">
-      NO CHECKOUT AVAILABLE
-    </div>
-    <div id="checkoutHint" class="checkout-hint">
-      Checkout routes appear from 170 remaining.
-    </div>
+   <div class="checkout-label">DARTIQ CHECKOUT</div>
+   <div id="checkoutRoute" class="checkout-route">
+    NO CHECKOUT AVAILABLE
+   </div>
+   <div id="checkoutHint" class="checkout-hint">
+    Checkout routes appear from 170 remaining.
+   </div>
   </div>
 
-  <div class="visit-actions">
-    <button id="missButton"
-      class="secondary"
-      onclick="addMiss()">
-      MISS
-    </button>
-    <button id="confirmVisitButton"
-      class="primary"
-      onclick="confirmVisit()">
-      CONFIRM VISIT
-    </button>
-    <button id="undoButton"
-      class="secondary"
-      onclick="undoVisitEntry()">
-      UNDO
-    </button>
+  <div class="score-box">
+   <div class="score-label">LEGS</div>
+   <div id="boardLegs" class="legs-number">0–0</div>
+   <div class="score-sub">YOU / OPP.</div>
   </div>
+ </div>
 
-  <div id="message" class="notice"></div>
-
-  <button id="opponentWonButton"
-    class="danger"
-    onclick="opponentWonLeg()">
-    OPPONENT WON LEG
+ <div class="visit-actions">
+  <button id="missButton"
+   class="secondary"
+   onclick="addMiss()">
+   MISS
   </button>
+  <button id="confirmVisitButton"
+   class="primary"
+   onclick="confirmVisit()">
+   CONFIRM VISIT
+  </button>
+  <button id="undoButton"
+   class="secondary"
+   onclick="undoVisitEntry()">
+   UNDO
+  </button>
+ </div>
+
+ <div id="message" class="notice"></div>
+
+ <button id="opponentWonButton"
+  class="danger"
+  onclick="opponentWonLeg()">
+  OPPONENT WON LEG
+ </button>
 </div>
 </section>
 
-<!-- MATCH COMPLETED -->
 <section id="completed" class="screen">
-  <div class="panel center">
-    <div class="eyebrow">MATCH COMPLETED</div>
-    <h1>MATCH RESULT</h1>
-    <div id="finalResult" class="result"></div>
-    <div id="finalScore" class="final-score"></div>
-    <div class="eyebrow">YOUR MATCH PERFORMANCE</div>
-    <div id="finalSummary" class="stats"></div>
-    <button class="primary" onclick="continueToMainIssue()">
-      CONTINUE TO MAIN ISSUE SELECTION
-    </button>
-    <div id="completionMessage" class="notice"></div>
-  </div>
+ <div class="panel center">
+  <div class="eyebrow">MATCH COMPLETED</div>
+  <h1>MATCH RESULT</h1>
+  <div id="finalResult" class="result"></div>
+  <div id="finalScore" class="final-score"></div>
+  <div class="eyebrow">YOUR MATCH PERFORMANCE</div>
+  <div id="finalSummary" class="stats"></div>
+  <button class="primary" onclick="continueToMainIssue()">
+   CONTINUE TO MAIN ISSUE SELECTION
+  </button>
+  <div id="completionMessage" class="notice"></div>
+ </div>
 </section>
 
-<!-- MAIN ISSUE -->
 <section id="mainIssue" class="screen">
-  <div class="panel center">
-    <div class="eyebrow">POST-MATCH ANALYSIS</div>
-    <h1>WHAT WAS YOUR MAIN ISSUE?</h1>
-    <p class="small">
-      Select the issue that affected your performance most.
-    </p>
-    <div id="issues" class="issue-grid"></div>
-    <button id="analysisButton"
-      class="primary hidden"
-      onclick="finishAnalysis()">
-      GET MY AI ANALYSIS
-    </button>
-    <div id="analysisMessage" class="notice"></div>
-  </div>
+ <div class="panel center">
+  <div class="eyebrow">POST-MATCH ANALYSIS</div>
+  <h1>WHAT WAS YOUR MAIN ISSUE?</h1>
+  <p class="small">
+   Select the issue that affected your performance most.
+  </p>
+  <div id="issues" class="issue-grid"></div>
+  <button id="analysisButton"
+   class="primary hidden"
+   onclick="finishAnalysis()">
+   GET MY AI ANALYSIS
+  </button>
+  <div id="analysisMessage" class="notice"></div>
+ </div>
 </section>
 
-<!-- AI ANALYSIS -->
 <section id="analysis" class="screen">
-  <div class="panel center">
-    <div class="eyebrow">DARTIQ AI COACH</div>
-    <h1>YOUR MATCH ANALYSIS</h1>
-    <h2 id="analysisIssue"></h2>
-    <p id="analysisAdvice" class="small"></p>
-    <button class="primary" onclick="openTraining()">
-      GO TO TODAY'S AI TRAINING
-    </button>
-    <div id="trainingMessage" class="notice"></div>
-  </div>
+ <div class="panel center">
+  <div class="eyebrow">DARTIQ AI COACH</div>
+  <h1>YOUR MATCH ANALYSIS</h1>
+  <h2 id="analysisIssue"></h2>
+  <p id="analysisAdvice" class="small"></p>
+  <button class="primary" onclick="openTraining()">
+   GO TO TODAY'S AI TRAINING
+  </button>
+  <div id="trainingMessage" class="notice"></div>
+ </div>
 </section>
 
 <footer>DARTIQ • INTELLIGENT DARTS PERFORMANCE</footer>
@@ -710,15 +734,14 @@ footer{
 <script>
 "use strict";
 
-/* GLIDE PARAMETERS */
 const params=new URLSearchParams(location.search);
 
 const param=(...names)=>{
-  for(const name of names){
-    const value=params.get(name);
-    if(value&&value.trim())return value.trim();
-  }
-  return "";
+ for(const name of names){
+  const value=params.get(name);
+  if(value&&value.trim())return value.trim();
+ }
+ return "";
 };
 
 const WEBHOOK=
@@ -733,29 +756,28 @@ const MATCH_COMPLETION_WEBHOOK=
 const email=param("email");
 const playerID=param("player","playerid","userid");
 
-/* DYNAMIC PLAYER NAME */
 function readPlayerName(){
-  const value=param(
-    "playername","playerName","player_name",
-    "name","fullName","full_name",
-    "firstName","firstname"
-  );
+ const value=param(
+  "playername","playerName","player_name",
+  "name","fullName","full_name",
+  "firstName","firstname"
+ );
 
-  if(!value)return "";
+ if(!value)return "";
 
-  if(
-    /^\{.*\}$/.test(value)||
-    /^(PLAYER|PLAYERNAME|undefined|null|unknown)$/i.test(value)
-  ){
-    return "";
-  }
+ if(
+  /^\{.*\}$/.test(value)||
+  /^(PLAYER|PLAYERNAME|undefined|null|unknown)$/i.test(value)
+ ){
+  return "";
+ }
 
-  return value.replace(/[{}]/g,"").trim().slice(0,80);
+ return value.replace(/[{}]/g,"").trim().slice(0,80);
 }
 
 const playerName=readPlayerName();
 const spokenName=playerName?
-  playerName.split(/\s+/)[0]:"";
+ playerName.split(/\s+/)[0]:"";
 
 const language=param("lang","language")||"EN";
 const isDutch=language.toLowerCase().startsWith("nl");
@@ -763,7 +785,6 @@ const isDutch=language.toLowerCase().startsWith("nl");
 const $=id=>document.getElementById(id);
 const fmt=n=>Number(n).toFixed(2);
 
-/* MATCH STATE */
 let sessionID=param("session","sessionID");
 let bestOf=0;
 let legsToWin=0;
@@ -801,18 +822,12 @@ let matchResult="";
 let completionSyncConfirmed=false;
 let matchLaunching=false;
 
-/*
- V8.2 FIX:
- Each session has its own recovery key.
- A previous match cannot overwrite a new session.
-*/
 function recoveryKey(){
-  return "DARTIQ_MATCH_RECOVERY_V8_"+
-    (sessionID||"NO_SESSION")+"_"+
-    (email||playerID||"guest");
+ return "DARTIQ_MATCH_RECOVERY_V8_"+
+  (sessionID||"NO_SESSION")+"_"+
+  (email||playerID||"guest");
 }
 
-/* CHECKOUT ROUTES */
 const checkoutRoutes={
 170:"T20 → T20 → BULL",167:"T20 → T19 → BULL",
 164:"T20 → T18 → BULL",161:"T20 → T17 → BULL",
@@ -898,1353 +913,14 @@ const checkoutRoutes={
 };
 
 function updateCheckoutRoute(){
-  const route=$("checkoutRoute");
-  const hint=$("checkoutHint");
-
-  if(remaining>170){
-    route.textContent="NO CHECKOUT AVAILABLE";
-    hint.textContent="Checkout routes appear from 170 remaining.";
-  }else if([169,168,166,165,163,162,159].includes(remaining)){
-    route.textContent="NO 3-DART FINISH";
-    hint.textContent="Set up your preferred double.";
-  }else if(remaining===1){
-    route.textContent="BUST";
-    hint.textContent="You must finish on a double.";
-  }else if(remaining===0){
-    route.textContent="GAME SHOT";
-    hint.textContent="Leg completed.";
-  }else{
-    route.textContent=checkoutRoutes[remaining]||"SET UP DOUBLE";
-    hint.textContent="Suggested checkout route • Double out";
-  }
-}
-
-/* COLLAPSIBLE CONTROLS */
-function toggleCallerPanel(){
-  const hidden=$("callerContent").classList.toggle("hidden");
-  $("callerArrow").textContent=hidden?"▼":"▲";
-}
-
-function toggleScoringPanel(){
-  const hidden=$("scoringContent").classList.toggle("hidden");
-  $("scoringArrow").textContent=hidden?"▼":"▲";
-}
-
-/* SESSION-SCOPED RECOVERY */
-function saveRecovery(stage){
-  if(!sessionID)return;
-
-  try{
-    sessionStorage.setItem(recoveryKey(),JSON.stringify({
-      stage,
-      sessionID,
-      bestOf,
-      legsToWin,
-      legsWon,
-      opponentLegs,
-      totalPoints,
-      totalDarts,
-      first9Points,
-      first9Darts,
-      count100,
-      count140,
-      count180,
-      checkoutAttempts,
-      checkoutHits,
-      highestCheckout,
-      visitNumber,
-      selectedIssue,
-      matchResult,
-      completionSyncConfirmed
-    }));
-  }catch(e){
-    console.warn("Recovery unavailable",e);
-  }
-}
-
-function restoreRecovery(){
-  /*
-   Never restore an old completed match
-   into a newly created Glide session.
-  */
-  if(!sessionID)return;
-
-  try{
-    const saved=JSON.parse(
-      sessionStorage.getItem(recoveryKey())||"null"
-    );
-
-    if(
-      !saved||
-      !saved.sessionID||
-      saved.sessionID!==sessionID||
-      !["completed","mainIssue","analysis"].includes(saved.stage)
-    ){
-      showScreen("setup");
-      return;
-    }
-
-    bestOf=saved.bestOf||0;
-    legsToWin=saved.legsToWin||0;
-    legsWon=saved.legsWon||0;
-    opponentLegs=saved.opponentLegs||0;
-    totalPoints=saved.totalPoints||0;
-    totalDarts=saved.totalDarts||0;
-    first9Points=saved.first9Points||0;
-    first9Darts=saved.first9Darts||0;
-    count100=saved.count100||0;
-    count140=saved.count140||0;
-    count180=saved.count180||0;
-    checkoutAttempts=saved.checkoutAttempts||0;
-    checkoutHits=saved.checkoutHits||0;
-    highestCheckout=saved.highestCheckout||0;
-    visitNumber=saved.visitNumber||0;
-    selectedIssue=saved.selectedIssue||"";
-    matchResult=saved.matchResult||
-      (legsWon>opponentLegs?"Won":"Lost");
-
-    completionSyncConfirmed=!!saved.completionSyncConfirmed;
-    finished=true;
-
-    updateStats();
-    renderMatchResults();
-
-    if(selectedIssue){
-      document.querySelectorAll(".issue").forEach(b=>{
-        b.classList.toggle(
-          "selected",
-          b.textContent===selectedIssue
-        );
-      });
-      $("analysisButton").classList.remove("hidden");
-    }
-
-    if(saved.stage==="analysis"&&selectedIssue){
-      renderAnalysis();
-      showScreen("analysis");
-    }else{
-      showScreen(
-        saved.stage==="analysis"?"mainIssue":saved.stage
-      );
-    }
-  }catch(e){
-    console.warn("Recovery failed",e);
-    showScreen("setup");
-  }
-}
-
-/* MASTER CALLER */
-const speechSupported=
-  "speechSynthesis" in window &&
-  "SpeechSynthesisUtterance" in window;
-
-let voiceEnabled=true;
-let callerVoice=null;
-let lastCall=[];
-let callSequence=0;
-
-function selectCallerVoice(){
-  if(!speechSupported)return;
-
-  const voices=window.speechSynthesis.getVoices();
-  const target=isDutch?"nl":"en";
-
-  const candidates=voices.filter(v=>
-    v.lang.toLowerCase().startsWith(target)
-  );
-
-  callerVoice=
-    candidates.find(v=>
-      /\bmale\b/i.test(v.name)&&!/\bfemale\b/i.test(v.name)
-    )||
-    candidates.find(v=>
-      /daniel|george|arthur|oliver|ryan|david|james|thomas|mark|andrew|guy/i.test(v.name)
-    )||
-    candidates.find(v=>!/female/i.test(v.name))||
-    candidates[0]||
-    null;
-
-  updateVoiceButton();
-}
-
-function updateVoiceButton(){
-  $("voiceToggle").textContent=
-    voiceEnabled?"VOICE ON":"VOICE OFF";
-
-  $("voiceStatus").textContent=
-    !voiceEnabled?"CALLER MUTED":
-    callerVoice?"CALLER READY • "+callerVoice.name:
-    "CALLER READY";
-}
-
-function prepareCallerSpeech(text){
-  return String(text)
-    .replace(/\bDARTIQ\b/gi,"Dart IQ")
-    .replace(/\s+/g," ")
-    .trim();
-}
-
-function toggleVoice(){
-  voiceEnabled=!voiceEnabled;
-
-  if(!voiceEnabled&&speechSupported){
-    callSequence++;
-    window.speechSynthesis.cancel();
-  }
-
-  updateVoiceButton();
-}
-
-function saySequence(lines){
-  lastCall=lines.map(line=>({...line}));
-
-  if(lines[0]){
-    $("callerLine").textContent=
-      lines[0].display||lines[0].text;
-  }
-
-  if(!voiceEnabled||!speechSupported)return;
-
-  callSequence++;
-  const sequence=callSequence;
-  window.speechSynthesis.cancel();
-
-  function play(index){
-    if(sequence!==callSequence||index>=lines.length)return;
-
-    const line=lines[index];
-    $("callerLine").textContent=line.display||line.text;
-
-    const utterance=new SpeechSynthesisUtterance(
-      prepareCallerSpeech(line.text)
-    );
-
-    utterance.lang=isDutch?"nl-NL":"en-GB";
-
-    if(callerVoice){
-      utterance.voice=callerVoice;
-    }
-
-    utterance.rate=line.rate||0.9;
-    utterance.pitch=line.pitch||0.78;
-
-    utterance.onend=()=>play(index+1);
-    utterance.onerror=()=>play(index+1);
-
-    window.speechSynthesis.speak(utterance);
-  }
-
-  play(0);
-}
-
-function repeatLastCall(){
-  if(lastCall.length)saySequence(lastCall);
-}
-
-function testVoice(){
-  saySequence([{
-    text:isDutch?
-      "Dart IQ master caller is klaar. Game on!":
-      "Dart IQ master caller is ready. Game on!",
-    rate:0.88
-  }]);
-}
-
-function numberWords(n){
-  n=Math.round(Number(n));
-
-  const units=[
-    "zero","one","two","three","four","five",
-    "six","seven","eight","nine","ten","eleven",
-    "twelve","thirteen","fourteen","fifteen",
-    "sixteen","seventeen","eighteen","nineteen"
-  ];
-
-  const tens=[
-    "","","twenty","thirty","forty",
-    "fifty","sixty","seventy","eighty","ninety"
-  ];
-
-  if(n<0)return "minus "+numberWords(-n);
-  if(n<20)return units[n];
-
-  if(n<100){
-    return tens[Math.floor(n/10)]+
-      (n%10?" "+units[n%10]:"");
-  }
-
-  if(n<1000){
-    return units[Math.floor(n/100)]+" hundred"+
-      (n%100?" and "+numberWords(n%100):"");
-  }
-
-  return String(n);
-}
-
-function legOrdinal(n){
-  return [
-    "","first","second","third","fourth","fifth",
-    "sixth","seventh","eighth","ninth","tenth"
-  ][n]||n+"th";
-}
-
-function dutchOrdinal(n){
-  return [
-    "","eerste","tweede","derde","vierde","vijfde",
-    "zesde","zevende","achtste","negende","tiende"
-  ][n]||n+"de";
-}
-
-function announceMatchWelcome(){
-  const greetingName=spokenName?spokenName+" ":"";
-
-  const text=
-    "Welcome "+greetingName+
-    "to the DARTIQ oche. "+
-    "You play best of "+bestOf+". "+
-    "Game on!";
-
-  $("matchWelcome").textContent=text;
-
-  saySequence([{
-    text,
-    display:text,
-    rate:0.88,
-    pitch:0.78
-  }]);
-}
-
-function announceStartLeg(n){
-  saySequence([{
-    text:isDutch?
-      dutchOrdinal(n)+" leg. Game on!":
-      legOrdinal(n)+" leg. Game on!",
-    rate:0.91
-  }]);
-}
-
-function announceScore(score){
-  saySequence([{
-    text:score===180?
-      (isDutch?"Honderd en tachtig!":
-      "One hundred and eighty!"):
-      numberWords(score)+"!",
-    display:score===180?
-      "ONE HUNDRED AND EIGHTYYYY!":undefined,
-    rate:score===180?0.72:0.91,
-    pitch:0.78
-  }]);
-}
-
-function announceBust(){
-  saySequence([{text:"Bust!",rate:0.87}]);
-}
-
-function announceCheckout(leg,matchWon){
-  const name=spokenName||"";
-  let text;
-
-  if(matchWon){
-    text=name?
-      "Game shot, "+name+"! And the match!":
-      "Game shot, and the match!";
-  }else{
-    text=name?
-      "Game shot, "+name+"! "+
-      legOrdinal(leg)+" leg!":
-      "Game shot! "+legOrdinal(leg)+" leg!";
-  }
-
-  saySequence([{
-    text,
-    display:text,
-    rate:0.84
-  }]);
-}
-
-function announceOpponentLeg(matchLost){
-  saySequence([{
-    text:matchLost?
-      (isDutch?
-        "Game shot, en de wedstrijd voor de tegenstander.":
-        "Game shot, and the match to your opponent."):
-      (isDutch?
-        "Game shot, leg voor de tegenstander.":
-        "Game shot, leg to your opponent."),
-    rate:0.87
-  }]);
-}
-
-function announceVisitResult({
-  score,bust,checkout,matchWon,leg,remainingScore
-}){
-  if(checkout){
-    announceCheckout(leg,matchWon);
-    return;
-  }
-
-  if(bust){
-    announceBust();
-    return;
-  }
-
-  if(remainingScore>=2&&remainingScore<=170){
-    saySequence([
-      {
-        text:score===180?
-          "One hundred and eighty!":
-          numberWords(score)+"!",
-        rate:score===180?0.72:0.91
-      },
-      {
-        text:isDutch?
-          (playerName||"Speler")+
-          ", je hebt "+remainingScore+" nodig.":
-          (spokenName?spokenName+", ":"")+
-          "you require "+numberWords(remainingScore)+".",
-        rate:0.88
-      }
-    ]);
-    return;
-  }
-
-  announceScore(score);
-}
-
-/* SCREENS */
-function showScreen(id){
-  document.querySelectorAll(".screen").forEach(s=>
-    s.classList.toggle("active",s.id===id)
-  );
-  window.scrollTo(0,0);
-}
-
-function message(t){
-  $("message").textContent=t;
-}
-
-/* GLIDE WEBHOOKS */
-async function sendEvent(eventType,data={}){
-  try{
-    const url=eventType==="match_start"?
-      MATCH_START_WEBHOOK:
-      eventType==="match_complete"?
-      MATCH_COMPLETION_WEBHOOK:
-      WEBHOOK;
-
-    const response=await fetch(url,{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        eventType,
-        sessionID,
-        email,
-        playerID,
-        language,
-        scoringSource:"Match",
-        bestOf,
-        matchFormat:"BO"+bestOf,
-        legsToWin,
-        ...data
-      })
-    });
-
-    if(!response.ok){
-      throw Error("HTTP "+response.status);
-    }
-
-    return true;
-  }catch(e){
-    console.error("DARTIQ sync:",eventType,e);
-    return false;
-  }
-}
-
-/* FORMAT SELECTION */
-function selectFormat(n){
-  if(![3,5,7,9].includes(n))return;
-
-  bestOf=n;
-  legsToWin=Math.floor(n/2)+1;
-
-  document.querySelectorAll(".format").forEach(b=>
-    b.classList.toggle(
-      "selected",
-      Number(b.dataset.format)===n
-    )
-  );
-
-  $("formatDescription").textContent=
-    "BEST OF "+n+" • FIRST TO "+legsToWin+" LEGS";
-
-  $("startGame").classList.remove("hidden");
-}
-
-/* START MATCH */
-async function startMatch(){
-  if(!bestOf||matchLaunching)return;
-
-  matchLaunching=true;
-
-  if(!sessionID){
-    sessionID=typeof crypto.randomUUID==="function"?
-      crypto.randomUUID():
-      "MATCH-"+Date.now();
-  }
-
-  /*
-   Starting a fresh match clears recovery
-   for this exact session only.
-  */
-  try{
-    sessionStorage.removeItem(recoveryKey());
-  }catch(e){}
-
-  matchStartedAt=new Date().toISOString();
-  $("startGame").disabled=true;
-
-  $("matchTitle").textContent="BEST OF "+bestOf;
-  $("targetInfo").textContent="FIRST TO "+legsToWin;
-  $("displayPlayerName").textContent=playerName||"PLAYER";
-
-  updateStats();
-  showScreen("match");
-  announceMatchWelcome();
-
-  const ok=await sendEvent("match_start",{
-    startedAt:matchStartedAt,
-    matchStatus:"In Progress"
-  });
-
-  $("startGame").disabled=false;
-  matchLaunching=false;
-
-  if(!ok){
-    message("Match started. Glide connection not confirmed.");
-  }
-}
-
-/* DARTBOARD */
-const numbers=[
-  20,1,18,4,13,6,10,15,2,17,
-  3,19,7,16,8,11,14,9,12,5
-];
-
-const NS="http://www.w3.org/2000/svg";
-const board=$("board");
-
-function polar(r,a){
-  const rad=(a-90)*Math.PI/180;
-  return [r*Math.cos(rad),r*Math.sin(rad)];
-}
-
-function pathRing(r1,r2,a1,a2){
-  const p1=polar(r2,a1);
-  const p2=polar(r2,a2);
-  const p3=polar(r1,a2);
-  const p4=polar(r1,a1);
-
-  return `M${p1} A${r2} ${r2} 0 0 1 ${p2} L${p3} A${r1} ${r1} 0 0 0 ${p4} Z`;
-}
-
-function element(tag,attributes,parent=board){
-  const e=document.createElementNS(NS,tag);
-
-  for(const [k,v] of Object.entries(attributes)){
-    e.setAttribute(k,v);
-  }
-
-  parent.appendChild(e);
-  return e;
-}
-
-function segment(r1,r2,a1,a2,color,n,m,label){
-  const e=element("path",{
-    d:pathRing(r1,r2,a1,a2),
-    fill:color,
-    stroke:"#666",
-    "stroke-width":".65"
-  });
-
-  e.addEventListener("click",()=>addDart(n,m,label));
-}
-
-function drawBoard(){
-  board.innerHTML="";
-
-  element("circle",{
-    cx:0,cy:0,r:224,
-    fill:"#02070e",
-    stroke:"#39a9ff",
-    "stroke-width":3
-  });
-
-  numbers.forEach((n,i)=>{
-    const a=i*18;
-    const dark=i%2===0;
-    const single=dark?"#10151a":"#e2d6b8";
-    const multi=dark?"#c83c46":"#27865e";
-
-    segment(24,103,a-9,a+9,single,n,1,"S"+n);
-    segment(103,118,a-9,a+9,multi,n,3,"T"+n);
-    segment(118,178,a-9,a+9,single,n,1,"S"+n);
-    segment(178,195,a-9,a+9,multi,n,2,"D"+n);
-
-    const [x,y]=polar(211,a);
-
-    const t=element("text",{
-      x,y,
-      fill:"#39a9ff",
-      "font-size":16,
-      "font-weight":900,
-      "text-anchor":"middle",
-      "dominant-baseline":"middle",
-      "pointer-events":"none"
-    });
-
-    t.textContent=n;
-  });
-
-  const outer=element("circle",{
-    cx:0,cy:0,r:24,
-    fill:"#27865e",
-    stroke:"#ddd"
-  });
-
-  outer.addEventListener("click",()=>addDart(25,1,"25"));
-
-  const bull=element("circle",{
-    cx:0,cy:0,r:10,
-    fill:"#c83c46",
-    stroke:"#ddd"
-  });
-
-  bull.addEventListener("click",()=>addDart(
-    
-25,2,"BULL"));
-}
-
-/* NEXT LEG */
-function playPendingLegAnnouncement(){
-  if(!nextLegAnnouncementPending)return;
-
-  nextLegAnnouncementPending=false;
-  announceStartLeg(currentLeg);
-}
-
-/* BOARD INPUT */
-function addDart(n,m,label){
-  if(finished||saving||mode!=="board")return;
-
-  if(currentDarts.length>=3){
-    message("Confirm your visit first.");
-    return;
-  }
-
-  playPendingLegAnnouncement();
-
-  currentDarts.push({
-    number:n,
-    multiplier:m,
-    score:n*m,
-    label
-  });
-
-  updateInput();
-}
-
-function undoDart(){
-  if(saving)return;
-
-  currentDarts.pop();
-  updateInput();
-}
-
-/* MISS BUTTON */
-function addMiss(){
-  if(finished||saving)return;
-
-  if(mode==="board"){
-    addDart(0,0,"MISS");
-  }else if(keyInput===""){
-    playPendingLegAnnouncement();
-    keyInput="0";
-    updateInput();
-  }
-}
-
-/* UNDO BUTTON */
-function undoVisitEntry(){
-  if(finished||saving)return;
-
-  if(mode==="board"){
-    undoDart();
-  }else{
-    keyBack();
-  }
-}
-
-/* INPUT MODE */
-function setMode(m){
-  if(
-    saving||
-    finished||
-    !["board","keypad"].includes(m)||
-    mode===m
-  )return;
-
-  currentDarts=[];
-  keyInput="";
-  mode=m;
-
-  $("boardPanel").classList.toggle("hidden",m!=="board");
-  $("keypadPanel").classList.toggle("hidden",m!=="keypad");
-
-  $("boardModeButton").classList.toggle(
-    "active",m==="board"
-  );
-
-  $("keyModeButton").classList.toggle(
-    "active",m==="keypad"
-  );
-
-  updateInput();
-  message("");
-}
-
-/* KEYPAD */
-function keyPress(n){
-  if(
-    saving||
-    finished||
-    mode!=="keypad"||
-    keyInput.length>=3
-  )return;
-
-  const next=keyInput+n;
-  if(Number(next)>180)return;
-
-  playPendingLegAnnouncement();
-  keyInput=next;
-  updateInput();
-}
-
-function keyClear(){
-  if(!saving){
-    keyInput="";
-    updateInput();
-  }
-}
-
-function keyBack(){
-  if(!saving){
-    keyInput=keyInput.slice(0,-1);
-    updateInput();
-  }
-}
-
-function updateInput(){
-  const score=currentDarts.reduce(
-    (s,d)=>s+d.score,0
-  );
-
-  $("visitScore").textContent=
-    mode==="board"?score:Number(keyInput||0);
-
-  $("keyValue").textContent=keyInput||"0";
-
-  for(let i=0;i<3;i++){
-    $("dart"+(i+1)).textContent=
-      "DART "+(i+1)+": "+
-      (currentDarts[i]?.label||"–");
-  }
-}
-
-/* PERFORMANCE STATISTICS */
-const average=()=>
-  totalDarts?totalPoints/totalDarts*3:0;
-
-const first9=()=>
-  first9Darts?first9Points/first9Darts*3:0;
-
-const checkoutPct=()=>
-  checkoutAttempts?
-    checkoutHits/checkoutAttempts*100:0;
-
-function updateStats(){
-  $("boardRemaining").textContent=remaining;
-  $("boardLegs").textContent=legsWon+"–"+opponentLegs;
-  $("legInfo").textContent="LEG "+currentLeg;
-  $("visitInfo").textContent="VISIT "+(visitNumber+1);
-
-  updateCheckoutRoute();
-}
-
-function recordFirst9(score,darts,dartScores=[]){
-  const available=Math.max(0,9-first9Darts);
-  const take=Math.min(darts,available);
-
-  if(take===darts){
-    first9Points+=score;
-  }else if(take>0&&mode==="board"){
-    first9Points+=dartScores
-      .slice(0,take)
-      .reduce((s,v)=>s+v,0);
-  }
-
-  first9Darts+=take;
-}
-
-/* CONFIRM VISIT */
-async function confirmVisit(){
-  if(finished||saving)return;
-
-  const boardMode=mode==="board";
-
-  if(boardMode&&!currentDarts.length){
-    message("Enter at least one dart.");
-    return;
-  }
-
-  if(!boardMode&&keyInput===""){
-    message("Enter a visit score.");
-    return;
-  }
-
-  const darts=boardMode?
-    currentDarts.map(d=>({...d})):[];
-
-  const score=boardMode?
-    darts.reduce((s,d)=>s+d.score,0):
-    Number(keyInput);
-
-  const before=remaining;
-  const count=boardMode?darts.length:3;
-  const last=darts[darts.length-1];
-  const exact=score===before;
-
-  const validDouble=boardMode?
-    last?.multiplier===2:false;
-
-  if(exact&&!boardMode){
-    if(!window.confirm(
-      "Did you finish on a double or bull?"
-    )){
-      message(
-        "Checkout not confirmed. Enter a corrected visit."
-      );
-      return;
-    }
-  }
-
-  const bust=
-    score>before||
-    before-score===1||
-    (exact&&boardMode&&!validDouble);
-
-  const checkoutHit=exact&&!bust;
-  const effectiveScore=bust?0:score;
-  const after=bust?before:before-score;
-  const attempt=before>=2&&before<=170;
-
-  const visit={
-    sessionID,
-    email,
-    playerID,
-    visitNumber:visitNumber+1,
-    legNumber:currentLeg,
-    bestOf,
-    scoreBefore:before,
-    visitScore:effectiveScore,
-    attemptedScore:score,
-    dartsThrown:count,
-    remainingScore:after,
-    checkoutAttempt:attempt,
-    checkoutHit,
-    legEnded:checkoutHit,
-    checkoutScore:checkoutHit?before:0,
-    bust,
-    scoringSource:"Match",
-    inputMode:mode,
-    bestDart:boardMode?
-      Math.max(...darts.map(d=>d.score)):null,
-    dart1Score:darts[0]?.score??null,
-    dart1Segment:darts[0]?.label||"",
-    dart2Score:darts[1]?.score??null,
-    dart2Segment:darts[1]?.label||"",
-    dart3Score:darts[2]?.score??null,
-    dart3Segment:darts[2]?.label||"",
-    darts
-  };
-
-  saving=true;
-
-  $("confirmVisitButton").disabled=true;
-  $("opponentWonButton").disabled=true;
-  $("missButton").disabled=true;
-  $("undoButton").disabled=true;
-
-  const ok=await sendEvent("match_visit",visit);
-
-  saving=false;
-
-  $("confirmVisitButton").disabled=false;
-  $("opponentWonButton").disabled=false;
-  $("missButton").disabled=false;
-  $("undoButton").disabled=false;
-
-  visitNumber++;
-  totalDarts+=count;
-  totalPoints+=effectiveScore;
-
-  recordFirst9(
-    effectiveScore,
-    count,
-    darts.map(d=>d.score)
-  );
-
-  if(attempt)checkoutAttempts++;
-
-  if(!bust){
-    remaining=after;
-
-    if(score===180)count180++;
-    else if(score>=140)count140++;
-    else if(score>=100)count100++;
-  }
-
-  if(checkoutHit){
-    checkoutHits++;
-    highestCheckout=Math.max(
-      highestCheckout,before
-    );
-    legsWon++;
-  }
-
-  currentDarts=[];
-  keyInput="";
-
-  updateInput();
-  updateStats();
-
-  const matchWon=
-    checkoutHit&&legsWon>=legsToWin;
-
-  announceVisitResult({
-    score,
-    bust,
-    checkout:checkoutHit,
-    matchWon,
-    leg:currentLeg,
-    remainingScore:remaining
-  });
-
-  if(checkoutHit){
-    if(matchWon){
-      await completeMatch();
-      return;
-    }
-
-    currentLeg++;
-    remaining=501;
-    updateStats();
-
-    message("LEG WON! Start leg "+currentLeg+".");
-    nextLegAnnouncementPending=true;
-  }else{
-    message(
-      bust?
-        "BUST • Score unchanged.":
-        "Visit recorded • "+remaining+" remaining."
-    );
-  }
-
-  if(!ok){
-    message(
-      "Visit recorded locally. Glide sync not confirmed."
-    );
-  }
-}
-
-/* OPPONENT WINS LEG */
-async function opponentWonLeg(){
-  if(finished||saving)return;
-
-  if(!window.confirm(
-    "Confirm opponent won leg "+currentLeg+"?"
-  ))return;
-
-  saving=true;
-
-  $("opponentWonButton").disabled=true;
-  $("confirmVisitButton").disabled=true;
-  $("missButton").disabled=true;
-  $("undoButton").disabled=true;
-
-  const ok=await sendEvent("match_visit",{
-    sessionID,
-    email,
-    playerID,
-    visitNumber:visitNumber+1,
-    legNumber:currentLeg,
-    bestOf,
-    scoreBefore:remaining,
-    visitScore:0,
-    attemptedScore:0,
-    dartsThrown:0,
-    remainingScore:remaining,
-    checkoutAttempt:false,
-    checkoutHit:false,
-    legEnded:true,
-    checkoutScore:0,
-    bust:false,
-    scoringSource:"Match",
-    inputMode:"opponent",
-    legWinner:"Opponent",
-    opponentWonLeg:true,
-    bestDart:null,
-    dart1Score:null,
-    dart1Segment:"",
-    dart2Score:null,
-    dart2Segment:"",
-    dart3Score:null,
-    dart3Segment:"",
-    darts:[]
-  });
-
-  saving=false;
-
-  $("opponentWonButton").disabled=false;
-  $("confirmVisitButton").disabled=false;
-  $("missButton").disabled=false;
-  $("undoButton").disabled=false;
-
-  opponentLegs++;
-  visitNumber++;
-  currentDarts=[];
-  keyInput="";
-
-  updateInput();
-  updateStats();
-
-  const matchLost=opponentLegs>=legsToWin;
-
-  announceOpponentLeg(matchLost);
-
-  if(matchLost){
-    await completeMatch();
-    return;
-  }
-
-  currentLeg++;
-  remaining=501;
-  nextLegAnnouncementPending=true;
-
-  updateStats();
-
-  message(
-    "OPPONENT WON LEG • Start leg "+currentLeg+"."
-  );
-
-  if(!ok){
-    message(
-      "Opponent leg recorded locally. Glide sync not confirmed."
-    );
-  }
-}
-
-/* MATCH RESULTS */
-function summaryCard(label,value){
-  const d=document.createElement("div");
-  d.className="stat";
-
-  const strong=document.createElement("strong");
-  strong.textContent=value;
-
-  const span=document.createElement("span");
-  span.textContent=label;
-
-  d.append(strong,span);
-  return d;
-}
-
-function renderMatchResults(){
-  matchResult=legsWon>=legsToWin?"Won":"Lost";
-
-  $("finalResult").textContent=
-    matchResult==="Won"?"YOU WON":"YOU LOST";
-
-  $("finalResult").className=
-    "result "+(matchResult==="Won"?"win":"loss");
-
-  $("finalScore").textContent=
-    legsWon+" – "+opponentLegs;
-
-  $("finalSummary").replaceChildren(
-    summaryCard("MATCH","BO"+bestOf),
-    summaryCard("RESULT",matchResult.toUpperCase()),
-    summaryCard("LEGS WON",legsWon),
-    summaryCard("LEGS LOST",opponentLegs),
-    summaryCard("AVERAGE",fmt(average())),
-    summaryCard("FIRST 9",fmt(first9())),
-    summaryCard("TOTAL DARTS",totalDarts),
-    summaryCard("180",count180),
-    summaryCard("140+",count140),
-    summaryCard("100+",count100),
-    summaryCard("CHECKOUT %",checkoutPct().toFixed(1)+"%"),
-    summaryCard("HIGHEST CO",highestCheckout),
-    summaryCard("CHECKOUT HITS",checkoutHits),
-    summaryCard("CO ATTEMPTS",checkoutAttempts),
-    summaryCard("TOTAL POINTS",totalPoints)
-  );
-}
-
-/* COMPLETE MATCH */
-async function completeMatch(){
-  if(finished)return;
-
-  finished=true;
-  matchResult=legsWon>=legsToWin?"Won":"Lost";
-
-  renderMatchResults();
-  saveRecovery("completed");
-  showScreen("completed");
-
-  $("completionMessage").textContent=
-    "Saving match results...";
-
-  const ok=await sendEvent("match_complete",{
-    matchStatus:"Completed",
-    matchResult,
-    legsWon,
-    legsLost:opponentLegs,
-    totalPoints,
-    totalDarts,
-    average:Number(fmt(average())),
-    first9Average:Number(fmt(first9())),
-    count100,
-    count140,
-    count180,
-    checkoutAttempts,
-    checkoutHits,
-    checkoutPercentage:Number(
-      checkoutPct().toFixed(1)
-    ),
-    highestCheckout,
-    visitCount:visitNumber,
-    startedAt:matchStartedAt,
-    completedAt:new Date().toISOString()
-  });
-
-  completionSyncConfirmed=ok;
-  saveRecovery("completed");
-
-  $("completionMessage").textContent=ok?
-    "Match completion sent to Glide.":
-    "Match completed locally. Glide sync not confirmed.";
-}
-
-function continueToMainIssue(){
-  saveRecovery("mainIssue");
-  showScreen("mainIssue");
-}
-
-/* POST-MATCH MAIN ISSUE */
-const issueData=[
-  ["Missing Right","Aim and release alignment"],
-  ["Missing Left","Release consistency"],
-  ["Missing High","Release height and timing"],
-  ["Missing Low","Follow-through and release"],
-  ["Inconsistent Grouping","Repeatable throw mechanics"],
-  ["Release Timing","Release timing consistency"],
-  ["Follow Through","Controlled follow-through"],
-  ["Elbow Movement","Stable throwing mechanics"],
-  ["Body Stability","Consistent stance and balance"],
-  ["Confidence","Match confidence and routine"]
-];
-
-function buildIssues(){
-  issueData.forEach(([name])=>{
-    const b=document.createElement("button");
-
-    b.className="issue";
-    b.textContent=name;
-
-    b.onclick=()=>{
-      selectedIssue=name;
-
-      document.querySelectorAll(".issue").forEach(x=>
-        x.classList.toggle("selected",x===b)
-      );
-
-      $("analysisButton").classList.remove("hidden");
-      saveRecovery("mainIssue");
-    };
-
-    $("issues").appendChild(b);
-  });
-}
-
-/* ANALYSIS */
-function renderAnalysis(){
-  const item=issueData.find(
-    x=>x[0]===selectedIssue
-  );
-
-  $("analysisIssue").textContent=selectedIssue;
-
-  $("analysisAdvice").textContent=
-    "Focus area: "+
-    (item?item[1]:selectedIssue)+
-    ". Your selected issue and match statistics have been submitted for coaching. Open Today's AI Training for the matched drill.";
-}
-
-async function finishAnalysis(){
-  if(!selectedIssue)return;
-
-  const button=$("analysisButton");
-  button.disabled=true;
-  button.textContent="PREPARING YOUR ANALYSIS...";
-
-  const ok=await sendEvent("match_main_issue",{
-    mainIssue:selectedIssue,
-    matchStatus:"Completed",
-    matchResult,
-    average:Number(fmt(average())),
-    first9Average:Number(fmt(first9())),
-    legsWon,
-    legsLost:opponentLegs,
-    totalDarts,
-    count100,
-    count140,
-    count180,
-    checkoutPercentage:Number(
-      checkoutPct().toFixed(1)
-    ),
-    highestCheckout
-  });
-
-  button.disabled=false;
-  button.textContent="GET MY AI ANALYSIS";
-
-  if(!ok){
-    $("analysisMessage").textContent=
-      "Glide did not confirm receipt. Retry before continuing.";
-    return;
-  }
-
-  renderAnalysis();
-  saveRecovery("analysis");
-  showScreen("analysis");
-}
-
-/* TODAY'S AI TRAINING */
-function openTraining(){
-  const notice=$("trainingMessage");
-
-  try{
-    const defaultTraining=
-      "https://coach1979christian-coder.github.io/dartiq-web/todays-training.html";
-
-    const raw=
-      params.get("trainingUrl")||
-      params.get("training_url")||
-      "";
-
-    let url;
-
-    if(raw){
-      const query=location.search.slice(1);
-
-      const marker=
-        /(?:^|&)trainingUrl=/i.exec(query)||
-        /(?:^|&)training_url=/i.exec(query);
-
-      let nested=raw;
-
-      if(marker){
-        const original=query.slice(
-          marker.index+marker[0].length
-        );
-
-        if(
-          original.startsWith("http")&&
-          original.includes("&")
-        ){
-          nested=original;
-        }
-      }
-
-      url=new URL(nested,location.href);
-    }else{
-      url=new URL(defaultTraining);
-    }
-
-    if(!["https:","http:"].includes(url.protocol)){
-      throw Error("Invalid training URL");
-    }
-
-    const playerParam=param("player","playerid");
-    const userID=param("userid");
-
-    if(sessionID){
-      url.searchParams.set("session",sessionID);
-    }
-
-    if(email){
-      url.searchParams.set("email",email);
-    }
-
-    if(playerParam){
-      url.searchParams.set("player",playerParam);
-    }
-
-    if(userID){
-      url.searchParams.set("userid",userID);
-    }
-
-    url.searchParams.set("source","MATCH");
-    url.searchParams.set("language",language);
-    url.searchParams.set("mainIssue",selectedIssue);
-    url.searchParams.set("focus",selectedIssue);
-
-    notice.textContent=
-      "Opening Today's AI Training...";
-
-    window.location.assign(url.toString());
-
-  }catch(error){
-    console.error(
-      "DARTIQ training navigation:",error
-    );
-
-    notice.textContent=
-      "Unable to open training. Check the training URL.";
-  }
-}
-
-/* INITIALIZATION */
-if(speechSupported){
-  selectCallerVoice();
-
-  if(
-    typeof window.speechSynthesis.addEventListener===
-    "function"
-  ){
-    window.speechSynthesis.addEventListener(
-      "voiceschanged",
-      selectCallerVoice
-    );
-  }
-}
-
-updateVoiceButton();
-drawBoard();
-buildIssues();
-updateStats();
-updateInput();
-restoreRecovery();
-
-</script>
-</body>
-</html>
+ const route=$("checkoutRoute");
+ const hint=$("checkoutHint");
+
+ if(remaining>170){
+  route.textContent="NO CHECKOUT AVAILABLE";
+  hint.textContent="Checkout routes appear from 170 remaining.";
+ }else if([169,168,166,165,163,162,159].includes(remaining)){
+  route.textContent="NO 3-DART FINISH";
+  hint.textContent="Set up your preferred double.";
+ }else if(remaining===1){
+  route.textContent="BUST";
