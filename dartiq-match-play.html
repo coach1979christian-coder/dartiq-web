@@ -1,639 +1,18 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#02070e">
-<title>DARTIQ | Match Engine V8.4</title>
+/*
+DARTIQ V8.5
+MATCH → MAIN ISSUE → COACH ADVICE →
+TODAY'S AI TRAINING → PERFORMANCE LAB
 
-<style>
-:root{
- --bg:#02070e;
- --panel:#091827;
- --panel2:#0c2236;
- --blue:#39a9ff;
- --line:#205073;
- --text:#f4faff;
- --muted:#8faabe;
- --green:#49e6ad;
- --red:#ff737b;
-}
-*{box-sizing:border-box}
-html,body{min-height:100%;background:var(--bg)}
-body{
- margin:0;
- padding:10px;
- color:var(--text);
- font-family:Arial,Helvetica,sans-serif;
-}
-button{font:inherit;cursor:pointer}
-button:disabled{opacity:.45;cursor:not-allowed}
-.hidden{display:none!important}
-.app{max-width:650px;margin:auto}
-.brand{text-align:center;padding:20px 0}
-.logo{
- color:var(--blue);
- font-size:30px;
- font-weight:900;
- letter-spacing:5px;
- text-shadow:0 0 20px #39a9ff65;
-}
-.subtitle{
- color:var(--muted);
- font-size:11px;
- letter-spacing:2px;
- margin-top:8px;
-}
-.screen{display:none}
-.screen.active{display:block}
-.panel{
- background:linear-gradient(160deg,#0b2032,#06111d);
- border:1px solid var(--line);
- border-radius:18px;
- padding:16px;
- margin-bottom:12px;
-}
-.center{text-align:center}
-h1{font-size:23px;margin:8px 0 15px}
-h2{font-size:18px;margin:8px 0 15px}
-.small{font-size:12px;color:var(--muted);line-height:1.6}
-.eyebrow{
- color:var(--blue);
- font-size:10px;
- font-weight:900;
- letter-spacing:2px;
-}
-.primary{
- display:block;
- width:100%;
- border:0;
- border-radius:12px;
- padding:15px 10px;
- background:var(--blue);
- color:#001321;
- font-size:13px;
- font-weight:900;
- margin-top:15px;
-}
-.secondary{
- background:var(--panel2);
- border:1px solid var(--line);
- border-radius:10px;
- padding:12px;
- color:white;
- font-weight:900;
-}
-.danger{
- background:#391722;
- border:1px solid var(--red);
- color:white;
- border-radius:12px;
- padding:14px;
- font-weight:900;
- width:100%;
- margin-top:12px;
-}
-.format-grid{
- display:grid;
- grid-template-columns:repeat(4,1fr);
- gap:8px;
- margin:20px 0;
-}
-.format{
- padding:19px 3px;
- border:1px solid var(--line);
- border-radius:12px;
- background:var(--panel2);
- color:white;
- font-weight:900;
-}
-.format.selected{
- background:var(--blue);
- color:#001321;
-}
-.match-info{
- display:flex;
- justify-content:space-between;
- gap:8px;
- color:var(--muted);
- font-size:11px;
- margin:12px 0;
-}
-.player-tag{
- text-align:center;
- font-size:12px;
- color:var(--muted);
- margin:8px 0;
-}
-.player-tag strong{color:white}
-.welcome-call{
- background:#102a43;
- border:1px solid var(--line);
- border-radius:10px;
- padding:12px;
- color:var(--green);
- font-size:12px;
- text-align:center;
- line-height:1.5;
- margin:10px 0;
-}
-.voice-panel,.scoring-panel{
- margin:12px 0;
- background:#061421;
- border:1px solid var(--line);
- border-radius:12px;
- overflow:hidden;
-}
-.voice-header,.scoring-header{
- width:100%;
- display:flex;
- justify-content:space-between;
- align-items:center;
- background:transparent;
- color:var(--blue);
- border:0;
- padding:14px;
- font-size:12px;
- font-weight:900;
- text-align:left;
-}
-.voice-content,.scoring-content{padding:12px}
-.voice-top{
- display:flex;
- justify-content:space-between;
- align-items:center;
- gap:8px;
-}
-.voice-status,.notice{
- color:var(--muted);
- font-size:11px;
- line-height:1.6;
- margin-top:10px;
- text-align:center;
-}
-.voice-buttons,.mode-row{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:8px;
- margin-top:10px;
-}
-.voice-buttons button{font-size:11px}
-.mode.active{
- background:var(--blue);
- color:#001321;
-}
-.caller-line{
- color:var(--green);
- font-size:12px;
- text-align:center;
- padding-top:12px;
- min-height:25px;
-}
-.visit{
- background:#020a12;
- border:1px solid var(--line);
- padding:12px;
- border-radius:12px;
- text-align:center;
- margin:12px 0;
-}
-.visit strong{font-size:30px}
-.darts{
- display:grid;
- grid-template-columns:repeat(3,1fr);
- gap:7px;
- margin:12px 0 8px;
-}
-.dart{
- background:var(--panel2);
- border-radius:9px;
- padding:10px 3px;
- text-align:center;
- font-size:12px;
-}
+Replace the existing script in
+dartiq-match-play.html with this complete script.
+Keep the existing HTML and CSS unchanged.
+*/
 
-/* DARTBOARD */
-.dartboard-layout{
- display:flex;
- align-items:center;
- justify-content:center;
- width:100%;
- margin:4px auto 8px;
-}
-.board-wrap{
- width:100%;
- max-width:420px;
- aspect-ratio:1;
- margin:auto;
-}
-#board{
- width:100%;
- height:100%;
- touch-action:manipulation;
- filter:drop-shadow(0 0 10px #39a9ff35);
-}
-
-/* SCOREBOARD BELOW DARTBOARD */
-.score-checkout-row{
- display:grid;
- grid-template-columns:minmax(0,1fr) minmax(0,1.45fr) minmax(0,1fr);
- gap:6px;
- width:100%;
- margin:7px 0;
-}
-.score-box,.checkout-panel{
- display:flex;
- flex-direction:column;
- align-items:center;
- justify-content:center;
- min-width:0;
- min-height:64px;
- background:#061421;
- border:1px solid var(--line);
- border-radius:9px;
- padding:7px 3px;
- text-align:center;
-}
-.checkout-panel{border-color:var(--blue)}
-.score-label,.checkout-label{
- color:var(--blue);
- font-size:9px;
- font-weight:900;
- letter-spacing:.5px;
-}
-.score-number{
- font-size:28px;
- font-weight:900;
- margin-top:4px;
-}
-.legs-number{
- font-size:24px;
- font-weight:900;
- margin-top:4px;
-}
-.score-sub{
- font-size:8px;
- color:var(--muted);
- margin-top:3px;
-}
-.checkout-route{
- font-size:11px;
- font-weight:900;
- line-height:1.2;
- margin-top:4px;
- overflow-wrap:anywhere;
-}
-.checkout-hint{display:none}
-
-/* THREE BUTTON ROW */
-.visit-actions{
- display:grid;
- grid-template-columns:.85fr 1.5fr .85fr;
- gap:7px;
- width:100%;
- margin-top:14px;
-}
-.visit-actions button{
- width:100%;
- min-width:0;
- min-height:50px;
- padding:10px 4px;
- margin:0;
- font-size:11px;
- font-weight:900;
- border-radius:10px;
-}
-.keypad{
- display:grid;
- grid-template-columns:repeat(3,1fr);
- gap:7px;
-}
-.key{
- background:var(--panel2);
- color:white;
- border:1px solid var(--line);
- border-radius:9px;
- padding:14px;
- font-size:20px;
- font-weight:900;
-}
-.stats{
- display:grid;
- grid-template-columns:repeat(3,1fr);
- gap:8px;
-}
-.stat{
- background:#071725;
- border:1px solid #173d59;
- border-radius:10px;
- padding:12px 5px;
- text-align:center;
-}
-.stat strong{display:block;font-size:19px}
-.stat span{
- display:block;
- font-size:10px;
- color:var(--muted);
- margin-top:5px;
-}
-.issue-grid{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:9px;
-}
-.issue{
- background:var(--panel2);
- color:white;
- border:1px solid var(--line);
- border-radius:10px;
- padding:15px 6px;
- font-size:12px;
- font-weight:bold;
-}
-.issue.selected{
- border-color:var(--blue);
- background:#123b5c;
-}
-.result{
- font-size:46px;
- font-weight:900;
- margin:16px 0;
-}
-.result.win{color:var(--green)}
-.result.loss{color:var(--red)}
-.final-score{
- font-size:35px;
- font-weight:900;
- color:var(--blue);
- margin:12px 0 22px;
-}
-footer{
- text-align:center;
- color:#52748c;
- font-size:9px;
- letter-spacing:2px;
- padding:20px 0;
-}
-@media(max-width:480px){
- .panel{padding:12px}
- .board-wrap{max-width:390px}
- .score-checkout-row{gap:5px}
- .score-box,.checkout-panel{min-height:60px}
- .score-label{font-size:8px}
- .score-number{font-size:25px}
- .legs-number{font-size:22px}
- .checkout-label{font-size:7px}
- .checkout-route{font-size:10px}
- .visit-actions{gap:5px}
- .visit-actions button{font-size:10px;padding:10px 2px}
-}
-@media(max-width:390px){
- .checkout-route{font-size:9px}
- .score-number{font-size:22px}
- .legs-number{font-size:20px}
-}
-</style>
-</head>
-
-<body>
-<div class="app">
-
-<header class="brand">
- <div class="logo">DARTIQ</div>
- <div class="subtitle">INTELLIGENT DARTS PERFORMANCE</div>
-</header>
-
-<!-- READY TO PLAY -->
-<section id="setup" class="screen active">
- <div class="panel center">
-  <div class="eyebrow">PLAYER JOURNEY</div>
-  <h1>READY TO PLAY?</h1>
-  <p class="small">
-   Start your match, track your performance and discover what to improve.
-  </p>
-  <button type="button" class="primary" onclick="startSession()">
-   START SESSION
-  </button>
- </div>
-</section>
-
-<!-- FORMAT -->
-<section id="formats" class="screen">
- <div class="panel center">
-  <div class="eyebrow">MATCH SETUP</div>
-  <h1>SELECT YOUR FORMAT</h1>
-
-  <div class="format-grid">
-   <button class="format" data-format="3" onclick="selectFormat(3)">BO3</button>
-   <button class="format" data-format="5" onclick="selectFormat(5)">BO5</button>
-   <button class="format" data-format="7" onclick="selectFormat(7)">BO7</button>
-   <button class="format" data-format="9" onclick="selectFormat(9)">BO9</button>
-  </div>
-
-  <p id="formatDescription" class="small">Choose your match format.</p>
-
-  <button id="startGame" class="primary hidden" onclick="startMatch()">
-   START YOUR GAME FOR AI ANALYSIS
-  </button>
- </div>
-</section>
-
-<!-- LIVE MATCH -->
-<section id="match" class="screen">
- <div class="panel">
-
-  <div class="center">
-   <div class="eyebrow">LIVE MATCH</div>
-   <h2 id="matchTitle">BEST OF 5</h2>
-   <div class="player-tag">
-    PLAYER: <strong id="displayPlayerName">PLAYER</strong>
-   </div>
-  </div>
-
-  <div id="matchWelcome" class="welcome-call">
-   Welcome to the DARTIQ oche.
-  </div>
-
-  <div class="voice-panel">
-   <button class="voice-header" onclick="toggleCallerPanel()">
-    <span>🎙 DARTIQ MASTER CALLER</span>
-    <span id="callerArrow">▼</span>
-   </button>
-
-   <div id="callerContent" class="voice-content hidden">
-    <div class="voice-top">
-     <span id="voiceStatus" class="small">CALLER READY</span>
-     <button id="voiceToggle" class="secondary" onclick="toggleVoice()">
-      VOICE ON
-     </button>
-    </div>
-
-    <div class="voice-buttons">
-     <button class="secondary" onclick="testVoice()">TEST CALLER</button>
-     <button class="secondary" onclick="repeatLastCall()">REPEAT LAST CALL</button>
-    </div>
-
-    <div id="callerLine" class="caller-line"></div>
-   </div>
-  </div>
-
-  <div class="scoring-panel">
-   <button class="scoring-header" onclick="toggleScoringPanel()">
-    <span>🎯 DARTBOARD / KEYPAD</span>
-    <span id="scoringArrow">▼</span>
-   </button>
-
-   <div id="scoringContent" class="scoring-content hidden">
-    <div class="mode-row">
-     <button id="boardModeButton" class="secondary mode active"
-      onclick="setMode('board')">DARTBOARD</button>
-     <button id="keyModeButton" class="secondary mode"
-      onclick="setMode('keypad')">KEYPAD</button>
-    </div>
-
-    <div id="keypadPanel" class="hidden">
-     <div class="visit">
-      <strong id="keyValue">0</strong>
-     </div>
-     <div class="keypad">
-      <button class="key" onclick="keyPress('1')">1</button>
-      <button class="key" onclick="keyPress('2')">2</button>
-      <button class="key" onclick="keyPress('3')">3</button>
-      <button class="key" onclick="keyPress('4')">4</button>
-      <button class="key" onclick="keyPress('5')">5</button>
-      <button class="key" onclick="keyPress('6')">6</button>
-      <button class="key" onclick="keyPress('7')">7</button>
-      <button class="key" onclick="keyPress('8')">8</button>
-      <button class="key" onclick="keyPress('9')">9</button>
-      <button class="key" onclick="keyClear()">C</button>
-      <button class="key" onclick="keyPress('0')">0</button>
-      <button class="key" onclick="keyBack()">⌫</button>
-     </div>
-    </div>
-   </div>
-  </div>
-
-  <div class="match-info">
-   <span id="legInfo">LEG 1</span>
-   <span id="targetInfo">FIRST TO 3</span>
-   <span id="visitInfo">VISIT 1</span>
-  </div>
-
-  <div class="visit">
-   <div class="eyebrow">CURRENT VISIT SCORE</div>
-   <strong id="visitScore">0</strong>
-  </div>
-
-  <div class="darts">
-   <div class="dart" id="dart1">DART 1: –</div>
-   <div class="dart" id="dart2">DART 2: –</div>
-   <div class="dart" id="dart3">DART 3: –</div>
-  </div>
-
-  <div class="dartboard-layout">
-   <div class="board-wrap">
-    <svg id="board" viewBox="-230 -230 460 460"
-     aria-label="Interactive dartboard"></svg>
-   </div>
-  </div>
-
-  <div class="score-checkout-row">
-   <div class="score-box">
-    <div class="score-label">REMAINING</div>
-    <div id="boardRemaining" class="score-number">501</div>
-   </div>
-
-   <div class="checkout-panel">
-    <div class="checkout-label">DARTIQ CHECKOUT</div>
-    <div id="checkoutRoute" class="checkout-route">
-     NO CHECKOUT AVAILABLE
-    </div>
-    <div id="checkoutHint" class="checkout-hint"></div>
-   </div>
-
-   <div class="score-box">
-    <div class="score-label">LEGS</div>
-    <div id="boardLegs" class="legs-number">0–0</div>
-    <div class="score-sub">YOU / OPP.</div>
-   </div>
-  </div>
-
-  <div class="visit-actions">
-   <button class="secondary" id="missButton" onclick="addMiss()">MISS</button>
-   <button class="primary" id="confirmVisitButton" onclick="confirmVisit()">
-    CONFIRM VISIT
-   </button>
-   <button class="secondary" id="undoButton" onclick="undoVisitEntry()">UNDO</button>
-  </div>
-
-  <div id="message" class="notice"></div>
-
-  <button id="opponentWonButton" class="danger" onclick="opponentWonLeg()">
-   OPPONENT WON LEG
-  </button>
-
- </div>
-</section>
-
-<!-- MATCH COMPLETED -->
-<section id="completed" class="screen">
- <div class="panel center">
-  <div class="eyebrow">MATCH COMPLETED</div>
-  <h1>MATCH RESULT</h1>
-  <div id="finalResult" class="result"></div>
-  <div id="finalScore" class="final-score"></div>
-  <div class="eyebrow">YOUR MATCH PERFORMANCE</div>
-  <div id="finalSummary" class="stats"></div>
-
-  <button class="primary" onclick="continueToMainIssue()">
-   CONTINUE TO MAIN ISSUE SELECTION
-  </button>
-
-  <div id="completionMessage" class="notice"></div>
- </div>
-</section>
-
-<!-- MAIN ISSUE -->
-<section id="mainIssue" class="screen">
- <div class="panel center">
-  <div class="eyebrow">POST-MATCH ANALYSIS</div>
-  <h1>WHAT WAS YOUR MAIN ISSUE?</h1>
-  <p class="small">Select the issue that affected your performance most.</p>
-  <div id="issues" class="issue-grid"></div>
-
-  <button id="analysisButton" class="primary hidden" onclick="finishAnalysis()">
-   GET MY AI ANALYSIS
-  </button>
-
-  <div id="analysisMessage" class="notice"></div>
- </div>
-</section>
-
-<!-- AI ANALYSIS -->
-<section id="analysis" class="screen">
- <div class="panel center">
-  <div class="eyebrow">DARTIQ AI COACH</div>
-  <h1>YOUR MATCH ANALYSIS</h1>
-  <h2 id="analysisIssue"></h2>
-  <p id="analysisAdvice" class="small"></p>
-
-  <button class="primary" onclick="openTraining()">
-   GO TO TODAY'S AI TRAINING
-  </button>
-
-  <div id="trainingMessage" class="notice"></div>
- </div>
-</section>
-
-<footer>DARTIQ • INTELLIGENT DARTS PERFORMANCE</footer>
-</div>
-
-<script>
 "use strict";
 
-/* PARAMETERS */
 const params=new URLSearchParams(location.search);
+
 const param=(...names)=>{
  for(const name of names){
   const value=params.get(name);
@@ -643,6 +22,7 @@ const param=(...names)=>{
 };
 
 const $=id=>document.getElementById(id);
+const fmt=n=>Number(n||0).toFixed(2);
 
 const WEBHOOK=
 "https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/5415568e-2eca-408f-a460-572b257d1cdf";
@@ -660,12 +40,9 @@ const playerName=(
 ).replace(/[{}]/g,"");
 
 const spokenName=playerName.split(/\s+/)[0];
-const language=param("lang","language")||"EN";
+const language=param("language","lang")||"EN";
 const isDutch=language.toLowerCase().startsWith("nl");
 
-const fmt=n=>Number(n||0).toFixed(2);
-
-/* STATE */
 let sessionID=param("session","sessionID");
 let bestOf=0;
 let legsToWin=0;
@@ -699,11 +76,347 @@ let matchLaunching=false;
 let matchResult="";
 let matchStartedAt="";
 let completionSyncConfirmed=false;
-let nextLegAnnouncementPending=false;
 
-/* RECOVERY */
+let selectedCoaching=null;
+
+/* =====================================
+   DARTIQ COACHING KNOWLEDGE
+===================================== */
+
+const coachingLibrary={
+
+"Missing Right":{
+ issue:"Missing Right",
+ category:"Accuracy",
+ advice:
+ "Your main issue is missing to the right. "+
+ "Check your stance alignment, release direction "+
+ "and follow-through. Observe whether the throwing "+
+ "arm finishes outside your intended target line.",
+ drill:"Right-Side Alignment Training",
+ objective:"Reduce right-side misses.",
+ why:
+ "Repeated right-side misses may indicate "+
+ "a directional inconsistency in the throw.",
+ execution:
+ "Choose one target. Throw ten visits of three "+
+ "darts. Record each dart that lands right of "+
+ "the intended target. Maintain the same stance "+
+ "and release routine throughout.",
+ avoid:
+ "Do not force the wrist or change several "+
+ "mechanics simultaneously.",
+ primary:"Right-side miss percentage",
+ secondary:"Grouping consistency",
+ target:"Reduce right-side misses compared with baseline.",
+ track:"Right misses, total darts and grouping.",
+ next:
+ "Compare the first five visits with the last five."
+},
+
+"Missing Left":{
+ issue:"Missing Left",
+ category:"Accuracy",
+ advice:
+ "Observe whether the release crosses your "+
+ "target line. Check shoulder alignment and "+
+ "follow-through direction.",
+ drill:"Left-Side Alignment Training",
+ objective:"Reduce left-side misses.",
+ why:
+ "Repeated left-side misses can indicate "+
+ "directional release variation.",
+ execution:
+ "Throw ten visits at a fixed target. "+
+ "Record left misses and keep the same "+
+ "stance and throwing rhythm.",
+ avoid:"Avoid overcorrecting after individual darts.",
+ primary:"Left-side miss percentage",
+ secondary:"Grouping consistency",
+ target:"Reduce left-side misses compared with baseline.",
+ track:"Left misses and grouping.",
+ next:"Repeat the drill and compare the results."
+},
+
+"Missing High":{
+ issue:"Missing High",
+ category:"Release Control",
+ advice:
+ "Observe release height and timing. "+
+ "Compare the release point of accurate "+
+ "darts with darts landing high.",
+ drill:"Vertical Release Control",
+ objective:"Reduce high misses.",
+ why:
+ "Changes in release timing or height "+
+ "can contribute to vertical variation.",
+ execution:
+ "Throw ten visits at the same target. "+
+ "Record high misses and maintain "+
+ "a consistent throwing rhythm.",
+ avoid:"Do not force the dart downward.",
+ primary:"High miss percentage",
+ secondary:"Vertical grouping spread",
+ target:"Reduce high misses from baseline.",
+ track:"High misses and grouping.",
+ next:"Retest with the same throwing rhythm."
+},
+
+"Missing Low":{
+ issue:"Missing Low",
+ category:"Follow Through",
+ advice:
+ "Check whether your arm stops early "+
+ "or your release point changes. "+
+ "Finish naturally toward the target.",
+ drill:"Low-Miss Follow-Through Training",
+ objective:"Reduce low misses.",
+ why:
+ "Inconsistent release height and "+
+ "follow-through may contribute to low darts.",
+ execution:
+ "Throw ten visits at a fixed target. "+
+ "Observe the finishing position of "+
+ "your throwing arm after each release.",
+ avoid:"Do not deliberately force the arm upward.",
+ primary:"Low miss percentage",
+ secondary:"Follow-through consistency",
+ target:"Reduce low misses compared with baseline.",
+ track:"Low misses and vertical spread.",
+ next:"Compare the first and final five visits."
+},
+
+"Inconsistent Grouping":{
+ issue:"Inconsistent Grouping",
+ category:"Consistency",
+ advice:
+ "Focus on repeating the same stance, "+
+ "tempo, release and follow-through. "+
+ "Measure grouping rather than chasing "+
+ "individual high scores.",
+ drill:"Grouping Consistency Training",
+ objective:"Improve repeatable grouping.",
+ why:
+ "Consistent grouping is a useful measure "+
+ "of repeatable throwing mechanics.",
+ execution:
+ "Throw ten visits at one fixed target. "+
+ "Record the grouping spread after each visit.",
+ avoid:
+ "Avoid changing your technique after every miss.",
+ primary:"Grouping spread",
+ secondary:"Visit-to-visit consistency",
+ target:"Reduce grouping spread from baseline.",
+ track:"Grouping size and miss direction.",
+ next:"Repeat the test after a short break."
+},
+
+"Release Timing":{
+ issue:"Release Timing",
+ category:"Mechanics",
+ advice:
+ "Maintain a repeatable throwing tempo. "+
+ "Observe whether early or late releases "+
+ "correspond with particular misses.",
+ drill:"Release Timing Training",
+ objective:"Improve release timing consistency.",
+ why:
+ "Variation in release timing can change "+
+ "dart trajectory and grouping.",
+ execution:
+ "Complete ten visits at a consistent pace. "+
+ "Record miss direction and any noticeable "+
+ "changes in release timing.",
+ avoid:"Avoid rushing or holding the dart unnaturally.",
+ primary:"Release timing consistency",
+ secondary:"Grouping spread",
+ target:"Reduce timing variation.",
+ track:"Miss direction and throwing tempo.",
+ next:"Retest using the same pre-throw routine."
+},
+
+"Follow Through":{
+ issue:"Follow Through",
+ category:"Mechanics",
+ advice:
+ "Allow your arm to finish naturally "+
+ "toward the target after release.",
+ drill:"Follow-Through Consistency",
+ objective:"Improve follow-through repeatability.",
+ why:
+ "Repeatable finishing mechanics may support "+
+ "more consistent dart delivery.",
+ execution:
+ "Throw ten visits while observing "+
+ "the finishing position of your arm.",
+ avoid:"Do not abruptly stop the throwing arm.",
+ primary:"Follow-through consistency",
+ secondary:"Grouping",
+ target:"Improve finishing-position consistency.",
+ track:"Arm finish and grouping.",
+ next:"Compare the first and last five visits."
+},
+
+"Elbow Movement":{
+ issue:"Elbow Movement",
+ category:"Mechanics",
+ advice:
+ "Observe elbow movement during delivery. "+
+ "Look for unnecessary changes before release.",
+ drill:"Elbow Stability Training",
+ objective:"Improve repeatability of elbow movement.",
+ why:
+ "Inconsistent elbow movement may influence "+
+ "the release path.",
+ execution:
+ "Throw ten visits at one target while "+
+ "observing elbow position and release.",
+ avoid:"Do not rigidly lock the elbow.",
+ primary:"Elbow movement consistency",
+ secondary:"Grouping",
+ target:"Improve movement repeatability.",
+ track:"Elbow movement and miss direction.",
+ next:"Retest after one controlled adjustment."
+},
+
+"Body Stability":{
+ issue:"Body Stability",
+ category:"Stance",
+ advice:
+ "Maintain a comfortable balanced stance. "+
+ "Reduce unnecessary body movement during delivery.",
+ drill:"Stance Stability Training",
+ objective:"Improve body stability.",
+ why:
+ "A repeatable setup supports a consistent throw.",
+ execution:
+ "Throw ten visits from the same stance. "+
+ "Record balance changes and grouping.",
+ avoid:"Avoid forced or uncomfortable positioning.",
+ primary:"Body movement consistency",
+ secondary:"Grouping",
+ target:"Improve stance repeatability.",
+ track:"Body movement and grouping.",
+ next:"Compare results across ten visits."
+},
+
+"Confidence":{
+ issue:"Confidence",
+ category:"Mental Performance",
+ advice:
+ "Use the same pre-throw routine after "+
+ "both strong and weak visits. Focus on "+
+ "execution rather than one score.",
+ drill:"Match Confidence Routine",
+ objective:"Improve consistency under pressure.",
+ why:
+ "A repeatable routine can support "+
+ "attention and decision-making.",
+ execution:
+ "Complete ten visits using the same "+
+ "setup and pre-throw routine.",
+ avoid:"Avoid changing routine after low scores.",
+ primary:"Routine adherence",
+ secondary:"Score consistency",
+ target:"Maintain the routine across all ten visits.",
+ track:"Routine adherence and visit scores.",
+ next:"Repeat under simulated match pressure."
+}
+
+};
+
+/* =====================================
+   COACHING SELECTION
+===================================== */
+
+function getCoaching(issue){
+ const base=coachingLibrary[issue]||
+  coachingLibrary["Inconsistent Grouping"];
+
+ /*
+  A matched Glide/Keith assignment can override
+  the local fallback when provided as URL fields.
+  Do not invent Keith drill grading or targets.
+ */
+
+ return {
+  ...base,
+  drill:param("recommendedDrill","drill")||base.drill,
+  advice:param("coachAdvice","aiAdvice")||base.advice,
+  objective:param("objective")||base.objective,
+  why:param("why")||base.why,
+  execution:param("execution")||base.execution,
+  avoid:param("avoid")||base.avoid,
+  primary:param("keithprimary","primarymetric")||base.primary,
+  secondary:param("keithsecondary","secondarymetric")||base.secondary,
+  target:param("keithtarget","successtarget")||base.target,
+  track:param("track")||base.track,
+  next:param("nextAction")||base.next,
+  practiceID:param("practiceID","practiceId"),
+  keithRules:param("keithrules","rules"),
+  keithCoach:param("keithcoach","coach"),
+  red:param("keithred","red"),
+  orange:param("keithorange","orange"),
+  yellow:param("keithyellow","yellow"),
+  green:param("keithgreen","green"),
+  redAction:param("redaction"),
+  orangeAction:param("orangeaction"),
+  yellowAction:param("yellowaction"),
+  greenAction:param("greenaction"),
+  improvement:param("improvement"),
+  reminder:param("reminder"),
+  after:param("after")
+ };
+}
+
+/* =====================================
+   GLIDE EVENTS
+===================================== */
+
+async function sendEvent(eventType,data={}){
+ const url=eventType==="match_start"?
+  MATCH_START_WEBHOOK:
+  eventType==="match_complete"?
+  MATCH_COMPLETION_WEBHOOK:
+  WEBHOOK;
+
+ try{
+  const response=await fetch(url,{
+   method:"POST",
+   headers:{"Content-Type":"application/json"},
+   body:JSON.stringify({
+    eventType,
+    sessionID,
+    email,
+    playerID,
+    playerName,
+    language,
+    scoringSource:"Match",
+    bestOf,
+    matchFormat:"BO"+bestOf,
+    legsToWin,
+    ...data
+   })
+  });
+
+  if(!response.ok){
+   throw new Error("Glide HTTP "+response.status);
+  }
+
+  return true;
+
+ }catch(error){
+  console.error("DARTIQ Glide:",error);
+  return false;
+ }
+}
+
+/* =====================================
+   RECOVERY
+===================================== */
+
 function recoveryKey(){
- return "DARTIQ_MATCH_RECOVERY_V84_"+
+ return "DARTIQ_MATCH_V85_"+
   (sessionID||"NO_SESSION")+"_"+(email||playerID||"guest");
 }
 
@@ -712,39 +425,27 @@ function saveRecovery(stage){
 
  try{
   sessionStorage.setItem(recoveryKey(),JSON.stringify({
-   stage,
-   sessionID,bestOf,legsToWin,
-   legsWon,opponentLegs,
-   totalPoints,totalDarts,
+   stage,sessionID,bestOf,legsToWin,
+   legsWon,opponentLegs,totalPoints,totalDarts,
    first9Points,first9Darts,
    count100,count140,count180,
    checkoutAttempts,checkoutHits,
    highestCheckout,visitNumber,
-   selectedIssue,matchResult,
-   completionSyncConfirmed
+   selectedIssue,selectedCoaching,
+   matchResult,completionSyncConfirmed
   }));
- }catch(error){
-  console.warn("Recovery unavailable",error);
- }
+ }catch(error){}
 }
 
 function restoreRecovery(){
- if(!sessionID){
-  showScreen("setup");
-  return;
- }
+ if(!sessionID)return;
 
  try{
   const saved=JSON.parse(
    sessionStorage.getItem(recoveryKey())||"null"
   );
 
-  if(
-   !saved||
-   saved.sessionID!==sessionID||
-   !["completed","mainIssue","analysis"].includes(saved.stage)
-  ){
-   showScreen("setup");
+  if(!saved||!["completed","mainIssue","analysis"].includes(saved.stage)){
    return;
   }
 
@@ -764,7 +465,8 @@ function restoreRecovery(){
   highestCheckout=saved.highestCheckout||0;
   visitNumber=saved.visitNumber||0;
   selectedIssue=saved.selectedIssue||"";
-  matchResult=saved.matchResult||"Lost";
+  selectedCoaching=saved.selectedCoaching||null;
+  matchResult=saved.matchResult||"";
   completionSyncConfirmed=!!saved.completionSyncConfirmed;
   finished=true;
 
@@ -772,44 +474,31 @@ function restoreRecovery(){
 
   if(saved.stage==="analysis"&&selectedIssue){
    renderAnalysis();
-   showScreen("analysis");
-  }else{
-   showScreen(saved.stage==="analysis"?"mainIssue":saved.stage);
   }
 
-  if(selectedIssue){
-   document.querySelectorAll(".issue").forEach(button=>{
-    button.classList.toggle(
-     "selected",button.textContent===selectedIssue
-    );
-   });
-   $("analysisButton").classList.remove("hidden");
-  }
+  showScreen(saved.stage);
 
  }catch(error){
-  showScreen("setup");
+  console.warn("Recovery:",error);
  }
 }
 
-/* SCREEN NAVIGATION */
+/* =====================================
+   SCREENS AND MATCH SETUP
+===================================== */
+
 function showScreen(id){
  document.querySelectorAll(".screen").forEach(screen=>{
   screen.classList.toggle("active",screen.id===id);
  });
+
  window.scrollTo(0,0);
 }
 
-/* START SESSION FIX */
 function startSession(){
- if(finished){
-  finished=false;
-  selectedIssue="";
- }
-
  showScreen("formats");
 }
 
-/* MATCH FORMAT */
 function selectFormat(n){
  if(![3,5,7,9].includes(n))return;
 
@@ -828,49 +517,17 @@ function selectFormat(n){
  $("startGame").classList.remove("hidden");
 }
 
-/* GLIDE */
-async function sendEvent(eventType,data={}){
- try{
-  const url=eventType==="match_start"?
-   MATCH_START_WEBHOOK:
-   eventType==="match_complete"?
-   MATCH_COMPLETION_WEBHOOK:
-   WEBHOOK;
+/* =====================================
+   VOICE CALLER
+===================================== */
 
-  const response=await fetch(url,{
-   method:"POST",
-   headers:{"Content-Type":"application/json"},
-   body:JSON.stringify({
-    eventType,
-    sessionID,
-    email,
-    playerID,
-    language,
-    scoringSource:"Match",
-    bestOf,
-    matchFormat:"BO"+bestOf,
-    legsToWin,
-    ...data
-   })
-  });
-
-  if(!response.ok)throw Error("HTTP "+response.status);
-  return true;
-
- }catch(error){
-  console.error("Glide sync:",error);
-  return false;
- }
-}
-
-/* MASTER CALLER */
 const speechSupported=
  "speechSynthesis" in window &&
  "SpeechSynthesisUtterance" in window;
 
 let voiceEnabled=true;
 let callerVoice=null;
-let lastCall=[];
+let lastCall="";
 
 function selectCallerVoice(){
  if(!speechSupported)return;
@@ -880,40 +537,13 @@ function selectCallerVoice(){
   v.lang.toLowerCase().startsWith(isDutch?"nl":"en")
  );
 
- callerVoice=
-  candidates.find(v=>/daniel|david|george|ryan|guy|male/i.test(v.name))||
-  candidates[0]||null;
+ callerVoice=candidates.find(v=>
+  /daniel|david|george|ryan|guy|male/i.test(v.name)
+ )||candidates[0]||null;
 }
 
-function numberWords(n){
- n=Math.round(Number(n));
-
- const units=[
-  "zero","one","two","three","four","five",
-  "six","seven","eight","nine","ten","eleven",
-  "twelve","thirteen","fourteen","fifteen",
-  "sixteen","seventeen","eighteen","nineteen"
- ];
- const tens=[
-  "","","twenty","thirty","forty",
-  "fifty","sixty","seventy","eighty","ninety"
- ];
-
- if(n<0)return "minus "+numberWords(-n);
- if(n<20)return units[n];
- if(n<100){
-  return tens[Math.floor(n/10)]+
-   (n%10?" "+units[n%10]:"");
- }
- if(n<1000){
-  return units[Math.floor(n/100)]+" hundred"+
-   (n%100?" and "+numberWords(n%100):"");
- }
- return String(n);
-}
-
-function speak(text,rate=.88){
- lastCall=[{text,rate}];
+function speak(text){
+ lastCall=text;
  $("callerLine").textContent=text;
 
  if(!voiceEnabled||!speechSupported)return;
@@ -925,7 +555,7 @@ function speak(text,rate=.88){
  );
 
  utterance.lang=isDutch?"nl-NL":"en-GB";
- utterance.rate=rate;
+ utterance.rate=.88;
  utterance.pitch=.8;
 
  if(callerVoice)utterance.voice=callerVoice;
@@ -934,17 +564,16 @@ function speak(text,rate=.88){
 }
 
 function repeatLastCall(){
- if(lastCall.length){
-  speak(lastCall[0].text,lastCall[0].rate);
- }
+ if(lastCall)speak(lastCall);
 }
 
 function testVoice(){
- speak("Dart IQ master caller is ready. Game on!");
+ speak("Dart IQ master caller ready. Game on!");
 }
 
 function toggleVoice(){
  voiceEnabled=!voiceEnabled;
+
  $("voiceToggle").textContent=voiceEnabled?
   "VOICE ON":"VOICE OFF";
 
@@ -963,33 +592,41 @@ function toggleScoringPanel(){
  $("scoringArrow").textContent=hidden?"▼":"▲";
 }
 
-function announceWelcome(){
- const text=
-  "Welcome "+spokenName+
-  " to the DARTIQ oche. "+
-  "You play best of "+bestOf+". Game on!";
+function numberWords(n){
+ n=Math.round(Number(n));
 
- $("matchWelcome").textContent=text;
- speak(text);
-}
+ const units=[
+  "zero","one","two","three","four","five",
+  "six","seven","eight","nine","ten","eleven",
+  "twelve","thirteen","fourteen","fifteen",
+  "sixteen","seventeen","eighteen","nineteen"
+ ];
 
-function announceScore(score){
- if(score===180){
-  speak("One hundred and eighty!",.75);
- }else{
-  speak(numberWords(score));
+ const tens=[
+  "","","twenty","thirty","forty",
+  "fifty","sixty","seventy","eighty","ninety"
+ ];
+
+ if(n<0)return "minus "+numberWords(-n);
+ if(n<20)return units[n];
+
+ if(n<100){
+  return tens[Math.floor(n/10)]+
+   (n%10?" "+units[n%10]:"");
  }
+
+ if(n<1000){
+  return units[Math.floor(n/100)]+" hundred"+
+   (n%100?" and "+numberWords(n%100):"");
+ }
+
+ return String(n);
 }
 
-function announceCheckout(matchWon){
- speak(
-  matchWon?
-  "Game shot "+spokenName+"! And the match!":
-  "Game shot "+spokenName+"! And the leg!"
- );
-}
+/* =====================================
+   START MATCH
+===================================== */
 
-/* START MATCH */
 async function startMatch(){
  if(!bestOf||matchLaunching)return;
 
@@ -1022,8 +659,9 @@ async function startMatch(){
  visitNumber=0;
  currentDarts=[];
  keyInput="";
- finished=false;
  selectedIssue="";
+ selectedCoaching=null;
+ finished=false;
  mode="board";
 
  matchStartedAt=new Date().toISOString();
@@ -1032,10 +670,18 @@ async function startMatch(){
  $("targetInfo").textContent="FIRST TO "+legsToWin;
  $("displayPlayerName").textContent=playerName;
 
+ setMode("board");
  updateInput();
  updateStats();
  showScreen("match");
- announceWelcome();
+
+ const welcome=
+  "Welcome "+spokenName+
+  " to the DARTIQ oche. "+
+  "You play best of "+bestOf+". Game on!";
+
+ $("matchWelcome").textContent=welcome;
+ speak(welcome);
 
  const ok=await sendEvent("match_start",{
   startedAt:matchStartedAt,
@@ -1049,7 +695,10 @@ async function startMatch(){
  }
 }
 
-/* DARTBOARD */
+/* =====================================
+   DARTBOARD
+===================================== */
+
 const numbers=[
  20,1,18,4,13,6,10,15,2,17,
  3,19,7,16,8,11,14,9,12,5
@@ -1092,10 +741,7 @@ function segment(r1,r2,a1,a2,color,n,m,label){
  });
 
  element.style.cursor="pointer";
-
- element.addEventListener("click",()=>{
-  addDart(n,m,label);
- });
+ element.addEventListener("click",()=>addDart(n,m,label));
 }
 
 function drawBoard(){
@@ -1139,6 +785,7 @@ function drawBoard(){
   fill:"#27865e",
   stroke:"#ddd"
  });
+
  outer.addEventListener("click",()=>addDart(25,1,"25"));
 
  const bull=svgElement("circle",{
@@ -1146,10 +793,14 @@ function drawBoard(){
   fill:"#c83c46",
   stroke:"#ddd"
  });
+
  bull.addEventListener("click",()=>addDart(25,2,"BULL"));
 }
 
-/* SCORING INPUT */
+/* =====================================
+   INPUT
+===================================== */
+
 function message(text){
  $("message").textContent=text;
 }
@@ -1246,7 +897,10 @@ function keyBack(){
  updateInput();
 }
 
-/* CHECKOUT ROUTES */
+/* =====================================
+   CHECKOUT
+===================================== */
+
 const checkoutRoutes={
 170:"T20 T20 BULL",
 167:"T20 T19 BULL",
@@ -1413,14 +1067,11 @@ const checkoutRoutes={
 
 function updateCheckoutRoute(){
  const route=$("checkoutRoute");
- const hint=$("checkoutHint");
 
  if(remaining>170){
   route.textContent="NO CHECKOUT";
-  hint.textContent="";
  }else if([169,168,166,165,163,162,159].includes(remaining)){
   route.textContent="NO 3-DART FINISH";
-  hint.textContent="";
  }else if(remaining===1){
   route.textContent="BUST";
  }else if(remaining===0){
@@ -1430,7 +1081,10 @@ function updateCheckoutRoute(){
  }
 }
 
-/* STATS */
+/* =====================================
+   STATS
+===================================== */
+
 const average=()=>totalDarts?
  totalPoints/totalDarts*3:0;
 
@@ -1466,7 +1120,10 @@ function recordFirst9(score,darts,scores=[]){
  first9Darts+=take;
 }
 
-/* CONFIRM VISIT */
+/* =====================================
+   CONFIRM VISIT
+===================================== */
+
 async function confirmVisit(){
  if(finished||saving)return;
 
@@ -1497,13 +1154,10 @@ async function confirmVisit(){
 
  if(exact&&!boardMode){
   if(!confirm("Did you finish on a double or bull?")){
-   message("Checkout not confirmed.");
    return;
   }
 
-  const used=prompt(
-   "Darts used in final visit (1, 2 or 3):","3"
-  );
+  const used=prompt("Darts used (1, 2 or 3):","3");
 
   if(used===null)return;
 
@@ -1544,8 +1198,6 @@ async function confirmVisit(){
   bust,
   scoringSource:"Match",
   inputMode:mode,
-  bestDart:boardMode?
-   Math.max(...darts.map(d=>d.score)):null,
   dart1Score:darts[0]?.score??null,
   dart1Segment:darts[0]?.label||"",
   dart2Score:darts[1]?.score??null,
@@ -1556,7 +1208,6 @@ async function confirmVisit(){
  };
 
  saving=true;
-
  $("confirmVisitButton").disabled=true;
 
  const ok=await sendEvent("match_visit",record);
@@ -1595,7 +1246,11 @@ async function confirmVisit(){
  const matchWon=checkoutHit&&legsWon>=legsToWin;
 
  if(checkoutHit){
-  announceCheckout(matchWon);
+  speak(
+   matchWon?
+   "Game shot "+spokenName+"! And the match!":
+   "Game shot "+spokenName+"! And the leg!"
+  );
 
   if(matchWon){
    await completeMatch();
@@ -1612,16 +1267,19 @@ async function confirmVisit(){
   message("BUST • Score unchanged.");
 
  }else{
-  announceScore(actual);
+  speak(numberWords(actual));
   message("Visit recorded • "+remaining+" remaining.");
  }
 
  if(!ok){
-  message("Visit recorded locally. Glide sync not confirmed.");
+  message("Glide sync not confirmed.");
  }
 }
 
-/* OPPONENT LEG */
+/* =====================================
+   OPPONENT WINS LEG
+===================================== */
+
 async function opponentWonLeg(){
  if(finished||saving)return;
 
@@ -1652,9 +1310,6 @@ async function opponentWonLeg(){
   inputMode:"opponent",
   legWinner:"Opponent",
   opponentWonLeg:true,
-  dart1Score:null,
-  dart2Score:null,
-  dart3Score:null,
   darts:[]
  });
 
@@ -1671,7 +1326,8 @@ async function opponentWonLeg(){
 
  const matchLost=opponentLegs>=legsToWin;
 
- speak(matchLost?
+ speak(
+  matchLost?
   "Game shot, and the match to your opponent!":
   "Game shot, leg to your opponent!"
  );
@@ -1692,7 +1348,10 @@ async function opponentWonLeg(){
  }
 }
 
-/* MATCH RESULTS */
+/* =====================================
+   MATCH RESULTS
+===================================== */
+
 function summaryCard(label,value){
  const element=document.createElement("div");
  element.className="stat";
@@ -1779,27 +1438,15 @@ async function completeMatch(){
   "Match completed locally. Glide sync not confirmed.";
 }
 
-function continueToMainIssue(){
- saveRecovery("mainIssue");
- showScreen("mainIssue");
-}
+/* =====================================
+   MAIN ISSUE
+===================================== */
 
-/* MAIN ISSUE */
-const issueData=[
- ["Missing Right","Aim and release alignment"],
- ["Missing Left","Release consistency"],
- ["Missing High","Release height and timing"],
- ["Missing Low","Follow-through and release"],
- ["Inconsistent Grouping","Repeatable throw mechanics"],
- ["Release Timing","Release timing consistency"],
- ["Follow Through","Controlled follow-through"],
- ["Elbow Movement","Stable throwing mechanics"],
- ["Body Stability","Consistent stance and balance"],
- ["Confidence","Match confidence and routine"]
-];
+const issueData=Object.keys(coachingLibrary).map(name=>[name]);
 
 function buildIssues(){
  const root=$("issues");
+ root.replaceChildren();
 
  issueData.forEach(([name])=>{
   const button=document.createElement("button");
@@ -1809,6 +1456,7 @@ function buildIssues(){
 
   button.onclick=()=>{
    selectedIssue=name;
+   selectedCoaching=getCoaching(name);
 
    document.querySelectorAll(".issue").forEach(b=>{
     b.classList.toggle("selected",b===button);
@@ -1822,26 +1470,60 @@ function buildIssues(){
  });
 }
 
-function renderAnalysis(){
- const issue=issueData.find(x=>x[0]===selectedIssue);
+function continueToMainIssue(){
+ saveRecovery("mainIssue");
+ showScreen("mainIssue");
+}
 
- $("analysisIssue").textContent=selectedIssue;
+/* =====================================
+   COACHING ANALYSIS
+===================================== */
+
+function renderAnalysis(){
+ selectedCoaching=getCoaching(selectedIssue);
+
+ const coach=selectedCoaching;
+
+ $("analysisIssue").textContent=coach.issue;
 
  $("analysisAdvice").textContent=
-  "Focus area: "+
-  (issue?issue[1]:selectedIssue)+
-  ". Your selected issue and match statistics have been submitted for coaching. "+
-  "Open Today's AI Training for your matched drill.";
+  "COACH ADVICE: "+coach.advice+
+  "\n\nRECOMMENDED DRILL: "+coach.drill+
+  "\n\nTRAINING OBJECTIVE: "+coach.objective+
+  "\n\nSUCCESS TARGET: "+coach.target+
+  "\n\nNEXT ACTION: "+coach.next;
+
+ $("analysisAdvice").style.whiteSpace="pre-line";
 }
+
+/* =====================================
+   SAVE MAIN ISSUE + COACHING
+===================================== */
 
 async function finishAnalysis(){
  if(!selectedIssue)return;
 
+ selectedCoaching=getCoaching(selectedIssue);
+ const coach=selectedCoaching;
+
  const button=$("analysisButton");
  button.disabled=true;
+ button.textContent="CONNECTING COACHING...";
 
- const ok=await sendEvent("match_main_issue",{
+ const payload={
   mainIssue:selectedIssue,
+  coachAdvice:coach.advice,
+  aiAdvice:coach.advice,
+  recommendedDrill:coach.drill,
+  trainingObjective:coach.objective,
+  successTarget:coach.target,
+  nextAction:coach.next,
+  trainingFocus:selectedIssue,
+  trainingCategory:coach.category,
+  primaryMetric:coach.primary,
+  secondaryMetric:coach.secondary,
+  whatToTrack:coach.track,
+  trainingExecution:coach.execution,
   matchStatus:"Completed",
   matchResult,
   average:Number(fmt(average())),
@@ -1854,13 +1536,16 @@ async function finishAnalysis(){
   count180,
   checkoutPercentage:Number(checkoutPct().toFixed(1)),
   highestCheckout
- });
+ };
+
+ const ok=await sendEvent("match_main_issue",payload);
 
  button.disabled=false;
+ button.textContent="GET MY AI ANALYSIS";
 
  if(!ok){
   $("analysisMessage").textContent=
-   "Glide did not confirm receipt. Retry.";
+   "Glide sync not confirmed. Retry.";
   return;
  }
 
@@ -1869,58 +1554,102 @@ async function finishAnalysis(){
  showScreen("analysis");
 }
 
-/* TODAY'S AI TRAINING */
+/* =====================================
+   CONNECT TODAY'S AI TRAINING
+===================================== */
+
 function openTraining(){
  const notice=$("trainingMessage");
 
  try{
+  if(!selectedIssue){
+   notice.textContent="Select your main issue first.";
+   return;
+  }
+
+  const coach=selectedCoaching||getCoaching(selectedIssue);
+
   const defaultURL=
    "https://coach1979christian-coder.github.io/dartiq-web/todays-training.html";
 
-  const raw=param("trainingUrl","training_url");
-  const url=new URL(raw||defaultURL,location.href);
+  const url=new URL(
+   param("trainingUrl","training_url")||defaultURL,
+   location.href
+  );
 
   if(!["https:","http:"].includes(url.protocol)){
-   throw Error("Invalid URL");
+   throw Error("Invalid training URL");
   }
 
-  if(sessionID){
-   url.searchParams.set("session",sessionID);
-  }
+  const fields={
+   session:sessionID,
+   email,
+   player:playerID,
+   userid:param("userid"),
+   playerName,
+   language,
+   source:"MATCH",
 
-  if(email){
-   url.searchParams.set("email",email);
-  }
+   mainIssue:selectedIssue,
+   focus:selectedIssue,
 
-  if(playerID){
-   url.searchParams.set("player",playerID);
-  }
+   drill:coach.drill,
+   recommendedDrill:coach.drill,
 
-  if(playerName){
-   url.searchParams.set("playername",playerName);
-  }
+   aiAdvice:coach.advice,
+   coachAdvice:coach.advice,
 
-  const userID=param("userid");
-  if(userID){
-   url.searchParams.set("userid",userID);
-  }
+   objective:coach.objective,
+   why:coach.why,
+   execution:coach.execution,
+   avoid:coach.avoid,
 
-  url.searchParams.set("source","MATCH");
-  url.searchParams.set("language",language);
-  url.searchParams.set("mainIssue",selectedIssue);
-  url.searchParams.set("focus",selectedIssue);
+   keithprimary:coach.primary,
+   keithsecondary:coach.secondary,
+   keithtarget:coach.target,
+
+   track:coach.track,
+   nextAction:coach.next,
+
+   practiceID:coach.practiceID,
+   keithcoach:coach.keithCoach,
+   keithrules:coach.keithRules,
+
+   keithred:coach.red,
+   keithorange:coach.orange,
+   keithyellow:coach.yellow,
+   keithgreen:coach.green,
+
+   redaction:coach.redAction,
+   orangeaction:coach.orangeAction,
+   yellowaction:coach.yellowAction,
+   greenaction:coach.greenAction,
+
+   improvement:coach.improvement,
+   reminder:coach.reminder,
+   after:coach.after
+  };
+
+  for(const [key,value] of Object.entries(fields)){
+   if(value!==undefined&&value!==null&&value!==""){
+    url.searchParams.set(key,String(value));
+   }
+  }
 
   notice.textContent="Opening Today's AI Training...";
 
   window.location.assign(url.toString());
 
  }catch(error){
-  console.error(error);
+  console.error("DARTIQ training navigation:",error);
   notice.textContent="Unable to open training.";
  }
 }
 
-/* INITIALIZATION */
+/* =====================================
+   INITIALIZATION
+===================================== */
+
 if(speechSupported){
  selectCallerVoice();
 
@@ -1936,7 +1665,3 @@ buildIssues();
 updateInput();
 updateStats();
 restoreRecovery();
-
-</script>
-</body>
-</html>
