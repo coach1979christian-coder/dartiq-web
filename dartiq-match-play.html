@@ -4,7 +4,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>DARTIQ | Match Engine V8.1</title>
+<meta name="theme-color" content="#02070e">
+<title>DARTIQ | Match Engine V8.2</title>
 
 <style>
 :root{
@@ -18,28 +19,22 @@
   --green:#49e6ad;
   --red:#ff737b;
 }
-
 *{box-sizing:border-box}
-
 html,body{
   min-height:100%;
   background:var(--bg);
   color-scheme:dark;
 }
-
 body{
   margin:0;
   color:var(--text);
   font-family:Arial,Helvetica,sans-serif;
   padding:10px;
 }
-
 button{font:inherit;cursor:pointer}
 button:disabled{opacity:.45;cursor:not-allowed}
-
 .app{max-width:650px;margin:auto}
 .brand{text-align:center;padding:20px 0}
-
 .logo{
   font-size:30px;
   font-weight:900;
@@ -47,17 +42,14 @@ button:disabled{opacity:.45;cursor:not-allowed}
   color:var(--blue);
   text-shadow:0 0 20px #39a9ff65;
 }
-
 .subtitle{
   color:var(--muted);
   font-size:11px;
   letter-spacing:2px;
   margin-top:8px;
 }
-
 .screen{display:none}
 .screen.active{display:block}
-
 .panel{
   background:linear-gradient(160deg,#0b2032,#06111d);
   border:1px solid var(--line);
@@ -65,19 +57,16 @@ button:disabled{opacity:.45;cursor:not-allowed}
   padding:18px;
   margin-bottom:12px;
 }
-
 .center{text-align:center}
 h1{font-size:23px;margin:8px 0 15px}
 h2{font-size:18px;margin:8px 0 15px}
 .small{font-size:12px;color:var(--muted)}
-
 .eyebrow{
   font-size:10px;
   color:var(--blue);
   font-weight:900;
   letter-spacing:2px;
 }
-
 .primary{
   display:block;
   width:100%;
@@ -90,7 +79,6 @@ h2{font-size:18px;margin:8px 0 15px}
   font-weight:900;
   margin-top:15px;
 }
-
 .secondary{
   background:var(--panel2);
   border:1px solid var(--line);
@@ -99,7 +87,6 @@ h2{font-size:18px;margin:8px 0 15px}
   padding:12px;
   font-weight:bold;
 }
-
 .danger{
   background:#391722;
   border:1px solid var(--red);
@@ -110,14 +97,12 @@ h2{font-size:18px;margin:8px 0 15px}
   width:100%;
   margin-top:12px;
 }
-
 .format-grid{
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:8px;
   margin:20px 0;
 }
-
 .format{
   padding:20px 3px;
   border-radius:12px;
@@ -126,13 +111,11 @@ h2{font-size:18px;margin:8px 0 15px}
   color:white;
   font-weight:900;
 }
-
 .format.selected{
   background:var(--blue);
   color:#001321;
   box-shadow:0 0 16px #39a9ff55;
 }
-
 .match-info{
   display:flex;
   justify-content:space-between;
@@ -141,19 +124,16 @@ h2{font-size:18px;margin:8px 0 15px}
   font-size:11px;
   margin:12px 0;
 }
-
 .mode-row{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:8px;
   margin:10px 0;
 }
-
 .mode.active{
   background:var(--blue);
   color:#001321;
 }
-
 .dartboard-layout{
   display:grid;
   grid-template-columns:minmax(0,1fr) minmax(0,3fr) minmax(0,1fr);
@@ -161,14 +141,12 @@ h2{font-size:18px;margin:8px 0 15px}
   gap:8px;
   width:100%;
 }
-
 .dartboard-side-score{
   display:flex;
   align-items:center;
   justify-content:center;
   min-width:0;
 }
-
 .side-score-box{
   width:100%;
   background:#061421;
@@ -177,38 +155,32 @@ h2{font-size:18px;margin:8px 0 15px}
   padding:10px 2px;
   text-align:center;
 }
-
 .side-score-label{
   color:var(--blue);
   font-size:9px;
   font-weight:900;
   margin-bottom:6px;
 }
-
 .side-score-value{
   font-size:27px;
   font-weight:900;
 }
-
 .side-legs-value{
   font-size:24px;
   font-weight:900;
 }
-
 .board-wrap{
   width:100%;
   max-width:370px;
   margin:auto;
   aspect-ratio:1;
 }
-
 #board{
   width:100%;
   height:100%;
   touch-action:manipulation;
   filter:drop-shadow(0 0 10px #39a9ff35);
 }
-
 .visit{
   background:#020a12;
   border:1px solid var(--line);
@@ -217,16 +189,13 @@ h2{font-size:18px;margin:8px 0 15px}
   text-align:center;
   margin:12px 0;
 }
-
 .visit strong{font-size:30px}
-
 .darts{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:7px;
   margin:12px 0 8px;
 }
-
 .dart{
   background:var(--panel2);
   border-radius:9px;
@@ -234,13 +203,11 @@ h2{font-size:18px;margin:8px 0 15px}
   padding:10px 3px;
   font-size:12px;
 }
-
 .keypad{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:7px;
 }
-
 .key{
   background:var(--panel2);
   color:white;
@@ -250,13 +217,11 @@ h2{font-size:18px;margin:8px 0 15px}
   font-size:20px;
   font-weight:900;
 }
-
 .stats{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:8px;
 }
-
 .stat{
   background:#071725;
   border:1px solid #173d59;
@@ -264,25 +229,21 @@ h2{font-size:18px;margin:8px 0 15px}
   padding:12px 5px;
   text-align:center;
 }
-
 .stat strong{
   display:block;
   font-size:19px;
 }
-
 .stat span{
   display:block;
   color:var(--muted);
   font-size:10px;
   margin-top:5px;
 }
-
 .issue-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:9px;
 }
-
 .issue{
   background:var(--panel2);
   color:white;
@@ -292,13 +253,11 @@ h2{font-size:18px;margin:8px 0 15px}
   font-size:12px;
   font-weight:bold;
 }
-
 .issue.selected{
   border-color:var(--blue);
   background:#123b5c;
   box-shadow:0 0 10px #39a9ff30;
 }
-
 .notice{
   font-size:11px;
   color:var(--muted);
@@ -306,7 +265,6 @@ h2{font-size:18px;margin:8px 0 15px}
   line-height:1.5;
   margin:12px 0;
 }
-
 .voice-panel,.scoring-panel{
   margin:12px 0;
   background:#061421;
@@ -314,7 +272,6 @@ h2{font-size:18px;margin:8px 0 15px}
   border-radius:12px;
   overflow:hidden;
 }
-
 .voice-header,.scoring-header{
   width:100%;
   display:flex;
@@ -329,39 +286,32 @@ h2{font-size:18px;margin:8px 0 15px}
   font-weight:900;
   text-align:left;
 }
-
 .voice-content,.scoring-content{
   padding:0 12px 12px;
 }
-
 .voice-top{
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:10px;
 }
-
 .voice-top span{
   color:var(--blue);
   font-size:12px;
   font-weight:900;
 }
-
 .voice-status{
   margin-top:8px;
   font-size:11px;
   color:var(--muted);
 }
-
 .voice-buttons{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:8px;
   margin-top:10px;
 }
-
 .voice-buttons button{font-size:11px}
-
 .caller-line{
   margin-top:10px;
   min-height:20px;
@@ -371,16 +321,13 @@ h2{font-size:18px;margin:8px 0 15px}
   text-align:center;
   line-height:1.5;
 }
-
 .player-tag{
   text-align:center;
   font-size:12px;
   color:var(--muted);
   margin:8px 0 12px;
 }
-
 .player-tag strong{color:white}
-
 .welcome-call{
   background:rgba(57,169,255,.07);
   border:1px solid var(--line);
@@ -393,17 +340,14 @@ h2{font-size:18px;margin:8px 0 15px}
   font-weight:bold;
   margin:10px 0;
 }
-
 .result{
   font-size:46px;
   font-weight:900;
   letter-spacing:3px;
   margin:16px 0;
 }
-
 .result.win{color:var(--green)}
 .result.loss{color:var(--red)}
-
 .final-score{
   font-size:35px;
   font-weight:900;
@@ -411,37 +355,35 @@ h2{font-size:18px;margin:8px 0 15px}
   margin:12px 0 22px;
 }
 
+/* COMPACT CHECKOUT ROUTE */
 .checkout-panel{
   background:#061421;
   border:1px solid var(--blue);
-  border-radius:12px;
-  padding:13px;
+  border-radius:9px;
+  padding:6px 10px;
   text-align:center;
-  margin:12px 0;
+  margin:7px 0;
 }
-
 .checkout-label{
   color:var(--blue);
-  font-size:10px;
+  font-size:9px;
   font-weight:900;
-  letter-spacing:2px;
+  letter-spacing:1.5px;
+  line-height:1.2;
 }
-
 .checkout-route{
-  font-size:22px;
+  font-size:16px;
   font-weight:900;
-  margin-top:8px;
-  letter-spacing:1px;
+  margin-top:3px;
+  letter-spacing:.4px;
+  line-height:1.15;
 }
-
 .checkout-hint{
-  font-size:10px;
+  font-size:9px;
   color:var(--muted);
-  margin-top:6px;
+  margin-top:2px;
+  line-height:1.15;
 }
-
-/* THREE BUTTONS IN ONE ROW */
-
 .visit-actions{
   display:grid;
   grid-template-columns:minmax(0,.85fr) minmax(0,1.5fr) minmax(0,.85fr);
@@ -450,7 +392,6 @@ h2{font-size:18px;margin:8px 0 15px}
   width:100%;
   margin-top:14px;
 }
-
 .visit-actions button{
   width:100%;
   min-width:0;
@@ -464,20 +405,16 @@ h2{font-size:18px;margin:8px 0 15px}
   text-align:center;
   white-space:normal;
 }
-
 .visit-actions .primary{
   background:var(--blue);
   color:#001321;
 }
-
 .visit-actions .secondary{
   background:var(--panel2);
   border:1px solid var(--line);
   color:white;
 }
-
 .hidden{display:none!important}
-
 footer{
   text-align:center;
   color:#52748c;
@@ -485,32 +422,26 @@ footer{
   letter-spacing:2px;
   padding:20px 0;
 }
-
 @media(max-width:480px){
   .panel{padding:12px}
-
   .dartboard-layout{
     grid-template-columns:minmax(0,1fr) minmax(0,3.2fr) minmax(0,1fr);
     gap:3px;
   }
-
   .side-score-box{padding:8px 1px}
   .side-score-value{font-size:21px}
   .side-legs-value{font-size:19px}
   .side-score-label{font-size:7px}
-
   .visit-actions{gap:5px}
-
   .visit-actions button{
     padding:10px 2px;
     font-size:10px;
   }
 }
-
 @media(max-width:390px){
   .stat strong{font-size:16px}
   .format{padding:17px 2px}
-  .checkout-route{font-size:19px}
+  .checkout-route{font-size:15px}
 }
 </style>
 </head>
@@ -524,7 +455,6 @@ footer{
 </header>
 
 <!-- SCREEN 1 -->
-
 <section id="setup" class="screen active">
   <div class="panel center">
     <div class="eyebrow">PLAYER JOURNEY</div>
@@ -539,38 +469,32 @@ footer{
 </section>
 
 <!-- SCREEN 2 -->
-
 <section id="formats" class="screen">
   <div class="panel center">
     <div class="eyebrow">MATCH SETUP</div>
     <h1>SELECT YOUR FORMAT</h1>
-
     <div class="format-grid">
       <button class="format" data-format="3" onclick="selectFormat(3)">BO3</button>
       <button class="format" data-format="5" onclick="selectFormat(5)">BO5</button>
       <button class="format" data-format="7" onclick="selectFormat(7)">BO7</button>
       <button class="format" data-format="9" onclick="selectFormat(9)">BO9</button>
     </div>
-
     <p id="formatDescription" class="small">
       Choose the number of legs.
     </p>
-
     <button id="startGame" class="primary hidden" onclick="startMatch()">
       START YOUR GAME FOR AI ANALYSIS
     </button>
   </div>
 </section>
 
-<!-- SCREEN 3: LIVE MATCH -->
-
+<!-- SCREEN 3 -->
 <section id="match" class="screen">
 <div class="panel">
 
   <div class="center">
     <div class="eyebrow">LIVE MATCH</div>
     <h2 id="matchTitle">BEST OF 5</h2>
-
     <div class="player-tag">
       PLAYER: <strong id="displayPlayerName">PLAYER</strong>
     </div>
@@ -580,60 +504,45 @@ footer{
     Welcome to the DARTIQ oche.
   </div>
 
-  <!-- MASTER CALLER -->
-
   <div class="voice-panel">
-
     <button class="voice-header" onclick="toggleCallerPanel()">
       <span>🎙 DARTIQ MASTER CALLER</span>
       <span id="callerArrow">▼</span>
     </button>
-
     <div id="callerContent" class="voice-content hidden">
-
       <div class="voice-top">
         <span>VOICE CONTROLS</span>
         <button id="voiceToggle" class="secondary" onclick="toggleVoice()">
           VOICE ON
         </button>
       </div>
-
       <div id="voiceStatus" class="voice-status">
         Preparing caller...
       </div>
-
       <div class="voice-buttons">
         <button class="secondary" onclick="testVoice()">
           TEST CALLER
         </button>
-
         <button class="secondary" onclick="repeatLastCall()">
           REPEAT LAST CALL
         </button>
       </div>
-
       <div id="callerLine" class="caller-line"></div>
     </div>
   </div>
 
-  <!-- DARTBOARD / KEYPAD -->
-
   <div class="scoring-panel">
-
     <button class="scoring-header" onclick="toggleScoringPanel()">
       <span>🎯 DARTBOARD / KEYPAD</span>
       <span id="scoringArrow">▼</span>
     </button>
-
     <div id="scoringContent" class="scoring-content hidden">
-
       <div class="mode-row">
         <button id="boardModeButton"
           class="secondary mode active"
           onclick="setMode('board')">
           🎯 DARTBOARD
         </button>
-
         <button id="keyModeButton"
           class="secondary mode"
           onclick="setMode('keypad')">
@@ -644,11 +553,9 @@ footer{
       <div id="boardPanel"></div>
 
       <div id="keypadPanel" class="hidden">
-
         <div class="visit">
           <strong id="keyValue">0</strong>
         </div>
-
         <div class="keypad">
           <button class="key" onclick="keyPress('1')">1</button>
           <button class="key" onclick="keyPress('2')">2</button>
@@ -663,16 +570,12 @@ footer{
           <button class="key" onclick="keyPress('0')">0</button>
           <button class="key" onclick="keyBack()">⌫</button>
         </div>
-
         <p class="small center">
           Enter your total visit score. A checkout requires confirmation.
         </p>
-
       </div>
     </div>
   </div>
-
-  <!-- MATCH INFORMATION -->
 
   <div class="match-info">
     <span id="legInfo">LEG 1</span>
@@ -691,10 +594,7 @@ footer{
     <div class="dart" id="dart3">DART 3: –</div>
   </div>
 
-  <!-- DARTBOARD -->
-
   <div class="dartboard-layout">
-
     <div class="dartboard-side-score">
       <div class="side-score-box">
         <div class="side-score-label">REMAINING</div>
@@ -716,10 +616,7 @@ footer{
         <div class="side-score-label">YOU / OPP.</div>
       </div>
     </div>
-
   </div>
-
-  <!-- CHECKOUT ROUTE -->
 
   <div class="checkout-panel">
     <div class="checkout-label">DARTIQ CHECKOUT ROUTE</div>
@@ -731,28 +628,22 @@ footer{
     </div>
   </div>
 
-  <!-- MISS / CONFIRM VISIT / UNDO -->
-
   <div class="visit-actions">
-
     <button id="missButton"
       class="secondary"
       onclick="addMiss()">
       MISS
     </button>
-
     <button id="confirmVisitButton"
       class="primary"
       onclick="confirmVisit()">
       CONFIRM VISIT
     </button>
-
     <button id="undoButton"
       class="secondary"
       onclick="undoVisitEntry()">
       UNDO
     </button>
-
   </div>
 
   <div id="message" class="notice"></div>
@@ -762,12 +653,10 @@ footer{
     onclick="opponentWonLeg()">
     OPPONENT WON LEG
   </button>
-
 </div>
 </section>
 
 <!-- MATCH COMPLETED -->
-
 <section id="completed" class="screen">
   <div class="panel center">
     <div class="eyebrow">MATCH COMPLETED</div>
@@ -776,17 +665,14 @@ footer{
     <div id="finalScore" class="final-score"></div>
     <div class="eyebrow">YOUR MATCH PERFORMANCE</div>
     <div id="finalSummary" class="stats"></div>
-
     <button class="primary" onclick="continueToMainIssue()">
       CONTINUE TO MAIN ISSUE SELECTION
     </button>
-
     <div id="completionMessage" class="notice"></div>
   </div>
 </section>
 
 <!-- MAIN ISSUE -->
-
 <section id="mainIssue" class="screen">
   <div class="panel center">
     <div class="eyebrow">POST-MATCH ANALYSIS</div>
@@ -795,42 +681,36 @@ footer{
       Select the issue that affected your performance most.
     </p>
     <div id="issues" class="issue-grid"></div>
-
     <button id="analysisButton"
       class="primary hidden"
       onclick="finishAnalysis()">
       GET MY AI ANALYSIS
     </button>
-
     <div id="analysisMessage" class="notice"></div>
   </div>
 </section>
 
 <!-- AI ANALYSIS -->
-
 <section id="analysis" class="screen">
   <div class="panel center">
     <div class="eyebrow">DARTIQ AI COACH</div>
     <h1>YOUR MATCH ANALYSIS</h1>
     <h2 id="analysisIssue"></h2>
     <p id="analysisAdvice" class="small"></p>
-
     <button class="primary" onclick="openTraining()">
       GO TO TODAY'S AI TRAINING
     </button>
-
     <div id="trainingMessage" class="notice"></div>
   </div>
 </section>
 
 <footer>DARTIQ • INTELLIGENT DARTS PERFORMANCE</footer>
-
 </div>
 
 <script>
+"use strict";
 
 /* GLIDE PARAMETERS */
-
 const params=new URLSearchParams(location.search);
 
 const param=(...names)=>{
@@ -841,33 +721,30 @@ const param=(...names)=>{
   return "";
 };
 
-const WEBHOOK="https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/5415568e-2eca-408f-a460-572b257d1cdf";
+const WEBHOOK=
+"https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/5415568e-2eca-408f-a460-572b257d1cdf";
 
-const MATCH_START_WEBHOOK="https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/86d46fb2-e26e-43fc-9887-60c5a31e5357";
+const MATCH_START_WEBHOOK=
+"https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/86d46fb2-e26e-43fc-9887-60c5a31e5357";
 
-const MATCH_COMPLETION_WEBHOOK="https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/89ab5acf-6067-4022-ab9d-f5a02ab99698";
+const MATCH_COMPLETION_WEBHOOK=
+"https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/89ab5acf-6067-4022-ab9d-f5a02ab99698";
 
 const email=param("email");
 const playerID=param("player","playerid","userid");
 
 /* DYNAMIC PLAYER NAME */
-
 function readPlayerName(){
   const value=param(
-    "playername",
-    "playerName",
-    "player_name",
-    "name",
-    "fullName",
-    "full_name",
-    "firstName",
-    "firstname"
+    "playername","playerName","player_name",
+    "name","fullName","full_name",
+    "firstName","firstname"
   );
 
   if(!value)return "";
 
   if(
-    /^\{.*\}$/.test(value) ||
+    /^\{.*\}$/.test(value)||
     /^(PLAYER|PLAYERNAME|undefined|null|unknown)$/i.test(value)
   ){
     return "";
@@ -887,7 +764,6 @@ const $=id=>document.getElementById(id);
 const fmt=n=>Number(n).toFixed(2);
 
 /* MATCH STATE */
-
 let sessionID=param("session","sessionID");
 let bestOf=0;
 let legsToWin=0;
@@ -925,11 +801,18 @@ let matchResult="";
 let completionSyncConfirmed=false;
 let matchLaunching=false;
 
-const RECOVERY_KEY=
-  "DARTIQ_MATCH_RECOVERY_V7_"+(email||playerID||"guest");
+/*
+ V8.2 FIX:
+ Each session has its own recovery key.
+ A previous match cannot overwrite a new session.
+*/
+function recoveryKey(){
+  return "DARTIQ_MATCH_RECOVERY_V8_"+
+    (sessionID||"NO_SESSION")+"_"+
+    (email||playerID||"guest");
+}
 
 /* CHECKOUT ROUTES */
-
 const checkoutRoutes={
 170:"T20 → T20 → BULL",167:"T20 → T19 → BULL",
 164:"T20 → T18 → BULL",161:"T20 → T17 → BULL",
@@ -937,7 +820,7 @@ const checkoutRoutes={
 157:"T20 → T19 → D20",156:"T20 → T20 → D18",
 155:"T20 → T19 → D19",154:"T20 → T18 → D20",
 153:"T20 → T19 → D18",152:"T20 → T20 → D16",
-151:"T20 → T17 → D20",150:"T20 → T18 → D16",
+151:"T20 → T17 → D20",150:"T20 → T18 → D18",
 149:"T20 → T19 → D16",148:"T20 → T16 → D20",
 147:"T20 → T17 → D18",146:"T20 → T18 → D16",
 145:"T20 → T15 → D20",144:"T20 → T20 → D12",
@@ -1037,7 +920,6 @@ function updateCheckoutRoute(){
 }
 
 /* COLLAPSIBLE CONTROLS */
-
 function toggleCallerPanel(){
   const hidden=$("callerContent").classList.toggle("hidden");
   $("callerArrow").textContent=hidden?"▼":"▲";
@@ -1048,15 +930,31 @@ function toggleScoringPanel(){
   $("scoringArrow").textContent=hidden?"▼":"▲";
 }
 
-/* RECOVERY */
-
+/* SESSION-SCOPED RECOVERY */
 function saveRecovery(stage){
+  if(!sessionID)return;
+
   try{
-    sessionStorage.setItem(RECOVERY_KEY,JSON.stringify({
-      stage,sessionID,bestOf,legsToWin,legsWon,opponentLegs,
-      totalPoints,totalDarts,first9Points,first9Darts,
-      count100,count140,count180,checkoutAttempts,checkoutHits,
-      highestCheckout,visitNumber,selectedIssue,matchResult,
+    sessionStorage.setItem(recoveryKey(),JSON.stringify({
+      stage,
+      sessionID,
+      bestOf,
+      legsToWin,
+      legsWon,
+      opponentLegs,
+      totalPoints,
+      totalDarts,
+      first9Points,
+      first9Darts,
+      count100,
+      count140,
+      count180,
+      checkoutAttempts,
+      checkoutHits,
+      highestCheckout,
+      visitNumber,
+      selectedIssue,
+      matchResult,
       completionSyncConfirmed
     }));
   }catch(e){
@@ -1065,17 +963,27 @@ function saveRecovery(stage){
 }
 
 function restoreRecovery(){
+  /*
+   Never restore an old completed match
+   into a newly created Glide session.
+  */
+  if(!sessionID)return;
+
   try{
     const saved=JSON.parse(
-      sessionStorage.getItem(RECOVERY_KEY)||"null"
+      sessionStorage.getItem(recoveryKey())||"null"
     );
 
     if(
       !saved||
+      !saved.sessionID||
+      saved.sessionID!==sessionID||
       !["completed","mainIssue","analysis"].includes(saved.stage)
-    )return;
+    ){
+      showScreen("setup");
+      return;
+    }
 
-    sessionID=saved.sessionID||sessionID;
     bestOf=saved.bestOf||0;
     legsToWin=saved.legsToWin||0;
     legsWon=saved.legsWon||0;
@@ -1121,11 +1029,11 @@ function restoreRecovery(){
     }
   }catch(e){
     console.warn("Recovery failed",e);
+    showScreen("setup");
   }
 }
 
 /* MASTER CALLER */
-
 const speechSupported=
   "speechSynthesis" in window &&
   "SpeechSynthesisUtterance" in window;
@@ -1242,8 +1150,6 @@ function testVoice(){
   }]);
 }
 
-/* NUMBER WORDS */
-
 function numberWords(n){
   n=Math.round(Number(n));
 
@@ -1289,8 +1195,6 @@ function dutchOrdinal(n){
   ][n]||n+"de";
 }
 
-/* PERSONALIZED WELCOME */
-
 function announceMatchWelcome(){
   const greetingName=spokenName?spokenName+" ":"";
 
@@ -1310,8 +1214,6 @@ function announceMatchWelcome(){
   }]);
 }
 
-/* NEXT LEGS */
-
 function announceStartLeg(n){
   saySequence([{
     text:isDutch?
@@ -1320,8 +1222,6 @@ function announceStartLeg(n){
     rate:0.91
   }]);
 }
-
-/* SCORING ANNOUNCEMENTS */
 
 function announceScore(score){
   saySequence([{
@@ -1340,27 +1240,19 @@ function announceBust(){
   saySequence([{text:"Bust!",rate:0.87}]);
 }
 
-/* PERSONALIZED GAME SHOT */
-
 function announceCheckout(leg,matchWon){
-
   const name=spokenName||"";
-
   let text;
 
   if(matchWon){
-
     text=name?
       "Game shot, "+name+"! And the match!":
       "Game shot, and the match!";
-
   }else{
-
     text=name?
       "Game shot, "+name+"! "+
       legOrdinal(leg)+" leg!":
       "Game shot! "+legOrdinal(leg)+" leg!";
-
   }
 
   saySequence([{
@@ -1369,8 +1261,6 @@ function announceCheckout(leg,matchWon){
     rate:0.84
   }]);
 }
-
-/* OPPONENT ANNOUNCEMENTS */
 
 function announceOpponentLeg(matchLost){
   saySequence([{
@@ -1388,7 +1278,6 @@ function announceOpponentLeg(matchLost){
 function announceVisitResult({
   score,bust,checkout,matchWon,leg,remainingScore
 }){
-
   if(checkout){
     announceCheckout(leg,matchWon);
     return;
@@ -1400,7 +1289,6 @@ function announceVisitResult({
   }
 
   if(remainingScore>=2&&remainingScore<=170){
-
     saySequence([
       {
         text:score===180?
@@ -1417,7 +1305,6 @@ function announceVisitResult({
         rate:0.88
       }
     ]);
-
     return;
   }
 
@@ -1425,7 +1312,6 @@ function announceVisitResult({
 }
 
 /* SCREENS */
-
 function showScreen(id){
   document.querySelectorAll(".screen").forEach(s=>
     s.classList.toggle("active",s.id===id)
@@ -1438,10 +1324,8 @@ function message(t){
 }
 
 /* GLIDE WEBHOOKS */
-
 async function sendEvent(eventType,data={}){
   try{
-
     const url=eventType==="match_start"?
       MATCH_START_WEBHOOK:
       eventType==="match_complete"?
@@ -1470,7 +1354,6 @@ async function sendEvent(eventType,data={}){
     }
 
     return true;
-
   }catch(e){
     console.error("DARTIQ sync:",eventType,e);
     return false;
@@ -1478,7 +1361,6 @@ async function sendEvent(eventType,data={}){
 }
 
 /* FORMAT SELECTION */
-
 function selectFormat(n){
   if(![3,5,7,9].includes(n))return;
 
@@ -1499,21 +1381,24 @@ function selectFormat(n){
 }
 
 /* START MATCH */
-
 async function startMatch(){
   if(!bestOf||matchLaunching)return;
 
   matchLaunching=true;
-
-  try{
-    sessionStorage.removeItem(RECOVERY_KEY);
-  }catch(e){}
 
   if(!sessionID){
     sessionID=typeof crypto.randomUUID==="function"?
       crypto.randomUUID():
       "MATCH-"+Date.now();
   }
+
+  /*
+   Starting a fresh match clears recovery
+   for this exact session only.
+  */
+  try{
+    sessionStorage.removeItem(recoveryKey());
+  }catch(e){}
 
   matchStartedAt=new Date().toISOString();
   $("startGame").disabled=true;
@@ -1524,7 +1409,6 @@ async function startMatch(){
 
   updateStats();
   showScreen("match");
-
   announceMatchWelcome();
 
   const ok=await sendEvent("match_start",{
@@ -1541,7 +1425,6 @@ async function startMatch(){
 }
 
 /* DARTBOARD */
-
 const numbers=[
   20,1,18,4,13,6,10,15,2,17,
   3,19,7,16,8,11,14,9,12,5
@@ -1636,11 +1519,12 @@ function drawBoard(){
     stroke:"#ddd"
   });
 
-  bull.addEventListener("click",()=>addDart(25,2,"BULL"));
+  bull.addEventListener("click",()=>addDart(
+    
+25,2,"BULL"));
 }
 
 /* NEXT LEG */
-
 function playPendingLegAnnouncement(){
   if(!nextLegAnnouncementPending)return;
 
@@ -1649,7 +1533,6 @@ function playPendingLegAnnouncement(){
 }
 
 /* BOARD INPUT */
-
 function addDart(n,m,label){
   if(finished||saving||mode!=="board")return;
 
@@ -1678,23 +1561,19 @@ function undoDart(){
 }
 
 /* MISS BUTTON */
-
 function addMiss(){
   if(finished||saving)return;
 
   if(mode==="board"){
     addDart(0,0,"MISS");
-  }else{
-    if(keyInput===""){
-      playPendingLegAnnouncement();
-      keyInput="0";
-      updateInput();
-    }
+  }else if(keyInput===""){
+    playPendingLegAnnouncement();
+    keyInput="0";
+    updateInput();
   }
 }
 
 /* UNDO BUTTON */
-
 function undoVisitEntry(){
   if(finished||saving)return;
 
@@ -1706,7 +1585,6 @@ function undoVisitEntry(){
 }
 
 /* INPUT MODE */
-
 function setMode(m){
   if(
     saving||
@@ -1723,13 +1601,11 @@ function setMode(m){
   $("keypadPanel").classList.toggle("hidden",m!=="keypad");
 
   $("boardModeButton").classList.toggle(
-    "active",
-    m==="board"
+    "active",m==="board"
   );
 
   $("keyModeButton").classList.toggle(
-    "active",
-    m==="keypad"
+    "active",m==="keypad"
   );
 
   updateInput();
@@ -1737,7 +1613,6 @@ function setMode(m){
 }
 
 /* KEYPAD */
-
 function keyPress(n){
   if(
     saving||
@@ -1786,7 +1661,6 @@ function updateInput(){
 }
 
 /* PERFORMANCE STATISTICS */
-
 const average=()=>
   totalDarts?totalPoints/totalDarts*3:0;
 
@@ -1822,7 +1696,6 @@ function recordFirst9(score,darts,dartScores=[]){
 }
 
 /* CONFIRM VISIT */
-
 async function confirmVisit(){
   if(finished||saving)return;
 
@@ -1943,8 +1816,7 @@ async function confirmVisit(){
   if(checkoutHit){
     checkoutHits++;
     highestCheckout=Math.max(
-      highestCheckout,
-      before
+      highestCheckout,before
     );
     legsWon++;
   }
@@ -1968,7 +1840,6 @@ async function confirmVisit(){
   });
 
   if(checkoutHit){
-
     if(matchWon){
       await completeMatch();
       return;
@@ -1980,15 +1851,12 @@ async function confirmVisit(){
 
     message("LEG WON! Start leg "+currentLeg+".");
     nextLegAnnouncementPending=true;
-
   }else{
-
     message(
       bust?
         "BUST • Score unchanged.":
         "Visit recorded • "+remaining+" remaining."
     );
-
   }
 
   if(!ok){
@@ -1999,7 +1867,6 @@ async function confirmVisit(){
 }
 
 /* OPPONENT WINS LEG */
-
 async function opponentWonLeg(){
   if(finished||saving)return;
 
@@ -2087,7 +1954,6 @@ async function opponentWonLeg(){
 }
 
 /* MATCH RESULTS */
-
 function summaryCard(label,value){
   const d=document.createElement("div");
   d.className="stat";
@@ -2099,7 +1965,6 @@ function summaryCard(label,value){
   span.textContent=label;
 
   d.append(strong,span);
-
   return d;
 }
 
@@ -2135,7 +2000,6 @@ function renderMatchResults(){
 }
 
 /* COMPLETE MATCH */
-
 async function completeMatch(){
   if(finished)return;
 
@@ -2186,7 +2050,6 @@ function continueToMainIssue(){
 }
 
 /* POST-MATCH MAIN ISSUE */
-
 const issueData=[
   ["Missing Right","Aim and release alignment"],
   ["Missing Left","Release consistency"],
@@ -2223,7 +2086,6 @@ function buildIssues(){
 }
 
 /* ANALYSIS */
-
 function renderAnalysis(){
   const item=issueData.find(
     x=>x[0]===selectedIssue
@@ -2277,7 +2139,6 @@ async function finishAnalysis(){
 }
 
 /* TODAY'S AI TRAINING */
-
 function openTraining(){
   const notice=$("trainingMessage");
 
@@ -2315,7 +2176,6 @@ function openTraining(){
       }
 
       url=new URL(nested,location.href);
-
     }else{
       url=new URL(defaultTraining);
     }
@@ -2355,8 +2215,7 @@ function openTraining(){
 
   }catch(error){
     console.error(
-      "DARTIQ training navigation:",
-      error
+      "DARTIQ training navigation:",error
     );
 
     notice.textContent=
@@ -2365,7 +2224,6 @@ function openTraining(){
 }
 
 /* INITIALIZATION */
-
 if(speechSupported){
   selectCallerVoice();
 
