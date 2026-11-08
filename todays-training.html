@@ -20,11 +20,7 @@
   --green:#42d879;
 }
 
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
+*{box-sizing:border-box;margin:0;padding:0}
 
 html,body{
   width:100%;
@@ -35,9 +31,7 @@ html,body{
   overflow-x:hidden;
 }
 
-body{
-  padding:6px;
-}
+body{padding:6px}
 
 .wrap{
   width:100%;
@@ -54,9 +48,7 @@ body{
     inset 0 1px 0 rgba(255,255,255,.025);
 }
 
-.header{
-  padding:2px 2px 15px;
-}
+.header{padding:2px 2px 15px}
 
 .kicker{
   font-size:10px;
@@ -100,9 +92,7 @@ body{
   margin-top:14px;
 }
 
-.card,
-.main-focus,
-.equipment{
+.card,.main-focus,.equipment{
   min-width:0;
   padding:12px 10px;
   border-radius:13px;
@@ -129,23 +119,63 @@ body{
   overflow-wrap:anywhere;
 }
 
-.main-focus,
-.equipment{
+.main-focus,.equipment{
   margin-top:8px;
   padding:13px 14px;
 }
 
-.main-focus .value,
-.equipment .value{
+.main-focus .value,.equipment .value{
   font-size:14px;
   line-height:1.4;
 }
 
-/* ACCORDIONS */
-
-.sections{
-  margin-top:14px;
+.voice-panel{
+  margin-top:10px;
+  padding:12px;
+  border-radius:13px;
+  background:linear-gradient(180deg,#10243a,#0a1929);
+  border:1px solid var(--line);
 }
+
+.voice-title{
+  color:var(--accent);
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.7px;
+  text-transform:uppercase;
+}
+
+.voice-status{
+  margin-top:5px;
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.4;
+}
+
+.voice-controls{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:7px;
+  margin-top:9px;
+}
+
+.voice-button{
+  border:1px solid rgba(57,169,255,.45);
+  background:#0b2035;
+  color:#fff;
+  border-radius:9px;
+  padding:10px 6px;
+  font-size:10px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.voice-button.primary{
+  background:var(--accent);
+  color:#031322;
+}
+
+.sections{margin-top:14px}
 
 .section{
   margin-top:8px;
@@ -192,21 +222,11 @@ body{
   padding:14px;
 }
 
-.section.open .section-content{
-  display:block;
-}
+.section.open .section-content{display:block}
+.section.open .arrow{transform:rotate(180deg)}
 
-.section.open .arrow{
-  transform:rotate(180deg);
-}
-
-.info-block{
-  margin-bottom:16px;
-}
-
-.info-block:last-child{
-  margin-bottom:0;
-}
+.info-block{margin-bottom:16px}
+.info-block:last-child{margin-bottom:0}
 
 .info-label{
   color:var(--accent);
@@ -239,21 +259,10 @@ body{
   border:1px solid rgba(255,255,255,.04);
 }
 
-.grade.red{
-  border-left:4px solid var(--red);
-}
-
-.grade.orange{
-  border-left:4px solid var(--orange);
-}
-
-.grade.yellow{
-  border-left:4px solid var(--yellow);
-}
-
-.grade.green{
-  border-left:4px solid var(--green);
-}
+.grade.red{border-left:4px solid var(--red)}
+.grade.orange{border-left:4px solid var(--orange)}
+.grade.yellow{border-left:4px solid var(--yellow)}
+.grade.green{border-left:4px solid var(--green)}
 
 .grade-title{
   font-size:10px;
@@ -274,9 +283,7 @@ body{
   line-height:1.45;
 }
 
-.training-action{
-  margin-top:16px;
-}
+.training-action{margin-top:16px}
 
 .start-button{
   display:block;
@@ -293,14 +300,8 @@ body{
   box-shadow:0 0 18px rgba(57,169,255,.30);
 }
 
-.start-button:active{
-  transform:scale(.99);
-}
-
-.start-button:disabled{
-  opacity:.5;
-  cursor:not-allowed;
-}
+.start-button:active{transform:scale(.99)}
+.start-button:disabled{opacity:.5;cursor:not-allowed}
 
 .action-note{
   text-align:center;
@@ -327,47 +328,18 @@ body{
   font-weight:900;
 }
 
-.hidden{
-  display:none!important;
-}
+.hidden{display:none!important}
 
 @media(max-width:380px){
-  body{
-    padding:4px;
-  }
-
-  .wrap{
-    padding:13px;
-  }
-
-  .header h1{
-    font-size:28px;
-  }
-
-  .stats{
-    gap:6px;
-  }
-
-  .card{
-    padding:11px 8px;
-  }
-
-  .label{
-    font-size:8px;
-    letter-spacing:.5px;
-  }
-
-  .value{
-    font-size:15px;
-  }
-
-  .main-focus .value{
-    font-size:14px;
-  }
-
-  .grade-grid{
-    gap:6px;
-  }
+  body{padding:4px}
+  .wrap{padding:13px}
+  .header h1{font-size:28px}
+  .stats{gap:6px}
+  .card{padding:11px 8px}
+  .label{font-size:8px;letter-spacing:.5px}
+  .value{font-size:15px}
+  .main-focus .value{font-size:14px}
+  .grade-grid{gap:6px}
 }
 </style>
 </head>
@@ -377,26 +349,13 @@ body{
 <div class="wrap">
 
   <div class="header">
-
-    <div class="kicker">
-      DARTIQ · PRACTICE TRAINING
-    </div>
-
-    <h1 id="drill">
-      Practice Training
-    </h1>
-
-    <div class="subtitle" id="focus">
-      Focused practice
-    </div>
-
+    <div class="kicker">DARTIQ · PRACTICE TRAINING</div>
+    <h1 id="drill">Practice Training</h1>
+    <div class="subtitle" id="focus">Focused practice</div>
     <div class="divider"></div>
-
   </div>
 
-
   <div class="stats">
-
     <div class="card">
       <div class="label">Difficulty</div>
       <div class="value" id="level">Adaptive</div>
@@ -411,426 +370,191 @@ body{
       <div class="label">Rounds</div>
       <div class="value" id="rounds">10</div>
     </div>
-
   </div>
-
 
   <div class="main-focus">
-
-    <div class="label">
-      Main Focus
-    </div>
-
-    <div class="value" id="focusShort">
-      --
-    </div>
-
+    <div class="label">Main Focus</div>
+    <div class="value" id="focusShort">--</div>
   </div>
-
 
   <div class="equipment hidden" id="equipmentWrap">
-
-    <div class="label">
-      Equipment
-    </div>
-
-    <div class="value" id="equipment">
-      --
-    </div>
-
+    <div class="label">Equipment</div>
+    <div class="value" id="equipment">--</div>
   </div>
 
+  <div class="voice-panel">
+    <div class="voice-title">🔊 DARTIQ VOICE COACH</div>
+    <div class="voice-status" id="voiceStatus">
+      Your training briefing will play automatically.
+    </div>
+
+    <div class="voice-controls">
+      <button class="voice-button primary" type="button" onclick="speakTraining()">
+        ▶ PLAY BRIEFING
+      </button>
+
+      <button class="voice-button" type="button" onclick="stopVoice()">
+        ■ STOP
+      </button>
+    </div>
+  </div>
 
   <div class="sections">
 
-
-    <!-- PRACTICE INSTRUCTIONS -->
-
     <div class="section open">
-
-      <button
-        class="section-header"
-        type="button"
-        onclick="toggleSection(this)"
-      >
-
+      <button class="section-header" type="button" onclick="toggleSection(this)">
         <div>
-
-          <div class="section-title">
-            🎯 PRACTICE INSTRUCTIONS
-          </div>
-
-          <div class="section-subtitle">
-            Purpose, execution and technique
-          </div>
-
+          <div class="section-title">🎯 PRACTICE INSTRUCTIONS</div>
+          <div class="section-subtitle">Purpose, execution and technique</div>
         </div>
-
         <div class="arrow">⌃</div>
-
       </button>
-
 
       <div class="section-content">
-
         <div class="info-block">
-
-          <div class="info-label">
-            Why This Practice
-          </div>
-
-          <div class="info-value" id="why">
-            --
-          </div>
-
+          <div class="info-label">Why This Practice</div>
+          <div class="info-value" id="why">--</div>
         </div>
 
-
         <div class="info-block">
-
-          <div class="info-label">
-            How To Practice
-          </div>
-
-          <div class="info-value" id="execution">
-            --
-          </div>
-
+          <div class="info-label">How To Practice</div>
+          <div class="info-value" id="execution">--</div>
         </div>
 
-
         <div class="info-block">
-
-          <div class="info-label">
-            Watch For
-          </div>
-
-          <div class="info-value" id="avoid">
-            --
-          </div>
-
+          <div class="info-label">Watch For</div>
+          <div class="info-value" id="avoid">--</div>
         </div>
-
       </div>
-
     </div>
 
-
-    <!-- KEITH METHODOLOGY -->
-
     <div class="section">
-
-      <button
-        class="section-header"
-        type="button"
-        onclick="toggleSection(this)"
-      >
-
+      <button class="section-header" type="button" onclick="toggleSection(this)">
         <div>
-
-          <div class="section-title">
-            🎓 KEITH'S METHODOLOGY
-          </div>
-
-          <div class="section-subtitle">
-            Professional training framework
-          </div>
-
+          <div class="section-title">🎓 KEITH'S METHODOLOGY</div>
+          <div class="section-subtitle">Professional training framework</div>
         </div>
-
         <div class="arrow">⌄</div>
-
       </button>
-
 
       <div class="section-content">
-
         <div class="info-block">
-
-          <div class="info-label">
-            Coach
-          </div>
-
-          <div class="info-value" id="coach">
-            Keith Allen Guther
-          </div>
-
+          <div class="info-label">Coach</div>
+          <div class="info-value" id="coach">Keith Allen Guther</div>
         </div>
 
-
         <div class="info-block">
-
-          <div class="info-label">
-            Training Rules
-          </div>
-
-          <div class="info-value" id="rules">
-            --
-          </div>
-
+          <div class="info-label">Training Rules</div>
+          <div class="info-value" id="rules">--</div>
         </div>
 
-
         <div class="info-block">
-
-          <div class="info-label">
-            Primary Metric
-          </div>
-
-          <div class="info-value" id="primary">
-            --
-          </div>
-
+          <div class="info-label">Primary Metric</div>
+          <div class="info-value" id="primary">--</div>
         </div>
 
-
         <div class="info-block">
-
-          <div class="info-label">
-            Secondary Metric
-          </div>
-
-          <div class="info-value" id="secondary">
-            --
-          </div>
-
+          <div class="info-label">Secondary Metric</div>
+          <div class="info-value" id="secondary">--</div>
         </div>
 
-
         <div class="info-block">
-
-          <div class="info-label">
-            Success Target
-          </div>
-
-          <div class="info-value" id="target">
-            --
-          </div>
-
+          <div class="info-label">Success Target</div>
+          <div class="info-value" id="target">--</div>
         </div>
-
       </div>
-
     </div>
 
-
-    <!-- GRADING -->
-
     <div class="section">
-
-      <button
-        class="section-header"
-        type="button"
-        onclick="toggleSection(this)"
-      >
-
+      <button class="section-header" type="button" onclick="toggleSection(this)">
         <div>
-
-          <div class="section-title">
-            📊 GRADING & COACHING ACTIONS
-          </div>
-
-          <div class="section-subtitle">
-            Performance levels and next actions
-          </div>
-
+          <div class="section-title">📊 GRADING & COACHING ACTIONS</div>
+          <div class="section-subtitle">Performance levels and next actions</div>
         </div>
-
         <div class="arrow">⌄</div>
-
       </button>
-
 
       <div class="section-content">
 
         <div class="grade-grid">
 
-
           <div class="grade red">
-
-            <div class="grade-title">
-              RED
-            </div>
-
-            <div class="grade-range" id="red">
-              --
-            </div>
-
-            <div class="grade-action" id="redAction">
-              --
-            </div>
-
+            <div class="grade-title">RED</div>
+            <div class="grade-range" id="red">--</div>
+            <div class="grade-action" id="redAction">--</div>
           </div>
-
 
           <div class="grade orange">
-
-            <div class="grade-title">
-              ORANGE
-            </div>
-
-            <div class="grade-range" id="orange">
-              --
-            </div>
-
-            <div class="grade-action" id="orangeAction">
-              --
-            </div>
-
+            <div class="grade-title">ORANGE</div>
+            <div class="grade-range" id="orange">--</div>
+            <div class="grade-action" id="orangeAction">--</div>
           </div>
-
 
           <div class="grade yellow">
-
-            <div class="grade-title">
-              YELLOW
-            </div>
-
-            <div class="grade-range" id="yellow">
-              --
-            </div>
-
-            <div class="grade-action" id="yellowAction">
-              --
-            </div>
-
+            <div class="grade-title">YELLOW</div>
+            <div class="grade-range" id="yellow">--</div>
+            <div class="grade-action" id="yellowAction">--</div>
           </div>
 
-
           <div class="grade green">
-
-            <div class="grade-title">
-              GREEN
-            </div>
-
-            <div class="grade-range" id="green">
-              --
-            </div>
-
-            <div class="grade-action" id="greenAction">
-              --
-            </div>
-
+            <div class="grade-title">GREEN</div>
+            <div class="grade-range" id="green">--</div>
+            <div class="grade-action" id="greenAction">--</div>
           </div>
 
         </div>
 
-
         <div class="info-block" style="margin-top:15px">
-
-          <div class="info-label">
-            Coaching Logic
-          </div>
-
+          <div class="info-label">Coaching Logic</div>
           <div class="info-value" id="improvement">
             Intention → Outcome → Decide → Retest
           </div>
-
         </div>
 
       </div>
-
     </div>
 
-
-    <!-- TRACK -->
-
     <div class="section">
-
-      <button
-        class="section-header"
-        type="button"
-        onclick="toggleSection(this)"
-      >
-
+      <button class="section-header" type="button" onclick="toggleSection(this)">
         <div>
-
-          <div class="section-title">
-            📝 WHAT TO TRACK
-          </div>
-
-          <div class="section-subtitle">
-            Your performance measurements
-          </div>
-
+          <div class="section-title">📝 WHAT TO TRACK</div>
+          <div class="section-subtitle">Your performance measurements</div>
         </div>
-
         <div class="arrow">⌄</div>
-
       </button>
 
-
       <div class="section-content">
-
-        <div class="info-value" id="track">
-          --
-        </div>
-
+        <div class="info-value" id="track">--</div>
       </div>
-
     </div>
 
-
-    <!-- AFTER PRACTICE -->
-
     <div class="section">
-
-      <button
-        class="section-header"
-        type="button"
-        onclick="toggleSection(this)"
-      >
-
+      <button class="section-header" type="button" onclick="toggleSection(this)">
         <div>
-
-          <div class="section-title">
-            🧠 AFTER PRACTICE
-          </div>
-
-          <div class="section-subtitle">
-            Review, reflect and retest
-          </div>
-
+          <div class="section-title">🧠 AFTER PRACTICE</div>
+          <div class="section-subtitle">Review, reflect and retest</div>
         </div>
-
         <div class="arrow">⌄</div>
-
       </button>
 
-
       <div class="section-content">
-
         <div class="info-block">
-
-          <div class="info-label">
-            Reminder
-          </div>
-
+          <div class="info-label">Reminder</div>
           <div class="info-value" id="reminder">
             Compare your results with your starting baseline.
           </div>
-
         </div>
 
-
         <div class="info-block">
-
-          <div class="info-label">
-            Next Step
-          </div>
-
+          <div class="info-label">Next Step</div>
           <div class="info-value" id="nextAction">
             Repeat the drill and compare the results.
           </div>
-
         </div>
-
       </div>
-
     </div>
 
   </div>
-
 
   <div class="training-action">
 
@@ -847,13 +571,9 @@ body{
       Continue to the DARTIQ Performance Lab
     </div>
 
-    <div
-      class="status hidden"
-      id="status"
-    ></div>
+    <div class="status hidden" id="status"></div>
 
   </div>
-
 
   <div class="footer">
     DARTIQ · INTELLIGENT DARTS COACHING
@@ -861,361 +581,208 @@ body{
 
 </div>
 
-
 <script>
 "use strict";
 
-const params=
-new URLSearchParams(window.location.search);
-
+const params=new URLSearchParams(window.location.search);
 
 function getValue(...keys){
-
   for(const key of keys){
-
     const value=params.get(key);
-
-    if(
-      value!==null &&
-      value.trim()!==""
-    ){
+    if(value!==null && value.trim()!==""){
       return value.trim();
     }
-
   }
-
   return "";
-
 }
-
 
 const context={
-
-  session:
-    getValue(
-      "session",
-      "sessionID"
-    ),
-
-  email:
-    getValue("email"),
-
-  player:
-    getValue(
-      "player",
-      "playerid"
-    ),
-
-  userid:
-    getValue("userid"),
-
-  playerName:
-    getValue(
-      "playerName",
-      "playername",
-      "name"
-    ),
-
-  language:
-    getValue(
-      "language",
-      "lang"
-    )||"EN",
-
-  source:
-    getValue("source")||"MATCH",
-
-
-  mainIssue:
-    getValue(
-      "mainIssue",
-      "mainissue",
-      "focus"
-    ),
-
-  focus:
-    getValue(
-      "focus",
-      "mainIssue",
-      "mainissue"
-    ),
-
-
-  drill:
-    getValue(
-      "drill",
-      "recommendedDrill",
-      "practice",
-      "trainingName",
-      "finalTraining"
-    ),
-
-
-  level:
-    getValue(
-      "level",
-      "difficulty",
-      "playerLevel"
-    )||"Adaptive",
-
-
-  duration:
-    getValue(
-      "duration",
-      "trainingDuration"
-    )||"10 Visits",
-
-
-  rounds:
-    getValue(
-      "rounds",
-      "trainingRounds"
-    )||"10",
-
-
-  equipment:
-    getValue("equipment"),
-
-
-  practiceID:
-    getValue(
-      "practiceID",
-      "practiceId",
-      "drillID"
-    ),
-
-
-  advice:
-    getValue(
-      "aiAdvice",
-      "coachAdvice",
-      "advice"
-    ),
-
-
-  objective:
-    getValue(
-      "objective",
-      "trainingObjective"
-    ),
-
-
-  why:
-    getValue(
-      "why",
-      "whyThisPractice"
-    ),
-
-
-  execution:
-    getValue(
-      "execution",
-      "howToPractice"
-    ),
-
-
-  avoid:
-    getValue(
-      "avoid",
-      "watchFor"
-    ),
-
-
-  coach:
-    getValue(
-      "keithcoach",
-      "coach"
-    )||"Keith Allen Guther",
-
-
-  rules:
-    getValue(
-      "keithrules",
-      "rules",
-      "trainingRules"
-    ),
-
-
-  primary:
-    getValue(
-      "keithprimary",
-      "primarymetric",
-      "primaryMetric"
-    ),
-
-
-  secondary:
-    getValue(
-      "keithsecondary",
-      "secondarymetric",
-      "secondaryMetric"
-    ),
-
-
-  target:
-    getValue(
-      "keithtarget",
-      "successtarget",
-      "successTarget"
-    ),
-
-
-  red:
-    getValue(
-      "keithred",
-      "red"
-    ),
-
-
-  orange:
-    getValue(
-      "keithorange",
-      "orange"
-    ),
-
-
-  yellow:
-    getValue(
-      "keithyellow",
-      "yellow"
-    ),
-
-
-  green:
-    getValue(
-      "keithgreen",
-      "green"
-    ),
-
-
-  redAction:
-    getValue(
-      "redaction",
-      "redAction"
-    ),
-
-
-  orangeAction:
-    getValue(
-      "orangeaction",
-      "orangeAction"
-    ),
-
-
-  yellowAction:
-    getValue(
-      "yellowaction",
-      "yellowAction"
-    ),
-
-
-  greenAction:
-    getValue(
-      "greenaction",
-      "greenAction"
-    ),
-
-
-  improvement:
-    getValue(
-      "improvement",
-      "coachingLogic"
-    )||
-    "Intention → Outcome → Decide → Retest",
-
-
-  track:
-    getValue(
-      "track",
-      "whatToTrack"
-    ),
-
-
-  reminder:
-    getValue(
-      "reminder",
-      "afterPractice"
-    ),
-
-
-  nextAction:
-    getValue(
-      "nextAction",
-      "next"
-    ),
-
-
-  after:
-    getValue("after")
-
+  session:getValue("session","sessionID"),
+  email:getValue("email"),
+  player:getValue("player","playerid"),
+  userid:getValue("userid"),
+
+  playerName:getValue(
+    "playerName",
+    "playername",
+    "name"
+  ),
+
+  language:getValue(
+    "language",
+    "lang"
+  )||"EN",
+
+  source:getValue("source")||"MATCH",
+
+  mainIssue:getValue(
+    "mainIssue",
+    "mainissue",
+    "focus"
+  ),
+
+  focus:getValue(
+    "focus",
+    "mainIssue",
+    "mainissue"
+  ),
+
+  drill:getValue(
+    "drill",
+    "recommendedDrill",
+    "practice",
+    "trainingName",
+    "finalTraining"
+  ),
+
+  level:getValue(
+    "level",
+    "difficulty",
+    "playerLevel"
+  )||"Adaptive",
+
+  duration:getValue(
+    "duration",
+    "trainingDuration"
+  )||"10 Visits",
+
+  rounds:getValue(
+    "rounds",
+    "trainingRounds"
+  )||"10",
+
+  equipment:getValue("equipment"),
+
+  practiceID:getValue(
+    "practiceID",
+    "practiceId",
+    "drillID"
+  ),
+
+  advice:getValue(
+    "aiAdvice",
+    "coachAdvice",
+    "advice"
+  ),
+
+  objective:getValue(
+    "objective",
+    "trainingObjective"
+  ),
+
+  why:getValue(
+    "why",
+    "whyThisPractice"
+  ),
+
+  execution:getValue(
+    "execution",
+    "howToPractice"
+  ),
+
+  avoid:getValue(
+    "avoid",
+    "watchFor"
+  ),
+
+  coach:getValue(
+    "keithcoach",
+    "coach"
+  )||"Keith Allen Guther",
+
+  rules:getValue(
+    "keithrules",
+    "rules",
+    "trainingRules"
+  ),
+
+  primary:getValue(
+    "keithprimary",
+    "primarymetric",
+    "primaryMetric"
+  ),
+
+  secondary:getValue(
+    "keithsecondary",
+    "secondarymetric",
+    "secondaryMetric"
+  ),
+
+  target:getValue(
+    "keithtarget",
+    "successtarget",
+    "successTarget"
+  ),
+
+  red:getValue("keithred","red"),
+  orange:getValue("keithorange","orange"),
+  yellow:getValue("keithyellow","yellow"),
+  green:getValue("keithgreen","green"),
+
+  redAction:getValue(
+    "redaction",
+    "redAction"
+  ),
+
+  orangeAction:getValue(
+    "orangeaction",
+    "orangeAction"
+  ),
+
+  yellowAction:getValue(
+    "yellowaction",
+    "yellowAction"
+  ),
+
+  greenAction:getValue(
+    "greenaction",
+    "greenAction"
+  ),
+
+  improvement:getValue(
+    "improvement",
+    "coachingLogic"
+  )||"Intention → Outcome → Decide → Retest",
+
+  track:getValue(
+    "track",
+    "whatToTrack"
+  ),
+
+  reminder:getValue(
+    "reminder",
+    "afterPractice"
+  ),
+
+  nextAction:getValue(
+    "nextAction",
+    "next"
+  ),
+
+  after:getValue("after")
 };
 
-
-function setText(
-  id,
-  value,
-  fallback="--"
-){
-
-  const element=
-    document.getElementById(id);
-
+function setText(id,value,fallback="--"){
+  const element=document.getElementById(id);
   if(!element)return;
-
-  element.textContent=
-    value||fallback;
-
+  element.textContent=value||fallback;
 }
 
+setText("drill",context.drill,"Practice Training");
+setText("focus",context.focus,"Focused practice");
+setText("focusShort",context.mainIssue||context.focus);
 
-setText(
-  "drill",
-  context.drill,
-  "Practice Training"
-);
-
-setText(
-  "focus",
-  context.focus,
-  "Focused practice"
-);
-
-setText(
-  "focusShort",
-  context.mainIssue||
-  context.focus
-);
-
-setText(
-  "level",
-  context.level
-);
-
-setText(
-  "duration",
-  context.duration
-);
-
-setText(
-  "rounds",
-  context.rounds
-);
-
+setText("level",context.level);
+setText("duration",context.duration);
+setText("rounds",context.rounds);
 
 if(context.equipment){
-
-  setText(
-    "equipment",
-    context.equipment
-  );
-
+  setText("equipment",context.equipment);
   document
     .getElementById("equipmentWrap")
     .classList
     .remove("hidden");
-
 }
-
 
 setText(
   "why",
@@ -1224,18 +791,8 @@ setText(
   context.advice
 );
 
-
-setText(
-  "execution",
-  context.execution
-);
-
-
-setText(
-  "avoid",
-  context.avoid
-);
-
+setText("execution",context.execution);
+setText("avoid",context.avoid);
 
 setText(
   "coach",
@@ -1243,73 +800,25 @@ setText(
   "Keith Allen Guther"
 );
 
-
 setText(
   "rules",
   context.rules||
   context.execution
 );
 
+setText("primary",context.primary);
+setText("secondary",context.secondary);
+setText("target",context.target);
 
-setText(
-  "primary",
-  context.primary
-);
+setText("red",context.red);
+setText("orange",context.orange);
+setText("yellow",context.yellow);
+setText("green",context.green);
 
-
-setText(
-  "secondary",
-  context.secondary
-);
-
-
-setText(
-  "target",
-  context.target
-);
-
-
-setText(
-  "red",
-  context.red
-);
-
-setText(
-  "orange",
-  context.orange
-);
-
-setText(
-  "yellow",
-  context.yellow
-);
-
-setText(
-  "green",
-  context.green
-);
-
-
-setText(
-  "redAction",
-  context.redAction
-);
-
-setText(
-  "orangeAction",
-  context.orangeAction
-);
-
-setText(
-  "yellowAction",
-  context.yellowAction
-);
-
-setText(
-  "greenAction",
-  context.greenAction
-);
-
+setText("redAction",context.redAction);
+setText("orangeAction",context.orangeAction);
+setText("yellowAction",context.yellowAction);
+setText("greenAction",context.greenAction);
 
 setText(
   "improvement",
@@ -1317,13 +826,11 @@ setText(
   "Intention → Outcome → Decide → Retest"
 );
 
-
 setText(
   "track",
   context.track||
   context.primary
 );
-
 
 setText(
   "reminder",
@@ -1332,13 +839,388 @@ setText(
   "Compare your results with your starting baseline."
 );
 
-
 setText(
   "nextAction",
   context.nextAction||
   "Repeat the drill and compare the results."
 );
 
+/* ========================================
+   DARTIQ VOICE COACH
+======================================== */
+
+let dartiqVoice=null;
+let voiceStarted=false;
+
+function cleanVoiceText(value){
+  if(!value)return "";
+
+  const text=String(value).trim();
+
+  if(
+    text==="" ||
+    text==="--" ||
+    text.toLowerCase()==="undefined" ||
+    text.toLowerCase()==="null"
+  ){
+    return "";
+  }
+
+  return text;
+}
+
+function chooseVoice(){
+  const voices=window.speechSynthesis.getVoices();
+
+  if(!voices.length){
+    return null;
+  }
+
+  const preferred=[
+    "Microsoft Ryan Online (Natural) - English (United Kingdom)",
+    "Microsoft Sonia Online (Natural) - English (United Kingdom)",
+    "Microsoft Guy Online (Natural) - English (United States)",
+    "Microsoft David",
+    "Google UK English Male",
+    "Google UK English Female",
+    "Google US English"
+  ];
+
+  for(const name of preferred){
+    const found=voices.find(
+      voice=>voice.name===name
+    );
+
+    if(found){
+      return found;
+    }
+  }
+
+  const englishVoice=voices.find(
+    voice=>
+      voice.lang &&
+      voice.lang.toLowerCase().startsWith("en-gb")
+  );
+
+  if(englishVoice){
+    return englishVoice;
+  }
+
+  return voices.find(
+    voice=>
+      voice.lang &&
+      voice.lang.toLowerCase().startsWith("en")
+  )||voices[0];
+}
+
+function buildTrainingBriefing(){
+
+  const parts=[];
+
+  const playerName=
+    cleanVoiceText(context.playerName);
+
+  const drill=
+    cleanVoiceText(context.drill);
+
+  const focus=
+    cleanVoiceText(
+      context.mainIssue||
+      context.focus
+    );
+
+  const level=
+    cleanVoiceText(context.level);
+
+  const duration=
+    cleanVoiceText(context.duration);
+
+  const rounds=
+    cleanVoiceText(context.rounds);
+
+  const why=
+    cleanVoiceText(
+      context.why||
+      context.objective||
+      context.advice
+    );
+
+  const execution=
+    cleanVoiceText(context.execution);
+
+  const avoid=
+    cleanVoiceText(context.avoid);
+
+  const rules=
+    cleanVoiceText(context.rules);
+
+  const primary=
+    cleanVoiceText(context.primary);
+
+  const secondary=
+    cleanVoiceText(context.secondary);
+
+  const target=
+    cleanVoiceText(context.target);
+
+  const track=
+    cleanVoiceText(
+      context.track||
+      context.primary
+    );
+
+  const nextAction=
+    cleanVoiceText(context.nextAction);
+
+  if(playerName){
+    parts.push(
+      "Welcome "+playerName+
+      " to your DARTIQ training session."
+    );
+  }else{
+    parts.push(
+      "Welcome to your DARTIQ training session."
+    );
+  }
+
+  if(drill){
+    parts.push(
+      "Today's training is "+drill+"."
+    );
+  }
+
+  if(focus){
+    parts.push(
+      "Your main focus is "+focus+"."
+    );
+  }
+
+  if(level){
+    parts.push(
+      "Difficulty level, "+level+"."
+    );
+  }
+
+  if(duration){
+    parts.push(
+      "Training duration, "+duration+"."
+    );
+  }
+
+  if(rounds){
+    parts.push(
+      "You will complete "+rounds+" rounds."
+    );
+  }
+
+  if(why){
+    parts.push(
+      "Why this practice. "+why+"."
+    );
+  }
+
+  if(execution){
+    parts.push(
+      "Here is how to practice. "+execution+"."
+    );
+  }
+
+  if(avoid){
+    parts.push(
+      "Watch for this. "+avoid+"."
+    );
+  }
+
+  if(rules && rules!==execution){
+    parts.push(
+      "Training rules. "+rules+"."
+    );
+  }
+
+  if(primary){
+    parts.push(
+      "Your primary metric is "+primary+"."
+    );
+  }
+
+  if(secondary){
+    parts.push(
+      "Your secondary metric is "+secondary+"."
+    );
+  }
+
+  if(target){
+    parts.push(
+      "Your success target is "+target+"."
+    );
+  }
+
+  if(track){
+    parts.push(
+      "During this training, track "+track+"."
+    );
+  }
+
+  if(nextAction){
+    parts.push(
+      "After the practice, your next step is "+
+      nextAction+"."
+    );
+  }
+
+  parts.push(
+    "Stay focused on the process, not the score."
+  );
+
+  parts.push(
+    "When you're ready, start training."
+  );
+
+  return parts.join(" ");
+}
+
+function updateVoiceStatus(message){
+  const status=
+    document.getElementById("voiceStatus");
+
+  if(status){
+    status.textContent=message;
+  }
+}
+
+function speakTraining(){
+
+  if(
+    !("speechSynthesis" in window) ||
+    !("SpeechSynthesisUtterance" in window)
+  ){
+    updateVoiceStatus(
+      "Voice coaching is not supported on this device."
+    );
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+
+  const briefing=
+    buildTrainingBriefing();
+
+  if(!briefing){
+    updateVoiceStatus(
+      "Training briefing unavailable."
+    );
+    return;
+  }
+
+  const utterance=
+    new SpeechSynthesisUtterance(briefing);
+
+  dartiqVoice=chooseVoice();
+
+  if(dartiqVoice){
+    utterance.voice=dartiqVoice;
+    utterance.lang=dartiqVoice.lang||"en-GB";
+  }else{
+    utterance.lang="en-GB";
+  }
+
+  utterance.rate=0.94;
+  utterance.pitch=0.95;
+  utterance.volume=1;
+
+  utterance.onstart=function(){
+    updateVoiceStatus(
+      "DARTIQ Voice Coach is briefing your training."
+    );
+  };
+
+  utterance.onend=function(){
+    updateVoiceStatus(
+      "Training briefing complete. Ready to start."
+    );
+  };
+
+  utterance.onerror=function(event){
+
+    if(event.error==="canceled"){
+      return;
+    }
+
+    updateVoiceStatus(
+      "Voice briefing could not be played."
+    );
+  };
+
+  window.speechSynthesis.speak(
+    utterance
+  );
+}
+
+function stopVoice(){
+  if("speechSynthesis" in window){
+    window.speechSynthesis.cancel();
+  }
+
+  updateVoiceStatus(
+    "Voice briefing stopped."
+  );
+}
+
+function autoStartVoice(){
+
+  if(voiceStarted){
+    return;
+  }
+
+  voiceStarted=true;
+
+  setTimeout(function(){
+    speakTraining();
+  },700);
+}
+
+if("speechSynthesis" in window){
+
+  window.speechSynthesis.onvoiceschanged=
+    function(){
+      dartiqVoice=chooseVoice();
+    };
+
+  window.addEventListener(
+    "load",
+    function(){
+      setTimeout(autoStartVoice,500);
+    }
+  );
+
+  /*
+    iPhone / embedded browser fallback:
+    browsers may block automatic speech until
+    the player interacts with the screen once.
+  */
+
+  document.addEventListener(
+    "pointerdown",
+    function unlockVoice(){
+      if(
+        !window.speechSynthesis.speaking &&
+        !voiceStarted
+      ){
+        autoStartVoice();
+      }
+
+      document.removeEventListener(
+        "pointerdown",
+        unlockVoice
+      );
+    },
+    {once:true}
+  );
+}
+
+/* ========================================
+   ACCORDIONS
+======================================== */
 
 function toggleSection(button){
 
@@ -1352,11 +1234,9 @@ function toggleSection(button){
 
   arrow.textContent=
     section.classList.contains("open")
-    ?"⌃"
-    :"⌄";
-
+      ?"⌃"
+      :"⌄";
 }
-
 
 function showStatus(message){
 
@@ -1368,11 +1248,15 @@ function showStatus(message){
   status
     .classList
     .remove("hidden");
-
 }
 
+/* ========================================
+   START PERFORMANCE LAB
+======================================== */
 
 function startTraining(){
+
+  stopVoice();
 
   try{
 
@@ -1382,175 +1266,85 @@ function startTraining(){
         window.location.href
       );
 
-
     const fields={
 
-      session:
-        context.session,
+      session:context.session,
+      email:context.email,
+      player:context.player,
+      userid:context.userid,
+      playerName:context.playerName,
+      language:context.language,
+      source:context.source,
 
-      email:
-        context.email,
+      mainIssue:context.mainIssue,
+      focus:context.focus,
 
-      player:
-        context.player,
+      drill:context.drill,
+      recommendedDrill:context.drill,
 
-      userid:
-        context.userid,
+      level:context.level,
+      difficulty:context.level,
 
-      playerName:
-        context.playerName,
+      duration:context.duration,
+      rounds:context.rounds,
+      equipment:context.equipment,
 
-      language:
-        context.language,
+      practiceID:context.practiceID,
 
-      source:
-        context.source,
+      aiAdvice:context.advice,
+      coachAdvice:context.advice,
 
+      objective:context.objective,
+      why:context.why,
+      execution:context.execution,
+      avoid:context.avoid,
 
-      mainIssue:
-        context.mainIssue,
+      keithcoach:context.coach,
+      keithrules:context.rules,
+      keithprimary:context.primary,
+      keithsecondary:context.secondary,
+      keithtarget:context.target,
 
-      focus:
-        context.focus,
+      keithred:context.red,
+      keithorange:context.orange,
+      keithyellow:context.yellow,
+      keithgreen:context.green,
 
+      redaction:context.redAction,
+      orangeaction:context.orangeAction,
+      yellowaction:context.yellowAction,
+      greenaction:context.greenAction,
 
-      drill:
-        context.drill,
-
-      recommendedDrill:
-        context.drill,
-
-
-      level:
-        context.level,
-
-      difficulty:
-        context.level,
-
-      duration:
-        context.duration,
-
-      rounds:
-        context.rounds,
-
-      equipment:
-        context.equipment,
-
-
-      practiceID:
-        context.practiceID,
-
-
-      aiAdvice:
-        context.advice,
-
-      coachAdvice:
-        context.advice,
-
-
-      objective:
-        context.objective,
-
-      why:
-        context.why,
-
-      execution:
-        context.execution,
-
-      avoid:
-        context.avoid,
-
-
-      keithcoach:
-        context.coach,
-
-      keithrules:
-        context.rules,
-
-      keithprimary:
-        context.primary,
-
-      keithsecondary:
-        context.secondary,
-
-      keithtarget:
-        context.target,
-
-
-      keithred:
-        context.red,
-
-      keithorange:
-        context.orange,
-
-      keithyellow:
-        context.yellow,
-
-      keithgreen:
-        context.green,
-
-
-      redaction:
-        context.redAction,
-
-      orangeaction:
-        context.orangeAction,
-
-      yellowaction:
-        context.yellowAction,
-
-      greenaction:
-        context.greenAction,
-
-
-      improvement:
-        context.improvement,
-
-      track:
-        context.track,
-
-      reminder:
-        context.reminder,
-
-      nextAction:
-        context.nextAction,
-
-      after:
-        context.after
-
+      improvement:context.improvement,
+      track:context.track,
+      reminder:context.reminder,
+      nextAction:context.nextAction,
+      after:context.after
     };
-
 
     for(
       const [key,value]
       of Object.entries(fields)
     ){
-
       if(
         value!==undefined &&
         value!==null &&
         String(value).trim()!==""
       ){
-
         url.searchParams.set(
           key,
           String(value)
         );
-
       }
-
     }
-
 
     showStatus(
       "Opening DARTIQ Performance Lab..."
     );
 
-
     window.location.assign(
       url.toString()
     );
-
 
   }catch(error){
 
@@ -1562,11 +1356,17 @@ function startTraining(){
     showStatus(
       "Unable to open DARTIQ Performance Lab."
     );
-
   }
-
 }
 
+window.addEventListener(
+  "beforeunload",
+  function(){
+    if("speechSynthesis" in window){
+      window.speechSynthesis.cancel();
+    }
+  }
+);
 </script>
 
 </body>
