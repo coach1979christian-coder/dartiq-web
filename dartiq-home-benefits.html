@@ -2,18 +2,19 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DARTIQ Home Benefits</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>DARTIQ | Why DARTIQ</title>
 
 <style>
 :root{
   --bg:#050b18;
-  --card:#0c1728;
-  --card2:#0a1321;
-  --line:rgba(40,170,255,.18);
-  --blue:#27b8ff;
-  --text:#f5f9ff;
-  --muted:#aebdce;
+  --panel:#0c1b2d;
+  --panel2:#081525;
+  --blue:#39a9ff;
+  --bright:#74d5ff;
+  --white:#f4faff;
+  --muted:#9eb6cb;
+  --line:rgba(57,169,255,.22);
 }
 
 *{
@@ -26,117 +27,376 @@ html,body{
   width:100%;
   min-height:100%;
   background:var(--bg);
+  color:var(--white);
   font-family:Arial,Helvetica,sans-serif;
-  color:var(--text);
+  overflow-x:hidden;
 }
 
 body{
-  padding:6px;
+  padding:8px;
 }
 
 .wrap{
   width:100%;
-  max-width:720px;
+  max-width:760px;
   margin:0 auto;
 }
 
-.head{
+/* MAIN PANEL */
+
+.main{
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(57,169,255,.12),
+      transparent 55%
+    ),
+    linear-gradient(
+      180deg,
+      #0a192b,
+      #050b18
+    );
+
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:20px 15px 16px;
+  box-shadow:
+    0 0 24px rgba(57,169,255,.06),
+    inset 0 1px rgba(255,255,255,.03);
+}
+
+/* HEADER */
+
+.heading{
+  text-align:center;
+  margin-bottom:20px;
+}
+
+.eyebrow{
   display:flex;
   align-items:center;
-  gap:9px;
-  margin:2px 2px 9px;
-}
-
-.head-dot{
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  background:var(--blue);
-  box-shadow:0 0 10px rgba(39,184,255,.8);
-  flex:0 0 auto;
-}
-
-.head span{
-  font-size:11px;
-  letter-spacing:.13em;
-  text-transform:uppercase;
-  font-weight:800;
-  color:#7fcfff;
-}
-
-.list{
-  display:grid;
+  justify-content:center;
   gap:8px;
+  color:var(--blue);
+  font-size:10px;
+  letter-spacing:2.5px;
+  font-weight:900;
+  margin-bottom:10px;
 }
 
-.item{
+.eyebrow-dot{
+  width:6px;
+  height:6px;
+  background:var(--blue);
+  border-radius:50%;
+  box-shadow:0 0 10px var(--blue);
+}
+
+.heading h1{
+  font-size:clamp(24px,5vw,34px);
+  font-weight:900;
+  line-height:1.1;
+  letter-spacing:-.7px;
+  margin:0;
+  color:white;
+}
+
+.heading h1 span{
+  color:var(--blue);
+  text-shadow:0 0 16px rgba(57,169,255,.3);
+}
+
+.subtitle{
+  max-width:510px;
+  margin:11px auto 0;
+  color:var(--muted);
+  font-size:12.5px;
+  line-height:1.6;
+}
+
+/* DIVIDER */
+
+.divider{
+  width:70px;
+  height:2px;
+  margin:0 auto 19px;
+  border-radius:10px;
+  background:linear-gradient(
+    90deg,
+    transparent,
+    var(--blue),
+    transparent
+  );
+  box-shadow:0 0 12px rgba(57,169,255,.4);
+}
+
+/* BENEFIT CARDS */
+
+.benefits{
   display:grid;
-  grid-template-columns:42px 1fr;
-  gap:11px;
-  align-items:center;
-  min-height:74px;
-  padding:11px 12px;
-  border:1px solid var(--line);
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+}
+
+.benefit{
+  position:relative;
+  min-width:0;
+  min-height:190px;
+  padding:17px 13px 14px;
   border-radius:15px;
-  background:linear-gradient(180deg,var(--card),var(--card2));
+  background:
+    linear-gradient(
+      160deg,
+      rgba(17,45,70,.93),
+      rgba(6,18,32,.98)
+    );
+  border:1px solid var(--line);
+  transition:
+    transform .2s ease,
+    border-color .2s ease,
+    box-shadow .2s ease;
 }
 
-.icon{
-  width:42px;
-  height:42px;
-  border-radius:12px;
-  display:grid;
-  place-items:center;
-  background:rgba(39,184,255,.09);
-  border:1px solid rgba(39,184,255,.22);
+.benefit:hover{
+  transform:translateY(-3px);
+  border-color:rgba(57,169,255,.55);
+  box-shadow:0 8px 22px rgba(0,0,0,.18);
 }
 
-.icon svg{
-  width:21px;
-  height:21px;
+.icon-box{
+  width:46px;
+  height:46px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(57,169,255,.09);
+  border:1px solid rgba(57,169,255,.25);
+  border-radius:13px;
+  margin-bottom:16px;
+}
+
+.icon-box svg{
+  width:25px;
+  height:25px;
   fill:none;
   stroke:var(--blue);
-  stroke-width:1.9;
+  stroke-width:1.8;
   stroke-linecap:round;
   stroke-linejoin:round;
 }
 
-.copy h3{
-  margin:0 0 3px;
-  font-size:14px;
-  line-height:1.2;
-  font-weight:800;
+.benefit-label{
+  color:var(--blue);
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:1.3px;
+  margin-bottom:7px;
 }
 
-.copy p{
-  margin:0;
+.benefit h3{
+  margin:0 0 8px;
+  color:white;
+  font-size:15px;
+  line-height:1.25;
+  font-weight:900;
+}
+
+.benefit p{
   color:var(--muted);
-  font-size:12.5px;
-  line-height:1.32;
+  font-size:11.5px;
+  line-height:1.55;
+  margin:0;
 }
 
-@media (min-width:620px){
-  .list{
-    grid-template-columns:repeat(3,1fr);
+/* VOICE COACH */
+
+.voice-panel{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:15px;
+  padding:13px;
+  border:1px solid rgba(57,169,255,.3);
+  border-radius:14px;
+  background:linear-gradient(
+    90deg,
+    rgba(57,169,255,.09),
+    rgba(57,169,255,.025)
+  );
+}
+
+.voice-info{
+  min-width:0;
+}
+
+.voice-title{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  color:white;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.4px;
+}
+
+.voice-title svg{
+  width:17px;
+  height:17px;
+  fill:none;
+  stroke:var(--blue);
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  flex-shrink:0;
+}
+
+.voice-subtitle{
+  margin-top:5px;
+  font-size:10px;
+  color:var(--muted);
+  line-height:1.4;
+}
+
+.voice-button{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  min-width:125px;
+  min-height:39px;
+  border:none;
+  border-radius:9px;
+  padding:10px 12px;
+  background:var(--blue);
+  color:#03111e;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.5px;
+  cursor:pointer;
+  box-shadow:0 0 13px rgba(57,169,255,.22);
+}
+
+.voice-button:hover{
+  background:var(--bright);
+}
+
+.voice-button:active{
+  transform:scale(.98);
+}
+
+.voice-button svg{
+  width:13px;
+  height:13px;
+  fill:currentColor;
+}
+
+.voice-button:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+.voice-status{
+  margin-top:7px;
+  text-align:center;
+  min-height:13px;
+  color:#789bb7;
+  font-size:9px;
+}
+
+/* FOOTER */
+
+.footer{
+  text-align:center;
+  margin-top:17px;
+  padding-top:14px;
+  border-top:1px solid rgba(57,169,255,.12);
+}
+
+.footer strong{
+  display:block;
+  color:white;
+  font-size:13px;
+  font-weight:900;
+}
+
+.footer span{
+  display:block;
+  margin-top:5px;
+  color:var(--blue);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:1px;
+}
+
+/* MOBILE */
+
+@media(max-width:620px){
+
+  .main{
+    padding:18px 12px 14px;
   }
 
-  .item{
-    display:block;
-    min-height:160px;
-    padding:14px;
+  .benefits{
+    grid-template-columns:1fr;
+    gap:8px;
   }
 
-  .icon{
-    margin-bottom:12px;
+  .benefit{
+    display:grid;
+    grid-template-columns:44px 1fr;
+    column-gap:13px;
+    align-items:start;
+    min-height:auto;
+    padding:13px;
   }
 
-  .copy h3{
-    font-size:15px;
+  .icon-box{
+    width:43px;
+    height:43px;
+    margin:0;
+    grid-row:1 / span 3;
   }
 
-  .copy p{
-    font-size:12.5px;
-    line-height:1.4;
+  .benefit-label{
+    margin:2px 0 5px;
+  }
+
+  .benefit h3{
+    font-size:14px;
+    margin-bottom:4px;
+  }
+
+  .benefit p{
+    font-size:11.5px;
+    line-height:1.45;
+  }
+
+  .voice-panel{
+    padding:11px;
+    gap:8px;
+  }
+
+  .voice-button{
+    min-width:108px;
+    font-size:9px;
+    padding:9px;
+  }
+
+  .heading{
+    margin-bottom:17px;
+  }
+}
+
+@media(max-width:350px){
+
+  .voice-panel{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .voice-button{
+    width:100%;
   }
 }
 </style>
@@ -146,62 +406,599 @@ body{
 
 <div class="wrap">
 
-  <div class="head">
-    <div class="head-dot"></div>
-    <span>Why DARTIQ</span>
-  </div>
+  <main class="main">
 
-  <div class="list">
+    <!-- HEADER -->
 
-    <section class="item">
-      <div class="icon">
-        <svg viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="7"></circle>
-          <circle cx="12" cy="12" r="2.5"></circle>
-          <path d="M12 2v3M22 12h-3M12 22v-3M2 12h3"></path>
-        </svg>
+    <header class="heading">
+
+      <div class="eyebrow">
+        <span class="eyebrow-dot"></span>
+        WHY DARTIQ
+        <span class="eyebrow-dot"></span>
       </div>
 
-      <div class="copy">
-        <h3>Find the real issue</h3>
-        <p>See what is actually holding your game back.</p>
-      </div>
+      <h1>
+        Your Game.
+        <span>Decoded.</span>
+      </h1>
+
+      <p class="subtitle">
+        Understand your performance, identify what
+        needs improvement, and turn every practice
+        session into meaningful progress.
+      </p>
+
+    </header>
+
+    <div class="divider"></div>
+
+    <!-- BENEFITS -->
+
+    <section class="benefits">
+
+      <!-- BENEFIT 1 -->
+
+      <article class="benefit">
+
+        <div class="icon-box">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="8"></circle>
+            <circle cx="12" cy="12" r="4"></circle>
+            <circle cx="12" cy="12" r="1"></circle>
+            <path d="M12 1v3M12 20v3M1 12h3M20 12h3"></path>
+          </svg>
+        </div>
+
+        <div class="benefit-label">
+          IDENTIFY
+        </div>
+
+        <h3>
+          Find the Real Issue
+        </h3>
+
+        <p>
+          Discover the performance patterns
+          holding your game back.
+          Stop practicing mistakes without
+          understanding them.
+        </p>
+
+      </article>
+
+      <!-- BENEFIT 2 -->
+
+      <article class="benefit">
+
+        <div class="icon-box">
+          <svg viewBox="0 0 24 24">
+            <path d="M4 18l5-6 4 3 7-9"></path>
+            <path d="M15 6h5v5"></path>
+            <path d="M4 21h16"></path>
+          </svg>
+        </div>
+
+        <div class="benefit-label">
+          IMPROVE
+        </div>
+
+        <h3>
+          Train With Purpose
+        </h3>
+
+        <p>
+          Follow focused practice recommendations
+          based on your performance.
+          Know what to work on and why.
+        </p>
+
+      </article>
+
+      <!-- BENEFIT 3 -->
+
+      <article class="benefit">
+
+        <div class="icon-box">
+          <svg viewBox="0 0 24 24">
+            <path d="M4 20V11"></path>
+            <path d="M10 20V7"></path>
+            <path d="M16 20V4"></path>
+            <path d="M22 20V9"></path>
+            <path d="M2 20h21"></path>
+          </svg>
+        </div>
+
+        <div class="benefit-label">
+          EVOLVE
+        </div>
+
+        <h3>
+          Measure Your Progress
+        </h3>
+
+        <p>
+          Track scoring, consistency, and
+          development over time.
+          See whether your training is
+          making a difference.
+        </p>
+
+      </article>
+
     </section>
 
+    <!-- AI VOICE COACH -->
 
-    <section class="item">
-      <div class="icon">
-        <svg viewBox="0 0 24 24">
-          <path d="M4 17l5-5 4 3 7-8"></path>
-          <path d="M15 7h5v5"></path>
+    <section class="voice-panel">
+
+      <div class="voice-info">
+
+        <div class="voice-title">
+          <svg viewBox="0 0 24 24">
+            <path d="M4 9v6"></path>
+            <path d="M8 5v14"></path>
+            <path d="M12 2v20"></path>
+            <path d="M16 6v12"></path>
+            <path d="M20 9v6"></path>
+          </svg>
+
+          AI Voice Coach
+        </div>
+
+        <div class="voice-subtitle">
+          Listen to the DARTIQ approach
+        </div>
+
+      </div>
+
+      <button
+        id="voiceButton"
+        class="voice-button"
+        type="button"
+        onclick="toggleVoice()"
+        aria-label="Play male AI voice">
+
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M8 5L19 12L8 19Z"></path>
         </svg>
-      </div>
 
-      <div class="copy">
-        <h3>Train with purpose</h3>
-        <p>Get practice matched to your performance.</p>
-      </div>
+        <span id="voiceButtonText">
+          PLAY VOICE
+        </span>
+
+      </button>
+
     </section>
 
+    <div
+      class="voice-status"
+      id="voiceStatus"
+      role="status"
+      aria-live="polite">
+      English male voice · Tap to listen
+    </div>
 
-    <section class="item">
-      <div class="icon">
-        <svg viewBox="0 0 24 24">
-          <path d="M5 18V9"></path>
-          <path d="M12 18V5"></path>
-          <path d="M19 18v-7"></path>
-        </svg>
-      </div>
+    <!-- FOOTER -->
 
-      <div class="copy">
-        <h3>See your progress</h3>
-        <p>Know when your scoring and consistency improve.</p>
-      </div>
-    </section>
+    <footer class="footer">
+      <strong>
+        Stop Guessing. Start Improving.
+      </strong>
 
-  </div>
+      <span>
+        POWERED BY DARTIQ
+      </span>
+    </footer>
+
+  </main>
 
 </div>
+
+<script>
+/* ===================================================
+   DARTIQ MALE VOICE COACH
+
+   IMPORTANT:
+   - English male voices ONLY.
+   - Never use a female voice as fallback.
+   - Never spell the brand letter by letter.
+   - Speak the brand as one word.
+   - Spoken phonetic form: "Dartick".
+   =================================================== */
+
+const voiceButton =
+  document.getElementById("voiceButton");
+
+const voiceButtonText =
+  document.getElementById("voiceButtonText");
+
+const voiceStatus =
+  document.getElementById("voiceStatus");
+
+const synthesizer =
+  window.speechSynthesis || null;
+
+let isPlaying = false;
+let activeUtterance = null;
+
+/* SPOKEN BRAND: ONE WORD */
+
+const SPOKEN_BRAND = "Dartick";
+
+/* COMPLETE VOICE SCRIPT */
+
+const voiceScript = [
+  "Welcome to " + SPOKEN_BRAND + ".",
+
+  "Your game. Decoded.",
+
+  "Every darts player wants to improve.",
+  "But improvement starts with understanding.",
+
+  "First. Identify the real issue.",
+  "Discover the performance patterns",
+  "that are holding your game back.",
+
+  "Second. Train with purpose.",
+  "Focus your practice on what",
+  "actually needs improvement.",
+
+  "Third. Measure your progress.",
+  "Track your scoring, consistency,",
+  "and development over time.",
+
+  "Because practicing more",
+  "does not always mean improving more.",
+
+  "Stop guessing.",
+  "Start improving."
+].join(" ");
+
+/* ===================================================
+   STRICT MALE VOICE SELECTION
+   =================================================== */
+
+function getMaleVoice(){
+
+  if(!synthesizer){
+    return null;
+  }
+
+  const voices =
+    synthesizer.getVoices();
+
+  if(!voices || !voices.length){
+    return null;
+  }
+
+  const englishVoices =
+    voices.filter(function(voice){
+      return /^en(?:-|_)/i.test(voice.lang);
+    });
+
+  /*
+   Explicit male voice names.
+
+   Do not use unnamed or generic voices.
+   Browser speech voices do not expose
+   a reliable gender property.
+  */
+
+  const maleNames = [
+    /\bguy\b/i,
+    /\bryan\b/i,
+    /\bryan\b/i,
+    /\bchristopher\b/i,
+    /\beric\b/i,
+    /\bdavid\b/i,
+    /\bmark\b/i,
+    /\bbrian\b/i,
+    /\bandrew\b/i,
+    /\bliam\b/i,
+    /\bdaniel\b/i,
+    /\balex\b/i,
+    /\bfred\b/i,
+    /\bthomas\b/i,
+    /\badam\b/i,
+    /\baaron\b/i,
+    /\bjason\b/i,
+    /\bmale\b/i
+  ];
+
+  const maleVoices =
+    englishVoices.filter(function(voice){
+
+      return maleNames.some(function(pattern){
+        return pattern.test(voice.name);
+      });
+
+    });
+
+  if(!maleVoices.length){
+    return null;
+  }
+
+  /*
+   Prefer common English male voices
+   with natural-sounding synthesis.
+  */
+
+  const preferred = [
+    /\bguy\b/i,
+    /\bryan\b/i,
+    /\bchristopher\b/i,
+    /\bbrian\b/i,
+    /\bandrew\b/i,
+    /google uk english male/i,
+    /\bdaniel\b/i,
+    /\beric\b/i,
+    /\bdavid\b/i
+  ];
+
+  maleVoices.sort(function(a,b){
+
+    function rank(voice){
+
+      const index =
+        preferred.findIndex(function(pattern){
+          return pattern.test(voice.name);
+        });
+
+      return index === -1
+        ? 100
+        : index;
+
+    }
+
+    return rank(a) - rank(b);
+  });
+
+  return maleVoices[0];
+}
+
+/* ===================================================
+   BUTTON STATE
+   =================================================== */
+
+function updateVoiceButton(playing){
+
+  isPlaying = playing;
+
+  voiceButtonText.textContent =
+    playing ? "STOP VOICE" : "PLAY VOICE";
+
+  voiceButton.setAttribute(
+    "aria-label",
+    playing
+      ? "Stop male AI voice"
+      : "Play male AI voice"
+  );
+
+}
+
+/* ===================================================
+   STOP VOICE
+   =================================================== */
+
+function stopVoice(){
+
+  if(synthesizer){
+    synthesizer.cancel();
+  }
+
+  activeUtterance = null;
+
+  updateVoiceButton(false);
+
+  voiceStatus.textContent =
+    "Voice stopped · Tap to listen again";
+}
+
+/* ===================================================
+   PLAY VOICE
+   =================================================== */
+
+function playVoice(){
+
+  if(
+    !synthesizer ||
+    !("SpeechSynthesisUtterance" in window)
+  ){
+
+    voiceStatus.textContent =
+      "Voice playback is not supported by this browser.";
+
+    return;
+  }
+
+  const maleVoice =
+    getMaleVoice();
+
+  /*
+   NO FEMALE VOICE FALLBACK.
+
+   If no recognized male voice exists,
+   voice playback will not start.
+  */
+
+  if(!maleVoice){
+
+    voiceStatus.textContent =
+      "No English male voice available on this device.";
+
+    updateVoiceButton(false);
+
+    return;
+  }
+
+  synthesizer.cancel();
+
+  const speech =
+    new SpeechSynthesisUtterance(voiceScript);
+
+  speech.voice = maleVoice;
+
+  speech.lang = maleVoice.lang;
+
+  speech.rate = 0.93;
+
+  speech.pitch = 0.88;
+
+  speech.volume = 1;
+
+  activeUtterance = speech;
+
+  speech.onstart = function(){
+
+    if(activeUtterance !== speech){
+      return;
+    }
+
+    updateVoiceButton(true);
+
+    voiceStatus.textContent =
+      "Male AI voice speaking...";
+  };
+
+  speech.onend = function(){
+
+    if(activeUtterance !== speech){
+      return;
+    }
+
+    activeUtterance = null;
+
+    updateVoiceButton(false);
+
+    voiceStatus.textContent =
+      "Voice finished · Replay anytime";
+  };
+
+  speech.onerror = function(event){
+
+    if(activeUtterance !== speech){
+      return;
+    }
+
+    activeUtterance = null;
+
+    updateVoiceButton(false);
+
+    if(event.error === "canceled"){
+      return;
+    }
+
+    voiceStatus.textContent =
+      "Voice playback unavailable.";
+  };
+
+  updateVoiceButton(true);
+
+  voiceStatus.textContent =
+    "Starting male voice...";
+
+  synthesizer.speak(speech);
+}
+
+/* ===================================================
+   USER CONTROL
+   =================================================== */
+
+function toggleVoice(){
+
+  if(isPlaying){
+
+    stopVoice();
+
+  }else{
+
+    playVoice();
+
+  }
+
+}
+
+/* ===================================================
+   VOICE AVAILABILITY
+   =================================================== */
+
+function checkVoiceAvailability(){
+
+  if(!synthesizer){
+
+    voiceStatus.textContent =
+      "Voice playback is not supported.";
+
+    voiceButton.disabled = true;
+
+    return;
+  }
+
+  const voices = synthesizer.getVoices();
+
+  if(!voices.length){
+
+    voiceStatus.textContent =
+      "Loading available voices...";
+
+    return;
+  }
+
+  if(getMaleVoice()){
+
+    if(!isPlaying){
+
+      voiceStatus.textContent =
+        "English male voice · Tap to listen";
+
+    }
+
+  }else{
+
+    if(!isPlaying){
+
+      voiceStatus.textContent =
+        "No English male voice available on this device.";
+
+    }
+
+  }
+
+}
+
+/*
+   Browsers may populate their voices
+   after the page has loaded.
+*/
+
+if(synthesizer){
+
+  synthesizer.addEventListener(
+    "voiceschanged",
+    checkVoiceAvailability
+  );
+
+  checkVoiceAvailability();
+
+}
+
+/*
+   Stop speech when the page is closed
+   or the player navigates away.
+*/
+
+window.addEventListener(
+  "pagehide",
+  function(){
+
+    if(synthesizer){
+      synthesizer.cancel();
+    }
+
+  }
+);
+</script>
 
 </body>
 </html>
