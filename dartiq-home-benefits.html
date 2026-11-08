@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>DARTIQ | Why DARTIQ</title>
 
 <style>
@@ -45,8 +45,9 @@ body{
 
 .header{
   padding:23px 19px 20px;
-  background:
-    linear-gradient(140deg,#102840,#081524 76%);
+  background:linear-gradient(
+    140deg,#102840,#081524 76%
+  );
   border:1px solid var(--border);
   border-radius:16px;
 }
@@ -79,7 +80,7 @@ body{
   max-width:500px;
 }
 
-/* SECTION TITLE */
+/* SECTION HEADING */
 
 .section-heading{
   display:flex;
@@ -104,7 +105,7 @@ body{
   letter-spacing:1px;
 }
 
-/* COMPACT COLLAPSIBLE VOICE */
+/* COLLAPSIBLE VOICE */
 
 .voice{
   margin-bottom:9px;
@@ -253,8 +254,9 @@ body{
   padding:17px 15px;
   border:1px solid var(--border);
   border-radius:12px;
-  background:
-    linear-gradient(120deg,var(--panel),var(--panel2));
+  background:linear-gradient(
+    120deg,var(--panel),var(--panel2)
+  );
 }
 
 .step-number{
@@ -349,8 +351,6 @@ body{
 
 <div class="container">
 
-  <!-- HEADER -->
-
   <header class="header">
 
     <div class="eyebrow">
@@ -370,18 +370,16 @@ body{
 
   </header>
 
-  <!-- PROCESS HEADING -->
-
   <div class="section-heading">
     <h2>The Coaching Process</h2>
     <span>01 / 02 / 03</span>
   </div>
 
-  <!-- COMPACT VOICE ABOVE IDENTIFY -->
+  <!-- AI VOICE COACH -->
 
   <details class="voice" id="voiceAccordion">
 
-    <summary>
+    <summary id="voiceHeader">
 
       <div class="voice-symbol">
 
@@ -406,8 +404,9 @@ body{
             class="voice-dot"
             id="voiceDot">
           </span>
+
           <span id="voiceMiniStatus">
-            Preparing narration...
+            Voice ready
           </span>
         </small>
 
@@ -422,9 +421,8 @@ body{
     <div class="voice-body">
 
       <div class="voice-description">
-        Your introduction to the DARTIQ
-        coaching approach, narrated by
-        an English male voice.
+        Listen to your introduction to
+        the DARTIQ coaching process.
       </div>
 
       <div class="voice-controls">
@@ -450,19 +448,22 @@ body{
         id="voiceStatus"
         role="status"
         aria-live="polite">
+        Automatic narration enabled.
       </div>
 
     </div>
 
   </details>
 
-  <!-- THREE STAGES -->
+  <!-- IDENTIFY -->
 
   <section class="steps">
 
     <article class="step">
 
-      <div class="step-number">01</div>
+      <div class="step-number">
+        01
+      </div>
 
       <div class="step-content">
 
@@ -484,9 +485,13 @@ body{
 
     </article>
 
+    <!-- TRAIN -->
+
     <article class="step">
 
-      <div class="step-number">02</div>
+      <div class="step-number">
+        02
+      </div>
 
       <div class="step-content">
 
@@ -508,9 +513,13 @@ body{
 
     </article>
 
+    <!-- EVOLVE -->
+
     <article class="step">
 
-      <div class="step-number">03</div>
+      <div class="step-number">
+        03
+      </div>
 
       <div class="step-content">
 
@@ -534,8 +543,6 @@ body{
 
   </section>
 
-  <!-- FOOTER -->
-
   <footer class="footer">
 
     <strong>
@@ -552,341 +559,537 @@ body{
 </div>
 
 <script>
-/* ==============================================
-   DARTIQ VOICE
-   Male English voice only.
-   Brand is spoken as ONE word.
-   No letter-by-letter pronunciation.
-   ============================================== */
+/* ================================================
+   DARTIQ AI VOICE COACH
+
+   Uses the same browser speech system
+   and voice fallback as DARTIQ Match Play.
+
+   English male voice preferred.
+   Android default fallback allowed.
+   Brand pronounced as ONE word.
+   No spelling DARTIQ.
+   ================================================ */
 
 (function(){
 
-  "use strict";
+"use strict";
 
-  const synth =
-    window.speechSynthesis || null;
+const speechSupported =
+  "speechSynthesis" in window &&
+  "SpeechSynthesisUtterance" in window;
 
-  const playButton =
-    document.getElementById("playVoice");
+const synth =
+  speechSupported
+    ? window.speechSynthesis
+    : null;
 
-  const stopButton =
-    document.getElementById("stopVoice");
+const playButton =
+  document.getElementById("playVoice");
 
-  const miniStatus =
-    document.getElementById("voiceMiniStatus");
+const stopButton =
+  document.getElementById("stopVoice");
 
-  const status =
-    document.getElementById("voiceStatus");
+const voiceHeader =
+  document.getElementById("voiceHeader");
 
-  const dot =
-    document.getElementById("voiceDot");
+const voiceStatus =
+  document.getElementById("voiceStatus");
 
-  let currentSpeech = null;
-  let autoAttempted = false;
-  let userStopped = false;
+const miniStatus =
+  document.getElementById("voiceMiniStatus");
 
-  /*
-    Spoken brand is one word.
-    Never pass "DARTIQ" to synthesis.
-  */
+const voiceDot =
+  document.getElementById("voiceDot");
 
-  const brand = "Dartick";
+let currentSpeech = null;
+let autoAttempted = false;
+let voiceStarted = false;
+let manuallyStopped = false;
+let startCheck = null;
 
-  const narration = [
-    "Welcome to " + brand + ".",
-    "Your game, decoded.",
-    "There are three stages to improving your darts.",
-    "First. Identify.",
-    "Understand your performance.",
-    "Find the patterns and inconsistencies",
-    "that may be holding you back.",
-    "Second. Train.",
-    "Practice with purpose.",
-    "Focus on the areas that need improvement.",
-    "Third. Evolve.",
-    "Measure your progress.",
-    "Track your scoring and consistency over time.",
-    "Stop guessing.",
-    "Start improving."
-  ].join(" ");
+/* ================================================
+   BRAND PRONUNCIATION
+   ================================================ */
 
-  /*
-    Browser voices have no reliable
-    standard gender field.
+const spokenBrand = "Dartick";
 
-    Use known male English voice names.
-    Never use the default voice as fallback.
-  */
+/*
+  Never send D A R T I Q or
+  Dart IQ to the voice engine.
+*/
 
-  const maleNames = [
-    /\bguy\b/i,
-    /\bryan\b/i,
-    /\bchristopher\b/i,
-    /\bbrian\b/i,
-    /\bandrew\b/i,
-    /\bdaniel\b/i,
-    /\bdavid\b/i,
-    /\beric\b/i,
-    /\bmark\b/i,
-    /\bthomas\b/i,
-    /\badam\b/i,
-    /\bmale\b/i,
-    /english.*male/i
-  ];
+const narration = [
+  "Welcome to " + spokenBrand + ".",
+  "Your game, decoded.",
+  "There are three stages to improving your darts.",
 
-  const preferred = [
-    /\bguy\b/i,
-    /\bryan\b/i,
-    /\bchristopher\b/i,
-    /\bbrian\b/i,
-    /\bandrew\b/i,
-    /\bdaniel\b/i
-  ];
+  "First. Identify.",
+  "Understand your performance.",
+  "Discover your scoring patterns",
+  "and the inconsistencies",
+  "that may be holding your game back.",
 
-  function maleVoice(){
+  "Second. Train.",
+  "Practice with purpose.",
+  "Focus on targeted exercises",
+  "matched to your performance.",
 
-    if(!synth) return null;
+  "Third. Evolve.",
+  "Measure your improvement.",
+  "Track your scoring and consistency",
+  "over time.",
 
-    const voices = synth.getVoices();
+  "Stop guessing.",
+  "Start improving."
+].join(" ");
 
-    const matching = voices.filter(function(v){
+/* ================================================
+   VOICE SELECTION
+
+   Same approach as DARTIQ Match Play:
+   1. Preferred English male voice
+   2. English UK voice
+   3. Any English voice
+   4. Android system default
+   ================================================ */
+
+function selectCallerVoice(){
+
+  if(!speechSupported){
+    return null;
+  }
+
+  const voices =
+    synth.getVoices();
+
+  const english =
+    voices.filter(function(voice){
 
       return (
-        /^en(?:-|_)/i.test(v.lang) &&
-        maleNames.some(function(p){
-          return p.test(v.name);
-        })
+        voice.lang &&
+        voice.lang.toLowerCase().startsWith("en")
       );
 
     });
 
-    if(!matching.length){
-      return null;
-    }
+  const preferred =
+    english.find(function(voice){
 
-    function rank(v){
+      return /daniel|david|george|ryan|ryan|brian|guy|male|andrew|mark|eric|christopher/i
+        .test(voice.name);
 
-      const n = preferred.findIndex(
-        p => p.test(v.name)
-      );
+    });
 
-      return n === -1 ? 100 : n;
-    }
-
-    matching.sort(
-      (a,b) => rank(a)-rank(b)
-    );
-
-    return matching[0];
+  if(preferred){
+    return preferred;
   }
 
-  function setStatus(text,active){
+  const british =
+    english.find(function(voice){
 
-    miniStatus.textContent = text;
+      return voice.lang.toLowerCase() === "en-gb";
 
-    dot.classList.toggle(
-      "active",
-      Boolean(active)
-    );
+    });
 
+  if(british){
+    return british;
   }
 
-  function stop(){
-
-    userStopped = true;
-
-    if(synth){
-      synth.cancel();
-    }
-
-    currentSpeech = null;
-
-    setStatus("Voice stopped",false);
-
-    status.textContent =
-      "Narration stopped.";
-
+  if(english.length){
+    return english[0];
   }
 
-  function speak(auto){
+  /*
+    Android may return an empty
+    voice list even when its
+    speech engine is available.
 
-    if(
-      !synth ||
-      !("SpeechSynthesisUtterance" in window)
-    ){
+    Null means the browser uses
+    its configured default voice.
+  */
 
-      setStatus("Voice unavailable",false);
+  return null;
+}
 
-      status.textContent =
-        "Voice playback is not supported.";
+/* ================================================
+   STATUS
+   ================================================ */
 
-      return;
-    }
+function updateStatus(text,speaking){
 
-    const voice = maleVoice();
+  miniStatus.textContent = text;
 
-    if(!voice){
+  voiceDot.classList.toggle(
+    "active",
+    Boolean(speaking)
+  );
 
-      setStatus(
-        "No English male voice available",
-        false
-      );
+}
 
-      status.textContent =
-        "A supported male voice is required.";
+function clearStartCheck(){
 
-      return;
-    }
+  if(startCheck){
+    clearTimeout(startCheck);
+    startCheck = null;
+  }
 
+}
+
+/* ================================================
+   STOP VOICE
+   ================================================ */
+
+function stopVoice(){
+
+  manuallyStopped = true;
+  autoAttempted = true;
+
+  clearStartCheck();
+
+  if(synth){
     synth.cancel();
+  }
 
-    const utterance =
-      new SpeechSynthesisUtterance(narration);
+  currentSpeech = null;
 
-    utterance.voice = voice;
-    utterance.lang = voice.lang;
-    utterance.rate = 0.94;
-    utterance.pitch = 0.9;
-    utterance.volume = 1;
+  updateStatus(
+    "Voice stopped",
+    false
+  );
 
-    currentSpeech = utterance;
+  voiceStatus.textContent =
+    "Narration stopped.";
+}
 
-    setStatus(
-      auto ? "Starting automatically..." : "Starting...",
+/* ================================================
+   SPEAK
+   ================================================ */
+
+function speak(autoStart){
+
+  if(!speechSupported){
+
+    updateStatus(
+      "Voice unavailable",
       false
     );
 
-    utterance.onstart = function(){
+    voiceStatus.textContent =
+      "Speech synthesis is not supported.";
 
-      if(currentSpeech !== utterance){
-        return;
-      }
+    return;
+  }
 
-      setStatus("Narration playing",true);
+  clearStartCheck();
 
-      status.textContent =
-        "English male narration playing.";
+  synth.cancel();
 
-    };
+  const utterance =
+    new SpeechSynthesisUtterance(narration);
 
-    utterance.onend = function(){
+  const chosenVoice =
+    selectCallerVoice();
 
-      if(currentSpeech !== utterance){
-        return;
-      }
+  /*
+    Use the selected English voice,
+    or the Android speech engine
+    default when none is listed.
+  */
 
-      currentSpeech = null;
+  if(chosenVoice){
 
-      setStatus("Narration completed",false);
+    utterance.voice =
+      chosenVoice;
 
-      status.textContent =
-        "Narration completed.";
+    utterance.lang =
+      chosenVoice.lang;
 
-    };
+  }else{
 
-    utterance.onerror = function(event){
-
-      if(currentSpeech !== utterance){
-        return;
-      }
-
-      currentSpeech = null;
-
-      if(event.error === "canceled"){
-        return;
-      }
-
-      setStatus("Tap to play",false);
-
-      status.textContent =
-        "Automatic audio may be blocked. Tap PLAY.";
-
-    };
-
-    try{
-
-      synth.speak(utterance);
-
-    }catch(error){
-
-      currentSpeech = null;
-
-      setStatus("Tap to play",false);
-
-      status.textContent =
-        "Tap PLAY to start the guide.";
-
-    }
+    utterance.lang =
+      "en-GB";
 
   }
 
-  playButton.addEventListener("click",function(){
+  utterance.rate = 0.88;
+  utterance.pitch = 0.8;
+  utterance.volume = 1;
 
-    userStopped = false;
+  currentSpeech = utterance;
+  voiceStarted = false;
+
+  updateStatus(
+    "Starting voice...",
+    false
+  );
+
+  voiceStatus.textContent =
+    "Preparing narration...";
+
+  utterance.onstart = function(){
+
+    if(currentSpeech !== utterance){
+      return;
+    }
+
+    clearStartCheck();
+
+    voiceStarted = true;
+
+    updateStatus(
+      "Voice playing",
+      true
+    );
+
+    voiceStatus.textContent =
+      "AI Voice Coach is speaking.";
+
+  };
+
+  utterance.onend = function(){
+
+    if(currentSpeech !== utterance){
+      return;
+    }
+
+    clearStartCheck();
+
+    currentSpeech = null;
+
+    updateStatus(
+      "Narration completed",
+      false
+    );
+
+    voiceStatus.textContent =
+      "Narration completed.";
+
+  };
+
+  utterance.onerror = function(event){
+
+    if(currentSpeech !== utterance){
+      return;
+    }
+
+    clearStartCheck();
+
+    currentSpeech = null;
+
+    if(event.error === "canceled"){
+      return;
+    }
+
+    updateStatus(
+      "Tap PLAY to listen",
+      false
+    );
+
+    voiceStatus.textContent =
+      "Tap PLAY to start the voice guide.";
+
+  };
+
+  try{
+
+    synth.speak(utterance);
+
+    /*
+      Resume handles some Android
+      speech engines that start paused.
+    */
+
+    if(synth.paused){
+      synth.resume();
+    }
+
+    if(autoStart){
+
+      /*
+        Some mobile browsers silently
+        block automatic speech.
+
+        Keep manual playback available.
+      */
+
+      startCheck = setTimeout(function(){
+
+        if(
+          currentSpeech === utterance &&
+          !voiceStarted
+        ){
+
+          updateStatus(
+            "Tap PLAY to listen",
+            false
+          );
+
+          voiceStatus.textContent =
+            "Tap PLAY if automatic audio did not start.";
+
+        }
+
+      },2500);
+
+    }
+
+  }catch(error){
+
+    currentSpeech = null;
+
+    updateStatus(
+      "Tap PLAY to listen",
+      false
+    );
+
+    voiceStatus.textContent =
+      "Tap PLAY to start narration.";
+
+  }
+}
+
+/* ================================================
+   PLAY BUTTON
+   ================================================ */
+
+playButton.addEventListener(
+  "click",
+  function(){
+
+    manuallyStopped = false;
     autoAttempted = true;
 
     speak(false);
 
-  });
+  }
+);
 
-  stopButton.addEventListener("click",stop);
+/* ================================================
+   STOP BUTTON
+   ================================================ */
+
+stopButton.addEventListener(
+  "click",
+  stopVoice
+);
+
+/* ================================================
+   AUTOMATIC PLAY ON PAGE LOAD
+   ================================================ */
+
+function attemptAutoPlay(){
+
+  if(
+    autoAttempted ||
+    manuallyStopped ||
+    !speechSupported
+  ){
+    return;
+  }
+
+  autoAttempted = true;
+
+  speak(true);
+}
+
+/*
+  Start narration automatically
+  when the page loads.
+*/
+
+if(speechSupported){
+
+  if(document.readyState === "complete"){
+
+    setTimeout(
+      attemptAutoPlay,
+      350
+    );
+
+  }else{
+
+    window.addEventListener(
+      "load",
+      function(){
+
+        setTimeout(
+          attemptAutoPlay,
+          350
+        );
+
+      },
+      {once:true}
+    );
+
+  }
 
   /*
-    Automatic voice playback attempt.
-    The accordion remains collapsed.
+    Load available voices when Android
+    updates the browser's voice list.
   */
 
-  function attemptAuto(){
+  if(
+    typeof synth.addEventListener === "function"
+  ){
+
+    synth.addEventListener(
+      "voiceschanged",
+      selectCallerVoice
+    );
+
+  }
+
+}else{
+
+  updateStatus(
+    "Voice unavailable",
+    false
+  );
+
+  voiceStatus.textContent =
+    "Voice playback is not supported.";
+
+}
+
+/* ================================================
+   ANDROID TOUCH FALLBACK
+
+   If autoplay was blocked, opening
+   the voice accordion also tries
+   speech during the user's tap.
+   ================================================ */
+
+voiceHeader.addEventListener(
+  "click",
+  function(){
 
     if(
-      autoAttempted ||
-      userStopped ||
-      !synth
+      manuallyStopped ||
+      voiceStarted ||
+      !speechSupported
     ){
-      return;
-    }
-
-    if(!maleVoice()){
       return;
     }
 
     autoAttempted = true;
 
-    speak(true);
+    speak(false);
 
   }
+);
 
-  if(synth){
+/* ================================================
+   CLEANUP
+   ================================================ */
 
-    if(typeof synth.addEventListener === "function"){
+window.addEventListener(
+  "pagehide",
+  function(){
 
-      synth.addEventListener(
-        "voiceschanged",
-        attemptAuto
-      );
+    manuallyStopped = true;
 
-    }else{
-
-      synth.onvoiceschanged = attemptAuto;
-
-    }
-
-    attemptAuto();
-
-    window.addEventListener(
-      "load",
-      attemptAuto
-    );
-
-  }else{
-
-    setStatus("Voice unavailable",false);
-
-  }
-
-  window.addEventListener("pagehide",function(){
-
-    userStopped = true;
+    clearStartCheck();
 
     if(synth){
       synth.cancel();
@@ -894,7 +1097,8 @@ body{
 
     currentSpeech = null;
 
-  });
+  }
+);
 
 })();
 </script>
