@@ -3,22 +3,23 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>DARTIQ | Performance Intelligence</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DARTIQ | Why DARTIQ</title>
 
 <style>
 :root{
-  --bg:#040a15;
-  --panel:#09192b;
-  --panel2:#0c2239;
+  --bg:#050b18;
+  --panel:#0c1c2d;
+  --panel2:#091625;
   --blue:#39a9ff;
-  --bright:#85d8ff;
-  --white:#f6fbff;
-  --muted:#a3b9cb;
-  --line:rgba(57,169,255,.22);
+  --text:#f5faff;
+  --muted:#9eb5c9;
+  --border:rgba(57,169,255,.19);
 }
 
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
 html,body{
   margin:0;
@@ -26,587 +27,319 @@ html,body{
   width:100%;
   min-height:100%;
   background:var(--bg);
-  color:var(--white);
+  color:var(--text);
   font-family:Arial,Helvetica,sans-serif;
   overflow-x:hidden;
 }
 
-body{padding:8px}
+body{
+  padding:8px;
+}
 
 .container{
-  max-width:800px;
-  margin:0 auto;
-}
-
-/* HERO */
-
-.hero{
-  position:relative;
-  overflow:hidden;
-  padding:28px 19px 24px;
-  border-radius:22px;
-  border:1px solid rgba(57,169,255,.25);
-  background:
-    radial-gradient(
-      ellipse at 87% 8%,
-      rgba(57,169,255,.17),
-      transparent 56%
-    ),
-    linear-gradient(145deg,#0e263e,#050d19 75%);
-}
-
-.hero:before{
-  content:"";
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  opacity:.18;
-  background-image:
-    linear-gradient(
-      rgba(57,169,255,.12) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      rgba(57,169,255,.12) 1px,
-      transparent 1px
-    );
-  background-size:32px 32px;
-  mask-image:linear-gradient(
-    to bottom,
-    black,
-    transparent 85%
-  );
-}
-
-.hero-content{
-  position:relative;
-  z-index:1;
-}
-
-.eyebrow{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  color:var(--blue);
-  font-size:10px;
-  font-weight:900;
-  letter-spacing:2px;
-}
-
-.eyebrow:before{
-  content:"";
-  width:17px;
-  height:3px;
-  border-radius:4px;
-  background:var(--blue);
-  box-shadow:0 0 12px var(--blue);
-}
-
-.hero h1{
-  margin:16px 0 13px;
-  font-size:clamp(34px,7.5vw,58px);
-  line-height:1.02;
-  letter-spacing:-1.9px;
-  font-weight:900;
-}
-
-.hero h1 span{
-  display:block;
-  color:var(--blue);
-  text-shadow:0 0 24px rgba(57,169,255,.25);
-}
-
-.hero-description{
-  max-width:490px;
-  margin:0;
-  color:#c0d3e1;
-  font-size:14px;
-  line-height:1.65;
-}
-
-.hero-bottom{
-  display:flex;
-  flex-wrap:wrap;
-  align-items:center;
-  gap:10px;
-  margin-top:22px;
-}
-
-.hero-tag{
-  padding:8px 11px;
-  border-radius:7px;
-  color:#bad7eb;
-  background:rgba(57,169,255,.07);
-  border:1px solid rgba(57,169,255,.2);
-  font-size:10px;
-  font-weight:800;
-  letter-spacing:.65px;
-}
-
-/* INTELLIGENCE */
-
-.intelligence{
-  display:grid;
-  grid-template-columns:1fr 170px;
-  gap:16px;
-  align-items:center;
-  margin-top:12px;
-  padding:20px;
-  border-radius:19px;
-  background:linear-gradient(145deg,#0c2035,#071320);
-  border:1px solid var(--line);
-}
-
-.section-kicker{
-  color:var(--blue);
-  font-size:10px;
-  font-weight:900;
-  letter-spacing:1.6px;
-  text-transform:uppercase;
-}
-
-.intelligence h2{
-  margin:9px 0;
-  font-size:23px;
-  font-weight:900;
-  line-height:1.2;
-  letter-spacing:-.5px;
-}
-
-.intelligence p{
-  color:var(--muted);
-  font-size:12.5px;
-  line-height:1.6;
-  margin:0;
-}
-
-.orbit{
-  position:relative;
-  width:155px;
-  height:155px;
-  display:grid;
-  place-items:center;
+  max-width:640px;
   margin:auto;
 }
 
-.orbit-ring{
-  position:absolute;
-  border:1px solid rgba(57,169,255,.32);
-  border-radius:50%;
-}
+/* HEADER */
 
-.orbit-ring.one{
-  width:145px;
-  height:145px;
-}
-
-.orbit-ring.two{
-  width:109px;
-  height:109px;
-  border-color:rgba(57,169,255,.48);
-}
-
-.orbit-ring.three{
-  width:73px;
-  height:73px;
-  background:rgba(57,169,255,.05);
-  box-shadow:0 0 25px rgba(57,169,255,.08);
-}
-
-.orbit-ring.one:after{
-  content:"";
-  position:absolute;
-  width:8px;
-  height:8px;
-  left:14px;
-  top:25px;
-  border-radius:50%;
-  background:var(--blue);
-  box-shadow:0 0 13px var(--blue);
-}
-
-.orbit-core{
-  position:relative;
-  z-index:1;
-  color:var(--white);
-  font-size:11px;
-  font-weight:900;
-  letter-spacing:1.4px;
-}
-
-/* PROCESS */
-
-.process{
-  margin-top:24px;
-}
-
-.process-heading{
-  margin:0 4px 15px;
-}
-
-.process-heading h2{
-  font-size:24px;
-  line-height:1.2;
-  margin:7px 0 5px;
-  font-weight:900;
-}
-
-.process-heading p{
-  margin:0;
-  font-size:12px;
-  color:var(--muted);
-  line-height:1.5;
-}
-
-/* COLLAPSIBLE AI VOICE */
-
-.voice-accordion{
-  margin-bottom:14px;
-  border:1px solid rgba(57,169,255,.38);
-  border-radius:16px;
+.header{
+  padding:23px 19px 20px;
   background:
-    radial-gradient(
-      circle at 100% 0,
-      rgba(57,169,255,.12),
-      transparent 62%
-    ),
-    linear-gradient(145deg,#0d2a45,#071422);
-  overflow:hidden;
+    linear-gradient(140deg,#102840,#081524 76%);
+  border:1px solid var(--border);
+  border-radius:16px;
 }
 
-.voice-accordion summary{
+.eyebrow{
+  color:var(--blue);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:2px;
+  margin-bottom:11px;
+}
+
+.header h1{
+  margin:0;
+  font-size:clamp(27px,6vw,35px);
+  line-height:1.12;
+  letter-spacing:-.8px;
+  font-weight:900;
+}
+
+.header h1 span{
+  color:var(--blue);
+}
+
+.header p{
+  margin:12px 0 0;
+  color:var(--muted);
+  font-size:12.5px;
+  line-height:1.65;
+  max-width:500px;
+}
+
+/* SECTION TITLE */
+
+.section-heading{
   display:flex;
   align-items:center;
-  gap:12px;
-  padding:15px;
-  cursor:pointer;
+  justify-content:space-between;
+  padding:19px 3px 11px;
+  gap:10px;
+}
+
+.section-heading h2{
+  margin:0;
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:1.1px;
+  text-transform:uppercase;
+}
+
+.section-heading span{
+  color:var(--blue);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:1px;
+}
+
+/* COMPACT COLLAPSIBLE VOICE */
+
+.voice{
+  margin-bottom:9px;
+  overflow:hidden;
+  border-radius:12px;
+  border:1px solid rgba(57,169,255,.28);
+  background:#0c2034;
+}
+
+.voice summary{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:12px 14px;
   list-style:none;
+  cursor:pointer;
   user-select:none;
 }
 
-.voice-accordion summary::-webkit-details-marker{
+.voice summary::-webkit-details-marker{
   display:none;
 }
 
-.voice-icon{
+.voice-symbol{
+  width:35px;
+  height:35px;
+  flex:0 0 35px;
   display:grid;
   place-items:center;
-  width:43px;
-  height:43px;
-  flex:0 0 43px;
-  border-radius:12px;
-  background:rgba(57,169,255,.13);
-  border:1px solid rgba(57,169,255,.32);
+  border-radius:9px;
+  background:rgba(57,169,255,.12);
+  color:var(--blue);
 }
 
-.voice-icon svg{
-  width:24px;
-  height:24px;
+.voice-symbol svg{
+  width:20px;
+  height:20px;
   fill:none;
-  stroke:var(--blue);
-  stroke-width:2;
+  stroke:currentColor;
+  stroke-width:1.8;
   stroke-linecap:round;
   stroke-linejoin:round;
 }
 
-.voice-heading{
+.voice-copy{
   flex:1;
   min-width:0;
 }
 
-.voice-heading strong{
+.voice-copy strong{
   display:block;
-  color:white;
-  font-size:13px;
+  font-size:12px;
   font-weight:900;
 }
 
-.voice-heading small{
+.voice-copy small{
   display:block;
-  margin-top:5px;
-  color:#a5c8df;
+  margin-top:4px;
+  color:var(--muted);
   font-size:10px;
+  line-height:1.4;
 }
 
 .voice-chevron{
-  display:grid;
-  place-items:center;
-  width:26px;
-  height:26px;
   color:var(--blue);
-  font-size:20px;
-  font-weight:900;
+  font-size:19px;
   transition:transform .2s;
 }
 
-.voice-accordion[open] .voice-chevron{
+.voice[open] .voice-chevron{
   transform:rotate(180deg);
 }
 
 .voice-body{
-  border-top:1px solid rgba(57,169,255,.16);
-  padding:14px 15px 16px;
+  padding:0 13px 12px;
+  border-top:1px solid rgba(57,169,255,.12);
 }
 
-.voice-body p{
-  margin:0 0 13px;
-  font-size:11px;
-  line-height:1.6;
+.voice-description{
+  padding:12px 0;
   color:var(--muted);
+  font-size:11px;
+  line-height:1.5;
 }
 
 .voice-controls{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:9px;
+  gap:8px;
 }
 
-.voice-button{
-  min-height:43px;
-  border-radius:9px;
-  padding:11px 9px;
-  border:1px solid rgba(57,169,255,.45);
+.voice-controls button{
+  min-height:39px;
+  border-radius:8px;
+  padding:10px;
   font-size:11px;
   font-weight:900;
   cursor:pointer;
 }
 
-.voice-button.primary{
+.play{
   background:var(--blue);
-  color:#051322;
+  color:#061424;
+  border:1px solid var(--blue);
 }
 
-.voice-button.secondary{
+.stop{
   color:var(--blue);
-  background:rgba(57,169,255,.08);
-}
-
-.voice-button:disabled{
-  opacity:.45;
-  cursor:not-allowed;
+  background:transparent;
+  border:1px solid rgba(57,169,255,.32);
 }
 
 .voice-status{
-  margin-top:10px;
-  color:#a6cbe3;
+  margin-top:9px;
+  color:var(--muted);
   font-size:10px;
-  line-height:1.5;
-  min-height:15px;
+  min-height:14px;
 }
 
-.voice-live{
+.voice-dot{
+  display:inline-block;
   width:7px;
   height:7px;
-  display:inline-block;
-  vertical-align:middle;
-  margin-right:5px;
   border-radius:50%;
-  background:#64849a;
+  background:#6f889d;
+  margin-right:5px;
 }
 
-.voice-live.playing{
-  background:#39e599;
-  box-shadow:0 0 9px #39e599;
-  animation:pulse 1.5s infinite;
+.voice-dot.active{
+  background:#40e5a4;
+  box-shadow:0 0 9px rgba(64,229,164,.65);
 }
 
-@keyframes pulse{
-  50%{opacity:.35}
-}
+/* COACHING STEPS */
 
-/* JOURNEY */
-
-.journey{
-  position:relative;
+.steps{
   display:grid;
-  gap:9px;
+  gap:8px;
 }
 
-.journey:before{
-  content:"";
-  position:absolute;
-  width:1px;
-  left:31px;
-  top:28px;
-  bottom:28px;
-  background:linear-gradient(
-    var(--blue),
-    rgba(57,169,255,.12)
-  );
-  pointer-events:none;
-}
-
-.journey-step{
-  position:relative;
-  display:grid;
-  grid-template-columns:54px 1fr 23px;
-  gap:13px;
-  align-items:center;
-  padding:17px 15px 17px 10px;
-  border-radius:14px;
-  border:1px solid var(--line);
-  background:linear-gradient(120deg,#0b1f33,#071321);
-  min-height:111px;
+.step{
+  display:flex;
+  align-items:flex-start;
+  gap:14px;
+  min-height:100px;
+  padding:17px 15px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:
+    linear-gradient(120deg,var(--panel),var(--panel2));
 }
 
 .step-number{
-  position:relative;
-  z-index:1;
+  width:40px;
+  height:40px;
   display:grid;
   place-items:center;
-  width:44px;
-  height:44px;
-  background:#09223a;
-  border:1px solid rgba(57,169,255,.5);
-  border-radius:12px;
+  flex:0 0 40px;
+  border-radius:10px;
+  background:rgba(57,169,255,.09);
+  border:1px solid rgba(57,169,255,.23);
   color:var(--blue);
-  font-size:19px;
-  font-weight:900;
-}
-
-.step-category{
-  font-size:9px;
-  letter-spacing:1.5px;
-  font-weight:900;
-  color:var(--blue);
-  margin-bottom:5px;
-}
-
-.step-content h3{
-  color:var(--white);
   font-size:17px;
   font-weight:900;
-  margin:0 0 7px;
 }
 
-.step-content p{
-  margin:0;
-  font-size:12px;
-  line-height:1.55;
-  color:var(--muted);
+.step-content{
+  flex:1;
+  min-width:0;
 }
 
-.step-arrow{
+.step-label{
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:1.5px;
   color:var(--blue);
-  font-size:23px;
-  opacity:.65;
-  text-align:center;
+  margin:1px 0 6px;
+}
+
+.step h3{
+  margin:0 0 6px;
+  font-size:15px;
+  line-height:1.2;
+  font-weight:900;
+}
+
+.step p{
+  margin:0;
+  color:var(--muted);
+  font-size:11.5px;
+  line-height:1.5;
 }
 
 /* FOOTER */
 
 .footer{
-  margin-top:23px;
   text-align:center;
-  padding:10px 8px 20px;
+  padding:20px 8px 12px;
 }
 
-.footer-title{
-  color:white;
-  font-size:18px;
+.footer strong{
+  display:block;
+  font-size:14px;
   font-weight:900;
 }
 
-.footer-title span{
+.footer strong span{
   color:var(--blue);
 }
 
-.footer-small{
-  margin-top:9px;
-  color:#63849c;
+.footer small{
+  display:block;
+  margin-top:8px;
+  color:#7797ac;
   font-size:9px;
+  letter-spacing:1px;
   font-weight:800;
-  letter-spacing:1.7px;
 }
 
-/* MOBILE */
-
-@media(max-width:560px){
-
-  .hero{
-    padding:25px 17px 22px;
+@media(max-width:380px){
+  .header{
+    padding:21px 15px;
   }
 
-  .hero h1{
-    font-size:37px;
+  .step{
+    gap:11px;
+    padding:14px 11px;
   }
 
-  .intelligence{
-    grid-template-columns:1fr 116px;
-    gap:7px;
-    padding:16px;
+  .step h3{
+    font-size:14px;
   }
 
-  .intelligence h2{
-    font-size:19px;
-  }
-
-  .intelligence p{
+  .step p{
     font-size:11px;
-  }
-
-  .orbit{
-    width:115px;
-    height:115px;
-  }
-
-  .orbit-ring.one{
-    width:110px;
-    height:110px;
-  }
-
-  .orbit-ring.two{
-    width:82px;
-    height:82px;
-  }
-
-  .orbit-ring.three{
-    width:55px;
-    height:55px;
-  }
-
-  .orbit-core{
-    font-size:9px;
-  }
-
-  .orbit-ring.one:after{
-    left:9px;
-    top:19px;
-  }
-
-  .journey-step{
-    padding:14px 10px;
-    grid-template-columns:48px 1fr 15px;
-    gap:8px;
-  }
-
-  .journey:before{
-    left:28px;
-  }
-
-  .step-content h3{
-    font-size:15px;
-  }
-
-  .step-content p{
-    font-size:11.5px;
-  }
-}
-
-@media(max-width:360px){
-
-  .intelligence{
-    grid-template-columns:1fr;
-    text-align:center;
-  }
-
-  .orbit{
-    margin-top:12px;
-  }
-
-  .hero h1{
-    font-size:32px;
   }
 }
 </style>
@@ -616,257 +349,188 @@ body{padding:8px}
 
 <div class="container">
 
-  <!-- HERO -->
+  <!-- HEADER -->
 
-  <section class="hero">
+  <header class="header">
 
-    <div class="hero-content">
+    <div class="eyebrow">
+      WHY DARTIQ
+    </div>
 
-      <div class="eyebrow">
-        DARTIQ PERFORMANCE INTELLIGENCE
+    <h1>
+      Your Game.<br>
+      <span>Decoded.</span>
+    </h1>
+
+    <p>
+      Understand your performance.
+      Train with purpose.
+      Turn every session into meaningful progress.
+    </p>
+
+  </header>
+
+  <!-- PROCESS HEADING -->
+
+  <div class="section-heading">
+    <h2>The Coaching Process</h2>
+    <span>01 / 02 / 03</span>
+  </div>
+
+  <!-- COMPACT VOICE ABOVE IDENTIFY -->
+
+  <details class="voice" id="voiceAccordion">
+
+    <summary>
+
+      <div class="voice-symbol">
+
+        <svg viewBox="0 0 24 24">
+          <path d="M4 9v6"/>
+          <path d="M8 5v14"/>
+          <path d="M12 2v20"/>
+          <path d="M16 6v12"/>
+          <path d="M20 9v6"/>
+        </svg>
+
       </div>
 
-      <h1>
-        Stop Guessing.
-        <span>Start Improving.</span>
-      </h1>
+      <div class="voice-copy">
 
-      <p class="hero-description">
-        DARTIQ turns performance information into
-        a clearer path forward. Understand what
-        needs work, train with purpose, and
-        measure your development.
-      </p>
+        <strong>
+          AI Voice Coach
+        </strong>
 
-      <div class="hero-bottom">
-        <span class="hero-tag">
-          PERFORMANCE ANALYSIS
-        </span>
-        <span class="hero-tag">
-          PERSONALIZED TRAINING
-        </span>
+        <small>
+          <span
+            class="voice-dot"
+            id="voiceDot">
+          </span>
+          <span id="voiceMiniStatus">
+            Preparing narration...
+          </span>
+        </small>
+
+      </div>
+
+      <div class="voice-chevron">
+        &#8964;
+      </div>
+
+    </summary>
+
+    <div class="voice-body">
+
+      <div class="voice-description">
+        Your introduction to the DARTIQ
+        coaching approach, narrated by
+        an English male voice.
+      </div>
+
+      <div class="voice-controls">
+
+        <button
+          type="button"
+          class="play"
+          id="playVoice">
+          &#9654; PLAY
+        </button>
+
+        <button
+          type="button"
+          class="stop"
+          id="stopVoice">
+          &#9632; STOP
+        </button>
+
+      </div>
+
+      <div
+        class="voice-status"
+        id="voiceStatus"
+        role="status"
+        aria-live="polite">
       </div>
 
     </div>
 
-  </section>
+  </details>
 
-  <!-- INTELLIGENCE VISUAL -->
+  <!-- THREE STAGES -->
 
-  <section class="intelligence">
+  <section class="steps">
 
-    <div>
-      <div class="section-kicker">
-        FROM DATA TO DIRECTION
-      </div>
+    <article class="step">
 
-      <h2>
-        Every session tells a story.
-      </h2>
+      <div class="step-number">01</div>
 
-      <p>
-        Your scoring and practice results
-        provide information you can use
-        to make smarter training decisions.
-      </p>
-    </div>
+      <div class="step-content">
 
-    <div class="orbit" aria-hidden="true">
-      <div class="orbit-ring one"></div>
-      <div class="orbit-ring two"></div>
-      <div class="orbit-ring three"></div>
-      <div class="orbit-core">DARTIQ</div>
-    </div>
-
-  </section>
-
-  <!-- COACHING PROCESS -->
-
-  <section class="process">
-
-    <div class="process-heading">
-
-      <div class="section-kicker">
-        THE DARTIQ APPROACH
-      </div>
-
-      <h2>
-        A Smarter Way to Improve
-      </h2>
-
-      <p>
-        Three connected stages.
-        One clear goal: measurable improvement.
-      </p>
-
-    </div>
-
-    <!-- COLLAPSIBLE AI VOICE ABOVE IDENTIFY -->
-
-    <details class="voice-accordion" id="voiceAccordion">
-
-      <summary>
-
-        <div class="voice-icon">
-          <svg viewBox="0 0 24 24">
-            <path d="M4 9v6"/>
-            <path d="M8 5v14"/>
-            <path d="M12 2v20"/>
-            <path d="M16 6v12"/>
-            <path d="M20 9v6"/>
-          </svg>
+        <div class="step-label">
+          IDENTIFY
         </div>
 
-        <div class="voice-heading">
-          <strong>
-            DARTIQ AI Voice Guide
-          </strong>
-
-          <small>
-            <span
-              class="voice-live"
-              id="voiceLive">
-            </span>
-
-            <span id="voiceMiniStatus">
-              AUTO VOICE ENABLED
-            </span>
-          </small>
-        </div>
-
-        <div class="voice-chevron">
-          ⌄
-        </div>
-
-      </summary>
-
-      <div class="voice-body">
+        <h3>
+          Understand Your Performance
+        </h3>
 
         <p>
-          Your personal introduction to the
-          DARTIQ coaching process.
-          English male voice narration.
+          Discover your scoring patterns,
+          inconsistencies, and the areas
+          holding your game back.
         </p>
-
-        <div class="voice-controls">
-
-          <button
-            type="button"
-            class="voice-button primary"
-            id="playVoiceButton">
-            ▶ PLAY GUIDE
-          </button>
-
-          <button
-            type="button"
-            class="voice-button secondary"
-            id="stopVoiceButton">
-            ■ STOP
-          </button>
-
-        </div>
-
-        <div
-          class="voice-status"
-          id="voiceStatus"
-          role="status"
-          aria-live="polite">
-          Preparing automatic voice playback...
-        </div>
 
       </div>
 
-    </details>
+    </article>
 
-    <!-- IDENTIFY / TRAIN / EVOLVE -->
+    <article class="step">
 
-    <div class="journey">
+      <div class="step-number">02</div>
 
-      <article class="journey-step">
+      <div class="step-content">
 
-        <div class="step-number">
-          01
+        <div class="step-label">
+          TRAIN
         </div>
 
-        <div class="step-content">
+        <h3>
+          Practice With Purpose
+        </h3>
 
-          <div class="step-category">
-            IDENTIFY
-          </div>
+        <p>
+          Focus on targeted exercises
+          matched to your performance
+          instead of practicing at random.
+        </p>
 
-          <h3>
-            Understand Your Performance
-          </h3>
+      </div>
 
-          <p>
-            Identify scoring patterns,
-            inconsistencies, and areas
-            that deserve attention.
-          </p>
+    </article>
 
+    <article class="step">
+
+      <div class="step-number">03</div>
+
+      <div class="step-content">
+
+        <div class="step-label">
+          EVOLVE
         </div>
 
-        <div class="step-arrow">›</div>
+        <h3>
+          Measure Your Improvement
+        </h3>
 
-      </article>
+        <p>
+          Track scoring, consistency,
+          and progress over time.
+          Know when your training works.
+        </p>
 
-      <article class="journey-step">
+      </div>
 
-        <div class="step-number">
-          02
-        </div>
-
-        <div class="step-content">
-
-          <div class="step-category">
-            TRAIN
-          </div>
-
-          <h3>
-            Practice With Purpose
-          </h3>
-
-          <p>
-            Work on targeted exercises
-            instead of repeating random
-            practice sessions.
-          </p>
-
-        </div>
-
-        <div class="step-arrow">›</div>
-
-      </article>
-
-      <article class="journey-step">
-
-        <div class="step-number">
-          03
-        </div>
-
-        <div class="step-content">
-
-          <div class="step-category">
-            EVOLVE
-          </div>
-
-          <h3>
-            Track Real Improvement
-          </h3>
-
-          <p>
-            Review your results over time
-            and adjust your training as
-            your performance changes.
-          </p>
-
-        </div>
-
-        <div class="step-arrow">›</div>
-
-      </article>
-
-    </div>
+    </article>
 
   </section>
 
@@ -874,115 +538,87 @@ body{padding:8px}
 
   <footer class="footer">
 
-    <div class="footer-title">
-      Your Game. <span>Decoded.</span>
-    </div>
+    <strong>
+      Stop Guessing.
+      <span>Start Improving.</span>
+    </strong>
 
-    <div class="footer-small">
+    <small>
       POWERED BY DARTIQ
-    </div>
+    </small>
 
   </footer>
 
 </div>
 
 <script>
-/* =========================================
-   DARTIQ AUTOMATIC MALE VOICE GUIDE
-
-   - Attempts automatic playback
-   - Collapsible voice section
-   - English male voice only
-   - DARTIQ pronounced as one word
-   - No spelled-out brand name
-   - Manual playback fallback
-   ========================================= */
+/* ==============================================
+   DARTIQ VOICE
+   Male English voice only.
+   Brand is spoken as ONE word.
+   No letter-by-letter pronunciation.
+   ============================================== */
 
 (function(){
 
   "use strict";
 
   const synth =
-    "speechSynthesis" in window
-      ? window.speechSynthesis
-      : null;
-
-  const accordion =
-    document.getElementById("voiceAccordion");
+    window.speechSynthesis || null;
 
   const playButton =
-    document.getElementById("playVoiceButton");
+    document.getElementById("playVoice");
 
   const stopButton =
-    document.getElementById("stopVoiceButton");
-
-  const status =
-    document.getElementById("voiceStatus");
+    document.getElementById("stopVoice");
 
   const miniStatus =
     document.getElementById("voiceMiniStatus");
 
-  const liveDot =
-    document.getElementById("voiceLive");
+  const status =
+    document.getElementById("voiceStatus");
 
-  let activeSpeech = null;
-  let isSpeaking = false;
-  let autoplayAttempted = false;
-  let startedAtLeastOnce = false;
+  const dot =
+    document.getElementById("voiceDot");
+
+  let currentSpeech = null;
+  let autoAttempted = false;
+  let userStopped = false;
 
   /*
-    SPOKEN BRAND
-
-    Visible: DARTIQ
-    Spoken: one phonetic word
-
-    Never send the individual letters
-    to speech synthesis.
+    Spoken brand is one word.
+    Never pass "DARTIQ" to synthesis.
   */
 
-  const spokenBrand = "Dartick";
+  const brand = "Dartick";
 
   const narration = [
-    "Welcome to " + spokenBrand + ".",
+    "Welcome to " + brand + ".",
     "Your game, decoded.",
-
-    "Every session tells a story.",
-    "The key to improvement is understanding",
-    "what your performance is telling you.",
-
-    "The " + spokenBrand + " coaching approach",
-    "has three connected stages.",
-
-    "Stage one. Identify.",
+    "There are three stages to improving your darts.",
+    "First. Identify.",
     "Understand your performance.",
-    "Find the scoring patterns and inconsistencies",
+    "Find the patterns and inconsistencies",
     "that may be holding you back.",
-
-    "Stage two. Train.",
+    "Second. Train.",
     "Practice with purpose.",
-    "Focus on exercises that target",
-    "the areas requiring improvement.",
-
-    "Stage three. Evolve.",
-    "Track real improvement.",
-    "Review your results and adapt your training",
-    "as your performance develops.",
-
+    "Focus on the areas that need improvement.",
+    "Third. Evolve.",
+    "Measure your progress.",
+    "Track your scoring and consistency over time.",
     "Stop guessing.",
     "Start improving."
   ].join(" ");
 
   /*
-    MALE VOICE SELECTION
+    Browser voices have no reliable
+    standard gender field.
 
-    Browser speech synthesis does not
-    expose a standard voice gender field.
-
-    Only known English male voice names
-    are allowed. No default voice fallback.
+    Use known male English voice names.
+    Never use the default voice as fallback.
   */
 
-  const malePatterns = [
+  const maleNames = [
     /\bguy\b/i,
     /\bryan\b/i,
     /\bchristopher\b/i,
@@ -994,13 +630,11 @@ body{padding:8px}
     /\bmark\b/i,
     /\bthomas\b/i,
     /\badam\b/i,
-    /\baaron\b/i,
-    /\bjason\b/i,
     /\bmale\b/i,
     /english.*male/i
   ];
 
-  const preferredPatterns = [
+  const preferred = [
     /\bguy\b/i,
     /\bryan\b/i,
     /\bchristopher\b/i,
@@ -1009,313 +643,258 @@ body{padding:8px}
     /\bdaniel\b/i
   ];
 
-  function findMaleVoice(){
+  function maleVoice(){
 
-    if(!synth){
-      return null;
-    }
+    if(!synth) return null;
 
     const voices = synth.getVoices();
 
-    const english = voices.filter(function(voice){
-      return /^en(?:-|_)/i.test(voice.lang);
+    const matching = voices.filter(function(v){
+
+      return (
+        /^en(?:-|_)/i.test(v.lang) &&
+        maleNames.some(function(p){
+          return p.test(v.name);
+        })
+      );
+
     });
 
-    const males = english.filter(function(voice){
-
-      return malePatterns.some(function(pattern){
-        return pattern.test(voice.name);
-      });
-
-    });
-
-    if(!males.length){
+    if(!matching.length){
       return null;
     }
 
-    function priority(voice){
+    function rank(v){
 
-      const index =
-        preferredPatterns.findIndex(function(pattern){
-          return pattern.test(voice.name);
-        });
+      const n = preferred.findIndex(
+        p => p.test(v.name)
+      );
 
-      return index < 0 ? 99 : index;
+      return n === -1 ? 100 : n;
     }
 
-    males.sort(function(a,b){
-      return priority(a) - priority(b);
-    });
-
-    return males[0];
-  }
-
-  function setVoiceState(speaking){
-
-    isSpeaking = speaking;
-
-    liveDot.classList.toggle(
-      "playing",
-      speaking
+    matching.sort(
+      (a,b) => rank(a)-rank(b)
     );
 
-    playButton.textContent =
-      speaking
-        ? "↻ RESTART GUIDE"
-        : "▶ PLAY GUIDE";
-
-    miniStatus.textContent =
-      speaking
-        ? "VOICE PLAYING"
-        : "VOICE READY";
+    return matching[0];
   }
 
-  function stopVoice(){
+  function setStatus(text,active){
+
+    miniStatus.textContent = text;
+
+    dot.classList.toggle(
+      "active",
+      Boolean(active)
+    );
+
+  }
+
+  function stop(){
+
+    userStopped = true;
 
     if(synth){
       synth.cancel();
     }
 
-    activeSpeech = null;
+    currentSpeech = null;
 
-    setVoiceState(false);
-
-    miniStatus.textContent =
-      "VOICE STOPPED";
+    setStatus("Voice stopped",false);
 
     status.textContent =
       "Narration stopped.";
+
   }
 
-  function playVoice(auto){
+  function speak(auto){
 
     if(
       !synth ||
       !("SpeechSynthesisUtterance" in window)
     ){
+
+      setStatus("Voice unavailable",false);
+
       status.textContent =
         "Voice playback is not supported.";
-
-      miniStatus.textContent =
-        "VOICE UNAVAILABLE";
 
       return;
     }
 
-    const selectedVoice =
-      findMaleVoice();
+    const voice = maleVoice();
 
-    if(!selectedVoice){
+    if(!voice){
+
+      setStatus(
+        "No English male voice available",
+        false
+      );
 
       status.textContent =
-        "No recognized English male voice is available.";
-
-      miniStatus.textContent =
-        "MALE VOICE UNAVAILABLE";
+        "A supported male voice is required.";
 
       return;
     }
 
     synth.cancel();
 
-    const speech =
+    const utterance =
       new SpeechSynthesisUtterance(narration);
 
-    speech.voice = selectedVoice;
-    speech.lang = selectedVoice.lang;
-    speech.rate = 0.94;
-    speech.pitch = 0.88;
-    speech.volume = 1;
+    utterance.voice = voice;
+    utterance.lang = voice.lang;
+    utterance.rate = 0.94;
+    utterance.pitch = 0.9;
+    utterance.volume = 1;
 
-    activeSpeech = speech;
+    currentSpeech = utterance;
 
-    speech.onstart = function(){
+    setStatus(
+      auto ? "Starting automatically..." : "Starting...",
+      false
+    );
 
-      if(activeSpeech !== speech){
+    utterance.onstart = function(){
+
+      if(currentSpeech !== utterance){
         return;
       }
 
-      startedAtLeastOnce = true;
-
-      setVoiceState(true);
+      setStatus("Narration playing",true);
 
       status.textContent =
-        "Male voice narration is playing.";
+        "English male narration playing.";
+
     };
 
-    speech.onend = function(){
+    utterance.onend = function(){
 
-      if(activeSpeech !== speech){
+      if(currentSpeech !== utterance){
         return;
       }
 
-      activeSpeech = null;
+      currentSpeech = null;
 
-      setVoiceState(false);
-
-      miniStatus.textContent =
-        "GUIDE COMPLETED";
+      setStatus("Narration completed",false);
 
       status.textContent =
         "Narration completed.";
+
     };
 
-    speech.onerror = function(event){
+    utterance.onerror = function(event){
 
-      if(activeSpeech !== speech){
+      if(currentSpeech !== utterance){
         return;
       }
 
-      activeSpeech = null;
-
-      setVoiceState(false);
+      currentSpeech = null;
 
       if(event.error === "canceled"){
         return;
       }
 
-      miniStatus.textContent =
-        "TAP TO PLAY";
+      setStatus("Tap to play",false);
 
       status.textContent =
-        "Automatic playback may be blocked. Tap PLAY GUIDE.";
+        "Automatic audio may be blocked. Tap PLAY.";
+
     };
-
-    if(auto){
-
-      miniStatus.textContent =
-        "AUTO PLAY REQUESTED";
-
-      status.textContent =
-        "Starting automatic narration...";
-
-    }else{
-
-      miniStatus.textContent =
-        "STARTING VOICE";
-
-      status.textContent =
-        "Starting male narration...";
-    }
 
     try{
 
-      synth.speak(speech);
+      synth.speak(utterance);
 
     }catch(error){
 
-      activeSpeech = null;
+      currentSpeech = null;
 
-      setVoiceState(false);
-
-      miniStatus.textContent =
-        "TAP TO PLAY";
+      setStatus("Tap to play",false);
 
       status.textContent =
-        "Use PLAY GUIDE to start narration.";
+        "Tap PLAY to start the guide.";
+
     }
+
   }
 
-  /* MANUAL CONTROLS */
+  playButton.addEventListener("click",function(){
 
-  playButton.addEventListener(
-    "click",
-    function(){
-      autoplayAttempted = true;
-      playVoice(false);
-    }
-  );
+    userStopped = false;
+    autoAttempted = true;
 
-  stopButton.addEventListener(
-    "click",
-    function(){
-      autoplayAttempted = true;
-      stopVoice();
-    }
-  );
+    speak(false);
 
-  /* AUTOMATIC PLAYBACK */
+  });
 
-  function attemptAutoplay(){
-
-    if(autoplayAttempted){
-      return;
-    }
-
-    if(!synth){
-      return;
-    }
-
-    const selectedVoice =
-      findMaleVoice();
-
-    if(!selectedVoice){
-      return;
-    }
-
-    autoplayAttempted = true;
-
-    playVoice(true);
-  }
-
-  function initializeVoice(){
-
-    if(!synth){
-
-      status.textContent =
-        "Speech synthesis is unavailable.";
-
-      miniStatus.textContent =
-        "VOICE UNAVAILABLE";
-
-      return;
-    }
-
-    attemptAutoplay();
-  }
+  stopButton.addEventListener("click",stop);
 
   /*
-    Some browsers load their speech
-    voices after the page loads.
+    Automatic voice playback attempt.
+    The accordion remains collapsed.
   */
+
+  function attemptAuto(){
+
+    if(
+      autoAttempted ||
+      userStopped ||
+      !synth
+    ){
+      return;
+    }
+
+    if(!maleVoice()){
+      return;
+    }
+
+    autoAttempted = true;
+
+    speak(true);
+
+  }
 
   if(synth){
 
-    synth.addEventListener(
-      "voiceschanged",
-      attemptAutoplay
-    );
+    if(typeof synth.addEventListener === "function"){
 
-    initializeVoice();
+      synth.addEventListener(
+        "voiceschanged",
+        attemptAuto
+      );
+
+    }else{
+
+      synth.onvoiceschanged = attemptAuto;
+
+    }
+
+    attemptAuto();
 
     window.addEventListener(
       "load",
-      attemptAutoplay
+      attemptAuto
     );
+
+  }else{
+
+    setStatus("Voice unavailable",false);
+
   }
 
-  /*
-    If autoplay is blocked, a tap on
-    PLAY GUIDE remains available.
+  window.addEventListener("pagehide",function(){
 
-    Do not force voice playback through
-    an unrelated user interaction.
-  */
+    userStopped = true;
 
-  /* STOP WHEN PAGE CLOSES */
-
-  window.addEventListener(
-    "pagehide",
-    function(){
-
-      if(synth){
-        synth.cancel();
-      }
-
-      activeSpeech = null;
-      isSpeaking = false;
+    if(synth){
+      synth.cancel();
     }
-  );
+
+    currentSpeech = null;
+
+  });
 
 })();
 </script>
