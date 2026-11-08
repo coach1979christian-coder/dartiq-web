@@ -17,6 +17,7 @@
   --muted:#a3b9cb;
   --line:rgba(57,169,255,.22);
 }
+
 *{box-sizing:border-box}
 
 html,body{
@@ -29,6 +30,7 @@ html,body{
   font-family:Arial,Helvetica,sans-serif;
   overflow-x:hidden;
 }
+
 body{padding:8px}
 
 .container{
@@ -90,7 +92,6 @@ body{padding:8px}
   font-size:10px;
   font-weight:900;
   letter-spacing:2px;
-  text-transform:uppercase;
 }
 
 .eyebrow:before{
@@ -143,7 +144,7 @@ body{padding:8px}
   letter-spacing:.65px;
 }
 
-/* PERFORMANCE VISUAL */
+/* INTELLIGENCE */
 
 .intelligence{
   display:grid;
@@ -153,9 +154,7 @@ body{padding:8px}
   margin-top:12px;
   padding:20px;
   border-radius:19px;
-  background:linear-gradient(
-    145deg,#0c2035,#071320
-  );
+  background:linear-gradient(145deg,#0c2035,#071320);
   border:1px solid var(--line);
 }
 
@@ -180,7 +179,6 @@ body{padding:8px}
   font-size:12.5px;
   line-height:1.6;
   margin:0;
-  max-width:420px;
 }
 
 .orbit{
@@ -235,10 +233,9 @@ body{padding:8px}
   font-size:11px;
   font-weight:900;
   letter-spacing:1.4px;
-  text-shadow:0 0 13px var(--blue);
 }
 
-/* COACHING PROCESS */
+/* PROCESS */
 
 .process{
   margin-top:24px;
@@ -261,6 +258,164 @@ body{padding:8px}
   color:var(--muted);
   line-height:1.5;
 }
+
+/* COLLAPSIBLE AI VOICE */
+
+.voice-accordion{
+  margin-bottom:14px;
+  border:1px solid rgba(57,169,255,.38);
+  border-radius:16px;
+  background:
+    radial-gradient(
+      circle at 100% 0,
+      rgba(57,169,255,.12),
+      transparent 62%
+    ),
+    linear-gradient(145deg,#0d2a45,#071422);
+  overflow:hidden;
+}
+
+.voice-accordion summary{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:15px;
+  cursor:pointer;
+  list-style:none;
+  user-select:none;
+}
+
+.voice-accordion summary::-webkit-details-marker{
+  display:none;
+}
+
+.voice-icon{
+  display:grid;
+  place-items:center;
+  width:43px;
+  height:43px;
+  flex:0 0 43px;
+  border-radius:12px;
+  background:rgba(57,169,255,.13);
+  border:1px solid rgba(57,169,255,.32);
+}
+
+.voice-icon svg{
+  width:24px;
+  height:24px;
+  fill:none;
+  stroke:var(--blue);
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.voice-heading{
+  flex:1;
+  min-width:0;
+}
+
+.voice-heading strong{
+  display:block;
+  color:white;
+  font-size:13px;
+  font-weight:900;
+}
+
+.voice-heading small{
+  display:block;
+  margin-top:5px;
+  color:#a5c8df;
+  font-size:10px;
+}
+
+.voice-chevron{
+  display:grid;
+  place-items:center;
+  width:26px;
+  height:26px;
+  color:var(--blue);
+  font-size:20px;
+  font-weight:900;
+  transition:transform .2s;
+}
+
+.voice-accordion[open] .voice-chevron{
+  transform:rotate(180deg);
+}
+
+.voice-body{
+  border-top:1px solid rgba(57,169,255,.16);
+  padding:14px 15px 16px;
+}
+
+.voice-body p{
+  margin:0 0 13px;
+  font-size:11px;
+  line-height:1.6;
+  color:var(--muted);
+}
+
+.voice-controls{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+
+.voice-button{
+  min-height:43px;
+  border-radius:9px;
+  padding:11px 9px;
+  border:1px solid rgba(57,169,255,.45);
+  font-size:11px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.voice-button.primary{
+  background:var(--blue);
+  color:#051322;
+}
+
+.voice-button.secondary{
+  color:var(--blue);
+  background:rgba(57,169,255,.08);
+}
+
+.voice-button:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+
+.voice-status{
+  margin-top:10px;
+  color:#a6cbe3;
+  font-size:10px;
+  line-height:1.5;
+  min-height:15px;
+}
+
+.voice-live{
+  width:7px;
+  height:7px;
+  display:inline-block;
+  vertical-align:middle;
+  margin-right:5px;
+  border-radius:50%;
+  background:#64849a;
+}
+
+.voice-live.playing{
+  background:#39e599;
+  box-shadow:0 0 9px #39e599;
+  animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+  50%{opacity:.35}
+}
+
+/* JOURNEY */
 
 .journey{
   position:relative;
@@ -291,11 +446,7 @@ body{padding:8px}
   padding:17px 15px 17px 10px;
   border-radius:14px;
   border:1px solid var(--line);
-  background:linear-gradient(
-    120deg,
-    #0b1f33,
-    #071321
-  );
+  background:linear-gradient(120deg,#0b1f33,#071321);
   min-height:111px;
 }
 
@@ -312,7 +463,6 @@ body{padding:8px}
   color:var(--blue);
   font-size:19px;
   font-weight:900;
-  box-shadow:0 0 17px rgba(57,169,255,.09);
 }
 
 .step-category{
@@ -344,101 +494,6 @@ body{padding:8px}
   text-align:center;
 }
 
-/* VOICE */
-
-.voice-section{
-  margin-top:17px;
-  padding:19px;
-  border:1px solid rgba(57,169,255,.38);
-  border-radius:18px;
-  background:
-    radial-gradient(
-      circle at 100% 0,
-      rgba(57,169,255,.15),
-      transparent 54%
-    ),
-    linear-gradient(140deg,#0c2843,#071421);
-}
-
-.voice-top{
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-
-.voice-icon{
-  width:46px;
-  height:46px;
-  flex:0 0 46px;
-  display:grid;
-  place-items:center;
-  border-radius:12px;
-  border:1px solid rgba(57,169,255,.3);
-  background:rgba(57,169,255,.12);
-}
-
-.voice-icon svg{
-  width:26px;
-  height:26px;
-  fill:none;
-  stroke:var(--blue);
-  stroke-width:2;
-  stroke-linecap:round;
-  stroke-linejoin:round;
-}
-
-.voice-heading{
-  min-width:0;
-}
-
-.voice-heading h3{
-  margin:0 0 5px;
-  font-size:16px;
-  font-weight:900;
-}
-
-.voice-heading p{
-  margin:0;
-  font-size:11px;
-  line-height:1.45;
-  color:var(--muted);
-}
-
-.voice-action{
-  margin-top:16px;
-}
-
-.voice-button{
-  width:100%;
-  padding:14px;
-  border:0;
-  border-radius:10px;
-  background:var(--blue);
-  color:#04101d;
-  font-size:12px;
-  letter-spacing:.8px;
-  font-weight:900;
-  cursor:pointer;
-  box-shadow:0 0 18px rgba(57,169,255,.15);
-}
-
-.voice-button:active{
-  transform:scale(.99);
-}
-
-.voice-button:disabled{
-  opacity:.45;
-  cursor:not-allowed;
-}
-
-.voice-status{
-  text-align:center;
-  min-height:15px;
-  margin-top:10px;
-  color:#a8c6d9;
-  font-size:10px;
-}
-
 /* FOOTER */
 
 .footer{
@@ -451,7 +506,6 @@ body{padding:8px}
   color:white;
   font-size:18px;
   font-weight:900;
-  letter-spacing:-.3px;
 }
 
 .footer-title span{
@@ -466,7 +520,7 @@ body{padding:8px}
   letter-spacing:1.7px;
 }
 
-/* RESPONSIVE */
+/* MOBILE */
 
 @media(max-width:560px){
 
@@ -554,10 +608,6 @@ body{padding:8px}
   .hero h1{
     font-size:32px;
   }
-
-  .hero-description{
-    font-size:12.5px;
-  }
 }
 </style>
 </head>
@@ -582,15 +632,19 @@ body{padding:8px}
       </h1>
 
       <p class="hero-description">
-        DARTIQ turns performance information
-        into a clearer path forward.
-        Understand what needs work, train
-        with purpose, and measure your development.
+        DARTIQ turns performance information into
+        a clearer path forward. Understand what
+        needs work, train with purpose, and
+        measure your development.
       </p>
 
       <div class="hero-bottom">
-        <span class="hero-tag">PERFORMANCE ANALYSIS</span>
-        <span class="hero-tag">PERSONALIZED TRAINING</span>
+        <span class="hero-tag">
+          PERFORMANCE ANALYSIS
+        </span>
+        <span class="hero-tag">
+          PERSONALIZED TRAINING
+        </span>
       </div>
 
     </div>
@@ -602,7 +656,6 @@ body{padding:8px}
   <section class="intelligence">
 
     <div>
-
       <div class="section-kicker">
         FROM DATA TO DIRECTION
       </div>
@@ -616,7 +669,6 @@ body{padding:8px}
         provide information you can use
         to make smarter training decisions.
       </p>
-
     </div>
 
     <div class="orbit" aria-hidden="true">
@@ -628,7 +680,7 @@ body{padding:8px}
 
   </section>
 
-  <!-- THREE-STAGE COACHING PROCESS -->
+  <!-- COACHING PROCESS -->
 
   <section class="process">
 
@@ -649,16 +701,97 @@ body{padding:8px}
 
     </div>
 
+    <!-- COLLAPSIBLE AI VOICE ABOVE IDENTIFY -->
+
+    <details class="voice-accordion" id="voiceAccordion">
+
+      <summary>
+
+        <div class="voice-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M4 9v6"/>
+            <path d="M8 5v14"/>
+            <path d="M12 2v20"/>
+            <path d="M16 6v12"/>
+            <path d="M20 9v6"/>
+          </svg>
+        </div>
+
+        <div class="voice-heading">
+          <strong>
+            DARTIQ AI Voice Guide
+          </strong>
+
+          <small>
+            <span
+              class="voice-live"
+              id="voiceLive">
+            </span>
+
+            <span id="voiceMiniStatus">
+              AUTO VOICE ENABLED
+            </span>
+          </small>
+        </div>
+
+        <div class="voice-chevron">
+          ⌄
+        </div>
+
+      </summary>
+
+      <div class="voice-body">
+
+        <p>
+          Your personal introduction to the
+          DARTIQ coaching process.
+          English male voice narration.
+        </p>
+
+        <div class="voice-controls">
+
+          <button
+            type="button"
+            class="voice-button primary"
+            id="playVoiceButton">
+            ▶ PLAY GUIDE
+          </button>
+
+          <button
+            type="button"
+            class="voice-button secondary"
+            id="stopVoiceButton">
+            ■ STOP
+          </button>
+
+        </div>
+
+        <div
+          class="voice-status"
+          id="voiceStatus"
+          role="status"
+          aria-live="polite">
+          Preparing automatic voice playback...
+        </div>
+
+      </div>
+
+    </details>
+
+    <!-- IDENTIFY / TRAIN / EVOLVE -->
+
     <div class="journey">
 
       <article class="journey-step">
 
-        <div class="step-number">01</div>
+        <div class="step-number">
+          01
+        </div>
 
         <div class="step-content">
 
           <div class="step-category">
-            ANALYSE
+            IDENTIFY
           </div>
 
           <h3>
@@ -667,8 +800,8 @@ body{padding:8px}
 
           <p>
             Identify scoring patterns,
-            inconsistencies, and areas that
-            deserve attention.
+            inconsistencies, and areas
+            that deserve attention.
           </p>
 
         </div>
@@ -679,7 +812,9 @@ body{padding:8px}
 
       <article class="journey-step">
 
-        <div class="step-number">02</div>
+        <div class="step-number">
+          02
+        </div>
 
         <div class="step-content">
 
@@ -705,7 +840,9 @@ body{padding:8px}
 
       <article class="journey-step">
 
-        <div class="step-number">03</div>
+        <div class="step-number">
+          03
+        </div>
 
         <div class="step-content">
 
@@ -733,61 +870,6 @@ body{padding:8px}
 
   </section>
 
-  <!-- MALE VOICE GUIDE -->
-
-  <section class="voice-section">
-
-    <div class="voice-top">
-
-      <div class="voice-icon">
-
-        <svg viewBox="0 0 24 24">
-          <path d="M4 9v6"/>
-          <path d="M8 5v14"/>
-          <path d="M12 2v20"/>
-          <path d="M16 6v12"/>
-          <path d="M20 9v6"/>
-        </svg>
-
-      </div>
-
-      <div class="voice-heading">
-
-        <h3>
-          DARTIQ AI Voice Guide
-        </h3>
-
-        <p>
-          Hear how the coaching approach
-          can help you train smarter.
-        </p>
-
-      </div>
-
-    </div>
-
-    <div class="voice-action">
-
-      <button
-        id="voiceButton"
-        class="voice-button"
-        type="button"
-        onclick="toggleVoice()">
-        ▶ LISTEN TO THE GUIDE
-      </button>
-
-      <div
-        class="voice-status"
-        id="voiceStatus"
-        role="status"
-        aria-live="polite">
-        Checking available male voices...
-      </div>
-
-    </div>
-
-  </section>
-
   <!-- FOOTER -->
 
   <footer class="footer">
@@ -805,95 +887,120 @@ body{padding:8px}
 </div>
 
 <script>
-/* ==================================================
-   DARTIQ VOICE GUIDE
-   STRICT ENGLISH MALE VOICE
-   BRAND SPOKEN AS ONE WORD
-   NO LETTER-BY-LETTER SPELLING
-   ================================================== */
+/* =========================================
+   DARTIQ AUTOMATIC MALE VOICE GUIDE
 
-const synth =
-  "speechSynthesis" in window
-    ? window.speechSynthesis
-    : null;
+   - Attempts automatic playback
+   - Collapsible voice section
+   - English male voice only
+   - DARTIQ pronounced as one word
+   - No spelled-out brand name
+   - Manual playback fallback
+   ========================================= */
 
-const voiceButton =
-  document.getElementById("voiceButton");
+(function(){
 
-const voiceStatus =
-  document.getElementById("voiceStatus");
+  "use strict";
 
-let activeSpeech = null;
-let playing = false;
+  const synth =
+    "speechSynthesis" in window
+      ? window.speechSynthesis
+      : null;
 
-/*
-  The on-screen brand remains DARTIQ.
-  Speech uses a single phonetic word.
-*/
+  const accordion =
+    document.getElementById("voiceAccordion");
 
-const spokenBrand = "Dartick";
+  const playButton =
+    document.getElementById("playVoiceButton");
 
-const scriptText = [
-  "Welcome to " + spokenBrand + ".",
-  "Your game, decoded.",
-  "Improvement starts with understanding.",
-  "First, analyse your performance.",
-  "Discover scoring patterns and inconsistencies",
-  "that may be holding you back.",
-  "Second, train with purpose.",
-  "Use focused practice to work on",
-  "the areas that need attention.",
-  "Third, measure your progress.",
-  "Review your results over time",
-  "and adapt your training.",
-  "Because better darts is not just",
-  "about throwing more.",
-  "It is about understanding what to improve.",
-  "Stop guessing.",
-  "Start improving."
-].join(" ");
+  const stopButton =
+    document.getElementById("stopVoiceButton");
 
-/* EXPLICITLY NAMED ENGLISH MALE VOICES */
+  const status =
+    document.getElementById("voiceStatus");
 
-const maleVoicePatterns = [
-  /\bguy\b/i,
-  /\bryan\b/i,
-  /\bchristopher\b/i,
-  /\bbrian\b/i,
-  /\bandrew\b/i,
-  /\bdaniel\b/i,
-  /\bdavid\b/i,
-  /\beric\b/i,
-  /\bmark\b/i,
-  /\bthomas\b/i,
-  /\badam\b/i,
-  /\baaron\b/i,
-  /\bjason\b/i,
-  /\bmale\b/i,
-  /english.*male/i
-];
+  const miniStatus =
+    document.getElementById("voiceMiniStatus");
 
-function selectMaleVoice(){
+  const liveDot =
+    document.getElementById("voiceLive");
 
-  if(!synth) return null;
+  let activeSpeech = null;
+  let isSpeaking = false;
+  let autoplayAttempted = false;
+  let startedAtLeastOnce = false;
 
-  const voices = synth.getVoices();
+  /*
+    SPOKEN BRAND
 
-  if(!voices.length) return null;
+    Visible: DARTIQ
+    Spoken: one phonetic word
 
-  const english = voices.filter(
-    voice => /^en(?:-|_)/i.test(voice.lang)
-  );
+    Never send the individual letters
+    to speech synthesis.
+  */
 
-  const males = english.filter(
-    voice => maleVoicePatterns.some(
-      pattern => pattern.test(voice.name)
-    )
-  );
+  const spokenBrand = "Dartick";
 
-  if(!males.length) return null;
+  const narration = [
+    "Welcome to " + spokenBrand + ".",
+    "Your game, decoded.",
 
-  const priorities = [
+    "Every session tells a story.",
+    "The key to improvement is understanding",
+    "what your performance is telling you.",
+
+    "The " + spokenBrand + " coaching approach",
+    "has three connected stages.",
+
+    "Stage one. Identify.",
+    "Understand your performance.",
+    "Find the scoring patterns and inconsistencies",
+    "that may be holding you back.",
+
+    "Stage two. Train.",
+    "Practice with purpose.",
+    "Focus on exercises that target",
+    "the areas requiring improvement.",
+
+    "Stage three. Evolve.",
+    "Track real improvement.",
+    "Review your results and adapt your training",
+    "as your performance develops.",
+
+    "Stop guessing.",
+    "Start improving."
+  ].join(" ");
+
+  /*
+    MALE VOICE SELECTION
+
+    Browser speech synthesis does not
+    expose a standard voice gender field.
+
+    Only known English male voice names
+    are allowed. No default voice fallback.
+  */
+
+  const malePatterns = [
+    /\bguy\b/i,
+    /\bryan\b/i,
+    /\bchristopher\b/i,
+    /\bbrian\b/i,
+    /\bandrew\b/i,
+    /\bdaniel\b/i,
+    /\bdavid\b/i,
+    /\beric\b/i,
+    /\bmark\b/i,
+    /\bthomas\b/i,
+    /\badam\b/i,
+    /\baaron\b/i,
+    /\bjason\b/i,
+    /\bmale\b/i,
+    /english.*male/i
+  ];
+
+  const preferredPatterns = [
     /\bguy\b/i,
     /\bryan\b/i,
     /\bchristopher\b/i,
@@ -902,189 +1009,315 @@ function selectMaleVoice(){
     /\bdaniel\b/i
   ];
 
-  function priority(voice){
+  function findMaleVoice(){
 
-    const index = priorities.findIndex(
-      pattern => pattern.test(voice.name)
+    if(!synth){
+      return null;
+    }
+
+    const voices = synth.getVoices();
+
+    const english = voices.filter(function(voice){
+      return /^en(?:-|_)/i.test(voice.lang);
+    });
+
+    const males = english.filter(function(voice){
+
+      return malePatterns.some(function(pattern){
+        return pattern.test(voice.name);
+      });
+
+    });
+
+    if(!males.length){
+      return null;
+    }
+
+    function priority(voice){
+
+      const index =
+        preferredPatterns.findIndex(function(pattern){
+          return pattern.test(voice.name);
+        });
+
+      return index < 0 ? 99 : index;
+    }
+
+    males.sort(function(a,b){
+      return priority(a) - priority(b);
+    });
+
+    return males[0];
+  }
+
+  function setVoiceState(speaking){
+
+    isSpeaking = speaking;
+
+    liveDot.classList.toggle(
+      "playing",
+      speaking
     );
 
-    return index === -1 ? 99 : index;
+    playButton.textContent =
+      speaking
+        ? "↻ RESTART GUIDE"
+        : "▶ PLAY GUIDE";
+
+    miniStatus.textContent =
+      speaking
+        ? "VOICE PLAYING"
+        : "VOICE READY";
   }
 
-  males.sort((a,b) => priority(a)-priority(b));
+  function stopVoice(){
 
-  return males[0];
-}
-
-function setButtonState(state){
-
-  playing = state;
-
-  voiceButton.textContent = state
-    ? "■ STOP VOICE"
-    : "▶ LISTEN TO THE GUIDE";
-}
-
-function stopVoice(){
-
-  if(synth) synth.cancel();
-
-  activeSpeech = null;
-
-  setButtonState(false);
-
-  voiceStatus.textContent =
-    "Voice stopped.";
-}
-
-function playVoice(){
-
-  if(
-    !synth ||
-    !("SpeechSynthesisUtterance" in window)
-  ){
-    voiceStatus.textContent =
-      "Speech playback is not supported.";
-    return;
-  }
-
-  const maleVoice = selectMaleVoice();
-
-  /*
-    Never use an unverified default voice.
-    If no recognized English male voice exists,
-    do not start playback.
-  */
-
-  if(!maleVoice){
-
-    voiceStatus.textContent =
-      "No recognized English male voice is available.";
-
-    return;
-  }
-
-  synth.cancel();
-
-  const speech =
-    new SpeechSynthesisUtterance(scriptText);
-
-  speech.voice = maleVoice;
-  speech.lang = maleVoice.lang;
-  speech.rate = 0.94;
-  speech.pitch = 0.88;
-  speech.volume = 1;
-
-  activeSpeech = speech;
-
-  speech.onstart = function(){
-
-    if(activeSpeech !== speech) return;
-
-    setButtonState(true);
-
-    voiceStatus.textContent =
-      "Male voice guide playing...";
-  };
-
-  speech.onend = function(){
-
-    if(activeSpeech !== speech) return;
-
-    activeSpeech = null;
-
-    setButtonState(false);
-
-    voiceStatus.textContent =
-      "Guide completed.";
-  };
-
-  speech.onerror = function(event){
-
-    if(activeSpeech !== speech) return;
-
-    activeSpeech = null;
-
-    setButtonState(false);
-
-    if(event.error !== "canceled"){
-      voiceStatus.textContent =
-        "Voice playback could not start.";
+    if(synth){
+      synth.cancel();
     }
-  };
 
-  setButtonState(true);
+    activeSpeech = null;
 
-  voiceStatus.textContent =
-    "Starting voice guide...";
+    setVoiceState(false);
 
-  synth.speak(speech);
-}
+    miniStatus.textContent =
+      "VOICE STOPPED";
 
-function toggleVoice(){
-
-  if(playing){
-    stopVoice();
-  }else{
-    playVoice();
-  }
-}
-
-function updateVoiceAvailability(){
-
-  if(!synth){
-
-    voiceButton.disabled = true;
-
-    voiceStatus.textContent =
-      "Speech playback is not supported.";
-
-    return;
+    status.textContent =
+      "Narration stopped.";
   }
 
-  if(playing) return;
+  function playVoice(auto){
 
-  const voices = synth.getVoices();
+    if(
+      !synth ||
+      !("SpeechSynthesisUtterance" in window)
+    ){
+      status.textContent =
+        "Voice playback is not supported.";
 
-  if(!voices.length){
+      miniStatus.textContent =
+        "VOICE UNAVAILABLE";
 
-    voiceStatus.textContent =
-      "Waiting for browser voices...";
+      return;
+    }
 
-    return;
+    const selectedVoice =
+      findMaleVoice();
+
+    if(!selectedVoice){
+
+      status.textContent =
+        "No recognized English male voice is available.";
+
+      miniStatus.textContent =
+        "MALE VOICE UNAVAILABLE";
+
+      return;
+    }
+
+    synth.cancel();
+
+    const speech =
+      new SpeechSynthesisUtterance(narration);
+
+    speech.voice = selectedVoice;
+    speech.lang = selectedVoice.lang;
+    speech.rate = 0.94;
+    speech.pitch = 0.88;
+    speech.volume = 1;
+
+    activeSpeech = speech;
+
+    speech.onstart = function(){
+
+      if(activeSpeech !== speech){
+        return;
+      }
+
+      startedAtLeastOnce = true;
+
+      setVoiceState(true);
+
+      status.textContent =
+        "Male voice narration is playing.";
+    };
+
+    speech.onend = function(){
+
+      if(activeSpeech !== speech){
+        return;
+      }
+
+      activeSpeech = null;
+
+      setVoiceState(false);
+
+      miniStatus.textContent =
+        "GUIDE COMPLETED";
+
+      status.textContent =
+        "Narration completed.";
+    };
+
+    speech.onerror = function(event){
+
+      if(activeSpeech !== speech){
+        return;
+      }
+
+      activeSpeech = null;
+
+      setVoiceState(false);
+
+      if(event.error === "canceled"){
+        return;
+      }
+
+      miniStatus.textContent =
+        "TAP TO PLAY";
+
+      status.textContent =
+        "Automatic playback may be blocked. Tap PLAY GUIDE.";
+    };
+
+    if(auto){
+
+      miniStatus.textContent =
+        "AUTO PLAY REQUESTED";
+
+      status.textContent =
+        "Starting automatic narration...";
+
+    }else{
+
+      miniStatus.textContent =
+        "STARTING VOICE";
+
+      status.textContent =
+        "Starting male narration...";
+    }
+
+    try{
+
+      synth.speak(speech);
+
+    }catch(error){
+
+      activeSpeech = null;
+
+      setVoiceState(false);
+
+      miniStatus.textContent =
+        "TAP TO PLAY";
+
+      status.textContent =
+        "Use PLAY GUIDE to start narration.";
+    }
   }
 
-  if(selectMaleVoice()){
+  /* MANUAL CONTROLS */
 
-    voiceButton.disabled = false;
-
-    voiceStatus.textContent =
-      "English male voice ready.";
-
-  }else{
-
-    voiceButton.disabled = true;
-
-    voiceStatus.textContent =
-      "No recognized English male voice on this device.";
-  }
-}
-
-if(synth){
-
-  synth.addEventListener(
-    "voiceschanged",
-    updateVoiceAvailability
+  playButton.addEventListener(
+    "click",
+    function(){
+      autoplayAttempted = true;
+      playVoice(false);
+    }
   );
 
-  updateVoiceAvailability();
-}
+  stopButton.addEventListener(
+    "click",
+    function(){
+      autoplayAttempted = true;
+      stopVoice();
+    }
+  );
 
-window.addEventListener("pagehide", function(){
+  /* AUTOMATIC PLAYBACK */
 
-  if(synth) synth.cancel();
+  function attemptAutoplay(){
 
-});
+    if(autoplayAttempted){
+      return;
+    }
+
+    if(!synth){
+      return;
+    }
+
+    const selectedVoice =
+      findMaleVoice();
+
+    if(!selectedVoice){
+      return;
+    }
+
+    autoplayAttempted = true;
+
+    playVoice(true);
+  }
+
+  function initializeVoice(){
+
+    if(!synth){
+
+      status.textContent =
+        "Speech synthesis is unavailable.";
+
+      miniStatus.textContent =
+        "VOICE UNAVAILABLE";
+
+      return;
+    }
+
+    attemptAutoplay();
+  }
+
+  /*
+    Some browsers load their speech
+    voices after the page loads.
+  */
+
+  if(synth){
+
+    synth.addEventListener(
+      "voiceschanged",
+      attemptAutoplay
+    );
+
+    initializeVoice();
+
+    window.addEventListener(
+      "load",
+      attemptAutoplay
+    );
+  }
+
+  /*
+    If autoplay is blocked, a tap on
+    PLAY GUIDE remains available.
+
+    Do not force voice playback through
+    an unrelated user interaction.
+  */
+
+  /* STOP WHEN PAGE CLOSES */
+
+  window.addEventListener(
+    "pagehide",
+    function(){
+
+      if(synth){
+        synth.cancel();
+      }
+
+      activeSpeech = null;
+      isSpeaking = false;
+    }
+  );
+
+})();
 </script>
 
 </body>
