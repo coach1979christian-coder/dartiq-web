@@ -4,6 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#050b18">
 <title>DARTIQ | Why DARTIQ</title>
 
 <style>
@@ -17,9 +18,7 @@
   --border:rgba(57,169,255,.19);
 }
 
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 html,body{
   margin:0;
@@ -32,9 +31,7 @@ html,body{
   overflow-x:hidden;
 }
 
-body{
-  padding:8px;
-}
+body{padding:8px}
 
 .container{
   max-width:640px;
@@ -68,9 +65,7 @@ body{
   font-weight:900;
 }
 
-.header h1 span{
-  color:var(--blue);
-}
+.header h1 span{color:var(--blue)}
 
 .header p{
   margin:12px 0 0;
@@ -105,7 +100,7 @@ body{
   letter-spacing:1px;
 }
 
-/* COLLAPSIBLE VOICE */
+/* VOICE COACH */
 
 .voice{
   margin-bottom:9px;
@@ -313,9 +308,7 @@ body{
   font-weight:900;
 }
 
-.footer strong span{
-  color:var(--blue);
-}
+.footer strong span{color:var(--blue)}
 
 .footer small{
   display:block;
@@ -327,22 +320,10 @@ body{
 }
 
 @media(max-width:380px){
-  .header{
-    padding:21px 15px;
-  }
-
-  .step{
-    gap:11px;
-    padding:14px 11px;
-  }
-
-  .step h3{
-    font-size:14px;
-  }
-
-  .step p{
-    font-size:11px;
-  }
+  .header{padding:21px 15px}
+  .step{gap:11px;padding:14px 11px}
+  .step h3{font-size:14px}
+  .step p{font-size:11px}
 }
 </style>
 </head>
@@ -352,10 +333,7 @@ body{
 <div class="container">
 
   <header class="header">
-
-    <div class="eyebrow">
-      WHY DARTIQ
-    </div>
+    <div class="eyebrow">WHY DARTIQ</div>
 
     <h1>
       Your Game.<br>
@@ -367,7 +345,6 @@ body{
       Train with purpose.
       Turn every session into meaningful progress.
     </p>
-
   </header>
 
   <div class="section-heading">
@@ -375,14 +352,11 @@ body{
     <span>01 / 02 / 03</span>
   </div>
 
-  <!-- AI VOICE COACH -->
-
   <details class="voice" id="voiceAccordion">
 
     <summary id="voiceHeader">
 
       <div class="voice-symbol">
-
         <svg viewBox="0 0 24 24">
           <path d="M4 9v6"/>
           <path d="M8 5v14"/>
@@ -390,26 +364,18 @@ body{
           <path d="M16 6v12"/>
           <path d="M20 9v6"/>
         </svg>
-
       </div>
 
       <div class="voice-copy">
-
-        <strong>
-          AI Voice Coach
-        </strong>
-
+        <strong>AI Voice Coach</strong>
         <small>
           <span
             class="voice-dot"
-            id="voiceDot">
-          </span>
-
+            id="voiceDot"></span>
           <span id="voiceMiniStatus">
             Voice ready
           </span>
         </small>
-
       </div>
 
       <div class="voice-chevron">
@@ -421,8 +387,8 @@ body{
     <div class="voice-body">
 
       <div class="voice-description">
-        Listen to your introduction to
-        the DARTIQ coaching process.
+        Your introduction to the DARTIQ
+        coaching process.
       </div>
 
       <div class="voice-controls">
@@ -452,137 +418,93 @@ body{
       </div>
 
     </div>
-
   </details>
-
-  <!-- IDENTIFY -->
 
   <section class="steps">
 
     <article class="step">
-
-      <div class="step-number">
-        01
-      </div>
-
+      <div class="step-number">01</div>
       <div class="step-content">
-
-        <div class="step-label">
-          IDENTIFY
-        </div>
-
-        <h3>
-          Understand Your Performance
-        </h3>
-
+        <div class="step-label">IDENTIFY</div>
+        <h3>Understand Your Performance</h3>
         <p>
           Discover your scoring patterns,
           inconsistencies, and the areas
           holding your game back.
         </p>
-
       </div>
-
     </article>
 
-    <!-- TRAIN -->
-
     <article class="step">
-
-      <div class="step-number">
-        02
-      </div>
-
+      <div class="step-number">02</div>
       <div class="step-content">
-
-        <div class="step-label">
-          TRAIN
-        </div>
-
-        <h3>
-          Practice With Purpose
-        </h3>
-
+        <div class="step-label">TRAIN</div>
+        <h3>Practice With Purpose</h3>
         <p>
           Focus on targeted exercises
           matched to your performance
           instead of practicing at random.
         </p>
-
       </div>
-
     </article>
 
-    <!-- EVOLVE -->
-
     <article class="step">
-
-      <div class="step-number">
-        03
-      </div>
-
+      <div class="step-number">03</div>
       <div class="step-content">
-
-        <div class="step-label">
-          EVOLVE
-        </div>
-
-        <h3>
-          Measure Your Improvement
-        </h3>
-
+        <div class="step-label">EVOLVE</div>
+        <h3>Measure Your Improvement</h3>
         <p>
           Track scoring, consistency,
           and progress over time.
           Know when your training works.
         </p>
-
       </div>
-
     </article>
 
   </section>
 
   <footer class="footer">
-
     <strong>
       Stop Guessing.
       <span>Start Improving.</span>
     </strong>
-
-    <small>
-      POWERED BY DARTIQ
-    </small>
-
+    <small>POWERED BY DARTIQ</small>
   </footer>
 
 </div>
 
 <script>
-/* ================================================
-   DARTIQ AI VOICE COACH
+/* ==========================================
+   DARTIQ NATURAL VOICE COACH V9
 
-   Uses the same browser speech system
-   and voice fallback as DARTIQ Match Play.
+   Display name: DARTIQ
+   Spoken name: Dartic
 
-   English male voice preferred.
-   Android default fallback allowed.
-   Brand pronounced as ONE word.
-   No spelling DARTIQ.
-   ================================================ */
+   No spelling.
+   No "Dart IQ".
+   No "D A R T I Q".
+
+   Natural voice preference.
+   Android browser fallback.
+   Automatic narration attempt.
+   Manual play and stop.
+   ========================================== */
 
 (function(){
 
 "use strict";
 
-const speechSupported =
-  "speechSynthesis" in window &&
+const synth = window.speechSynthesis;
+
+const supported =
+  !!synth &&
   "SpeechSynthesisUtterance" in window;
 
-const synth =
-  speechSupported
-    ? window.speechSynthesis
-    : null;
+const accordion =
+  document.getElementById("voiceAccordion");
+
+const header =
+  document.getElementById("voiceHeader");
 
 const playButton =
   document.getElementById("playVoice");
@@ -590,343 +512,357 @@ const playButton =
 const stopButton =
   document.getElementById("stopVoice");
 
-const voiceHeader =
-  document.getElementById("voiceHeader");
+const miniStatus =
+  document.getElementById("voiceMiniStatus");
 
 const voiceStatus =
   document.getElementById("voiceStatus");
 
-const miniStatus =
-  document.getElementById("voiceMiniStatus");
-
 const voiceDot =
   document.getElementById("voiceDot");
 
-let currentSpeech = null;
+let activeSpeech = null;
+let speaking = false;
+let stoppedByUser = false;
 let autoAttempted = false;
-let voiceStarted = false;
-let manuallyStopped = false;
-let startCheck = null;
+let startTimer = null;
 
-/* ================================================
-   BRAND PRONUNCIATION
-   ================================================ */
+/* BRAND PRONUNCIATION */
 
-const spokenBrand = "Dartick";
+const BRAND_SPOKEN = "Dartic";
 
 /*
-  Never send D A R T I Q or
-  Dart IQ to the voice engine.
+  Narration uses the spoken version
+  exclusively. DARTIQ remains
+  unchanged everywhere on screen.
 */
 
 const narration = [
-  "Welcome to " + spokenBrand + ".",
+  `Welcome to ${BRAND_SPOKEN}.`,
   "Your game, decoded.",
-  "There are three stages to improving your darts.",
 
-  "First. Identify.",
+  "Every player wants to improve.",
+  "But improvement begins with understanding.",
+
+  `That's where ${BRAND_SPOKEN} comes in.`,
+
+  "Our coaching process has three simple stages.",
+
+  "First, identify.",
   "Understand your performance.",
-  "Discover your scoring patterns",
-  "and the inconsistencies",
-  "that may be holding your game back.",
+  "Discover your scoring patterns,",
+  "your inconsistencies,",
+  "and the areas holding your game back.",
 
-  "Second. Train.",
+  "Second, train.",
   "Practice with purpose.",
-  "Focus on targeted exercises",
-  "matched to your performance.",
+  "Focus on exercises matched",
+  "to your actual performance.",
+  "Every session should have a clear goal.",
 
-  "Third. Evolve.",
+  "Third, evolve.",
   "Measure your improvement.",
-  "Track your scoring and consistency",
-  "over time.",
+  "Track your scoring,",
+  "your consistency,",
+  "and your progress over time.",
 
+  "Know what's improving.",
+  "Know what still needs work.",
+
+  `${BRAND_SPOKEN}.`,
   "Stop guessing.",
   "Start improving."
 ].join(" ");
 
-/* ================================================
-   VOICE SELECTION
+/* ==========================================
+   NATURAL VOICE SELECTION
+   ========================================== */
 
-   Same approach as DARTIQ Match Play:
-   1. Preferred English male voice
-   2. English UK voice
-   3. Any English voice
-   4. Android system default
-   ================================================ */
+function getBestVoice(){
 
-function selectCallerVoice(){
-
-  if(!speechSupported){
+  if(!supported){
     return null;
   }
 
   const voices =
-    synth.getVoices();
+    synth.getVoices() || [];
 
   const english =
-    voices.filter(function(voice){
+    voices.filter(v =>
+      /^en([-_]|$)/i.test(v.lang || "")
+    );
 
-      return (
-        voice.lang &&
-        voice.lang.toLowerCase().startsWith("en")
-      );
-
-    });
-
-  const preferred =
-    english.find(function(voice){
-
-      return /daniel|david|george|ryan|ryan|brian|guy|male|andrew|mark|eric|christopher/i
-        .test(voice.name);
-
-    });
-
-  if(preferred){
-    return preferred;
-  }
-
-  const british =
-    english.find(function(voice){
-
-      return voice.lang.toLowerCase() === "en-gb";
-
-    });
-
-  if(british){
-    return british;
-  }
-
-  if(english.length){
-    return english[0];
+  if(!english.length){
+    return null;
   }
 
   /*
-    Android may return an empty
-    voice list even when its
-    speech engine is available.
+    Prefer known male voices.
 
-    Null means the browser uses
-    its configured default voice.
+    Names vary by operating system.
+    Natural / Neural / Online voices
+    receive additional preference.
   */
+
+  const maleNames =
+    /ryan|guy|davis|david|daniel|george|brian|andrew|mark|eric|christopher|oliver|thomas|james|matthew|male/i;
+
+  const femaleNames =
+    /female|zira|hazel|susan|samantha|victoria|karen|moira|ava|aria|jenny|sonia|natasha|emma/i;
+
+  function rank(voice){
+
+    const name = voice.name || "";
+    const lang = voice.lang || "";
+
+    let score = 0;
+
+    if(maleNames.test(name)){
+      score += 120;
+    }
+
+    if(femaleNames.test(name)){
+      score -= 150;
+    }
+
+    if(/neural|natural|premium|enhanced|online/i.test(name)){
+      score += 45;
+    }
+
+    if(/microsoft|google/i.test(name)){
+      score += 15;
+    }
+
+    if(/^en-GB$/i.test(lang)){
+      score += 12;
+    }
+
+    if(/^en-US$/i.test(lang)){
+      score += 8;
+    }
+
+    if(voice.default){
+      score += 5;
+    }
+
+    return score;
+  }
+
+  const ranked =
+    english
+      .map(voice => ({
+        voice,
+        score:rank(voice)
+      }))
+      .sort((a,b) => b.score-a.score);
+
+  /*
+    Avoid explicitly choosing a voice
+    identified as female.
+
+    If no suitable voice is listed,
+    allow Android's default speech
+    engine as a fallback.
+  */
+
+  if(
+    ranked.length &&
+    ranked[0].score >= 0
+  ){
+    return ranked[0].voice;
+  }
 
   return null;
 }
 
-/* ================================================
+/* ==========================================
    STATUS
-   ================================================ */
+   ========================================== */
 
-function updateStatus(text,speaking){
+function setStatus(message,active){
 
-  miniStatus.textContent = text;
+  miniStatus.textContent = message;
 
   voiceDot.classList.toggle(
     "active",
-    Boolean(speaking)
+    Boolean(active)
   );
-
 }
 
-function clearStartCheck(){
+function clearTimer(){
 
-  if(startCheck){
-    clearTimeout(startCheck);
-    startCheck = null;
+  if(startTimer !== null){
+    clearTimeout(startTimer);
+    startTimer = null;
   }
-
 }
 
-/* ================================================
-   STOP VOICE
-   ================================================ */
+/* ==========================================
+   STOP
+   ========================================== */
 
-function stopVoice(){
+function stopNarration(){
 
-  manuallyStopped = true;
+  stoppedByUser = true;
   autoAttempted = true;
 
-  clearStartCheck();
+  clearTimer();
 
-  if(synth){
+  activeSpeech = null;
+  speaking = false;
+
+  if(supported){
     synth.cancel();
   }
 
-  currentSpeech = null;
-
-  updateStatus(
-    "Voice stopped",
-    false
-  );
+  setStatus("Voice stopped",false);
 
   voiceStatus.textContent =
     "Narration stopped.";
 }
 
-/* ================================================
-   SPEAK
-   ================================================ */
+/* ==========================================
+   PLAY
+   ========================================== */
 
-function speak(autoStart){
+function playNarration(automatic=false){
 
-  if(!speechSupported){
+  if(!supported){
 
-    updateStatus(
-      "Voice unavailable",
-      false
-    );
+    setStatus("Voice unavailable",false);
 
     voiceStatus.textContent =
-      "Speech synthesis is not supported.";
+      "Speech playback is not supported.";
 
     return;
   }
 
-  clearStartCheck();
+  clearTimer();
+
+  activeSpeech = null;
+  speaking = false;
 
   synth.cancel();
+
+  const voice = getBestVoice();
 
   const utterance =
     new SpeechSynthesisUtterance(narration);
 
-  const chosenVoice =
-    selectCallerVoice();
-
   /*
-    Use the selected English voice,
-    or the Android speech engine
-    default when none is listed.
+    Natural speaking parameters.
+
+    Avoid excessively low pitch
+    and artificially slow speech,
+    which create robotic delivery.
   */
 
-  if(chosenVoice){
+  utterance.lang = "en-GB";
+  utterance.rate = 0.97;
+  utterance.pitch = 0.98;
+  utterance.volume = 1;
 
-    utterance.voice =
-      chosenVoice;
+  if(voice){
 
-    utterance.lang =
-      chosenVoice.lang;
-
-  }else{
-
-    utterance.lang =
-      "en-GB";
+    utterance.voice = voice;
+    utterance.lang = voice.lang;
 
   }
 
-  utterance.rate = 0.88;
-  utterance.pitch = 0.8;
-  utterance.volume = 1;
+  activeSpeech = utterance;
 
-  currentSpeech = utterance;
-  voiceStarted = false;
-
-  updateStatus(
-    "Starting voice...",
-    false
-  );
+  setStatus("Preparing voice...",false);
 
   voiceStatus.textContent =
     "Preparing narration...";
 
   utterance.onstart = function(){
 
-    if(currentSpeech !== utterance){
+    if(activeSpeech !== utterance){
       return;
     }
 
-    clearStartCheck();
+    clearTimer();
 
-    voiceStarted = true;
+    speaking = true;
 
-    updateStatus(
-      "Voice playing",
-      true
-    );
+    setStatus("Voice playing",true);
 
     voiceStatus.textContent =
-      "AI Voice Coach is speaking.";
-
+      "Your AI Voice Coach is speaking.";
   };
 
   utterance.onend = function(){
 
-    if(currentSpeech !== utterance){
+    if(activeSpeech !== utterance){
       return;
     }
 
-    clearStartCheck();
+    clearTimer();
 
-    currentSpeech = null;
+    speaking = false;
+    activeSpeech = null;
 
-    updateStatus(
+    setStatus(
       "Narration completed",
       false
     );
 
     voiceStatus.textContent =
       "Narration completed.";
-
   };
 
   utterance.onerror = function(event){
 
-    if(currentSpeech !== utterance){
+    if(activeSpeech !== utterance){
       return;
     }
 
-    clearStartCheck();
+    clearTimer();
 
-    currentSpeech = null;
+    speaking = false;
+    activeSpeech = null;
 
-    if(event.error === "canceled"){
+    if(
+      event.error === "canceled" ||
+      event.error === "interrupted"
+    ){
       return;
     }
 
-    updateStatus(
+    setStatus(
       "Tap PLAY to listen",
       false
     );
 
     voiceStatus.textContent =
-      "Tap PLAY to start the voice guide.";
-
+      "Tap PLAY to start narration.";
   };
 
   try{
 
     synth.speak(utterance);
 
-    /*
-      Resume handles some Android
-      speech engines that start paused.
-    */
-
     if(synth.paused){
       synth.resume();
     }
 
-    if(autoStart){
+    if(automatic){
 
-      /*
-        Some mobile browsers silently
-        block automatic speech.
-
-        Keep manual playback available.
-      */
-
-      startCheck = setTimeout(function(){
+      startTimer = setTimeout(function(){
 
         if(
-          currentSpeech === utterance &&
-          !voiceStarted
+          activeSpeech === utterance &&
+          !speaking
         ){
 
-          updateStatus(
+          setStatus(
             "Tap PLAY to listen",
             false
           );
 
           voiceStatus.textContent =
-            "Tap PLAY if automatic audio did not start.";
+            "Tap PLAY if automatic audio is blocked.";
 
         }
 
@@ -936,97 +872,77 @@ function speak(autoStart){
 
   }catch(error){
 
-    currentSpeech = null;
+    activeSpeech = null;
 
-    updateStatus(
+    setStatus(
       "Tap PLAY to listen",
       false
     );
 
     voiceStatus.textContent =
       "Tap PLAY to start narration.";
-
   }
 }
 
-/* ================================================
-   PLAY BUTTON
-   ================================================ */
+/* ==========================================
+   BUTTON EVENTS
+   ========================================== */
 
 playButton.addEventListener(
   "click",
   function(){
 
-    manuallyStopped = false;
+    stoppedByUser = false;
     autoAttempted = true;
 
-    speak(false);
-
+    playNarration(false);
   }
 );
 
-/* ================================================
-   STOP BUTTON
-   ================================================ */
-
 stopButton.addEventListener(
   "click",
-  stopVoice
+  stopNarration
 );
 
-/* ================================================
-   AUTOMATIC PLAY ON PAGE LOAD
-   ================================================ */
+/* ==========================================
+   AUTOMATIC NARRATION
+   ========================================== */
 
-function attemptAutoPlay(){
+function autoPlay(){
 
   if(
     autoAttempted ||
-    manuallyStopped ||
-    !speechSupported
+    stoppedByUser ||
+    !supported
   ){
     return;
   }
 
   autoAttempted = true;
 
-  speak(true);
+  playNarration(true);
 }
 
-/*
-  Start narration automatically
-  when the page loads.
-*/
-
-if(speechSupported){
+if(supported){
 
   if(document.readyState === "complete"){
 
-    setTimeout(
-      attemptAutoPlay,
-      350
-    );
+    setTimeout(autoPlay,450);
 
   }else{
 
     window.addEventListener(
       "load",
       function(){
-
-        setTimeout(
-          attemptAutoPlay,
-          350
-        );
-
+        setTimeout(autoPlay,450);
       },
       {once:true}
     );
-
   }
 
   /*
-    Load available voices when Android
-    updates the browser's voice list.
+    Android and Chrome can load
+    their available voices late.
   */
 
   if(
@@ -1035,68 +951,61 @@ if(speechSupported){
 
     synth.addEventListener(
       "voiceschanged",
-      selectCallerVoice
+      getBestVoice
     );
-
   }
 
 }else{
 
-  updateStatus(
+  setStatus(
     "Voice unavailable",
     false
   );
 
   voiceStatus.textContent =
-    "Voice playback is not supported.";
-
+    "Speech playback is not supported.";
 }
 
-/* ================================================
-   ANDROID TOUCH FALLBACK
+/* ==========================================
+   MOBILE TOUCH FALLBACK
+   ========================================== */
 
-   If autoplay was blocked, opening
-   the voice accordion also tries
-   speech during the user's tap.
-   ================================================ */
-
-voiceHeader.addEventListener(
+header.addEventListener(
   "click",
   function(){
 
     if(
-      manuallyStopped ||
-      voiceStarted ||
-      !speechSupported
+      stoppedByUser ||
+      speaking ||
+      !supported
     ){
       return;
     }
 
     autoAttempted = true;
 
-    speak(false);
-
+    playNarration(false);
   }
 );
 
-/* ================================================
-   CLEANUP
-   ================================================ */
+/* ==========================================
+   PAGE CLEANUP
+   ========================================== */
 
 window.addEventListener(
   "pagehide",
   function(){
 
-    manuallyStopped = true;
+    stoppedByUser = true;
 
-    clearStartCheck();
+    clearTimer();
 
-    if(synth){
+    activeSpeech = null;
+    speaking = false;
+
+    if(supported){
       synth.cancel();
     }
-
-    currentSpeech = null;
-
   }
 );
 
