@@ -287,7 +287,8 @@ const MATCH_START_WEBHOOK=
 
 const MATCH_COMPLETION_WEBHOOK=
 "https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/89ab5acf-6067-4022-ab9d-f5a02ab99698";
-
+const POST_MATCH_ANALYSIS_WEBHOOK=
+"https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/14d384bc-3cab-4998-b788-826359db17dc";
 const email=param("email");
 const playerID=param("player","playerid","userid");
 const playerName=(
@@ -517,6 +518,8 @@ async function sendEvent(eventType,data={}){
  MATCH_START_WEBHOOK:
  eventType==="match_complete"?
  MATCH_COMPLETION_WEBHOOK:
+  eventType==="match_main_issue"?
+POST_MATCH_ANALYSIS_WEBHOOK:
  WEBHOOK;
  try{
   const response=await fetch(url,{
