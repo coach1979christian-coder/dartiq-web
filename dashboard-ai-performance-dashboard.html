@@ -937,7 +937,7 @@ body{
   function prepareSpeech(text){
 
     return String(text)
-      .replace(/\bDARTIQ\b/gi,"Dart eye cue")
+      .replace(/\bDARTIQ\b/gi,"DARTIQ")
       .replace(/\s+/g," ")
       .trim();
 
@@ -984,9 +984,7 @@ body{
 
     }
 
-    return english.find(v=>v.default) ||
-           english[0] ||
-           null;
+   return null;
 
   }
 
@@ -1013,7 +1011,11 @@ body{
     synth.cancel();
 
     selectedVoice = chooseVoice();
-
+if (!selectedVoice) {
+  document.getElementById("voiceStatus").textContent =
+    "Male voice unavailable on this device.";
+  return;
+}
     const spokenText = prepareSpeech(text);
 
     if(!spokenText) return;
