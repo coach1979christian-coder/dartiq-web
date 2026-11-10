@@ -269,6 +269,7 @@ h1{font-size:23px}
 "use strict";
 
 const params=new URLSearchParams(location.search);
+
 const param=(...names)=>{
  for(const name of names){
   const value=params.get(name);
@@ -276,6 +277,7 @@ const param=(...names)=>{
  }
  return "";
 };
+
 const $=id=>document.getElementById(id);
 const fmt=n=>Number(n||0).toFixed(2);
 
@@ -293,9 +295,11 @@ const POST_MATCH_ANALYSIS_WEBHOOK=
 
 const email=param("email");
 const playerID=param("player","playerid","userid");
+
 const playerName=(
  param("playername","playerName","name","firstName")||"Player"
 ).replace(/[{}]/g,"");
+
 const spokenName=playerName.split(/\s+/)[0];
 const language=param("language","lang")||"EN";
 
@@ -485,6 +489,7 @@ const coachingLibrary={
 function getCoaching(issue){
  const base=coachingLibrary[issue]||
  coachingLibrary["Inconsistent Grouping"];
+
  return {
   ...base,
   drill:param("recommendedDrill","drill")||base.drill,
@@ -632,7 +637,14 @@ function showScreen(id){
 
 function startSession(){
  showScreen("formats");
- speak("Welcome "+spokenName+" to Dartic Match Play. Select your match format.");
+
+ const readyLine=readyPromptPlayed?"":
+  "Ready to play? Start a new DARTIQ match session. ";
+
+ speak(
+  readyLine+"Welcome "+spokenName+
+  " to DARTIQ Match Play. Select your match format."
+ );
 }
 
 function selectFormat(n){
@@ -658,7 +670,7 @@ function selectFormat(n){
  );
 }
 
-/* DARTIQ MASTER CALLER V8.6 */
+/* DARTIQ MASTER CALLER */
 
 const speechSupported=
  "speechSynthesis" in window &&
@@ -668,48 +680,56 @@ let voiceEnabled=true;
 let callerVoice=null;
 let lastCall="";
 let speechSequence=0;
+let readyPromptPlayed=false;
+let readyPromptAttempted=false;
 
 const spokenBrand="Dartic";
 
 function selectCallerVoice(){
- if(!speechSupported)return;
+ if(!speechSupported)return null;
 
  const voices=speechSynthesis.getVoices()||[];
 
- const candidates=voices.filter(v=>
-  /^en([-_]|$)/i.test(v.lang||"")
+ const english=voices.filter(v=>
+  /^en(?:[-_]|$)/i.test(v.lang||"")
  );
 
  const maleNames=
- /ryan|guy|davis|david|daniel|george|brian|andrew|mark|eric|christopher|oliver|thomas|james|matthew|male/i;
+ /\b(?:ryan|guy|david|daniel|george|brian|andrew|mark|eric|christopher|oliver|thomas|james|matthew|richard|arthur|alex|aaron|fred|ralph|albert|bruce|reed|rocko|eddy|grandpa|nathan|michael|male)\b/i;
 
  const femaleNames=
- /female|zira|hazel|susan|samantha|victoria|karen|moira|ava|aria|jenny|sonia|natasha|emma/i;
+ /\b(?:female|zira|hazel|susan|samantha|victoria|karen|moira|ava|aria|jenny|sonia|natasha|emma|amy|fiona|tessa|allison|joanna|salli|shelley|sandy|joelle|serena|martha)\b/i;
 
- const ranked=candidates
- .filter(v=>maleNames.test(v.name||"")&&!femaleNames.test(v.name||""))
- .map(voice=>{
-  const name=voice.name||"";
-  let score=0;
+ const ranked=english
+  .filter(v=>
+   maleNames.test(v.name||"") &&
+   !femaleNames.test(v.name||"")
+  )
+  .map(voice=>{
+   const name=voice.name||"";
+   let score=100;
 
-  if(maleNames.test(name))score+=120;
-  if(/neural|natural|premium|enhanced|online/i.test(name))score+=45;
-  if(/microsoft|google/i.test(name))score+=15;
-  if(/^en-GB$/i.test(voice.lang))score+=12;
-  if(/^en-US$/i.test(voice.lang))score+=8;
-  if(voice.default)score+=5;
+   if(/neural|natural|premium|enhanced/i.test(name))score+=25;
+   if(/microsoft|google/i.test(name))score+=10;
+   if(/^en-GB$/i.test(voice.lang))score+=12;
+   if(/^en-US$/i.test(voice.lang))score+=6;
+   if(voice.default)score+=3;
 
-  return {voice,score};
- })
- .sort((a,b)=>b.score-a.score);
+   return {voice,score};
+  })
+  .sort((a,b)=>b.score-a.score);
 
  callerVoice=ranked[0]?.voice||null;
 
- if($("voiceStatus")){
-  $("voiceStatus").textContent=callerVoice?
-   "Voice ready: "+callerVoice.name:
-   "Male voice unavailable on this device.";
+ const status=$("voiceStatus");
+
+ if(status){
+  status.textContent=callerVoice?
+   "Male voice ready: "+callerVoice.name:
+   "No recognised male English voice on this device.";
  }
+
+ return callerVoice;
 }
 
 function speechText(text){
@@ -724,38 +744,50 @@ function speechText(text){
 
 function speak(text,options={}){
  lastCall=text;
- $("callerLine").textContent=text;
+
+ const callerLine=$("callerLine");
+ if(callerLine)callerLine.textContent=text;
 
  if(!voiceEnabled||!speechSupported)return;
 
  const sequence=++speechSequence;
+
  speechSynthesis.cancel();
 
  const deliver=()=>{
   if(sequence!==speechSequence||!voiceEnabled)return;
 
-  selectCallerVoice();
-  if(!callerVoice)return;
+  const voice=selectCallerVoice();
 
-  const utterance=new SpeechSynthesisUtterance(
-   speechText(text)
-  );
+  if(!voice)return;
 
-  utterance.lang="en-GB";
-  utterance.rate=options.celebration?0.82:0.98;
-  utterance.pitch=options.celebration?1.25:1.0;
+  const script=options.celebration?
+   "ONE HUNDRED! ... AND EIGHTY!":
+   speechText(text);
+
+  const utterance=new SpeechSynthesisUtterance(script);
+
+  utterance.voice=voice;
+  utterance.lang=voice.lang||"en-GB";
+  utterance.rate=options.celebration?0.80:0.97;
+  utterance.pitch=options.celebration?0.82:0.94;
   utterance.volume=1;
 
-  utterance.voice=callerVoice;
-  utterance.lang=callerVoice.lang;
+  utterance.onstart=()=>{
+   if(options.setupIntro){
+    readyPromptPlayed=true;
+   }
+  };
 
   utterance.onerror=event=>{
    if(sequence!==speechSequence)return;
 
    if(!["interrupted","canceled"].includes(event.error)){
-    if($("voiceStatus")){
-     $("voiceStatus").textContent=
-      "Tap TEST VOICE if audio is blocked.";
+    const status=$("voiceStatus");
+
+    if(status){
+     status.textContent=
+      "Voice blocked. Tap to enable the male caller.";
     }
    }
   };
@@ -768,10 +800,29 @@ function speak(text,options={}){
  };
 
  if(!speechSynthesis.getVoices().length){
-  setTimeout(deliver,180);
+  setTimeout(deliver,200);
  }else{
   deliver();
  }
+}
+
+function announceReady(){
+ if(
+  readyPromptPlayed||
+  readyPromptAttempted||
+  !$("setup").classList.contains("active")
+ ){
+  return;
+ }
+
+ if(!selectCallerVoice())return;
+
+ readyPromptAttempted=true;
+
+ speak(
+  "Ready to play? Start a new DARTIQ match session.",
+  {setupIntro:true}
+ );
 }
 
 function repeatLastCall(){
@@ -921,14 +972,17 @@ function ringPath(r1,r2,a1,a2){
  const p2=polar(r2,a2);
  const p3=polar(r1,a2);
  const p4=polar(r1,a1);
+
  return `M${p1} A${r2} ${r2} 0 0 1 ${p2} L${p3} A${r1} ${r1} 0 0 0 ${p4} Z`;
 }
 
 function svgElement(tag,attributes){
  const element=document.createElementNS(NS,tag);
+
  for(const [key,value] of Object.entries(attributes)){
   element.setAttribute(key,value);
  }
+
  board.appendChild(element);
  return element;
 }
@@ -1294,6 +1348,7 @@ function updateStats(){
 function recordFirst9(score,darts,scores=[]){
  const available=Math.max(0,9-first9Darts);
  const take=Math.min(darts,available);
+
  if(take<=0)return;
 
  if(take===darts){
@@ -1324,6 +1379,7 @@ async function confirmVisit(){
 
  const darts=boardMode?
   currentDarts.map(d=>({...d})):[];
+
  const score=boardMode?
   darts.reduce((sum,d)=>sum+d.score,0):
   Number(keyInput);
@@ -1404,6 +1460,7 @@ async function confirmVisit(){
 
  if(!bust){
   remaining=after;
+
   if(score===180)count180++;
   else if(score>=140)count140++;
   else if(score>=100)count100++;
@@ -1449,6 +1506,7 @@ async function confirmVisit(){
   }else{
    speak(numberWords(actual));
   }
+
   message("Visit recorded • "+remaining+" remaining.");
  }
 
@@ -1514,6 +1572,7 @@ async function opponentWonLeg(){
  currentLeg++;
  remaining=501;
  updateStats();
+
  message("OPPONENT WON LEG • Start leg "+currentLeg+".");
 
  if(!ok){
@@ -1575,6 +1634,14 @@ async function completeMatch(){
  saveRecovery("completed");
  showScreen("completed");
 
+ speak(
+  matchResult==="Won"?
+  "Game shot "+spokenName+"! You won the match, "+
+  legsWon+" legs to "+opponentLegs+". Congratulations!":
+  "Match completed, "+opponentLegs+" legs to "+
+  legsWon+". Review your performance results."
+ );
+
  $("completionMessage").textContent="Saving match results...";
 
  const ok=await sendEvent("match_complete",{
@@ -1628,6 +1695,7 @@ function buildIssues(){
 
    $("analysisButton").classList.remove("hidden");
    saveRecovery("mainIssue");
+
    speak(
     "Main issue selected: "+name+
     ". Press Get My AI Analysis to continue."
@@ -1807,10 +1875,31 @@ if(speechSupported){
  selectCallerVoice();
 
  if(typeof speechSynthesis.addEventListener==="function"){
-  speechSynthesis.addEventListener(
-   "voiceschanged",selectCallerVoice
-  );
+  speechSynthesis.addEventListener("voiceschanged",()=>{
+   selectCallerVoice();
+
+   if(!readyPromptAttempted){
+    announceReady();
+   }
+  });
  }
+
+ window.addEventListener("load",()=>{
+  setTimeout(announceReady,500);
+ });
+
+ document.addEventListener("pointerdown",event=>{
+  if(
+   !$("setup").classList.contains("active")||
+   readyPromptPlayed
+  ){
+   return;
+  }
+
+  if(event.target.closest("button"))return;
+
+  announceReady();
+ },{once:true});
 }
 
 drawBoard();
@@ -1818,6 +1907,7 @@ buildIssues();
 updateInput();
 updateStats();
 restoreRecovery();
+
 </script>
 </body>
 </html>
