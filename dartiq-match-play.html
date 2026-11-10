@@ -662,7 +662,7 @@ function selectCallerVoice(){
  /female|zira|hazel|susan|samantha|victoria|karen|moira|ava|aria|jenny|sonia|natasha|emma/i;
 
  const ranked=candidates
- .filter(v=>!femaleNames.test(v.name||""))
+ .filter(v=>maleNames.test(v.name||"")&&!femaleNames.test(v.name||""))
  .map(voice=>{
   const name=voice.name||"";
   let score=0;
@@ -681,7 +681,7 @@ function selectCallerVoice(){
  if($("voiceStatus")){
   $("voiceStatus").textContent=callerVoice?
    "Voice ready: "+callerVoice.name:
-   "Using device speech voice.";
+   "Male voice unavailable on this device.";
  }
 }
 
@@ -705,6 +705,7 @@ function speak(text){
   if(sequence!==speechSequence||!voiceEnabled)return;
 
   selectCallerVoice();
+  if(!callerVoice)return;
 
   const utterance=new SpeechSynthesisUtterance(
    speechText(text)
