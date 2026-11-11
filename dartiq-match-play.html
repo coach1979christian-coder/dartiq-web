@@ -615,30 +615,27 @@ const spokenBrand="Dartic";
 function selectCallerVoice(){
  if(!speechSupported)return null;
  const voices=speechSynthesis.getVoices()||[];
- const maleNames=
- /\b(ryan|guy|david|daniel|george|brian|andrew|mark|eric|christopher|oliver|thomas|james|matthew|richard|arthur|alex|aaron|fred|ralph|albert|bruce|reed|nathan|michael)\b/i;
- const femaleNames=
- /\b(female|zira|hazel|susan|samantha|victoria|karen|moira|ava|aria|jenny|sonia|natasha|emma|amy|fiona|tessa|allison|joanna|salli|serena)\b/i;
- const ranked=voices
- .filter(v=>/^en(?:[-_]|$)/i.test(v.lang||""))
- .filter(v=>maleNames.test(v.name||"")&&!femaleNames.test(v.name||""))
- .map(voice=>{
-  let score=0;
+ const maleNames=/\b(ryan|guy|david|daniel|george|brian|andrew|mark|eric|christopher|oliver|thomas|james|matthew|richard|arthur|alex|aaron|fred|ralph|albert|bruce|reed|nathan|michael)\b/i;
+ const femaleNames=/\b(female|zira|hazel|susan|samantha|victoria|karen|moira|ava|aria|jenny|sonia|natasha|emma|amy|fiona|tessa|allison|joanna|salli|serena)\b/i;
+ const english=voices.filter(v=>/^en(?:[-_]|$)/i.test(v.lang||""));
+ const ranked=english.map(voice=>{
   const name=voice.name||"";
-  if(/ryan/i.test(name))score+=100;
-  if(/george/i.test(name))score+=90;
-  if(/guy/i.test(name))score+=85;
-  if(/david/i.test(name))score+=80;
-  if(/daniel/i.test(name))score+=75;
-  if(/neural|natural|premium/i.test(name))score+=35;
-  if(/^en-GB$/i.test(voice.lang))score+=15;
+  let score=0;
+  if(maleNames.test(name)&&!femaleNames.test(name))score+=100;
+  if(femaleNames.test(name))score-=100;
+  if(/ryan/i.test(name))score+=50;
+  if(/george/i.test(name))score+=45;
+  if(/guy/i.test(name))score+=40;
+  if(/david/i.test(name))score+=35;
+  if(/daniel/i.test(name))score+=30;
+  if(/neural|natural|premium/i.test(name))score+=20;
+  if(/^en-GB$/i.test(voice.lang||""))score+=10;
   return {voice,score};
  }).sort((a,b)=>b.score-a.score);
-
  callerVoice=ranked[0]?.voice||null;
  $("voiceStatus").textContent=callerVoice?
- "MASTER CALLER: "+callerVoice.name:
- "No recognised male English voice available.";
+  "MASTER CALLER: "+callerVoice.name:
+  "Using browser default voice.";
  return callerVoice;
 }
 
