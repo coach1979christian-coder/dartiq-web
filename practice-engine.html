@@ -6,104 +6,325 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#050b18">
 <title>DARTIQ | PERFORMANCE TRAINING</title>
+
 <style>
 :root{
- --bg:#050b18;--panel:#10243a;--blue:#39a9ff;
- --white:#f5fbff;--muted:#9cb7cc;--line:#39a9ff44;
- --green:#35c978;--red:#ff6573
+ --bg:#050b18;
+ --panel:#10243a;
+ --blue:#39a9ff;
+ --white:#f5fbff;
+ --muted:#9cb7cc;
+ --line:#39a9ff44;
+ --green:#35c978;
+ --red:#ff6573;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--white);font-family:Arial,sans-serif}
+body{
+ margin:0;
+ background:var(--bg);
+ color:var(--white);
+ font-family:Arial,sans-serif;
+}
 button{cursor:pointer;font:inherit}
 button:disabled{opacity:.45;cursor:not-allowed}
 .hidden{display:none!important}
 .app{max-width:760px;margin:auto;padding:12px 12px 35px}
 header{text-align:center;padding:20px 0}
-.logo{color:var(--blue);font-size:19px;font-weight:900;letter-spacing:6px;text-shadow:0 0 18px #39a9ff80}
+.logo{
+ color:var(--blue);
+ font-size:19px;
+ font-weight:900;
+ letter-spacing:6px;
+ text-shadow:0 0 18px #39a9ff80;
+}
 h1{font-size:24px;margin:12px 0;font-weight:900}
 .subtitle{color:var(--muted);font-size:10px;letter-spacing:2px}
-.screen-heading{display:flex;justify-content:space-between;align-items:center;margin:12px 0 16px;color:var(--blue);font-size:12px;font-weight:900}
-.step{border:1px solid var(--line);border-radius:20px;padding:8px;color:var(--muted);font-size:10px}
-.panel,details{background:linear-gradient(180deg,#10243a,#081827);border:1px solid var(--line);border-radius:15px;margin-bottom:12px;overflow:hidden}
+.screen-heading{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ margin:12px 0 16px;
+ color:var(--blue);
+ font-size:12px;
+ font-weight:900;
+}
+.step{
+ border:1px solid var(--line);
+ border-radius:20px;
+ padding:8px;
+ color:var(--muted);
+ font-size:10px;
+}
+.panel,details{
+ background:linear-gradient(180deg,#10243a,#081827);
+ border:1px solid var(--line);
+ border-radius:15px;
+ margin-bottom:12px;
+ overflow:hidden;
+}
 .panel{padding:16px}
-.eyebrow{font-size:10px;color:var(--blue);font-weight:900;letter-spacing:1px}
+.eyebrow{
+ font-size:10px;
+ color:var(--blue);
+ font-weight:900;
+ letter-spacing:1px;
+}
 .training-name{font-size:23px;font-weight:900;margin:12px 0}
 .muted{color:var(--muted);font-size:11px;line-height:1.6}
-.info-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:13px}
-.info{background:#071827;border:1px solid var(--line);border-radius:11px;padding:12px 8px;text-align:center}
-.info small{display:block;color:var(--muted);font-size:9px;font-weight:900}
-.info strong{display:block;margin-top:9px;font-size:11px;overflow-wrap:anywhere}
-summary{list-style:none;cursor:pointer;padding:17px 15px;font-size:13px;font-weight:900;background:#12324c}
+.info-grid{
+ display:grid;
+ grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:8px;
+ margin-top:13px;
+}
+.info{
+ background:#071827;
+ border:1px solid var(--line);
+ border-radius:11px;
+ padding:12px 8px;
+ text-align:center;
+}
+.info small{
+ display:block;
+ color:var(--muted);
+ font-size:9px;
+ font-weight:900;
+}
+.info strong{
+ display:block;
+ margin-top:9px;
+ font-size:11px;
+ overflow-wrap:anywhere;
+}
+summary{
+ list-style:none;
+ cursor:pointer;
+ padding:17px 15px;
+ font-size:13px;
+ font-weight:900;
+ background:#12324c;
+}
 summary::-webkit-details-marker{display:none}
-summary:after{content:"⌄";float:right;color:var(--blue);font-size:19px}
+summary:after{
+ content:"⌄";
+ float:right;
+ color:var(--blue);
+ font-size:19px;
+}
 details[open] summary:after{content:"⌃"}
-.summary-sub{display:block;font-size:10px;font-weight:400;color:var(--muted);margin-top:5px}
+.summary-sub{
+ display:block;
+ font-size:10px;
+ font-weight:400;
+ color:var(--muted);
+ margin-top:5px;
+}
 .content{padding:16px;border-top:1px solid var(--line)}
 .field{margin-bottom:17px}
 .field:last-child{margin-bottom:0}
-.field label{display:block;color:var(--blue);font-size:10px;font-weight:900;text-transform:uppercase;margin-bottom:7px}
-.field div{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;line-height:1.7;color:#d2e7f5}
-.grades{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.grade{background:#071827;padding:12px;border-radius:9px;font-size:11px;line-height:1.6}
+.field label{
+ display:block;
+ color:var(--blue);
+ font-size:10px;
+ font-weight:900;
+ text-transform:uppercase;
+ margin-bottom:7px;
+}
+.field div{
+ white-space:pre-wrap;
+ overflow-wrap:anywhere;
+ font-size:12px;
+ line-height:1.7;
+ color:#d2e7f5;
+}
+.grades{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:8px;
+}
+.grade{
+ background:#071827;
+ padding:12px;
+ border-radius:9px;
+ font-size:11px;
+ line-height:1.6;
+}
 .grade strong{display:block;margin-bottom:5px}
 .grade.red{border-left:4px solid #ff6573}
 .grade.orange{border-left:4px solid #ff9f43}
 .grade.yellow{border-left:4px solid #ffd447}
 .grade.green{border-left:4px solid #35c978}
-.primary{width:100%;background:var(--blue);color:#031322;border:0;border-radius:11px;padding:17px;font-size:13px;font-weight:900;margin-top:12px}
-.secondary{width:100%;background:#102b43;border:1px solid var(--line);color:var(--blue);border-radius:11px;padding:13px;font-size:11px;font-weight:900;margin-top:10px}
-.tabs{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:15px 0}
-.tab{background:#081827;border:1px solid var(--line);border-radius:10px;color:var(--muted);padding:15px;font-size:12px;font-weight:900}
+.primary{
+ width:100%;
+ background:var(--blue);
+ color:#031322;
+ border:0;
+ border-radius:11px;
+ padding:17px;
+ font-size:13px;
+ font-weight:900;
+ margin-top:12px;
+}
+.secondary{
+ width:100%;
+ background:#102b43;
+ border:1px solid var(--line);
+ color:var(--blue);
+ border-radius:11px;
+ padding:13px;
+ font-size:11px;
+ font-weight:900;
+ margin-top:10px;
+}
+.tabs{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:9px;
+ margin:15px 0;
+}
+.tab{
+ background:#081827;
+ border:1px solid var(--line);
+ border-radius:10px;
+ color:var(--muted);
+ padding:15px;
+ font-size:12px;
+ font-weight:900;
+}
 .tab.active{background:var(--blue);color:#031322}
-.visit-display{text-align:center;background:#030b15;border:1px solid var(--line);border-radius:11px;padding:16px;margin:12px 0}
+.visit-display{
+ text-align:center;
+ background:#030b15;
+ border:1px solid var(--line);
+ border-radius:11px;
+ padding:16px;
+ margin:12px 0;
+}
 .visit-display strong{display:block;font-size:42px}
 .visit-display small{color:var(--muted);font-size:10px}
-.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.key{min-height:54px;background:#15324b;color:white;border:1px solid #28516f;border-radius:10px;font-size:21px;font-weight:900}
-.dart-slots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.dart-slot{background:#071827;border:1px solid var(--line);border-radius:10px;padding:12px 5px;text-align:center}
-.dart-slot small{display:block;color:var(--muted);font-size:9px;margin-bottom:7px}
+.keypad{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:8px;
+}
+.key{
+ min-height:54px;
+ background:#15324b;
+ color:white;
+ border:1px solid #28516f;
+ border-radius:10px;
+ font-size:21px;
+ font-weight:900;
+}
+.dart-slots{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:8px;
+}
+.dart-slot{
+ background:#071827;
+ border:1px solid var(--line);
+ border-radius:10px;
+ padding:12px 5px;
+ text-align:center;
+}
+.dart-slot small{
+ display:block;
+ color:var(--muted);
+ font-size:9px;
+ margin-bottom:7px;
+}
 .dart-slot strong{font-size:12px}
-
 .board-wrap{max-width:440px;margin:auto;aspect-ratio:1}
 #dartboard{width:100%;height:100%;touch-action:manipulation}
-.board-actions,.voice-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
-.board-actions button,.voice-actions button{background:#102b43;color:var(--blue);border:1px solid var(--line);border-radius:10px;padding:13px 5px;font-size:11px;font-weight:900}
-.message{text-align:center;font-size:11px;color:var(--muted);line-height:1.6;margin-top:12px}
-.footer{text-align:center;color:#68879d;font-size:9px;margin-top:25px;letter-spacing:1px}
-
-.mastercaller{background:linear-gradient(180deg,#12324d,#071725);border:1px solid #39a9ff90;border-radius:14px;padding:15px;margin-bottom:12px}
-.caller-heading{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.board-actions,.voice-actions{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:9px;
+ margin-top:12px;
+}
+.board-actions button,.voice-actions button{
+ background:#102b43;
+ color:var(--blue);
+ border:1px solid var(--line);
+ border-radius:10px;
+ padding:13px 5px;
+ font-size:11px;
+ font-weight:900;
+}
+.message{
+ text-align:center;
+ font-size:11px;
+ color:var(--muted);
+ line-height:1.6;
+ margin-top:12px;
+}
+.footer{
+ text-align:center;
+ color:#68879d;
+ font-size:9px;
+ margin-top:25px;
+ letter-spacing:1px;
+}
+.mastercaller{
+ background:linear-gradient(180deg,#12324d,#071725);
+ border:1px solid #39a9ff90;
+ border-radius:14px;
+ padding:15px;
+ margin-bottom:12px;
+}
+.caller-heading{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:8px;
+}
 .caller-heading strong{color:var(--blue);font-size:13px}
-.caller-badge{font-size:9px;color:#77e8a8;border:1px solid #35c97870;border-radius:20px;padding:7px}
-.caller-text{text-align:center;font-size:17px;font-weight:900;line-height:1.5;padding:15px 0 8px}
-.caller-sub{text-align:center;color:var(--muted);font-size:10px;line-height:1.5}
-
+.caller-badge{
+ font-size:9px;
+ color:#77e8a8;
+ border:1px solid #35c97870;
+ border-radius:20px;
+ padding:7px;
+}
+.caller-text{
+ text-align:center;
+ font-size:17px;
+ font-weight:900;
+ line-height:1.5;
+ padding:15px 0 8px;
+}
+.caller-sub{
+ text-align:center;
+ color:var(--muted);
+ font-size:10px;
+ line-height:1.5;
+}
 .match-scoreboard{
  background:linear-gradient(180deg,#102a43,#061421);
  border:1px solid #39a9ff77;
  border-radius:14px;
  padding:14px;
- margin-bottom:12px
+ margin-bottom:12px;
 }
 .match-topline{
  display:flex;
  justify-content:space-between;
  align-items:center;
  gap:8px;
- margin-bottom:12px
+ margin-bottom:12px;
 }
 .match-topline span{
  font-size:10px;
  font-weight:900;
  color:var(--blue);
- letter-spacing:1px
+ letter-spacing:1px;
 }
 .match-topline .format{
  color:var(--muted);
  border:1px solid var(--line);
  border-radius:20px;
- padding:6px 10px
+ padding:6px 10px;
 }
 .match-player-row{
  display:grid;
@@ -114,94 +335,130 @@ details[open] summary:after{content:"⌃"}
  background:#061321;
  border:1px solid var(--line);
  border-radius:11px;
- padding:15px 12px
+ padding:15px 12px;
 }
 .match-remaining{
  grid-area:remaining;
  text-align:left;
  min-width:0;
  border:0;
- padding:0
+ padding:0;
 }
 .match-remaining strong{
  display:block;
  color:var(--blue);
  font-size:clamp(40px,10vw,60px);
  font-weight:900;
- line-height:1
+ line-height:1;
 }
 .match-remaining small{
  display:block;
  color:var(--muted);
  font-size:9px;
  font-weight:900;
- margin-top:7px
+ margin-top:7px;
 }
 .match-player-name{
  grid-area:player;
  font-size:13px;
  font-weight:900;
  text-align:right;
- overflow-wrap:anywhere
+ overflow-wrap:anywhere;
 }
 .match-player-name small{
  display:block;
  color:var(--muted);
  font-size:9px;
- margin-top:6px
+ margin-top:6px;
 }
 .match-legs{
  grid-area:legs;
  text-align:center;
  min-width:55px;
  border-left:1px solid var(--line);
- padding-left:12px
+ padding-left:12px;
 }
-.match-legs strong{
- display:block;
- font-size:23px
-}
-.match-legs small{
- color:var(--muted);
- font-size:9px
-}
+.match-legs strong{display:block;font-size:23px}
+.match-legs small{color:var(--muted);font-size:9px}
 .match-mini-stats{
  display:grid;
  grid-template-columns:repeat(3,1fr);
  gap:8px;
- margin-top:10px
+ margin-top:10px;
 }
 .match-mini-stat{
  background:#071827;
  border-radius:9px;
  text-align:center;
- padding:9px 4px
+ padding:9px 4px;
 }
-.match-mini-stat strong{
- display:block;
- font-size:16px
-}
+.match-mini-stat strong{display:block;font-size:16px}
 .match-mini-stat small{
  display:block;
  font-size:9px;
  color:var(--muted);
- margin-top:5px
+ margin-top:5px;
 }
-.practice-section>summary{background:#102a43;padding:15px;font-size:12px}
+.practice-section>summary{
+ background:#102a43;
+ padding:15px;
+ font-size:12px;
+}
 .practice-section>.content{background:#071827}
 .practice-section[open]>summary{color:var(--blue)}
-
 .results-hero{text-align:center;padding:24px 15px}
 .results-hero h2{color:var(--blue);font-size:23px}
-.results-hero p{color:var(--muted);font-size:12px;line-height:1.7}
-.result-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:14px 0}
-.result-tile{background:#071827;border:1px solid var(--line);border-radius:12px;text-align:center;padding:17px 8px}
-.result-tile strong{display:block;font-size:27px;color:var(--blue)}
-.result-tile small{display:block;font-size:10px;color:var(--muted);margin-top:8px}
-.result-grade{text-align:center;padding:18px;border:1px solid var(--line);border-radius:12px;background:#071827}
-.result-grade strong{display:block;font-size:30px;color:var(--blue);margin:8px 0}
+.results-hero p{
+ color:var(--muted);
+ font-size:12px;
+ line-height:1.7;
+}
+.result-grid{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:9px;
+ margin:14px 0;
+}
+.result-tile{
+ background:#071827;
+ border:1px solid var(--line);
+ border-radius:12px;
+ text-align:center;
+ padding:17px 8px;
+}
+.result-tile strong{
+ display:block;
+ font-size:27px;
+ color:var(--blue);
+}
+.result-tile small{
+ display:block;
+ font-size:10px;
+ color:var(--muted);
+ margin-top:8px;
+}
+.result-grade{
+ text-align:center;
+ padding:18px;
+ border:1px solid var(--line);
+ border-radius:12px;
+ background:#071827;
+}
+.result-grade strong{
+ display:block;
+ font-size:30px;
+ color:var(--blue);
+ margin:8px 0;
+}
 .result-grade small{font-size:10px;color:var(--muted)}
-.history-row{display:flex;justify-content:space-between;gap:10px;padding:12px 4px;border-bottom:1px solid #39a9ff22;font-size:11px}
+.history-row{
+ display:flex;
+ justify-content:space-between;
+ gap:10px;
+ padding:12px 4px;
+ border-bottom:1px solid #39a9ff22;
+ font-size:11px;
+}
 .history-row strong{color:var(--blue)}
 @media(max-width:390px){
  .app{padding:8px}
@@ -214,8 +471,10 @@ details[open] summary:after{content:"⌃"}
 }
 </style>
 </head>
+
 <body>
 <main class="app">
+
 <header>
 <div class="logo">DARTIQ</div>
 <h1 id="pageTitle">PERFORMANS INSTRUCTION</h1>
@@ -230,76 +489,198 @@ details[open] summary:after{content:"⌃"}
 
 <div class="panel">
 <div class="eyebrow">TODAY'S TRAINING</div>
-<div class="training-name" id="practiceName">501 Focused Practice</div>
-<div class="muted" id="trainingFocus">Personalized training</div>
-<div class="info-grid">
-<div class="info"><small>GOAL</small><strong id="objectiveValue">—</strong></div>
-<div class="info"><small>TARGET</small><strong id="targetValue">—</strong></div>
-<div class="info"><small>COACH FOCUS</small><strong id="focusValue">—</strong></div>
+<div class="training-name" id="practiceName">
+501 Focused Practice
 </div>
-<div class="muted" style="margin-top:14px" id="coachName">COACH KEITH ALLEN GUTHER</div>
+<div class="muted" id="trainingFocus">
+Personalized training
+</div>
+
+<div class="info-grid">
+<div class="info">
+<small>GOAL</small>
+<strong id="objectiveValue">—</strong>
+</div>
+<div class="info">
+<small>TARGET</small>
+<strong id="targetValue">—</strong>
+</div>
+<div class="info">
+<small>COACH FOCUS</small>
+<strong id="focusValue">—</strong>
+</div>
+</div>
+
+<div class="muted" style="margin-top:14px" id="coachName">
+COACH KEITH ALLEN GUTHER
+</div>
 </div>
 
 <details open>
-<summary>◉ AI COACH<span class="summary-sub">Personalized coaching with voice instructions</span></summary>
+<summary>
+◉ AI COACH
+<span class="summary-sub">
+Personalized coaching with voice instructions
+</span>
+</summary>
+
 <div class="content">
 <div id="aiCoachContent"></div>
+
 <div class="voice-actions">
-<button type="button" onclick="playInstructionVoice()">▶ PLAY INSTRUCTIONS</button>
-<button type="button" onclick="pauseInstructionVoice()">⏸ PAUSE / RESUME</button>
+<button type="button" onclick="playInstructionVoice()">
+▶ PLAY INSTRUCTIONS
+</button>
+<button type="button" onclick="pauseInstructionVoice()">
+⏸ PAUSE / RESUME
+</button>
 </div>
-<button class="secondary" type="button" onclick="stopInstructionVoice()">■ STOP VOICE</button>
-<div class="message" id="instructionVoiceStatus">Voice instructions ready</div>
+
+<button class="secondary" type="button"
+onclick="stopInstructionVoice()">
+■ STOP VOICE
+</button>
+
+<div class="message" id="instructionVoiceStatus"
+aria-live="polite">
+Voice instructions ready
+</div>
 </div>
 </details>
 
 <details open>
-<summary>🎯 PRACTICE INSTRUCTIONS<span class="summary-sub">Purpose, execution and technique</span></summary>
+<summary>
+🎯 PRACTICE INSTRUCTIONS
+<span class="summary-sub">
+Purpose, execution and technique
+</span>
+</summary>
 <div class="content">
-<div class="field"><label>Why This Practice</label><div id="whyValue">—</div></div>
-<div class="field"><label>How To Practice</label><div id="executionValue">—</div></div>
-<div class="field"><label>Watch For</label><div id="avoidValue">—</div></div>
+<div class="field">
+<label>Why This Practice</label>
+<div id="whyValue">—</div>
+</div>
+<div class="field">
+<label>How To Practice</label>
+<div id="executionValue">—</div>
+</div>
+<div class="field">
+<label>Watch For</label>
+<div id="avoidValue">—</div>
+</div>
 </div>
 </details>
 
 <details>
-<summary>🎓 KEITH'S METHODOLOGY<span class="summary-sub">Professional training framework</span></summary>
+<summary>
+🎓 KEITH'S METHODOLOGY
+<span class="summary-sub">
+Professional training framework
+</span>
+</summary>
 <div class="content">
-<div class="field"><label>Coach</label><div id="keithCoachValue">—</div></div>
-<div class="field"><label>Training Rules</label><div id="keithRulesValue">—</div></div>
-<div class="field"><label>Primary Metric</label><div id="primaryValue">—</div></div>
-<div class="field"><label>Secondary Metric</label><div id="secondaryValue">—</div></div>
-<div class="field"><label>Success Target</label><div id="keithTargetValue">—</div></div>
+<div class="field">
+<label>Coach</label>
+<div id="keithCoachValue">—</div>
+</div>
+<div class="field">
+<label>Training Rules</label>
+<div id="keithRulesValue">—</div>
+</div>
+<div class="field">
+<label>Primary Metric</label>
+<div id="primaryValue">—</div>
+</div>
+<div class="field">
+<label>Secondary Metric</label>
+<div id="secondaryValue">—</div>
+</div>
+<div class="field">
+<label>Success Target</label>
+<div id="keithTargetValue">—</div>
+</div>
 </div>
 </details>
 
 <details>
-<summary>📊 GRADING & COACHING ACTIONS<span class="summary-sub">Performance levels and next actions</span></summary>
+<summary>
+📊 GRADING & COACHING ACTIONS
+<span class="summary-sub">
+Performance levels and next actions
+</span>
+</summary>
+
 <div class="content">
 <div class="grades">
-<div class="grade red"><strong>RED</strong><span id="redValue">—</span><p id="redActionValue"></p></div>
-<div class="grade orange"><strong>ORANGE</strong><span id="orangeValue">—</span><p id="orangeActionValue"></p></div>
-<div class="grade yellow"><strong>YELLOW</strong><span id="yellowValue">—</span><p id="yellowActionValue"></p></div>
-<div class="grade green"><strong>GREEN</strong><span id="greenValue">—</span><p id="greenActionValue"></p></div>
+<div class="grade red">
+<strong>RED</strong>
+<span id="redValue">—</span>
+<p id="redActionValue"></p>
 </div>
-<div class="field" style="margin-top:15px"><label>Coaching Logic</label><div id="improvementValue">—</div></div>
+
+<div class="grade orange">
+<strong>ORANGE</strong>
+<span id="orangeValue">—</span>
+<p id="orangeActionValue"></p>
+</div>
+
+<div class="grade yellow">
+<strong>YELLOW</strong>
+<span id="yellowValue">—</span>
+<p id="yellowActionValue"></p>
+</div>
+
+<div class="grade green">
+<strong>GREEN</strong>
+<span id="greenValue">—</span>
+<p id="greenActionValue"></p>
+</div>
+</div>
+
+<div class="field" style="margin-top:15px">
+<label>Coaching Logic</label>
+<div id="improvementValue">—</div>
+</div>
 </div>
 </details>
 
 <details>
-<summary>📈 WHAT TO TRACK<span class="summary-sub">Your performance measurements</span></summary>
-<div class="content"><div class="field"><div id="trackValue">—</div></div></div>
-</details>
-
-<details>
-<summary>🏁 AFTER PRACTICE<span class="summary-sub">Review, reflect and retest</span></summary>
+<summary>
+📈 WHAT TO TRACK
+<span class="summary-sub">
+Your performance measurements
+</span>
+</summary>
 <div class="content">
-<div class="field"><label>Reminder</label><div id="reminderValue">—</div></div>
-<div class="field"><label>Next Step</label><div id="afterValue">—</div></div>
+<div class="field">
+<div id="trackValue">—</div>
+</div>
 </div>
 </details>
 
-<button class="primary" type="button" onclick="startPractice()">🎯 START PRACTICE</button>
+<details>
+<summary>
+🏁 AFTER PRACTICE
+<span class="summary-sub">
+Review, reflect and retest
+</span>
+</summary>
+<div class="content">
+<div class="field">
+<label>Reminder</label>
+<div id="reminderValue">—</div>
+</div>
+<div class="field">
+<label>Next Step</label>
+<div id="afterValue">—</div>
+</div>
+</div>
+</details>
+
+<button class="primary" type="button"
+onclick="startPractice()">
+🎯 START PRACTICE
+</button>
 </section>
 
 <section id="practiceScreen" class="hidden">
@@ -311,16 +692,26 @@ details[open] summary:after{content:"⌃"}
 <div class="mastercaller">
 <div class="caller-heading">
 <strong>🎙 AI MASTERCALLER</strong>
-<span class="caller-badge" id="callerBadge">● READY</span>
+<span class="caller-badge" id="callerBadge">
+● READY
+</span>
 </div>
-<div class="caller-text" id="callerAnnouncement">Welcome to the oche</div>
-<div class="caller-sub" id="callerPlayer">Automatic score announcements</div>
+
+<div class="caller-text" id="callerAnnouncement">
+Welcome to the oche
+</div>
+
+<div class="caller-sub" id="callerPlayer">
+Automatic score announcements
+</div>
 </div>
 
 <div class="match-scoreboard">
 <div class="match-topline">
 <span>🎯 LIVE SCOREBOARD</span>
-<span class="format" id="matchFormat">501 • DOUBLE OUT</span>
+<span class="format" id="matchFormat">
+501 • DOUBLE OUT
+</span>
 </div>
 
 <div class="match-player-row">
@@ -341,14 +732,31 @@ PLAYER
 </div>
 
 <div class="match-mini-stats">
-<div class="match-mini-stat"><strong id="average">0.00</strong><small id="averageLabel">3-DART AVG</small></div>
-<div class="match-mini-stat"><strong id="dartsThrown">0</strong><small>DARTS</small></div>
-<div class="match-mini-stat"><strong id="scoreboardVisit">1</strong><small id="scoreboardVisitLabel">VISIT</small></div>
+<div class="match-mini-stat">
+<strong id="average">0.00</strong>
+<small id="averageLabel">3-DART AVG</small>
+</div>
+
+<div class="match-mini-stat">
+<strong id="dartsThrown">0</strong>
+<small>DARTS</small>
+</div>
+
+<div class="match-mini-stat">
+<strong id="scoreboardVisit">1</strong>
+<small id="scoreboardVisitLabel">VISIT</small>
+</div>
 </div>
 </div>
 
 <details class="practice-section" id="scoringPanel" open>
-<summary>🎯 LIVE SCORING<span class="summary-sub" id="scoringSubtitle">Choose keypad or dartboard</span></summary>
+<summary>
+🎯 LIVE SCORING
+<span class="summary-sub" id="scoringSubtitle">
+Choose keypad or dartboard
+</span>
+</summary>
+
 <div class="content">
 <div class="screen-heading">
 <span id="scoringTitle">LIVE SCORING</span>
@@ -356,8 +764,15 @@ PLAYER
 </div>
 
 <div class="tabs" id="modeTabs">
-<button type="button" class="tab active" id="keypadTab" onclick="setMode('keypad')">▦ KEYPAD</button>
-<button type="button" class="tab" id="dartboardTab" onclick="setMode('dartboard')">🎯 DARTBOARD</button>
+<button type="button" class="tab active"
+id="keypadTab" onclick="setMode('keypad')">
+▦ KEYPAD
+</button>
+
+<button type="button" class="tab"
+id="dartboardTab" onclick="setMode('dartboard')">
+🎯 DARTBOARD
+</button>
 </div>
 
 <div id="keypadMode">
@@ -365,6 +780,7 @@ PLAYER
 <strong id="scoreDisplay">0</strong>
 <small>CURRENT VISIT SCORE</small>
 </div>
+
 <div class="keypad">
 <button type="button" class="key" onclick="press('1')">1</button>
 <button type="button" class="key" onclick="press('2')">2</button>
@@ -383,45 +799,98 @@ PLAYER
 
 <div id="dartboardMode" class="hidden">
 <div class="dart-slots">
-<div class="dart-slot"><small>DART 1</small><strong id="dart1">—</strong></div>
-<div class="dart-slot"><small>DART 2</small><strong id="dart2">—</strong></div>
-<div class="dart-slot"><small>DART 3</small><strong id="dart3">—</strong></div>
+<div class="dart-slot">
+<small>DART 1</small>
+<strong id="dart1">—</strong>
 </div>
+<div class="dart-slot">
+<small>DART 2</small>
+<strong id="dart2">—</strong>
+</div>
+<div class="dart-slot">
+<small>DART 3</small>
+<strong id="dart3">—</strong>
+</div>
+</div>
+
 <div class="visit-display">
 <strong id="boardVisitScore">0</strong>
 <small>CURRENT VISIT SCORE</small>
 </div>
+
 <div class="board-wrap">
-<svg id="dartboard" viewBox="-230 -230 460 460" aria-label="Interactive dartboard"></svg>
+<svg id="dartboard" viewBox="-230 -230 460 460"
+aria-label="Interactive dartboard"></svg>
 </div>
+
 <div class="board-actions">
 <button type="button" onclick="addMiss()">MISS</button>
 <button type="button" onclick="undoDart()">UNDO DART</button>
 </div>
 </div>
 
-<button class="primary" type="button" id="confirmButton" onclick="confirmVisit()">CONFIRM VISIT</button>
-<div class="message" id="message" aria-live="polite">Enter your first visit.</div>
+<button class="primary" type="button"
+id="confirmButton" onclick="confirmVisit()">
+CONFIRM VISIT
+</button>
+
+<div class="message" id="message" aria-live="polite">
+Enter your first visit.
+</div>
 </div>
 </details>
 
 <details class="practice-section">
-<summary>📋 VISIT HISTORY<span class="summary-sub">Recorded visits</span></summary>
-<div class="content"><div id="visitHistory" class="muted">No visits recorded yet.</div></div>
-</details>
-
-<details class="practice-section">
-<summary>🎓 TRAINING REFERENCE<span class="summary-sub">Review your coaching objective</span></summary>
+<summary>
+📋 VISIT HISTORY
+<span class="summary-sub">Recorded visits</span>
+</summary>
 <div class="content">
-<div class="field"><label>Current Drill</label><div id="liveDrill">—</div></div>
-<div class="field"><label>Main Issue</label><div id="liveIssue">—</div></div>
-<div class="field"><label>Success Target</label><div id="liveTarget">—</div></div>
-<button type="button" class="secondary" onclick="showInstructions()">VIEW FULL INSTRUCTIONS</button>
+<div id="visitHistory" class="muted">
+No visits recorded yet.
+</div>
 </div>
 </details>
 
-<button type="button" class="primary" id="finishButton" onclick="finishPractice()">🏁 FINISH PRACTICE</button>
-<div class="message" id="finishMessage">Your results will appear on Screen 3.</div>
+<details class="practice-section">
+<summary>
+🎓 TRAINING REFERENCE
+<span class="summary-sub">
+Review your coaching objective
+</span>
+</summary>
+
+<div class="content">
+<div class="field">
+<label>Current Drill</label>
+<div id="liveDrill">—</div>
+</div>
+
+<div class="field">
+<label>Main Issue</label>
+<div id="liveIssue">—</div>
+</div>
+
+<div class="field">
+<label>Success Target</label>
+<div id="liveTarget">—</div>
+</div>
+
+<button type="button" class="secondary"
+onclick="showInstructions()">
+VIEW FULL INSTRUCTIONS
+</button>
+</div>
+</details>
+
+<button type="button" class="primary"
+id="finishButton" onclick="finishPractice()">
+🏁 FINISH PRACTICE
+</button>
+
+<div class="message" id="finishMessage">
+Your results will appear on Screen 3.
+</div>
 </section>
 
 <section id="resultsScreen" class="hidden">
@@ -433,56 +902,120 @@ PLAYER
 <div class="panel results-hero">
 <div class="eyebrow">DARTIQ PERFORMANCE REPORT</div>
 <h2 id="resultTitle">TRAINING COMPLETE</h2>
-<p id="resultDescription">Your practice session has been recorded.</p>
+<p id="resultDescription">
+Your practice session has been recorded.
+</p>
 </div>
 
 <div class="panel">
 <div class="eyebrow">PLAYER PERFORMANCE</div>
 <div class="training-name" id="resultPlayer">PLAYER</div>
 <div class="muted" id="resultDrill">Training session</div>
+
 <div class="result-grid">
-<div class="result-tile"><strong id="resultAverage">0.00</strong><small>3-DART AVERAGE</small></div>
-<div class="result-tile"><strong id="resultDarts">0</strong><small>DARTS THROWN</small></div>
-<div class="result-tile"><strong id="resultVisits">0</strong><small>VISITS</small></div>
-<div class="result-tile"><strong id="resultRemaining">501</strong><small>REMAINING</small></div>
-<div class="result-tile"><strong id="result100">0</strong><small>100+ SCORES</small></div>
-<div class="result-tile"><strong id="result140">0</strong><small>140+ SCORES</small></div>
-<div class="result-tile"><strong id="result180">0</strong><small>180 SCORES</small></div>
-<div class="result-tile"><strong id="resultCheckout">—</strong><small>HIGHEST CHECKOUT</small></div>
-<div class="result-tile"><strong id="resultLegs">0</strong><small>LEGS WON</small></div>
-<div class="result-tile"><strong id="resultPoints">0</strong><small>TOTAL POINTS</small></div>
+<div class="result-tile">
+<strong id="resultAverage">0.00</strong>
+<small>3-DART AVERAGE</small>
+</div>
+<div class="result-tile">
+<strong id="resultDarts">0</strong>
+<small>DARTS THROWN</small>
+</div>
+<div class="result-tile">
+<strong id="resultVisits">0</strong>
+<small>VISITS</small>
+</div>
+<div class="result-tile">
+<strong id="resultRemaining">501</strong>
+<small>REMAINING</small>
+</div>
+<div class="result-tile">
+<strong id="result100">0</strong>
+<small>100+ SCORES</small>
+</div>
+<div class="result-tile">
+<strong id="result140">0</strong>
+<small>140+ SCORES</small>
+</div>
+<div class="result-tile">
+<strong id="result180">0</strong>
+<small>180 SCORES</small>
+</div>
+<div class="result-tile">
+<strong id="resultCheckout">—</strong>
+<small>HIGHEST CHECKOUT</small>
+</div>
+<div class="result-tile">
+<strong id="resultLegs">0</strong>
+<small>LEGS WON</small>
+</div>
+<div class="result-tile">
+<strong id="resultPoints">0</strong>
+<small>TOTAL POINTS</small>
+</div>
 </div>
 </div>
 
 <div class="panel">
 <div class="eyebrow">AI PERFORMANCE REVIEW</div>
+
 <div class="result-grade">
 <small>SESSION STATUS</small>
 <strong id="resultStatus">COMPLETE</strong>
 <small id="resultStatusDescription">Training reviewed</small>
 </div>
-<div class="field" style="margin-top:20px"><label>Main Training Issue</label><div id="resultIssue">—</div></div>
-<div class="field"><label>Coach Advice</label><div id="resultAdvice">—</div></div>
-<div class="field"><label>Success Target</label><div id="resultTarget">—</div></div>
-<div class="field"><label>Next Action</label><div id="resultNextAction">—</div></div>
+
+<div class="field" style="margin-top:20px">
+<label>Main Training Issue</label>
+<div id="resultIssue">—</div>
+</div>
+
+<div class="field">
+<label>Coach Advice</label>
+<div id="resultAdvice">—</div>
+</div>
+
+<div class="field">
+<label>Success Target</label>
+<div id="resultTarget">—</div>
+</div>
+
+<div class="field">
+<label>Next Action</label>
+<div id="resultNextAction">—</div>
+</div>
 </div>
 
 <details class="practice-section">
-<summary>📋 FULL VISIT HISTORY<span class="summary-sub">Your recorded performance</span></summary>
-<div class="content"><div id="resultHistory">—</div></div>
+<summary>
+📋 FULL VISIT HISTORY
+<span class="summary-sub">
+Your recorded performance
+</span>
+</summary>
+<div class="content">
+<div id="resultHistory">—</div>
+</div>
 </details>
 
-<button type="button" class="primary" id="saveButton" onclick="saveSession()">SAVE SESSION TO GLIDE</button>
+<button type="button" class="primary"
+id="saveButton" onclick="saveSession()">
+SAVE SESSION TO GLIDE
+</button>
+
 <div class="message" id="saveStatus"></div>
 </section>
 
-<div class="footer">DARTIQ • INTELLIGENT DARTS COACHING</div>
+<div class="footer">
+DARTIQ • INTELLIGENT DARTS COACHING
+</div>
 </main>
 
 <script>
 "use strict";
 
 const q=new URLSearchParams(location.search);
+
 const get=(...keys)=>{
  for(const key of keys){
   const value=q.get(key);
@@ -490,11 +1023,15 @@ const get=(...keys)=>{
  }
  return "";
 };
+
 const $=id=>document.getElementById(id);
+
 const put=(id,value,fallback="—")=>{
  const el=$(id);
  if(!el)return;
- el.textContent=value===undefined||value===null||value===""?
+
+ el.textContent=
+  value===undefined||value===null||value===""?
   fallback:String(value);
 };
 
@@ -502,9 +1039,11 @@ const sessionID=get("session","sessionID");
 const email=get("email");
 const player=get("player","playerid");
 const userid=get("userid");
-const playerName=get("playerName","playername","name")||"Player";
+const playerName=
+ get("playerName","playername","name")||"Player";
 const language=get("language","lang")||"EN";
-const drill=get("drill","practice")||"501 Focused Practice";
+const drill=
+ get("drill","practice")||"501 Focused Practice";
 const mainIssue=get("mainIssue","focus");
 const focus=get("focus","mainIssue");
 
@@ -515,7 +1054,8 @@ const saveWebhook=
 const doubleTroubleWebhook=
  "https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/2876503c-d138-44a2-adfd-7815bd4b834c";
 
-const doubleTrouble=drill.toLowerCase().includes("double trouble");
+const doubleTrouble=
+ drill.toLowerCase().includes("double trouble");
 
 const fields={
  practiceName:drill,
@@ -523,15 +1063,18 @@ const fields={
  objectiveValue:get("objective"),
  targetValue:get("target"),
  focusValue:focus,
- coachName:"COACH "+(get("keithcoach","coach")||"KEITH ALLEN GUTHER"),
+ coachName:"COACH "+
+  (get("keithcoach","coach")||"KEITH ALLEN GUTHER"),
  whyValue:get("why"),
  executionValue:get("execution"),
  avoidValue:get("avoid"),
- keithCoachValue:get("keithcoach","coach")||"Keith Allen Guther",
+ keithCoachValue:
+  get("keithcoach","coach")||"Keith Allen Guther",
  keithRulesValue:get("keithrules","rules"),
  primaryValue:get("keithprimary","primarymetric"),
  secondaryValue:get("keithsecondary","secondarymetric"),
- keithTargetValue:get("keithtarget","successtarget"),
+ keithTargetValue:
+  get("keithtarget","successtarget"),
  redValue:get("keithred","red"),
  orangeValue:get("keithorange","orange"),
  yellowValue:get("keithyellow","yellow"),
@@ -552,37 +1095,55 @@ const fields={
  resultDrill:drill,
  resultIssue:mainIssue,
  resultAdvice:get("aiAdvice","coachAdvice","advice"),
- resultTarget:get("keithtarget","successtarget","target"),
- resultNextAction:get("nextAction","aiNextAction","after")
+ resultTarget:
+  get("keithtarget","successtarget","target"),
+ resultNextAction:
+  get("nextAction","aiNextAction","after")
 };
-Object.entries(fields).forEach(([id,value])=>put(id,value));
+
+Object.entries(fields).forEach(
+ ([id,value])=>put(id,value)
+);
 
 function buildCoach(){
  const root=$("aiCoachContent");
  root.replaceChildren();
+
  const entries=[
   ["Main Issue",mainIssue],
   ["Training Objective",get("objective")],
   ["Coach Focus",focus],
   ["Success Target",get("keithtarget","target")],
-  ["AI Analysis",get("aiSummary","ai_summary","coachSummary")],
-  ["Coach Advice",get("aiAdvice","coachAdvice","advice")],
-  ["Recommended Drill",get("recommendedDrill","aiDrill")],
-  ["Next Action",get("nextAction","aiNextAction")]
+  ["AI Analysis",
+   get("aiSummary","ai_summary","coachSummary")],
+  ["Coach Advice",
+   get("aiAdvice","coachAdvice","advice")],
+  ["Recommended Drill",
+   get("recommendedDrill","aiDrill")],
+  ["Next Action",
+   get("nextAction","aiNextAction")]
  ];
+
  let count=0;
+
  for(const [label,value] of entries){
   if(!value)continue;
+
   count++;
+
   const field=document.createElement("div");
   field.className="field";
+
   const title=document.createElement("label");
   title.textContent=label;
+
   const body=document.createElement("div");
   body.textContent=value;
+
   field.append(title,body);
   root.append(field);
  }
+
  if(!count){
   root.textContent=
    "Follow your assigned practice instructions. "+
@@ -590,7 +1151,16 @@ function buildCoach(){
    "review your performance against the success target.";
  }
 }
+
 buildCoach();
+
+/* =============================================
+   DARTIQ MALE AI VOICE ENGINE
+   - MALE VOICES ONLY
+   - DARTIQ PRONOUNCED AS ONE WORD
+   - AUTOMATIC INSTRUCTION BRIEFING
+   - MANUAL REPLAY AND PAUSE
+   ============================================= */
 
 const speechSupported=
  "speechSynthesis" in window &&
@@ -601,58 +1171,177 @@ let speechType=null;
 let speechVoice=null;
 let practiceStarted=false;
 
+let instructionVoiceStarted=false;
+let instructionAutoAttempted=false;
+
+const spokenBrand="Dartic";
+
+/* NEVER SELECT A DEFAULT FEMALE VOICE */
+
 function chooseVoice(){
  if(!speechSupported)return null;
- const voices=speechSynthesis.getVoices();
- const english=voices.filter(v=>v.lang.toLowerCase().startsWith("en"));
- return english.find(v=>/david|daniel|ryan|george|guy|male/i.test(v.name))||
-  english.find(v=>v.lang.toLowerCase()==="en-gb")||
-  english[0]||null;
+
+ const voices=speechSynthesis.getVoices()||[];
+
+ const maleNames=
+ /\b(?:david|daniel|ryan|george|guy|andrew|brian|oliver|alex|aaron|arthur|fred|rishi|reed|mark|thomas|james|matthew|eric|michael|richard|male)\b/i;
+
+ const femaleNames=
+ /\b(?:female|zira|hazel|susan|samantha|victoria|karen|moira|ava|aria|jenny|sonia|natasha|emma|amy|fiona|tessa|allison|joanna|salli|serena)\b/i;
+
+ const available=voices.filter(v=>
+  /^en(?:[-_]|$)/i.test(v.lang||"") &&
+  maleNames.test(v.name||"") &&
+  !femaleNames.test(v.name||"")
+ );
+
+ const preferred=[
+  /microsoft guy/i,
+  /microsoft andrew/i,
+  /microsoft david/i,
+  /google uk english male/i,
+  /\bdaniel\b/i,
+  /\bryan\b/i,
+  /\bryan\b/i,
+  /\bgeorge\b/i,
+  /\bmale\b/i
+ ];
+
+ for(const pattern of preferred){
+  const match=available.find(v=>
+   pattern.test(v.name||"")
+  );
+
+  if(match)return match;
+ }
+
+ return available[0]||null;
 }
+
+/* DISPLAY ALWAYS SAYS DARTIQ
+   VOICE ALWAYS RECEIVES DARTIC */
+
+function speechText(text){
+ return String(text)
+  .replace(/\bDART\s*[-._]?\s*I\s*[-._]?\s*Q\b/gi,
+   spokenBrand)
+  .replace(/\bDARTIQ\b/gi,spokenBrand)
+  .replace(/\s+/g," ")
+  .trim();
+}
+
 function stopSpeech(){
  speechToken++;
- if(speechSupported)speechSynthesis.cancel();
+
+ if(speechSupported){
+  speechSynthesis.cancel();
+ }
+
  speechType=null;
 }
+
 function speakText(text,type="caller"){
- if(type==="caller")put("callerAnnouncement",text);
- if(!speechSupported){
-  if(type==="caller")put("callerBadge","● UNAVAILABLE");
-  else put("instructionVoiceStatus","Speech unavailable in this browser.");
-  return;
+ if(type==="caller"){
+  put("callerAnnouncement",text);
  }
+
+ if(!speechSupported){
+  if(type==="caller"){
+   put("callerBadge","● UNAVAILABLE");
+  }else{
+   put(
+    "instructionVoiceStatus",
+    "Speech unavailable in this browser."
+   );
+  }
+  return false;
+ }
+
+ speechVoice=chooseVoice();
+
+ if(!speechVoice){
+  if(type==="caller"){
+   put("callerBadge","● NO MALE VOICE");
+  }else{
+   put(
+    "instructionVoiceStatus",
+    "Male English voice unavailable on this device."
+   );
+  }
+  return false;
+ }
+
  stopSpeech();
+
  const token=speechToken;
  speechType=type;
- const utterance=new SpeechSynthesisUtterance(text);
- utterance.lang="en-GB";
+
+ const utterance=
+  new SpeechSynthesisUtterance(speechText(text));
+
+ utterance.voice=speechVoice;
+ utterance.lang=speechVoice.lang;
+
  utterance.rate=type==="caller"?.88:.93;
- utterance.pitch=type==="caller"?.85:1;
+ utterance.pitch=type==="caller"?.82:.86;
  utterance.volume=1;
- speechVoice=chooseVoice();
- if(speechVoice){
-  utterance.voice=speechVoice;
-  utterance.lang=speechVoice.lang;
- }
+
  utterance.onstart=()=>{
   if(token!==speechToken)return;
-  if(type==="caller")put("callerBadge","● SPEAKING");
-  else put("instructionVoiceStatus","Reading instructions...");
+
+  if(type==="caller"){
+   put("callerBadge","● SPEAKING");
+  }else{
+   instructionVoiceStarted=true;
+   put(
+    "instructionVoiceStatus",
+    "Reading instructions with male AI voice..."
+   );
+  }
  };
+
  utterance.onend=()=>{
   if(token!==speechToken)return;
+
   speechType=null;
-  if(type==="caller")put("callerBadge","● READY");
-  else put("instructionVoiceStatus","Instructions completed.");
+
+  if(type==="caller"){
+   put("callerBadge","● READY");
+  }else{
+   put(
+    "instructionVoiceStatus",
+    "Instructions completed."
+   );
+  }
  };
- utterance.onerror=()=>{
+
+ utterance.onerror=event=>{
   if(token!==speechToken)return;
+
   speechType=null;
-  if(type==="caller")put("callerBadge","● READY");
-  else put("instructionVoiceStatus","Voice playback stopped.");
+
+  if(type==="caller"){
+   put("callerBadge","● READY");
+  }else{
+   put(
+    "instructionVoiceStatus",
+    event.error==="not-allowed"?
+    "Tap PLAY INSTRUCTIONS to enable male voice.":
+    "Voice playback stopped. Tap PLAY INSTRUCTIONS."
+   );
+  }
  };
+
  speechSynthesis.speak(utterance);
+
+ if(speechSynthesis.paused){
+  speechSynthesis.resume();
+ }
+
+ return true;
 }
+
+/* PERSONALIZED TRAINING INSTRUCTIONS */
 
 function buildInstructionSpeech(){
  const sections=[
@@ -661,69 +1350,230 @@ function buildInstructionSpeech(){
   ["Training objective",get("objective")],
   ["Practice instructions",get("execution")],
   ["Things to watch for",get("avoid")],
-  ["Coach Keith's training rules",get("keithrules","rules")],
-  ["Success target",get("keithtarget","successtarget","target")],
-  ["Coach advice",get("aiAdvice","coachAdvice","advice")],
-  ["Next action",get("nextAction","aiNextAction")]
+  ["Coach Keith's training rules",
+   get("keithrules","rules")],
+  ["Success target",
+   get("keithtarget","successtarget","target")],
+  ["Coach advice",
+   get("aiAdvice","coachAdvice","advice")],
+  ["Next action",
+   get("nextAction","aiNextAction")]
  ];
- let text="Hello "+playerName+". Welcome to your DARTIQ training session. ";
+
+ let text=
+  "Hello "+playerName+
+  ". Welcome to your DARTIQ training session. ";
+
  for(const [label,value] of sections){
-  if(value)text+=label+". "+value+". ";
+  if(value){
+   text+=label+". "+value+". ";
+  }
  }
- return text+"Focus on quality and consistency. Good luck.";
+
+ return text+
+  "Focus on quality and consistency. Good luck.";
 }
+
 function playInstructionVoice(){
+ instructionAutoAttempted=true;
  speakText(buildInstructionSpeech(),"instruction");
 }
+
+/* AUTOMATIC BRIEFING WHEN SCREEN 1 OPENS */
+
+function automaticInstructionVoice(){
+ if(
+  practiceStarted||
+  instructionVoiceStarted||
+  instructionAutoAttempted||
+  $("instructionsScreen").classList.contains("hidden")
+ ){
+  return;
+ }
+
+ if(!chooseVoice()){
+  put(
+   "instructionVoiceStatus",
+   "Waiting for a male English voice. You can also tap PLAY INSTRUCTIONS."
+  );
+  return;
+ }
+
+ instructionAutoAttempted=true;
+
+ speakText(
+  buildInstructionSpeech(),
+  "instruction"
+ );
+}
+
+if(speechSupported){
+
+ if(
+  typeof speechSynthesis.addEventListener===
+  "function"
+ ){
+  speechSynthesis.addEventListener(
+   "voiceschanged",
+   automaticInstructionVoice
+  );
+ }
+
+ window.addEventListener(
+  "load",
+  ()=>{
+   setTimeout(automaticInstructionVoice,450);
+  },
+  {once:true}
+ );
+
+ /*
+   Embedded browsers can require a user gesture.
+   Never interrupt navigation buttons.
+ */
+
+ document.addEventListener(
+  "pointerdown",
+  event=>{
+   if(
+    event.target.closest(
+     "button,summary,a,input"
+    )
+   ){
+    return;
+   }
+
+   if(
+    instructionVoiceStarted||
+    practiceStarted
+   ){
+    return;
+   }
+
+   instructionAutoAttempted=false;
+   automaticInstructionVoice();
+  },
+  {capture:true}
+ );
+}
+
 function pauseInstructionVoice(){
- if(!speechSupported||speechType!=="instruction")return;
+ if(
+  !speechSupported||
+  speechType!=="instruction"
+ ){
+  return;
+ }
+
  if(speechSynthesis.paused){
   speechSynthesis.resume();
-  put("instructionVoiceStatus","Reading instructions...");
+  put(
+   "instructionVoiceStatus",
+   "Reading instructions..."
+  );
  }else if(speechSynthesis.speaking){
   speechSynthesis.pause();
-  put("instructionVoiceStatus","Instructions paused.");
+  put(
+   "instructionVoiceStatus",
+   "Instructions paused."
+  );
  }
 }
+
 function stopInstructionVoice(){
  stopSpeech();
- put("instructionVoiceStatus","Voice instructions stopped.");
+
+ put(
+  "instructionVoiceStatus",
+  "Voice instructions stopped."
+ );
 }
+
+/* AUTOMATIC MASTER CALLER */
 
 function announcePlayer(){
- speakText("Ladies and gentlemen. At the oche. "+
-  playerName+". Game on!");
+ speakText(
+  "Ladies and gentlemen. At the oche. "+
+  playerName+". Game on!"
+ );
 }
+
 function announceScore(score,bust=false){
- if(bust)return speakText(playerName+". No score.");
- if(score===180)return speakText("One hundred and eighty!");
+ if(bust){
+  return speakText(
+   playerName+". No score."
+  );
+ }
+
+ if(score===180){
+  return speakText(
+   "One hundred and eighty!"
+  );
+ }
+
  speakText(playerName+". "+score+".");
 }
+
 function announceCheckout(score){
- speakText(playerName+". Game shot! And the leg! Checkout "+score+".");
+ speakText(
+  playerName+
+  ". Game shot! And the leg! Checkout "+
+  score+"."
+ );
 }
-put("callerPlayer","PLAYER: "+playerName.toUpperCase());
+
+put(
+ "callerPlayer",
+ "PLAYER: "+playerName.toUpperCase()
+);
+
+/* =============================================
+   SCREEN NAVIGATION
+   ============================================= */
 
 function showScreen(number){
- $("instructionsScreen").classList.toggle("hidden",number!==1);
- $("practiceScreen").classList.toggle("hidden",number!==2);
- $("resultsScreen").classList.toggle("hidden",number!==3);
- put("pageTitle",number===1?"PERFORMANS INSTRUCTION":
-  number===2?"LIVE PRACTICE":"PERFORMANCE RESULTS");
+ $("instructionsScreen").classList.toggle(
+  "hidden",number!==1
+ );
+
+ $("practiceScreen").classList.toggle(
+  "hidden",number!==2
+ );
+
+ $("resultsScreen").classList.toggle(
+  "hidden",number!==3
+ );
+
+ put(
+  "pageTitle",
+  number===1?
+  "PERFORMANS INSTRUCTION":
+  number===2?
+  "LIVE PRACTICE":
+  "PERFORMANCE RESULTS"
+ );
+
  window.scrollTo(0,0);
 }
+
 function startPractice(){
  stopSpeech();
  showScreen(2);
+
  if(!practiceStarted){
   practiceStarted=true;
   announcePlayer();
  }
 }
+
 function showInstructions(){
  stopSpeech();
  showScreen(1);
 }
+
+/* =============================================
+   LIVE SCORING ENGINE
+   ============================================= */
 
 let mode="keypad";
 let input="";
@@ -731,7 +1581,9 @@ let remaining=doubleTrouble?27:501;
 let visit=1;
 let totalPoints=0;
 let totalDarts=0;
-let count100=0,count140=0,count180=0;
+let count100=0;
+let count140=0;
+let count180=0;
 let currentDarts=[];
 let visits=[];
 let completed=false;
@@ -744,122 +1596,293 @@ let highestCheckout=0;
 let legsWon=0;
 let finishedManually=false;
 
-function message(text){put("message",text);}
+function message(text){
+ put("message",text);
+}
+
 function setMode(next){
  if(completed)return;
- if(doubleTrouble&&next!=="dartboard")return;
- if(input!==""||currentDarts.length){
-  message("Confirm or clear the current visit before switching.");
+
+ if(
+  doubleTrouble&&
+  next!=="dartboard"
+ ){
   return;
  }
+
+ if(
+  input!==""||
+  currentDarts.length
+ ){
+  message(
+   "Confirm or clear the current visit before switching."
+  );
+  return;
+ }
+
  mode=next;
- $("keypadMode").classList.toggle("hidden",mode!=="keypad");
- $("dartboardMode").classList.toggle("hidden",mode!=="dartboard");
- $("keypadTab").classList.toggle("active",mode==="keypad");
- $("dartboardTab").classList.toggle("active",mode==="dartboard");
- message(mode==="keypad"?"Enter your visit score.":"Tap the dartboard to enter your darts.");
+
+ $("keypadMode").classList.toggle(
+  "hidden",mode!=="keypad"
+ );
+
+ $("dartboardMode").classList.toggle(
+  "hidden",mode!=="dartboard"
+ );
+
+ $("keypadTab").classList.toggle(
+  "active",mode==="keypad"
+ );
+
+ $("dartboardTab").classList.toggle(
+  "active",mode==="dartboard"
+ );
+
+ message(
+  mode==="keypad"?
+  "Enter your visit score.":
+  "Tap the dartboard to enter your darts."
+ );
 }
+
 function press(n){
  if(completed||input.length>=3)return;
+
  if(Number(input+n)>180){
   message("Maximum score is 180.");
   return;
  }
+
  input+=n;
  put("scoreDisplay",input);
 }
+
 function clearScore(){
  input="";
  put("scoreDisplay","0");
 }
+
 function backspace(){
  input=input.slice(0,-1);
  put("scoreDisplay",input||"0");
 }
+
 function resetVisit(){
  clearScore();
  currentDarts=[];
  updateDartDisplay();
 }
+
 function updateDartDisplay(){
  for(let i=0;i<3;i++){
   const d=currentDarts[i];
-  put("dart"+(i+1),d?d.label+" • "+d.score:"—");
+
+  put(
+   "dart"+(i+1),
+   d?d.label+" • "+d.score:"—"
+  );
  }
- put("boardVisitScore",currentDarts.reduce((s,d)=>s+d.score,0));
+
+ put(
+  "boardVisitScore",
+  currentDarts.reduce(
+   (s,d)=>s+d.score,0
+  )
+ );
 }
+
 function addDart(number,multiplier,label){
- if(completed||currentDarts.length>=3)return;
- currentDarts.push({number,multiplier,score:number*multiplier,label});
+ if(
+  completed||
+  currentDarts.length>=3
+ ){
+  return;
+ }
+
+ currentDarts.push({
+  number,
+  multiplier,
+  score:number*multiplier,
+  label
+ });
+
  updateDartDisplay();
 }
-function addMiss(){addDart(0,0,"MISS");}
+
+function addMiss(){
+ addDart(0,0,"MISS");
+}
+
 function undoDart(){
  currentDarts.pop();
  updateDartDisplay();
 }
 
-const boardNumbers=[20,1,18,4,13,6,10,15,2,17,3,19,7,16,8,11,14,9,12,5];
+/* =============================================
+   INTERACTIVE DARTBOARD
+   ============================================= */
+
+const boardNumbers=[
+ 20,1,18,4,13,6,10,15,2,17,
+ 3,19,7,16,8,11,14,9,12,5
+];
+
 const svg=$("dartboard");
 const NS="http://www.w3.org/2000/svg";
+
 function polar(r,a){
  const rad=(a-90)*Math.PI/180;
- return {x:r*Math.cos(rad),y:r*Math.sin(rad)};
+
+ return {
+  x:r*Math.cos(rad),
+  y:r*Math.sin(rad)
+ };
 }
+
 function pathRing(inner,outer,start,end){
- const a=polar(outer,start),b=polar(outer,end);
- const c=polar(inner,end),d=polar(inner,start);
+ const a=polar(outer,start);
+ const b=polar(outer,end);
+ const c=polar(inner,end);
+ const d=polar(inner,start);
+
  return `M ${a.x} ${a.y} A ${outer} ${outer} 0 0 1 ${b.x} ${b.y} L ${c.x} ${c.y} A ${inner} ${inner} 0 0 0 ${d.x} ${d.y} Z`;
 }
+
 function node(tag,attrs){
  const n=document.createElementNS(NS,tag);
- Object.entries(attrs).forEach(([k,v])=>n.setAttribute(k,v));
+
+ Object.entries(attrs).forEach(
+  ([k,v])=>n.setAttribute(k,v)
+ );
+
  return n;
 }
-function segment(inner,outer,start,end,color,num,mult,label){
+
+function segment(
+ inner,outer,start,end,
+ color,num,mult,label
+){
  const n=node("path",{
   d:pathRing(inner,outer,start,end),
-  fill:color,stroke:"#777","stroke-width":".7"
+  fill:color,
+  stroke:"#777",
+  "stroke-width":".7"
  });
+
  n.style.cursor="pointer";
- n.addEventListener("click",()=>addDart(num,mult,label));
+
+ n.addEventListener(
+  "click",
+  ()=>addDart(num,mult,label)
+ );
+
  svg.append(n);
 }
+
 function drawBoard(){
  svg.replaceChildren();
- svg.append(node("circle",{cx:0,cy:0,r:224,fill:"#020509",stroke:"#39a9ff","stroke-width":4}));
+
+ svg.append(
+  node("circle",{
+   cx:0,
+   cy:0,
+   r:224,
+   fill:"#020509",
+   stroke:"#39a9ff",
+   "stroke-width":4
+  })
+ );
+
  boardNumbers.forEach((num,i)=>{
-  const center=i*18,start=center-9,end=center+9;
+  const center=i*18;
+  const start=center-9;
+  const end=center+9;
+
   const dark=i%2===0;
   const single=dark?"#101419":"#d8c9a7";
   const colored=dark?"#c73b43":"#21865c";
-  segment(24,103,start,end,single,num,1,"S"+num);
-  segment(103,118,start,end,colored,num,3,"T"+num);
-  segment(118,178,start,end,single,num,1,"S"+num);
-  segment(178,195,start,end,colored,num,2,"D"+num);
+
+  segment(
+   24,103,start,end,
+   single,num,1,"S"+num
+  );
+
+  segment(
+   103,118,start,end,
+   colored,num,3,"T"+num
+  );
+
+  segment(
+   118,178,start,end,
+   single,num,1,"S"+num
+  );
+
+  segment(
+   178,195,start,end,
+   colored,num,2,"D"+num
+  );
+
   const p=polar(211,center);
+
   const t=node("text",{
-   x:p.x,y:p.y,fill:"#39a9ff","font-size":16,
-   "font-weight":900,"text-anchor":"middle",
+   x:p.x,
+   y:p.y,
+   fill:"#39a9ff",
+   "font-size":16,
+   "font-weight":900,
+   "text-anchor":"middle",
    "dominant-baseline":"middle"
   });
+
   t.textContent=num;
   svg.append(t);
  });
- const outer=node("circle",{cx:0,cy:0,r:24,fill:"#21865c",stroke:"#ddd"});
- outer.addEventListener("click",()=>addDart(25,1,"25"));
+
+ const outer=node("circle",{
+  cx:0,
+  cy:0,
+  r:24,
+  fill:"#21865c",
+  stroke:"#ddd"
+ });
+
+ outer.addEventListener(
+  "click",
+  ()=>addDart(25,1,"25")
+ );
+
  svg.append(outer);
- const bull=node("circle",{cx:0,cy:0,r:10,fill:"#c73b43",stroke:"#fff"});
- bull.addEventListener("click",()=>addDart(25,2,"BULL"));
+
+ const bull=node("circle",{
+  cx:0,
+  cy:0,
+  r:10,
+  fill:"#c73b43",
+  stroke:"#fff"
+ });
+
+ bull.addEventListener(
+  "click",
+  ()=>addDart(25,2,"BULL")
+ );
+
  svg.append(bull);
 }
+
 drawBoard();
 
+/* =============================================
+   PERFORMANCE STATISTICS
+   ============================================= */
+
 function average(){
- return totalDarts?totalPoints/totalDarts*3:0;
+ return totalDarts?
+  totalPoints/totalDarts*3:
+  0;
 }
 
 /* FIRST 9 STATISTICS */
+
 function calculateFirst9(){
  let darts=0;
  let points=0;
@@ -870,7 +1893,9 @@ function calculateFirst9(){
   const used=Number(v.dartsThrown)||0;
   if(used<=0)continue;
 
-  const count=Math.min(used,9-darts);
+  const count=Math.min(
+   used,9-darts
+  );
 
   if(count===used){
    points+=Number(v.score)||0;
@@ -882,10 +1907,12 @@ function calculateFirst9(){
   ){
    points+=v.darts
     .slice(0,count)
-    .reduce((sum,d)=>sum+(Number(d.score)||0),0);
+    .reduce(
+     (sum,d)=>sum+(Number(d.score)||0),
+     0
+    );
   }else{
-   // An incomplete keypad visit has no dart-by-dart scores.
-   // Never invent the partial visit's points.
+   // Never invent partial keypad points.
    return {
     first9Points:null,
     first9Average:null
@@ -897,51 +1924,91 @@ function calculateFirst9(){
 
  return {
   first9Points:points,
-  first9Average:darts
-   ? Number((points/darts*3).toFixed(2))
-   : 0
+  first9Average:darts?
+   Number((points/darts*3).toFixed(2)):
+   0
  };
 }
 
 function updateStats(){
  put("remaining",remaining);
- put("average",doubleTrouble?"D"+furthestWedge:average().toFixed(2));
+
+ put(
+  "average",
+  doubleTrouble?
+  "D"+furthestWedge:
+  average().toFixed(2)
+ );
+
  put("dartsThrown",totalDarts);
- put("visitNumber",doubleTrouble?"D"+wedge:"VISIT "+visit);
- put("scoreboardVisit",doubleTrouble?"D"+wedge:visit);
+
+ put(
+  "visitNumber",
+  doubleTrouble?
+  "D"+wedge:
+  "VISIT "+visit
+ );
+
+ put(
+  "scoreboardVisit",
+  doubleTrouble?
+  "D"+wedge:
+  visit
+ );
+
  put("legsWon",legsWon);
 }
+
 function isDouble(d){
- return d&&d.multiplier===2&&d.number>=1&&d.number<=25;
+ return d&&
+  d.multiplier===2&&
+  d.number>=1&&
+  d.number<=25;
 }
+
 function createHistory(rootId){
  const root=$(rootId);
  root.replaceChildren();
+
  if(!visits.length){
   root.textContent="No visits recorded.";
   return;
  }
+
  [...visits].reverse().forEach(v=>{
   const row=document.createElement("div");
   row.className="history-row";
+
   const left=document.createElement("strong");
+
   left.textContent=doubleTrouble?
-   "D"+v.wedgeNumber:"VISIT "+v.visitNumber;
+   "D"+v.wedgeNumber:
+   "VISIT "+v.visitNumber;
+
   const right=document.createElement("span");
+
   right.textContent=doubleTrouble?
    v.scoreChange+" pts • "+v.doubleHits+" hits":
-   v.score+" pts • "+v.remainingAfter+" remaining"+
+   v.score+" pts • "+
+   v.remainingAfter+" remaining"+
    (v.bust?" • BUST":"");
+
   row.append(left,right);
   root.append(row);
  });
 }
+
 function updateVisitHistory(){
  createHistory("visitHistory");
 }
 
+/* =============================================
+   CONFIRM VISIT
+   ============================================= */
+
 function confirmVisit(){
  if(completed||saving)return;
+
  if(doubleTrouble){
   confirmDoubleTrouble();
   return;
@@ -957,47 +2024,83 @@ function confirmVisit(){
    message("Enter a visit score first.");
    return;
   }
+
   score=Number(input);
-  if(!Number.isInteger(score)||score<0||score>180){
-   message("Enter a valid score between 0 and 180.");
+
+  if(
+   !Number.isInteger(score)||
+   score<0||
+   score>180
+  ){
+   message(
+    "Enter a valid score between 0 and 180."
+   );
    return;
   }
 
   if(score===remaining){
-   if(!confirm("Was this a valid double-out checkout?")){
-    message("Checkout not confirmed. Correct the visit score.");
+   if(!confirm(
+    "Was this a valid double-out checkout?"
+   )){
+    message(
+     "Checkout not confirmed. Correct the visit score."
+    );
     return;
    }
-   const answer=prompt("Darts used in final visit (1, 2 or 3):","3");
+
+   const answer=prompt(
+    "Darts used in final visit (1, 2 or 3):",
+    "3"
+   );
+
    if(answer===null)return;
+
    dartsUsed=Number(answer);
+
    if(![1,2,3].includes(dartsUsed)){
     message("Enter 1, 2 or 3 darts.");
     return;
    }
+
    checkout=true;
   }
+
  }else{
   if(currentDarts.length===0){
-   message("Select at least one dart on the board.");
+   message(
+    "Select at least one dart on the board."
+   );
    return;
   }
-  score=currentDarts.reduce((sum,d)=>sum+d.score,0);
+
+  score=currentDarts.reduce(
+   (sum,d)=>sum+d.score,
+   0
+  );
+
   dartsUsed=currentDarts.length;
 
   let running=remaining;
+
   for(let i=0;i<currentDarts.length;i++){
    const d=currentDarts[i];
+
    running-=d.score;
+
    if(running<0||running===1){
     bust=true;
     break;
    }
+
    if(running===0){
     if(!isDouble(d)){
      bust=true;
-    }else if(i!==currentDarts.length-1){
-     message("Remove darts entered after the checkout.");
+    }else if(
+     i!==currentDarts.length-1
+    ){
+     message(
+      "Remove darts entered after the checkout."
+     );
      return;
     }else{
      checkout=true;
@@ -1007,8 +2110,19 @@ function confirmVisit(){
   }
  }
 
- if(score>remaining||remaining-score===1)bust=true;
- if(score===remaining&&!checkout)bust=true;
+ if(
+  score>remaining||
+  remaining-score===1
+ ){
+  bust=true;
+ }
+
+ if(
+  score===remaining&&
+  !checkout
+ ){
+  bust=true;
+ }
 
  const before=remaining;
  const actual=bust?0:score;
@@ -1018,9 +2132,14 @@ function confirmVisit(){
  if(!bust){
   totalPoints+=score;
   remaining-=score;
-  if(score===180)count180++;
-  else if(score>=140)count140++;
-  else if(score>=100)count100++;
+
+  if(score===180){
+   count180++;
+  }else if(score>=140){
+   count140++;
+  }else if(score>=100){
+   count100++;
+  }
  }
 
  visits.push({
@@ -1031,7 +2150,9 @@ function confirmVisit(){
   bust,
   remainingBefore:before,
   remainingAfter:remaining,
-  darts:mode==="dartboard"?currentDarts.map(d=>({...d})):[],
+  darts:mode==="dartboard"?
+   currentDarts.map(d=>({...d})):
+   [],
   createdAt:new Date().toISOString()
  });
 
@@ -1040,189 +2161,386 @@ function confirmVisit(){
   checkoutDarts=totalDarts;
   highestCheckout=score;
   completed=true;
-  put("scoreboardTurn","LEG COMPLETE");
+
+  put(
+   "scoreboardTurn",
+   "LEG COMPLETE"
+  );
+
   announceCheckout(score);
  }else{
   announceScore(actual,bust);
  }
 
  resetVisit();
- if(!completed)visit++;
+
+ if(!completed){
+  visit++;
+ }
+
  updateStats();
  updateVisitHistory();
 
- message(bust?
+ message(
+  bust?
   "BUST • No score":
-  "Visit confirmed: "+actual+" • Remaining: "+remaining);
+  "Visit confirmed: "+actual+
+  " • Remaining: "+remaining
+ );
 
  if(completed){
   $("confirmButton").disabled=true;
-  $("finishButton").textContent="🏁 VIEW PERFORMANCE RESULTS";
+
+  $("finishButton").textContent=
+   "🏁 VIEW PERFORMANCE RESULTS";
+
   $("scoringPanel").open=false;
-  put("finishMessage","Leg complete. View your performance results.");
+
+  put(
+   "finishMessage",
+   "Leg complete. View your performance results."
+  );
  }
 }
 
+/* =============================================
+   FINISH PRACTICE
+   ============================================= */
+
 function finishPractice(){
  if(saving)return;
+
  if(!completed){
-  if(input!==""||currentDarts.length>0){
-   message("Confirm or clear your current visit before finishing.");
+  if(
+   input!==""||
+   currentDarts.length>0
+  ){
+   message(
+    "Confirm or clear your current visit before finishing."
+   );
+
    $("scoringPanel").open=true;
    return;
   }
+
   if(!visits.length){
-   message("Complete at least one visit before finishing.");
+   message(
+    "Complete at least one visit before finishing."
+   );
+
    $("scoringPanel").open=true;
    return;
   }
-  if(!confirm("Finish practice and view performance results?"))return;
+
+  if(!confirm(
+   "Finish practice and view performance results?"
+  )){
+   return;
+  }
+
   completed=true;
   finishedManually=true;
  }
+
  stopSpeech();
  populateResults();
  showScreen(3);
 }
 
 function populateResults(){
- put("resultAverage",doubleTrouble?"D"+furthestWedge:average().toFixed(2));
+ put(
+  "resultAverage",
+  doubleTrouble?
+  "D"+furthestWedge:
+  average().toFixed(2)
+ );
+
  put("resultDarts",totalDarts);
  put("resultVisits",visits.length);
  put("resultRemaining",remaining);
  put("result100",count100);
  put("result140",count140);
  put("result180",count180);
- put("resultCheckout",highestCheckout||"—");
+
+ put(
+  "resultCheckout",
+  highestCheckout||"—"
+ );
+
  put("resultLegs",legsWon);
  put("resultPoints",totalPoints);
 
  if(doubleTrouble){
-  put("resultTitle","DOUBLE TROUBLE COMPLETE");
-  put("resultDescription","Your double training performance.");
+  put(
+   "resultTitle",
+   "DOUBLE TROUBLE COMPLETE"
+  );
+
+  put(
+   "resultDescription",
+   "Your double training performance."
+  );
+
   put("resultStatus","COMPLETE");
-  put("resultStatusDescription","Furthest double: D"+furthestWedge);
+
+  put(
+   "resultStatusDescription",
+   "Furthest double: D"+furthestWedge
+  );
+
  }else if(remaining===0){
   put("resultTitle","LEG COMPLETE");
-  put("resultDescription","Checkout completed successfully.");
+
+  put(
+   "resultDescription",
+   "Checkout completed successfully."
+  );
+
   put("resultStatus","CHECKOUT");
-  put("resultStatusDescription","Finished in "+totalDarts+" darts.");
+
+  put(
+   "resultStatusDescription",
+   "Finished in "+totalDarts+" darts."
+  );
+
  }else{
   put("resultTitle","PRACTICE COMPLETE");
-  put("resultDescription","Your recorded training performance.");
+
+  put(
+   "resultDescription",
+   "Your recorded training performance."
+  );
+
   put("resultStatus","FINISHED");
-  put("resultStatusDescription","Session finished with "+remaining+" remaining.");
+
+  put(
+   "resultStatusDescription",
+   "Session finished with "+
+   remaining+" remaining."
+  );
  }
+
  createHistory("resultHistory");
 }
+
+/* =============================================
+   SAVE SESSION TO GLIDE
+   ============================================= */
 
 async function saveSession(){
  if(!completed||saving||saved)return;
 
  if(doubleTrouble){
-  put("saveStatus","Double Trouble visits were saved individually. Verify the records in Glide.");
+  put(
+   "saveStatus",
+   "Double Trouble visits were saved individually. Verify the records in Glide."
+  );
   return;
  }
+
  if(!saveWebhook){
-  put("saveStatus","Save webhook missing from the URL. No session data was sent.");
+  put(
+   "saveStatus",
+   "Save webhook missing from the URL. No session data was sent."
+  );
   return;
  }
+
  let url;
+
  try{
-  url=new URL(saveWebhook,location.href);
-  if(url.protocol!=="https:")throw Error("HTTPS required");
+  url=new URL(
+   saveWebhook,
+   location.href
+  );
+
+  if(url.protocol!=="https:"){
+   throw Error("HTTPS required");
+  }
  }catch(e){
-  put("saveStatus","Invalid save webhook.");
+  put(
+   "saveStatus",
+   "Invalid save webhook."
+  );
   return;
  }
 
  const first9=calculateFirst9();
 
  const payload={
-  sessionID,email,player,userid,playerName,language,
+  sessionID,
+  email,
+  player,
+  userid,
+  playerName,
+  language,
   source:get("source")||"TRAINING",
-  mainIssue,focus,drill,
+  mainIssue,
+  focus,
+  drill,
   practiceType:"501",
   status:"completed",
   startingScore:501,
   remainingScore:remaining,
-  totalPoints,totalDarts,
-  average:Number(average().toFixed(2)),
+  totalPoints,
+  totalDarts,
+  average:Number(
+   average().toFixed(2)
+  ),
   first9Points:first9.first9Points,
   first9Average:first9.first9Average,
   totalVisits:visits.length,
-  count100,count140,count180,
-  checkoutDarts,highestCheckout,
-  legsWon,finishedManually,visits,
+  count100,
+  count140,
+  count180,
+  checkoutDarts,
+  highestCheckout,
+  legsWon,
+  finishedManually,
+  visits,
   completedAt:new Date().toISOString()
  };
 
  saving=true;
  $("saveButton").disabled=true;
- put("saveStatus","Sending to Glide...");
+
+ put(
+  "saveStatus",
+  "Sending to Glide..."
+ );
+
  try{
-  const res=await fetch(url.toString(),{
-   method:"POST",
-   headers:{"Content-Type":"application/json"},
-   body:JSON.stringify(payload)
-  });
-  if(!res.ok)throw Error("HTTP "+res.status);
+  const res=await fetch(
+   url.toString(),
+   {
+    method:"POST",
+    headers:{
+     "Content-Type":"application/json"
+    },
+    body:JSON.stringify(payload)
+   }
+  );
+
+  if(!res.ok){
+   throw Error("HTTP "+res.status);
+  }
+
   saved=true;
-  put("saveStatus","Request accepted. Verify the record in Glide.");
-  $("saveButton").textContent="SAVE REQUEST SENT";
+
+  put(
+   "saveStatus",
+   "Request accepted. Verify the record in Glide."
+  );
+
+  $("saveButton").textContent=
+   "SAVE REQUEST SENT";
+
  }catch(e){
   console.error(e);
-  put("saveStatus","Save failed. Check the Glide workflow.");
+
+  put(
+   "saveStatus",
+   "Save failed. Check the Glide workflow."
+  );
+
   $("saveButton").disabled=false;
+
  }finally{
   saving=false;
  }
 }
 
+/* =============================================
+   DOUBLE TROUBLE
+   ============================================= */
+
 async function confirmDoubleTrouble(){
  if(completed||saving)return;
+
  if(currentDarts.length!==3){
-  message("Enter all 3 darts for D"+wedge+".");
+  message(
+   "Enter all 3 darts for D"+wedge+"."
+  );
   return;
  }
 
  const hits=currentDarts.filter(
-  d=>d.number===wedge&&d.multiplier===2
+  d=>
+   d.number===wedge&&
+   d.multiplier===2
  ).length;
+
  const before=remaining;
- const change=hits?hits*wedge*2:-wedge;
+
+ const change=hits?
+  hits*wedge*2:
+  -wedge;
+
  const after=before+change;
  const cleared=hits>0;
+
  const nextFurthest=cleared?
-  Math.max(furthestWedge,wedge):furthestWedge;
- const finished=(wedge===20)||after<=0;
+  Math.max(furthestWedge,wedge):
+  furthestWedge;
+
+ const finished=
+  wedge===20||
+  after<=0;
 
  const record={
-  sessionID,email,player,userid,
+  sessionID,
+  email,
+  player,
+  userid,
   drill:"Double Trouble",
-  roundNumber:wedge,wedgeNumber:wedge,
-  dartsThrown:3,doubleHits:hits,
-  scoreBefore:before,scoreChange:change,scoreAfter:after,
-  wedgeCleared:cleared,furthestWedge:nextFurthest,
-  d20Cleared:wedge===20&&cleared,
-  recordScore:wedge===20&&cleared?after:0,
+  roundNumber:wedge,
+  wedgeNumber:wedge,
+  dartsThrown:3,
+  doubleHits:hits,
+  scoreBefore:before,
+  scoreChange:change,
+  scoreAfter:after,
+  wedgeCleared:cleared,
+  furthestWedge:nextFurthest,
+  d20Cleared:
+   wedge===20&&cleared,
+  recordScore:
+   wedge===20&&cleared?
+   after:
+   0,
   createdAt:new Date().toISOString()
  };
 
  saving=true;
  $("confirmButton").disabled=true;
- message("Saving D"+wedge+"...");
+
+ message(
+  "Saving D"+wedge+"..."
+ );
 
  try{
-  const res=await fetch(doubleTroubleWebhook,{
-   method:"POST",
-   headers:{"Content-Type":"application/json"},
-   body:JSON.stringify(record)
-  });
-  if(!res.ok)throw Error("HTTP "+res.status);
+  const res=await fetch(
+   doubleTroubleWebhook,
+   {
+    method:"POST",
+    headers:{
+     "Content-Type":"application/json"
+    },
+    body:JSON.stringify(record)
+   }
+  );
+
+  if(!res.ok){
+   throw Error("HTTP "+res.status);
+  }
+
  }catch(e){
   console.error(e);
-  message("Glide save failed. Retry this wedge.");
+
+  message(
+   "Glide save failed. Retry this wedge."
+  );
+
   saving=false;
   $("confirmButton").disabled=false;
   return;
@@ -1230,14 +2548,17 @@ async function confirmDoubleTrouble(){
 
  saving=false;
  $("confirmButton").disabled=false;
+
  remaining=after;
  furthestWedge=nextFurthest;
  totalDarts+=3;
  totalPoints+=change;
+
  visits.push(record);
 
  speakText(
-  playerName+". Double "+wedge+". "+hits+
+  playerName+
+  ". Double "+wedge+". "+hits+
   (hits===1?" hit.":" hits.")
  );
 
@@ -1246,35 +2567,121 @@ async function confirmDoubleTrouble(){
 
  if(finished){
   completed=true;
-  put("scoreboardTurn","PRACTICE COMPLETE");
+
+  put(
+   "scoreboardTurn",
+   "PRACTICE COMPLETE"
+  );
+
   $("confirmButton").disabled=true;
-  $("finishButton").textContent="🏁 VIEW PERFORMANCE RESULTS";
+
+  $("finishButton").textContent=
+   "🏁 VIEW PERFORMANCE RESULTS";
+
   $("scoringPanel").open=false;
-  put("finishMessage","Double Trouble complete. View your results.");
+
+  put(
+   "finishMessage",
+   "Double Trouble complete. View your results."
+  );
+
  }else{
   wedge++;
-  message("Next target: D"+wedge);
+
+  message(
+   "Next target: D"+wedge
+  );
  }
+
  updateStats();
 }
 
+/* =============================================
+   INITIALIZE DOUBLE TROUBLE
+   ============================================= */
+
 if(doubleTrouble){
- put("practiceName","Double Trouble");
- put("scoringTitle","DOUBLE TROUBLE");
- put("scoringSubtitle","3 darts at each double • D1 to D20");
- put("remainingLabel","RUNNING POINTS");
- put("averageLabel","FURTHEST");
- put("matchFormat","DOUBLE TROUBLE • D1-D20");
- put("scoreboardVisitLabel","TARGET");
- put("scoreboardTurn","DOUBLE TROUBLE");
- $("modeTabs").classList.add("hidden");
+ put(
+  "practiceName",
+  "Double Trouble"
+ );
+
+ put(
+  "scoringTitle",
+  "DOUBLE TROUBLE"
+ );
+
+ put(
+  "scoringSubtitle",
+  "3 darts at each double • D1 to D20"
+ );
+
+ put(
+  "remainingLabel",
+  "RUNNING POINTS"
+ );
+
+ put(
+  "averageLabel",
+  "FURTHEST"
+ );
+
+ put(
+  "matchFormat",
+  "DOUBLE TROUBLE • D1-D20"
+ );
+
+ put(
+  "scoreboardVisitLabel",
+  "TARGET"
+ );
+
+ put(
+  "scoreboardTurn",
+  "DOUBLE TROUBLE"
+ );
+
+ $("modeTabs").classList.add(
+  "hidden"
+ );
+
  mode="dartboard";
- $("keypadMode").classList.add("hidden");
- $("dartboardMode").classList.remove("hidden");
+
+ $("keypadMode").classList.add(
+  "hidden"
+ );
+
+ $("dartboardMode").classList.remove(
+  "hidden"
+ );
 }
 
 updateStats();
 updateVisitHistory();
+
+/* INITIAL VOICE STATUS */
+
+if(!speechSupported){
+ put(
+  "instructionVoiceStatus",
+  "Speech is not supported by this browser."
+ );
+}else{
+ const availableMaleVoice=chooseVoice();
+
+ if(availableMaleVoice){
+  put(
+   "instructionVoiceStatus",
+   "Male AI voice ready."
+  );
+ }else{
+  put(
+   "instructionVoiceStatus",
+   "Waiting for an English male voice."
+  );
+ }
+}
+
 </script>
 </body>
 </html>
