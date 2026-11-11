@@ -5,93 +5,144 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#02070e">
-<title>DARTIQ | Match Engine V8.6</title>
+<title>DARTIQ | Match Play V8.7</title>
 <style>
-:root{--bg:#02070e;--panel:#071522;--panel2:#091b2b;--blue:#39a9ff;--blue2:#27b8ff;--white:#f4f9ff;--muted:#8fa7bb;--line:#17364c;--danger:#ff4d61;--success:#39e58c}
+:root{
+--bg:#02070e;--panel:#071522;--blue:#39a9ff;
+--white:#f4f9ff;--muted:#8fa7bb;--line:#17364c;
+--danger:#ff4d61;--success:#39e58c
+}
 *{box-sizing:border-box}
-html,body{margin:0;min-height:100%;background:radial-gradient(circle at top,#0a2235 0,#02070e 42%),#02070e;color:var(--white);font-family:Arial,Helvetica,sans-serif}
-body{padding:14px}
-button{font:inherit}
+html,body{
+margin:0;min-height:100%;
+background:radial-gradient(circle at top,#0a2235,#02070e 42%);
+color:var(--white);font-family:Arial,Helvetica,sans-serif
+}
+body{padding:10px}
+button{font:inherit;cursor:pointer}
 button:disabled{opacity:.45;cursor:not-allowed}
-.app{width:min(100%,620px);margin:auto}
+.app{max-width:620px;margin:auto}
 .screen{display:none}
 .screen.active{display:block}
-.panel{background:linear-gradient(180deg,#081a2a,#05111d);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 0 25px rgba(57,169,255,.08),inset 0 0 20px rgba(57,169,255,.025);margin-bottom:12px}
-.center{text-align:center}
-h1,h2,h3,p{margin-top:0}
-h1{margin-bottom:8px;font-size:27px;letter-spacing:.5px}
-h2{font-size:21px}
-.eyebrow{color:var(--blue);font-size:10px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:7px}
-.small{color:var(--muted);font-size:12px;line-height:1.55}
-.hidden{display:none!important}
-.primary,.secondary,.danger,.format,.issue,.mode-button{border-radius:10px;min-height:45px;padding:10px 12px;font-weight:900;cursor:pointer}
-.primary{width:100%;color:#00101c;background:linear-gradient(180deg,#5cc0ff,#269be8);border:1px solid #73c9ff;box-shadow:0 0 15px rgba(57,169,255,.22)}
-.secondary{color:var(--white);background:#0b2132;border:1px solid #27506c}
-.danger{width:100%;color:#fff;background:#35101a;border:1px solid #8d3042;margin-top:10px}
-.notice{min-height:18px;margin-top:9px;color:#b9d9ed;font-size:11px;font-weight:700;text-align:center}
-.formats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:14px 0}
-.format{background:#081c2b;border:1px solid #21455e;color:white}
-.format.selected{border-color:var(--blue);color:var(--blue);box-shadow:0 0 13px rgba(57,169,255,.18)}
-.match-header{text-align:center;margin-bottom:10px}
-.player-name{color:var(--blue);font-size:17px;font-weight:900}
-.welcome{color:#a9c6d9;font-size:11px;margin-top:4px}
-.collapse{border:1px solid var(--line);background:#061421;border-radius:11px;margin-bottom:8px;overflow:hidden}
-.collapse-head{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;cursor:pointer;color:var(--blue);font-size:11px;font-weight:900}
-.collapse-body{padding:0 10px 10px}
-.caller-line{min-height:36px;display:flex;align-items:center;justify-content:center;text-align:center;border:1px solid #15374f;border-radius:8px;background:#04101a;color:#d9efff;font-size:12px;font-weight:800;padding:8px}
-.caller-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:7px}
-.caller-actions button{min-height:35px;border:1px solid #214a67;border-radius:7px;background:#0a2030;color:#d7efff;font-size:9px;font-weight:900}
-.mode-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
-.mode-button{border:1px solid #21455e;background:#071a28;color:#91aabc}
-.mode-button.active{color:var(--blue);border-color:var(--blue);background:#092338}
-.keypad-panel{margin-top:8px}
-.key-value{border:1px solid var(--blue);border-radius:9px;background:#020b12;color:white;font-size:32px;font-weight:900;padding:8px;margin-bottom:7px;text-align:center}
-.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
-.key{min-height:44px;border:1px solid #214a67;border-radius:8px;background:#0a2030;color:white;font-size:17px;font-weight:900}
-.match-info{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin:8px 0}
-.match-info span{background:#061421;border:1px solid var(--line);border-radius:7px;padding:7px 3px;text-align:center;color:#9cc9e5;font-size:9px;font-weight:900}
-.visit{text-align:center;margin:8px 0 6px}
-.visit strong{display:block;font-size:31px;color:#fff}
-.darts{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:7px}
-.dart{min-width:0;border:1px solid #15364c;border-radius:7px;background:#05131e;padding:7px 2px;color:#9db8ca;text-align:center;font-size:9px;font-weight:800;overflow:hidden}
-.dartboard-layout{width:100%;display:flex;justify-content:center;align-items:center;margin:3px auto 8px}
-.board-wrap{width:100%;max-width:420px;aspect-ratio:1;margin:auto}
-#board{display:block;width:100%;height:100%;touch-action:manipulation;filter:drop-shadow(0 0 10px rgba(57,169,255,.22))}
-.score-checkout-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.45fr) minmax(0,1fr);gap:6px;width:100%;align-items:stretch;margin:6px 0 8px}
-.score-box,.checkout-panel{min-width:0;min-height:64px;border-radius:9px;background:#061421;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:6px 3px}
-.score-box{border:1px solid var(--line)}
-.checkout-panel{border:1px solid var(--blue);box-shadow:inset 0 0 10px rgba(57,169,255,.05)}
-.score-label,.checkout-label{color:var(--blue);font-size:8px;font-weight:900;letter-spacing:.6px;line-height:1.15}
-.score-number{margin-top:3px;color:#fff;font-size:27px;line-height:1;font-weight:900}
-.legs-number{margin-top:4px;color:#fff;font-size:23px;line-height:1;font-weight:900}
-.score-sub{color:#758fa1;font-size:7px;font-weight:800;margin-top:4px}
-.checkout-route{width:100%;margin-top:4px;color:#fff;font-size:10px;line-height:1.2;font-weight:900;overflow-wrap:anywhere}
-.checkout-hint{display:none}
-.visit-actions{display:grid;grid-template-columns:.8fr 1.4fr .8fr;gap:6px;width:100%;margin-top:7px}
-.visit-actions button{width:100%;min-width:0;padding:9px 4px;font-size:10px}
-.result{font-size:28px;font-weight:900;margin:10px 0 4px}
-.result.win{color:var(--success)}
-.result.loss{color:var(--danger)}
-.final-score{font-size:38px;font-weight:900;margin-bottom:15px}
-.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin:10px 0 14px}
-.stat{border:1px solid var(--line);border-radius:8px;background:#061421;padding:8px 5px}
-.stat strong{display:block;color:white;font-size:18px}
-.stat span{color:#7997aa;font-size:8px;font-weight:900}
-.issues{display:grid;grid-template-columns:1fr;gap:7px;margin:12px 0}
-.issue{width:100%;text-align:left;color:#d9eaf5;background:#071a28;border:1px solid #1a3c54}
-.issue.selected{border-color:var(--blue);color:var(--blue);background:#092338}
-footer{padding:12px 5px 20px;text-align:center;color:#46647a;font-size:8px;font-weight:900;letter-spacing:1px}
-@media(max-width:480px){
-body{padding:8px}
-.panel{padding:11px;border-radius:13px}
-h1{font-size:23px}
-.board-wrap{max-width:390px}
-.score-checkout-row{gap:5px}
-.score-box,.checkout-panel{min-height:59px}
-.score-number{font-size:24px}
-.legs-number{font-size:21px}
-.checkout-route{font-size:9px}
+.panel{
+background:linear-gradient(180deg,#081a2a,#05111d);
+border:1px solid var(--line);border-radius:15px;
+padding:13px;margin-bottom:12px
 }
+.center{text-align:center}
+h1{font-size:25px;margin:0 0 10px}
+h2{font-size:19px}
+.small{color:var(--muted);font-size:12px;line-height:1.5}
+.eyebrow{
+color:var(--blue);font-size:10px;font-weight:900;
+letter-spacing:1.4px;margin-bottom:8px
+}
+.hidden{display:none!important}
+.primary,.secondary,.danger,.format,.issue,.mode-button{
+border-radius:9px;min-height:44px;padding:10px;
+font-weight:900
+}
+.primary{
+width:100%;color:#00101c;
+background:linear-gradient(#5cc0ff,#269be8);
+border:1px solid #73c9ff
+}
+.secondary{background:#0b2132;color:white;border:1px solid #27506c}
+.danger{
+width:100%;margin-top:10px;color:white;
+background:#35101a;border:1px solid #8d3042
+}
+.formats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0}
+.format{background:#081c2b;border:1px solid #21455e;color:white}
+.format.selected{border-color:var(--blue);color:var(--blue)}
+.match-header{text-align:center;margin-bottom:12px}
+.player-name{color:var(--blue);font-size:18px;font-weight:900}
+.welcome{color:#a9c6d9;font-size:11px;margin-top:5px}
+.collapse{
+background:#061421;border:1px solid var(--line);
+border-radius:10px;margin-bottom:8px;overflow:hidden
+}
+.collapse-head{
+display:flex;justify-content:space-between;
+padding:12px;color:var(--blue);
+font-size:11px;font-weight:900;cursor:pointer
+}
+.collapse-body{padding:0 10px 10px}
+.caller-line{
+padding:10px;text-align:center;
+border:1px solid #15374f;border-radius:8px;
+font-size:12px;font-weight:800
+}
+.caller-actions{
+display:grid;grid-template-columns:repeat(3,1fr);
+gap:5px;margin-top:8px
+}
+.caller-actions button{
+background:#0a2030;color:white;border:1px solid #214a67;
+border-radius:7px;padding:9px 3px;font-size:10px
+}
+.mode-row{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.mode-button{background:#071a28;color:#91aabc;border:1px solid #21455e}
+.mode-button.active{color:var(--blue);border-color:var(--blue)}
+.key-value{
+background:#020b12;border:1px solid var(--blue);
+border-radius:9px;text-align:center;
+font-size:32px;font-weight:900;padding:10px;margin:8px 0
+}
+.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.key{
+background:#0a2030;color:white;border:1px solid #214a67;
+border-radius:8px;min-height:45px;font-size:18px;font-weight:900
+}
+.match-info{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin:9px 0}
+.match-info span{
+background:#061421;border:1px solid var(--line);
+border-radius:7px;padding:8px 3px;text-align:center;
+color:#9cc9e5;font-size:10px;font-weight:900
+}
+.visit{text-align:center;margin:10px 0}
+.visit strong{display:block;font-size:32px}
+.darts{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.dart{
+background:#05131e;border:1px solid #15364c;
+border-radius:7px;padding:8px 2px;text-align:center;
+font-size:10px;color:#9db8ca;font-weight:800
+}
+.board-wrap{max-width:420px;width:100%;aspect-ratio:1;margin:8px auto}
+#board{width:100%;height:100%;touch-action:manipulation}
+.score-checkout-row{
+display:grid;grid-template-columns:1fr 1.45fr 1fr;
+gap:6px;margin:8px 0
+}
+.score-box,.checkout-panel{
+min-width:0;min-height:65px;background:#061421;
+border:1px solid var(--line);border-radius:9px;
+display:flex;flex-direction:column;justify-content:center;
+align-items:center;text-align:center;padding:5px
+}
+.checkout-panel{border-color:var(--blue)}
+.score-label{font-size:9px;color:var(--blue);font-weight:900}
+.score-number{font-size:27px;font-weight:900;margin-top:4px}
+.checkout-route{font-size:10px;font-weight:900;margin-top:5px;overflow-wrap:anywhere}
+.score-sub{font-size:8px;color:var(--muted)}
+.visit-actions{
+display:grid;grid-template-columns:.8fr 1.4fr .8fr;
+gap:6px;margin-top:8px
+}
+.visit-actions button{width:100%;font-size:10px;padding:8px 2px}
+.notice{font-size:11px;text-align:center;color:#b9d9ed;margin-top:9px;min-height:18px}
+.result{font-size:28px;font-weight:900}
+.win{color:var(--success)}
+.loss{color:var(--danger)}
+.final-score{font-size:38px;font-weight:900;margin:10px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:12px 0}
+.stat{background:#061421;border:1px solid var(--line);padding:10px;border-radius:8px}
+.stat strong{display:block;font-size:20px}
+.stat span{font-size:9px;color:var(--muted)}
+.issues{display:grid;gap:7px;margin:12px 0}
+.issue{width:100%;text-align:left;background:#071a28;color:white;border:1px solid #1a3c54}
+.issue.selected{border-color:var(--blue);color:var(--blue)}
+footer{text-align:center;color:#46647a;font-size:9px;padding:20px}
 </style>
 </head>
 <body>
@@ -116,7 +167,7 @@ h1{font-size:23px}
 <button class="format" data-format="7" onclick="selectFormat(7)">BEST OF 7</button>
 <button class="format" data-format="9" onclick="selectFormat(9)">BEST OF 9</button>
 </div>
-<div id="formatDescription" class="small">Select your match format.</div>
+<p id="formatDescription" class="small">Select your match format.</p>
 <button id="startGame" class="primary hidden" onclick="startMatch()">START YOUR GAME</button>
 </div>
 </section>
@@ -132,8 +183,7 @@ h1{font-size:23px}
 
 <div class="collapse">
 <div class="collapse-head" onclick="toggleCallerPanel()">
-<span>DARTIQ MASTER CALLER</span>
-<span id="callerArrow">▼</span>
+<span>DARTIQ MASTER CALLER</span><span id="callerArrow">▼</span>
 </div>
 <div id="callerContent" class="collapse-body hidden">
 <div id="callerLine" class="caller-line">Master caller ready.</div>
@@ -148,16 +198,14 @@ h1{font-size:23px}
 
 <div class="collapse">
 <div class="collapse-head" onclick="toggleScoringPanel()">
-<span>SCORING INPUT</span>
-<span id="scoringArrow">▼</span>
+<span>SCORING INPUT</span><span id="scoringArrow">▼</span>
 </div>
 <div id="scoringContent" class="collapse-body hidden">
 <div class="mode-row">
 <button id="boardModeButton" class="mode-button active" onclick="setMode('board')">DARTBOARD</button>
 <button id="keyModeButton" class="mode-button" onclick="setMode('keypad')">KEYPAD</button>
 </div>
-<div id="boardPanel"></div>
-<div id="keypadPanel" class="keypad-panel hidden">
+<div id="keypadPanel" class="hidden">
 <div id="keyValue" class="key-value">0</div>
 <div class="keypad">
 <button class="key" onclick="keyPress('1')">1</button>
@@ -173,7 +221,7 @@ h1{font-size:23px}
 <button class="key" onclick="keyPress('0')">0</button>
 <button class="key" onclick="keyBack()">⌫</button>
 </div>
-<p class="small center">Enter your total visit score. A checkout requires confirmation.</p>
+<p class="small center">Enter your visit total.</p>
 </div>
 </div>
 </div>
@@ -195,10 +243,8 @@ h1{font-size:23px}
 <div class="dart" id="dart3">DART 3: –</div>
 </div>
 
-<div class="dartboard-layout">
 <div class="board-wrap">
 <svg id="board" viewBox="-230 -230 460 460" aria-label="Interactive dartboard"></svg>
-</div>
 </div>
 
 <div class="score-checkout-row">
@@ -207,24 +253,23 @@ h1{font-size:23px}
 <div id="boardRemaining" class="score-number">501</div>
 </div>
 <div class="checkout-panel">
-<div class="checkout-label">DARTIQ CHECKOUT</div>
+<div class="score-label">DARTIQ CHECKOUT</div>
 <div id="checkoutRoute" class="checkout-route">NO CHECKOUT</div>
-<div id="checkoutHint" class="checkout-hint"></div>
 </div>
 <div class="score-box">
 <div class="score-label">LEGS</div>
-<div id="boardLegs" class="legs-number">0–0</div>
+<div id="boardLegs" class="score-number">0–0</div>
 <div class="score-sub">YOU / OPP.</div>
 </div>
 </div>
 
 <div class="visit-actions">
-<button id="missButton" class="secondary" onclick="addMiss()">MISS</button>
+<button class="secondary" onclick="addMiss()">MISS</button>
 <button id="confirmVisitButton" class="primary" onclick="confirmVisit()">CONFIRM VISIT</button>
-<button id="undoButton" class="secondary" onclick="undoVisitEntry()">UNDO</button>
+<button class="secondary" onclick="undoVisitEntry()">UNDO</button>
 </div>
 <div id="message" class="notice"></div>
-<button id="opponentWonButton" class="danger" onclick="opponentWonLeg()">OPPONENT WON LEG</button>
+<button class="danger" onclick="opponentWonLeg()">OPPONENT WON LEG</button>
 </div>
 </section>
 
@@ -245,7 +290,7 @@ h1{font-size:23px}
 <div class="panel">
 <div class="eyebrow">POST-MATCH ANALYSIS</div>
 <h1>WHAT WAS YOUR MAIN ISSUE?</h1>
-<p class="small">Select the main issue you experienced during this match.</p>
+<p class="small">Select the main issue experienced during this match.</p>
 <div id="issues" class="issues"></div>
 <button id="analysisButton" class="primary hidden" onclick="finishAnalysis()">GET MY AI ANALYSIS</button>
 <div id="analysisMessage" class="notice"></div>
@@ -268,8 +313,8 @@ h1{font-size:23px}
 <script>
 "use strict";
 
+const $=id=>document.getElementById(id);
 const params=new URLSearchParams(location.search);
-
 const param=(...names)=>{
  for(const name of names){
   const value=params.get(name);
@@ -278,234 +323,149 @@ const param=(...names)=>{
  return "";
 };
 
-const $=id=>document.getElementById(id);
-const fmt=n=>Number(n||0).toFixed(2);
-
-const WEBHOOK=
-"https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/5415568e-2eca-408f-a460-572b257d1cdf";
-
-const MATCH_START_WEBHOOK=
-"https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/86d46fb2-e26e-43fc-9887-60c5a31e5357";
-
-const MATCH_COMPLETION_WEBHOOK=
-"https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/89ab5acf-6067-4022-ab9d-f5a02ab99698";
-
-const POST_MATCH_ANALYSIS_WEBHOOK=
-"https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/14d384bc-3cab-4998-b788-826359db17dc";
+const WEBHOOK="https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/5415568e-2eca-408f-a460-572b257d1cdf";
+const MATCH_START_WEBHOOK="https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/86d46fb2-e26e-43fc-9887-60c5a31e5357";
+const MATCH_COMPLETION_WEBHOOK="https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/89ab5acf-6067-4022-ab9d-f5a02ab99698";
+const POST_MATCH_ANALYSIS_WEBHOOK="https://go.glideapps.com/api/container/plugin/webhook-trigger/mjIrXgu5eUxtGVZ4JA3B/14d384bc-3cab-4998-b788-826359db17dc";
 
 const email=param("email");
 const playerID=param("player","playerid","userid");
-
 const playerName=(
- param("playername","playerName","name","firstName")||"Player"
+ param("playername","playerName","name","firstName")||
+ "Player"
 ).replace(/[{}]/g,"");
-
 const spokenName=playerName.split(/\s+/)[0];
 const language=param("language","lang")||"EN";
 
 let sessionID=param("session","sessionID");
-let bestOf=0;
-let legsToWin=0;
-let mode="board";
-let remaining=501;
-let currentLeg=1;
-let legsWon=0;
-let opponentLegs=0;
-let totalPoints=0;
-let totalDarts=0;
-let first9Points=0;
-let first9Darts=0;
-let count100=0;
-let count140=0;
-let count180=0;
-let checkoutAttempts=0;
-let checkoutHits=0;
-let highestCheckout=0;
-let visitNumber=0;
-let currentDarts=[];
-let keyInput="";
-let selectedIssue="";
-let finished=false;
-let saving=false;
-let matchLaunching=false;
-let matchResult="";
-let matchStartedAt="";
+let bestOf=0,legsToWin=0;
+let remaining=501,currentLeg=1;
+let legsWon=0,opponentLegs=0;
+let totalPoints=0,totalDarts=0;
+let first9Points=0,first9Darts=0;
+let count100=0,count140=0,count180=0;
+let checkoutAttempts=0,checkoutHits=0;
+let highestCheckout=0,visitNumber=0;
+let currentDarts=[],keyInput="";
+let mode="board",selectedIssue="";
+let finished=false,saving=false,matchLaunching=false;
+let matchResult="",matchStartedAt="";
 let completionSyncConfirmed=false;
 let selectedCoaching=null;
 
 const coachingLibrary={
 "Missing Right":{
- issue:"Missing Right",
- category:"Accuracy",
- advice:"Your main issue is missing to the right. Check your stance alignment, release direction and follow-through. Observe whether the throwing arm finishes outside your intended target line.",
- drill:"Right-Side Alignment Training",
- objective:"Reduce right-side misses.",
- why:"Repeated right-side misses may indicate a directional inconsistency in the throw.",
- execution:"Choose one target. Throw ten visits of three darts. Record each dart that lands right of the intended target. Maintain the same stance and release routine throughout.",
- avoid:"Do not force the wrist or change several mechanics simultaneously.",
- primary:"Right-side miss percentage",
- secondary:"Grouping consistency",
- target:"Reduce right-side misses compared with baseline.",
- track:"Right misses, total darts and grouping.",
- next:"Compare the first five visits with the last five."
+category:"Accuracy",
+advice:"Check stance alignment, release direction and follow-through. Observe whether your arm finishes to the right of the target.",
+drill:"Right-Side Alignment Training",
+objective:"Reduce right-side misses.",
+execution:"Throw ten visits of three darts at one target. Record right-side misses.",
+primary:"Right-side miss percentage",
+target:"Reduce right misses compared with baseline."
 },
 "Missing Left":{
- issue:"Missing Left",
- category:"Accuracy",
- advice:"Observe whether the release crosses your target line. Check shoulder alignment and follow-through direction.",
- drill:"Left-Side Alignment Training",
- objective:"Reduce left-side misses.",
- why:"Repeated left-side misses can indicate directional release variation.",
- execution:"Throw ten visits at a fixed target. Record left misses and keep the same stance and throwing rhythm.",
- avoid:"Avoid overcorrecting after individual darts.",
- primary:"Left-side miss percentage",
- secondary:"Grouping consistency",
- target:"Reduce left-side misses compared with baseline.",
- track:"Left misses and grouping.",
- next:"Repeat the drill and compare the results."
+category:"Accuracy",
+advice:"Check shoulder alignment and whether your release crosses the target line.",
+drill:"Left-Side Alignment Training",
+objective:"Reduce left-side misses.",
+execution:"Throw ten visits at a fixed target and record left-side misses.",
+primary:"Left-side miss percentage",
+target:"Reduce left misses compared with baseline."
 },
 "Missing High":{
- issue:"Missing High",
- category:"Release Control",
- advice:"Observe release height and timing. Compare the release point of accurate darts with darts landing high.",
- drill:"Vertical Release Control",
- objective:"Reduce high misses.",
- why:"Changes in release timing or height can contribute to vertical variation.",
- execution:"Throw ten visits at the same target. Record high misses and maintain a consistent throwing rhythm.",
- avoid:"Do not force the dart downward.",
- primary:"High miss percentage",
- secondary:"Vertical grouping spread",
- target:"Reduce high misses from baseline.",
- track:"High misses and grouping.",
- next:"Retest with the same throwing rhythm."
+category:"Release Control",
+advice:"Observe release height and timing. Compare accurate throws with darts landing high.",
+drill:"Vertical Release Control",
+objective:"Reduce high misses.",
+execution:"Throw ten visits at one target and record high misses.",
+primary:"High miss percentage",
+target:"Reduce high misses compared with baseline."
 },
 "Missing Low":{
- issue:"Missing Low",
- category:"Follow Through",
- advice:"Check whether your arm stops early or your release point changes. Finish naturally toward the target.",
- drill:"Low-Miss Follow-Through Training",
- objective:"Reduce low misses.",
- why:"Inconsistent release height and follow-through may contribute to low darts.",
- execution:"Throw ten visits at a fixed target. Observe the finishing position of your throwing arm after each release.",
- avoid:"Do not deliberately force the arm upward.",
- primary:"Low miss percentage",
- secondary:"Follow-through consistency",
- target:"Reduce low misses compared with baseline.",
- track:"Low misses and vertical spread.",
- next:"Compare the first and final five visits."
+category:"Follow Through",
+advice:"Check whether your throwing arm stops early or your release point changes.",
+drill:"Low-Miss Follow-Through Training",
+objective:"Reduce low misses.",
+execution:"Throw ten visits while observing the arm's finishing position.",
+primary:"Low miss percentage",
+target:"Reduce low misses compared with baseline."
 },
 "Inconsistent Grouping":{
- issue:"Inconsistent Grouping",
- category:"Consistency",
- advice:"Focus on repeating the same stance, tempo, release and follow-through. Measure grouping rather than chasing individual high scores.",
- drill:"Grouping Consistency Training",
- objective:"Improve repeatable grouping.",
- why:"Consistent grouping is a useful measure of repeatable throwing mechanics.",
- execution:"Throw ten visits at one fixed target. Record the grouping spread after each visit.",
- avoid:"Avoid changing your technique after every miss.",
- primary:"Grouping spread",
- secondary:"Visit-to-visit consistency",
- target:"Reduce grouping spread from baseline.",
- track:"Grouping size and miss direction.",
- next:"Repeat the test after a short break."
+category:"Consistency",
+advice:"Repeat the same stance, tempo, release and follow-through. Focus on grouping rather than individual high scores.",
+drill:"Grouping Consistency Training",
+objective:"Improve repeatable grouping.",
+execution:"Throw ten visits at one target and record grouping spread.",
+primary:"Grouping spread",
+target:"Reduce grouping spread from baseline."
 },
 "Release Timing":{
- issue:"Release Timing",
- category:"Mechanics",
- advice:"Maintain a repeatable throwing tempo. Observe whether early or late releases correspond with particular misses.",
- drill:"Release Timing Training",
- objective:"Improve release timing consistency.",
- why:"Variation in release timing can change dart trajectory and grouping.",
- execution:"Complete ten visits at a consistent pace. Record miss direction and any noticeable changes in release timing.",
- avoid:"Avoid rushing or holding the dart unnaturally.",
- primary:"Release timing consistency",
- secondary:"Grouping spread",
- target:"Reduce timing variation.",
- track:"Miss direction and throwing tempo.",
- next:"Retest using the same pre-throw routine."
+category:"Mechanics",
+advice:"Maintain repeatable throwing tempo. Observe early and late releases.",
+drill:"Release Timing Training",
+objective:"Improve release timing consistency.",
+execution:"Complete ten visits at a consistent pace and record miss direction.",
+primary:"Release timing consistency",
+target:"Reduce timing variation."
 },
 "Follow Through":{
- issue:"Follow Through",
- category:"Mechanics",
- advice:"Allow your arm to finish naturally toward the target after release.",
- drill:"Follow-Through Consistency",
- objective:"Improve follow-through repeatability.",
- why:"Repeatable finishing mechanics may support more consistent dart delivery.",
- execution:"Throw ten visits while observing the finishing position of your arm.",
- avoid:"Do not abruptly stop the throwing arm.",
- primary:"Follow-through consistency",
- secondary:"Grouping",
- target:"Improve finishing-position consistency.",
- track:"Arm finish and grouping.",
- next:"Compare the first and last five visits."
+category:"Mechanics",
+advice:"Allow the throwing arm to finish naturally toward the target.",
+drill:"Follow-Through Consistency",
+objective:"Improve follow-through repeatability.",
+execution:"Throw ten visits while observing the finishing position of the arm.",
+primary:"Follow-through consistency",
+target:"Improve finishing-position consistency."
 },
 "Elbow Movement":{
- issue:"Elbow Movement",
- category:"Mechanics",
- advice:"Observe elbow movement during delivery. Look for unnecessary changes before release.",
- drill:"Elbow Stability Training",
- objective:"Improve repeatability of elbow movement.",
- why:"Inconsistent elbow movement may influence the release path.",
- execution:"Throw ten visits at one target while observing elbow position and release.",
- avoid:"Do not rigidly lock the elbow.",
- primary:"Elbow movement consistency",
- secondary:"Grouping",
- target:"Improve movement repeatability.",
- track:"Elbow movement and miss direction.",
- next:"Retest after one controlled adjustment."
+category:"Mechanics",
+advice:"Observe elbow movement and unnecessary changes before release.",
+drill:"Elbow Stability Training",
+objective:"Improve repeatability of elbow movement.",
+execution:"Throw ten visits at one target while observing elbow movement.",
+primary:"Elbow movement consistency",
+target:"Improve movement repeatability."
 },
 "Body Stability":{
- issue:"Body Stability",
- category:"Stance",
- advice:"Maintain a comfortable balanced stance. Reduce unnecessary body movement during delivery.",
- drill:"Stance Stability Training",
- objective:"Improve body stability.",
- why:"A repeatable setup supports a consistent throw.",
- execution:"Throw ten visits from the same stance. Record balance changes and grouping.",
- avoid:"Avoid forced or uncomfortable positioning.",
- primary:"Body movement consistency",
- secondary:"Grouping",
- target:"Improve stance repeatability.",
- track:"Body movement and grouping.",
- next:"Compare results across ten visits."
+category:"Stance",
+advice:"Maintain a comfortable balanced stance and reduce unnecessary body movement.",
+drill:"Stance Stability Training",
+objective:"Improve body stability.",
+execution:"Throw ten visits from the same stance and record balance changes.",
+primary:"Body movement consistency",
+target:"Improve stance repeatability."
 },
 "Confidence":{
- issue:"Confidence",
- category:"Mental Performance",
- advice:"Use the same pre-throw routine after both strong and weak visits. Focus on execution rather than one score.",
- drill:"Match Confidence Routine",
- objective:"Improve consistency under pressure.",
- why:"A repeatable routine can support attention and decision-making.",
- execution:"Complete ten visits using the same setup and pre-throw routine.",
- avoid:"Avoid changing routine after low scores.",
- primary:"Routine adherence",
- secondary:"Score consistency",
- target:"Maintain the routine across all ten visits.",
- track:"Routine adherence and visit scores.",
- next:"Repeat under simulated match pressure."
+category:"Mental Performance",
+advice:"Use the same pre-throw routine after strong and weak visits. Focus on execution.",
+drill:"Match Confidence Routine",
+objective:"Improve consistency under pressure.",
+execution:"Complete ten visits using the same pre-throw routine.",
+primary:"Routine adherence",
+target:"Maintain the routine across all ten visits."
 }
 };
 
 function getCoaching(issue){
  const base=coachingLibrary[issue]||
  coachingLibrary["Inconsistent Grouping"];
-
  return {
+  issue,
   ...base,
   drill:param("recommendedDrill","drill")||base.drill,
   advice:param("coachAdvice","aiAdvice")||base.advice,
   objective:param("objective")||base.objective,
-  why:param("why")||base.why,
   execution:param("execution")||base.execution,
-  avoid:param("avoid")||base.avoid,
   primary:param("keithprimary","primarymetric")||base.primary,
-  secondary:param("keithsecondary","secondarymetric")||base.secondary,
   target:param("keithtarget","successtarget")||base.target,
-  track:param("track")||base.track,
-  next:param("nextAction")||base.next,
   practiceID:param("practiceID","practiceId"),
   keithRules:param("keithrules","rules"),
   keithCoach:param("keithcoach","coach"),
+  secondary:param("keithsecondary","secondarymetric"),
+  why:param("why"),
+  avoid:param("avoid"),
+  track:param("track"),
+  next:param("nextAction"),
   red:param("keithred","red"),
   orange:param("keithorange","orange"),
   yellow:param("keithyellow","yellow"),
@@ -521,12 +481,10 @@ function getCoaching(issue){
 }
 
 async function sendEvent(eventType,data={}){
- const url=eventType==="match_start"?
- MATCH_START_WEBHOOK:
- eventType==="match_complete"?
- MATCH_COMPLETION_WEBHOOK:
- eventType==="match_main_issue"?
- POST_MATCH_ANALYSIS_WEBHOOK:
+ const url=
+ eventType==="match_start"?MATCH_START_WEBHOOK:
+ eventType==="match_complete"?MATCH_COMPLETION_WEBHOOK:
+ eventType==="match_main_issue"?POST_MATCH_ANALYSIS_WEBHOOK:
  WEBHOOK;
 
  try{
@@ -534,26 +492,14 @@ async function sendEvent(eventType,data={}){
    method:"POST",
    headers:{"Content-Type":"application/json"},
    body:JSON.stringify({
-    eventType,
-    sessionID,
-    email,
-    playerID,
-    playerName,
-    language,
-    scoringSource:"Match",
-    bestOf,
-    matchFormat:"BO"+bestOf,
-    legsToWin,
+    eventType,sessionID,email,playerID,playerName,
+    language,scoringSource:"Match",
+    bestOf,matchFormat:"BO"+bestOf,legsToWin,
     ...data
    })
   });
-
-  if(!response.ok){
-   throw new Error("Glide HTTP "+response.status);
-  }
-
+  if(!response.ok)throw Error("Glide HTTP "+response.status);
   return true;
-
  }catch(error){
   console.error("DARTIQ Glide:",error);
   return false;
@@ -561,116 +507,96 @@ async function sendEvent(eventType,data={}){
 }
 
 function recoveryKey(){
- return "DARTIQ_MATCH_V85_"+
- (sessionID||"NO_SESSION")+"_"+(email||playerID||"guest");
+ return "DARTIQ_MATCH_V85_"+(sessionID||"NO_SESSION")+
+ "_"+(email||playerID||"guest");
 }
 
 function saveRecovery(stage){
  if(!sessionID)return;
-
  try{
   sessionStorage.setItem(recoveryKey(),JSON.stringify({
-   stage,sessionID,bestOf,legsToWin,
-   legsWon,opponentLegs,totalPoints,totalDarts,
-   first9Points,first9Darts,
-   count100,count140,count180,
-   checkoutAttempts,checkoutHits,
-   highestCheckout,visitNumber,
-   selectedIssue,selectedCoaching,
-   matchResult,completionSyncConfirmed
+   stage,sessionID,bestOf,legsToWin,legsWon,opponentLegs,
+   totalPoints,totalDarts,first9Points,first9Darts,
+   count100,count140,count180,checkoutAttempts,
+   checkoutHits,highestCheckout,visitNumber,
+   selectedIssue,selectedCoaching,matchResult,
+   completionSyncConfirmed
   }));
  }catch(error){}
 }
 
 function restoreRecovery(){
  if(!sessionID)return;
-
  try{
-  const saved=JSON.parse(
-   sessionStorage.getItem(recoveryKey())||"null"
-  );
-
-  if(!saved||!["completed","mainIssue","analysis"].includes(saved.stage)){
-   return;
+  const saved=JSON.parse(sessionStorage.getItem(recoveryKey())||"null");
+  if(!saved||!["completed","mainIssue","analysis"].includes(saved.stage))return;
+  const keys=[
+   "bestOf","legsToWin","legsWon","opponentLegs",
+   "totalPoints","totalDarts","first9Points","first9Darts",
+   "count100","count140","count180","checkoutAttempts",
+   "checkoutHits","highestCheckout","visitNumber"
+  ];
+  for(const key of keys){
+   const value=Number(saved[key]);
+   if(Number.isFinite(value)){
+    switch(key){
+     case "bestOf":bestOf=value;break;
+     case "legsToWin":legsToWin=value;break;
+     case "legsWon":legsWon=value;break;
+     case "opponentLegs":opponentLegs=value;break;
+     case "totalPoints":totalPoints=value;break;
+     case "totalDarts":totalDarts=value;break;
+     case "first9Points":first9Points=value;break;
+     case "first9Darts":first9Darts=value;break;
+     case "count100":count100=value;break;
+     case "count140":count140=value;break;
+     case "count180":count180=value;break;
+     case "checkoutAttempts":checkoutAttempts=value;break;
+     case "checkoutHits":checkoutHits=value;break;
+     case "highestCheckout":highestCheckout=value;break;
+     case "visitNumber":visitNumber=value;break;
+    }
+   }
   }
-
-  bestOf=saved.bestOf||0;
-  legsToWin=saved.legsToWin||0;
-  legsWon=saved.legsWon||0;
-  opponentLegs=saved.opponentLegs||0;
-  totalPoints=saved.totalPoints||0;
-  totalDarts=saved.totalDarts||0;
-  first9Points=saved.first9Points||0;
-  first9Darts=saved.first9Darts||0;
-  count100=saved.count100||0;
-  count140=saved.count140||0;
-  count180=saved.count180||0;
-  checkoutAttempts=saved.checkoutAttempts||0;
-  checkoutHits=saved.checkoutHits||0;
-  highestCheckout=saved.highestCheckout||0;
-  visitNumber=saved.visitNumber||0;
   selectedIssue=saved.selectedIssue||"";
   selectedCoaching=saved.selectedCoaching||null;
   matchResult=saved.matchResult||"";
   completionSyncConfirmed=!!saved.completionSyncConfirmed;
-
   finished=true;
   renderMatchResults();
-
-  if(saved.stage==="analysis"&&selectedIssue){
-   renderAnalysis();
-  }
-
+  if(saved.stage==="analysis"&&selectedIssue)renderAnalysis();
   showScreen(saved.stage);
-
- }catch(error){
-  console.warn("Recovery:",error);
- }
+ }catch(error){console.warn(error)}
 }
 
 function showScreen(id){
- document.querySelectorAll(".screen").forEach(screen=>{
-  screen.classList.toggle("active",screen.id===id);
+ document.querySelectorAll(".screen").forEach(s=>{
+  s.classList.toggle("active",s.id===id);
  });
  window.scrollTo(0,0);
 }
 
 function startSession(){
  showScreen("formats");
-
- const readyLine=readyPromptPlayed?"":
-  "Ready to play? Start a new DARTIQ match session. ";
-
- speak(
-  readyLine+"Welcome "+spokenName+
-  " to DARTIQ Match Play. Select your match format."
- );
+ speak("Welcome "+spokenName+
+ " to DARTIQ Match Play. Select your match format.");
 }
 
 function selectFormat(n){
  if(![3,5,7,9].includes(n))return;
-
  bestOf=n;
  legsToWin=Math.floor(n/2)+1;
-
- document.querySelectorAll(".format").forEach(button=>{
-  button.classList.toggle(
-   "selected",Number(button.dataset.format)===n
-  );
+ document.querySelectorAll(".format").forEach(b=>{
+  b.classList.toggle("selected",Number(b.dataset.format)===n);
  });
-
  $("formatDescription").textContent=
- "BEST OF "+bestOf+" • FIRST TO "+legsToWin+" LEGS";
-
+ "BEST OF "+n+" • FIRST TO "+legsToWin+" LEGS";
  $("startGame").classList.remove("hidden");
-
- speak(
-  "Best of "+bestOf+". First to "+legsToWin+
-  " legs. Press Start Your Game when ready."
- );
+ speak("Best of "+n+". First to "+legsToWin+
+ " legs. Press Start Your Game when ready.");
 }
 
-/* DARTIQ MASTER CALLER */
+/* MASTER CALLER V8.7 */
 
 const speechSupported=
  "speechSynthesis" in window &&
@@ -679,6 +605,7 @@ const speechSupported=
 let voiceEnabled=true;
 let callerVoice=null;
 let lastCall="";
+let lastCallOptions={};
 let speechSequence=0;
 let readyPromptPlayed=false;
 let readyPromptAttempted=false;
@@ -687,158 +614,103 @@ const spokenBrand="Dartic";
 
 function selectCallerVoice(){
  if(!speechSupported)return null;
-
  const voices=speechSynthesis.getVoices()||[];
-
- const english=voices.filter(v=>
-  /^en(?:[-_]|$)/i.test(v.lang||"")
- );
-
  const maleNames=
- /\b(?:ryan|guy|david|daniel|george|brian|andrew|mark|eric|christopher|oliver|thomas|james|matthew|richard|arthur|alex|aaron|fred|ralph|albert|bruce|reed|rocko|eddy|grandpa|nathan|michael|male)\b/i;
-
+ /\b(ryan|guy|david|daniel|george|brian|andrew|mark|eric|christopher|oliver|thomas|james|matthew|richard|arthur|alex|aaron|fred|ralph|albert|bruce|reed|nathan|michael)\b/i;
  const femaleNames=
- /\b(?:female|zira|hazel|susan|samantha|victoria|karen|moira|ava|aria|jenny|sonia|natasha|emma|amy|fiona|tessa|allison|joanna|salli|shelley|sandy|joelle|serena|martha)\b/i;
-
- const ranked=english
-  .filter(v=>
-   maleNames.test(v.name||"") &&
-   !femaleNames.test(v.name||"")
-  )
-  .map(voice=>{
-   const name=voice.name||"";
-   let score=100;
-
-   if(/neural|natural|premium|enhanced/i.test(name))score+=25;
-   if(/microsoft|google/i.test(name))score+=10;
-   if(/^en-GB$/i.test(voice.lang))score+=12;
-   if(/^en-US$/i.test(voice.lang))score+=6;
-   if(voice.default)score+=3;
-
-   return {voice,score};
-  })
-  .sort((a,b)=>b.score-a.score);
+ /\b(female|zira|hazel|susan|samantha|victoria|karen|moira|ava|aria|jenny|sonia|natasha|emma|amy|fiona|tessa|allison|joanna|salli|serena)\b/i;
+ const ranked=voices
+ .filter(v=>/^en(?:[-_]|$)/i.test(v.lang||""))
+ .filter(v=>maleNames.test(v.name||"")&&!femaleNames.test(v.name||""))
+ .map(voice=>{
+  let score=0;
+  const name=voice.name||"";
+  if(/ryan/i.test(name))score+=100;
+  if(/george/i.test(name))score+=90;
+  if(/guy/i.test(name))score+=85;
+  if(/david/i.test(name))score+=80;
+  if(/daniel/i.test(name))score+=75;
+  if(/neural|natural|premium/i.test(name))score+=35;
+  if(/^en-GB$/i.test(voice.lang))score+=15;
+  return {voice,score};
+ }).sort((a,b)=>b.score-a.score);
 
  callerVoice=ranked[0]?.voice||null;
-
- const status=$("voiceStatus");
-
- if(status){
-  status.textContent=callerVoice?
-   "Male voice ready: "+callerVoice.name:
-   "No recognised male English voice on this device.";
- }
-
+ $("voiceStatus").textContent=callerVoice?
+ "MASTER CALLER: "+callerVoice.name:
+ "No recognised male English voice available.";
  return callerVoice;
 }
 
 function speechText(text){
  return String(text)
- .replace(
-  /\bD\s*[.\-]?\s*A\s*[.\-]?\s*R\s*[.\-]?\s*T\s*[.\-]?\s*I\s*[.\-]?\s*Q\b/gi,
-  spokenBrand
- )
+ .replace(/\bD\s*[.\-]?\s*A\s*[.\-]?\s*R\s*[.\-]?\s*T\s*[.\-]?\s*I\s*[.\-]?\s*Q\b/gi,spokenBrand)
  .replace(/\bDART\s+IQ\b/gi,spokenBrand)
  .replace(/\bDARTIQ\b/gi,spokenBrand);
 }
 
 function speak(text,options={}){
  lastCall=text;
-
- const callerLine=$("callerLine");
- if(callerLine)callerLine.textContent=text;
-
+ lastCallOptions={...options};
+ $("callerLine").textContent=text;
  if(!voiceEnabled||!speechSupported)return;
-
  const sequence=++speechSequence;
-
  speechSynthesis.cancel();
 
  const deliver=()=>{
   if(sequence!==speechSequence||!voiceEnabled)return;
-
   const voice=selectCallerVoice();
-
   if(!voice)return;
+  const celebration=options.celebration===true||
+  /\b180\b/.test(text)||
+  /one hundred and eighty/i.test(text);
 
-  const script=options.celebration?
-   "ONE HUNDRED! ... AND EIGHTY!":
-   speechText(text);
+  const script=celebration?
+  "One hundred and eighty!":speechText(text);
 
   const utterance=new SpeechSynthesisUtterance(script);
-
   utterance.voice=voice;
   utterance.lang=voice.lang||"en-GB";
-  utterance.rate=options.celebration?0.80:0.97;
-  utterance.pitch=options.celebration?0.82:0.94;
+  utterance.rate=celebration?1.02:0.98;
+  utterance.pitch=celebration?0.88:0.94;
   utterance.volume=1;
-
   utterance.onstart=()=>{
-   if(options.setupIntro){
-    readyPromptPlayed=true;
-   }
+   if(options.setupIntro)readyPromptPlayed=true;
   };
-
   utterance.onerror=event=>{
    if(sequence!==speechSequence)return;
-
    if(!["interrupted","canceled"].includes(event.error)){
-    const status=$("voiceStatus");
-
-    if(status){
-     status.textContent=
-      "Voice blocked. Tap to enable the male caller.";
-    }
+    $("voiceStatus").textContent="Voice unavailable.";
    }
   };
-
   speechSynthesis.speak(utterance);
-
-  if(speechSynthesis.paused){
-   speechSynthesis.resume();
-  }
+  if(speechSynthesis.paused)speechSynthesis.resume();
  };
-
  if(!speechSynthesis.getVoices().length){
   setTimeout(deliver,200);
- }else{
-  deliver();
- }
+ }else deliver();
 }
 
 function announceReady(){
- if(
-  readyPromptPlayed||
-  readyPromptAttempted||
-  !$("setup").classList.contains("active")
- ){
-  return;
- }
-
+ if(readyPromptPlayed||readyPromptAttempted||
+ !$("setup").classList.contains("active"))return;
  if(!selectCallerVoice())return;
-
  readyPromptAttempted=true;
-
- speak(
-  "Ready to play? Start a new DARTIQ match session.",
-  {setupIntro:true}
- );
+ speak("Ready to play? Start a new DARTIQ match session.",
+ {setupIntro:true});
 }
 
 function repeatLastCall(){
- if(lastCall)speak(lastCall);
+ if(lastCall)speak(lastCall,lastCallOptions);
 }
 
 function testVoice(){
- speak("DARTIQ master caller ready. Game on!");
+ speak("ONE HUNDRED AND EIGHTY!",{celebration:true});
 }
 
 function toggleVoice(){
  voiceEnabled=!voiceEnabled;
-
- $("voiceToggle").textContent=voiceEnabled?
- "VOICE ON":"VOICE OFF";
-
+ $("voiceToggle").textContent=voiceEnabled?"VOICE ON":"VOICE OFF";
  if(!voiceEnabled&&speechSupported){
   speechSequence++;
   speechSynthesis.cancel();
@@ -857,88 +729,52 @@ function toggleScoringPanel(){
 
 function numberWords(n){
  n=Math.round(Number(n));
-
  const units=[
-  "zero","one","two","three","four","five",
-  "six","seven","eight","nine","ten","eleven",
-  "twelve","thirteen","fourteen","fifteen",
-  "sixteen","seventeen","eighteen","nineteen"
+ "zero","one","two","three","four","five","six","seven",
+ "eight","nine","ten","eleven","twelve","thirteen",
+ "fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"
  ];
-
- const tens=[
-  "","","twenty","thirty","forty",
-  "fifty","sixty","seventy","eighty","ninety"
- ];
-
+ const tens=["","","twenty","thirty","forty","fifty",
+ "sixty","seventy","eighty","ninety"];
  if(n<0)return "minus "+numberWords(-n);
  if(n<20)return units[n];
-
- if(n<100){
-  return tens[Math.floor(n/10)]+
-   (n%10?" "+units[n%10]:"");
- }
-
- if(n<1000){
-  return units[Math.floor(n/100)]+" hundred"+
-   (n%100?" and "+numberWords(n%100):"");
- }
-
+ if(n<100)return tens[Math.floor(n/10)]+
+ (n%10?" "+units[n%10]:"");
+ if(n<1000)return units[Math.floor(n/100)]+
+ " hundred"+(n%100?" and "+numberWords(n%100):"");
  return String(n);
 }
 
 async function startMatch(){
  if(!bestOf||matchLaunching)return;
-
  matchLaunching=true;
-
  if(!sessionID){
   sessionID=typeof crypto.randomUUID==="function"?
-   crypto.randomUUID():
-   "MATCH-"+Date.now();
+  crypto.randomUUID():"MATCH-"+Date.now();
  }
-
- try{
-  sessionStorage.removeItem(recoveryKey());
- }catch(error){}
-
- remaining=501;
- currentLeg=1;
- legsWon=0;
- opponentLegs=0;
- totalPoints=0;
- totalDarts=0;
- first9Points=0;
- first9Darts=0;
- count100=0;
- count140=0;
- count180=0;
- checkoutAttempts=0;
- checkoutHits=0;
- highestCheckout=0;
- visitNumber=0;
- currentDarts=[];
- keyInput="";
- selectedIssue="";
- selectedCoaching=null;
- finished=false;
- mode="board";
-
+ try{sessionStorage.removeItem(recoveryKey())}catch(error){}
+ remaining=501;currentLeg=1;
+ legsWon=0;opponentLegs=0;
+ totalPoints=0;totalDarts=0;
+ first9Points=0;first9Darts=0;
+ count100=0;count140=0;count180=0;
+ checkoutAttempts=0;checkoutHits=0;
+ highestCheckout=0;visitNumber=0;
+ currentDarts=[];keyInput="";
+ selectedIssue="";selectedCoaching=null;
+ finished=false;saving=false;mode="board";
  matchStartedAt=new Date().toISOString();
 
  $("matchTitle").textContent="BEST OF "+bestOf;
  $("targetInfo").textContent="FIRST TO "+legsToWin;
  $("displayPlayerName").textContent=playerName;
-
  setMode("board");
- updateInput();
- updateStats();
+ updateInput();updateStats();
  showScreen("match");
 
- const welcome=
- "Welcome "+spokenName+
- " to the DARTIQ oche. "+
- "You play best of "+bestOf+". Game on!";
-
+ const welcome="Welcome "+spokenName+
+ " to the DARTIQ oche. You play best of "+
+ bestOf+". Game on!";
  $("matchWelcome").textContent=welcome;
  speak(welcome);
 
@@ -946,19 +782,16 @@ async function startMatch(){
   startedAt:matchStartedAt,
   matchStatus:"In Progress"
  });
-
  matchLaunching=false;
-
- if(!ok){
-  message("Match started. Glide sync not confirmed.");
- }
+ if(!ok)message("Match started. Glide sync not confirmed.");
 }
 
-const numbers=[
- 20,1,18,4,13,6,10,15,2,17,
- 3,19,7,16,8,11,14,9,12,5
-];
+/* DARTBOARD */
 
+const numbers=[
+20,1,18,4,13,6,10,15,2,17,
+3,19,7,16,8,11,14,9,12,5
+];
 const NS="http://www.w3.org/2000/svg";
 const board=$("board");
 
@@ -968,21 +801,16 @@ function polar(r,a){
 }
 
 function ringPath(r1,r2,a1,a2){
- const p1=polar(r2,a1);
- const p2=polar(r2,a2);
- const p3=polar(r1,a2);
- const p4=polar(r1,a1);
-
+ const p1=polar(r2,a1),p2=polar(r2,a2);
+ const p3=polar(r1,a2),p4=polar(r1,a1);
  return `M${p1} A${r2} ${r2} 0 0 1 ${p2} L${p3} A${r1} ${r1} 0 0 0 ${p4} Z`;
 }
 
 function svgElement(tag,attributes){
  const element=document.createElementNS(NS,tag);
-
  for(const [key,value] of Object.entries(attributes)){
   element.setAttribute(key,value);
  }
-
  board.appendChild(element);
  return element;
 }
@@ -990,111 +818,74 @@ function svgElement(tag,attributes){
 function segment(r1,r2,a1,a2,color,n,m,label){
  const element=svgElement("path",{
   d:ringPath(r1,r2,a1,a2),
-  fill:color,
-  stroke:"#666",
-  "stroke-width":".65"
+  fill:color,stroke:"#666","stroke-width":".65"
  });
-
  element.style.cursor="pointer";
  element.addEventListener("click",()=>addDart(n,m,label));
 }
 
 function drawBoard(){
  board.replaceChildren();
-
  svgElement("circle",{
-  cx:0,cy:0,r:224,
-  fill:"#02070e",
-  stroke:"#39a9ff",
-  "stroke-width":3
+  cx:0,cy:0,r:224,fill:"#02070e",
+  stroke:"#39a9ff","stroke-width":3
  });
-
  numbers.forEach((n,i)=>{
   const a=i*18;
   const dark=i%2===0;
   const single=dark?"#10151a":"#e2d6b8";
   const multi=dark?"#c83c46":"#27865e";
-
   segment(24,103,a-9,a+9,single,n,1,"S"+n);
   segment(103,118,a-9,a+9,multi,n,3,"T"+n);
   segment(118,178,a-9,a+9,single,n,1,"S"+n);
   segment(178,195,a-9,a+9,multi,n,2,"D"+n);
-
   const [x,y]=polar(211,a);
-
-  const text=svgElement("text",{
-   x,y,
-   fill:"#39a9ff",
-   "font-size":16,
-   "font-weight":900,
-   "text-anchor":"middle",
+  const label=svgElement("text",{
+   x,y,fill:"#39a9ff","font-size":16,
+   "font-weight":900,"text-anchor":"middle",
    "dominant-baseline":"middle",
    "pointer-events":"none"
   });
-
-  text.textContent=n;
+  label.textContent=n;
  });
-
  const outer=svgElement("circle",{
-  cx:0,cy:0,r:24,
-  fill:"#27865e",
-  stroke:"#ddd"
+  cx:0,cy:0,r:24,fill:"#27865e",stroke:"#ddd"
  });
-
  outer.addEventListener("click",()=>addDart(25,1,"25"));
-
  const bull=svgElement("circle",{
-  cx:0,cy:0,r:10,
-  fill:"#c83c46",
-  stroke:"#ddd"
+  cx:0,cy:0,r:10,fill:"#c83c46",stroke:"#ddd"
  });
-
  bull.addEventListener("click",()=>addDart(25,2,"BULL"));
 }
 
-function message(text){
- $("message").textContent=text;
-}
+function message(text){$("message").textContent=text}
 
 function updateInput(){
  const score=currentDarts.reduce((sum,d)=>sum+d.score,0);
-
- $("visitScore").textContent=
-  mode==="board"?score:Number(keyInput||0);
-
+ $("visitScore").textContent=mode==="board"?score:Number(keyInput||0);
  $("keyValue").textContent=keyInput||"0";
-
  for(let i=0;i<3;i++){
   $("dart"+(i+1)).textContent=
-   "DART "+(i+1)+": "+
-   (currentDarts[i]?.label||"–");
+  "DART "+(i+1)+": "+(currentDarts[i]?.label||"–");
  }
 }
 
 function addDart(number,multiplier,label){
  if(finished||saving||mode!=="board")return;
-
  if(currentDarts.length>=3){
   message("Confirm your visit first.");
   return;
  }
-
  currentDarts.push({
-  number,
-  multiplier,
-  score:number*multiplier,
-  label
+  number,multiplier,score:number*multiplier,label
  });
-
  updateInput();
 }
 
 function addMiss(){
  if(finished||saving)return;
-
- if(mode==="board"){
-  addDart(0,0,"MISS");
- }else if(keyInput===""){
+ if(mode==="board")addDart(0,0,"MISS");
+ else if(keyInput===""){
   keyInput="0";
   updateInput();
  }
@@ -1102,240 +893,115 @@ function addMiss(){
 
 function undoVisitEntry(){
  if(finished||saving)return;
-
- if(mode==="board"){
-  currentDarts.pop();
- }else{
-  keyInput=keyInput.slice(0,-1);
- }
-
+ if(mode==="board")currentDarts.pop();
+ else keyInput=keyInput.slice(0,-1);
  updateInput();
 }
 
 function setMode(next){
  if(saving||finished)return;
  if(!["board","keypad"].includes(next))return;
-
- mode=next;
- currentDarts=[];
- keyInput="";
-
+ mode=next;currentDarts=[];keyInput="";
  $("keypadPanel").classList.toggle("hidden",mode!=="keypad");
  $("boardModeButton").classList.toggle("active",mode==="board");
  $("keyModeButton").classList.toggle("active",mode==="keypad");
-
  updateInput();
 }
 
 function keyPress(n){
  if(mode!=="keypad"||saving||finished)return;
  if(keyInput.length>=3)return;
-
  const next=keyInput+n;
  if(Number(next)>180)return;
-
- keyInput=next;
- updateInput();
+ keyInput=next;updateInput();
 }
+function keyClear(){keyInput="";updateInput()}
+function keyBack(){keyInput=keyInput.slice(0,-1);updateInput()}
 
-function keyClear(){
- keyInput="";
- updateInput();
-}
-
-function keyBack(){
- keyInput=keyInput.slice(0,-1);
- updateInput();
-}
+/* CHECKOUT ROUTES */
 
 const checkoutRoutes={
-170:"T20 T20 BULL",
-167:"T20 T19 BULL",
-164:"T20 T18 BULL",
-161:"T20 T17 BULL",
-160:"T20 T20 D20",
-158:"T20 T20 D19",
-157:"T20 T19 D20",
-156:"T20 T20 D18",
-155:"T20 T19 D19",
-154:"T20 T18 D20",
-153:"T20 T19 D18",
-152:"T20 T20 D16",
-151:"T20 T17 D20",
-150:"T20 T18 D18",
-149:"T20 T19 D16",
-148:"T20 T16 D20",
-147:"T20 T17 D18",
-146:"T20 T18 D16",
-145:"T20 T15 D20",
-144:"T20 T20 D12",
-143:"T20 T17 D16",
-142:"T20 T14 D20",
-141:"T20 T19 D12",
-140:"T20 T20 D10",
-139:"T20 T13 D20",
-138:"T20 T18 D12",
-137:"T20 T19 D10",
-136:"T20 T20 D8",
-135:"T20 T17 D12",
-134:"T20 T14 D16",
-133:"T20 T19 D8",
-132:"T20 T16 D12",
-131:"T20 T13 D16",
-130:"T20 T20 D5",
-129:"T19 T16 D12",
-128:"T18 T14 D16",
-127:"T20 T17 D8",
-126:"T19 T19 D6",
-125:"25 T20 D20",
-124:"T20 T16 D8",
-123:"T19 T16 D9",
-122:"T18 T20 D4",
-121:"T20 T11 D14",
-120:"T20 S20 D20",
-119:"T19 T12 D13",
-118:"T20 S18 D20",
-117:"T20 S17 D20",
-116:"T20 S16 D20",
-115:"T20 S15 D20",
-114:"T20 S14 D20",
-113:"T20 S13 D20",
-112:"T20 S12 D20",
-111:"T20 S11 D20",
-110:"T20 S10 D20",
-109:"T20 S9 D20",
-108:"T20 S8 D20",
-107:"T19 S10 D20",
-106:"T20 S6 D20",
-105:"T20 S5 D20",
-104:"T18 S10 D20",
-103:"T19 S6 D20",
-102:"T20 S10 D16",
-101:"T17 S10 D20",
-100:"T20 D20",
-98:"T20 D19",
-97:"T19 D20",
-96:"T20 D18",
-95:"T19 D19",
-94:"T18 D20",
-93:"T19 D18",
-92:"T20 D16",
-91:"T17 D20",
-90:"T18 D18",
-89:"T19 D16",
-88:"T16 D20",
-87:"T17 D18",
-86:"T18 D16",
-85:"T15 D20",
-84:"T20 D12",
-83:"T17 D16",
-82:"BULL D16",
-81:"T19 D12",
-80:"T20 D10",
-79:"T13 D20",
-78:"T18 D12",
-77:"T19 D10",
-76:"T20 D8",
-75:"T17 D12",
-74:"T14 D16",
-73:"T19 D8",
-72:"T16 D12",
-71:"T13 D16",
-70:"T10 D20",
-69:"T19 D6",
-68:"T20 D4",
-67:"T17 D8",
-66:"T10 D18",
-65:"T19 D4",
-64:"T16 D8",
-63:"T13 D12",
-62:"T10 D16",
-61:"T15 D8",
-60:"S20 D20",
-59:"S19 D20",
-58:"S18 D20",
-57:"S17 D20",
-56:"S16 D20",
-55:"S15 D20",
-54:"S14 D20",
-53:"S13 D20",
-52:"S12 D20",
-51:"S11 D20",
-50:"BULL",
-49:"S9 D20",
-48:"S16 D16",
-47:"S7 D20",
-46:"S6 D20",
-45:"S5 D20",
-44:"S12 D16",
-43:"S3 D20",
-42:"S10 D16",
-41:"S9 D16",
-40:"D20",
-39:"S7 D16",
-38:"D19",
-37:"S5 D16",
-36:"D18",
-35:"S3 D16",
-34:"D17",
-33:"S1 D16",
-32:"D16",
-31:"S15 D8",
-30:"D15",
-29:"S13 D8",
-28:"D14",
-27:"S11 D8",
-26:"D13",
-25:"S9 D8",
-24:"D12",
-23:"S7 D8",
-22:"D11",
-21:"S5 D8",
-20:"D10",
-19:"S3 D8",
-18:"D9",
-17:"S1 D8",
-16:"D8",
-15:"S7 D4",
-14:"D7",
-13:"S5 D4",
-12:"D6",
-11:"S3 D4",
-10:"D5",
-9:"S1 D4",
-8:"D4",
-7:"S3 D2",
-6:"D3",
-5:"S1 D2",
-4:"D2",
-3:"S1 D1",
-2:"D1"
+170:"T20 T20 BULL",167:"T20 T19 BULL",
+164:"T20 T18 BULL",161:"T20 T17 BULL",
+160:"T20 T20 D20",158:"T20 T20 D19",
+157:"T20 T19 D20",156:"T20 T20 D18",
+155:"T20 T19 D19",154:"T20 T18 D20",
+153:"T20 T19 D18",152:"T20 T20 D16",
+151:"T20 T17 D20",150:"T20 T18 D18",
+149:"T20 T19 D16",148:"T20 T16 D20",
+147:"T20 T17 D18",146:"T20 T18 D16",
+145:"T20 T15 D20",144:"T20 T20 D12",
+143:"T20 T17 D16",142:"T20 T14 D20",
+141:"T20 T19 D12",140:"T20 T20 D10",
+139:"T20 T13 D20",138:"T20 T18 D12",
+137:"T20 T19 D10",136:"T20 T20 D8",
+135:"T20 T17 D12",134:"T20 T14 D16",
+133:"T20 T19 D8",132:"T20 T16 D12",
+131:"T20 T13 D16",130:"T20 T20 D5",
+129:"T19 T16 D12",128:"T18 T14 D16",
+127:"T20 T17 D8",126:"T19 T19 D6",
+125:"25 T20 D20",124:"T20 T16 D8",
+123:"T19 T16 D9",122:"T18 T20 D4",
+121:"T20 T11 D14",120:"T20 S20 D20",
+119:"T19 T12 D13",118:"T20 S18 D20",
+117:"T20 S17 D20",116:"T20 S16 D20",
+115:"T20 S15 D20",114:"T20 S14 D20",
+113:"T20 S13 D20",112:"T20 S12 D20",
+111:"T20 S11 D20",110:"T20 S10 D20",
+109:"T20 S9 D20",108:"T20 S8 D20",
+107:"T19 S10 D20",106:"T20 S6 D20",
+105:"T20 S5 D20",104:"T18 S10 D20",
+103:"T19 S6 D20",102:"T20 S10 D16",
+101:"T17 S10 D20",100:"T20 D20",
+98:"T20 D19",97:"T19 D20",96:"T20 D18",
+95:"T19 D19",94:"T18 D20",93:"T19 D18",
+92:"T20 D16",91:"T17 D20",90:"T18 D18",
+89:"T19 D16",88:"T16 D20",87:"T17 D18",
+86:"T18 D16",85:"T15 D20",84:"T20 D12",
+83:"T17 D16",82:"BULL D16",81:"T19 D12",
+80:"T20 D10",79:"T13 D20",78:"T18 D12",
+77:"T19 D10",76:"T20 D8",75:"T17 D12",
+74:"T14 D16",73:"T19 D8",72:"T16 D12",
+71:"T13 D16",70:"T10 D20",69:"T19 D6",
+68:"T20 D4",67:"T17 D8",66:"T10 D18",
+65:"T19 D4",64:"T16 D8",63:"T13 D12",
+62:"T10 D16",61:"T15 D8",60:"S20 D20",
+59:"S19 D20",58:"S18 D20",57:"S17 D20",
+56:"S16 D20",55:"S15 D20",54:"S14 D20",
+53:"S13 D20",52:"S12 D20",51:"S11 D20",
+50:"BULL",49:"S9 D20",48:"S16 D16",
+47:"S7 D20",46:"S6 D20",45:"S5 D20",
+44:"S12 D16",43:"S3 D20",42:"S10 D16",
+41:"S9 D16",40:"D20",39:"S7 D16",
+38:"D19",37:"S5 D16",36:"D18",
+35:"S3 D16",34:"D17",33:"S1 D16",
+32:"D16",31:"S15 D8",30:"D15",
+29:"S13 D8",28:"D14",27:"S11 D8",
+26:"D13",25:"S9 D8",24:"D12",
+23:"S7 D8",22:"D11",21:"S5 D8",
+20:"D10",19:"S3 D8",18:"D9",
+17:"S1 D8",16:"D8",15:"S7 D4",
+14:"D7",13:"S5 D4",12:"D6",
+11:"S3 D4",10:"D5",9:"S1 D4",
+8:"D4",7:"S3 D2",6:"D3",
+5:"S1 D2",4:"D2",3:"S1 D1",2:"D1"
 };
 
 function updateCheckoutRoute(){
  const route=$("checkoutRoute");
-
- if(remaining>170){
-  route.textContent="NO CHECKOUT";
- }else if([169,168,166,165,163,162,159].includes(remaining)){
-  route.textContent="NO 3-DART FINISH";
- }else if(remaining===1){
-  route.textContent="BUST";
- }else if(remaining===0){
-  route.textContent="GAME SHOT";
- }else{
-  route.textContent=checkoutRoutes[remaining]||"SET UP DOUBLE";
- }
+ if(remaining>170)route.textContent="NO CHECKOUT";
+ else if([169,168,166,165,163,162,159].includes(remaining))
+ route.textContent="NO 3-DART FINISH";
+ else if(remaining===1)route.textContent="BUST";
+ else if(remaining===0)route.textContent="GAME SHOT";
+ else route.textContent=checkoutRoutes[remaining]||"SET UP DOUBLE";
 }
 
-const average=()=>totalDarts?
- totalPoints/totalDarts*3:0;
-
-const first9=()=>first9Darts?
- first9Points/first9Darts*3:0;
-
+const average=()=>totalDarts?totalPoints/totalDarts*3:0;
+const first9=()=>first9Darts?first9Points/first9Darts*3:0;
 const checkoutPct=()=>checkoutAttempts?
- checkoutHits/checkoutAttempts*100:0;
+checkoutHits/checkoutAttempts*100:0;
+const fmt=n=>Number(n||0).toFixed(2);
 
 function updateStats(){
  $("boardRemaining").textContent=remaining;
@@ -1348,92 +1014,60 @@ function updateStats(){
 function recordFirst9(score,darts,scores=[]){
  const available=Math.max(0,9-first9Darts);
  const take=Math.min(darts,available);
-
  if(take<=0)return;
-
- if(take===darts){
-  first9Points+=score;
- }else if(mode==="board"){
-  first9Points+=scores.slice(0,take).reduce(
-   (sum,n)=>sum+n,0
-  );
+ if(take===darts)first9Points+=score;
+ else if(mode==="board"){
+  first9Points+=scores.slice(0,take).reduce((a,b)=>a+b,0);
  }
-
  first9Darts+=take;
 }
 
+/* MATCH SCORING */
+
 async function confirmVisit(){
  if(finished||saving)return;
-
  const boardMode=mode==="board";
-
  if(boardMode&&!currentDarts.length){
-  message("Enter your darts first.");
-  return;
+  message("Enter your darts first.");return;
  }
-
  if(!boardMode&&keyInput===""){
-  message("Enter a visit score.");
-  return;
+  message("Enter a visit score.");return;
  }
-
- const darts=boardMode?
-  currentDarts.map(d=>({...d})):[];
-
+ const darts=boardMode?currentDarts.map(d=>({...d})):[];
  const score=boardMode?
-  darts.reduce((sum,d)=>sum+d.score,0):
-  Number(keyInput);
-
+ darts.reduce((sum,d)=>sum+d.score,0):Number(keyInput);
  const before=remaining;
  let count=boardMode?darts.length:3;
  const last=darts[darts.length-1];
  const exact=score===before;
 
  if(exact&&!boardMode){
-  if(!confirm("Did you finish on a double or bull?")){
-   return;
-  }
-
+  if(!confirm("Did you finish on a double or bull?"))return;
   const used=prompt("Darts used (1, 2 or 3):","3");
   if(used===null)return;
-
   count=Number(used);
-
   if(![1,2,3].includes(count)){
-   message("Enter 1, 2 or 3 darts.");
-   return;
+   message("Enter 1, 2 or 3 darts.");return;
   }
  }
 
- const bust=
-  score>before||
-  before-score===1||
-  (exact&&boardMode&&last?.multiplier!==2);
-
+ const bust=score>before||before-score===1||
+ (exact&&boardMode&&last?.multiplier!==2);
  const checkoutHit=exact&&!bust;
  const actual=bust?0:score;
  const after=bust?before:before-score;
  const attempt=before>=2&&before<=170;
 
  const record={
-  sessionID,
-  email,
-  playerID,
+  sessionID,email,playerID,
   visitNumber:visitNumber+1,
-  legNumber:currentLeg,
-  bestOf,
-  scoreBefore:before,
-  visitScore:actual,
-  attemptedScore:score,
-  dartsThrown:count,
-  remainingScore:after,
-  checkoutAttempt:attempt,
-  checkoutHit,
-  legEnded:checkoutHit,
+  legNumber:currentLeg,bestOf,
+  scoreBefore:before,visitScore:actual,
+  attemptedScore:score,dartsThrown:count,
+  remainingScore:after,checkoutAttempt:attempt,
+  checkoutHit,legEnded:checkoutHit,
   checkoutScore:checkoutHit?before:0,
-  bust,
-  scoringSource:"Match",
-  inputMode:mode,
+  bust,scoringSource:"Match",inputMode:mode,
   dart1Score:darts[0]?.score??null,
   dart1Segment:darts[0]?.label||"",
   dart2Score:darts[1]?.score??null,
@@ -1445,9 +1079,7 @@ async function confirmVisit(){
 
  saving=true;
  $("confirmVisitButton").disabled=true;
-
  const ok=await sendEvent("match_visit",record);
-
  saving=false;
  $("confirmVisitButton").disabled=false;
 
@@ -1455,12 +1087,10 @@ async function confirmVisit(){
  totalDarts+=count;
  totalPoints+=actual;
  recordFirst9(actual,count,darts.map(d=>d.score));
-
  if(attempt)checkoutAttempts++;
 
  if(!bust){
   remaining=after;
-
   if(score===180)count180++;
   else if(score>=140)count140++;
   else if(score>=100)count100++;
@@ -1470,6 +1100,13 @@ async function confirmVisit(){
   checkoutHits++;
   highestCheckout=Math.max(highestCheckout,before);
   legsWon++;
+  speak("Game shot "+spokenName+".");
+ }else if(score===180&&!bust){
+  speak("ONE HUNDRED AND EIGHTY!",{celebration:true});
+ }else if(bust){
+  speak("No score.");
+ }else{
+  speak(numberWords(actual));
  }
 
  currentDarts=[];
@@ -1477,435 +1114,242 @@ async function confirmVisit(){
  updateInput();
  updateStats();
 
- const matchWon=checkoutHit&&legsWon>=legsToWin;
+ if(!ok)message("Visit recorded. Glide sync not confirmed.");
+ else message(checkoutHit?"GAME SHOT!":"VISIT CONFIRMED");
 
  if(checkoutHit){
-  speak(
-   matchWon?
-   "Game shot "+spokenName+"! And the match!":
-   "Game shot "+spokenName+"! And the leg!"
-  );
-
-  if(matchWon){
+  if(legsWon>=legsToWin){
    await completeMatch();
-   return;
-  }
-
-  currentLeg++;
-  remaining=501;
-  updateStats();
-  message("LEG WON! Start leg "+currentLeg+".");
-
- }else if(bust){
-  speak("Bust!");
-  message("BUST • Score unchanged.");
-
- }else{
-  if(actual===180){
-   speak("ONE HUNDRED AND EIGHTY!",{celebration:true});
   }else{
-   speak(numberWords(actual));
+   remaining=501;
+   currentLeg++;
+   updateStats();
   }
-
-  message("Visit recorded • "+remaining+" remaining.");
- }
-
- if(!ok){
-  message("Glide sync not confirmed.");
  }
 }
 
 async function opponentWonLeg(){
  if(finished||saving)return;
-
- if(!confirm("Confirm opponent won leg "+currentLeg+"?")){
-  return;
- }
-
+ if(!confirm("Confirm opponent won this leg?"))return;
  saving=true;
-
- const ok=await sendEvent("match_visit",{
-  sessionID,
-  email,
-  playerID,
-  visitNumber:visitNumber+1,
-  legNumber:currentLeg,
-  bestOf,
-  scoreBefore:remaining,
-  visitScore:0,
-  attemptedScore:0,
-  dartsThrown:0,
-  remainingScore:remaining,
-  checkoutAttempt:false,
-  checkoutHit:false,
-  legEnded:true,
-  checkoutScore:0,
-  bust:false,
-  scoringSource:"Match",
-  inputMode:"opponent",
-  legWinner:"Opponent",
-  opponentWonLeg:true,
-  darts:[]
- });
-
- saving=false;
  opponentLegs++;
- visitNumber++;
- currentDarts=[];
- keyInput="";
- updateInput();
- updateStats();
-
- const matchLost=opponentLegs>=legsToWin;
-
- speak(
-  matchLost?
-  "Game shot, and the match to your opponent!":
-  "Game shot, leg to your opponent!"
- );
-
- if(matchLost){
+ const ok=await sendEvent("opponent_won_leg",{
+  legNumber:currentLeg,
+  legsWon,opponentLegs,
+  remainingScore:remaining,
+  legEnded:true,
+  legWinner:"Opponent"
+ });
+ saving=false;
+ if(!ok)message("Opponent leg recorded. Glide sync not confirmed.");
+ speak("Game shot. Opponent.");
+ if(opponentLegs>=legsToWin){
   await completeMatch();
-  return;
- }
-
- currentLeg++;
- remaining=501;
- updateStats();
-
- message("OPPONENT WON LEG • Start leg "+currentLeg+".");
-
- if(!ok){
-  message("Glide sync not confirmed.");
+ }else{
+  remaining=501;
+  currentLeg++;
+  currentDarts=[];
+  keyInput="";
+  updateInput();
+  updateStats();
  }
 }
 
-function summaryCard(label,value){
- const element=document.createElement("div");
- element.className="stat";
-
- const number=document.createElement("strong");
- number.textContent=value;
-
- const caption=document.createElement("span");
- caption.textContent=label;
-
- element.append(number,caption);
- return element;
-}
-
-function renderMatchResults(){
- matchResult=legsWon>=legsToWin?"Won":"Lost";
-
- $("finalResult").textContent=
-  matchResult==="Won"?"YOU WON":"YOU LOST";
-
- $("finalResult").className=
-  "result "+(matchResult==="Won"?"win":"loss");
-
- $("finalScore").textContent=legsWon+" – "+opponentLegs;
-
- $("finalSummary").replaceChildren(
-  summaryCard("MATCH","BO"+bestOf),
-  summaryCard("RESULT",matchResult.toUpperCase()),
-  summaryCard("LEGS WON",legsWon),
-  summaryCard("LEGS LOST",opponentLegs),
-  summaryCard("AVERAGE",fmt(average())),
-  summaryCard("FIRST 9",fmt(first9())),
-  summaryCard("TOTAL DARTS",totalDarts),
-  summaryCard("180",count180),
-  summaryCard("140+",count140),
-  summaryCard("100+",count100),
-  summaryCard("CHECKOUT %",checkoutPct().toFixed(1)+"%"),
-  summaryCard("HIGHEST CO",highestCheckout),
-  summaryCard("CHECKOUT HITS",checkoutHits),
-  summaryCard("CO ATTEMPTS",checkoutAttempts),
-  summaryCard("TOTAL POINTS",totalPoints)
- );
+function resultPayload(){
+ return {
+  matchResult,
+  matchStatus:"Completed",
+  completedAt:new Date().toISOString(),
+  startedAt:matchStartedAt,
+  legsWon,legsLost:opponentLegs,
+  opponentLegs,
+  totalPoints,totalDarts,
+  average:average(),
+  first9:first9(),
+  first9Average:first9(),
+  count100,count140,count180,
+  checkoutAttempts,checkoutHits,
+  checkoutPercentage:checkoutPct(),
+  highestCheckout,
+  visits:visitNumber
+ };
 }
 
 async function completeMatch(){
  if(finished)return;
-
  finished=true;
- matchResult=legsWon>=legsToWin?"Won":"Lost";
-
+ matchResult=legsWon>=legsToWin?"Win":"Loss";
  renderMatchResults();
- saveRecovery("completed");
  showScreen("completed");
-
- speak(
-  matchResult==="Won"?
-  "Game shot "+spokenName+"! You won the match, "+
-  legsWon+" legs to "+opponentLegs+". Congratulations!":
-  "Match completed, "+opponentLegs+" legs to "+
-  legsWon+". Review your performance results."
- );
-
- $("completionMessage").textContent="Saving match results...";
-
- const ok=await sendEvent("match_complete",{
-  matchStatus:"Completed",
-  matchResult,
-  legsWon,
-  legsLost:opponentLegs,
-  totalPoints,
-  totalDarts,
-  average:Number(fmt(average())),
-  first9Average:Number(fmt(first9())),
-  first9Points,
-  count100,
-  count140,
-  count180,
-  checkoutAttempts,
-  checkoutHits,
-  checkoutPercentage:Number(checkoutPct().toFixed(1)),
-  highestCheckout,
-  visitCount:visitNumber,
-  startedAt:matchStartedAt,
-  completedAt:new Date().toISOString()
- });
-
- completionSyncConfirmed=ok;
  saveRecovery("completed");
 
+ if(matchResult==="Win"){
+  speak("Game shot and the match, "+spokenName+".");
+ }else{
+  speak("Match completed.");
+ }
+
+ const ok=await sendEvent("match_complete",resultPayload());
+ completionSyncConfirmed=ok;
  $("completionMessage").textContent=ok?
-  "Match completion sent to Glide.":
-  "Match completed locally. Glide sync not confirmed.";
+ "MATCH SAVED":"Match completed. Glide sync not confirmed.";
+ saveRecovery("completed");
 }
 
-const issueData=[
- "Missing Right",
- "Missing Left",
- "Missing High",
- "Missing Low",
- "Inconsistent Grouping",
- "Release Timing",
- "Follow Through"
-].map(name=>[name]);
-
-function buildIssues(){
- const root=$("issues");
- root.replaceChildren();
-
- issueData.forEach(([name])=>{
-  const button=document.createElement("button");
-  button.className="issue";
-  button.textContent=name;
-
-  button.onclick=()=>{
-   selectedIssue=name;
-   selectedCoaching=getCoaching(name);
-
-   document.querySelectorAll(".issue").forEach(b=>{
-    b.classList.toggle("selected",b===button);
-   });
-
-   $("analysisButton").classList.remove("hidden");
-   saveRecovery("mainIssue");
-
-   speak(
-    "Main issue selected: "+name+
-    ". Press Get My AI Analysis to continue."
-   );
-  };
-
-  root.appendChild(button);
+function renderMatchResults(){
+ const won=matchResult==="Win";
+ $("finalResult").textContent=won?"MATCH WON":"MATCH LOST";
+ $("finalResult").className="result "+(won?"win":"loss");
+ $("finalScore").textContent=legsWon+" – "+opponentLegs;
+ const stats=[
+  ["3-DART AVERAGE",fmt(average())],
+  ["FIRST 9",fmt(first9())],
+  ["100+",count100],
+  ["140+",count140],
+  ["180s",count180],
+  ["HIGHEST CHECKOUT",highestCheckout],
+  ["CHECKOUT %",fmt(checkoutPct())+"%"],
+  ["DARTS THROWN",totalDarts]
+ ];
+ $("finalSummary").replaceChildren();
+ stats.forEach(([label,value])=>{
+  const div=document.createElement("div");
+  div.className="stat";
+  const strong=document.createElement("strong");
+  strong.textContent=value;
+  const span=document.createElement("span");
+  span.textContent=label;
+  div.append(strong,span);
+  $("finalSummary").appendChild(div);
  });
 }
 
 function continueToMainIssue(){
- saveRecovery("mainIssue");
  showScreen("mainIssue");
-
- speak(
-  "What was your main issue in this match? "+
-  "Select the issue you experienced most."
- );
+ saveRecovery("mainIssue");
+ speak("Select your main issue during this match.");
 }
 
-function renderAnalysis(){
- selectedCoaching=getCoaching(selectedIssue);
- const coach=selectedCoaching;
+/* POST-MATCH ANALYSIS */
 
- $("analysisIssue").textContent=coach.issue;
+function buildIssues(){
+ const container=$("issues");
+ container.replaceChildren();
+ Object.keys(coachingLibrary).forEach(issue=>{
+  const button=document.createElement("button");
+  button.className="issue";
+  button.textContent=issue;
+  button.onclick=()=>selectIssue(issue);
+  container.appendChild(button);
+ });
+}
 
- $("analysisAdvice").textContent=
-  "COACH ADVICE: "+coach.advice+
-  "\n\nRECOMMENDED DRILL: "+coach.drill+
-  "\n\nTRAINING OBJECTIVE: "+coach.objective+
-  "\n\nSUCCESS TARGET: "+coach.target+
-  "\n\nNEXT ACTION: "+coach.next;
-
- $("analysisAdvice").style.whiteSpace="pre-line";
+function selectIssue(issue){
+ selectedIssue=issue;
+ selectedCoaching=getCoaching(issue);
+ document.querySelectorAll(".issue").forEach(button=>{
+  button.classList.toggle("selected",button.textContent===issue);
+ });
+ $("analysisButton").classList.remove("hidden");
 }
 
 async function finishAnalysis(){
  if(!selectedIssue)return;
-
- selectedCoaching=getCoaching(selectedIssue);
- const coach=selectedCoaching;
- const button=$("analysisButton");
-
- button.disabled=true;
- button.textContent="CONNECTING COACHING...";
-
- const payload={
+ $("analysisButton").disabled=true;
+ const coaching=selectedCoaching||getCoaching(selectedIssue);
+ const ok=await sendEvent("match_main_issue",{
   mainIssue:selectedIssue,
-  coachAdvice:coach.advice,
-  aiAdvice:coach.advice,
-  recommendedDrill:coach.drill,
-  trainingObjective:coach.objective,
-  successTarget:coach.target,
-  nextAction:coach.next,
-  trainingFocus:selectedIssue,
-  trainingCategory:coach.category,
-  primaryMetric:coach.primary,
-  secondaryMetric:coach.secondary,
-  whatToTrack:coach.track,
-  trainingExecution:coach.execution,
-  matchStatus:"Completed",
-  matchResult,
-  average:Number(fmt(average())),
-  first9Average:Number(fmt(first9())),
-  legsWon,
-  legsLost:opponentLegs,
-  totalDarts,
-  count100,
-  count140,
-  count180,
-  checkoutPercentage:Number(checkoutPct().toFixed(1)),
-  highestCheckout
- };
-
- const ok=await sendEvent("match_main_issue",payload);
-
- button.disabled=false;
- button.textContent="GET MY AI ANALYSIS";
-
- if(!ok){
-  $("analysisMessage").textContent=
-   "Glide sync not confirmed. Retry.";
-  return;
- }
-
+  selectedIssue,
+  coachAdvice:coaching.advice,
+  recommendedDrill:coaching.drill,
+  trainingCategory:coaching.category,
+  objective:coaching.objective,
+  execution:coaching.execution,
+  primaryMetric:coaching.primary,
+  successTarget:coaching.target,
+  coaching,
+  ...resultPayload()
+ });
+ $("analysisButton").disabled=false;
+ $("analysisMessage").textContent=ok?
+ "ANALYSIS SAVED":"Analysis ready. Glide sync not confirmed.";
  renderAnalysis();
- saveRecovery("analysis");
  showScreen("analysis");
+ saveRecovery("analysis");
+ speak("Your main issue is "+selectedIssue+
+ ". Recommended training: "+coaching.drill+".");
+}
 
- speak(
-  "Dartic AI Coach. "+coach.issue+
-  ". Coach advice: "+coach.advice+
-  ". Recommended drill: "+coach.drill+
-  ". Success target: "+coach.target+
-  ". Next action: "+coach.next
- );
+function renderAnalysis(){
+ const coaching=selectedCoaching||getCoaching(selectedIssue);
+ $("analysisIssue").textContent=selectedIssue;
+ $("analysisAdvice").textContent=
+ coaching.advice+"\n\nRecommended drill: "+coaching.drill+
+ "\n\nObjective: "+coaching.objective;
+ $("analysisAdvice").style.whiteSpace="pre-line";
 }
 
 function openTraining(){
- const notice=$("trainingMessage");
-
- try{
-  if(!selectedIssue){
-   notice.textContent="Select your main issue first.";
-   return;
+ const coaching=selectedCoaching||getCoaching(selectedIssue);
+ const url=new URL(
+ "https://coach1979christian-coder.github.io/dartiq-web/todays-training.html"
+ );
+ const values={
+  session:sessionID,
+  email,
+  player:playerID,
+  userid:param("userid"),
+  playername:playerName,
+  language,
+  source:"Match",
+  mainIssue:selectedIssue,
+  recommendedDrill:coaching.drill,
+  coachAdvice:coaching.advice,
+  objective:coaching.objective,
+  execution:coaching.execution,
+  keithprimary:coaching.primary,
+  keithtarget:coaching.target,
+  practiceID:coaching.practiceID,
+  keithrules:coaching.keithRules,
+  keithcoach:coaching.keithCoach,
+  keithsecondary:coaching.secondary,
+  why:coaching.why,
+  avoid:coaching.avoid,
+  track:coaching.track,
+  nextAction:coaching.next,
+  keithred:coaching.red,
+  keithorange:coaching.orange,
+  keithyellow:coaching.yellow,
+  keithgreen:coaching.green,
+  redaction:coaching.redAction,
+  orangeaction:coaching.orangeAction,
+  yellowaction:coaching.yellowAction,
+  greenaction:coaching.greenAction,
+  improvement:coaching.improvement,
+  reminder:coaching.reminder,
+  after:coaching.after
+ };
+ Object.entries(values).forEach(([key,value])=>{
+  if(value!==undefined&&value!==null&&value!==""){
+   url.searchParams.set(key,String(value));
   }
-
-  const coach=selectedCoaching||getCoaching(selectedIssue);
-
-  const defaultURL=
-   "https://coach1979christian-coder.github.io/dartiq-web/todays-training.html";
-
-  const url=new URL(
-   param("trainingUrl","training_url")||defaultURL,
-   location.href
-  );
-
-  if(!["https:","http:"].includes(url.protocol)){
-   throw Error("Invalid training URL");
-  }
-
-  const fields={
-   session:sessionID,
-   email,
-   player:playerID,
-   userid:param("userid"),
-   playerName,
-   language,
-   source:"MATCH",
-   mainIssue:selectedIssue,
-   focus:selectedIssue,
-   drill:coach.drill,
-   recommendedDrill:coach.drill,
-   aiAdvice:coach.advice,
-   coachAdvice:coach.advice,
-   objective:coach.objective,
-   why:coach.why,
-   execution:coach.execution,
-   avoid:coach.avoid,
-   keithprimary:coach.primary,
-   keithsecondary:coach.secondary,
-   keithtarget:coach.target,
-   track:coach.track,
-   nextAction:coach.next,
-   practiceID:coach.practiceID,
-   keithcoach:coach.keithCoach,
-   keithrules:coach.keithRules,
-   keithred:coach.red,
-   keithorange:coach.orange,
-   keithyellow:coach.yellow,
-   keithgreen:coach.green,
-   redaction:coach.redAction,
-   orangeaction:coach.orangeAction,
-   yellowaction:coach.yellowAction,
-   greenaction:coach.greenAction,
-   improvement:coach.improvement,
-   reminder:coach.reminder,
-   after:coach.after
-  };
-
-  for(const [key,value] of Object.entries(fields)){
-   if(value!==undefined&&value!==null&&value!==""){
-    url.searchParams.set(key,String(value));
-   }
-  }
-
-  notice.textContent="Opening Today's AI Training...";
-  window.location.assign(url.toString());
-
- }catch(error){
-  console.error("DARTIQ training navigation:",error);
-  notice.textContent="Unable to open training.";
- }
+ });
+ location.href=url.toString();
 }
 
+/* INITIALIZATION */
+
 if(speechSupported){
- selectCallerVoice();
-
- if(typeof speechSynthesis.addEventListener==="function"){
-  speechSynthesis.addEventListener("voiceschanged",()=>{
-   selectCallerVoice();
-
-   if(!readyPromptAttempted){
-    announceReady();
-   }
-  });
- }
-
+ speechSynthesis.onvoiceschanged=()=>{
+  selectCallerVoice();
+  if($("setup").classList.contains("active"))announceReady();
+ };
  window.addEventListener("load",()=>{
   setTimeout(announceReady,500);
  });
-
  document.addEventListener("pointerdown",event=>{
-  if(
-   !$("setup").classList.contains("active")||
-   readyPromptPlayed
-  ){
-   return;
-  }
-
+  if(!$("setup").classList.contains("active")||readyPromptPlayed)return;
   if(event.target.closest("button"))return;
-
   announceReady();
  },{once:true});
 }
