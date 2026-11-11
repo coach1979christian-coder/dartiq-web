@@ -1229,10 +1229,17 @@ function continueToMainIssue(){
 
 /* POST-MATCH ANALYSIS */
 
+
 function buildIssues(){
  const container=$("issues");
  container.replaceChildren();
- Object.keys(coachingLibrary).forEach(issue=>{
+
+ Object.keys(coachingLibrary)
+ .filter(issue=>
+  issue!=="Elbow Movement" &&
+  issue!=="Body Stability"
+ )
+ .forEach(issue=>{
   const button=document.createElement("button");
   button.className="issue";
   button.textContent=issue;
