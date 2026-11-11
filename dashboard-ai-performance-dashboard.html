@@ -17,473 +17,221 @@
   --text:#f6fbff;
   --muted:#9fb3c7;
 }
-
-*{
-  box-sizing:border-box;
-}
-
+*{box-sizing:border-box}
 html{
-  margin:0;
-  padding:0;
-  width:100%;
-  min-height:100%;
-  background:#050b18!important;
-  color-scheme:dark;
+  margin:0;padding:0;width:100%;min-height:100%;
+  background:#050b18!important;color-scheme:dark;
 }
-
 body{
-  margin:0;
-  padding:0;
-  width:100%;
-  min-height:100vh;
-  overflow-x:hidden;
-  background:#050b18!important;
-  color:var(--text);
-  font-family:Inter,Arial,Helvetica,sans-serif;
+  margin:0;padding:0;width:100%;min-height:100vh;
+  overflow-x:hidden;background:#050b18!important;
+  color:var(--text);font-family:Inter,Arial,Helvetica,sans-serif;
 }
-
 .page{
-  width:100%;
-  min-height:100vh;
-  padding:5px;
-  background:
-    radial-gradient(
-      circle at 20% 0%,
-      rgba(41,185,255,.09),
-      transparent 35%
-    ),
-    linear-gradient(180deg,#07101e,#050b18);
+  width:100%;min-height:100vh;padding:5px;
+  background:radial-gradient(circle at 20% 0%,rgba(41,185,255,.09),transparent 35%),
+  linear-gradient(180deg,#07101e,#050b18);
 }
-
 .wrap{
-  width:100%;
-  max-width:760px;
-  min-height:calc(100vh - 10px);
-  margin:0 auto;
-  padding:12px;
+  width:100%;max-width:760px;min-height:calc(100vh - 10px);
+  margin:0 auto;padding:12px;
   background:linear-gradient(180deg,#07101e,#050b18);
-  border:1px solid rgba(41,185,255,.28);
-  border-radius:18px;
+  border:1px solid rgba(41,185,255,.28);border-radius:18px;
 }
-
-/* DASHBOARD HEADER */
-
 .top{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  padding:8px 3px 14px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:10px;padding:8px 3px 14px;
 }
-
-.brand{
-  display:flex;
-  align-items:center;
-  gap:9px;
-  min-width:0;
-}
-
+.brand{display:flex;align-items:center;gap:9px;min-width:0}
 .dot{
-  width:8px;
-  height:8px;
-  flex-shrink:0;
-  border-radius:50%;
-  background:var(--blue);
-  box-shadow:0 0 12px var(--blue);
+  width:8px;height:8px;flex-shrink:0;border-radius:50%;
+  background:var(--blue);box-shadow:0 0 12px var(--blue);
 }
-
 .brand strong{
-  font-size:12px;
-  font-weight:900;
-  color:#83d5ff;
-  letter-spacing:.07em;
-  line-height:1.4;
+  font-size:12px;font-weight:900;color:#83d5ff;
+  letter-spacing:.07em;line-height:1.4;
 }
-
 .live{
-  font-size:10px;
-  font-weight:800;
-  color:#8fe1ff;
-  padding:5px 8px;
-  border-radius:999px;
+  font-size:10px;font-weight:800;color:#8fe1ff;
+  padding:5px 8px;border-radius:999px;
   border:1px solid var(--line);
-  background:rgba(41,185,255,.08);
-  flex-shrink:0;
+  background:rgba(41,185,255,.08);flex-shrink:0;
 }
-
-/* AUTOMATIC PERSONAL AI VOICE */
-
 .voice-panel{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  margin-bottom:12px;
-  padding:12px;
-  border:1px solid rgba(41,185,255,.35);
-  border-radius:13px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:10px;margin-bottom:12px;padding:12px;
+  border:1px solid rgba(41,185,255,.35);border-radius:13px;
   background:linear-gradient(135deg,#10233c,#091525);
 }
-
-.voice-info{
-  flex:1;
-  min-width:0;
-}
-
+.voice-info{flex:1;min-width:0}
 .voice-title{
-  color:#83d5ff;
-  font-size:11px;
-  font-weight:900;
-  letter-spacing:.06em;
+  color:#83d5ff;font-size:11px;font-weight:900;letter-spacing:.06em;
 }
-
 .voice-player{
-  margin-top:5px;
-  color:white;
-  font-size:12px;
-  font-weight:800;
-  overflow-wrap:anywhere;
+  margin-top:5px;color:white;font-size:12px;
+  font-weight:800;overflow-wrap:anywhere;
 }
-
 .voice-status{
-  margin-top:4px;
-  color:var(--muted);
-  font-size:10px;
-  line-height:1.4;
+  margin-top:4px;color:var(--muted);
+  font-size:10px;line-height:1.4;
 }
-
 .voice-button{
-  flex-shrink:0;
-  border:1px solid var(--blue);
-  border-radius:999px;
-  background:rgba(41,185,255,.12);
-  color:#83d5ff;
-  font-size:10px;
-  font-weight:900;
-  font-family:inherit;
-  padding:10px 12px;
-  cursor:pointer;
+  flex-shrink:0;border:1px solid var(--blue);
+  border-radius:999px;background:rgba(41,185,255,.12);
+  color:#83d5ff;font-size:10px;font-weight:900;
+  font-family:inherit;padding:10px 12px;cursor:pointer;
 }
-
 .voice-button.muted{
-  border-color:#506579;
-  color:#9fb3c7;
+  border-color:#506579;color:#9fb3c7;
   background:rgba(255,255,255,.04);
 }
-
 .voice-button:focus-visible{
-  outline:2px solid var(--blue);
-  outline-offset:3px;
+  outline:2px solid var(--blue);outline-offset:3px;
 }
-
-/* INDEPENDENT COLLAPSIBLE PANELS */
-
 .panel{
   margin-bottom:9px;
   background:linear-gradient(180deg,var(--panel2),var(--panel));
-  border:1px solid var(--line);
-  border-radius:15px;
-  overflow:hidden;
+  border:1px solid var(--line);border-radius:15px;overflow:hidden;
 }
-
-.panel[open]{
-  border-color:rgba(41,185,255,.45);
-}
-
+.panel[open]{border-color:rgba(41,185,255,.45)}
 .panel-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  padding:15px 13px;
-  list-style:none;
-  cursor:pointer;
-  user-select:none;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;padding:15px 13px;list-style:none;
+  cursor:pointer;user-select:none;
   background:rgba(41,185,255,.035);
 }
-
-.panel-header::-webkit-details-marker{
-  display:none;
-}
-
-.panel-header::marker{
-  content:"";
-}
-
+.panel-header::-webkit-details-marker{display:none}
+.panel-header::marker{content:""}
 .panel-header:focus-visible{
-  outline:2px solid var(--blue);
-  outline-offset:-3px;
+  outline:2px solid var(--blue);outline-offset:-3px;
 }
-
 .panel[open] .panel-header{
   border-bottom:1px solid var(--line);
   background:rgba(41,185,255,.09);
 }
-
 .panel-title{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  color:#d9f2ff;
-  font-size:12px;
-  font-weight:850;
+  display:flex;align-items:center;gap:10px;
+  color:#d9f2ff;font-size:12px;font-weight:850;
 }
-
 .panel-icon{
-  width:20px;
-  flex-shrink:0;
-  text-align:center;
-  font-size:15px;
+  width:20px;flex-shrink:0;text-align:center;font-size:15px;
 }
-
 .panel-arrow{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  width:25px;
-  height:25px;
-  flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  width:25px;height:25px;flex-shrink:0;
   border:1px solid rgba(41,185,255,.2);
-  border-radius:50%;
-  background:rgba(41,185,255,.07);
+  border-radius:50%;background:rgba(41,185,255,.07);
 }
-
 .chevron{
-  width:8px;
-  height:8px;
+  width:8px;height:8px;
   border-right:2px solid var(--blue);
   border-bottom:2px solid var(--blue);
   transform:translateY(-2px) rotate(45deg);
   transition:transform .2s ease;
 }
-
 .panel[open] .chevron{
   transform:translateY(2px) rotate(225deg);
 }
-
 .panel-content{
   padding:13px;
   background:linear-gradient(180deg,#0b1728,#081321);
 }
-
-/* AI COACH SCORE */
-
 .score-card{
-  padding:15px 10px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  text-align:center;
+  padding:15px 10px;display:flex;flex-direction:column;
+  align-items:center;text-align:center;
 }
-
 .kicker{
-  font-size:10px;
-  letter-spacing:.13em;
-  color:var(--muted);
-  font-weight:800;
+  font-size:10px;letter-spacing:.13em;
+  color:var(--muted);font-weight:800;
 }
-
 .score{
-  font-size:54px;
-  margin:10px 0;
-  font-weight:900;
-  color:#fff;
-  text-shadow:0 0 18px rgba(41,185,255,.35);
+  font-size:54px;margin:10px 0;font-weight:900;
+  color:#fff;text-shadow:0 0 18px rgba(41,185,255,.35);
 }
-
 .grade{
-  max-width:100%;
-  padding:6px 13px;
-  border-radius:999px;
-  background:#63d1ff;
-  color:#04101c;
-  font-size:10px;
-  font-weight:900;
-  overflow-wrap:anywhere;
+  max-width:100%;padding:6px 13px;border-radius:999px;
+  background:#63d1ff;color:#04101c;font-size:10px;
+  font-weight:900;overflow-wrap:anywhere;
 }
-
-/* AI INSIGHT */
-
 .insight{
-  font-size:12.5px;
-  line-height:1.5;
-  color:#dbeeff;
-  overflow-wrap:anywhere;
+  font-size:12.5px;line-height:1.5;
+  color:#dbeeff;overflow-wrap:anywhere;
 }
-
 .focus{
-  margin-top:12px;
-  padding:10px;
-  border-radius:10px;
-  font-size:11.5px;
-  line-height:1.4;
-  color:#94ddff;
+  margin-top:12px;padding:10px;border-radius:10px;
+  font-size:11.5px;line-height:1.4;color:#94ddff;
   background:rgba(41,185,255,.07);
-  border:1px solid var(--line);
-  overflow-wrap:anywhere;
+  border:1px solid var(--line);overflow-wrap:anywhere;
 }
-
-/* PERFORMANCE STATISTICS */
-
 .stats{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:8px;
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;
 }
-
 .stat{
-  min-width:0;
-  padding:11px;
+  min-width:0;padding:11px;
   background:linear-gradient(180deg,#102038,#0b1728);
-  border:1px solid var(--line);
-  border-radius:12px;
+  border:1px solid var(--line);border-radius:12px;
 }
-
 .stat .name{
-  font-size:9px;
-  letter-spacing:.07em;
-  color:var(--muted);
-  font-weight:800;
-  text-transform:uppercase;
-  line-height:1.4;
+  font-size:9px;letter-spacing:.07em;
+  color:var(--muted);font-weight:800;
+  text-transform:uppercase;line-height:1.4;
 }
-
 .stat .value{
-  margin-top:7px;
-  font-size:22px;
-  font-weight:900;
-  color:var(--blue);
-  overflow-wrap:anywhere;
+  margin-top:7px;font-size:22px;font-weight:900;
+  color:var(--blue);overflow-wrap:anywhere;
 }
-
-/* GOALS AND STATUS */
-
 .copy{
-  font-size:12px;
-  line-height:1.5;
-  color:#d6e8f6;
-  overflow-wrap:anywhere;
+  font-size:12px;line-height:1.5;
+  color:#d6e8f6;overflow-wrap:anywhere;
 }
-
-.status{
-  display:flex;
-  align-items:flex-start;
-  gap:10px;
-}
-
+.status{display:flex;align-items:flex-start;gap:10px}
 .status-badge{
-  color:var(--blue);
-  font-size:17px;
-  font-weight:900;
+  color:var(--blue);font-size:17px;font-weight:900;
 }
-
 .status-text{
-  font-size:12px;
-  line-height:1.5;
-  color:#cfe2f2;
-  overflow-wrap:anywhere;
+  font-size:12px;line-height:1.5;
+  color:#cfe2f2;overflow-wrap:anywhere;
 }
-
 .footer{
-  margin-top:12px;
-  text-align:center;
-  font-size:8px;
-  letter-spacing:.18em;
-  color:#5d7890;
-  font-weight:800;
+  margin-top:12px;text-align:center;font-size:8px;
+  letter-spacing:.18em;color:#5d7890;font-weight:800;
 }
-
-/* MOBILE */
-
 @media(max-width:430px){
-
-  .wrap{
-    padding:10px;
-  }
-
-  .brand strong{
-    font-size:10.5px;
-    letter-spacing:.04em;
-  }
-
-  .panel-header{
-    padding:14px 12px;
-  }
-
-  .panel-title{
-    font-size:11.5px;
-  }
-
-  .panel-content{
-    padding:11px;
-  }
-
-  .stats{
-    grid-template-columns:repeat(2,minmax(0,1fr));
-  }
-
-  .stat{
-    padding:10px;
-  }
-
-  .stat .value{
-    font-size:20px;
-  }
-
-  .score{
-    font-size:48px;
-  }
-
-  .voice-panel{
-    padding:10px;
-  }
-
-  .voice-button{
-    padding:9px;
-  }
-
+  .wrap{padding:10px}
+  .brand strong{font-size:10.5px;letter-spacing:.04em}
+  .panel-header{padding:14px 12px}
+  .panel-title{font-size:11.5px}
+  .panel-content{padding:11px}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .stat{padding:10px}
+  .stat .value{font-size:20px}
+  .score{font-size:48px}
+  .voice-panel{padding:10px}
+  .voice-button{padding:9px}
 }
 </style>
 </head>
 
 <body>
-
 <div class="page">
 <main class="wrap">
 
-<!-- MAIN DASHBOARD HEADER -->
-
 <header class="top">
-
   <div class="brand">
     <span class="dot"></span>
     <strong>DARTIQ PERFORMANCE DASHBOARD</strong>
   </div>
-
   <span class="live">LIVE</span>
-
 </header>
 
-<!-- AUTOMATIC PERSONAL VOICE COACH -->
-
 <section class="voice-panel">
-
   <div class="voice-info">
-
-    <div class="voice-title">
-      🔊 DARTIQ AI VOICE COACH
-    </div>
-
-    <div class="voice-player" id="playerGreeting">
-      DARTIQ PLAYER
-    </div>
-
+    <div class="voice-title">🔊 DARTIQ AI VOICE COACH</div>
+    <div class="voice-player" id="playerGreeting">DARTIQ PLAYER</div>
     <div class="voice-status" id="voiceStatus">
       Automatic voice coaching enabled
     </div>
-
   </div>
-
   <button
     class="voice-button"
     id="voiceToggle"
@@ -491,911 +239,658 @@ body{
     aria-pressed="false">
     🔊 MUTE
   </button>
-
 </section>
 
-<!-- SECTION 1: AI COACH SCORE -->
-
 <details class="panel" id="section-score">
-
   <summary class="panel-header">
-
     <span class="panel-title">
       <span class="panel-icon">🎯</span>
       AI Coach Score
     </span>
-
     <span class="panel-arrow" aria-hidden="true">
       <span class="chevron"></span>
     </span>
-
   </summary>
-
   <div class="panel-content">
-
     <div class="score-card">
-
       <div class="kicker">AI COACH SCORE</div>
-
       <div class="score" id="score">--</div>
-
       <div class="grade" id="grade">NO DATA</div>
-
     </div>
-
   </div>
-
 </details>
 
-<!-- SECTION 2: AI INSIGHT -->
-
 <details class="panel" id="section-insight">
-
   <summary class="panel-header">
-
     <span class="panel-title">
       <span class="panel-icon">🧠</span>
       AI Insight
     </span>
-
     <span class="panel-arrow" aria-hidden="true">
       <span class="chevron"></span>
     </span>
-
   </summary>
-
   <div class="panel-content">
-
     <div class="insight" id="insight">
       Your AI insight will appear here.
     </div>
-
     <div class="focus" id="focus">
       Focus: Not available
     </div>
-
   </div>
-
 </details>
 
-<!-- SECTION 3: PERFORMANCE STATISTICS -->
-
 <details class="panel" id="section-statistics">
-
   <summary class="panel-header">
-
     <span class="panel-title">
       <span class="panel-icon">📊</span>
       Performance Statistics
     </span>
-
     <span class="panel-arrow" aria-hidden="true">
       <span class="chevron"></span>
     </span>
-
   </summary>
-
   <div class="panel-content">
-
     <div class="stats">
-
       <div class="stat">
         <div class="name">Best Avg</div>
         <div class="value" id="bestavg">--</div>
       </div>
-
       <div class="stat">
         <div class="name">Sessions</div>
         <div class="value" id="sessions">--</div>
       </div>
-
       <div class="stat">
         <div class="name">High Checkout</div>
         <div class="value" id="highcheckout">--</div>
       </div>
-
       <div class="stat">
         <div class="name">First 9 Avg</div>
         <div class="value" id="first9">--</div>
       </div>
-
       <div class="stat">
         <div class="name">Checkout %</div>
         <div class="value" id="checkoutpct">--</div>
       </div>
-
       <div class="stat">
         <div class="name">180s</div>
         <div class="value" id="total180">--</div>
       </div>
-
     </div>
-
   </div>
-
 </details>
 
-<!-- SECTION 4: NEXT GOAL -->
-
 <details class="panel" id="section-goal">
-
   <summary class="panel-header">
-
     <span class="panel-title">
       <span class="panel-icon">🎯</span>
       Next Goal
     </span>
-
     <span class="panel-arrow" aria-hidden="true">
       <span class="chevron"></span>
     </span>
-
   </summary>
-
   <div class="panel-content">
-
-    <div class="copy" id="goal">
-      No goal available.
-    </div>
-
+    <div class="copy" id="goal">No goal available.</div>
   </div>
-
 </details>
 
-<!-- SECTION 5: FOCUS THIS WEEK -->
-
 <details class="panel" id="section-weekly-focus">
-
   <summary class="panel-header">
-
     <span class="panel-title">
       <span class="panel-icon">⚡</span>
       Focus This Week
     </span>
-
     <span class="panel-arrow" aria-hidden="true">
       <span class="chevron"></span>
     </span>
-
   </summary>
-
   <div class="panel-content">
-
-    <div class="copy" id="focusCard">
-      No focus available.
-    </div>
-
+    <div class="copy" id="focusCard">No focus available.</div>
   </div>
-
 </details>
 
-<!-- SECTION 6: AI PERFORMANCE STATUS -->
-
 <details class="panel" id="section-status">
-
   <summary class="panel-header">
-
     <span class="panel-title">
       <span class="panel-icon">📈</span>
       AI Performance Status
     </span>
-
     <span class="panel-arrow" aria-hidden="true">
       <span class="chevron"></span>
     </span>
-
   </summary>
-
   <div class="panel-content">
-
     <div class="status">
-
       <span class="status-badge">↗</span>
-
       <div class="status-text" id="statusText">
         Submit your next session to update this dashboard.
       </div>
-
     </div>
-
   </div>
-
 </details>
 
-<div class="footer">
-  POWERED BY DARTIQ AI
-</div>
+<div class="footer">POWERED BY DARTIQ AI</div>
 
 </main>
 </div>
 
 <script>
 (function(){
+"use strict";
 
-  /* GLIDE URL DATA */
+const p=new URLSearchParams(window.location.search);
 
-  const p = new URLSearchParams(window.location.search);
+function safe(key,fallback){
+  const raw=p.get(key);
+  if(raw===null||raw.trim()==="")return fallback;
+  const cleaned=raw.replace(/[{}]/g,"").trim();
+  return cleaned||fallback;
+}
 
-  function safe(key,fallback){
+function getPlayerName(){
+  const keys=[
+    "playername","playerName","player_name",
+    "firstname","firstName","first_name",
+    "name","full_name","fullName","player"
+  ];
 
-    const raw = p.get(key);
+  for(const key of keys){
+    const raw=p.get(key);
+    if(!raw)continue;
 
-    if(raw === null || raw.trim() === ""){
-      return fallback;
+    const trimmed=raw.trim();
+
+    if(
+      !trimmed||
+      /^\{.*\}$/.test(trimmed)||
+      /^(undefined|null|unknown|nan|PLAYERNAME)$/i.test(trimmed)
+    ){
+      continue;
     }
 
-    const cleaned = raw.replace(/[{}]/g,"").trim();
-
-    return cleaned || fallback;
-
+    const cleaned=trimmed.replace(/[{}]/g,"").trim();
+    if(cleaned)return cleaned.slice(0,80);
   }
 
-  /* PLAYER NAME FROM GLIDE */
+  return "";
+}
 
-  function getPlayerName(){
+const playerFullName=getPlayerName();
 
-    const keys = [
-      "playername",
-      "playerName",
-      "player_name",
-      "firstname",
-      "firstName",
-      "first_name",
-      "name",
-      "full_name",
-      "fullName",
-      "player"
-    ];
+const playerFirstName=playerFullName
+  ?playerFullName.split(/\s+/)[0]
+  :"";
 
-    for(const key of keys){
+const spokenName=playerFirstName||"player";
 
-      const raw = p.get(key);
+const d={
+  score:safe("score","--"),
+  grade:safe("grade","NO DATA"),
+  bestavg:safe("bestavg","--"),
+  sessions:safe("sessions","--"),
+  highcheckout:safe("highcheckout","--"),
+  first9:safe("first9","--"),
+  checkoutpct:safe("checkoutpct","--"),
+  total180:safe("total180","--"),
+  insight:safe(
+    "insight",
+    "Your AI insight will appear here."
+  ),
+  goal:safe(
+    "goal",
+    "No goal available."
+  ),
+  focus:safe(
+    "focus",
+    "No focus available."
+  )
+};
 
-      if(!raw) continue;
+const get=id=>document.getElementById(id);
+const set=(id,value)=>{get(id).textContent=value;};
 
-      const trimmed = raw.trim();
+set("score",d.score);
+set("grade",d.grade.toUpperCase());
+set("bestavg",d.bestavg);
+set("sessions",d.sessions);
+set("highcheckout",d.highcheckout);
+set("first9",d.first9);
 
-      if(
-        !trimmed ||
-        /^\{.*\}$/.test(trimmed) ||
-        /^(undefined|null|unknown|nan|PLAYERNAME)$/i.test(trimmed)
-      ){
-        continue;
-      }
+set(
+  "checkoutpct",
+  d.checkoutpct==="--"
+    ?"--"
+    :d.checkoutpct.replace(/%$/,"")+"%"
+);
 
-      const cleaned = trimmed.replace(/[{}]/g,"").trim();
+set("total180",d.total180);
+set("insight",d.insight);
+set("goal",d.goal);
+set("focus","Focus: "+d.focus);
+set("focusCard",d.focus);
 
-      if(cleaned){
-        return cleaned.slice(0,80);
-      }
+set(
+  "playerGreeting",
+  playerFullName
+    ?"PLAYER: "+playerFullName
+    :"DARTIQ PLAYER"
+);
 
-    }
+const n=Number(String(d.score).replace(",","."));
 
-    return "";
+let status=
+  "Submit your next session to update this dashboard.";
 
+if(d.score!=="--"&&Number.isFinite(n)){
+  if(n>=90){
+    status=
+      "Elite performance. Maintain consistency and pressure control.";
+  }else if(n>=80){
+    status=
+      "Great performance. Small refinements can unlock the next level.";
+  }else if(n>=70){
+    status=
+      "Good progress. Keep training the highlighted weakness.";
+  }else if(n>=60){
+    status=
+      "Developing well. Stay focused on one correction at a time.";
+  }else{
+    status=
+      "Improvement phase. Follow the recommended focus and repeat the drill.";
   }
+}
 
-  const playerFullName = getPlayerName();
+set("statusText",status);
 
-  const playerFirstName = playerFullName
-    ? playerFullName.split(/\s+/)[0]
-    : "";
+/* DARTIQ AI VOICE COACH */
+/* DARTIQ IS NEVER SENT TO SPEECH SYNTHESIS AS LETTERS */
 
-  const spokenName = playerFirstName || "player";
+const supported=
+  "speechSynthesis" in window&&
+  "SpeechSynthesisUtterance" in window;
 
-  /* PERFORMANCE DATA */
+const synth=supported?window.speechSynthesis:null;
+const voiceToggle=get("voiceToggle");
 
-  const d = {
+let voiceEnabled=true;
+let selectedVoice=null;
+let voiceHasStarted=false;
+let activeSection=null;
+let activeUtterance=null;
 
-    score:safe("score","--"),
+/*
+ DISPLAY NAME: DARTIQ
+ SPOKEN NAME: Dartic
 
-    grade:safe("grade","NO DATA"),
+ Only spoken text is transformed.
+ All dashboard headings retain their branding.
+*/
 
-    bestavg:safe("bestavg","--"),
-
-    sessions:safe("sessions","--"),
-
-    highcheckout:safe("highcheckout","--"),
-
-    first9:safe("first9","--"),
-
-    checkoutpct:safe("checkoutpct","--"),
-
-    total180:safe("total180","--"),
-
-    insight:safe(
-      "insight",
-      "Your AI insight will appear here."
-    ),
-
-    goal:safe(
-      "goal",
-      "No goal available."
-    ),
-
-    focus:safe(
-      "focus",
-      "No focus available."
-    )
-
-  };
-
-  const get = id => document.getElementById(id);
-
-  const set = (id,value) => {
-    get(id).textContent = value;
-  };
-
-  /* DISPLAY GLIDE DATA */
-
-  set("score",d.score);
-
-  set("grade",d.grade.toUpperCase());
-
-  set("bestavg",d.bestavg);
-
-  set("sessions",d.sessions);
-
-  set("highcheckout",d.highcheckout);
-
-  set("first9",d.first9);
-
-  set(
-    "checkoutpct",
-    d.checkoutpct==="--"
-      ? "--"
-      : d.checkoutpct.replace(/%$/,"")+"%"
-  );
-
-  set("total180",d.total180);
-
-  set("insight",d.insight);
-
-  set("goal",d.goal);
-
-  set("focus","Focus: "+d.focus);
-
-  set("focusCard",d.focus);
-
-  set(
-    "playerGreeting",
-    playerFullName
-      ? "PLAYER: "+playerFullName
-      : "DARTIQ PLAYER"
-  );
-
-  /* AI PERFORMANCE STATUS */
-
-  const n = Number(
-    String(d.score).replace(",",".")
-  );
-
-  let status =
-    "Submit your next session to update this dashboard.";
-
-  if(d.score !== "--" && Number.isFinite(n)){
-
-    if(n >= 90){
-
-      status =
-        "Elite performance. Maintain consistency and pressure control.";
-
-    }
-
-    else if(n >= 80){
-
-      status =
-        "Great performance. Small refinements can unlock the next level.";
-
-    }
-
-    else if(n >= 70){
-
-      status =
-        "Good progress. Keep training the highlighted weakness.";
-
-    }
-
-    else if(n >= 60){
-
-      status =
-        "Developing well. Stay focused on one correction at a time.";
-
-    }
-
-    else{
-
-      status =
-        "Improvement phase. Follow the recommended focus and repeat the drill.";
-
-    }
-
-  }
-
-  set("statusText",status);
-
-  /* AUTOMATIC AI VOICE COACH */
-
-  const supported =
-    "speechSynthesis" in window &&
-    "SpeechSynthesisUtterance" in window;
-
-  const synth = supported
-    ? window.speechSynthesis
-    : null;
-
-  const voiceToggle = get("voiceToggle");
-
-  let voiceEnabled = true;
-  let selectedVoice = null;
-  let voiceHasStarted = false;
-  let activeSection = null;
-  let activeUtterance = null;
-
-  /* NATURAL DARTIQ PRONUNCIATION */
-
-  
 function prepareSpeech(text){
-
   return String(text)
+    .replace(/\bD[\s.\-]*A[\s.\-]*R[\s.\-]*T[\s.\-]*I[\s.\-]*Q\b/gi,"Dartic")
     .replace(/\bDART\s+IQ\b/gi,"Dartic")
-    .replace(/\bDARTIQ\b/gi,"Dartic")
+    .replace(/DARTIQ/gi,"Dartic")
     .replace(/\s+/g," ")
     .trim();
-
 }
 
+/* MALE ENGLISH VOICES ONLY */
 
-  /* PREFER ENGLISH MALE VOICE */
+function chooseVoice(){
+  if(!supported)return null;
 
-  function chooseVoice(){
+  const voices=synth.getVoices();
 
-    if(!supported) return null;
+  const english=voices.filter(v=>
+    /^en([-_]|$)/i.test(v.lang||"")
+  );
 
-    const voices = synth.getVoices();
+  const femaleNames=
+    /\b(female|zira|hazel|susan|samantha|victoria|karen|moira|ava|aria|jenny|sonia|natasha|emma|amy|fiona|tessa|allison|joanna|salli|serena)\b/i;
 
-    const english = voices.filter(v =>
-      /^en([-_]|$)/i.test(v.lang)
+  const preferred=[
+    /microsoft guy/i,
+    /microsoft andrew/i,
+    /microsoft david/i,
+    /microsoft mark/i,
+    /google uk english male/i,
+    /\bdaniel\b/i,
+    /\balex\b/i,
+    /\boliver\b/i,
+    /\bbrian\b/i,
+    /\bnathan\b/i,
+    /\baaron\b/i,
+    /\bfred\b/i,
+    /\bre ed\b/i,
+    /\bmale\b/i
+  ];
+
+  for(const pattern of preferred){
+    const match=english.find(v=>
+      pattern.test(v.name||"")&&
+      !femaleNames.test(v.name||"")
     );
 
-    const preferred = [
-      /microsoft guy/i,
-      /microsoft andrew/i,
-      /microsoft david/i,
-      /microsoft mark/i,
-      /google uk english male/i,
-      /\bdaniel\b/i,
-      /\balex\b/i,
-      /\boliver\b/i,
-      /\bbrian\b/i,
-      /\bnathan\b/i,
-      /\baaron\b/i,
-      /\bfred\b/i,
-      /\bre ed\b/i,
-      /\bmale\b/i
-    ];
-
-    for(const pattern of preferred){
-
-      const match = english.find(v =>
-        pattern.test(v.name)
-      );
-
-      if(match){
-        return match;
-      }
-
-    }
-
-   return null;
-
+    if(match)return match;
   }
 
-  if(supported){
-
-    selectedVoice = chooseVoice();
-
-    if(typeof synth.addEventListener==="function"){
-
-      synth.addEventListener("voiceschanged",()=>{
-        selectedVoice = chooseVoice();
-      });
-
-    }
-
-  }
-
-  /* SPEAK USING NATURAL BRAND PRONUNCIATION */
-
-  function speak(text){
-
-    if(!supported || !voiceEnabled || !text) return;
-
-    synth.cancel();
-
-    selectedVoice = chooseVoice();
-if (!selectedVoice) {
-  document.getElementById("voiceStatus").textContent =
-    "Male voice unavailable on this device.";
-  return;
+  return null;
 }
-    const spokenText = prepareSpeech(text);
 
-    if(!spokenText) return;
+if(supported){
+  selectedVoice=chooseVoice();
 
-    const utterance =
-      new SpeechSynthesisUtterance(spokenText);
+  if(typeof synth.addEventListener==="function"){
+    synth.addEventListener("voiceschanged",()=>{
+      selectedVoice=chooseVoice();
+    });
+  }
+}
 
-    activeUtterance = utterance;
+/* ALL VOICE OUTPUT PASSES THROUGH prepareSpeech() */
 
-    utterance.lang = selectedVoice
-      ? selectedVoice.lang
-      : "en-US";
+function speak(text){
+  if(!supported||!voiceEnabled||!text)return;
 
-    if(selectedVoice){
-      utterance.voice = selectedVoice;
-    }
+  synth.cancel();
 
-    utterance.rate = 0.92;
-    utterance.pitch = 0.82;
-    utterance.volume = 1;
+  selectedVoice=chooseVoice();
 
-    utterance.onstart = function(){
+  if(!selectedVoice){
+    set(
+      "voiceStatus",
+      "Male voice unavailable on this device."
+    );
+    return;
+  }
 
-      if(activeUtterance !== utterance) return;
+  const spokenText=prepareSpeech(text);
+  if(!spokenText)return;
 
-      voiceHasStarted = true;
+  const utterance=new SpeechSynthesisUtterance(spokenText);
+  activeUtterance=utterance;
 
+  utterance.voice=selectedVoice;
+  utterance.lang=selectedVoice.lang;
+  utterance.rate=0.92;
+  utterance.pitch=0.82;
+  utterance.volume=1;
+
+  utterance.onstart=function(){
+    if(activeUtterance!==utterance)return;
+
+    voiceHasStarted=true;
+    set("voiceStatus","DARTIQ AI Coach is speaking");
+  };
+
+  utterance.onend=function(){
+    if(activeUtterance!==utterance)return;
+
+    activeUtterance=null;
+
+    if(voiceEnabled){
       set(
         "voiceStatus",
-        "DARTIQ AI Coach is speaking"
+        "Automatic voice coaching active"
+      );
+    }
+  };
+
+  utterance.onerror=function(event){
+    if(activeUtterance!==utterance)return;
+
+    activeUtterance=null;
+
+    if(event.error==="not-allowed"){
+      set(
+        "voiceStatus",
+        "Open a section to activate voice coaching"
+      );
+    }else if(
+      voiceEnabled&&
+      event.error!=="canceled"&&
+      event.error!=="interrupted"
+    ){
+      set(
+        "voiceStatus",
+        "Voice is temporarily unavailable"
+      );
+    }
+  };
+
+  synth.speak(utterance);
+}
+
+/* PERSONALIZED GREETING */
+
+function welcomeMessage(){
+  let message=playerFirstName
+    ?"Hello "+spokenName+
+      ". Welcome back to your DARTIQ Performance Dashboard. "
+    :"Welcome to your DARTIQ Performance Dashboard. ";
+
+  if(d.score!=="--"){
+    message+=
+      "Your current AI Coach Score is "+d.score+". ";
+  }
+
+  if(
+    d.insight!==
+    "Your AI insight will appear here."
+  ){
+    message+=
+      "Here is your latest AI insight. "+d.insight+". ";
+  }
+
+  if(d.focus!=="No focus available."){
+    message+=
+      "Your current training focus is "+d.focus+". ";
+  }
+
+  message+=
+    "Open any section to hear your individual performance feedback, statistics, goals, and coaching recommendations.";
+
+  return message;
+}
+
+function automaticWelcome(){
+  if(
+    !supported||
+    !voiceEnabled||
+    voiceHasStarted
+  ){
+    return;
+  }
+
+  speak(welcomeMessage());
+}
+
+/* INDIVIDUAL SECTION VOICE FEEDBACK */
+
+function sectionMessage(sectionId){
+  const value=id=>get(id).textContent.trim();
+
+  const spokenValue=id=>{
+    const v=value(id);
+    return v==="--"?"not available":v;
+  };
+
+  const intro=playerFirstName
+    ?spokenName+", "
+    :"";
+
+  switch(sectionId){
+
+    case "section-score":
+      return (
+        intro+
+        "here is your AI Coach Score. "+
+        "Your current score is "+
+        spokenValue("score")+". "+
+        "Your performance grade is "+
+        value("grade")+"."
       );
 
-    };
+    case "section-insight":
+      return (
+        intro+
+        "here is your latest AI insight. "+
+        value("insight")+". "+
+        value("focus")+"."
+      );
 
-    utterance.onend = function(){
+    case "section-statistics":
+      return (
+        intro+
+        "here are your performance statistics. "+
+        "Best average: "+
+        spokenValue("bestavg")+". "+
+        "Total sessions: "+
+        spokenValue("sessions")+". "+
+        "Highest checkout: "+
+        spokenValue("highcheckout")+". "+
+        "First nine average: "+
+        spokenValue("first9")+". "+
+        "Checkout percentage: "+
+        spokenValue("checkoutpct")+". "+
+        "Total one hundred and eighties: "+
+        spokenValue("total180")+"."
+      );
 
-      if(activeUtterance !== utterance) return;
+    case "section-goal":
+      return (
+        intro+
+        "here is your next goal. "+
+        value("goal")+"."
+      );
 
-      activeUtterance = null;
+    case "section-weekly-focus":
+      return (
+        intro+
+        "here is your focus for this week. "+
+        value("focusCard")+"."
+      );
 
-      if(voiceEnabled){
+    case "section-status":
+      return (
+        intro+
+        "here is your AI performance status. "+
+        value("statusText")+"."
+      );
 
-        set(
-          "voiceStatus",
-          "Automatic voice coaching active"
-        );
-
-      }
-
-    };
-
-    utterance.onerror = function(event){
-
-      if(activeUtterance !== utterance) return;
-
-      activeUtterance = null;
-
-      if(event.error === "not-allowed"){
-
-        set(
-          "voiceStatus",
-          "Open a section to activate voice coaching"
-        );
-
-      }else if(
-        voiceEnabled &&
-        event.error !== "canceled" &&
-        event.error !== "interrupted"
-      ){
-
-        set(
-          "voiceStatus",
-          "Voice is temporarily unavailable"
-        );
-
-      }
-
-    };
-
-    synth.speak(utterance);
-
+    default:
+      return "";
   }
+}
 
-  /* PERSONALIZED AUTOMATIC GREETING */
+/* AUTOMATIC ACTIVATION */
 
-  function welcomeMessage(){
+if(!supported){
+  voiceEnabled=false;
+  voiceToggle.disabled=true;
+  voiceToggle.textContent="UNAVAILABLE";
 
-    let message = playerFirstName
-      ? "Hello "+spokenName+
-        ". Welcome back to your DARTIQ Performance Dashboard. "
-      : "Welcome to your DARTIQ Performance Dashboard. ";
+  set(
+    "voiceStatus",
+    "Speech is not supported by this browser"
+  );
 
-    if(d.score !== "--"){
+}else{
 
-      message +=
-        "Your current AI Coach Score is "+
-        d.score+". ";
+  window.addEventListener("load",()=>{
+    setTimeout(automaticWelcome,350);
+  },{once:true});
 
-    }
-
+  function gestureFallback(event){
     if(
-      d.insight !==
-      "Your AI insight will appear here."
-    ){
-
-      message +=
-        "Here is your latest AI insight. "+
-        d.insight+". ";
-
-    }
-
-    if(d.focus !== "No focus available."){
-
-      message +=
-        "Your current training focus is "+
-        d.focus+". ";
-
-    }
-
-    message +=
-      "Open any section to hear your individual performance feedback, statistics, goals, and coaching recommendations.";
-
-    return message;
-
-  }
-
-  function automaticWelcome(){
-
-    if(
-      !supported ||
-      !voiceEnabled ||
-      voiceHasStarted
+      !voiceEnabled||
+      voiceHasStarted||
+      event.target.closest(".voice-button")||
+      event.target.closest("summary")
     ){
       return;
     }
 
-    speak(welcomeMessage());
-
+    automaticWelcome();
   }
 
-  /* AUTOMATIC SPOKEN SECTION FEEDBACK */
+  document.addEventListener(
+    "pointerdown",
+    gestureFallback,
+    {capture:true,passive:true}
+  );
 
-  function sectionMessage(sectionId){
+  document.addEventListener(
+    "keydown",
+    gestureFallback,
+    true
+  );
 
-    const value = id =>
-      get(id).textContent.trim();
+  document.querySelectorAll(".panel").forEach(panel=>{
+    panel.addEventListener("toggle",()=>{
+      if(panel.open){
+        activeSection=panel.id;
 
-    const spokenValue = id => {
+        if(voiceEnabled){
+          speak(sectionMessage(panel.id));
+        }
 
-      const v = value(id);
+      }else if(activeSection===panel.id){
+        activeSection=null;
 
-      return v === "--"
-        ? "not available"
-        : v;
-
-    };
-
-    const intro = playerFirstName
-      ? spokenName+", "
-      : "";
-
-    switch(sectionId){
-
-      case "section-score":
-
-        return (
-          intro+
-          "here is your AI Coach Score. "+
-          "Your current score is "+
-          spokenValue("score")+". "+
-          "Your performance grade is "+
-          value("grade")+"."
-        );
-
-      case "section-insight":
-
-        return (
-          intro+
-          "here is your latest AI insight. "+
-          value("insight")+". "+
-          value("focus")+"."
-        );
-
-      case "section-statistics":
-
-        return (
-          intro+
-          "here are your performance statistics. "+
-          "Best average: "+
-          spokenValue("bestavg")+". "+
-          "Total sessions: "+
-          spokenValue("sessions")+". "+
-          "Highest checkout: "+
-          spokenValue("highcheckout")+". "+
-          "First nine average: "+
-          spokenValue("first9")+". "+
-          "Checkout percentage: "+
-          spokenValue("checkoutpct")+". "+
-          "Total one hundred and eighties: "+
-          spokenValue("total180")+"."
-        );
-
-      case "section-goal":
-
-        return (
-          intro+
-          "here is your next goal. "+
-          value("goal")+"."
-        );
-
-      case "section-weekly-focus":
-
-        return (
-          intro+
-          "here is your focus for this week. "+
-          value("focusCard")+"."
-        );
-
-      case "section-status":
-
-        return (
-          intro+
-          "here is your AI performance status. "+
-          value("statusText")+"."
-        );
-
-      default:
-        return "";
-
-    }
-
-  }
-
-  /* AUTOMATIC VOICE ACTIVATION */
-
-  if(!supported){
-
-    voiceEnabled = false;
-
-    voiceToggle.disabled = true;
-
-    voiceToggle.textContent = "UNAVAILABLE";
-
-    set(
-      "voiceStatus",
-      "Speech is not supported by this browser"
-    );
-
-  }else{
-
-    /* ATTEMPT AUTOMATIC GREETING */
-
-    window.addEventListener("load",()=>{
-
-      setTimeout(()=>{
-        automaticWelcome();
-      },350);
-
-    },{once:true});
-
-    /* BROWSER INTERACTION FALLBACK */
-
-    function gestureFallback(event){
-
-      if(
-        !voiceEnabled ||
-        voiceHasStarted ||
-        event.target.closest(".voice-button") ||
-        event.target.closest("summary")
-      ){
-        return;
+        if(voiceEnabled){
+          synth.cancel();
+        }
       }
-
-      automaticWelcome();
-
-    }
-
-    document.addEventListener(
-      "pointerdown",
-      gestureFallback,
-      {capture:true,passive:true}
-    );
-
-    document.addEventListener(
-      "keydown",
-      gestureFallback,
-      true
-    );
-
-    /* AUTOMATIC SPEECH WHEN SECTIONS OPEN */
-
-    document.querySelectorAll(".panel").forEach(panel=>{
-
-      panel.addEventListener("toggle",()=>{
-
-        if(panel.open){
-
-          activeSection = panel.id;
-
-          if(voiceEnabled){
-
-            speak(sectionMessage(panel.id));
-
-          }
-
-        }else if(activeSection === panel.id){
-
-          activeSection = null;
-
-          if(voiceEnabled){
-            synth.cancel();
-          }
-
-        }
-
-      });
-
     });
+  });
 
-    /* OPTIONAL MUTE BUTTON */
+  voiceToggle.addEventListener("click",()=>{
+    voiceEnabled=!voiceEnabled;
 
-    voiceToggle.addEventListener("click",()=>{
+    voiceToggle.classList.toggle(
+      "muted",
+      !voiceEnabled
+    );
 
-      voiceEnabled = !voiceEnabled;
+    voiceToggle.setAttribute(
+      "aria-pressed",
+      String(!voiceEnabled)
+    );
 
-      voiceToggle.classList.toggle(
-        "muted",
-        !voiceEnabled
+    if(voiceEnabled){
+      voiceToggle.textContent="🔊 MUTE";
+
+      set(
+        "voiceStatus",
+        "Automatic voice coaching active"
       );
 
-      voiceToggle.setAttribute(
-        "aria-pressed",
-        String(!voiceEnabled)
-      );
-
-      if(voiceEnabled){
-
-        voiceToggle.textContent = "🔊 MUTE";
-
-        set(
-          "voiceStatus",
-          "Automatic voice coaching active"
-        );
-
-        if(activeSection){
-
-          speak(sectionMessage(activeSection));
-
-        }else{
-
-          speak(welcomeMessage());
-
-        }
-
+      if(activeSection){
+        speak(sectionMessage(activeSection));
       }else{
-
-        synth.cancel();
-
-        voiceToggle.textContent = "🔇 UNMUTE";
-
-        set(
-          "voiceStatus",
-          "Voice coaching muted"
-        );
-
+        speak(welcomeMessage());
       }
 
-    });
-
-    window.addEventListener("pagehide",()=>{
+    }else{
       synth.cancel();
-    });
+      voiceToggle.textContent="🔇 UNMUTE";
 
-  }
+      set(
+        "voiceStatus",
+        "Voice coaching muted"
+      );
+    }
+  });
+
+  window.addEventListener("pagehide",()=>{
+    synth.cancel();
+  });
+}
 
 })();
 </script>
-
 </body>
 </html>
