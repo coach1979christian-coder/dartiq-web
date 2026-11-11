@@ -934,14 +934,17 @@ body{
 
   /* NATURAL DARTIQ PRONUNCIATION */
 
-  function prepareSpeech(text){
+  
+function prepareSpeech(text){
 
-    return String(text)
-      .replace(/\bDARTIQ\b/gi,"DARTIQ")
-      .replace(/\s+/g," ")
-      .trim();
+  return String(text)
+    .replace(/\bDART\s+IQ\b/gi,"Dartic")
+    .replace(/\bDARTIQ\b/gi,"Dartic")
+    .replace(/\s+/g," ")
+    .trim();
 
-  }
+}
+
 
   /* PREFER ENGLISH MALE VOICE */
 
