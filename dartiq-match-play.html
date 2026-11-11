@@ -1674,7 +1674,15 @@ async function completeMatch(){
   "Match completed locally. Glide sync not confirmed.";
 }
 
-const issueData=Object.keys(coachingLibrary).map(name=>[name]);
+const issueData=[
+ "Missing Right",
+ "Missing Left",
+ "Missing High",
+ "Missing Low",
+ "Inconsistent Grouping",
+ "Release Timing",
+ "Follow Through"
+].map(name=>[name]);
 
 function buildIssues(){
  const root=$("issues");
