@@ -1752,16 +1752,16 @@ restoreRecovery();
 
 /* READY TO PLAY VOICE */
 
+
 function announceReadyToPlay(){
  if(!$("setup").classList.contains("active"))return;
 
  speak(
-  "Welcome "+spokenName+
-  " to DARTIQ Match Play. "+
-  "Are you ready to play? "+
-  "Press Start New Session to begin."
+  "You're entering the DARTIQ Match Play venue. " +
+  "Are you ready to play and get analysed?"
  );
 }
+
 
 window.addEventListener("load",()=>{
  setTimeout(announceReadyToPlay,450);
