@@ -613,14 +613,14 @@ function showScreen(id){
  window.scrollTo(0,0);
 }
 
+
+
 function startSession(){
  showScreen("formats");
- speak(
-  "Welcome "+spokenName+
-  " to DARTIQ Match Play. "+
-  "Select your match format to continue."
- );
+ speak("Select your match format to continue.");
 }
+
+
 
 function selectFormat(n){
  if(![3,5,7,9].includes(n))return;
