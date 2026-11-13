@@ -615,6 +615,11 @@ function showScreen(id){
 
 function startSession(){
  showScreen("formats");
+ speak(
+  "Welcome "+spokenName+
+  " to DARTIQ Match Play. "+
+  "Select your match format to continue."
+ );
 }
 
 function selectFormat(n){
@@ -1744,6 +1749,24 @@ buildIssues();
 updateInput();
 updateStats();
 restoreRecovery();
+
+/* READY TO PLAY VOICE */
+
+function announceReadyToPlay(){
+ if(!$("setup").classList.contains("active"))return;
+
+ speak(
+  "Welcome "+spokenName+
+  " to DARTIQ Match Play. "+
+  "Are you ready to play? "+
+  "Press Start New Session to begin."
+ );
+}
+
+window.addEventListener("load",()=>{
+ setTimeout(announceReadyToPlay,450);
+},{once:true});
+
 </script>
 </body>
 </html>
