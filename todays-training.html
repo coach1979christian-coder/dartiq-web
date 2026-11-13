@@ -4,509 +4,571 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>DARTIQ Today's AI Training</title>
+<title>DARTIQ | Today's AI Training</title>
 <style>
 :root{
- --bg:#050b18;
- --panel:#10243a;
- --panel2:#0a1929;
- --accent:#39a9ff;
- --text:#f4fbff;
- --muted:#9db8ce;
- --line:rgba(57,169,255,.24);
+  --bg:#050b18;
+  --panel:#10243a;
+  --accent:#39a9ff;
+  --text:#f4fbff;
+  --muted:#a9c2d6;
+  --line:rgba(57,169,255,.25);
 }
-*{box-sizing:border-box;margin:0;padding:0}
+*{box-sizing:border-box}
 html,body{
- width:100%;min-height:100%;background:var(--bg);
- font-family:Arial,Helvetica,sans-serif;
- color:var(--text);overflow-x:hidden
+  margin:0;
+  min-height:100%;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+  overflow-x:hidden;
 }
-body{padding:6px}
+body{padding:8px}
 .wrap{
- width:100%;max-width:430px;margin:0 auto;
- padding:16px;border-radius:20px;
- background:
- radial-gradient(circle at 50% 0%,rgba(57,169,255,.10),transparent 35%),
- linear-gradient(180deg,#102844 0%,#081a2d 100%);
- border:1px solid rgba(57,169,255,.40);
- box-shadow:0 0 16px rgba(57,169,255,.18),
- inset 0 1px 0 rgba(255,255,255,.025)
+  width:100%;
+  max-width:430px;
+  margin:auto;
+  padding:18px 14px;
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:linear-gradient(180deg,#0b1e34,#071426);
 }
-.header{padding:2px 2px 15px}
-.kicker{
- font-size:10px;font-weight:900;letter-spacing:1.7px;
- color:var(--accent);text-transform:uppercase;margin-bottom:8px
+.header{
+  text-align:center;
+  padding:10px 0 20px;
 }
-.header h1{
- font-size:31px;line-height:1.05;font-weight:900;
- letter-spacing:-.5px;overflow-wrap:anywhere
+.brand{
+  color:var(--accent);
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:1.5px;
 }
-.subtitle{
- margin-top:8px;color:var(--accent);font-size:14px;
- line-height:1.4;font-weight:700;overflow-wrap:anywhere
+h1{
+  font-size:25px;
+  line-height:1.15;
+  margin:10px 0 0;
 }
-.divider{
- width:100%;height:2px;margin-top:15px;
- background:linear-gradient(90deg,var(--accent),rgba(57,169,255,.12));
- border-radius:99px;box-shadow:0 0 8px rgba(57,169,255,.20)
-}
-.stats{
- display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
- gap:8px;margin-top:14px
-}
-.card,.main-focus,.equipment{
- min-width:0;padding:12px 10px;border-radius:13px;
- background:linear-gradient(180deg,#10243a,#0a1929);
- border:1px solid var(--line)
+.card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:17px;
+  margin-bottom:12px;
 }
 .label{
- color:var(--muted);font-size:9px;line-height:1.2;
- font-weight:900;letter-spacing:.7px;text-transform:uppercase
+  color:var(--accent);
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.7px;
+  text-transform:uppercase;
 }
-.value{
- margin-top:7px;color:#fff;font-size:17px;
- line-height:1.3;font-weight:900;overflow-wrap:anywhere
+.issue{
+  font-size:25px;
+  font-weight:900;
+  margin:10px 0;
+  overflow-wrap:anywhere;
 }
-.main-focus,.equipment{margin-top:8px;padding:13px 14px}
-.main-focus .value,.equipment .value{font-size:14px;line-height:1.4}
-.voice-panel{
- margin-top:10px;padding:12px;border-radius:13px;
- background:linear-gradient(180deg,#10243a,#0a1929);
- border:1px solid var(--line)
+.drill{
+  color:var(--muted);
+  font-size:15px;
+  line-height:1.4;
+  overflow-wrap:anywhere;
 }
-.voice-title{
- color:var(--accent);font-size:9px;font-weight:900;
- letter-spacing:.7px;text-transform:uppercase
+.divider{
+  height:1px;
+  background:var(--line);
+  margin:17px 0;
+}
+.objective{
+  font-size:15px;
+  line-height:1.55;
+  margin-top:10px;
+}
+.tip{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.55;
+  margin-top:10px;
+}
+.voice-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
 }
 .voice-status{
- margin-top:5px;color:var(--muted);
- font-size:10px;line-height:1.4
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.5;
+  margin:12px 0;
 }
-.voice-controls{
- display:grid;grid-template-columns:1fr 1fr;
- gap:7px;margin-top:9px
+.voice-buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
 }
 .voice-button{
- border:1px solid rgba(57,169,255,.45);
- background:#0b2035;color:#fff;border-radius:9px;
- padding:10px 6px;font-size:10px;font-weight:900;cursor:pointer
+  padding:12px 8px;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:#0b2035;
+  color:#fff;
+  font-size:12px;
+  font-weight:900;
+  cursor:pointer;
 }
-.voice-button.primary{background:var(--accent);color:#031322}
-.training-action{margin-top:16px}
-.start-button{
- display:block;width:100%;padding:16px 12px;
- border:0;border-radius:12px;background:var(--accent);
- color:#031322;font-size:14px;font-weight:900;
- letter-spacing:.8px;cursor:pointer;
- box-shadow:0 0 18px rgba(57,169,255,.30)
+.voice-button.primary{
+  background:var(--accent);
+  color:#031322;
 }
-.action-note{
- text-align:center;color:var(--muted);
- font-size:11px;line-height:1.5;margin-top:10px
+.start{
+  display:block;
+  width:100%;
+  padding:18px 10px;
+  border:0;
+  border-radius:12px;
+  background:var(--accent);
+  color:#031322;
+  font-size:14px;
+  font-weight:900;
+  cursor:pointer;
+  box-shadow:0 0 16px rgba(57,169,255,.25);
 }
-.status{text-align:center;color:#ffd17a;font-size:11px;margin-top:10px}
+.status{
+  color:#ffd17a;
+  text-align:center;
+  font-size:12px;
+  margin-top:12px;
+}
 .footer{
- margin-top:18px;text-align:center;color:#54738c;
- font-size:8px;letter-spacing:1px;font-weight:900
+  color:#688ba6;
+  font-size:9px;
+  text-align:center;
+  letter-spacing:1px;
+  margin-top:22px;
 }
-.hidden{display:none!important}
 </style>
 </head>
 <body>
-<div class="wrap">
- <div class="header">
-  <div class="kicker">DARTIQ · PRACTICE TRAINING</div>
-  <h1 id="drill">Practice Training</h1>
-  <div class="subtitle" id="focus">Focused practice</div>
-  <div class="divider"></div>
- </div>
- <div class="stats">
-  <div class="card">
-   <div class="label">Difficulty</div>
-   <div class="value" id="level">Adaptive</div>
-  </div>
-  <div class="card">
-   <div class="label">Duration</div>
-   <div class="value" id="duration">10 Visits</div>
-  </div>
-  <div class="card">
-   <div class="label">Rounds</div>
-   <div class="value" id="rounds">10</div>
-  </div>
- </div>
- <div class="main-focus">
-  <div class="label">Main Focus</div>
-  <div class="value" id="focusShort">--</div>
- </div>
- <div class="equipment hidden" id="equipmentWrap">
-  <div class="label">Equipment</div>
-  <div class="value" id="equipment">--</div>
- </div>
- <div class="voice-panel">
-  <div class="voice-title">🔊 DARTIQ VOICE COACH</div>
-  <div class="voice-status" id="voiceStatus">
-   Male DARTIQ coach ready.
-  </div>
-  <div class="voice-controls">
-   <button class="voice-button primary" onclick="speakTraining()">
-    ▶ PLAY BRIEFING
-   </button>
-   <button class="voice-button" onclick="stopVoice()">
-    ■ STOP
-   </button>
-  </div>
- </div>
- <div class="training-action">
-  <button id="startTraining" class="start-button" onclick="startTraining()">
-   🎯 START TRAINING
+
+<main class="wrap">
+
+  <header class="header">
+    <div class="brand">DARTIQ PERFORMANCE LAB</div>
+    <h1>TODAY'S AI TRAINING</h1>
+  </header>
+
+  <section class="card">
+    <div class="label">Your Training Focus</div>
+    <div class="issue" id="issue">Loading...</div>
+    <div class="drill" id="drill"></div>
+
+    <div class="divider"></div>
+
+    <div class="label">Your Objective</div>
+    <div class="objective" id="objective"></div>
+    <div class="tip" id="instruction"></div>
+  </section>
+
+  <section class="card">
+    <div class="voice-head">
+      <div class="label">🔊 AI Voice Coach</div>
+      <div class="tip" style="margin:0">Male voice</div>
+    </div>
+
+    <div class="voice-status" id="voiceStatus">
+      Preparing your training briefing...
+    </div>
+
+    <div class="voice-buttons">
+      <button class="voice-button primary"
+        onclick="speakTraining()">
+        ▶ PLAY
+      </button>
+
+      <button class="voice-button"
+        onclick="stopVoice()">
+        ■ STOP
+      </button>
+    </div>
+  </section>
+
+  <button class="start" onclick="startTraining()">
+    START PERFORMANCE TRAINING
   </button>
-  <div class="action-note">
-   Continue to the DARTIQ Performance Lab
-  </div>
-  <div class="status hidden" id="status"></div>
- </div>
- <div class="footer">DARTIQ · INTELLIGENT DARTS COACHING</div>
-</div>
+
+  <div class="status" id="status"></div>
+
+  <footer class="footer">
+    DARTIQ · INTELLIGENT DARTS COACHING
+  </footer>
+
+</main>
 
 <script>
 "use strict";
+
 const params=new URLSearchParams(window.location.search);
 
 function getValue(...keys){
- for(const key of keys){
-  const v=params.get(key);
-  if(v!==null&&v.trim()!=="")return v.trim();
- }
- return "";
+  for(const key of keys){
+    const value=params.get(key);
+    if(value!==null && value.trim()!==""){
+      return value.trim();
+    }
+  }
+  return "";
 }
 
 const context={
- session:getValue("session","sessionID"),
- email:getValue("email"),
- player:getValue("player","playerid"),
- userid:getValue("userid"),
- playerName:getValue("playerName","playername","name"),
- language:getValue("language","lang")||"EN",
- source:getValue("source")||"MATCH",
- mainIssue:getValue("mainIssue","mainissue","focus"),
- focus:getValue("focus","mainIssue","mainissue"),
- drill:getValue(
-  "drill","recommendedDrill","practice",
-  "trainingName","finalTraining"
- ),
- level:getValue("level","difficulty","playerLevel")||"Adaptive",
- duration:getValue("duration","trainingDuration")||"10 Visits",
- rounds:getValue("rounds","trainingRounds")||"10",
- equipment:getValue("equipment"),
- practiceID:getValue("practiceID","practiceId","drillID"),
- advice:getValue("aiAdvice","coachAdvice","advice"),
- objective:getValue("objective","trainingObjective"),
- why:getValue("why","whyThisPractice"),
- execution:getValue("execution","howToPractice"),
- avoid:getValue("avoid","watchFor"),
- coach:getValue("keithcoach","coach")||"Keith Allen Guther",
- rules:getValue("keithrules","rules","trainingRules"),
- primary:getValue("keithprimary","primarymetric","primaryMetric"),
- secondary:getValue(
-  "keithsecondary","secondarymetric","secondaryMetric"
- ),
- target:getValue("keithtarget","successtarget","successTarget"),
- red:getValue("keithred","red"),
- orange:getValue("keithorange","orange"),
- yellow:getValue("keithyellow","yellow"),
- green:getValue("keithgreen","green"),
- redAction:getValue("redaction","redAction"),
- orangeAction:getValue("orangeaction","orangeAction"),
- yellowAction:getValue("yellowaction","yellowAction"),
- greenAction:getValue("greenaction","greenAction"),
- improvement:getValue("improvement","coachingLogic")||
-  "Intention → Outcome → Decide → Retest",
- track:getValue("track","whatToTrack"),
- reminder:getValue("reminder","afterPractice"),
- nextAction:getValue("nextAction","next"),
- after:getValue("after")
+  session:getValue("session","sessionID"),
+  email:getValue("email"),
+  player:getValue("player","playerid"),
+  userid:getValue("userid"),
+  playerName:getValue("playerName","playername","name"),
+  language:getValue("language","lang")||"EN",
+  source:getValue("source")||"MATCH",
+
+  mainIssue:getValue("mainIssue","mainissue","focus"),
+  focus:getValue("focus","mainIssue","mainissue"),
+
+  drill:getValue(
+    "drill","recommendedDrill","practice",
+    "trainingName","finalTraining"
+  ),
+
+  level:getValue("level","difficulty","playerLevel")||"Adaptive",
+  duration:getValue("duration","trainingDuration")||"10 Visits",
+  rounds:getValue("rounds","trainingRounds")||"10",
+  equipment:getValue("equipment"),
+  practiceID:getValue("practiceID","practiceId","drillID"),
+
+  advice:getValue("aiAdvice","coachAdvice","advice"),
+  objective:getValue("objective","trainingObjective"),
+  why:getValue("why","whyThisPractice"),
+  execution:getValue("execution","howToPractice"),
+  avoid:getValue("avoid","watchFor"),
+
+  coach:getValue("keithcoach","coach")||"Keith Allen Guther",
+  rules:getValue("keithrules","rules","trainingRules"),
+  primary:getValue("keithprimary","primarymetric","primaryMetric"),
+  secondary:getValue(
+    "keithsecondary","secondarymetric","secondaryMetric"
+  ),
+  target:getValue("keithtarget","successtarget","successTarget"),
+
+  red:getValue("keithred","red"),
+  orange:getValue("keithorange","orange"),
+  yellow:getValue("keithyellow","yellow"),
+  green:getValue("keithgreen","green"),
+
+  redAction:getValue("redaction","redAction"),
+  orangeAction:getValue("orangeaction","orangeAction"),
+  yellowAction:getValue("yellowaction","yellowAction"),
+  greenAction:getValue("greenaction","greenAction"),
+
+  improvement:getValue("improvement","coachingLogic")||
+    "Intention → Outcome → Decide → Retest",
+
+  track:getValue("track","whatToTrack"),
+  reminder:getValue("reminder","afterPractice"),
+  nextAction:getValue("nextAction","next"),
+  after:getValue("after")
 };
 
-function setText(id,value,fallback="--"){
- const e=document.getElementById(id);
- if(e)e.textContent=value||fallback;
-}
+const issue=context.mainIssue||context.focus||"Focused Practice";
 
-setText("drill",context.drill,"Practice Training");
-setText("focus",context.focus,"Focused practice");
-setText("focusShort",context.mainIssue||context.focus);
-setText("level",context.level);
-setText("duration",context.duration);
-setText("rounds",context.rounds);
+const fallbackDrills={
+  "missing right":"Right-Side Alignment Training",
+  "missing left":"Left-Side Alignment Training",
+  "missing high":"Vertical Accuracy Training",
+  "missing low":"Vertical Accuracy Training",
+  "inconsistent grouping":"Grouping Consistency Training",
+  "release timing":"Release Timing Training",
+  "follow through":"Follow-Through Training",
+  "elbow movement":"Elbow Stability Training",
+  "body stability":"Body Stability Training",
+  "confidence":"Confidence Training"
+};
 
-if(context.equipment){
- setText("equipment",context.equipment);
- document.getElementById("equipmentWrap").classList.remove("hidden");
-}
+const fallbackObjectives={
+  "missing right":"Reduce right-side misses.",
+  "missing left":"Reduce left-side misses.",
+  "missing high":"Reduce high misses.",
+  "missing low":"Reduce low misses.",
+  "inconsistent grouping":"Improve dart grouping consistency.",
+  "release timing":"Improve release timing consistency.",
+  "follow through":"Improve follow-through consistency.",
+  "elbow movement":"Improve elbow stability.",
+  "body stability":"Improve body stability.",
+  "confidence":"Build confidence through repeatable practice."
+};
+
+const issueKey=issue.toLowerCase();
+
+const drill=context.drill||
+  fallbackDrills[issueKey]||
+  "Focused Performance Training";
+
+const objective=context.objective||
+  fallbackObjectives[issueKey]||
+  "Improve consistency during your training.";
+
+const instruction=context.execution||
+  "Complete "+context.duration+
+  " of focused practice. Maintain a consistent stance "+
+  "and release routine. Track your results.";
+
+document.getElementById("issue").textContent=issue;
+document.getElementById("drill").textContent=drill;
+document.getElementById("objective").textContent=objective;
+document.getElementById("instruction").textContent=instruction;
 
 function voiceText(text){
- return String(text||"")
- .replace(
-  /\bD\s*[.\-]?\s*A\s*[.\-]?\s*R\s*[.\-]?\s*T\s*[.\-]?\s*I\s*[.\-]?\s*Q\b/gi,
-  "Dartic"
- )
- .replace(/\bDART\s+IQ\b/gi,"Dartic")
- .replace(/\bDARTIQ\b/gi,"Dartic");
+  return String(text||"")
+    .replace(
+      /\bD\s*[.\-]?\s*A\s*[.\-]?\s*R\s*[.\-]?\s*T\s*[.\-]?\s*I\s*[.\-]?\s*Q\b/gi,
+      "Dartic"
+    )
+    .replace(/\bDART\s+IQ\b/gi,"Dartic")
+    .replace(/\bDARTIQ\b/gi,"Dartic");
 }
 
 function selectMaleVoice(){
- if(!("speechSynthesis" in window))return null;
+  if(!("speechSynthesis" in window))return null;
 
- const voices=speechSynthesis.getVoices();
+  const voices=speechSynthesis.getVoices();
 
- const male=
- /microsoft (guy|andrew|david|mark)|google uk english male|\b(ryan|david|daniel|george|brian|andrew|mark|eric|christopher|oliver|thomas|james|matthew|alex|aaron|fred|richard|reed|arthur)\b|\bmale\b/i;
+  const male=
+    /microsoft (guy|andrew|david|mark)|google uk english male|\b(ryan|david|daniel|george|brian|andrew|mark|eric|christopher|oliver|thomas|james|matthew|alex|aaron|fred|richard|reed|arthur)\b|\bmale\b/i;
 
- const female=
- /\b(female|zira|hazel|susan|samantha|victoria|karen|moira|ava|aria|jenny|sonia|natasha|emma|amy|fiona|tessa)\b/i;
+  const female=
+    /\b(female|zira|hazel|susan|samantha|victoria|karen|moira|ava|aria|jenny|sonia|natasha|emma|amy|fiona|tessa)\b/i;
 
- const available=voices.filter(v=>
-  /^en([-_]|$)/i.test(v.lang||"") &&
-  male.test(v.name||"") &&
-  !female.test(v.name||"")
- );
+  const available=voices.filter(v=>
+    /^en([-_]|$)/i.test(v.lang||"") &&
+    male.test(v.name||"") &&
+    !female.test(v.name||"")
+  );
 
- return available.find(v=>/^en-GB$/i.test(v.lang))||
-        available[0]||null;
+  return available.find(v=>/^en-GB$/i.test(v.lang))||
+    available[0]||null;
 }
 
-function setVoiceStatus(text){
- const e=document.getElementById("voiceStatus");
- if(e)e.textContent=text;
-}
-
-let maleVoice=null;
+let currentVoice=null;
 let voiceStarted=false;
 let voiceHasPlayed=false;
 
-function buildTrainingBriefing(){
- const parts=[];
+function setVoiceStatus(message){
+  document.getElementById("voiceStatus").textContent=message;
+}
 
- if(context.playerName){
-  parts.push(
-   "Welcome "+context.playerName+
-   " to your DARTIQ training session."
-  );
- }else{
-  parts.push("Welcome to your DARTIQ training session.");
- }
+function buildBriefing(){
+  const parts=[];
 
- if(context.drill){
-  parts.push("Today's drill is "+context.drill+".");
- }
+  if(context.playerName){
+    parts.push(
+      "Welcome "+context.playerName+
+      " to the DARTIQ Performance Lab."
+    );
+  }else{
+    parts.push("Welcome to the DARTIQ Performance Lab.");
+  }
 
- if(context.mainIssue||context.focus){
-  parts.push(
-   "Your main focus is "+
-   (context.mainIssue||context.focus)+"."
-  );
- }
+  parts.push("Your today's AI training.");
 
- if(context.duration){
-  parts.push("Training duration "+context.duration+".");
- }
+  parts.push("Your main focus is "+issue+".");
+  parts.push("Your recommended drill is "+drill+".");
+  parts.push("Your objective is "+objective);
 
- if(context.rounds){
-  parts.push(context.rounds+" rounds.");
- }
+  if(context.target){
+    parts.push("Your success target is "+context.target+".");
+  }
 
- if(context.target){
-  parts.push("Success target "+context.target+".");
- }
+  parts.push("When ready, start performance training.");
 
- parts.push(
-  "For detailed performance instructions, continue to the DARTIQ Performance Lab. When ready, start training."
- );
-
- return voiceText(parts.join(" "));
+  return voiceText(parts.join(" "));
 }
 
 function speakTraining(){
- if(
-  !("speechSynthesis" in window) ||
-  !("SpeechSynthesisUtterance" in window)
- ){
-  setVoiceStatus("Voice not supported on this device.");
-  return;
- }
-
- maleVoice=selectMaleVoice();
-
- if(!maleVoice){
-  setVoiceStatus("Male voice unavailable on this device.");
-  return;
- }
-
- speechSynthesis.cancel();
-
- const u=new SpeechSynthesisUtterance(buildTrainingBriefing());
- u.voice=maleVoice;
- u.lang=maleVoice.lang||"en-GB";
- u.rate=.92;
- u.pitch=.88;
- u.volume=1;
-
- u.onstart=()=>{
-  voiceHasPlayed=true;
-  setVoiceStatus(
-   "DARTIQ Voice Coach is briefing your training."
-  );
- };
-
- u.onend=()=>{
-  setVoiceStatus("Training briefing complete. Ready to start.");
- };
-
- u.onerror=e=>{
-  if(!["canceled","interrupted"].includes(e.error)){
-   setVoiceStatus(
-    "Tap PLAY BRIEFING to hear the male coach."
-   );
+  if(
+    !("speechSynthesis" in window)||
+    !("SpeechSynthesisUtterance" in window)
+  ){
+    setVoiceStatus("Voice is not supported on this device.");
+    return;
   }
- };
 
- speechSynthesis.speak(u);
- if(speechSynthesis.paused)speechSynthesis.resume();
+  currentVoice=selectMaleVoice();
+
+  if(!currentVoice){
+    setVoiceStatus(
+      "No confirmed male voice is available on this device."
+    );
+    return;
+  }
+
+  speechSynthesis.cancel();
+
+  const utterance=new SpeechSynthesisUtterance(buildBriefing());
+
+  utterance.voice=currentVoice;
+  utterance.lang=currentVoice.lang||"en-GB";
+  utterance.rate=.92;
+  utterance.pitch=.88;
+  utterance.volume=1;
+
+  utterance.onstart=()=>{
+    voiceHasPlayed=true;
+    setVoiceStatus("DARTIQ Voice Coach is speaking...");
+  };
+
+  utterance.onend=()=>{
+    setVoiceStatus("Briefing complete. Ready to train.");
+  };
+
+  utterance.onerror=event=>{
+    if(!["canceled","interrupted"].includes(event.error)){
+      setVoiceStatus("Tap PLAY to hear your briefing.");
+    }
+  };
+
+  speechSynthesis.speak(utterance);
+
+  if(speechSynthesis.paused){
+    speechSynthesis.resume();
+  }
 }
 
 function stopVoice(){
- if("speechSynthesis" in window){
-  speechSynthesis.cancel();
- }
- setVoiceStatus("Voice briefing stopped.");
+  if("speechSynthesis" in window){
+    speechSynthesis.cancel();
+  }
+  setVoiceStatus("Voice stopped.");
 }
 
 function autoStartVoice(){
- if(voiceStarted)return;
+  if(voiceStarted)return;
 
- voiceStarted=true;
- maleVoice=selectMaleVoice();
+  currentVoice=selectMaleVoice();
 
- if(!maleVoice){
-  voiceStarted=false;
-  setVoiceStatus("Male voice ready when available.");
-  return;
- }
+  if(!currentVoice){
+    setVoiceStatus("Tap PLAY when a male voice is available.");
+    return;
+  }
 
- speakTraining();
+  voiceStarted=true;
+  speakTraining();
 }
 
 if("speechSynthesis" in window){
- const loadVoices=()=>{
-  maleVoice=selectMaleVoice();
+  speechSynthesis.addEventListener?.(
+    "voiceschanged",
+    ()=>{
+      if(!voiceStarted && document.readyState==="complete"){
+        autoStartVoice();
+      }
+    }
+  );
 
-  if(
-   maleVoice &&
-   !voiceStarted &&
-   document.readyState==="complete"
-  ){
-   autoStartVoice();
-  }
- };
+  window.addEventListener("load",()=>{
+    setTimeout(autoStartVoice,750);
+  });
 
- speechSynthesis.addEventListener?.("voiceschanged",loadVoices);
-
- window.addEventListener("load",()=>{
-  setTimeout(autoStartVoice,750);
- });
-
- document.addEventListener("pointerdown",()=>{
-  if(!voiceHasPlayed&&!speechSynthesis.speaking){
-   autoStartVoice();
-  }
- },{once:true});
-}
-
-function showStatus(message){
- const el=document.getElementById("status");
- el.textContent=message;
- el.classList.remove("hidden");
+  document.addEventListener("pointerdown",()=>{
+    if(!voiceHasPlayed && !speechSynthesis.speaking){
+      autoStartVoice();
+    }
+  },{once:true});
 }
 
 function startTraining(){
- stopVoice();
+  stopVoice();
 
- try{
-  const url=new URL(
-   "practice-engine.html",
-   window.location.href
-  );
+  try{
+    const url=new URL(
+      "practice-engine.html",
+      window.location.href
+    );
 
-  const fields={
-   session:context.session,
-   email:context.email,
-   player:context.player,
-   userid:context.userid,
-   playerName:context.playerName,
-   language:context.language,
-   source:context.source,
-   mainIssue:context.mainIssue,
-   focus:context.focus,
-   drill:context.drill,
-   recommendedDrill:context.drill,
-   level:context.level,
-   difficulty:context.level,
-   duration:context.duration,
-   rounds:context.rounds,
-   equipment:context.equipment,
-   practiceID:context.practiceID,
-   aiAdvice:context.advice,
-   coachAdvice:context.advice,
-   objective:context.objective,
-   why:context.why,
-   execution:context.execution,
-   avoid:context.avoid,
-   keithcoach:context.coach,
-   keithrules:context.rules,
-   keithprimary:context.primary,
-   keithsecondary:context.secondary,
-   keithtarget:context.target,
-   keithred:context.red,
-   keithorange:context.orange,
-   keithyellow:context.yellow,
-   keithgreen:context.green,
-   redaction:context.redAction,
-   orangeaction:context.orangeAction,
-   yellowaction:context.yellowAction,
-   greenaction:context.greenAction,
-   improvement:context.improvement,
-   track:context.track,
-   reminder:context.reminder,
-   nextAction:context.nextAction,
-   after:context.after
-  };
+    const fields={
+      session:context.session,
+      email:context.email,
+      player:context.player,
+      userid:context.userid,
+      playerName:context.playerName,
+      language:context.language,
+      source:context.source,
 
-  for(const [key,value] of Object.entries(fields)){
-   if(
-    value!==undefined &&
-    value!==null &&
-    String(value).trim()!==""
-   ){
-    url.searchParams.set(key,String(value));
-   }
+      mainIssue:context.mainIssue,
+      focus:context.focus,
+      drill:context.drill||drill,
+      recommendedDrill:context.drill||drill,
+
+      level:context.level,
+      difficulty:context.level,
+      duration:context.duration,
+      rounds:context.rounds,
+      equipment:context.equipment,
+      practiceID:context.practiceID,
+
+      aiAdvice:context.advice,
+      coachAdvice:context.advice,
+      objective:context.objective||objective,
+      why:context.why,
+      execution:context.execution,
+      avoid:context.avoid,
+
+      keithcoach:context.coach,
+      keithrules:context.rules,
+      keithprimary:context.primary,
+      keithsecondary:context.secondary,
+      keithtarget:context.target,
+
+      keithred:context.red,
+      keithorange:context.orange,
+      keithyellow:context.yellow,
+      keithgreen:context.green,
+
+      redaction:context.redAction,
+      orangeaction:context.orangeAction,
+      yellowaction:context.yellowAction,
+      greenaction:context.greenAction,
+
+      improvement:context.improvement,
+      track:context.track,
+      reminder:context.reminder,
+      nextAction:context.nextAction,
+      after:context.after
+    };
+
+    for(const [key,value] of Object.entries(fields)){
+      if(
+        value!==undefined &&
+        value!==null &&
+        String(value).trim()!==""
+      ){
+        url.searchParams.set(key,String(value));
+      }
+    }
+
+    document.getElementById("status").textContent=
+      "Opening DARTIQ Performance Lab...";
+
+    window.location.assign(url.toString());
+
+  }catch(error){
+    console.error("DARTIQ navigation error:",error);
+
+    document.getElementById("status").textContent=
+      "Unable to open DARTIQ Performance Lab.";
   }
-
-  showStatus("Opening DARTIQ Performance Lab...");
-  window.location.assign(url.toString());
-
- }catch(error){
-  console.error(
-   "DARTIQ training navigation failed:",
-   error
-  );
-  showStatus("Unable to open DARTIQ Performance Lab.");
- }
 }
 
 window.addEventListener("beforeunload",()=>{
- if("speechSynthesis" in window){
-  speechSynthesis.cancel();
- }
+  if("speechSynthesis" in window){
+    speechSynthesis.cancel();
+  }
 });
 </script>
 </body>
