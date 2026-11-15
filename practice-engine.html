@@ -1603,6 +1603,15 @@ reportURL.searchParams.set("source", "TRAINING");
 
 window.location.assign(reportURL.toString());
 
+  }catch(e){
+    console.error(e);
+    put("saveStatus","Save failed. Check the Glide workflow.");
+    $("saveButton").disabled=false;
+  }finally{
+    saving=false;
+  }
+}
+
 /* DOUBLE TROUBLE */
 
 async function confirmDoubleTrouble(){
