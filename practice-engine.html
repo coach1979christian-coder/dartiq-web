@@ -223,12 +223,17 @@ details[open] summary:after{content:"⌃"}
   margin:auto;
   aspect-ratio:1;
 }
+
 #dartboard{
   width:100%;
-  height:100%;
-  touch-action:manipulation;
+  height:auto;
+  aspect-ratio:1/1;
+  min-height:280px;
   display:block;
+  visibility:visible;
+  touch-action:manipulation;
 }
+
 .lab-bottom{
   display:grid;
   grid-template-columns:1fr 1.25fr 1fr;
