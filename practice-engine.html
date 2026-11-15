@@ -1600,7 +1600,16 @@ reportURL.searchParams.set("player", player);
 reportURL.searchParams.set("userid", userid);
 reportURL.searchParams.set("playername", playerName);
 reportURL.searchParams.set("source", "TRAINING");
-
+reportURL.searchParams.set("average", payload.average);
+reportURL.searchParams.set("first9", payload.first9Average);
+reportURL.searchParams.set("count100", payload.count100);
+reportURL.searchParams.set("count140", payload.count140);
+reportURL.searchParams.set("count180", payload.count180);
+reportURL.searchParams.set("highestCheckout", payload.highestCheckout);
+reportURL.searchParams.set("totalDarts", payload.totalDarts);
+reportURL.searchParams.set("totalVisits", payload.totalVisits);
+reportURL.searchParams.set("mainIssue", payload.mainIssue);
+reportURL.searchParams.set("drill", payload.drill);
 window.location.assign(reportURL.toString());
 
   }catch(e){
