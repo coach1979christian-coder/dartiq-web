@@ -1587,14 +1587,12 @@ saved = true;
 
 put(
   "saveStatus",
-  "Training submitted. Opening your AI Progress Report..."
-);
+"ai-progress-report-matched-coaching.html",);
 
 $("saveButton").textContent = "OPENING AI PROGRESS REPORT";
 
 const reportURL = new URL(
-  "ai-progress-report-matched-coaching.html",
-  window.location.href
+"training-history.html",  window.location.href
 );
 
 reportURL.searchParams.set("session", sessionID);
