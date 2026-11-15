@@ -276,8 +276,7 @@ const context={
   after:getValue("after")
 };
 
-const issue=context.mainIssue||context.focus||"Focused Practice";
-
+const issue = (context.mainIssue || context.focus || "").trim();
 const fallbackDrills={
   "missing right":"Right-Side Alignment Training",
   "missing left":"Left-Side Alignment Training",
