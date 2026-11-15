@@ -1507,8 +1507,450 @@ function populateResults(){
 
 /* SAVE TO GLIDE */
 
-async function saveSession(){
-  if(!completed||saving||saved)return;
+
+async function saveSession() {
+  if (!completed || saving || saved) return;
+
+  if (doubleTrouble) {
+    put(
+      "saveStatus",
+      "Double Trouble visits were saved individually. Verify the records in Glide."
+    );
+    return;
+  }
+
+  if (!saveWebhook) {
+    put("saveStatus", "Save webhook missing. No data sent.");
+    return;
+  }
+
+  const first9 = calculateFirst9();
+
+  const coaching = {
+    mainIssue: get("mainIssue", "focus"),
+    coachAdvice: get("aiAdvice", "coachAdvice", "advice"),
+    successTarget: get(
+      "keithtarget",
+      "successTarget",
+      "successtarget",
+      "target"
+    ),
+    nextAction: get("nextAction", "aiNextAction", "after")
+  };
+
+  const xpValue = get("xpEarned", "xp", "earnedXP");
+  const xpEarned =
+    xpValue !== "" && Number.isFinite(Number(xpValue))
+      ? Number(xpValue)
+      : null;
+
+  const payload = {
+    sessionID,
+    email,
+    player,
+    userid,
+    playerName,
+    language,
+    source: get("source") || "TRAINING",
+    mainIssue: coaching.mainIssue,
+    focus,
+    drill,
+    coachAdvice: coaching.coachAdvice,
+    successTarget: coaching.successTarget,
+    nextAction: coaching.nextAction,
+    practiceType: "501",
+    status: "completed",
+    startingScore: 501,
+    remainingScore: remaining,
+    totalPoints,
+    totalDarts,
+    average: Number(average().toFixed(2)),
+    first9Points: first9.first9Points,
+    first9Average: first9.first9Average,
+    totalVisits: visits.length,
+    count100,
+    count140,
+    count180,
+    checkoutDarts,
+    highestCheckout,
+    legsWon,
+    finishedManually,
+    visits,
+    completedAt: new Date().toISOString()
+  };
+
+  if (xpEarned !== null) {
+    payload.xpEarned = xpEarned;
+  }
+
+  saving = true;
+  $("saveButton").disabled = true;
+  put("saveStatus", "Saving training to Glide...");
+
+  try {
+    const url = new URL(saveWebhook, window.location.href);
+
+    if (url.protocol !== "https:") {
+      throw new Error("HTTPS required");
+    }
+
+    const response = await fetch(url.toString(), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+      throw new Error("Glide returned HTTP " + response.status);
+    }
+
+    saved = true;
+
+    // Build the existing Training History destination.
+    const historyURL = new URL(
+      "training-history.html",
+      window.location.href
+    );
+
+    const historyParams = {
+      session: sessionID,
+      email,
+      player,
+      userid,
+      playername: playerName,
+      trainingname: drill,
+      trainingdate: payload.completedAt,
+      average: payload.average,
+      first9: payload.first9Average ?? "",
+      totaldarts: totalDarts,
+      visits: visits.length,
+      count180,
+      count140,
+      count100,
+      highestcheckout: highestCheckout,
+      mainissue: coaching.mainIssue,
+      coachadvice: coaching.coachAdvice,
+      successtarget: coaching.successTarget,
+      nextaction: coaching.nextAction,
+      status: "completed",
+      source: "TRAINING",
+      v: "3"
+    };
+
+    if (xpEarned !== null) {
+      historyParams.xpearned = xpEarned;
+    }
+
+    Object.entries(historyParams).forEach(([key, value]) => {
+      historyURL.searchParams.set(key, String(value ?? ""));
+    });
+
+    // Only the completion screen uses Indigo.
+    const indigo = "#6366F1";
+    const indigoBright = "#818CF8";
+    const indigoBorder = "rgba(129,140,248,.42)";
+
+    const existingStyle = document.getElementById(
+      "dartiqTrainingCompleteStyle"
+    );
+
+    if (!existingStyle) {
+      const style = document.createElement("style");
+      style.id = "dartiqTrainingCompleteStyle";
+      style.textContent = `
+        #dartiqTrainingComplete {
+          color: #F5F7FF;
+          font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #dartiqTrainingComplete .tc-hero {
+          text-align: center;
+          padding: 26px 16px;
+          background: linear-gradient(
+            160deg,
+            #211B59,
+            #10142E
+          );
+          border: 1px solid ${indigoBorder};
+          border-radius: 16px;
+          box-shadow: 0 0 22px rgba(99,102,241,.15);
+        }
+
+        #dartiqTrainingComplete .tc-check {
+          width: 62px;
+          height: 62px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto 15px;
+          border: 2px solid ${indigoBright};
+          border-radius: 50%;
+          color: ${indigoBright};
+          font-size: 34px;
+          font-weight: 900;
+          box-shadow: 0 0 18px rgba(129,140,248,.3);
+        }
+
+        #dartiqTrainingComplete h2 {
+          margin: 0 0 10px;
+          color: ${indigoBright};
+          font-size: 23px;
+          font-weight: 900;
+          letter-spacing: 1px;
+          text-shadow: 0 0 15px rgba(129,140,248,.3);
+        }
+
+        #dartiqTrainingComplete .tc-subtitle {
+          color: #D4D9FF;
+          font-size: 12px;
+          line-height: 1.6;
+        }
+
+        #dartiqTrainingComplete .tc-grid {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0,1fr));
+          gap: 10px;
+          margin: 14px 0;
+        }
+
+        #dartiqTrainingComplete .tc-stat {
+          padding: 18px 8px;
+          text-align: center;
+          background: #151735;
+          border: 1px solid ${indigoBorder};
+          border-radius: 12px;
+        }
+
+        #dartiqTrainingComplete .tc-stat strong {
+          display: block;
+          color: ${indigoBright};
+          font-size: 27px;
+          font-weight: 900;
+          overflow-wrap: anywhere;
+        }
+
+        #dartiqTrainingComplete .tc-stat small {
+          display: block;
+          margin-top: 8px;
+          color: #B8BEE3;
+          font-size: 10px;
+          font-weight: 900;
+          letter-spacing: .6px;
+        }
+
+        #dartiqTrainingComplete .tc-summary {
+          background: #151735;
+          border: 1px solid ${indigoBorder};
+          border-radius: 13px;
+          padding: 16px;
+          margin-bottom: 14px;
+        }
+
+        #dartiqTrainingComplete .tc-heading {
+          color: ${indigoBright};
+          font-size: 12px;
+          font-weight: 900;
+          letter-spacing: 1px;
+          margin-bottom: 15px;
+        }
+
+        #dartiqTrainingComplete .tc-field {
+          margin-bottom: 14px;
+        }
+
+        #dartiqTrainingComplete .tc-field:last-child {
+          margin-bottom: 0;
+        }
+
+        #dartiqTrainingComplete .tc-field label {
+          display: block;
+          margin-bottom: 5px;
+          color: #A5B4FC;
+          font-size: 10px;
+          font-weight: 900;
+          text-transform: uppercase;
+        }
+
+        #dartiqTrainingComplete .tc-field div {
+          color: #F5F7FF;
+          font-size: 12px;
+          line-height: 1.6;
+          white-space: pre-wrap;
+          overflow-wrap: anywhere;
+        }
+
+        #dartiqTrainingComplete .tc-button {
+          display: block;
+          width: 100%;
+          padding: 17px 12px;
+          background: ${indigo};
+          color: white;
+          border: 1px solid ${indigoBright};
+          border-radius: 12px;
+          font-size: 13px;
+          font-weight: 900;
+          cursor: pointer;
+          box-shadow: 0 0 20px rgba(99,102,241,.22);
+        }
+
+        #dartiqTrainingComplete .tc-footer {
+          margin-top: 15px;
+          text-align: center;
+          color: #A5AACA;
+          font-size: 10px;
+        }
+      `;
+
+      document.head.appendChild(style);
+    }
+
+    // Hide the old Performance Results content
+    // only after the save request succeeds.
+    const results = $("resultsScreen");
+    results.replaceChildren();
+    results.classList.remove("hidden");
+
+    const complete = document.createElement("section");
+    complete.id = "dartiqTrainingComplete";
+
+    const hero = document.createElement("div");
+    hero.className = "tc-hero";
+
+    const check = document.createElement("div");
+    check.className = "tc-check";
+    check.textContent = "✓";
+
+    const title = document.createElement("h2");
+    title.textContent = "TRAINING COMPLETE";
+
+    const subtitle = document.createElement("div");
+    subtitle.className = "tc-subtitle";
+    subtitle.textContent =
+      "Your training has been submitted to Glide.";
+
+    hero.append(check, title, subtitle);
+    complete.appendChild(hero);
+
+    const stats = document.createElement("div");
+    stats.className = "tc-grid";
+
+    function addStat(label, value) {
+      const tile = document.createElement("div");
+      tile.className = "tc-stat";
+
+      const number = document.createElement("strong");
+      number.textContent = String(value ?? "—");
+
+      const caption = document.createElement("small");
+      caption.textContent = label;
+
+      tile.append(number, caption);
+      stats.appendChild(tile);
+    }
+
+    addStat("3-DART AVERAGE", payload.average.toFixed(2));
+
+    addStat(
+      "FIRST 9",
+      payload.first9Average === null
+        ? "—"
+        : Number(payload.first9Average).toFixed(2)
+    );
+
+    addStat("TOTAL DARTS", totalDarts);
+
+    addStat(
+      "XP EARNED",
+      xpEarned === null ? "PENDING" : "+" + xpEarned
+    );
+
+    complete.appendChild(stats);
+
+    const summary = document.createElement("div");
+    summary.className = "tc-summary";
+
+    const summaryTitle = document.createElement("div");
+    summaryTitle.className = "tc-heading";
+    summaryTitle.textContent = "TRAINING SUMMARY";
+
+    summary.appendChild(summaryTitle);
+
+    function addCoachingField(label, value) {
+      const field = document.createElement("div");
+      field.className = "tc-field";
+
+      const fieldLabel = document.createElement("label");
+      fieldLabel.textContent = label;
+
+      const fieldValue = document.createElement("div");
+      fieldValue.textContent = value || "Not provided";
+
+      field.append(fieldLabel, fieldValue);
+      summary.appendChild(field);
+    }
+
+    addCoachingField(
+      "Main Training Issue",
+      coaching.mainIssue
+    );
+
+    addCoachingField(
+      "Coach Advice",
+      coaching.coachAdvice
+    );
+
+    addCoachingField(
+      "Success Target",
+      coaching.successTarget
+    );
+
+    addCoachingField(
+      "Next Action",
+      coaching.nextAction
+    );
+
+    complete.appendChild(summary);
+
+    const historyButton = document.createElement("button");
+    historyButton.type = "button";
+    historyButton.className = "tc-button";
+    historyButton.textContent = "VIEW TRAINING HISTORY →";
+
+    historyButton.addEventListener("click", () => {
+      window.location.assign(historyURL.toString());
+    });
+
+    complete.appendChild(historyButton);
+
+    const footer = document.createElement("div");
+    footer.className = "tc-footer";
+    footer.textContent =
+      "DARTIQ • INTELLIGENT DARTS COACHING";
+
+    complete.appendChild(footer);
+    results.appendChild(complete);
+
+    put("pageTitle", "TRAINING COMPLETE");
+
+    window.scrollTo(0, 0);
+
+  } catch (error) {
+    console.error("DARTIQ training save failed:", error);
+
+    put(
+      "saveStatus",
+      "Save failed. Check the Glide workflow and retry."
+    );
+
+    $("saveButton").disabled = false;
+
+  } finally {
+    saving = false;
+  }
+}
+
 
   if(doubleTrouble){
     put("saveStatus",
