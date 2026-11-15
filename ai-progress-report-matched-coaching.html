@@ -72,7 +72,15 @@ h1{color:var(--accent);font-size:22px;margin-top:3px;text-shadow:0 0 10px rgba(5
 
 <script> 
 const params = new URLSearchParams(window.location.search); 
+const trainingStatus = (
+  params.get("trainingStatus") ||
+  params.get("status") ||
+  ""
+).trim().toLowerCase();
 
+if (trainingStatus === "completed") {
+  document.querySelector(".wrap").style.display = "none";
+}
 function getValue(key, fallback = "--") { 
   const value = params.get(key); 
   if (value === null || value.trim() === "") return fallback; 
