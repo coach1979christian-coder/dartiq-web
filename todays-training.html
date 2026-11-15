@@ -225,7 +225,7 @@ const context={
   email:getValue("email"),
   player:getValue("player","playerid"),
   userid:getValue("userid"),
-  playerName:getValue("playerName","playername","name"),
+  playerName:getValue("playername").replace(/\s+name$/i,"").trim(),
   language:getValue("language","lang")||"EN",
   source:getValue("source")||"MATCH",
 
