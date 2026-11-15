@@ -1,0 +1,290 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DARTIQ Training History</title>
+
+<style>
+:root{
+  --bg:#080a10;
+  --panel:#15171e;
+  --amber:#ffbf35;
+  --amber2:#ff9100;
+  --text:#f8f8fa;
+  --muted:#a9acb8;
+  --line:rgba(255,191,53,.27);
+}
+*{box-sizing:border-box}
+html,body{
+  margin:0;
+  min-height:100%;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+}
+body{padding:14px}
+.wrap{max-width:600px;margin:auto}
+.hero{
+  padding:25px 16px;
+  text-align:center;
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:linear-gradient(145deg,#22190c,#0c1019 75%);
+  box-shadow:0 0 25px rgba(255,153,0,.12);
+}
+.logo{
+  font-size:34px;
+  font-weight:900;
+  font-style:italic;
+  letter-spacing:2px;
+  color:#fff;
+  text-shadow:0 0 15px var(--amber2);
+}
+h1{
+  margin:12px 0 5px;
+  font-size:25px;
+  color:var(--amber);
+}
+.subtitle{color:var(--muted);font-size:13px}
+.card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:17px;
+  padding:17px;
+  margin-top:13px;
+}
+.label{
+  color:var(--amber);
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:1.1px;
+  text-transform:uppercase;
+  margin-bottom:9px;
+}
+.drill{
+  font-size:23px;
+  font-weight:800;
+  overflow-wrap:anywhere;
+}
+.date{
+  margin-top:8px;
+  color:var(--muted);
+  font-size:13px;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  margin-top:13px;
+}
+.stat{
+  background:#10131b;
+  border:1px solid var(--line);
+  border-radius:13px;
+  text-align:center;
+  padding:16px 7px;
+}
+.value{
+  color:var(--amber);
+  font-size:25px;
+  font-weight:900;
+  overflow-wrap:anywhere;
+}
+.statname{
+  color:var(--muted);
+  font-size:10px;
+  margin-top:7px;
+  font-weight:700;
+  text-transform:uppercase;
+}
+.bodytext{
+  font-size:14px;
+  line-height:1.65;
+  overflow-wrap:anywhere;
+  white-space:pre-wrap;
+}
+.empty{
+  text-align:center;
+  color:var(--muted);
+  padding:22px 12px;
+}
+.footer{
+  text-align:center;
+  color:#8b7654;
+  font-size:10px;
+  padding:25px 0;
+  letter-spacing:2px;
+}
+</style>
+</head>
+
+<body>
+<main class="wrap">
+
+<header class="hero">
+  <div class="logo">DARTIQ</div>
+  <h1>Training History</h1>
+  <div class="subtitle">
+    Your practice. Your progress. Your performance.
+  </div>
+</header>
+
+<section class="card">
+  <div class="label">Completed Training</div>
+  <div class="drill" id="trainingName">—</div>
+  <div class="date" id="trainingDate">—</div>
+</section>
+
+<section class="grid">
+  <div class="stat">
+    <div class="value" id="average">—</div>
+    <div class="statname">3-Dart Average</div>
+  </div>
+  <div class="stat">
+    <div class="value" id="first9">—</div>
+    <div class="statname">First 9</div>
+  </div>
+  <div class="stat">
+    <div class="value" id="totalDarts">—</div>
+    <div class="statname">Darts Thrown</div>
+  </div>
+  <div class="stat">
+    <div class="value" id="visits">—</div>
+    <div class="statname">Visits</div>
+  </div>
+  <div class="stat">
+    <div class="value" id="count180">—</div>
+    <div class="statname">180s</div>
+  </div>
+  <div class="stat">
+    <div class="value" id="count140">—</div>
+    <div class="statname">140+ Scores</div>
+  </div>
+  <div class="stat">
+    <div class="value" id="count100">—</div>
+    <div class="statname">100+ Scores</div>
+  </div>
+  <div class="stat">
+    <div class="value" id="highestCheckout">—</div>
+    <div class="statname">Highest Checkout</div>
+  </div>
+</section>
+
+<section class="card">
+  <div class="label">Main Training Issue</div>
+  <div class="bodytext" id="mainIssue">—</div>
+</section>
+
+<section class="card">
+  <div class="label">Coach Keith's Advice</div>
+  <div class="bodytext" id="coachAdvice">—</div>
+</section>
+
+<section class="card">
+  <div class="label">Success Target</div>
+  <div class="bodytext" id="successTarget">—</div>
+</section>
+
+<section class="card">
+  <div class="label">Next Action</div>
+  <div class="bodytext" id="nextAction">—</div>
+</section>
+
+<section class="card">
+  <div class="label">Training Status</div>
+  <div class="bodytext" id="status">—</div>
+</section>
+
+<div class="footer">
+  DARTIQ • INTELLIGENT DARTS COACHING
+</div>
+
+</main>
+
+<script>
+"use strict";
+
+const params=new URLSearchParams(location.search);
+
+function read(...keys){
+  for(const key of keys){
+    const value=params.get(key);
+    if(value!==null && value.trim()!==""){
+      return value.trim();
+    }
+  }
+  return "";
+}
+
+function display(id,keys,formatter){
+  const value=read(...keys);
+  document.getElementById(id).textContent=
+    value ? (formatter ? formatter(value) : value) : "—";
+}
+
+function numeric(value){
+  const n=Number(value);
+  return Number.isFinite(n)
+    ? n.toLocaleString("en-US",{maximumFractionDigits:2})
+    : value;
+}
+
+display("trainingName",
+  ["trainingname","trainingName","drill","name"]);
+
+display("trainingDate",
+  ["trainingdate","trainingDate","completedat","completedAt","date"],
+  value=>{
+    const d=new Date(value);
+    return Number.isNaN(d.getTime())
+      ? value
+      : d.toLocaleString("en-GB",{
+          day:"numeric",month:"long",year:"numeric",
+          hour:"2-digit",minute:"2-digit"
+        });
+  });
+
+display("average",
+  ["average","trainingaverage","trainingAverage"],numeric);
+
+display("first9",
+  ["first9","trainingfirst9","trainingFirst9","first9Average"],numeric);
+
+display("totalDarts",
+  ["totaldarts","totalDarts","trainingtotaldarts"],numeric);
+
+display("visits",
+  ["visits","totalvisits","totalVisits"],numeric);
+
+display("count180",
+  ["count180","180s","training180s"],numeric);
+
+display("count140",
+  ["count140","140s","training140s"],numeric);
+
+display("count100",
+  ["count100","100s","training100s"],numeric);
+
+display("highestCheckout",
+  ["highestcheckout","highestCheckout"],numeric);
+
+display("mainIssue",
+  ["mainissue","mainIssue","focus"]);
+
+display("coachAdvice",
+  ["coachadvice","coachAdvice","advice"]);
+
+display("successTarget",
+  ["successtarget","successTarget"]);
+
+display("nextAction",
+  ["nextaction","nextAction","after","improvement"]);
+
+display("status",
+  ["status","trainingstatus","trainingStatus"]);
+</script>
+
+</body>
+</html>
