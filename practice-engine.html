@@ -2045,18 +2045,12 @@ if (drill && drill.trim() !== "") {
 
    
 saved = true;
-
-put(
-  "saveStatus",
-  "Training submitted. Opening your AI Progress Report..."
-);
-
-$("saveButton").textContent = "OPENING AI PROGRESS REPORT";
-
 const reportURL = new URL(
-  "ai-progress-report-matched-coaching.html",
+  "training-history.html",
   window.location.href
 );
+put("saveStatus", "Training submitted. Opening Training History...");
+$("saveButton").textContent = "OPENING TRAINING HISTORY";
 
 reportURL.searchParams.set("session", sessionID);
 reportURL.searchParams.set("email", email);
