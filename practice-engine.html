@@ -1592,7 +1592,8 @@ put(
 $("saveButton").textContent = "OPENING AI PROGRESS REPORT";
 
 const reportURL = new URL(
-"training-history.html",  window.location.href
+  "training-history.html",
+  window.location.href
 );
 
 reportURL.searchParams.set("session", sessionID);
