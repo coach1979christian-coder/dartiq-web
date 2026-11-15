@@ -1538,11 +1538,34 @@ async function saveSession() {
     nextAction: get("nextAction", "aiNextAction", "after")
   };
 
-  const xpValue = get("xpEarned", "xp", "earnedXP");
-  const xpEarned =
-    xpValue !== "" && Number.isFinite(Number(xpValue))
-      ? Number(xpValue)
-      : null;
+ 
+// DARTIQ XP SYSTEM V1
+
+const trainingAverage = average();
+
+let xpEarned = 50; // Completed training
+
+// Average bonus
+if (trainingAverage >= 100) {
+  xpEarned += 50;
+} else if (trainingAverage >= 80) {
+  xpEarned += 35;
+} else if (trainingAverage >= 60) {
+  xpEarned += 20;
+} else if (trainingAverage >= 40) {
+  xpEarned += 10;
+}
+
+// Scoring bonuses
+xpEarned += count100 * 5;
+xpEarned += count140 * 10;
+xpEarned += count180 * 25;
+
+// Keith training drill bonus
+if (drill && drill.trim() !== "") {
+  xpEarned += 25;
+}
+
 
   const payload = {
     sessionID,
