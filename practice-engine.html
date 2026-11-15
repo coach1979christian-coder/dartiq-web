@@ -1575,20 +1575,29 @@ async function saveSession(){
 
     if(!res.ok)throw Error("HTTP "+res.status);
 
-    saved=true;
-    put("saveStatus",
-      "Request accepted. Verify the record in Glide.");
+   
+saved = true;
 
-    $("saveButton").textContent="SAVE REQUEST SENT";
-  }catch(e){
-    console.error(e);
-    put("saveStatus",
-      "Save failed. Check the Glide workflow.");
-    $("saveButton").disabled=false;
-  }finally{
-    saving=false;
-  }
-}
+put(
+  "saveStatus",
+  "Training submitted. Opening your AI Progress Report..."
+);
+
+$("saveButton").textContent = "OPENING AI PROGRESS REPORT";
+
+const reportURL = new URL(
+  "ai-progress-report-matched-coaching.html",
+  window.location.href
+);
+
+reportURL.searchParams.set("session", sessionID);
+reportURL.searchParams.set("email", email);
+reportURL.searchParams.set("player", player);
+reportURL.searchParams.set("userid", userid);
+reportURL.searchParams.set("playername", playerName);
+reportURL.searchParams.set("source", "TRAINING");
+
+window.location.assign(reportURL.toString());
 
 /* DOUBLE TROUBLE */
 
