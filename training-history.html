@@ -260,6 +260,39 @@ if(record.trainingname || record.trainingdate){
   entries.innerHTML=
     '<div class="empty">No training session selected.</div>';
 }
+
+</script>
+
+<div style="padding:20px;text-align:center;">
+  <button
+    type="button"
+    onclick="startNewSession()"
+    style="
+      background:#27B8FF;
+      color:#00111f;
+      border:none;
+      border-radius:12px;
+      padding:16px 28px;
+      font-size:16px;
+      font-weight:800;
+      cursor:pointer;
+      box-shadow:0 0 18px rgba(39,184,255,.5);
+    "
+  >
+    START NEW SESSION
+  </button>
+</div>
+
+<script>
+function startNewSession() {
+  const params = new URLSearchParams(window.location.search);
+  params.delete("session");
+  params.delete("sessionID");
+
+  // Destination must be the existing Start New Session page.
+  const destination = "START_NEW_SESSION_URL";
+  window.location.href = destination;
+}
 </script>
 </body>
 </html>
