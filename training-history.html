@@ -284,15 +284,27 @@ if(record.trainingname || record.trainingdate){
 </div>
 
 <script>
+
 function startNewSession() {
   const params = new URLSearchParams(window.location.search);
-  params.delete("session");
-  params.delete("sessionID");
 
-  // Destination must be the existing Start New Session page.
-  const destination = "START_NEW_SESSION_URL";
-  window.location.href = destination;
+  const email = params.get("email") || "";
+  const player = params.get("player") || "";
+  const userid = params.get("userid") || "";
+
+  const destination = new URL(
+    "dartiq-match-play.html",
+    window.location.href
+  );
+
+  destination.searchParams.set("email", email);
+  destination.searchParams.set("player", player);
+  destination.searchParams.set("userid", userid);
+  destination.searchParams.set("source", "MATCH");
+
+  window.location.href = destination.toString();
 }
+
 </script>
 </body>
 </html>
