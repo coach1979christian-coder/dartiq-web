@@ -51,7 +51,11 @@ body{
       rgba(56,169,255,.10),
       transparent 34%
     ),
-    linear-gradient(180deg,#09111f 0%,#050914 100%);
+    linear-gradient(
+      180deg,
+      #09111f 0%,
+      #050914 100%
+    );
   border:1px solid var(--line);
   border-radius:20px;
   padding:14px;
@@ -128,6 +132,8 @@ body{
   overflow-wrap:anywhere;
 }
 
+/* AI COACH SCORE BADGE */
+
 .player-badge{
   display:inline-flex;
   align-items:center;
@@ -152,55 +158,115 @@ body{
   box-shadow:0 0 7px var(--accent);
 }
 
-/* PPP SPONSORED PLAYER BADGE */
+/* DARTIQ OFFICIAL BADGES */
 
-.ppp-badge{
+.dartiq-badges{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  margin-top:11px;
+}
+
+.dartiq-badges:empty{
   display:none;
+}
+
+.official-badge{
+  display:flex;
   flex-direction:column;
   align-items:flex-start;
   gap:5px;
-  margin-top:11px;
   padding:10px 12px;
   border:1px solid rgba(56,169,255,.75);
   border-radius:11px;
-  background:
-    linear-gradient(
-      135deg,
-      rgba(39,184,255,.20),
-      rgba(5,9,20,.95)
-    );
+  background:linear-gradient(
+    135deg,
+    rgba(39,184,255,.20),
+    rgba(5,9,20,.95)
+  );
   box-shadow:
     0 0 15px rgba(39,184,255,.18),
     inset 0 0 12px rgba(39,184,255,.06);
 }
 
-.ppp-badge.active{
-  display:flex;
-}
-
-.ppp-title{
+.official-badge-title{
   display:flex;
   align-items:center;
   gap:7px;
   color:#8dd3ff;
-  font-size:12px;
+  font-size:11px;
   font-weight:900;
-  letter-spacing:1px;
+  letter-spacing:.8px;
+  line-height:1.3;
   text-shadow:0 0 10px rgba(39,184,255,.6);
+  overflow-wrap:anywhere;
 }
 
-.ppp-symbol{
+.official-badge-symbol{
   color:#38a9ff;
   font-size:15px;
+  flex-shrink:0;
 }
 
-.ppp-subtitle{
+.official-badge-subtitle{
   color:#e4f5ff;
   font-size:8px;
   font-weight:800;
   letter-spacing:.5px;
   line-height:1.5;
   text-transform:uppercase;
+  overflow-wrap:anywhere;
+}
+
+/* PPP */
+
+.official-badge.ppp{
+  border-color:rgba(56,169,255,.85);
+}
+
+/* SPONSORED INFLUENCER */
+
+.official-badge.influencer{
+  border-color:rgba(100,195,255,.75);
+  background:linear-gradient(
+    135deg,
+    rgba(39,184,255,.15),
+    rgba(5,9,20,.95)
+  );
+}
+
+/* OFFICIAL COACH */
+
+.official-badge.coach{
+  border-color:rgba(93,180,255,.80);
+}
+
+/* HEAD OF COACHING */
+
+.official-badge.head-coach{
+  border-color:#8dd3ff;
+  background:linear-gradient(
+    135deg,
+    rgba(39,184,255,.28),
+    rgba(5,9,20,.95)
+  );
+  box-shadow:
+    0 0 20px rgba(39,184,255,.25),
+    inset 0 0 16px rgba(39,184,255,.08);
+}
+
+/* FOUNDER */
+
+.official-badge.founder{
+  border-color:#8dd3ff;
+  background:linear-gradient(
+    135deg,
+    rgba(56,169,255,.30),
+    rgba(5,9,20,.95)
+  );
+  box-shadow:
+    0 0 20px rgba(56,169,255,.25),
+    inset 0 0 15px rgba(56,169,255,.10);
 }
 
 /* SECTION HEADER */
@@ -396,6 +462,7 @@ body{
 /* RESPONSIVE */
 
 @media(max-width:340px){
+
   .stats{
     grid-template-columns:repeat(2,minmax(0,1fr));
   }
@@ -409,12 +476,13 @@ body{
     font-size:18px;
   }
 
-  .ppp-title{
+  .official-badge-title{
     font-size:10px;
   }
 }
 
 @media(min-width:600px){
+
   .profile-card{
     max-width:560px;
   }
@@ -463,7 +531,7 @@ body{
         player@email.com
       </div>
 
-      <!-- AI SCORE BADGE -->
+      <!-- AI COACH SCORE -->
 
       <div class="player-badge">
         <span class="badge-dot"></span>
@@ -471,24 +539,13 @@ body{
         <span id="header-score">0</span>
       </div>
 
-      <!-- PPP BADGE -->
+      <!-- DYNAMIC OFFICIAL BADGES -->
 
       <div
-        class="ppp-badge"
-        id="ppp-badge"
-        aria-label="DARTIQ PPP Sponsored Player and Brand Ambassador"
-      >
-
-        <div class="ppp-title">
-          <span class="ppp-symbol">★</span>
-          DARTIQ PPP
-        </div>
-
-        <div class="ppp-subtitle">
-          Sponsored Player &amp; Brand Ambassador
-        </div>
-
-      </div>
+        class="dartiq-badges"
+        id="dartiq-badges"
+        aria-label="DARTIQ Official Badges"
+      ></div>
 
     </div>
 
@@ -675,17 +732,129 @@ body{
     document.getElementById("photo").src = photo;
   }
 
-  /* PPP SPONSORED PLAYER BADGE */
+  /* OFFICIAL DARTIQ BADGE DEFINITIONS */
 
-  const role =
-    getValue("role","").trim().toUpperCase();
+  const badgeDefinitions = {
 
-  const pppBadge =
-    document.getElementById("ppp-badge");
+    PPP:{
+      className:"ppp",
+      symbol:"★",
+      title:"DARTIQ PPP",
+      subtitle:"Platinum Patch Player"
+    },
 
-  if(pppBadge && role === "PPP"){
-    pppBadge.classList.add("active");
-  }
+    INFLUENCER:{
+      className:"influencer",
+      symbol:"✦",
+      title:"DARTIQ SPONSORED INFLUENCER",
+      subtitle:"Brand Ambassador"
+    },
+
+    COACH:{
+      className:"coach",
+      symbol:"◆",
+      title:"DARTIQ OFFICIAL COACH",
+      subtitle:"Verified Coaching Team"
+    },
+
+    HEAD_COACH:{
+      className:"head-coach",
+      symbol:"✦",
+      title:"DARTIQ HEAD OF COACHING",
+      subtitle:
+        "Director of Coaching & Strategic Partnerships"
+    },
+
+    FOUNDER:{
+      className:"founder",
+      symbol:"★",
+      title:"DARTIQ FOUNDER",
+      subtitle:"Founder & CEO"
+    }
+
+  };
+
+  /* READ MULTIPLE BADGES FROM GLIDE */
+
+  const badgeValue =
+    getValue("badge","");
+
+  const badgeCodes =
+    badgeValue
+      .split(",")
+      .map(function(value){
+        return value.trim().toUpperCase();
+      })
+      .filter(function(value){
+        return value.length > 0;
+      });
+
+  /* REMOVE DUPLICATES */
+
+  const uniqueBadges =
+    [...new Set(badgeCodes)];
+
+  /* BADGE CONTAINER */
+
+  const badgeContainer =
+    document.getElementById("dartiq-badges");
+
+  /* CREATE BADGES */
+
+  uniqueBadges.forEach(function(code){
+
+    const definition =
+      badgeDefinitions[code];
+
+    if(!definition){
+      return;
+    }
+
+    const badge =
+      document.createElement("div");
+
+    badge.className =
+      "official-badge " + definition.className;
+
+    const title =
+      document.createElement("div");
+
+    title.className =
+      "official-badge-title";
+
+    const symbol =
+      document.createElement("span");
+
+    symbol.className =
+      "official-badge-symbol";
+
+    symbol.textContent =
+      definition.symbol;
+
+    const titleText =
+      document.createElement("span");
+
+    titleText.textContent =
+      definition.title;
+
+    title.appendChild(symbol);
+    title.appendChild(titleText);
+
+    const subtitle =
+      document.createElement("div");
+
+    subtitle.className =
+      "official-badge-subtitle";
+
+    subtitle.textContent =
+      definition.subtitle;
+
+    badge.appendChild(title);
+    badge.appendChild(subtitle);
+
+    badgeContainer.appendChild(badge);
+
+  });
 
 })();
 </script>
