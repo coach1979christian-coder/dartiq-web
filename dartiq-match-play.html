@@ -1562,8 +1562,9 @@ async function completeMatch(){
   "Match completed locally. Glide sync not confirmed.";
 }
 
-const issueData=Object.keys(coachingLibrary).map(name=>[name]);
-
+const issueData=Object.keys(coachingLibrary)
+.filter(name=>name!=="Elbow Movement"&&name!=="Body Stability")
+.map(name=>[name]);
 function buildIssues(){
  const root=$("issues");
  root.replaceChildren();
