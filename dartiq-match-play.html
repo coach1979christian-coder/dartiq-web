@@ -1561,6 +1561,29 @@ async function completeMatch(){
   completedAt:new Date().toISOString()
  });
 
+if (ok) {
+  await sendEvent("post_match_analysis", {
+    matchStatus: "Completed",
+    matchResult,
+    legsWon,
+    legsLost: opponentLegs,
+    totalPoints,
+    totalDarts,
+    average: Number(fmt(average())),
+    first9Average: Number(fmt(first9())),
+    count100,
+    count140,
+    count180,
+    checkoutAttempts,
+    checkoutHits,
+    checkoutPercentage: Number(checkoutPct().toFixed(1)),
+    highestCheckout,
+    visitCount: visitNumber,
+    startedAt: matchStartedAt,
+    completedAt: new Date().toISOString()
+  });
+}
+
  completionSyncConfirmed=ok;
  saveRecovery("completed");
 
