@@ -1569,13 +1569,20 @@ if (drill && drill.trim() !== "") {
   xpEarned += 25;
 }
 
+const actualPlayerName =
+  (playerName && playerName.trim() !== "Player"
+    ? playerName.trim()
+    : player && player.trim() !== "Player"
+      ? player.trim()
+      : "");
+
 
   const payload = {
     sessionID,
     email,
     player,
     userid,
-    playerName,
+                                                                                                                                                                       playerName: actualPlayerName,
     language,
     source: get("source") || "TRAINING",
     mainIssue: coaching.mainIssue,
