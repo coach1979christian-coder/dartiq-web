@@ -1634,6 +1634,23 @@ if (drill && drill.trim() !== "") {
 
     saved = true;
 
+    // Trigger DARTIQ Performance Lab workflow
+    try {
+      const labResponse = await fetch(performanceLabWebhook, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!labResponse.ok) {
+        console.error("Performance Lab webhook HTTP", labResponse.status);
+      }
+    } catch (labError) {
+      console.error("Performance Lab webhook failed:", labError);
+    }
+
     // Build the existing Training History destination.
     const historyURL = new URL(
       "training-history.html",
