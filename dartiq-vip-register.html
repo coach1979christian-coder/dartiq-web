@@ -123,6 +123,23 @@ h1 {
   letter-spacing:1px;
   background:rgba(0,187,255,.08);
 }
+.referral {
+  display:none;
+  background:#102c4b;
+  border:1px solid #22699a;
+  padding:15px;
+  border-radius:12px;
+  text-align:center;
+  color:#93e1ff;
+  margin:20px 0;
+  font-size:13px;
+  line-height:1.7;
+}
+.referral strong {
+  color:white;
+  font-size:17px;
+  letter-spacing:1px;
+}
 .thankyou {
   text-align:center;
   color:#d4e5f7;
@@ -206,6 +223,16 @@ footer {
   </div>
 </section>
 
+<!-- Existing ambassador referral URL support -->
+<div class="referral" id="referralBox">
+  <div id="referralTitle">AMBASSADOR REFERRAL</div>
+  <strong id="referralCodeDisplay"></strong>
+  <div id="referralNotice">
+    This referral link remains recognized.
+    VIP Founder registration is closed.
+  </div>
+</div>
+
 <p class="description" id="description">
   All 100 exclusive DARTIQ VIP Founder
   registration spots have been claimed.
@@ -242,9 +269,54 @@ footer {
 <script>
 "use strict";
 
-// Registration is permanently disabled on this page.
-// No registration form, submission handler,
-// or Supabase registration request is present.
+// VIP registration remains closed.
+// No registration form or submission request.
+// Existing ambassador referral URL parameters
+// are recognized and displayed.
+
+// Same referral format as the original
+// DARTIQ VIP Founder registration page.
+const params = new URLSearchParams(
+  window.location.search
+);
+
+function cleanCode(value) {
+  const code = String(value || "")
+    .trim()
+    .toUpperCase();
+
+  return /^[A-Z0-9_-]{1,40}$/.test(code)
+    ? code
+    : "DIRECT";
+}
+
+const referralCode = cleanCode(
+  params.get("ref")
+);
+
+const campaignCode = cleanCode(
+  params.get("campaign")
+);
+
+// Store only for this browser session.
+// This does NOT send data to Glide or Supabase.
+try {
+  if (referralCode !== "DIRECT") {
+    sessionStorage.setItem(
+      "dartiq_referral_code",
+      referralCode
+    );
+    sessionStorage.setItem(
+      "dartiq_campaign_code",
+      campaignCode
+    );
+  }
+} catch (error) {
+  console.warn(
+    "Referral session storage unavailable",
+    error
+  );
+}
 
 const translations = {
   en: {
@@ -271,9 +343,12 @@ const translations = {
       "registration remains valid. Please " +
       "complete your email verification " +
       "if you haven't already.",
-    footer: "Built with players, for players."
+    footer: "Built with players, for players.",
+    referralTitle: "AMBASSADOR REFERRAL",
+    referralNotice:
+      "This referral link remains recognized. " +
+      "VIP Founder registration is closed."
   },
-
   nl: {
     headline:
       '100 VIP-PLAATSEN<br>' +
@@ -298,14 +373,21 @@ const translations = {
       "registratie blijft geldig. " +
       "Bevestig je e-mailadres als je " +
       "dat nog niet hebt gedaan.",
-    footer: "Gemaakt met spelers, voor spelers."
+    footer: "Gemaakt met spelers, voor spelers.",
+    referralTitle: "AMBASSADEUR REFERENTIE",
+    referralNotice:
+      "Deze verwijzingslink wordt nog herkend. " +
+      "VIP Founder-inschrijvingen zijn gesloten."
   }
 };
 
 function setLanguage(lang) {
-  const t = translations[lang] || translations.en;
+  const selected =
+    translations[lang] ? lang : "en";
 
-  document.documentElement.lang = lang;
+  const t = translations[selected];
+
+  document.documentElement.lang = selected;
 
   document.getElementById("headline").innerHTML =
     t.headline;
@@ -321,16 +403,31 @@ function setLanguage(lang) {
     "launchTitle",
     "launchDate",
     "notice",
-    "footer"
+    "footer",
+    "referralTitle",
+    "referralNotice"
   ].forEach(id => {
     document.getElementById(id).textContent = t[id];
   });
 
   document.getElementById("enBtn")
-    .classList.toggle("active", lang === "en");
+    .classList.toggle("active", selected === "en");
 
   document.getElementById("nlBtn")
-    .classList.toggle("active", lang === "nl");
+    .classList.toggle("active", selected === "nl");
+
+  const referralBox =
+    document.getElementById("referralBox");
+
+  if (referralCode !== "DIRECT") {
+    referralBox.style.display = "block";
+
+    document.getElementById(
+      "referralCodeDisplay"
+    ).textContent = referralCode;
+  } else {
+    referralBox.style.display = "none";
+  }
 }
 
 setLanguage("en");
