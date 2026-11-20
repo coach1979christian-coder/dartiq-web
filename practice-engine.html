@@ -1969,7 +1969,9 @@ const actualPlayerName =
     historyButton.textContent = "VIEW TRAINING HISTORY →";
 
     historyButton.addEventListener("click", () => {
-  window.open(historyURL.toString(), "_blank", "noopener");
+  const destination = historyURL.toString();
+
+  window.location.replace(destination);
 });
     complete.appendChild(historyButton);
 
