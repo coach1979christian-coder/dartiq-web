@@ -262,49 +262,5 @@ if(record.trainingname || record.trainingdate){
 }
 
 </script>
-
-<div style="padding:20px;text-align:center;">
-  <button
-    type="button"
-    onclick="startNewSession()"
-    style="
-      background:#27B8FF;
-      color:#00111f;
-      border:none;
-      border-radius:12px;
-      padding:16px 28px;
-      font-size:16px;
-      font-weight:800;
-      cursor:pointer;
-      box-shadow:0 0 18px rgba(39,184,255,.5);
-    "
-  >
-    START NEW SESSION
-  </button>
-</div>
-
-<script>
-
-function startNewSession() {
-  const params = new URLSearchParams(window.location.search);
-
-  const email = params.get("email") || "";
-  const player = params.get("player") || "";
-  const userid = params.get("userid") || "";
-
-  const destination = new URL(
-    "dartiq-match-play.html",
-    window.location.href
-  );
-
-  destination.searchParams.set("email", email);
-  destination.searchParams.set("player", player);
-  destination.searchParams.set("userid", userid);
-  destination.searchParams.set("source", "MATCH");
-
-  window.location.href = destination.toString();
-}
-
-</script>
 </body>
 </html>
