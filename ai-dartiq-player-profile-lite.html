@@ -797,14 +797,15 @@ const badgeValue = [
   getValue("foundingtester", "")
 ].filter(Boolean).join(",");
 
-  const badgeCodes =
-    badgeValue
-      .split(",")
-      .map(function(value){
-       return value.trim().toUpperCase().replace(/[\s-]+/g, "_");
-      .filter(function(value){
-        return value.length > 0;
-      });
+ const badgeCodes =
+  badgeValue
+    .split(",")
+    .map(function(value){
+      return value.trim().toUpperCase().replace(/[\s-]+/g, "_");
+    })
+    .filter(function(value){
+      return value.length > 0;
+    });
 
   /* REMOVE DUPLICATES */
 
