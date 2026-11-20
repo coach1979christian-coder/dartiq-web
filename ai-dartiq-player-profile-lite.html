@@ -790,8 +790,12 @@ FOUNDING_TESTER: {
 
   /* READ MULTIPLE BADGES FROM GLIDE */
 
-  const badgeValue =
-    getValue("badge","");
+ 
+const badgeValue = [
+  getValue("badge", ""),
+  getValue("vipfounder", ""),
+  getValue("foundingtester", "")
+].filter(Boolean).join(",");
 
   const badgeCodes =
     badgeValue
