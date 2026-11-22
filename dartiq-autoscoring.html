@@ -4,29 +4,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#050b16">
-<title>DARTIQ | Auto-Scoring V12</title>
+<title>DARTIQ | Auto-Scoring V13</title>
 <style>
 :root{
+ --bg:#050b16;
  --blue:#27b8ff;
  --green:#19e79a;
- --muted:#a9bfd4;
- --bg:#050b16;
+ --muted:#b0c3d8;
 }
 *{box-sizing:border-box}
 html,body{
  margin:0;width:100%;height:100%;
- overflow:hidden;background:#000;color:#fff;
+ overflow:hidden;background:#000;color:white;
  font-family:Arial,sans-serif;
 }
 button,input{font:inherit}
 .app{
- position:relative;
- height:100dvh;width:100%;
- max-width:800px;margin:auto;
- overflow:hidden;background:#000;
+ position:relative;width:100%;
+ max-width:800px;height:100dvh;
+ margin:auto;overflow:hidden;background:#000;
 }
-#camera{display:none}
-#preview,#overlay{
+#video{display:none}
+#view,#overlay{
  position:absolute;inset:0;
  width:100%;height:100%;
  object-fit:contain;
@@ -35,224 +34,209 @@ button,input{font:inherit}
 .top{
  position:absolute;z-index:3;
  top:0;left:0;right:0;
- text-align:center;
- padding:9px 12px 20px;
- background:linear-gradient(#020916fa,#020916a0,transparent);
+ padding:9px 12px 20px;text-align:center;
+ background:linear-gradient(#020916f5,#02091690,transparent);
 }
 .logo{
  margin:0;color:var(--blue);
- font-size:25px;letter-spacing:4px;
+ font-size:27px;letter-spacing:4px;
  text-shadow:0 0 14px #27b8ff99;
 }
-.subtitle{
- margin-top:3px;font-size:10px;
- letter-spacing:1px;color:var(--muted);
+.sub{
+ font-size:10px;letter-spacing:1px;
+ color:var(--muted);margin-top:3px;
 }
-.camera-info{
+.info{
  display:flex;justify-content:space-between;
- margin-top:8px;font-size:10px;color:var(--muted);
+ margin-top:9px;font-size:10px;color:var(--muted);
 }
 .bottom{
  position:absolute;z-index:4;
  bottom:0;left:0;right:0;
  display:flex;flex-direction:column;gap:6px;
  padding:12px 10px max(12px,env(safe-area-inset-bottom));
- background:linear-gradient(transparent,#020916ed 12%,#020916 45%);
+ background:linear-gradient(transparent,#020916ed 13%,#020916 45%);
 }
 .status{
  text-align:center;color:var(--blue);
  font-size:12px;font-weight:800;
  min-height:17px;
 }
-.indicator{
- display:flex;justify-content:center;
- align-items:center;gap:7px;
+.live{
+ display:flex;align-items:center;
+ justify-content:center;gap:7px;
  font-size:11px;color:var(--muted);
 }
 .dot{
  width:9px;height:9px;border-radius:50%;
  background:#64748b;
 }
-.dot.active{background:var(--green);box-shadow:0 0 12px var(--green)}
+.dot.on{background:var(--green);box-shadow:0 0 12px var(--green)}
 .dot.wait{background:#ffd447}
-.dot.error{background:#ff5268}
+.dot.err{background:#ff5268}
 button{
- min-height:39px;padding:8px 5px;
- background:var(--blue);color:#00121e;
+ min-height:40px;border-radius:9px;
  border:1px solid #27b8ff77;
- border-radius:9px;font-size:11px;font-weight:800;
+ background:var(--blue);color:#00121e;
+ padding:8px 6px;font-size:11px;font-weight:800;
 }
-button:disabled{opacity:.4}
-.secondary{background:#18334d;color:#fff}
-.zoom-panel{
- background:#031020ed;
+button:disabled{opacity:.45}
+.secondary{background:#18334d;color:white}
+.zoom{
+ padding:9px 12px;border-radius:10px;
  border:1px solid #27b8ff88;
- border-radius:10px;padding:9px 12px;
+ background:#031020ed;
 }
-.zoom-head{
+.zoom-title{
  display:flex;justify-content:space-between;
- margin-bottom:6px;font-size:12px;font-weight:800;
+ font-size:12px;font-weight:800;
 }
-.zoom-head span:last-child{color:var(--blue)}
-.zoom-controls{
+.zoom-title span:last-child{color:var(--blue)}
+.zoom-row{
  display:flex;align-items:center;gap:8px;
+ margin-top:7px;
 }
-.zoom-controls button{
+.zoom-row button{
  flex:0 0 35px;min-height:34px;
- padding:0;font-size:21px;
+ font-size:21px;padding:0;
 }
 input[type=range]{flex:1;min-width:0;accent-color:var(--blue)}
-.zoom-note{
- text-align:center;color:var(--muted);
- font-size:10px;margin-top:4px;
-}
 .metrics{
  display:grid;grid-template-columns:repeat(3,1fr);
  gap:6px;
 }
 .metric{
+ text-align:center;padding:8px 3px;
  background:#031020ed;
  border:1px solid #27b8ff55;
- border-radius:9px;text-align:center;
- padding:8px 3px;
+ border-radius:9px;
 }
 .metric small{
  display:block;color:var(--muted);font-size:9px;
 }
 .metric strong{
- display:block;color:var(--blue);
- font-size:26px;margin-top:3px;
-}
-.details,.message{
- text-align:center;color:var(--muted);font-size:10px;
+ display:block;margin-top:3px;
+ color:var(--blue);font-size:26px;
 }
 .row{
  display:grid;grid-template-columns:1fr 1fr;gap:6px;
 }
+.note{
+ text-align:center;font-size:10px;
+ color:var(--muted);
+}
 .hidden{display:none!important}
-.correct-panel{
+.correction{
  background:#031020f5;
  border:1px solid var(--blue);
  border-radius:10px;padding:10px;
 }
-.correct-panel input{
- width:100%;padding:10px;
+.correction input{
+ width:100%;background:#061527;
  border:1px solid #27b8ff77;
- border-radius:8px;
- background:#061527;color:white;
- font-size:16px;
-}
-.correct-title{
- font-size:12px;font-weight:800;
- margin-bottom:8px;color:var(--blue);
+ border-radius:8px;color:white;
+ padding:9px;font-size:16px;
 }
 @media(max-height:700px){
  .bottom{gap:4px;padding-top:5px}
  button{min-height:32px}
  .metric{padding:5px 2px}
  .metric strong{font-size:20px}
- .zoom-panel{padding:6px 9px}
+ .zoom{padding:6px 9px}
 }
 </style>
 </head>
-
 <body>
+
 <div class="app" id="app">
+ <video id="video" autoplay muted playsinline></video>
+ <canvas id="view"></canvas>
+ <canvas id="overlay"></canvas>
 
-<video id="camera" autoplay muted playsinline></video>
-<canvas id="preview"></canvas>
-<canvas id="overlay"></canvas>
-
-<div class="top">
- <h1 class="logo">DARTIQ</h1>
- <div class="subtitle">AUTO-SCORING V12 | LIVE DART VISION</div>
- <div class="camera-info">
-  <span id="cameraStatus">Connecting camera...</span>
-  <span id="resolution">---</span>
- </div>
-</div>
-
-<div class="bottom">
-
- <div class="status" id="status">WAITING FOR CAMERA</div>
-
- <div class="indicator">
-  <span class="dot" id="liveDot"></span>
-  <span id="liveText">SYSTEM IDLE</span>
- </div>
-
- <div class="zoom-panel" id="zoomPanel">
-  <div class="zoom-head">
-   <span>CAMERA ZOOM</span>
-   <span id="zoomValue">1.0×</span>
-  </div>
-  <div class="zoom-controls">
-   <button id="zoomOut">−</button>
-   <input id="zoomSlider" type="range"
-    min="1" max="3" step=".1" value="1">
-   <button id="zoomIn">+</button>
-  </div>
-  <div class="zoom-note">Keep the full scoring area visible</div>
- </div>
-
- <button id="calibrate" disabled>
-  START AUTOMATIC CALIBRATION
- </button>
-
- <div class="metrics">
-  <div class="metric">
-   <small>LAST DART</small>
-   <strong id="score">---</strong>
-  </div>
-  <div class="metric">
-   <small>VISIT TOTAL</small>
-   <strong id="total">0</strong>
-  </div>
-  <div class="metric">
-   <small>DARTS</small>
-   <strong id="darts">0/3</strong>
+ <div class="top">
+  <h1 class="logo">DARTIQ</h1>
+  <div class="sub">AUTO-SCORING V13 | VOICE VISION</div>
+  <div class="info">
+   <span id="cameraInfo">Connecting camera...</span>
+   <span id="resolution">---</span>
   </div>
  </div>
 
- <div class="details" id="details">
-  Zoom before calibration
- </div>
-
- <div class="correct-panel hidden" id="correctPanel">
-  <div class="correct-title">CORRECT LAST DART SCORE</div>
-  <input id="correctInput" type="number"
-   min="0" max="60" placeholder="Enter correct score">
-  <div class="row" style="margin-top:8px">
-   <button id="saveCorrection">SAVE CORRECTION</button>
-   <button id="cancelCorrection" class="secondary">CANCEL</button>
+ <div class="bottom">
+  <div class="status" id="status">WAITING FOR CAMERA</div>
+  <div class="live">
+   <span class="dot" id="dot"></span>
+   <span id="liveText">SYSTEM IDLE</span>
   </div>
- </div>
 
- <div class="row">
-  <button id="correct" class="secondary" disabled>
-   CORRECT SCORE
+  <div class="zoom" id="zoomPanel">
+   <div class="zoom-title">
+    <span>CAMERA ZOOM</span>
+    <span id="zoomText">1.0×</span>
+   </div>
+   <div class="zoom-row">
+    <button id="minus">−</button>
+    <input id="zoomSlider" type="range"
+      min="1" max="3" step=".1" value="1">
+    <button id="plus">+</button>
+   </div>
+  </div>
+
+  <button id="calibrate" disabled>
+   START AUTOMATIC CALIBRATION
   </button>
-  <button id="restart" class="secondary">
-   RESTART CAMERA
-  </button>
- </div>
 
- <div class="message" id="message">
-  Adjust zoom, then calibrate the empty board
- </div>
+  <div class="metrics">
+   <div class="metric">
+    <small>LAST DART</small>
+    <strong id="last">---</strong>
+   </div>
+   <div class="metric">
+    <small>VISIT TOTAL</small>
+    <strong id="total">0</strong>
+   </div>
+   <div class="metric">
+    <small>DARTS</small>
+    <strong id="count">0/3</strong>
+   </div>
+  </div>
 
-</div>
+  <div class="note" id="details">
+   Adjust zoom before calibration
+  </div>
+
+  <div class="correction hidden" id="correction">
+   <input id="correctValue" type="number"
+     min="0" max="60" placeholder="Correct dart score">
+   <div class="row" style="margin-top:8px">
+    <button id="save">SAVE CORRECTION</button>
+    <button id="cancel" class="secondary">CANCEL</button>
+   </div>
+  </div>
+
+  <div class="row">
+   <button id="correct" class="secondary" disabled>
+    CORRECT SCORE
+   </button>
+   <button id="restart" class="secondary">
+    RESTART CAMERA
+   </button>
+  </div>
+
+  <div class="note" id="message">
+   Remove darts before calibration
+  </div>
+ </div>
 </div>
 
 <script>
 "use strict";
 
 const $=id=>document.getElementById(id);
-
-const video=$("camera");
+const video=$("video");
 const app=$("app");
-const preview=$("preview");
-const pc=preview.getContext("2d",{willReadFrequently:true});
+const canvas=$("view");
+const ctx=canvas.getContext("2d",{willReadFrequently:true});
 const overlay=$("overlay");
 const oc=overlay.getContext("2d");
 
@@ -261,20 +245,15 @@ const SECTORS=[
  3,19,7,16,8,11,14,9,12,5
 ];
 
-const CFG={
- interval:350,
- stableRequired:3,
- stableThreshold:.045,
- sceneThreshold:.24,
- pixelThreshold:42,
- minPixels:8,
- maxPixels:4500,
- candidateRequired:3,
- candidateTolerance:11,
- removalFrames:5,
- removalThreshold:.025,
- minConfidence:.66,
- minElongation:1.9
+const C={
+ interval:300,
+ changeThreshold:38,
+ minChanged:7,
+ candidateFrames:3,
+ tipTolerance:12,
+ emptyThreshold:.028,
+ emptyFrames:6,
+ settleFrames:3
 };
 
 let W=270,H=480;
@@ -282,73 +261,82 @@ let stream=null;
 let cameraToken=0;
 let loopToken=0;
 let timer=null;
-let animationId=null;
-
 let zoom=1;
-let zoomLocked=false;
-
+let locked=false;
 let board=null;
 let calibrated=false;
 let calibrating=false;
 let monitoring=false;
 
-let emptyBoard=null;
+let emptyFrame=null;
 let referenceFrame=null;
 let previousFrame=null;
-
-let stableCount=0;
-let candidateCount=0;
-let previousCandidate=null;
-let removalCount=0;
-let quietCount=0;
-
-let visitTotal=0;
-let dartCount=0;
-let scores=[];
-let acceptedTips=[];
-
+let candidate=null;
+let candidateFrames=0;
+let stableFrames=0;
+let emptyFrames=0;
+let visit=[];
 let lastMarker=null;
-let markerUntil=0;
-let waitingForClear=false;
-let awaitingFirstThrow=false;
+let markerExpiry=0;
+let baselineRefresh=0;
+
+let voices=[];
+let selectedVoice=null;
+let voiceEnabled=false;
 
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 
 function status(s){$("status").textContent=s}
 function message(s){$("message").textContent=s}
+function live(mode,s){
+ $("dot").className="dot"+(mode?" "+mode:"");
+ $("liveText").textContent=s;
+}
 
-function setLive(mode,text){
- $("liveDot").className="dot"+(mode?" "+mode:"");
- $("liveText").textContent=text;
+function initVoices(){
+ if(!("speechSynthesis" in window))return;
+ voices=speechSynthesis.getVoices();
+ selectedVoice=
+  voices.find(v=>
+   /^en/i.test(v.lang)&&
+   /male|david|mark|daniel|george|guy/i.test(v.name)
+  )||
+  voices.find(v=>/^en/i.test(v.lang))||
+  null;
+}
+if("speechSynthesis" in window){
+ initVoices();
+ speechSynthesis.onvoiceschanged=initVoices;
+}
+
+function speak(text){
+ if(!voiceEnabled||!("speechSynthesis" in window))return;
+ try{
+  speechSynthesis.cancel();
+  const utterance=new SpeechSynthesisUtterance(text);
+  utterance.lang="en-US";
+  utterance.rate=.95;
+  utterance.pitch=.85;
+  utterance.volume=1;
+  if(selectedVoice)utterance.voice=selectedVoice;
+  speechSynthesis.speak(utterance);
+ }catch(e){}
 }
 
 function ready(){
- return !!stream&&video.readyState>=2&&
+ return stream&&video.readyState>=2&&
   video.videoWidth>0&&video.videoHeight>0;
 }
 
-function setZoom(value){
- if(zoomLocked||calibrating)return;
- zoom=Math.round(
-  Math.max(1,Math.min(3,+value))*10
- )/10;
+function setZoom(v){
+ if(locked||calibrating)return;
+ zoom=Math.round(Math.max(1,Math.min(3,+v))*10)/10;
  $("zoomSlider").value=zoom;
- $("zoomValue").textContent=zoom.toFixed(1)+"×";
+ $("zoomText").textContent=zoom.toFixed(1)+"×";
 }
-
 $("zoomSlider").oninput=e=>setZoom(e.target.value);
-$("zoomOut").onclick=()=>setZoom(zoom-.1);
-$("zoomIn").onclick=()=>setZoom(zoom+.1);
-
-function lockZoom(){
- zoomLocked=true;
- $("zoomPanel").classList.add("hidden");
-}
-
-function unlockZoom(){
- zoomLocked=false;
- $("zoomPanel").classList.remove("hidden");
-}
+$("minus").onclick=()=>setZoom(zoom-.1);
+$("plus").onclick=()=>setZoom(zoom+.1);
 
 function resize(){
  const dpr=devicePixelRatio||1;
@@ -358,122 +346,69 @@ function resize(){
  drawOverlay();
 }
 
-function imageRect(){
- const scale=Math.min(
-  app.clientWidth/W,
-  app.clientHeight/H
- );
+function rect(){
+ const s=Math.min(app.clientWidth/W,app.clientHeight/H);
  return {
-  x:(app.clientWidth-W*scale)/2,
-  y:(app.clientHeight-H*scale)/2,
-  w:W*scale,
-  h:H*scale
+  x:(app.clientWidth-W*s)/2,
+  y:(app.clientHeight-H*s)/2,
+  s
  };
 }
-
-function toScreen(x,y){
- const r=imageRect();
- return {
-  x:r.x+x/W*r.w,
-  y:r.y+y/H*r.h
- };
+function screenPoint(x,y){
+ const r=rect();
+ return {x:r.x+x*r.s,y:r.y+y*r.s};
 }
 
-function renderCamera(){
+function render(){
  if(!ready())return;
-
- const vw=video.videoWidth;
- const vh=video.videoHeight;
- const sw=vw/zoom;
- const sh=vh/zoom;
-
- pc.drawImage(
-  video,
-  (vw-sw)/2,(vh-sh)/2,
-  sw,sh,
+ const vw=video.videoWidth,vh=video.videoHeight;
+ const sw=vw/zoom,sh=vh/zoom;
+ ctx.drawImage(
+  video,(vw-sw)/2,(vh-sh)/2,sw,sh,
   0,0,W,H
  );
 }
-
-function previewLoop(){
- if(ready())renderCamera();
- animationId=requestAnimationFrame(previewLoop);
-}
-
 function capture(){
- if(!ready())throw Error("Camera not ready");
- renderCamera();
- return pc.getImageData(0,0,W,H);
+ render();
+ return ctx.getImageData(0,0,W,H);
+}
+function previewLoop(){
+ if(ready())render();
+ requestAnimationFrame(previewLoop);
 }
 
 function drawOverlay(){
- oc.clearRect(
-  0,0,app.clientWidth,app.clientHeight
- );
-
+ oc.clearRect(0,0,app.clientWidth,app.clientHeight);
  if(!board)return;
 
  if(!calibrated){
-  const r=imageRect();
-  const c=toScreen(board.x,board.y);
-  const rx=board.rx/W*r.w;
-  const ry=board.ry/H*r.h;
-
-  function ring(s,color){
+  const p=screenPoint(board.x,board.y);
+  const s=rect().s;
+  for(const radius of [1,162/170,107/170,99/170]){
    oc.beginPath();
    oc.ellipse(
-    c.x,c.y,rx*s,ry*s,
+    p.x,p.y,
+    board.rx*radius*s,
+    board.ry*radius*s,
     0,0,Math.PI*2
    );
-   oc.strokeStyle=color;
+   oc.strokeStyle="#27b8ff";
    oc.lineWidth=1.5;
-   oc.stroke();
-  }
-
-  [1,162/170,107/170,99/170]
-   .forEach(s=>ring(s,"#27b8ff"));
-
-  ring(15.9/170,"#ffd447");
-  ring(6.35/170,"#ffd447");
-
-  for(let i=0;i<20;i++){
-   const a=(
-    -99+i*18+board.rotation
-   )*Math.PI/180;
-
-   oc.beginPath();
-   oc.moveTo(c.x,c.y);
-   oc.lineTo(
-    c.x+Math.cos(a)*rx,
-    c.y+Math.sin(a)*ry
-   );
-   oc.strokeStyle="#27b8ff55";
-   oc.lineWidth=1;
    oc.stroke();
   }
  }
 
- if(lastMarker&&Date.now()<markerUntil){
-  const p=toScreen(
-   lastMarker.x,lastMarker.y
-  );
-
+ if(lastMarker&&Date.now()<markerExpiry){
+  const p=screenPoint(lastMarker.x,lastMarker.y);
   oc.beginPath();
-  oc.arc(p.x,p.y,10,0,Math.PI*2);
+  oc.arc(p.x,p.y,11,0,Math.PI*2);
   oc.strokeStyle="#19e79a";
   oc.lineWidth=3;
-  oc.stroke();
-
-  oc.beginPath();
-  oc.moveTo(p.x-15,p.y);
-  oc.lineTo(p.x+15,p.y);
-  oc.moveTo(p.x,p.y-15);
-  oc.lineTo(p.x,p.y+15);
   oc.stroke();
  }
 }
 
-function pixelDifference(a,b,i){
+function diff(a,b,i){
  return (
   Math.abs(a.data[i]-b.data[i])+
   Math.abs(a.data[i+1]-b.data[i+1])+
@@ -481,20 +416,106 @@ function pixelDifference(a,b,i){
  )/3;
 }
 
-function motionRatio(a,b,step=8,threshold=35){
+function frameDifference(a,b,step=6,threshold=38){
  let changed=0,count=0;
-
  for(let y=0;y<H;y+=step){
   for(let x=0;x<W;x+=step){
-   const i=(y*W+x)*4;
    count++;
-   if(pixelDifference(a,b,i)>threshold){
-    changed++;
+   if(diff(a,b,(y*W+x)*4)>threshold)changed++;
+  }
+ }
+ return changed/Math.max(1,count);
+}
+
+function color(r,g,b){
+ if(r>65&&r>g*1.3&&r>b*1.25)return 1;
+ if(g>45&&g>r*1.15&&g>b*1.12)return 2;
+ return 0;
+}
+
+function colorMask(frame){
+ const mask=new Uint8Array(W*H);
+ for(let i=0;i<W*H;i++){
+  const j=i*4;
+  mask[i]=color(
+   frame.data[j],
+   frame.data[j+1],
+   frame.data[j+2]
+  );
+ }
+ return mask;
+}
+
+function ringScore(mask,x,y,rx,ry){
+ let hits=0,valid=0;
+ for(let i=0;i<64;i++){
+  const a=i*Math.PI/32;
+  const px=Math.round(x+Math.cos(a)*rx);
+  const py=Math.round(y+Math.sin(a)*ry);
+  if(px<0||py<0||px>=W||py>=H)continue;
+  valid++;
+  if(mask[py*W+px])hits++;
+ }
+ return valid?hits/valid:0;
+}
+
+function detectBoard(frame){
+ const mask=colorMask(frame);
+ const min=Math.min(W,H);
+ let best=null;
+
+ function search(cx,cy,spanX,spanY,rMin,rMax,step,radStep,ratios){
+  for(let y=cy-spanY;y<=cy+spanY;y+=step){
+   for(let x=cx-spanX;x<=cx+spanX;x+=step){
+    for(let rx=rMin;rx<=rMax;rx+=radStep){
+     for(const ratio of ratios){
+      const ry=rx*ratio;
+      if(x-rx<1||x+rx>=W||y-ry<1||y+ry>=H)continue;
+
+      const outer=ringScore(mask,x,y,rx*.965,ry*.965);
+      const triple=ringScore(
+       mask,x,y,rx*103/170,ry*103/170
+      );
+      const bull=ringScore(
+       mask,x,y,rx*15.9/170,ry*15.9/170
+      );
+      const quality=outer*.45+triple*.4+bull*.15;
+
+      if(!best||quality>best.quality){
+       best={x,y,rx,ry,outer,triple,quality};
+      }
+     }
+    }
    }
   }
  }
 
- return changed/Math.max(1,count);
+ search(
+  W/2,H/2,W*.18,H*.18,
+  min*.24,min*.49,
+  8,6,[.75,.9,1,1.1,1.25]
+ );
+
+ if(best){
+  const b=best;
+  const ratio=b.ry/b.rx;
+  search(
+   b.x,b.y,9,9,
+   Math.max(10,b.rx-8),b.rx+8,
+   3,3,[ratio-.07,ratio,ratio+.07]
+  );
+ }
+
+ if(!best||best.quality<.35||
+    best.outer<.35||best.triple<.30){
+  return null;
+ }
+
+ return {
+  x:best.x,y:best.y,
+  rx:best.rx,ry:best.ry,
+  rotation:0
+ };
 }
 
 function normalized(x,y){
@@ -503,224 +524,517 @@ function normalized(x,y){
   y:(y-board.y)/board.ry
  };
 }
-
-function onBoard(x,y,margin=1.04){
+function onBoard(x,y,limit=1.12){
  if(!board)return false;
  const p=normalized(x,y);
- return Math.hypot(p.x,p.y)<=margin;
+ return Math.hypot(p.x,p.y)<=limit;
 }
 
-function classify(r,g,b){
- if(
-  Math.max(r,g,b)-Math.min(r,g,b)<35
- )return 0;
+function scoreAt(x,y){
+ const p=normalized(x,y);
+ const r=Math.hypot(p.x,p.y);
 
- if(r>65&&r>g*1.3&&r>b*1.25)return 1;
- if(g>45&&g>r*1.15&&g>b*1.12)return 2;
- return 0;
-}
+ if(r>1)return {score:0,label:"Miss",x,y};
+ if(r<=6.35/170)return {score:50,label:"Bull",x,y};
+ if(r<=15.9/170)return {score:25,label:"Outer bull",x,y};
 
-function makeMask(frame){
- const mask=new Uint8Array(W*H);
+ const angle=(
+  Math.atan2(p.y,p.x)*180/Math.PI+
+  90-board.rotation+360
+ )%360;
 
- for(let i=0;i<W*H;i++){
-  const j=i*4;
-  mask[i]=classify(
-   frame.data[j],
-   frame.data[j+1],
-   frame.data[j+2]
-  );
+ const number=SECTORS[Math.floor((angle+9)/18)%20];
+
+ let mult=1;
+ let name="Single";
+
+ if(r>=99/170&&r<=107/170){
+  mult=3;name="Triple";
+ }else if(r>=162/170&&r<=1){
+  mult=2;name="Double";
  }
 
- return mask;
+ return {
+  score:number*mult,
+  label:name+" "+number,
+  x,y
+ };
 }
 
-function maskAt(mask,x,y){
- x=Math.round(x);
- y=Math.round(y);
+/*
+ Detect new image regions.
 
- if(x<0||y<0||x>=W||y>=H)return 0;
+ V13 deliberately separates the new object
+ from the already accepted board image.
+*/
 
- return mask[y*W+x];
-}
+function changedPoints(base,current){
+ const points=[];
 
-function ringStrength(mask,cx,cy,rx,ry){
- let hits=0,valid=0;
-
- for(let i=0;i<80;i++){
-  const a=i*Math.PI/40;
-  const x=cx+Math.cos(a)*rx;
-  const y=cy+Math.sin(a)*ry;
-
-  if(x<0||y<0||x>=W||y>=H)continue;
-
-  valid++;
-  if(maskAt(mask,x,y))hits++;
+ for(let y=2;y<H-2;y+=2){
+  for(let x=2;x<W-2;x+=2){
+   if(!onBoard(x,y,1.18))continue;
+   const i=(y*W+x)*4;
+   const d=diff(base,current,i);
+   if(d>C.changeThreshold){
+    points.push({x,y,d});
+   }
+  }
  }
 
- return valid?hits/valid:0;
+ return points;
 }
 
-function geometrySearch(mask){
- let best=null;
- const md=Math.min(W,H);
+function components(points){
+ const cell=7;
+ const cells=new Map();
 
- function scan(
-  cx0,cy0,sx,sy,
-  r0,r1,step,rs,ratios
- ){
-  for(let cy=cy0-sy;cy<=cy0+sy;cy+=step){
-   for(let cx=cx0-sx;cx<=cx0+sx;cx+=step){
-    for(let rx=r0;rx<=r1;rx+=rs){
-     for(const ratio of ratios){
-      const ry=rx*ratio;
+ for(const p of points){
+  const cx=Math.floor(p.x/cell);
+  const cy=Math.floor(p.y/cell);
+  const key=cx+","+cy;
+  if(!cells.has(key)){
+   cells.set(key,{cx,cy,points:[],seen:false});
+  }
+  cells.get(key).points.push(p);
+ }
 
-      if(
-       cx-rx<2||cx+rx>=W-2||
-       cy-ry<2||cy+ry>=H-2
-      )continue;
+ const groups=[];
 
-      const outer=ringStrength(
-       mask,cx,cy,
-       rx*.965,ry*.965
-      );
+ for(const start of cells.values()){
+  if(start.seen)continue;
+  start.seen=true;
+  const queue=[start],group=[];
 
-      const triple=ringStrength(
-       mask,cx,cy,
-       rx*103/170,
-       ry*103/170
-      );
+  for(let i=0;i<queue.length;i++){
+   const c=queue[i];
+   group.push(...c.points);
 
-      const bull=ringStrength(
-       mask,cx,cy,
-       rx*15.9/170,
-       ry*15.9/170
-      );
-
-      const quality=
-       outer*.45+
-       triple*.40+
-       bull*.15;
-
-      if(!best||quality>best.quality){
-       best={
-        x:cx,y:cy,rx,ry,
-        outer,triple,bull,quality
-       };
-      }
+   for(let dy=-1;dy<=1;dy++){
+    for(let dx=-1;dx<=1;dx++){
+     const n=cells.get(
+      (c.cx+dx)+","+(c.cy+dy)
+     );
+     if(n&&!n.seen){
+      n.seen=true;
+      queue.push(n);
      }
     }
    }
   }
+
+  if(group.length>=C.minChanged){
+   groups.push(group);
+  }
  }
 
- scan(
-  W/2,H/2,
-  W*.18,H*.18,
-  md*.24,md*.49,
-  8,6,
-  [.75,.9,1,1.1,1.25]
+ return groups.sort((a,b)=>b.length-a.length);
+}
+
+/*
+ Shaft endpoint estimation.
+
+ This uses the major axis of a newly visible
+ dart silhouette and evaluates the endpoints.
+
+ Green flights alone are not accepted as
+ scoring points.
+*/
+
+function tipFromGroup(group){
+ if(group.length<8)return null;
+
+ let mx=0,my=0;
+ for(const p of group){mx+=p.x;my+=p.y}
+ mx/=group.length;
+ my/=group.length;
+
+ let xx=0,xy=0,yy=0;
+ for(const p of group){
+  const dx=p.x-mx,dy=p.y-my;
+  xx+=dx*dx;
+  xy+=dx*dy;
+  yy+=dy*dy;
+ }
+
+ const angle=.5*Math.atan2(2*xy,xx-yy);
+ const ux=Math.cos(angle),uy=Math.sin(angle);
+
+ let min=Infinity,max=-Infinity;
+ let a=null,b=null;
+
+ for(const p of group){
+  const t=(p.x-mx)*ux+(p.y-my)*uy;
+  if(t<min){min=t;a=p}
+  if(t>max){max=t;b=p}
+ }
+
+ const length=max-min;
+ const trace=(xx+yy)/group.length;
+ const disc=Math.sqrt(
+  Math.pow((xx-yy)/group.length,2)+
+  4*Math.pow(xy/group.length,2)
+ );
+ const minor=Math.max(0,(trace-disc)/2);
+ const width=Math.max(1,Math.sqrt(minor)*2);
+ const elongation=length/width;
+
+ if(length<10||elongation<1.7)return null;
+
+ const da=Math.hypot(
+  (a.x-board.x)/board.rx,
+  (a.y-board.y)/board.ry
+ );
+ const db=Math.hypot(
+  (b.x-board.x)/board.rx,
+  (b.y-board.y)/board.ry
  );
 
- if(best){
-  const g=best;
-  const ratio=g.ry/g.rx;
+ const tip=da<db?a:b;
 
-  scan(
-   g.x,g.y,9,9,
-   Math.max(10,g.rx-8),
-   g.rx+8,
-   3,3,
-   [ratio-.07,ratio,ratio+.07]
+ if(!onBoard(tip.x,tip.y,1.02))return null;
+
+ return {
+  x:tip.x,y:tip.y,
+  length,elongation
+ };
+}
+
+function findDart(base,current){
+ const points=changedPoints(base,current);
+ if(points.length<C.minChanged||points.length>5000){
+  return null;
+ }
+
+ const groups=components(points);
+ const candidates=[];
+
+ for(const group of groups.slice(0,6)){
+  const tip=tipFromGroup(group);
+  if(!tip)continue;
+
+  const duplicate=visit.some(d=>
+   Math.hypot(d.x-tip.x,d.y-tip.y)<4
   );
+  if(duplicate)continue;
+
+  candidates.push({
+   ...tip,
+   quality:Math.min(1,tip.elongation/5)
+  });
  }
 
- return best;
+ if(!candidates.length)return null;
+
+ candidates.sort((a,b)=>b.quality-a.quality);
+ return candidates[0];
 }
 
-function estimateRotation(mask,g){
- let best={rotation:0,quality:0};
+function updateScores(){
+ const total=visit.reduce((s,d)=>s+d.score,0);
+ $("last").textContent=
+  visit.length?visit[visit.length-1].score:"---";
+ $("total").textContent=total;
+ $("count").textContent=visit.length+"/3";
+ $("correct").disabled=!visit.length;
+}
 
- for(let rot=-9;rot<=9;rot++){
-  let hits=0,count=0;
+function resetVisit(frame){
+ visit=[];
+ candidate=null;
+ candidateFrames=0;
+ stableFrames=0;
+ emptyFrames=0;
+ lastMarker=null;
 
-  for(let i=0;i<20;i++){
-   const a=(-90+rot+i*18)*Math.PI/180;
-
-   const color=maskAt(
-    mask,
-    g.x+Math.cos(a)*g.rx*.965,
-    g.y+Math.sin(a)*g.ry*.965
-   );
-
-   if(!color)continue;
-
-   count++;
-
-   if(color===(i%2===0?1:2)){
-    hits++;
-   }
-  }
-
-  const quality=count?hits/count:0;
-
-  if(quality>best.quality){
-   best={rotation:rot,quality};
-  }
+ if(frame){
+  referenceFrame=frame;
+  previousFrame=frame;
  }
 
- return best;
+ updateScores();
+ drawOverlay();
+ status("NEW VISIT READY");
+ live("on","AUTOMATIC MONITORING");
+ message("Throw your first dart");
 }
 
-async function waitForStability(token){
- let previous=null,stable=0;
- const started=Date.now();
+function registerDart(tip,frame){
+ if(visit.length>=3)return;
 
- while(Date.now()-started<15000){
-  if(token!==cameraToken){
-   throw Error("Camera changed");
+ const result=scoreAt(tip.x,tip.y);
+ visit.push(result);
+
+ /*
+  Update the baseline only after a dart
+  has been registered. Previously accepted
+  scores remain in the visit array.
+ */
+
+ referenceFrame=frame;
+ candidate=null;
+ candidateFrames=0;
+ stableFrames=0;
+
+ lastMarker=result;
+ markerExpiry=Date.now()+1700;
+ drawOverlay();
+
+ updateScores();
+
+ status("DART SCORED: "+result.label);
+ live("on","SCORE REGISTERED");
+
+ speak(result.label);
+
+ message(
+  visit.length===3
+   ?"Remove all darts for the next visit"
+   :"Throw your next dart"
+ );
+
+ setTimeout(()=>{
+  if(Date.now()>=markerExpiry){
+   lastMarker=null;
+   drawOverlay();
   }
-
-  await sleep(350);
-
-  const frame=capture();
-
-  if(previous){
-   const movement=motionRatio(
-    previous,frame
-   );
-
-   stable=movement<CFG.stableThreshold
-    ?stable+1:0;
-
-   status(
-    "STABILIZING CAMERA "+
-    stable+"/"+CFG.stableRequired
-   );
-
-   if(stable>=CFG.stableRequired){
-    return frame;
-   }
-  }
-
-  previous=frame;
- }
-
- throw Error("Camera could not stabilize");
+ },1800);
 }
 
-function stopLoop(){
+function stopMonitoring(){
  monitoring=false;
  loopToken++;
-
  if(timer!==null){
   clearTimeout(timer);
   timer=null;
  }
 }
 
+function startMonitoring(){
+ if(!calibrated||!ready())return;
+
+ stopMonitoring();
+ monitoring=true;
+ const token=loopToken;
+
+ function next(){
+  if(!monitoring||token!==loopToken)return;
+  timer=setTimeout(()=>tick(token),C.interval);
+ }
+
+ function tick(id){
+  if(!monitoring||id!==loopToken)return;
+
+  try{
+   const frame=capture();
+
+   if(!previousFrame){
+    previousFrame=frame;
+    next();
+    return;
+   }
+
+   const movement=frameDifference(previousFrame,frame);
+   previousFrame=frame;
+
+   if(movement>.24){
+    stableFrames=0;
+    candidateFrames=0;
+    candidate=null;
+    status("CAMERA SETTLING");
+    live("wait","WAITING FOR STABILITY");
+    next();
+    return;
+   }
+
+   stableFrames++;
+
+   if(stableFrames<C.settleFrames){
+    next();
+    return;
+   }
+
+   /*
+    Dart removal is checked independently
+    of whether three darts were registered.
+   */
+
+   if(visit.length>0){
+    const emptyDiff=frameDifference(
+     emptyFrame,frame,4,45
+    );
+
+    emptyFrames=
+     emptyDiff<C.emptyThreshold
+      ?emptyFrames+1:0;
+
+    if(emptyFrames>=C.emptyFrames){
+     resetVisit(frame);
+     speak("Next visit");
+     next();
+     return;
+    }
+   }
+
+   if(visit.length>=3){
+    status("WAITING FOR DART REMOVAL");
+    live("wait","REMOVE DARTS");
+    next();
+    return;
+   }
+
+   if(!referenceFrame){
+    referenceFrame=frame;
+   }
+
+   const tip=findDart(referenceFrame,frame);
+
+   if(!tip){
+    candidate=null;
+    candidateFrames=0;
+    status("LIVE MONITORING");
+    live("on","DART VISION ACTIVE");
+    next();
+    return;
+   }
+
+   if(candidate){
+    const distance=Math.hypot(
+     tip.x-candidate.x,
+     tip.y-candidate.y
+    );
+
+    candidateFrames=
+     distance<C.tipTolerance
+      ?candidateFrames+1:1;
+   }else{
+    candidateFrames=1;
+   }
+
+   candidate=tip;
+
+   if(candidateFrames>=C.candidateFrames){
+    registerDart(tip,frame);
+   }else{
+    status("VERIFYING DART");
+    live("wait","DART CANDIDATE");
+   }
+
+  }catch(e){
+   status("MONITORING ERROR");
+   live("err","VISION ERROR");
+   message(e.message);
+  }
+
+  next();
+ }
+
+ next();
+}
+
+async function calibrate(){
+ if(calibrating||!ready())return;
+
+ stopMonitoring();
+ calibrating=true;
+ $("calibrate").disabled=true;
+
+ /*
+  The user gesture also enables browser
+  speech synthesis where supported.
+ */
+
+ voiceEnabled=true;
+ initVoices();
+
+ try{
+  if("speechSynthesis" in window){
+   speechSynthesis.cancel();
+   speechSynthesis.resume();
+  }
+ }catch(e){}
+
+ const token=cameraToken;
+
+ try{
+  live("wait","CALIBRATING");
+
+  for(let n=3;n>=1;n--){
+   status("CALIBRATION STARTS IN "+n);
+   await sleep(1000);
+   if(token!==cameraToken)return;
+  }
+
+  let previous=null,stable=0;
+  let frame=null;
+
+  for(let i=0;i<35;i++){
+   await sleep(300);
+   if(token!==cameraToken)return;
+
+   frame=capture();
+
+   if(previous){
+    const d=frameDifference(previous,frame);
+    stable=d<.045?stable+1:0;
+    if(stable>=3)break;
+   }
+   previous=frame;
+  }
+
+  if(stable<3){
+   throw Error("Camera not stable");
+  }
+
+  status("DETECTING BOARD GEOMETRY");
+  const geometry=detectBoard(frame);
+
+  if(!geometry){
+   throw Error("Board rings not detected");
+  }
+
+  board=geometry;
+  calibrated=true;
+  locked=true;
+
+  $("zoomPanel").classList.add("hidden");
+  $("calibrate").classList.add("hidden");
+
+  emptyFrame=frame;
+  referenceFrame=frame;
+  previousFrame=null;
+
+  visit=[];
+  updateScores();
+  drawOverlay();
+
+  $("details").textContent=
+   "Calibration complete | Zoom "+
+   zoom.toFixed(1)+"× | Voice enabled";
+
+  status("LIVE MONITORING");
+  live("on","AUTOMATIC SCORING ACTIVE");
+  message("Throw your first dart");
+
+  speak("DARTIQ auto scoring ready. Game on.");
+
+  startMonitoring();
+
+ }catch(e){
+  calibrated=false;
+  board=null;
+  drawOverlay();
+  status("CALIBRATION FAILED");
+  live("err","CALIBRATION ERROR");
+  message(e.message);
+  $("calibrate").disabled=false;
+ }finally{
+  calibrating=false;
+ }
+}
+
 async function startCamera(){
- stopLoop();
+ stopMonitoring();
 
  const token=++cameraToken;
 
@@ -730,26 +1044,20 @@ async function startCamera(){
 
  stream=null;
  video.srcObject=null;
-
  board=null;
  calibrated=false;
  calibrating=false;
+ locked=false;
 
- emptyBoard=null;
- referenceFrame=null;
- previousFrame=null;
+ visit=[];
+ updateScores();
 
- lastMarker=null;
- waitingForClear=false;
-
- resetVisit(false);
- unlockZoom();
-
+ $("zoomPanel").classList.remove("hidden");
  $("calibrate").classList.remove("hidden");
  $("calibrate").disabled=true;
 
- setLive("","SYSTEM IDLE");
  status("CONNECTING CAMERA");
+ live("","SYSTEM IDLE");
 
  try{
   const s=await navigator.mediaDevices.getUserMedia({
@@ -768,37 +1076,29 @@ async function startCamera(){
 
   stream=s;
   video.srcObject=s;
-
   await video.play();
 
-  if(token!==cameraToken)return;
-
   const scale=Math.min(
-   1,
-   480/Math.max(
-    video.videoWidth,
-    video.videoHeight
+   1,480/Math.max(
+    video.videoWidth,video.videoHeight
    )
   );
 
   W=Math.round(video.videoWidth*scale);
   H=Math.round(video.videoHeight*scale);
 
-  preview.width=W;
-  preview.height=H;
+  canvas.width=W;
+  canvas.height=H;
 
   $("resolution").textContent=
-   video.videoWidth+" × "+
-   video.videoHeight;
-
-  $("cameraStatus").textContent="Camera active";
-
-  $("calibrate").disabled=false;
+   video.videoWidth+" × "+video.videoHeight;
+  $("cameraInfo").textContent="Camera active";
 
   resize();
 
-  status("ADJUST ZOOM BEFORE CALIBRATION");
-  message("Remove all darts before calibration");
+  $("calibrate").disabled=false;
+  status("READY FOR CALIBRATION");
+  message("Remove all darts and adjust zoom");
 
  }catch(e){
   status("CAMERA ERROR");
@@ -806,741 +1106,37 @@ async function startCamera(){
  }
 }
 
-async function calibrate(){
- if(calibrating||!ready())return;
-
- stopLoop();
-
- calibrating=true;
- calibrated=false;
-
- $("calibrate").disabled=true;
-
- const token=cameraToken;
-
- try{
-  setLive("wait","CALIBRATING");
-
-  for(let n=3;n>=1;n--){
-   status("CALIBRATION STARTS IN "+n);
-   await sleep(1000);
-
-   if(token!==cameraToken)return;
-  }
-
-  const frame=await waitForStability(token);
-
-  status("DETECTING SCORING RINGS");
-
-  const mask=makeMask(frame);
-  const g=geometrySearch(mask);
-
-  if(
-   !g||
-   g.outer<.35||
-   g.triple<.30||
-   g.quality<.35
-  ){
-   throw Error(
-    "Scoring rings not reliably detected"
-   );
-  }
-
-  const orientation=estimateRotation(mask,g);
-
-  board={
-   x:g.x,y:g.y,
-   rx:g.rx,ry:g.ry,
-   rotation:orientation.rotation,
-   quality:g.quality,
-   zoom
-  };
-
-  calibrated=true;
-  lockZoom();
-  drawOverlay();
-
-  $("calibrate").classList.add("hidden");
-
-  $("details").textContent=
-   "Calibration complete | Zoom "+
-   zoom.toFixed(1)+"×";
-
-  emptyBoard=frame;
-  referenceFrame=frame;
-  previousFrame=null;
-
-  stableCount=0;
-  candidateCount=0;
-  previousCandidate=null;
-  removalCount=0;
-
-  status("LIVE MONITORING");
-  setLive("active","AUTOMATIC SCORING ACTIVE");
-
-  message("Throw your first dart");
-
-  startLoop();
-
- }catch(e){
-  calibrated=false;
-  board=null;
-
-  drawOverlay();
-
-  status("CALIBRATION FAILED");
-  setLive("error","CALIBRATION ERROR");
-  message(e.message);
-
-  unlockZoom();
-
- }finally{
-  calibrating=false;
-
-  if(!calibrated){
-   $("calibrate").disabled=!ready();
-  }
- }
-}
-
-/*
- V12:
- Detect changed regions against the last
- accepted board image.
-
- Green flights are treated as useful evidence,
- but the actual scoring position is estimated
- from the lower shaft endpoint.
-*/
-
-function changedPixels(a,b){
- const pixels=[];
-
- for(let y=2;y<H-2;y+=2){
-  for(let x=2;x<W-2;x+=2){
-   if(!onBoard(x,y,1.15))continue;
-
-   const i=(y*W+x)*4;
-   const diff=pixelDifference(a,b,i);
-
-   if(diff>CFG.pixelThreshold){
-    pixels.push({x,y,diff});
-   }
-  }
- }
-
- return pixels;
-}
-
-function connectedGroups(pixels){
- const cellSize=7;
- const cells=new Map();
-
- for(const p of pixels){
-  const cx=Math.floor(p.x/cellSize);
-  const cy=Math.floor(p.y/cellSize);
-  const key=cx+","+cy;
-
-  if(!cells.has(key)){
-   cells.set(key,{
-    cx,cy,points:[],seen:false
-   });
-  }
-
-  cells.get(key).points.push(p);
- }
-
- const groups=[];
-
- for(const start of cells.values()){
-  if(start.seen)continue;
-
-  const queue=[start];
-  const points=[];
-  start.seen=true;
-
-  for(let k=0;k<queue.length;k++){
-   const c=queue[k];
-   points.push(...c.points);
-
-   for(let dy=-1;dy<=1;dy++){
-    for(let dx=-1;dx<=1;dx++){
-     if(!dx&&!dy)continue;
-
-     const n=cells.get(
-      (c.cx+dx)+","+(c.cy+dy)
-     );
-
-     if(n&&!n.seen){
-      n.seen=true;
-      queue.push(n);
-     }
-    }
-   }
-  }
-
-  if(points.length>=CFG.minPixels){
-   groups.push(points);
-  }
- }
-
- return groups.sort((a,b)=>b.length-a.length);
-}
-
-function findCandidate(pixels){
- if(
-  pixels.length<CFG.minPixels||
-  pixels.length>CFG.maxPixels
- )return null;
-
- const groups=connectedGroups(pixels);
-
- if(!groups.length)return null;
-
- /*
-  Prefer a substantial connected change.
-  Multiple dart-shaped groups are rejected
-  until they can be separated reliably.
- */
-
- const group=groups[0];
-
- if(
-  groups.length>1&&
-  groups[1].length>group.length*.65
- )return null;
-
- let minX=Infinity,minY=Infinity;
- let maxX=-Infinity,maxY=-Infinity;
-
- for(const p of group){
-  minX=Math.min(minX,p.x);
-  minY=Math.min(minY,p.y);
-  maxX=Math.max(maxX,p.x);
-  maxY=Math.max(maxY,p.y);
- }
-
- const width=maxX-minX;
- const height=maxY-minY;
-
- if(width<5&&height<5)return null;
- if(width>W*.6||height>H*.6)return null;
-
- return {
-  points:group,
-  minX,minY,maxX,maxY,
-  width,height
- };
-}
-
-function estimateTip(candidate){
- const points=candidate.points;
-
- if(points.length<10)return null;
-
- let mx=0,my=0;
-
- for(const p of points){
-  mx+=p.x;
-  my+=p.y;
- }
-
- mx/=points.length;
- my/=points.length;
-
- let xx=0,xy=0,yy=0;
-
- for(const p of points){
-  const dx=p.x-mx;
-  const dy=p.y-my;
-
-  xx+=dx*dx;
-  xy+=dx*dy;
-  yy+=dy*dy;
- }
-
- const theta=.5*Math.atan2(
-  2*xy,xx-yy
- );
-
- const ux=Math.cos(theta);
- const uy=Math.sin(theta);
-
- let minT=Infinity,maxT=-Infinity;
- let minPoint=null,maxPoint=null;
-
- for(const p of points){
-  const t=
-   (p.x-mx)*ux+
-   (p.y-my)*uy;
-
-  if(t<minT){
-   minT=t;
-   minPoint=p;
-  }
-
-  if(t>maxT){
-   maxT=t;
-   maxPoint=p;
-  }
- }
-
- const length=maxT-minT;
-
- const covarianceX=xx/points.length;
- const covarianceY=yy/points.length;
- const covarianceXY=xy/points.length;
-
- const trace=covarianceX+covarianceY;
- const discriminant=Math.sqrt(
-  Math.pow(covarianceX-covarianceY,2)+
-  4*covarianceXY*covarianceXY
- );
-
- const minorVariance=Math.max(
-  0,(trace-discriminant)/2
- );
-
- const width=Math.max(
-  1,Math.sqrt(minorVariance)*2
- );
-
- const elongation=length/width;
-
- if(
-  length<10||
-  elongation<CFG.minElongation
- )return null;
-
- const d1=Math.hypot(
-  (minPoint.x-board.x)/board.rx,
-  (minPoint.y-board.y)/board.ry
- );
-
- const d2=Math.hypot(
-  (maxPoint.x-board.x)/board.rx,
-  (maxPoint.y-board.y)/board.ry
- );
-
- const tip=d1<d2?minPoint:maxPoint;
-
- const centerAdvantage=
-  Math.abs(d1-d2)/
-  Math.max(.01,length/Math.max(board.rx,board.ry));
-
- const confidence=Math.min(
-  1,
-  .28+
-  Math.min(.34,elongation*.085)+
-  Math.min(.30,centerAdvantage*.25)
- );
-
- if(confidence<CFG.minConfidence)return null;
- if(!onBoard(tip.x,tip.y,1.02))return null;
-
- return {
-  x:tip.x,
-  y:tip.y,
-  confidence,
-  elongation
- };
-}
-
-function scoreAt(x,y){
- const p=normalized(x,y);
- const radius=Math.hypot(p.x,p.y);
-
- if(radius>1){
-  return {score:0,label:"MISS",x,y};
- }
-
- if(radius<=6.35/170){
-  return {score:50,label:"BULL",x,y};
- }
-
- if(radius<=15.9/170){
-  return {score:25,label:"OUTER BULL",x,y};
- }
-
- let angle=Math.atan2(p.y,p.x)*180/Math.PI;
-
- angle=(
-  angle+90-board.rotation+360
- )%360;
-
- const index=Math.floor(
-  (angle+9)/18
- )%20;
-
- const number=SECTORS[index];
-
- let multiplier=1;
- let ring="SINGLE";
-
- if(
-  radius>=99/170&&
-  radius<=107/170
- ){
-  multiplier=3;
-  ring="TRIPLE";
- }
-
- if(
-  radius>=162/170&&
-  radius<=1
- ){
-  multiplier=2;
-  ring="DOUBLE";
- }
-
- return {
-  score:number*multiplier,
-  label:ring+" "+number,
-  x,y
- };
-}
-
-function updateMetrics(){
- visitTotal=scores.reduce(
-  (sum,item)=>sum+item.score,0
- );
-
- dartCount=scores.length;
-
- $("score").textContent=
-  dartCount?scores[dartCount-1].score:"---";
-
- $("total").textContent=visitTotal;
- $("darts").textContent=dartCount+"/3";
-
- $("correct").disabled=!dartCount;
-}
-
-function registerDart(result,frame){
- if(dartCount>=3)return;
-
- scores.push(result);
- acceptedTips.push({
-  x:result.x,y:result.y
- });
-
- updateMetrics();
-
- lastMarker=result;
- markerUntil=Date.now()+1800;
-
- drawOverlay();
-
- setTimeout(()=>{
-  if(Date.now()>=markerUntil){
-   lastMarker=null;
-   drawOverlay();
-  }
- },1900);
-
- referenceFrame=frame;
-
- candidateCount=0;
- previousCandidate=null;
- quietCount=0;
-
- status("DART SCORED: "+result.label);
- setLive("active","SCORE REGISTERED");
-
- message(
-  dartCount===3
-   ?"Remove darts for next visit"
-   :"Throw your next dart"
- );
-}
-
-function resetVisit(restart=true){
- scores=[];
- acceptedTips=[];
-
- visitTotal=0;
- dartCount=0;
-
- removalCount=0;
- candidateCount=0;
- previousCandidate=null;
- stableCount=0;
- quietCount=0;
-
- lastMarker=null;
- waitingForClear=false;
-
- updateMetrics();
- drawOverlay();
-
- $("correctPanel").classList.add("hidden");
-
- if(restart&&calibrated){
-  referenceFrame=null;
-  previousFrame=null;
-
-  status("NEW VISIT READY");
-  message("Throw your first dart");
-
-  startLoop();
- }
-}
-
-/*
-  Automatic visit reset:
-
-  Compare the current board against the
-  original empty-board reference.
-
-  Reset only after several consecutive
-  frames resemble the empty board.
-
-  This also works when fewer than three
-  darts were thrown.
-*/
-
-function checkRemoval(frame){
- if(dartCount===0)return false;
-
- const difference=motionRatio(
-  emptyBoard,frame,4,45
- );
-
- if(difference<CFG.removalThreshold){
-  removalCount++;
- }else{
-  removalCount=0;
- }
-
- if(removalCount>=CFG.removalFrames){
-  resetVisit(false);
-
-  emptyBoard=frame;
-  referenceFrame=frame;
-  previousFrame=frame;
-
-  status("NEW VISIT READY");
-  setLive("active","AUTOMATIC MONITORING");
-
-  message("Throw your first dart");
-
-  return true;
- }
-
- return false;
-}
-
-function startLoop(){
- if(!calibrated||!ready())return;
-
- stopLoop();
- monitoring=true;
-
- const token=loopToken;
-
- function next(){
-  if(!monitoring||token!==loopToken)return;
-
-  timer=setTimeout(
-   ()=>tick(token),
-   CFG.interval
-  );
- }
-
- function tick(id){
-  if(!monitoring||id!==loopToken)return;
-
-  try{
-   const frame=capture();
-
-   if(!previousFrame){
-    previousFrame=frame;
-    next();
-    return;
-   }
-
-   const motion=motionRatio(
-    previousFrame,frame
-   );
-
-   previousFrame=frame;
-
-   if(motion>CFG.sceneThreshold){
-    stableCount=0;
-    candidateCount=0;
-    previousCandidate=null;
-
-    status("WAITING FOR CAMERA STABILITY");
-    setLive("wait","CAMERA SETTLING");
-
-    next();
-    return;
-   }
-
-   stableCount++;
-
-   if(stableCount<CFG.stableRequired){
-    next();
-    return;
-   }
-
-   if(!referenceFrame){
-    referenceFrame=frame;
-   }
-
-   if(checkRemoval(frame)){
-    next();
-    return;
-   }
-
-   if(dartCount>=3){
-    status("WAITING FOR DART REMOVAL");
-    setLive("wait","REMOVE ALL DARTS");
-
-    next();
-    return;
-   }
-
-   const changes=changedPixels(
-    referenceFrame,frame
-   );
-
-   if(changes.length<CFG.minPixels){
-    candidateCount=0;
-    previousCandidate=null;
-
-    status("LIVE MONITORING");
-    setLive("active","AUTOMATIC SCORING ACTIVE");
-
-    next();
-    return;
-   }
-
-   const candidate=findCandidate(changes);
-
-   if(!candidate){
-    candidateCount=0;
-    previousCandidate=null;
-
-    status("ANALYSING BOARD");
-
-    next();
-    return;
-   }
-
-   const tip=estimateTip(candidate);
-
-   if(!tip){
-    candidateCount=0;
-    previousCandidate=null;
-
-    status("ANALYSING DART IMPACT");
-    setLive("wait","VERIFYING DART TIP");
-
-    next();
-    return;
-   }
-
-   /*
-     Avoid duplicate detection near an
-     already accepted dart tip.
-   */
-
-   const duplicate=acceptedTips.some(p=>
-    Math.hypot(
-     p.x-tip.x,
-     p.y-tip.y
-    )<5
-   );
-
-   if(duplicate){
-    next();
-    return;
-   }
-
-   if(previousCandidate){
-    const distance=Math.hypot(
-     tip.x-previousCandidate.x,
-     tip.y-previousCandidate.y
-    );
-
-    candidateCount=
-     distance<=CFG.candidateTolerance
-      ?candidateCount+1
-      :1;
-   }else{
-    candidateCount=1;
-   }
-
-   previousCandidate=tip;
-
-   if(candidateCount<CFG.candidateRequired){
-    status("VERIFYING DART TIP");
-
-    next();
-    return;
-   }
-
-   const result=scoreAt(tip.x,tip.y);
-
-   registerDart(result,frame);
-
-  }catch(e){
-   status("MONITORING ERROR");
-   setLive("error","VISION ERROR");
-   message(e.message);
-  }
-
-  next();
- }
-
- next();
-}
-
-/*
-  Manual input is only available for
-  correcting an automatically scored dart.
-*/
+$("calibrate").onclick=calibrate;
+$("restart").onclick=startCamera;
 
 $("correct").onclick=()=>{
- if(!scores.length)return;
-
- $("correctInput").value=
-  scores[scores.length-1].score;
-
- $("correctPanel").classList.remove("hidden");
+ if(!visit.length)return;
+ $("correctValue").value=visit[visit.length-1].score;
+ $("correction").classList.remove("hidden");
 };
 
-$("cancelCorrection").onclick=()=>{
- $("correctPanel").classList.add("hidden");
+$("cancel").onclick=()=>{
+ $("correction").classList.add("hidden");
 };
 
-$("saveCorrection").onclick=()=>{
- if(!scores.length)return;
+$("save").onclick=()=>{
+ if(!visit.length)return;
 
- const value=Number($("correctInput").value);
-
- if(
-  !Number.isInteger(value)||
-  value<0||value>60
- ){
-  message("Enter a valid dart score from 0 to 60");
+ const value=Number($("correctValue").value);
+ if(!Number.isInteger(value)||value<0||value>60){
+  message("Enter a valid score from 0 to 60");
   return;
  }
 
- scores[scores.length-1].score=value;
- scores[scores.length-1].label="CORRECTED";
+ visit[visit.length-1].score=value;
+ visit[visit.length-1].label="Corrected "+value;
 
- updateMetrics();
-
- $("correctPanel").classList.add("hidden");
+ updateScores();
+ $("correction").classList.add("hidden");
 
  status("SCORE CORRECTED");
- message("Automatic monitoring continues");
+ speak(String(value));
 };
-
-$("calibrate").onclick=calibrate;
-$("restart").onclick=startCamera;
 
 window.addEventListener("resize",resize);
 
@@ -1549,14 +1145,9 @@ if(window.ResizeObserver){
 }
 
 window.addEventListener("pagehide",()=>{
- stopLoop();
+ stopMonitoring();
  cameraToken++;
-
- cancelAnimationFrame(animationId);
-
- if(stream){
-  stream.getTracks().forEach(t=>t.stop());
- }
+ if(stream)stream.getTracks().forEach(t=>t.stop());
 });
 
 window.addEventListener("DOMContentLoaded",()=>{
