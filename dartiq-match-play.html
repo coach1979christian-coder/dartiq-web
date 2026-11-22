@@ -195,7 +195,7 @@ h1{font-size:23px}
 <div class="dart" id="dart3">DART 3: –</div>
 </div>
 
-<div class="dartboard-layout">
+<div id="dartboardLayout" class="dartboard-layout">
 <div class="board-wrap">
 <svg id="board" viewBox="-230 -230 460 460" aria-label="Interactive dartboard"></svg>
 </div>
@@ -517,7 +517,6 @@ function getCoaching(issue){
  };
 }
 
-
 async function sendEvent(eventType,data={}){
 
 const url =
@@ -530,7 +529,6 @@ const url =
   eventType === "post_match_analysis" ?
     POST_MATCH_ANALYSIS_WEBHOOK :
     WEBHOOK;
-
 
  try{
   const response=await fetch(url,{
@@ -627,14 +625,10 @@ function showScreen(id){
  window.scrollTo(0,0);
 }
 
-
-
 function startSession(){
  showScreen("formats");
  speak("Select your match format to continue.");
 }
-
-
 
 function selectFormat(n){
  if(![3,5,7,9].includes(n))return;
@@ -1033,6 +1027,11 @@ function setMode(next){
  keyInput="";
 
  $("keypadPanel").classList.toggle("hidden",mode!=="keypad");
+ $("dartboardLayout").classList.toggle("hidden",mode==="keypad");
+ if(mode==="keypad"){
+  $("scoringContent").classList.remove("hidden");
+  $("scoringArrow").textContent="▲";
+ }
  $("boardModeButton").classList.toggle("active",mode==="board");
  $("keyModeButton").classList.toggle("active",mode==="keypad");
 
@@ -1059,6 +1058,27 @@ function keyBack(){
  keyInput=keyInput.slice(0,-1);
  updateInput();
 }
+
+// Desktop keyboard and numeric keypad scoring (keypad mode only).
+document.addEventListener("keydown",function(event){
+ if(mode!=="keypad"||finished||saving||!$("match").classList.contains("active"))return;
+ if(event.ctrlKey||event.altKey||event.metaKey||event.isComposing)return;
+ const target=event.target;
+ if(target&&(target.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName)))return;
+ if(/^[0-9]$/.test(event.key)){
+  event.preventDefault();
+  keyPress(event.key);
+ }else if(event.key==="Backspace"){
+  event.preventDefault();
+  keyBack();
+ }else if(event.key==="Delete"||event.key==="Escape"){
+  event.preventDefault();
+  keyClear();
+ }else if(event.key==="Enter"||event.code==="NumpadEnter"){
+  event.preventDefault();
+  if(keyInput!=="")confirmVisit();
+ }
+});
 
 const checkoutRoutes={
 170:"T20 T20 BULL",
@@ -1595,6 +1615,7 @@ if (ok) {
 const issueData=Object.keys(coachingLibrary)
 .filter(name=>name!=="Elbow Movement"&&name!=="Body Stability")
 .map(name=>[name]);
+
 function buildIssues(){
  const root=$("issues");
  root.replaceChildren();
@@ -1790,7 +1811,6 @@ restoreRecovery();
 
 /* READY TO PLAY VOICE */
 
-
 function announceReadyToPlay(){
  if(!$("setup").classList.contains("active"))return;
 
@@ -1799,7 +1819,6 @@ function announceReadyToPlay(){
   "Are you ready to play and get analysed?"
  );
 }
-
 
 window.addEventListener("load",()=>{
  setTimeout(announceReadyToPlay,450);
