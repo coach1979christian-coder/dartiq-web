@@ -131,17 +131,18 @@ small{color:var(--muted)}
  <video id="camera" autoplay muted playsinline></video>
  <canvas id="overlay"></canvas>
 </div>
-<p class="status" id="cameraStatus">Camera offline</p>
-<div class="controls">
- <button id="startCamera">START CAMERA</button>
- <button id="stopCamera" class="secondary">STOP</button>
-</div>
+<p class="status" id="cameraStatus">
+ Connecting camera...
+</p>
+<button id="stopCamera" class="secondary full">
+ STOP CAMERA
+</button>
 </section>
 
 <section class="panel">
 <h3>2. Board Calibration</h3>
 <p id="calibrationInstruction">
- Start the camera, then select CALIBRATE.
+ Camera starts automatically. Select CALIBRATE.
 </p>
 <p><small>
  Tap the center of the bull, followed by the top,
@@ -202,8 +203,7 @@ small{color:var(--muted)}
  <span id="dartCount">0 / 3</span>
 </div>
 <p><small>
- Confirm or correct the detected score. Enter a legal
- single-dart score between 0 and 60.
+ Confirm or correct the detected score.
 </small></p>
 <input id="manualScore" type="number"
  min="0" max="60" placeholder="Correct dart score">
@@ -243,6 +243,7 @@ let before=null;
 let pending=null;
 let visitTotal=0;
 let dartCount=0;
+let cameraRequest=0;
 
 const calibrationNames=[
  "Bull center",
@@ -269,14 +270,15 @@ function message(id,text){
 }
 
 function cameraReady(){
- return stream && video.readyState>=2;
+ return !!stream && video.readyState>=2;
 }
 
 function resizeOverlay(){
  const r=$("stage").getBoundingClientRect();
- overlay.width=Math.round(r.width*devicePixelRatio);
- overlay.height=Math.round(r.height*devicePixelRatio);
- octx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+ const dpr=window.devicePixelRatio||1;
+ overlay.width=Math.round(r.width*dpr);
+ overlay.height=Math.round(r.height*dpr);
+ octx.setTransform(dpr,0,0,dpr,0,0);
  drawOverlay();
 }
 
@@ -358,19 +360,24 @@ function drawOverlay(){
  }
 
  if(pending?.position){
-  drawPoint(pending.position,"#ffcc00",
-    pending.corrected?"Corrected":"Candidate");
+  drawPoint(
+   pending.position,
+   "#ffcc00",
+   pending.corrected?"Corrected":"Candidate"
+  );
  }
 }
 
 async function startCamera(){
+ const request=++cameraRequest;
+
  try{
   if(!navigator.mediaDevices?.getUserMedia)
    throw Error("HTTPS and camera access required");
 
-  stopCamera();
+  message("cameraStatus","Connecting camera...");
 
-  stream=await navigator.mediaDevices.getUserMedia({
+  const newStream=await navigator.mediaDevices.getUserMedia({
    audio:false,
    video:{
     facingMode:{ideal:"environment"},
@@ -379,48 +386,74 @@ async function startCamera(){
    }
   });
 
+  if(request!==cameraRequest){
+   newStream.getTracks().forEach(t=>t.stop());
+   return;
+  }
+
+  stream=newStream;
   video.srcObject=stream;
   await video.play();
+
+  if(request!==cameraRequest)return;
 
   $("calibrate").disabled=false;
   message("cameraStatus","Camera active");
   resizeOverlay();
+
  }catch(e){
+  if(request!==cameraRequest)return;
   message("cameraStatus","Camera error: "+e.message);
  }
 }
 
 function stopCamera(){
+ cameraRequest++;
+
  if(stream){
   stream.getTracks().forEach(t=>t.stop());
  }
+
  stream=null;
  video.srcObject=null;
  before=null;
+ board=null;
+ points=[];
+ pending=null;
+ calibrating=false;
+
  $("calibrate").disabled=true;
  $("baseline").disabled=true;
  $("detect").disabled=true;
- message("cameraStatus","Camera offline");
+
+ message("cameraStatus","Camera stopped");
+ message("calibrationStatus","Not calibrated");
+ drawOverlay();
 }
 
 function capture(){
  if(!cameraReady())throw Error("Camera not ready");
+
  wctx.drawImage(video,0,0,W,H);
  return wctx.getImageData(0,0,W,H);
 }
 
 function beginCalibration(){
  if(!cameraReady())return;
+
  points=[];
  board=null;
  pending=null;
  before=null;
  calibrating=true;
+
  $("baseline").disabled=true;
  $("detect").disabled=true;
+
  message("calibrationStatus","Calibration in progress");
  message("calibrationInstruction",
   "Tap: "+calibrationNames[0]);
+
  drawOverlay();
 }
 
@@ -431,6 +464,7 @@ function finishCalibration(){
   x:(r.x-l.x)/2,
   y:(r.y-l.y)/2
  };
+
  const vy={
   x:(b.x-t.x)/2,
   y:(b.y-t.y)/2
@@ -458,10 +492,13 @@ function finishCalibration(){
 
  board={center:c,vx,vy,determinant};
  calibrating=false;
+
  $("baseline").disabled=false;
+
  message("calibrationStatus","Board calibrated");
  message("calibrationInstruction",
   "Calibration complete. Keep the phone stationary.");
+
  drawOverlay();
 }
 
@@ -469,6 +506,7 @@ function normalizedPosition(p){
  const dx=p.x-board.center.x;
  const dy=p.y-board.center.y;
  const d=board.determinant;
+
  return {
   x:(dx*board.vy.y-dy*board.vy.x)/d,
   y:(board.vx.x*dy-board.vx.y*dx)/d
@@ -480,8 +518,6 @@ function calculateScore(p){
 
  const n=normalizedPosition(p);
  const radius=Math.hypot(n.x,n.y);
-
- // Outer double-ring radius = 170 mm.
  const mm=radius*170;
 
  if(mm>170)return {
@@ -496,9 +532,9 @@ function calculateScore(p){
   score:25,segment:"OUTER BULL",multiplier:1
  };
 
- // Clockwise angle from the top of the board.
- const angle=(Math.atan2(n.x,-n.y)+
-  Math.PI*2)%(Math.PI*2);
+ const angle=(
+  Math.atan2(n.x,-n.y)+Math.PI*2
+ )%(Math.PI*2);
 
  const index=Math.floor(
   (angle+Math.PI/20)/(Math.PI/10)
@@ -533,7 +569,9 @@ function setPending(position,confidence,corrected=false){
  $("multiplier").textContent=result.multiplier;
  $("confidence").textContent=
   confidence===null?"MANUAL":confidence+"%";
+
  $("manualScore").value=result.score;
+
  drawOverlay();
 }
 
@@ -541,9 +579,12 @@ function captureBaseline(){
  try{
   before=capture();
   pending=null;
+
   $("detect").disabled=false;
+
   message("detectionStatus",
    "Baseline captured. Throw one dart and wait.");
+
   drawOverlay();
  }catch(e){
   message("detectionStatus",e.message);
@@ -557,6 +598,7 @@ function detectDart(){
  }
 
  let after;
+
  try{
   after=capture();
  }catch(e){
@@ -567,7 +609,6 @@ function detectDart(){
  const mask=new Uint8Array(W*H);
  let changed=0;
 
- // Basic frame differencing.
  for(let i=0;i<W*H;i++){
   const j=i*4;
   const delta=
@@ -589,7 +630,6 @@ function detectDart(){
   return;
  }
 
- // Find connected regions of changed pixels.
  const visited=new Uint8Array(W*H);
  const components=[];
  const stack=[];
@@ -597,6 +637,7 @@ function detectDart(){
  for(let y=1;y<H-1;y++){
   for(let x=1;x<W-1;x++){
    const start=y*W+x;
+
    if(!mask[start]||visited[start])continue;
 
    let count=0,sumX=0,sumY=0;
@@ -609,9 +650,11 @@ function detectDart(){
     const idx=stack.pop();
     const px=idx%W;
     const py=Math.floor(idx/W);
+
     count++;
     sumX+=px;
     sumY+=py;
+
     minX=Math.min(minX,px);
     maxX=Math.max(maxX,px);
     minY=Math.min(minY,py);
@@ -622,12 +665,20 @@ function detectDart(){
     ];
 
     for(const ni of neighbors){
-     if(ni<0||ni>=mask.length||
-        visited[ni]||!mask[ni])continue;
+     if(
+      ni<0||
+      ni>=mask.length||
+      visited[ni]||
+      !mask[ni]
+     )continue;
+
      const nx=ni%W;
      const ny=Math.floor(ni/W);
-     if(Math.abs(nx-px)+Math.abs(ny-py)!==1)
-      continue;
+
+     if(
+      Math.abs(nx-px)+Math.abs(ny-py)!==1
+     )continue;
+
      visited[ni]=1;
      stack.push(ni);
     }
@@ -644,10 +695,11 @@ function detectDart(){
   }
  }
 
- // Display change mask.
  const output=dctx.createImageData(W,H);
+
  for(let i=0;i<W*H;i++){
   const j=i*4;
+
   if(mask[i]){
    output.data[j]=39;
    output.data[j+1]=184;
@@ -657,16 +709,19 @@ function detectDart(){
    output.data[j+1]=after.data[j+1]*.25;
    output.data[j+2]=after.data[j+2]*.25;
   }
+
   output.data[j+3]=255;
  }
+
  const temp=document.createElement("canvas");
  temp.width=W;
  temp.height=H;
+
  temp.getContext("2d").putImageData(output,0,0);
+
  dctx.clearRect(0,0,diff.width,diff.height);
  dctx.drawImage(temp,0,0,diff.width,diff.height);
 
- // Restrict candidates to the calibrated board.
  const candidates=components.filter(c=>{
   const n=normalizedPosition(c);
   return Math.hypot(n.x,n.y)<=1.05 &&
@@ -682,12 +737,8 @@ function detectDart(){
   return;
  }
 
- // The centroid is a rough candidate, not a dart tip.
  const candidate=candidates[0];
  const ambiguity=candidates.length>1;
-
- // Deliberately conservative confidence:
- // frame differencing cannot establish tip accuracy.
  const confidence=ambiguity?15:25;
 
  setPending({
@@ -702,23 +753,27 @@ function detectDart(){
 
 overlay.addEventListener("pointerdown",e=>{
  if(!cameraReady())return;
+
  const p=screenToImage(e);
  if(!p)return;
 
  if(calibrating){
   points.push(p);
+
   if(points.length===5){
    finishCalibration();
   }else{
    message("calibrationInstruction",
     "Tap: "+calibrationNames[points.length]);
   }
+
   drawOverlay();
   return;
  }
 
  if(board){
   setPending(p,null,true);
+
   message("detectionStatus",
    "Manual dart position selected. Verify score.");
  }
@@ -732,13 +787,18 @@ function confirmDart(){
  }
 
  const raw=$("manualScore").value.trim();
+
  if(raw===""){
   message("saveStatus","Enter a dart score.");
   return;
  }
 
  const score=Number(raw);
- if(!Number.isInteger(score)||!validScores.has(score)){
+
+ if(
+  !Number.isInteger(score)||
+  !validScores.has(score)
+ ){
   message("saveStatus","Invalid single-dart score.");
   return;
  }
@@ -750,11 +810,12 @@ function confirmDart(){
  $("dartCount").textContent=dartCount+" / 3";
  $("score").textContent=score;
 
- // Next baseline must include the previous darts.
  before=null;
  pending=null;
+
  $("detect").disabled=true;
  $("manualScore").value="";
+
  drawOverlay();
 
  message("saveStatus",
@@ -789,20 +850,36 @@ function newVisit(){
 
  message("detectionStatus",
   "New visit ready. Capture baseline.");
- message("saveStatus","Local prototype. No database writes.");
+
+ message("saveStatus",
+  "Local prototype. No database writes.");
+
  drawOverlay();
 }
 
-$("startCamera").onclick=startCamera;
+// Automatic camera startup.
+window.addEventListener("DOMContentLoaded",()=>{
+ startCamera();
+});
+
+// Camera controls.
 $("stopCamera").onclick=stopCamera;
+
+// Calibration.
 $("calibrate").onclick=beginCalibration;
+
+// Detection.
 $("baseline").onclick=captureBaseline;
 $("detect").onclick=detectDart;
+
+// Scoring.
 $("confirm").onclick=confirmDart;
 $("newVisit").onclick=newVisit;
 
+// Cleanup.
 window.addEventListener("resize",resizeOverlay);
 window.addEventListener("pagehide",stopCamera);
+
 resizeOverlay();
 </script>
 </body>
