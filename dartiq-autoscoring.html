@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#050b16">
-<title>DARTIQ | Auto-Scoring V3</title>
+<title>DARTIQ | Automatic Calibration</title>
 <style>
 :root{
  --bg:#050b16;
@@ -16,30 +16,29 @@
  --muted:#a6bdd5;
 }
 *{box-sizing:border-box}
-html,body{
+body{
  margin:0;
  background:var(--bg);
  color:var(--text);
  font-family:Arial,sans-serif;
 }
 main{
- width:100%;
  max-width:700px;
  margin:auto;
  padding:10px;
 }
 h1{
- margin:8px 0 2px;
  text-align:center;
  color:var(--blue);
  letter-spacing:3px;
  text-shadow:0 0 18px #27b8ff88;
+ margin:8px 0 3px;
 }
 .subtitle{
  text-align:center;
- color:var(--muted);
- margin:3px 0 12px;
  font-size:12px;
+ color:var(--muted);
+ margin:0 0 12px;
 }
 .panel{
  background:var(--panel);
@@ -65,54 +64,56 @@ video{
  inset:0;
  width:100%;
  height:100%;
- touch-action:none;
+ pointer-events:none;
 }
 .status{
  text-align:center;
- color:var(--muted);
+ padding:10px 4px;
  font-size:13px;
- padding:7px 0;
- min-height:30px;
+ color:var(--muted);
 }
 #instruction{
  color:var(--blue);
- font-weight:700;
+ font-weight:800;
 }
 button{
  border:0;
- border-radius:8px;
+ border-radius:9px;
+ padding:13px 8px;
+ font-weight:800;
+ font-size:12px;
  background:var(--blue);
  color:#00121e;
- padding:12px 6px;
- font-size:12px;
- font-weight:800;
  cursor:pointer;
 }
 button:disabled{opacity:.4}
 .secondary{
  background:#19334c;
- color:#fff;
+ color:white;
  border:1px solid #376181;
+}
+.full{
+ width:100%;
+ margin-top:8px;
 }
 .actions{
  display:grid;
  grid-template-columns:1fr 1fr;
- gap:7px;
- margin-top:7px;
+ gap:8px;
+ margin-top:8px;
 }
-.full{width:100%}
 .scorebar{
  display:grid;
- grid-template-columns:1fr 1fr 1fr;
- gap:6px;
- margin:9px 0;
+ grid-template-columns:repeat(3,1fr);
+ gap:7px;
+ margin-top:10px;
 }
 .metric{
  background:#071321;
  border:1px solid var(--line);
- border-radius:8px;
+ border-radius:9px;
  text-align:center;
- padding:7px 3px;
+ padding:10px 3px;
 }
 .metric small{
  display:block;
@@ -122,31 +123,31 @@ button:disabled{opacity:.4}
 .metric strong{
  display:block;
  color:var(--blue);
- font-size:24px;
- margin-top:3px;
-}
-input{
- width:100%;
- background:#071321;
- border:1px solid var(--line);
- border-radius:8px;
- color:white;
- font-size:16px;
- padding:11px;
- margin:7px 0;
+ font-size:26px;
+ margin-top:4px;
 }
 .details{
  display:flex;
  justify-content:space-between;
- gap:8px;
+ gap:5px;
  color:var(--muted);
  font-size:11px;
- padding:6px 0;
+ margin:10px 0;
 }
-#difference{
+input{
+ width:100%;
+ background:#071321;
+ color:white;
+ border:1px solid var(--line);
+ border-radius:8px;
+ padding:12px;
+ font-size:16px;
+ margin-top:10px;
+}
+#diagnostic{
  display:none;
  width:100%;
- margin-top:8px;
+ margin-top:10px;
  border-radius:8px;
 }
 </style>
@@ -154,7 +155,9 @@ input{
 <body>
 <main>
 <h1>DARTIQ</h1>
-<p class="subtitle">AUTO-SCORING V3 | STEEL TIP</p>
+<p class="subtitle">
+ AUTO-SCORING | AUTOMATIC CALIBRATION
+</p>
 
 <section class="panel">
 
@@ -169,11 +172,11 @@ input{
 </div>
 
 <div class="status" id="instruction">
- Press START CALIBRATION
+ Waiting for camera
 </div>
 
 <button class="full" id="calibrate" disabled>
- START CALIBRATION
+ START AUTOMATIC CALIBRATION
 </button>
 
 <div class="scorebar">
@@ -194,21 +197,21 @@ input{
 <div class="details">
  <span id="segment">Segment: ---</span>
  <span id="multiplier">Multiplier: ---</span>
- <span id="confidence">Confidence: ---</span>
+ <span id="confidence">Detection: ---</span>
 </div>
 
 <div class="actions">
- <button id="baseline" disabled>
-  CAPTURE BEFORE
- </button>
- <button id="detect" disabled>
-  DETECT DART
- </button>
+ <button id="baseline" disabled>CAPTURE BEFORE</button>
+ <button id="detect" disabled>DETECT DART</button>
 </div>
 
-<input id="manualScore" type="number"
- min="0" max="60"
- placeholder="Correct dart score">
+<input
+ id="manualScore"
+ type="number"
+ min="0"
+ max="60"
+ placeholder="Confirm or correct dart score"
+>
 
 <div class="actions">
  <button id="confirm">CONFIRM DART</button>
@@ -217,18 +220,18 @@ input{
 
 <div class="actions">
  <button id="restartCamera" class="secondary">
-  RESTART CAMERA
+ RESTART CAMERA
  </button>
  <button id="stopCamera" class="secondary">
-  STOP CAMERA
+ STOP CAMERA
  </button>
 </div>
 
 <div class="status" id="detectionStatus">
- Waiting for camera
+ Awaiting calibration
 </div>
 
-<canvas id="difference"></canvas>
+<canvas id="diagnostic"></canvas>
 
 <div class="status" id="saveStatus">
  Local prototype. No database writes.
@@ -245,24 +248,23 @@ const video=$("camera");
 const stage=$("stage");
 const overlay=$("overlay");
 const ctx=overlay.getContext("2d");
-const diff=$("difference");
-const dctx=diff.getContext("2d");
+const diagnostic=$("diagnostic");
+const dctx=diagnostic.getContext("2d");
+
 const work=document.createElement("canvas");
-const wctx=work.getContext("2d",{willReadFrequently:true});
+const wctx=work.getContext("2d",{
+ willReadFrequently:true
+});
 
 let W=480,H=640;
-let stream=null,requestId=0;
-let points=[],board=null,calibrating=false;
-let before=null,pending=null;
-let total=0,darts=0;
-
-const names=[
- "BULL CENTER",
- "TOP OF DOUBLE RING",
- "RIGHT OF DOUBLE RING",
- "BOTTOM OF DOUBLE RING",
- "LEFT OF DOUBLE RING"
-];
+let stream=null;
+let requestId=0;
+let board=null;
+let before=null;
+let pending=null;
+let total=0;
+let darts=0;
+let calibrating=false;
 
 const numbers=[
  20,1,18,4,13,6,10,15,2,17,
@@ -271,27 +273,41 @@ const numbers=[
 
 const valid=new Set([0,25,50]);
 for(let n=1;n<=20;n++){
- valid.add(n);valid.add(n*2);valid.add(n*3);
+ valid.add(n);
+ valid.add(n*2);
+ valid.add(n*3);
 }
 
-function status(text){
- $("instruction").textContent=text;
+function status(s){
+ $("instruction").textContent=s;
 }
+
 function ready(){
- return !!stream&&video.readyState>=2&&video.videoWidth>0;
+ return !!stream &&
+ video.readyState>=2 &&
+ video.videoWidth>0;
 }
+
 function configure(){
- const vw=video.videoWidth,vh=video.videoHeight;
+ const vw=video.videoWidth;
+ const vh=video.videoHeight;
  if(!vw||!vh)return;
+
  stage.style.aspectRatio=vw+"/"+vh;
+
  const scale=Math.min(1,640/Math.max(vw,vh));
- W=Math.max(1,Math.round(vw*scale));
- H=Math.max(1,Math.round(vh*scale));
- work.width=W;work.height=H;
- diff.width=W;diff.height=H;
+ W=Math.round(vw*scale);
+ H=Math.round(vh*scale);
+
+ work.width=W;
+ work.height=H;
+ diagnostic.width=W;
+ diagnostic.height=H;
+
  $("resolution").textContent=vw+" × "+vh;
  resize();
 }
+
 function resize(){
  const r=stage.getBoundingClientRect();
  const dpr=devicePixelRatio||1;
@@ -300,69 +316,88 @@ function resize(){
  ctx.setTransform(dpr,0,0,dpr,0,0);
  draw();
 }
-function rect(){
- const sw=video.videoWidth||W;
- const sh=video.videoHeight||H;
- const cw=overlay.clientWidth,ch=overlay.clientHeight;
- const scale=Math.min(cw/sw,ch/sh);
+
+function screenPoint(x,y){
  return {
-  x:(cw-sw*scale)/2,y:(ch-sh*scale)/2,
-  w:sw*scale,h:sh*scale
+  x:x/W*overlay.clientWidth,
+  y:y/H*overlay.clientHeight
  };
 }
-function toScreen(p){
- const r=rect();
- return {x:r.x+p.x/W*r.w,y:r.y+p.y/H*r.h};
-}
-function toImage(e){
- const r=overlay.getBoundingClientRect();
- const v=rect();
- const x=(e.clientX-r.left-v.x)/v.w*W;
- const y=(e.clientY-r.top-v.y)/v.h*H;
- if(x<0||x>W||y<0||y>H)return null;
- return {x,y};
-}
+
 function draw(){
- ctx.clearRect(0,0,overlay.clientWidth,overlay.clientHeight);
- function dot(p,color,label){
-  const s=toScreen(p);
-  ctx.beginPath();
-  ctx.arc(s.x,s.y,6,0,Math.PI*2);
-  ctx.fillStyle=color;ctx.fill();
-  ctx.strokeStyle="white";ctx.lineWidth=1.5;ctx.stroke();
-  ctx.fillStyle="white";ctx.font="12px Arial";
-  ctx.fillText(label,s.x+9,s.y-9);
- }
- points.forEach((p,i)=>dot(p,"#27b8ff",String(i+1)));
+ ctx.clearRect(
+  0,0,
+  overlay.clientWidth,
+  overlay.clientHeight
+ );
+
  if(board){
-  ctx.beginPath();
-  for(let i=0;i<=120;i++){
-   const a=i/120*Math.PI*2;
-   const p={
-    x:board.c.x+Math.cos(a)*board.vx.x+Math.sin(a)*board.vy.x,
-    y:board.c.y+Math.cos(a)*board.vx.y+Math.sin(a)*board.vy.y
-   };
-   const s=toScreen(p);
-   if(i===0)ctx.moveTo(s.x,s.y);
-   else ctx.lineTo(s.x,s.y);
-  }
+  const c=screenPoint(board.x,board.y);
+  const sx=overlay.clientWidth/W;
+  const sy=overlay.clientHeight/H;
+
   ctx.strokeStyle="#27b8ff";
-  ctx.lineWidth=2;ctx.stroke();
+  ctx.lineWidth=2;
+
+  // Detected outer double-ring ellipse.
+  ctx.beginPath();
+  ctx.ellipse(
+   c.x,c.y,
+   board.rx*sx,
+   board.ry*sy,
+   0,0,Math.PI*2
+  );
+  ctx.stroke();
+
+  // Bull reference.
+  ctx.beginPath();
+  ctx.arc(c.x,c.y,5,0,Math.PI*2);
+  ctx.fillStyle="#27b8ff";
+  ctx.fill();
+
+  // Reference crosshair.
+  ctx.beginPath();
+  ctx.moveTo(c.x-12,c.y);
+  ctx.lineTo(c.x+12,c.y);
+  ctx.moveTo(c.x,c.y-12);
+  ctx.lineTo(c.x,c.y+12);
+  ctx.stroke();
  }
- if(pending?.position)dot(pending.position,"#ffcc00","DART");
+
+ if(pending){
+  const p=screenPoint(pending.x,pending.y);
+  ctx.beginPath();
+  ctx.arc(p.x,p.y,7,0,Math.PI*2);
+  ctx.fillStyle="#ffcc00";
+  ctx.fill();
+ }
 }
+
 async function startCamera(){
  const id=++requestId;
- if(stream)stream.getTracks().forEach(t=>t.stop());
- stream=null;video.srcObject=null;
- board=null;points=[];pending=null;before=null;
+
+ if(stream){
+  stream.getTracks().forEach(t=>t.stop());
+ }
+
+ stream=null;
+ video.srcObject=null;
+ board=null;
+ before=null;
+ pending=null;
  calibrating=false;
+
  $("calibrate").disabled=true;
  $("baseline").disabled=true;
  $("detect").disabled=true;
- $("cameraStatus").textContent="Connecting...";
- status("Connecting camera...");
+
+ status("CONNECTING CAMERA");
+
  try{
+  if(!navigator.mediaDevices?.getUserMedia){
+   throw Error("Camera access unavailable");
+  }
+
   const s=await navigator.mediaDevices.getUserMedia({
    audio:false,
    video:{
@@ -371,229 +406,362 @@ async function startCamera(){
     height:{ideal:720}
    }
   });
+
   if(id!==requestId){
-   s.getTracks().forEach(t=>t.stop());return;
+   s.getTracks().forEach(t=>t.stop());
+   return;
   }
-  stream=s;video.srcObject=s;
+
+  stream=s;
+  video.srcObject=s;
   await video.play();
+
   if(id!==requestId)return;
+
   configure();
+
   $("calibrate").disabled=false;
   $("cameraStatus").textContent="Camera active";
-  status("PRESS START CALIBRATION");
-  $("detectionStatus").textContent="Ready for calibration";
+  status("PRESS START AUTOMATIC CALIBRATION");
+
  }catch(e){
   if(id!==requestId)return;
   $("cameraStatus").textContent="Camera error";
   status(e.message);
  }
 }
+
 function stopCamera(){
  requestId++;
  if(stream)stream.getTracks().forEach(t=>t.stop());
- stream=null;video.srcObject=null;
- board=null;points=[];before=null;pending=null;
+ stream=null;
+ video.srcObject=null;
+ board=null;
+ before=null;
+ pending=null;
  calibrating=false;
+
  $("calibrate").disabled=true;
  $("baseline").disabled=true;
  $("detect").disabled=true;
  $("cameraStatus").textContent="Camera stopped";
- status("Camera stopped");
+ status("CAMERA STOPPED");
  draw();
 }
+
 function capture(){
  if(!ready())throw Error("Camera not ready");
  wctx.drawImage(video,0,0,W,H);
  return wctx.getImageData(0,0,W,H);
 }
-function startCalibration(){
- if(!ready())return;
- points=[];board=null;pending=null;before=null;
- calibrating=true;
- $("baseline").disabled=true;
- $("detect").disabled=true;
- $("calibrate").textContent="RESTART CALIBRATION";
- status("STEP 1/5: TAP "+names[0]);
- draw();
-}
-function finishCalibration(){
- const [c,t,r,b,l]=points;
- const vx={x:(r.x-l.x)/2,y:(r.y-l.y)/2};
- const vy={x:(b.x-t.x)/2,y:(b.y-t.y)/2};
- const det=vx.x*vy.y-vx.y*vy.x;
- const top={x:c.x-vy.x,y:c.y-vy.y};
- const radius=Math.hypot(vy.x,vy.y);
- const error=Math.hypot(top.x-t.x,top.y-t.y);
- calibrating=false;
- if(Math.abs(det)<100||radius<35||error>radius*.3){
-  points=[];
-  status("CALIBRATION FAILED - PRESS RESTART");
-  draw();return;
+
+// Extract brightness and edge strength.
+function imageEdges(frame){
+ const gray=new Float32Array(W*H);
+ const edge=new Float32Array(W*H);
+
+ for(let i=0;i<W*H;i++){
+  const j=i*4;
+  gray[i]=
+   frame.data[j]*.299+
+   frame.data[j+1]*.587+
+   frame.data[j+2]*.114;
  }
- board={c,vx,vy,det};
- $("baseline").disabled=darts>=3;
- status("CALIBRATION COMPLETE");
- $("detectionStatus").textContent="Capture the empty board before throwing";
- draw();
+
+ for(let y=1;y<H-1;y++){
+  for(let x=1;x<W-1;x++){
+   const i=y*W+x;
+   const gx=gray[i+1]-gray[i-1];
+   const gy=gray[i+W]-gray[i-W];
+   edge[i]=Math.hypot(gx,gy);
+  }
+ }
+
+ return edge;
 }
-function normalize(p){
- const dx=p.x-board.c.x,dy=p.y-board.c.y,d=board.det;
+
+function edgeAt(edge,x,y){
+ const ix=Math.round(x);
+ const iy=Math.round(y);
+ if(ix<1||iy<1||ix>=W-1||iy>=H-1)return 0;
+ return edge[iy*W+ix];
+}
+
+// Sample elliptical ring edge strength.
+function ringStrength(edge,cx,cy,rx,ry){
+ let sum=0;
+ let hits=0;
+ const samples=96;
+
+ for(let i=0;i<samples;i++){
+  const a=i*Math.PI*2/samples;
+  const x=cx+Math.cos(a)*rx;
+  const y=cy+Math.sin(a)*ry;
+  const e=edgeAt(edge,x,y);
+  sum+=Math.min(e,100);
+  if(e>18)hits++;
+ }
+
  return {
-  x:(dx*board.vy.y-dy*board.vy.x)/d,
-  y:(board.vx.x*dy-board.vx.y*dx)/d
+  strength:sum/samples,
+  coverage:hits/samples
  };
 }
-function scoring(p){
- if(!board)return null;
- const n=normalize(p);
- const mm=Math.hypot(n.x,n.y)*170;
+
+// Search for a centered, approximately elliptical
+// dartboard ring. This is experimental and does not
+// guarantee correct calibration.
+function findBoard(frame){
+ const edge=imageEdges(frame);
+
+ const maxR=Math.min(W,H)*.48;
+ const minR=Math.min(W,H)*.15;
+
+ let best=null;
+
+ // Candidate centers near image center.
+ const cx0=W/2;
+ const cy0=H/2;
+
+ for(let cy=cy0-H*.2;cy<=cy0+H*.2;cy+=12){
+  for(let cx=cx0-W*.2;cx<=cx0+W*.2;cx+=12){
+   for(let r=minR;r<=maxR;r+=7){
+    for(const ratio of [.7,.8,.9,1,1.1,1.2,1.3]){
+     const rx=r;
+     const ry=r*ratio;
+
+     if(
+      cx-rx<2||cx+rx>=W-2||
+      cy-ry<2||cy+ry>=H-2
+     )continue;
+
+     const a=ringStrength(edge,cx,cy,rx,ry);
+
+     // Prefer strong, continuous rings.
+     const quality=a.strength*a.coverage;
+
+     if(!best||quality>best.quality){
+      best={cx,cy,rx,ry,quality,coverage:a.coverage};
+     }
+    }
+   }
+  }
+ }
+
+ if(!best)return null;
+
+ // Refine the strongest candidate.
+ let refined=best;
+
+ for(let cy=best.cy-12;cy<=best.cy+12;cy+=3){
+  for(let cx=best.cx-12;cx<=best.cx+12;cx+=3){
+   for(let rx=best.rx-9;rx<=best.rx+9;rx+=3){
+    for(let ry=best.ry-9;ry<=best.ry+9;ry+=3){
+     if(
+      rx<=0||ry<=0||
+      cx-rx<2||cx+rx>=W-2||
+      cy-ry<2||cy+ry>=H-2
+     )continue;
+
+     const a=ringStrength(edge,cx,cy,rx,ry);
+     const quality=a.strength*a.coverage;
+
+     if(quality>refined.quality){
+      refined={
+       cx,cy,rx,ry,
+       quality,
+       coverage:a.coverage
+      };
+     }
+    }
+   }
+  }
+ }
+
+ return refined;
+}
+
+async function autoCalibrate(){
+ if(!ready()||calibrating)return;
+
+ calibrating=true;
+ board=null;
+ before=null;
+ pending=null;
+
+ $("calibrate").disabled=true;
+ $("baseline").disabled=true;
+ $("detect").disabled=true;
+
+ status("ANALYZING DARTBOARD...");
+
+ // Allow the status message to render.
+ await new Promise(resolve=>
+  requestAnimationFrame(()=>resolve())
+ );
+
+ try{
+  const frame=capture();
+  const found=findBoard(frame);
+
+  if(!found){
+   throw Error("Board ring not detected");
+  }
+
+  // Conservative geometry validation.
+  if(
+   found.coverage<.55||
+   found.quality<13||
+   found.rx<40||
+   found.ry<40
+  ){
+   throw Error("Insufficient ring detection");
+  }
+
+  // This candidate is only a preliminary ellipse.
+  // Ring identity and sector orientation are not
+  // verified by the image-processing prototype.
+  board={
+   x:found.cx,
+   y:found.cy,
+   rx:found.rx,
+   ry:found.ry,
+   orientationVerified:false
+  };
+
+  draw();
+
+  // Do not enable scoring until the actual outer
+  // double ring and the 20 orientation are verified.
+  status("BOARD CANDIDATE FOUND - NOT YET VERIFIED");
+
+  $("detectionStatus").textContent=
+   "Automatic ring candidate detected. "+
+   "Scoring remains locked until ring and "+
+   "sector orientation can be verified.";
+
+  $("baseline").disabled=true;
+
+ }catch(e){
+  board=null;
+  status("CALIBRATION FAILED");
+  $("detectionStatus").textContent=e.message+
+   ". Adjust the camera view and retry.";
+  draw();
+ }finally{
+  calibrating=false;
+  $("calibrate").disabled=!ready();
+ }
+}
+
+// Scoring remains disabled until calibration
+// is verified by a future detection engine.
+function scoreAt(p){
+ if(!board||!board.orientationVerified)return null;
+
+ const nx=(p.x-board.x)/board.rx;
+ const ny=(p.y-board.y)/board.ry;
+ const mm=Math.hypot(nx,ny)*170;
+
  if(mm>170)return {score:0,segment:"MISS",multi:0};
  if(mm<=6.35)return {score:50,segment:"BULL",multi:2};
  if(mm<=15.9)return {score:25,segment:"OUTER BULL",multi:1};
- const a=(Math.atan2(n.x,-n.y)+Math.PI*2)%(Math.PI*2);
- const index=Math.floor((a+Math.PI/20)/(Math.PI/10))%20;
- const segment=numbers[index];
+
+ const a=(Math.atan2(nx,-ny)+Math.PI*2)%(Math.PI*2);
+ const i=Math.floor((a+Math.PI/20)/(Math.PI/10))%20;
+ const segment=numbers[i];
+
  let multi=1;
  if(mm>=99&&mm<=107)multi=3;
  if(mm>=162&&mm<=170)multi=2;
+
  return {score:segment*multi,segment,multi};
 }
-function candidate(p,confidence,corrected=false){
- const s=scoring(p);if(!s)return;
- pending={...s,position:p,confidence,corrected};
- $("score").textContent=s.score;
- $("segment").textContent="Segment: "+s.segment;
- $("multiplier").textContent="Multiplier: "+s.multi;
- $("confidence").textContent="Confidence: "+
-  (confidence===null?"MANUAL":confidence+"%");
- $("manualScore").value=s.score;
- draw();
-}
-overlay.addEventListener("pointerdown",e=>{
- if(!ready())return;
- const p=toImage(e);if(!p)return;
- if(calibrating){
-  points.push(p);
-  if(points.length===5)finishCalibration();
-  else status("STEP "+(points.length+1)+"/5: TAP "+names[points.length]);
-  draw();return;
- }
- if(board){
-  candidate(p,null,true);
-  status("DART POSITION SELECTED");
-  $("detectionStatus").textContent="Verify score and confirm";
- }
-});
+
 function baseline(){
- try{
-  before=capture();pending=null;
-  $("detect").disabled=false;
-  $("detectionStatus").textContent="Throw one dart, then press DETECT";
-  status("BASELINE CAPTURED");
-  draw();
- }catch(e){status(e.message);}
-}
-function detect(){
- if(!before){status("CAPTURE BEFORE FIRST");return;}
- let after;
- try{after=capture();}catch(e){status(e.message);return;}
- const mask=new Uint8Array(W*H);
- let changed=0;
- for(let i=0;i<W*H;i++){
-  const j=i*4;
-  const delta=
-   Math.abs(after.data[j]-before.data[j])+
-   Math.abs(after.data[j+1]-before.data[j+1])+
-   Math.abs(after.data[j+2]-before.data[j+2]);
-  if(delta>85){mask[i]=1;changed++;}
- }
- if(changed/(W*H)>.12){
-  status("CAMERA MOVEMENT DETECTED");return;
- }
- const visited=new Uint8Array(W*H),stack=[],components=[];
- for(let y=1;y<H-1;y++)for(let x=1;x<W-1;x++){
-  const start=y*W+x;
-  if(!mask[start]||visited[start])continue;
-  visited[start]=1;stack.push(start);
-  let count=0,sx=0,sy=0;
-  while(stack.length){
-   const i=stack.pop(),px=i%W,py=Math.floor(i/W);
-   count++;sx+=px;sy+=py;
-   for(const ni of [i-1,i+1,i-W,i+W]){
-    if(ni<0||ni>=W*H||visited[ni]||!mask[ni])continue;
-    const nx=ni%W,ny=Math.floor(ni/W);
-    if(Math.abs(nx-px)+Math.abs(ny-py)!==1)continue;
-    visited[ni]=1;stack.push(ni);
-   }
-  }
-  if(count>=8&&count<12000){
-   const p={x:sx/count,y:sy/count,count};
-   const n=normalize(p);
-   if(Math.hypot(n.x,n.y)<=1.05)components.push(p);
-  }
- }
- const output=dctx.createImageData(W,H);
- for(let i=0;i<W*H;i++){
-  const j=i*4;
-  output.data[j]=mask[i]?39:after.data[j]*.25;
-  output.data[j+1]=mask[i]?184:after.data[j+1]*.25;
-  output.data[j+2]=mask[i]?255:after.data[j+2]*.25;
-  output.data[j+3]=255;
- }
- dctx.putImageData(output,0,0);
- components.sort((a,b)=>b.count-a.count);
- if(!components.length){
-  status("NO DART FOUND - TAP ENTRY POINT");
+ if(!board?.orientationVerified){
+  status("CALIBRATION NOT VERIFIED");
   return;
  }
- candidate(components[0],components.length>1?15:25);
- status("VERIFY DART ENTRY POINT");
- $("detectionStatus").textContent="Tap the dart tip if the candidate is incorrect";
+ before=capture();
+ $("detect").disabled=false;
+ status("BASELINE CAPTURED");
 }
-function confirm(){
- if(darts>=3){status("VISIT COMPLETE");return;}
- const raw=$("manualScore").value.trim();
- if(raw===""){status("ENTER A SCORE");return;}
- const score=Number(raw);
- if(!Number.isInteger(score)||!valid.has(score)){
-  status("INVALID DART SCORE");return;
+
+function detect(){
+ if(!before||!board?.orientationVerified){
+  status("CALIBRATION REQUIRED");
+  return;
  }
- darts++;total+=score;
- $("score").textContent=score;
+
+ // Dart-tip detection requires a separately
+ // validated algorithm, not an arbitrary
+ // changed-pixel centroid.
+ status("DART-TIP DETECTION NOT YET VERIFIED");
+}
+
+function confirm(){
+ if(darts>=3){
+  status("VISIT COMPLETE");
+  return;
+ }
+
+ const raw=$("manualScore").value.trim();
+
+ if(raw===""){
+  status("ENTER A SCORE");
+  return;
+ }
+
+ const value=Number(raw);
+
+ if(!Number.isInteger(value)||!valid.has(value)){
+  status("INVALID DART SCORE");
+  return;
+ }
+
+ darts++;
+ total+=value;
+
+ $("score").textContent=value;
  $("visitTotal").textContent=total;
  $("dartCount").textContent=darts+"/3";
  $("manualScore").value="";
- before=null;pending=null;
- $("detect").disabled=true;
- $("baseline").disabled=darts>=3;
+
  status(darts===3?"VISIT COMPLETE":"DART CONFIRMED");
- $("detectionStatus").textContent=darts===3?
-  "Start a new visit":"Capture baseline for next dart";
- $("saveStatus").textContent="Confirmed locally. No database writes.";
- draw();
+ $("saveStatus").textContent=
+  "Confirmed locally. No database writes.";
 }
+
 function newVisit(){
- darts=0;total=0;before=null;pending=null;
+ darts=0;
+ total=0;
+ before=null;
+ pending=null;
+
  $("score").textContent="---";
  $("visitTotal").textContent="0";
  $("dartCount").textContent="0/3";
  $("segment").textContent="Segment: ---";
  $("multiplier").textContent="Multiplier: ---";
- $("confidence").textContent="Confidence: ---";
+ $("confidence").textContent="Detection: ---";
  $("manualScore").value="";
- $("baseline").disabled=!board||!ready();
+
  $("detect").disabled=true;
- status(board?"NEW VISIT READY":"CALIBRATE BOARD");
- $("detectionStatus").textContent="Capture baseline";
+ $("baseline").disabled=!board?.orientationVerified;
+
+ status(board?"BOARD CANDIDATE FOUND":"START CALIBRATION");
  draw();
 }
-$("calibrate").onclick=startCalibration;
+
+$("calibrate").onclick=autoCalibrate;
 $("baseline").onclick=baseline;
 $("detect").onclick=detect;
 $("confirm").onclick=confirm;
 $("newVisit").onclick=newVisit;
 $("restartCamera").onclick=startCamera;
 $("stopCamera").onclick=stopCamera;
+
 window.addEventListener("resize",resize);
 window.addEventListener("pagehide",stopCamera);
 window.addEventListener("DOMContentLoaded",startCamera);
