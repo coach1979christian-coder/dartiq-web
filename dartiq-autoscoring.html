@@ -4,13 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#050b16">
-<title>DARTIQ | Auto-Scoring V6</title>
+<title>DARTIQ | Auto-Scoring V7</title>
 <style>
 :root{
+  --bg:#050b16;
   --blue:#27b8ff;
   --green:#19e79a;
   --red:#ff5268;
-  --bg:#050b16;
+  --muted:#b4c9dc;
 }
 *{box-sizing:border-box}
 html,body{
@@ -20,9 +21,9 @@ html,body{
 }
 button,input{font:inherit}
 .app{
-  position:relative;width:100%;height:100dvh;
-  max-width:800px;margin:auto;overflow:hidden;
-  background:#000;
+  position:relative;width:100%;max-width:800px;
+  height:100vh;height:100dvh;
+  margin:auto;overflow:hidden;background:#000;
 }
 video,canvas{
   position:absolute;inset:0;width:100%;height:100%;
@@ -31,86 +32,85 @@ video{object-fit:contain}
 canvas{pointer-events:none}
 .top{
   position:absolute;top:0;left:0;right:0;
-  text-align:center;padding:9px 12px 18px;
-  background:linear-gradient(#020916f5,#020916aa,transparent);
+  text-align:center;padding:8px 12px 17px;
+  background:linear-gradient(#020916fa,#020916a0,transparent);
 }
 .logo{
   margin:0;color:var(--blue);font-size:24px;
   letter-spacing:4px;text-shadow:0 0 14px #27b8ff99;
 }
 .subtitle{
-  color:#a9c5dd;font-size:10px;
+  color:var(--muted);font-size:10px;
   letter-spacing:1px;margin-top:3px;
 }
 .camera-info{
   display:flex;justify-content:space-between;
-  color:#a9c5dd;font-size:10px;margin-top:7px;
+  margin-top:7px;font-size:10px;color:var(--muted);
 }
 .bottom{
   position:absolute;bottom:0;left:0;right:0;
   display:flex;flex-direction:column;gap:5px;
   padding:8px 10px max(10px,env(safe-area-inset-bottom));
   background:linear-gradient(
-    transparent,
-    #020916e8 12%,
-    #020916 40%
+    transparent,#020916ed 12%,#020916 42%
   );
 }
 .status{
-  text-align:center;color:var(--blue);
-  font-size:12px;font-weight:800;
-  min-height:16px;
+  min-height:16px;text-align:center;
+  color:var(--blue);font-size:12px;font-weight:800;
 }
 button{
-  background:var(--blue);color:#00121e;
-  border:1px solid #27b8ff77;border-radius:8px;
-  min-height:37px;padding:7px 5px;
-  font-size:11px;font-weight:800;
+  min-height:36px;padding:7px 5px;
+  border:1px solid #27b8ff77;
+  border-radius:8px;background:var(--blue);
+  color:#00121e;font-size:11px;font-weight:800;
 }
-button:disabled{opacity:.4}
+button:disabled{opacity:.38}
 .secondary{background:#18334d;color:#fff}
 .metrics{
   display:grid;grid-template-columns:repeat(3,1fr);
   gap:5px;
 }
 .metric{
-  text-align:center;background:#031020e8;
+  text-align:center;background:#031020ed;
   border:1px solid #27b8ff55;
   border-radius:8px;padding:6px 2px;
 }
 .metric small{
-  display:block;font-size:9px;color:#a9c5dd;
+  display:block;font-size:9px;color:var(--muted);
 }
 .metric strong{
   display:block;color:var(--blue);
   font-size:24px;margin-top:2px;
 }
-.row{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.row{
+  display:grid;grid-template-columns:1fr 1fr;gap:5px;
+}
 .score-row{
   display:grid;grid-template-columns:1fr 40%;gap:5px;
 }
 input{
-  width:100%;min-width:0;background:#031020e8;
-  border:1px solid #27b8ff55;border-radius:8px;
-  color:#fff;padding:8px;font-size:13px;
+  width:100%;min-width:0;min-height:36px;
+  background:#031020ed;color:#fff;
+  border:1px solid #27b8ff55;
+  border-radius:8px;padding:8px;font-size:13px;
 }
 .details,.message{
-  color:#b4c9dc;text-align:center;font-size:10px;
+  text-align:center;color:var(--muted);font-size:10px;
 }
 .review{
-  display:none;
-  border:1px solid #ffcc00;
-  background:#292109ee;
-  border-radius:8px;padding:7px;
-  text-align:center;font-size:11px;
+  display:none;border:1px solid #ffcc00;
+  background:#292109ee;border-radius:8px;
+  padding:7px;text-align:center;font-size:11px;
 }
 .review.show{display:block}
 .review strong{color:#ffdd55}
 @media(max-height:700px){
   .bottom{gap:3px;padding-top:4px}
-  button{min-height:30px;padding:5px}
+  button{min-height:29px;padding:5px}
   .metric{padding:3px}
   .metric strong{font-size:19px}
+  input{min-height:29px}
 }
 @media(max-height:560px){
   .logo{font-size:18px}
@@ -128,7 +128,9 @@ input{
 
   <div class="top">
     <h1 class="logo">DARTIQ</h1>
-    <div class="subtitle">AUTO-SCORING V6 | LIVE VISION</div>
+    <div class="subtitle">
+      AUTO-SCORING V7 | STABILIZED LIVE VISION
+    </div>
     <div class="camera-info">
       <span id="cameraStatus">Connecting...</span>
       <span id="resolution">---</span>
@@ -136,7 +138,9 @@ input{
   </div>
 
   <div class="bottom">
-    <div class="status" id="status">WAITING FOR CAMERA</div>
+    <div class="status" id="status">
+      WAITING FOR CAMERA
+    </div>
 
     <button id="calibrate" disabled>
       START AUTOMATIC CALIBRATION
@@ -163,20 +167,26 @@ input{
 
     <div class="review" id="review">
       <strong id="candidateLabel">CANDIDATE</strong>
-      <div>Check the marker before accepting</div>
+      <div>Verify dart position before confirming</div>
     </div>
 
     <div class="row">
-      <button id="monitor" disabled>START MONITORING</button>
+      <button id="monitor" disabled>
+        START MONITORING
+      </button>
       <button id="pause" class="secondary" disabled>
         PAUSE
       </button>
     </div>
 
     <div class="score-row">
-      <input id="manualScore" type="number"
-        min="0" max="60"
-        placeholder="Detected / manual score">
+      <input
+        id="manualScore"
+        type="number"
+        min="0"
+        max="60"
+        placeholder="Detected / manual score"
+      >
       <button id="confirm">CONFIRM DART</button>
     </div>
 
@@ -190,7 +200,7 @@ input{
     </div>
 
     <div class="message" id="message">
-      Keep the camera stationary
+      Automatic stabilization enabled
     </div>
   </div>
 </div>
@@ -221,6 +231,20 @@ for(let n=1;n<=20;n++){
   VALID.add(n*3);
 }
 
+const CFG={
+  calibrationDelay:3000,
+  stableFrames:5,
+  monitorInterval:400,
+  motionThreshold:32,
+  motionFraction:.045,
+  majorMotionFraction:.12,
+  changeThreshold:48,
+  minimumPixels:12,
+  maximumChangeFraction:.14,
+  candidateFrames:3,
+  duplicateCooldown:4500
+};
+
 let W=270,H=480;
 let stream=null;
 let cameraToken=0;
@@ -230,31 +254,45 @@ let candidate=null;
 let marker=null;
 
 let monitoring=false;
-let busy=false;
+let calibrating=false;
 let timer=null;
+let generation=0;
+
 let visitTotal=0;
 let dartCount=0;
 
-let stableFrames=0;
-let changeFrames=0;
-let previousSignature=null;
+let previousFrame=null;
+let stableCount=0;
+let motionCount=0;
+let candidateCount=0;
+let previousCandidate=null;
+
 let lastAcceptedSignature=null;
 let lastAcceptedAt=0;
 
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 
-function status(s){$("status").textContent=s}
-function message(s){$("message").textContent=s}
+function status(s){
+  $("status").textContent=s;
+}
+
+function message(s){
+  $("message").textContent=s;
+}
 
 function ready(){
-  return !!stream&&video.readyState>=2&&
-    video.videoWidth>0&&video.videoHeight>0;
+  return !!stream &&
+    video.readyState>=2 &&
+    video.videoWidth>0 &&
+    video.videoHeight>0;
 }
 
 function resize(){
   const dpr=devicePixelRatio||1;
+
   canvas.width=Math.round(app.clientWidth*dpr);
   canvas.height=Math.round(app.clientHeight*dpr);
+
   ctx.setTransform(dpr,0,0,dpr,0,0);
   draw();
 }
@@ -262,19 +300,23 @@ function resize(){
 function imageRect(){
   const vw=video.videoWidth||W;
   const vh=video.videoHeight||H;
+
   const scale=Math.min(
     app.clientWidth/vw,
     app.clientHeight/vh
   );
+
   return {
     x:(app.clientWidth-vw*scale)/2,
     y:(app.clientHeight-vh*scale)/2,
-    w:vw*scale,h:vh*scale
+    w:vw*scale,
+    h:vh*scale
   };
 }
 
 function screenPoint(x,y){
   const r=imageRect();
+
   return {
     x:r.x+x/W*r.w,
     y:r.y+y/H*r.h
@@ -282,18 +324,23 @@ function screenPoint(x,y){
 }
 
 function draw(){
-  ctx.clearRect(0,0,app.clientWidth,app.clientHeight);
+  ctx.clearRect(
+    0,0,app.clientWidth,app.clientHeight
+  );
+
   if(!board)return;
 
   const r=imageRect();
   const c=screenPoint(board.x,board.y);
+
   const rx=board.rx/W*r.w;
   const ry=board.ry/H*r.h;
 
   function ring(scale,color){
     ctx.beginPath();
     ctx.ellipse(
-      c.x,c.y,rx*scale,ry*scale,
+      c.x,c.y,
+      rx*scale,ry*scale,
       0,0,Math.PI*2
     );
     ctx.strokeStyle=color;
@@ -314,14 +361,17 @@ function draw(){
     )*Math.PI/180;
 
     ctx.beginPath();
+
     ctx.moveTo(
       c.x+Math.cos(a)*rx*.1,
       c.y+Math.sin(a)*ry*.1
     );
+
     ctx.lineTo(
       c.x+Math.cos(a)*rx,
       c.y+Math.sin(a)*ry
     );
+
     ctx.strokeStyle="#27b8ff66";
     ctx.lineWidth=1;
     ctx.stroke();
@@ -334,6 +384,7 @@ function draw(){
 
   if(marker){
     const p=screenPoint(marker.x,marker.y);
+
     ctx.beginPath();
     ctx.arc(p.x,p.y,11,0,Math.PI*2);
     ctx.strokeStyle="#19e79a";
@@ -350,9 +401,88 @@ function draw(){
 }
 
 function capture(){
-  if(!ready())throw Error("Camera not ready");
+  if(!ready()){
+    throw Error("Camera not ready");
+  }
+
   wc.drawImage(video,0,0,W,H);
   return wc.getImageData(0,0,W,H);
+}
+
+function pixelDifference(a,b,i){
+  return (
+    Math.abs(a.data[i]-b.data[i])+
+    Math.abs(a.data[i+1]-b.data[i+1])+
+    Math.abs(a.data[i+2]-b.data[i+2])
+  )/3;
+}
+
+function motionRatio(a,b,step=8){
+  let changed=0;
+  let count=0;
+
+  for(let y=0;y<H;y+=step){
+    for(let x=0;x<W;x+=step){
+      const i=(y*W+x)*4;
+
+      count++;
+
+      if(
+        pixelDifference(a,b,i)>
+        CFG.motionThreshold
+      ){
+        changed++;
+      }
+    }
+  }
+
+  return changed/Math.max(1,count);
+}
+
+async function waitForStability(token,timeout=12000){
+  const start=Date.now();
+
+  let previous=null;
+  let stable=0;
+
+  while(Date.now()-start<timeout){
+    if(token!==cameraToken){
+      throw Error("Camera changed");
+    }
+
+    await sleep(350);
+
+    const current=capture();
+
+    if(previous){
+      const motion=motionRatio(
+        previous,current
+      );
+
+      if(motion<CFG.motionFraction){
+        stable++;
+      }else{
+        stable=0;
+      }
+
+      status(
+        stable>=CFG.stableFrames
+          ?"CAMERA STABLE"
+          :"STABILIZING CAMERA "+stable+
+           "/"+CFG.stableFrames
+      );
+
+      if(stable>=CFG.stableFrames){
+        return current;
+      }
+    }
+
+    previous=current;
+  }
+
+  throw Error(
+    "Camera did not stabilize. Check tripod."
+  );
 }
 
 async function startCamera(){
@@ -365,6 +495,8 @@ async function startCamera(){
   }
 
   stream=null;
+  video.srcObject=null;
+
   board=null;
   baseline=null;
   candidate=null;
@@ -393,12 +525,17 @@ async function startCamera(){
 
     stream=s;
     video.srcObject=s;
+
     await video.play();
 
     if(token!==cameraToken)return;
 
     const scale=Math.min(
-      1,480/Math.max(video.videoWidth,video.videoHeight)
+      1,
+      480/Math.max(
+        video.videoWidth,
+        video.videoHeight
+      )
     );
 
     W=Math.round(video.videoWidth*scale);
@@ -408,13 +545,18 @@ async function startCamera(){
     work.height=H;
 
     $("resolution").textContent=
-      video.videoWidth+" × "+video.videoHeight;
+      video.videoWidth+" × "+
+      video.videoHeight;
 
-    $("cameraStatus").textContent="Camera active";
+    $("cameraStatus").textContent=
+      "Camera active";
+
     $("calibrate").disabled=false;
 
     resize();
+
     status("READY FOR CALIBRATION");
+    message("One tap, then release the tripod");
 
   }catch(e){
     status("CAMERA ERROR");
@@ -423,9 +565,23 @@ async function startCamera(){
 }
 
 function classify(r,g,b){
-  if(Math.max(r,g,b)-Math.min(r,g,b)<35)return 0;
-  if(r>65&&r>g*1.3&&r>b*1.25)return 1;
-  if(g>45&&g>r*1.15&&g>b*1.12)return 2;
+  if(
+    Math.max(r,g,b)-
+    Math.min(r,g,b)<35
+  )return 0;
+
+  if(
+    r>65&&
+    r>g*1.3&&
+    r>b*1.25
+  )return 1;
+
+  if(
+    g>45&&
+    g>r*1.15&&
+    g>b*1.12
+  )return 2;
+
   return 0;
 }
 
@@ -434,6 +590,7 @@ function maskFrom(frame){
 
   for(let i=0;i<W*H;i++){
     const j=i*4;
+
     mask[i]=classify(
       frame.data[j],
       frame.data[j+1],
@@ -447,21 +604,35 @@ function maskFrom(frame){
 function maskAt(mask,x,y){
   x=Math.round(x);
   y=Math.round(y);
-  if(x<0||y<0||x>=W||y>=H)return 0;
+
+  if(
+    x<0||y<0||
+    x>=W||y>=H
+  )return 0;
+
   return mask[y*W+x];
 }
 
 function ringStrength(mask,cx,cy,rx,ry){
-  let hits=0,valid=0;
+  let hits=0;
+  let valid=0;
 
   for(let i=0;i<80;i++){
     const a=i*Math.PI/40;
+
     const x=cx+Math.cos(a)*rx;
     const y=cy+Math.sin(a)*ry;
 
-    if(x<0||y<0||x>=W||y>=H)continue;
+    if(
+      x<0||y<0||
+      x>=W||y>=H
+    )continue;
+
     valid++;
-    if(maskAt(mask,x,y))hits++;
+
+    if(maskAt(mask,x,y)){
+      hits++;
+    }
   }
 
   return valid?hits/valid:0;
@@ -471,39 +642,65 @@ function geometrySearch(mask){
   let best=null;
   const md=Math.min(W,H);
 
-  function scan(cx0,cy0,sx,sy,r0,r1,step,rs,ratios){
-    for(let cy=cy0-sy;cy<=cy0+sy;cy+=step){
-      for(let cx=cx0-sx;cx<=cx0+sx;cx+=step){
-        for(let rx=r0;rx<=r1;rx+=rs){
+  function scan(
+    cx0,cy0,sx,sy,
+    r0,r1,step,rs,ratios
+  ){
+    for(
+      let cy=cy0-sy;
+      cy<=cy0+sy;
+      cy+=step
+    ){
+      for(
+        let cx=cx0-sx;
+        cx<=cx0+sx;
+        cx+=step
+      ){
+        for(
+          let rx=r0;
+          rx<=r1;
+          rx+=rs
+        ){
           for(const ratio of ratios){
             const ry=rx*ratio;
 
             if(
-              cx-rx<2||cx+rx>=W-2||
-              cy-ry<2||cy+ry>=H-2
+              cx-rx<2||
+              cx+rx>=W-2||
+              cy-ry<2||
+              cy+ry>=H-2
             )continue;
 
             const outer=ringStrength(
-              mask,cx,cy,rx*.965,ry*.965
+              mask,cx,cy,
+              rx*.965,ry*.965
             );
 
             const triple=ringStrength(
               mask,cx,cy,
-              rx*103/170,ry*103/170
+              rx*103/170,
+              ry*103/170
             );
 
             const bull=ringStrength(
               mask,cx,cy,
-              rx*15.9/170,ry*15.9/170
+              rx*15.9/170,
+              ry*15.9/170
             );
 
             const quality=
-              outer*.45+triple*.40+bull*.15;
+              outer*.45+
+              triple*.40+
+              bull*.15;
 
-            if(!best||quality>best.quality){
+            if(
+              !best||
+              quality>best.quality
+            ){
               best={
                 x:cx,y:cy,rx,ry,
-                outer,triple,bull,quality
+                outer,triple,bull,
+                quality
               };
             }
           }
@@ -513,8 +710,10 @@ function geometrySearch(mask){
   }
 
   scan(
-    W/2,H/2,W*.18,H*.18,
-    md*.24,md*.49,8,6,
+    W/2,H/2,
+    W*.18,H*.18,
+    md*.24,md*.49,
+    8,6,
     [.75,.9,1,1.1,1.25]
   );
 
@@ -525,8 +724,13 @@ function geometrySearch(mask){
     scan(
       g.x,g.y,9,9,
       Math.max(10,g.rx-8),
-      g.rx+8,3,3,
-      [ratio-.07,ratio,ratio+.07]
+      g.rx+8,
+      3,3,
+      [
+        ratio-.07,
+        ratio,
+        ratio+.07
+      ]
     );
   }
 
@@ -534,13 +738,19 @@ function geometrySearch(mask){
 }
 
 function estimateRotation(mask,g){
-  let best={rotation:0,quality:0};
+  let best={
+    rotation:0,
+    quality:0
+  };
 
   for(let rot=-9;rot<=9;rot++){
-    let hits=0,count=0;
+    let hits=0;
+    let count=0;
 
     for(let i=0;i<20;i++){
-      const a=(-90+rot+i*18)*Math.PI/180;
+      const a=(
+        -90+rot+i*18
+      )*Math.PI/180;
 
       const color=maskAt(
         mask,
@@ -549,9 +759,12 @@ function estimateRotation(mask,g){
       );
 
       if(!color)continue;
+
       count++;
 
-      if(color===(i%2===0?1:2))hits++;
+      if(color===(i%2===0?1:2)){
+        hits++;
+      }
     }
 
     const quality=count?hits/count:0;
@@ -565,19 +778,36 @@ function estimateRotation(mask,g){
 }
 
 async function calibrate(){
-  if(busy||!ready())return;
+  if(calibrating||!ready())return;
 
   stopMonitoring();
-  busy=true;
+
+  calibrating=true;
+
   $("calibrate").disabled=true;
   $("monitor").disabled=true;
 
+  board=null;
+  baseline=null;
+  candidate=null;
+  marker=null;
+
+  const token=cameraToken;
+
   try{
-    status("DETECTING BOARD");
+    for(let n=3;n>=1;n--){
+      status("STABILIZATION STARTS IN "+n);
+      await sleep(1000);
+    }
 
-    await sleep(50);
+    status("WAITING FOR STABLE CAMERA");
 
-    const frame=capture();
+    const frame=await waitForStability(token);
+
+    status("DETECTING SCORING RINGS");
+
+    await sleep(30);
+
     const mask=maskFrom(frame);
     const g=geometrySearch(mask);
 
@@ -587,44 +817,49 @@ async function calibrate(){
       g.triple<.30||
       g.quality<.35
     ){
-      throw Error("Scoring rings not reliably detected");
+      throw Error(
+        "Scoring rings not reliably detected"
+      );
     }
 
     status("MAPPING SECTORS");
 
-    await sleep(30);
-
-    const orientation=estimateRotation(mask,g);
+    const orientation=estimateRotation(
+      mask,g
+    );
 
     board={
-      x:g.x,y:g.y,
-      rx:g.rx,ry:g.ry,
+      x:g.x,
+      y:g.y,
+      rx:g.rx,
+      ry:g.ry,
       rotation:orientation.rotation,
       quality:g.quality
     };
 
-    baseline=null;
-    candidate=null;
-    marker=null;
-
-    $("details").textContent=
-      "Rings detected | 20 sectors | Upright orientation assumed";
-
     draw();
 
-    status("CALIBRATION COMPLETE");
-    message("Checking empty board automatically");
+    $("details").textContent=
+      "Rings detected | 20 sectors | Camera stabilized";
+
+    baseline=null;
 
     $("monitor").disabled=false;
+
+    status("CALIBRATION COMPLETE");
+    message("Automatic monitoring starting");
 
     startMonitoring();
 
   }catch(e){
     board=null;
+    draw();
+
     status("CALIBRATION FAILED");
     message(e.message);
+
   }finally{
-    busy=false;
+    calibrating=false;
     $("calibrate").disabled=!ready();
   }
 }
@@ -638,29 +873,10 @@ function normalized(x,y){
 
 function onBoard(x,y){
   const p=normalized(x,y);
-  return Math.hypot(p.x,p.y)<=1.02;
-}
 
-function difference(a,b,i){
-  return (
-    Math.abs(a.data[i]-b.data[i])+
-    Math.abs(a.data[i+1]-b.data[i+1])+
-    Math.abs(a.data[i+2]-b.data[i+2])
-  )/3;
-}
-
-function frameChange(a,b){
-  let changed=0,count=0;
-
-  for(let y=0;y<H;y+=6){
-    for(let x=0;x<W;x+=6){
-      const i=(y*W+x)*4;
-      count++;
-      if(difference(a,b,i)>45)changed++;
-    }
-  }
-
-  return changed/Math.max(1,count);
+  return Math.hypot(
+    p.x,p.y
+  )<=1.02;
 }
 
 function changedPixels(a,b){
@@ -671,9 +887,11 @@ function changedPixels(a,b){
       if(!onBoard(x,y))continue;
 
       const i=(y*W+x)*4;
-      const diff=difference(a,b,i);
+      const diff=pixelDifference(a,b,i);
 
-      if(diff>43)pixels.push({x,y,diff});
+      if(diff>CFG.changeThreshold){
+        pixels.push({x,y,diff});
+      }
     }
   }
 
@@ -681,19 +899,29 @@ function changedPixels(a,b){
 }
 
 function findCandidate(pixels){
-  if(pixels.length<10)return null;
+  if(pixels.length<CFG.minimumPixels){
+    return null;
+  }
 
-  const size=8;
+  const cellSize=8;
   const cells=new Map();
 
   for(const p of pixels){
-    const cx=Math.floor(p.x/size);
-    const cy=Math.floor(p.y/size);
+    const cx=Math.floor(
+      p.x/cellSize
+    );
+
+    const cy=Math.floor(
+      p.y/cellSize
+    );
+
     const key=cx+","+cy;
 
     if(!cells.has(key)){
       cells.set(key,{
-        cx,cy,points:[],seen:false
+        cx,cy,
+        points:[],
+        seen:false
       });
     }
 
@@ -707,52 +935,56 @@ function findCandidate(pixels){
 
     const queue=[start];
     const points=[];
+
     start.seen=true;
 
     for(let k=0;k<queue.length;k++){
       const c=queue[k];
+
       points.push(...c.points);
 
       for(let dy=-1;dy<=1;dy++){
         for(let dx=-1;dx<=1;dx++){
           if(!dx&&!dy)continue;
 
-          const n=cells.get(
-            (c.cx+dx)+","+(c.cy+dy)
+          const neighbor=cells.get(
+            (c.cx+dx)+","+
+            (c.cy+dy)
           );
 
-          if(n&&!n.seen){
-            n.seen=true;
-            queue.push(n);
+          if(
+            neighbor&&
+            !neighbor.seen
+          ){
+            neighbor.seen=true;
+            queue.push(neighbor);
           }
         }
       }
     }
 
-    if(points.length>=10)groups.push(points);
+    if(points.length>=CFG.minimumPixels){
+      groups.push(points);
+    }
   }
 
   if(!groups.length)return null;
 
-  groups.sort((a,b)=>b.length-a.length);
+  groups.sort(
+    (a,b)=>b.length-a.length
+  );
 
   const group=groups[0];
-
-  if(group.length>pixels.length*.85&&pixels.length>600){
-    return null;
-  }
-
-  /*
-    Candidate only. The point closest to the
-    bull is not guaranteed to be the dart tip.
-  */
 
   let best=null;
   let distance=Infinity;
 
   for(const p of group){
     const n=normalized(p.x,p.y);
-    const d=Math.hypot(n.x,n.y);
+
+    const d=Math.hypot(
+      n.x,n.y
+    );
 
     if(d<distance){
       distance=d;
@@ -774,35 +1006,55 @@ function scoreAt(x,y){
   const radius=Math.hypot(p.x,p.y);
 
   if(radius>1){
-    return {score:0,label:"MISS",x,y};
+    return {
+      score:0,
+      label:"MISS",x,y
+    };
   }
 
   if(radius<=6.35/170){
-    return {score:50,label:"BULL",x,y};
+    return {
+      score:50,
+      label:"BULL",x,y
+    };
   }
 
   if(radius<=15.9/170){
-    return {score:25,label:"OUTER BULL",x,y};
+    return {
+      score:25,
+      label:"OUTER BULL",x,y
+    };
   }
 
-  let angle=Math.atan2(p.y,p.x)*180/Math.PI;
+  let angle=Math.atan2(
+    p.y,p.x
+  )*180/Math.PI;
 
   angle=(
     angle+90-board.rotation+360
   )%360;
 
-  const index=Math.floor((angle+9)/18)%20;
+  const index=Math.floor(
+    (angle+9)/18
+  )%20;
+
   const number=SECTORS[index];
 
   let multiplier=1;
   let ring="SINGLE";
 
-  if(radius>=99/170&&radius<=107/170){
+  if(
+    radius>=99/170&&
+    radius<=107/170
+  ){
     multiplier=3;
     ring="TRIPLE";
   }
 
-  if(radius>=162/170&&radius<=1){
+  if(
+    radius>=162/170&&
+    radius<=1
+  ){
     multiplier=2;
     ring="DOUBLE";
   }
@@ -823,6 +1075,7 @@ function signature(hit){
 
 function stopMonitoring(){
   monitoring=false;
+  generation++;
 
   if(timer!==null){
     clearTimeout(timer);
@@ -834,7 +1087,12 @@ function stopMonitoring(){
 }
 
 function startMonitoring(){
-  if(!board||!ready()||monitoring)return;
+  if(
+    !board||
+    !ready()||
+    monitoring||
+    candidate
+  )return;
 
   if(dartCount>=3){
     status("VISIT COMPLETE");
@@ -842,101 +1100,170 @@ function startMonitoring(){
   }
 
   monitoring=true;
-  stableFrames=0;
-  changeFrames=0;
-  previousSignature=null;
+  const id=++generation;
+
+  previousFrame=null;
+  stableCount=0;
+  motionCount=0;
+  candidateCount=0;
+  previousCandidate=null;
 
   $("monitor").disabled=true;
   $("pause").disabled=false;
 
-  status("LIVE MONITORING");
+  status("STABILIZING LIVE MONITOR");
 
-  schedule();
+  monitorLoop(id);
 }
 
-function schedule(){
-  if(!monitoring)return;
+function monitorLoop(id){
+  if(
+    !monitoring||
+    id!==generation
+  )return;
 
-  timer=setTimeout(monitorFrame,350);
+  timer=setTimeout(
+    ()=>monitorFrame(id),
+    CFG.monitorInterval
+  );
 }
 
-function monitorFrame(){
-  if(!monitoring||!board||!ready())return;
+function monitorFrame(id){
+  if(
+    !monitoring||
+    id!==generation||
+    !board||
+    !ready()
+  )return;
 
   try{
     const frame=capture();
 
-    if(!baseline){
-      baseline=frame;
-      status("EMPTY BOARD BASELINE READY");
-      message("Throw one dart");
-      schedule();
+    if(!previousFrame){
+      previousFrame=frame;
+      monitorLoop(id);
       return;
     }
 
-    if(candidate){
-      schedule();
-      return;
-    }
+    const frameMotion=motionRatio(
+      previousFrame,frame
+    );
 
-    const movement=frameChange(baseline,frame);
+    previousFrame=frame;
 
-    if(movement>.30){
-      stableFrames=0;
-      changeFrames=0;
-      status("CAMERA MOVEMENT DETECTED");
-      message("Keep phone and dartboard stationary");
-      schedule();
-      return;
-    }
+    if(frameMotion>CFG.motionFraction){
+      stableCount=0;
+      motionCount++;
 
-    if(movement<.008){
-      stableFrames++;
+      status("WAITING FOR CAMERA TO SETTLE");
 
-      if(stableFrames>=3){
-        changeFrames=0;
-        previousSignature=null;
+      if(motionCount>=2){
+        baseline=null;
+        candidateCount=0;
+        previousCandidate=null;
       }
 
-      schedule();
+      monitorLoop(id);
       return;
     }
 
-    stableFrames=0;
+    motionCount=0;
+    stableCount++;
 
-    const pixels=changedPixels(baseline,frame);
+    if(!baseline){
+      if(stableCount>=CFG.stableFrames){
+        baseline=frame;
+        status("BASELINE READY");
+        message("Throw one dart");
+      }else{
+        status(
+          "STABILIZING "+
+          stableCount+"/"+CFG.stableFrames
+        );
+      }
+
+      monitorLoop(id);
+      return;
+    }
+
+    const change=motionRatio(
+      baseline,frame,4
+    );
+
+    if(change<.008){
+      candidateCount=0;
+      previousCandidate=null;
+      monitorLoop(id);
+      return;
+    }
+
+    if(change>CFG.maximumChangeFraction){
+      /*
+        Significant scene change.
+        Do not interpret this as a dart.
+      */
+      baseline=null;
+      stableCount=0;
+      candidateCount=0;
+      previousCandidate=null;
+
+      status("SCENE CHANGED");
+      message("Waiting for stable baseline");
+
+      monitorLoop(id);
+      return;
+    }
+
+    const pixels=changedPixels(
+      baseline,frame
+    );
+
     const hit=findCandidate(pixels);
 
     if(!hit){
-      changeFrames=0;
-      schedule();
+      candidateCount=0;
+      previousCandidate=null;
+      monitorLoop(id);
+      return;
+    }
+
+    if(previousCandidate){
+      const distance=Math.hypot(
+        hit.x-previousCandidate.x,
+        hit.y-previousCandidate.y
+      );
+
+      if(distance<=8){
+        candidateCount++;
+      }else{
+        candidateCount=1;
+      }
+    }else{
+      candidateCount=1;
+    }
+
+    previousCandidate=hit;
+
+    if(candidateCount<CFG.candidateFrames){
+      status("VERIFYING DART CANDIDATE");
+      monitorLoop(id);
       return;
     }
 
     const sig=signature(hit);
 
-    if(sig===previousSignature){
-      changeFrames++;
-    }else{
-      previousSignature=sig;
-      changeFrames=1;
-    }
-
-    if(changeFrames<3){
-      status("CHECKING DART STABILITY");
-      schedule();
-      return;
-    }
-
     if(
-      sig===lastAcceptedSignature &&
-      Date.now()-lastAcceptedAt<4000
+      sig===lastAcceptedSignature&&
+      Date.now()-lastAcceptedAt<
+      CFG.duplicateCooldown
     ){
-      schedule();
+      monitorLoop(id);
       return;
     }
 
-    const result=scoreAt(hit.x,hit.y);
+    const result=scoreAt(
+      hit.x,hit.y
+    );
 
     candidate={
       ...result,
@@ -956,19 +1283,19 @@ function monitorFrame(){
 
     draw();
 
-    status("DART CANDIDATE DETECTED");
-    message("Check marker and score before confirming");
-
     stopMonitoring();
+
+    status("DART CANDIDATE DETECTED");
+    message("Check marker and confirm score");
 
   }catch(e){
+    stopMonitoring();
     status("MONITOR ERROR");
     message(e.message);
-    stopMonitoring();
     return;
   }
 
-  schedule();
+  monitorLoop(id);
 }
 
 function confirmDart(){
@@ -986,7 +1313,10 @@ function confirmDart(){
 
   const value=Number(raw);
 
-  if(!Number.isInteger(value)||!VALID.has(value)){
+  if(
+    !Number.isInteger(value)||
+    !VALID.has(value)
+  ){
     status("INVALID SCORE");
     return;
   }
@@ -996,11 +1326,14 @@ function confirmDart(){
 
   $("score").textContent=value;
   $("total").textContent=visitTotal;
-  $("darts").textContent=dartCount+"/3";
+  $("darts").textContent=
+    dartCount+"/3";
 
   if(candidate){
     baseline=candidate.after;
-    lastAcceptedSignature=candidate.signature;
+    lastAcceptedSignature=
+      candidate.signature;
+
     lastAcceptedAt=Date.now();
   }else{
     baseline=null;
@@ -1017,8 +1350,9 @@ function confirmDart(){
 
   if(dartCount>=3){
     stopMonitoring();
+
     status("VISIT COMPLETE");
-    message("Remove darts and press NEW VISIT");
+    message("Remove darts and start new visit");
   }else{
     status("DART CONFIRMED");
     message("Monitoring next dart");
@@ -1035,6 +1369,7 @@ function newVisit(){
   baseline=null;
   candidate=null;
   marker=null;
+
   lastAcceptedSignature=null;
   lastAcceptedAt=0;
 
@@ -1048,7 +1383,7 @@ function newVisit(){
   draw();
 
   if(board){
-    status("NEW VISIT");
+    status("NEW VISIT READY");
     message("Remove all darts before monitoring");
     $("monitor").disabled=false;
   }else{
@@ -1057,11 +1392,14 @@ function newVisit(){
 }
 
 $("calibrate").onclick=calibrate;
+
 $("monitor").onclick=startMonitoring;
+
 $("pause").onclick=()=>{
   stopMonitoring();
   status("MONITORING PAUSED");
 };
+
 $("confirm").onclick=confirmDart;
 $("newVisit").onclick=newVisit;
 $("restart").onclick=startCamera;
@@ -1081,7 +1419,10 @@ window.addEventListener("pagehide",()=>{
   }
 });
 
-window.addEventListener("DOMContentLoaded",startCamera);
+window.addEventListener(
+  "DOMContentLoaded",
+  startCamera
+);
 </script>
 </body>
 </html>
