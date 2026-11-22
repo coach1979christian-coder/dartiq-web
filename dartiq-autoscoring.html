@@ -6,7 +6,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#050b16">
 <title>DARTIQ | Auto-Scoring V3</title>
-
 <style>
 :root{
  --bg:#050b16;
@@ -19,7 +18,6 @@
 *{box-sizing:border-box}
 html,body{
  margin:0;
- padding:0;
  background:var(--bg);
  color:var(--text);
  font-family:Arial,sans-serif;
@@ -28,49 +26,39 @@ main{
  width:100%;
  max-width:700px;
  margin:auto;
- padding:12px;
+ padding:10px;
 }
 h1{
- color:var(--blue);
+ margin:8px 0 2px;
  text-align:center;
+ color:var(--blue);
  letter-spacing:3px;
  text-shadow:0 0 18px #27b8ff88;
- margin:15px 0 5px;
 }
 .subtitle{
  text-align:center;
  color:var(--muted);
- font-size:14px;
- margin-bottom:20px;
+ margin:3px 0 12px;
+ font-size:12px;
 }
 .panel{
  background:var(--panel);
  border:1px solid var(--line);
  border-radius:14px;
- padding:14px;
- margin:14px 0;
-}
-h3{
- color:var(--blue);
- margin-top:0;
+ padding:10px;
 }
 .stage{
  position:relative;
  width:100%;
- aspect-ratio:3/4;
  background:#000;
- border-radius:12px;
+ border-radius:10px;
  overflow:hidden;
- display:flex;
- justify-content:center;
- align-items:center;
 }
 video{
  display:block;
  width:100%;
  height:100%;
  object-fit:contain;
- background:#000;
 }
 #overlay{
  position:absolute;
@@ -78,168 +66,138 @@ video{
  width:100%;
  height:100%;
  touch-action:none;
- cursor:crosshair;
+}
+.status{
+ text-align:center;
+ color:var(--muted);
+ font-size:13px;
+ padding:7px 0;
+ min-height:30px;
+}
+#instruction{
+ color:var(--blue);
+ font-weight:700;
 }
 button{
  border:0;
- border-radius:9px;
+ border-radius:8px;
  background:var(--blue);
  color:#00121e;
- padding:13px;
- font-weight:700;
+ padding:12px 6px;
+ font-size:12px;
+ font-weight:800;
  cursor:pointer;
- font-size:14px;
 }
-button:disabled{
- opacity:.4;
- cursor:not-allowed;
-}
+button:disabled{opacity:.4}
 .secondary{
  background:#19334c;
  color:#fff;
  border:1px solid #376181;
 }
-.controls{
+.actions{
  display:grid;
  grid-template-columns:1fr 1fr;
- gap:10px;
- margin-top:10px;
+ gap:7px;
+ margin-top:7px;
 }
-.full{
- width:100%;
- margin-top:10px;
+.full{width:100%}
+.scorebar{
+ display:grid;
+ grid-template-columns:1fr 1fr 1fr;
+ gap:6px;
+ margin:9px 0;
 }
-.status{
+.metric{
+ background:#071321;
+ border:1px solid var(--line);
+ border-radius:8px;
  text-align:center;
+ padding:7px 3px;
+}
+.metric small{
+ display:block;
  color:var(--muted);
- font-size:14px;
- line-height:1.5;
+ font-size:10px;
 }
-.score{
- text-align:center;
- font-size:55px;
- font-weight:800;
+.metric strong{
+ display:block;
  color:var(--blue);
- text-shadow:0 0 20px #27b8ff66;
+ font-size:24px;
+ margin-top:3px;
 }
 input{
  width:100%;
- padding:13px;
  background:#071321;
  border:1px solid var(--line);
  border-radius:8px;
  color:white;
- font-size:18px;
+ font-size:16px;
+ padding:11px;
+ margin:7px 0;
 }
-small{
- color:var(--muted);
- line-height:1.5;
-}
-#difference{
- width:100%;
- height:auto;
- display:block;
- border-radius:8px;
- background:#000;
-}
-.metric{
- display:flex;
- justify-content:space-between;
- padding:9px 0;
- border-bottom:1px solid var(--line);
- gap:12px;
-}
-.metric span:last-child{
- color:var(--blue);
-}
-.camera-info{
+.details{
  display:flex;
  justify-content:space-between;
  gap:8px;
- font-size:12px;
  color:var(--muted);
- margin-top:10px;
+ font-size:11px;
+ padding:6px 0;
 }
-.camera-info span:last-child{
- color:var(--blue);
+#difference{
+ display:none;
+ width:100%;
+ margin-top:8px;
+ border-radius:8px;
 }
 </style>
 </head>
-
 <body>
 <main>
-
 <h1>DARTIQ</h1>
-<p class="subtitle">
- AUTO-SCORING V3 | STEEL TIP
-</p>
+<p class="subtitle">AUTO-SCORING V3 | STEEL TIP</p>
 
 <section class="panel">
-<h3>1. Camera</h3>
 
 <div class="stage" id="stage">
- <video
-  id="camera"
-  autoplay
-  muted
-  playsinline
- ></video>
+ <video id="camera" autoplay muted playsinline></video>
  <canvas id="overlay"></canvas>
 </div>
 
-<div class="camera-info">
- <span>FULL BOARD CAMERA VIEW</span>
- <span id="resolution">Connecting...</span>
+<div class="details">
+ <span id="cameraStatus">Connecting camera...</span>
+ <span id="resolution">---</span>
 </div>
 
-<p class="status" id="cameraStatus">
- Connecting camera...
-</p>
+<div class="status" id="instruction">
+ Press START CALIBRATION
+</div>
 
-<button id="stopCamera" class="secondary full">
- STOP CAMERA
+<button class="full" id="calibrate" disabled>
+ START CALIBRATION
 </button>
 
-<button id="restartCamera" class="full">
- RESTART CAMERA
-</button>
+<div class="scorebar">
+ <div class="metric">
+  <small>DART SCORE</small>
+  <strong id="score">---</strong>
+ </div>
+ <div class="metric">
+  <small>VISIT TOTAL</small>
+  <strong id="visitTotal">0</strong>
+ </div>
+ <div class="metric">
+  <small>DARTS</small>
+  <strong id="dartCount">0/3</strong>
+ </div>
+</div>
 
-</section>
+<div class="details">
+ <span id="segment">Segment: ---</span>
+ <span id="multiplier">Multiplier: ---</span>
+ <span id="confidence">Confidence: ---</span>
+</div>
 
-<section class="panel">
-<h3>2. Board Calibration</h3>
-
-<p id="calibrationInstruction">
- Camera starts automatically. Select CALIBRATE.
-</p>
-
-<p><small>
- Tap the center of the bull, followed by
- the top, right, bottom and left points
- of the outer edge of the double ring.
- Keep the camera fixed.
- The 20 segment must be at the top.
-</small></p>
-
-<button id="calibrate" class="full" disabled>
- CALIBRATE BOARD
-</button>
-
-<p class="status" id="calibrationStatus">
- Not calibrated
-</p>
-</section>
-
-<section class="panel">
-<h3>3. Automatic Dart Detection</h3>
-
-<p><small>
- Capture the board before throwing.
- Throw one dart, wait until the board
- is still, then detect.
-</small></p>
-
-<div class="controls">
+<div class="actions">
  <button id="baseline" disabled>
   CAPTURE BEFORE
  </button>
@@ -248,116 +206,62 @@ small{
  </button>
 </div>
 
-<p class="status" id="detectionStatus">
- Awaiting calibration
-</p>
+<input id="manualScore" type="number"
+ min="0" max="60"
+ placeholder="Correct dart score">
+
+<div class="actions">
+ <button id="confirm">CONFIRM DART</button>
+ <button id="newVisit" class="secondary">NEW VISIT</button>
+</div>
+
+<div class="actions">
+ <button id="restartCamera" class="secondary">
+  RESTART CAMERA
+ </button>
+ <button id="stopCamera" class="secondary">
+  STOP CAMERA
+ </button>
+</div>
+
+<div class="status" id="detectionStatus">
+ Waiting for camera
+</div>
 
 <canvas id="difference"></canvas>
 
-<p><small>
- Blue pixels indicate image changes.
- Tap the actual dart entry point on the
- camera image to correct detection.
-</small></p>
-</section>
-
-<section class="panel">
-<h3>4. Scoring Engine</h3>
-
-<div class="score" id="score">---</div>
-
-<div class="metric">
- <span>Detected segment</span>
- <span id="segment">---</span>
-</div>
-
-<div class="metric">
- <span>Multiplier</span>
- <span id="multiplier">---</span>
-</div>
-
-<div class="metric">
- <span>Detection confidence</span>
- <span id="confidence">---</span>
-</div>
-
-<div class="metric">
- <span>Visit total</span>
- <span id="visitTotal">0</span>
-</div>
-
-<div class="metric">
- <span>Darts confirmed</span>
- <span id="dartCount">0 / 3</span>
-</div>
-
-<p><small>
- Confirm or correct the detected score.
-</small></p>
-
-<input
- id="manualScore"
- type="number"
- min="0"
- max="60"
- placeholder="Correct dart score"
->
-
-<button class="full" id="confirm">
- CONFIRM DART
-</button>
-
-<button class="full secondary" id="newVisit">
- NEW VISIT
-</button>
-
-<p class="status" id="saveStatus">
+<div class="status" id="saveStatus">
  Local prototype. No database writes.
-</p>
-</section>
+</div>
 
+</section>
 </main>
 
 <script>
 "use strict";
 
 const $=id=>document.getElementById(id);
-
 const video=$("camera");
 const stage=$("stage");
 const overlay=$("overlay");
-const octx=overlay.getContext("2d");
-
+const ctx=overlay.getContext("2d");
 const diff=$("difference");
 const dctx=diff.getContext("2d");
-
 const work=document.createElement("canvas");
-const wctx=work.getContext("2d",{
- willReadFrequently:true
-});
+const wctx=work.getContext("2d",{willReadFrequently:true});
 
-let W=480;
-let H=640;
+let W=480,H=640;
+let stream=null,requestId=0;
+let points=[],board=null,calibrating=false;
+let before=null,pending=null;
+let total=0,darts=0;
 
-let stream=null;
-let cameraRequest=0;
-
-let points=[];
-let board=null;
-let calibrating=false;
-
-let before=null;
-let pending=null;
-
-let visitTotal=0;
-let dartCount=0;
-
-const calibrationNames=[
- "Bull center",
- "Top of double ring",
- "Right of double ring",
- "Bottom of double ring",
- "Left of double ring"
+const names=[
+ "BULL CENTER",
+ "TOP OF DOUBLE RING",
+ "RIGHT OF DOUBLE RING",
+ "BOTTOM OF DOUBLE RING",
+ "LEFT OF DOUBLE RING"
 ];
 
 const numbers=[
@@ -365,969 +269,334 @@ const numbers=[
  3,19,7,16,8,11,14,9,12,5
 ];
 
-const validScores=new Set([0,25,50]);
-
+const valid=new Set([0,25,50]);
 for(let n=1;n<=20;n++){
- validScores.add(n);
- validScores.add(n*2);
- validScores.add(n*3);
+ valid.add(n);valid.add(n*2);valid.add(n*3);
 }
 
-function message(id,text){
- $(id).textContent=text;
+function status(text){
+ $("instruction").textContent=text;
 }
-
-function cameraReady(){
- return !!stream &&
- video.readyState>=2 &&
- video.videoWidth>0 &&
- video.videoHeight>0;
+function ready(){
+ return !!stream&&video.readyState>=2&&video.videoWidth>0;
 }
-
-function configureFrame(){
- const vw=video.videoWidth;
- const vh=video.videoHeight;
-
+function configure(){
+ const vw=video.videoWidth,vh=video.videoHeight;
  if(!vw||!vh)return;
-
- // Preserve the exact camera aspect ratio.
- // No center crop or stretched image.
- const ratio=vw/vh;
-
  stage.style.aspectRatio=vw+"/"+vh;
-
- // Processing frame uses the same ratio.
- const maxSide=640;
- const scale=Math.min(1,maxSide/Math.max(vw,vh));
-
+ const scale=Math.min(1,640/Math.max(vw,vh));
  W=Math.max(1,Math.round(vw*scale));
  H=Math.max(1,Math.round(vh*scale));
-
- work.width=W;
- work.height=H;
-
- diff.width=W;
- diff.height=H;
-
- message(
-  "resolution",
-  vw+" × "+vh
- );
-
- resizeOverlay();
+ work.width=W;work.height=H;
+ diff.width=W;diff.height=H;
+ $("resolution").textContent=vw+" × "+vh;
+ resize();
 }
-
-function resizeOverlay(){
+function resize(){
  const r=stage.getBoundingClientRect();
- const dpr=window.devicePixelRatio||1;
-
+ const dpr=devicePixelRatio||1;
  overlay.width=Math.round(r.width*dpr);
  overlay.height=Math.round(r.height*dpr);
-
- octx.setTransform(
-  dpr,0,0,dpr,0,0
- );
-
- drawOverlay();
+ ctx.setTransform(dpr,0,0,dpr,0,0);
+ draw();
 }
-
-function videoRect(){
+function rect(){
  const sw=video.videoWidth||W;
  const sh=video.videoHeight||H;
-
- const cw=overlay.clientWidth;
- const ch=overlay.clientHeight;
-
- const scale=Math.min(
-  cw/sw,
-  ch/sh
- );
-
+ const cw=overlay.clientWidth,ch=overlay.clientHeight;
+ const scale=Math.min(cw/sw,ch/sh);
  return {
-  x:(cw-sw*scale)/2,
-  y:(ch-sh*scale)/2,
-  w:sw*scale,
-  h:sh*scale
+  x:(cw-sw*scale)/2,y:(ch-sh*scale)/2,
+  w:sw*scale,h:sh*scale
  };
 }
-
-function imageToScreen(p){
- const r=videoRect();
-
- return {
-  x:r.x+p.x/W*r.w,
-  y:r.y+p.y/H*r.h
- };
+function toScreen(p){
+ const r=rect();
+ return {x:r.x+p.x/W*r.w,y:r.y+p.y/H*r.h};
 }
-
-function screenToImage(e){
+function toImage(e){
  const r=overlay.getBoundingClientRect();
- const v=videoRect();
-
- const x=(
-  e.clientX-r.left-v.x
- )/v.w*W;
-
- const y=(
-  e.clientY-r.top-v.y
- )/v.h*H;
-
- if(
-  x<0||x>W||
-  y<0||y>H
- )return null;
-
+ const v=rect();
+ const x=(e.clientX-r.left-v.x)/v.w*W;
+ const y=(e.clientY-r.top-v.y)/v.h*H;
+ if(x<0||x>W||y<0||y>H)return null;
  return {x,y};
 }
-
-function drawOverlay(){
- const width=overlay.clientWidth;
- const height=overlay.clientHeight;
-
- octx.clearRect(
-  0,0,width,height
- );
-
- const drawPoint=(p,color,label)=>{
-  const s=imageToScreen(p);
-
-  octx.beginPath();
-  octx.arc(
-   s.x,s.y,6,0,Math.PI*2
-  );
-
-  octx.fillStyle=color;
-  octx.fill();
-
-  octx.strokeStyle="#fff";
-  octx.lineWidth=1.5;
-  octx.stroke();
-
-  if(label){
-   octx.font="12px Arial";
-   octx.fillStyle="#fff";
-   octx.fillText(
-    label,s.x+9,s.y-9
-   );
-  }
- };
-
- points.forEach((p,i)=>{
-  drawPoint(
-   p,
-   "#27b8ff",
-   String(i+1)
-  );
- });
-
+function draw(){
+ ctx.clearRect(0,0,overlay.clientWidth,overlay.clientHeight);
+ function dot(p,color,label){
+  const s=toScreen(p);
+  ctx.beginPath();
+  ctx.arc(s.x,s.y,6,0,Math.PI*2);
+  ctx.fillStyle=color;ctx.fill();
+  ctx.strokeStyle="white";ctx.lineWidth=1.5;ctx.stroke();
+  ctx.fillStyle="white";ctx.font="12px Arial";
+  ctx.fillText(label,s.x+9,s.y-9);
+ }
+ points.forEach((p,i)=>dot(p,"#27b8ff",String(i+1)));
  if(board){
-  octx.beginPath();
-
+  ctx.beginPath();
   for(let i=0;i<=120;i++){
-   const angle=i/120*Math.PI*2;
-
+   const a=i/120*Math.PI*2;
    const p={
-    x:board.center.x+
-      Math.cos(angle)*board.vx.x+
-      Math.sin(angle)*board.vy.x,
-
-    y:board.center.y+
-      Math.cos(angle)*board.vx.y+
-      Math.sin(angle)*board.vy.y
+    x:board.c.x+Math.cos(a)*board.vx.x+Math.sin(a)*board.vy.x,
+    y:board.c.y+Math.cos(a)*board.vx.y+Math.sin(a)*board.vy.y
    };
-
-   const s=imageToScreen(p);
-
-   if(i===0){
-    octx.moveTo(s.x,s.y);
-   }else{
-    octx.lineTo(s.x,s.y);
-   }
+   const s=toScreen(p);
+   if(i===0)ctx.moveTo(s.x,s.y);
+   else ctx.lineTo(s.x,s.y);
   }
-
-  octx.strokeStyle="#27b8ff";
-  octx.lineWidth=2;
-  octx.stroke();
+  ctx.strokeStyle="#27b8ff";
+  ctx.lineWidth=2;ctx.stroke();
  }
-
- if(pending?.position){
-  drawPoint(
-   pending.position,
-   "#ffcc00",
-   pending.corrected
-    ?"Corrected"
-    :"Candidate"
-  );
- }
+ if(pending?.position)dot(pending.position,"#ffcc00","DART");
 }
-
 async function startCamera(){
- const request=++cameraRequest;
-
- if(stream){
-  stream.getTracks().forEach(
-   track=>track.stop()
-  );
-  stream=null;
- }
-
- video.srcObject=null;
-
- points=[];
- board=null;
- pending=null;
- before=null;
+ const id=++requestId;
+ if(stream)stream.getTracks().forEach(t=>t.stop());
+ stream=null;video.srcObject=null;
+ board=null;points=[];pending=null;before=null;
  calibrating=false;
-
  $("calibrate").disabled=true;
  $("baseline").disabled=true;
  $("detect").disabled=true;
-
- message(
-  "calibrationStatus",
-  "Not calibrated"
- );
-
- message(
-  "cameraStatus",
-  "Connecting camera..."
- );
-
+ $("cameraStatus").textContent="Connecting...";
+ status("Connecting camera...");
  try{
-  if(!navigator.mediaDevices?.getUserMedia){
-   throw Error(
-    "HTTPS and camera access required"
-   );
+  const s=await navigator.mediaDevices.getUserMedia({
+   audio:false,
+   video:{
+    facingMode:{ideal:"environment"},
+    width:{ideal:1280},
+    height:{ideal:720}
+   }
+  });
+  if(id!==requestId){
+   s.getTracks().forEach(t=>t.stop());return;
   }
-
-  // Request the rear camera.
-  // Resolution is flexible to support phones
-  // with different camera capabilities.
-  const newStream=
-   await navigator.mediaDevices.getUserMedia({
-    audio:false,
-    video:{
-     facingMode:{
-      ideal:"environment"
-     },
-     width:{
-      ideal:1280
-     },
-     height:{
-      ideal:720
-     }
-    }
-   });
-
-  if(request!==cameraRequest){
-   newStream.getTracks().forEach(
-    track=>track.stop()
-   );
-   return;
-  }
-
-  stream=newStream;
-  video.srcObject=stream;
-
+  stream=s;video.srcObject=s;
   await video.play();
-
-  if(request!==cameraRequest)return;
-
-  configureFrame();
-
+  if(id!==requestId)return;
+  configure();
   $("calibrate").disabled=false;
-
-  message(
-   "cameraStatus",
-   "Camera active"
-  );
-
+  $("cameraStatus").textContent="Camera active";
+  status("PRESS START CALIBRATION");
+  $("detectionStatus").textContent="Ready for calibration";
  }catch(e){
-  if(request!==cameraRequest)return;
-
-  message(
-   "cameraStatus",
-   "Camera error: "+e.message
-  );
+  if(id!==requestId)return;
+  $("cameraStatus").textContent="Camera error";
+  status(e.message);
  }
 }
-
 function stopCamera(){
- cameraRequest++;
-
- if(stream){
-  stream.getTracks().forEach(
-   track=>track.stop()
-  );
- }
-
- stream=null;
- video.srcObject=null;
-
- before=null;
- board=null;
- points=[];
- pending=null;
+ requestId++;
+ if(stream)stream.getTracks().forEach(t=>t.stop());
+ stream=null;video.srcObject=null;
+ board=null;points=[];before=null;pending=null;
  calibrating=false;
-
  $("calibrate").disabled=true;
  $("baseline").disabled=true;
  $("detect").disabled=true;
-
- message(
-  "cameraStatus",
-  "Camera stopped"
- );
-
- message(
-  "calibrationStatus",
-  "Not calibrated"
- );
-
- drawOverlay();
+ $("cameraStatus").textContent="Camera stopped";
+ status("Camera stopped");
+ draw();
 }
-
 function capture(){
- if(!cameraReady()){
-  throw Error("Camera not ready");
- }
-
- // Capture the full source image.
- // Processing coordinates match the preview.
- wctx.drawImage(
-  video,
-  0,0,
-  W,H
- );
-
- return wctx.getImageData(
-  0,0,W,H
- );
+ if(!ready())throw Error("Camera not ready");
+ wctx.drawImage(video,0,0,W,H);
+ return wctx.getImageData(0,0,W,H);
 }
-
-function beginCalibration(){
- if(!cameraReady())return;
-
- points=[];
- board=null;
- pending=null;
- before=null;
-
+function startCalibration(){
+ if(!ready())return;
+ points=[];board=null;pending=null;before=null;
  calibrating=true;
-
  $("baseline").disabled=true;
  $("detect").disabled=true;
-
- message(
-  "calibrationStatus",
-  "Calibration in progress"
- );
-
- message(
-  "calibrationInstruction",
-  "Tap: "+calibrationNames[0]
- );
-
- drawOverlay();
+ $("calibrate").textContent="RESTART CALIBRATION";
+ status("STEP 1/5: TAP "+names[0]);
+ draw();
 }
-
 function finishCalibration(){
  const [c,t,r,b,l]=points;
-
- const vx={
-  x:(r.x-l.x)/2,
-  y:(r.y-l.y)/2
- };
-
- const vy={
-  x:(b.x-t.x)/2,
-  y:(b.y-t.y)/2
- };
-
- const determinant=
-  vx.x*vy.y-vx.y*vy.x;
-
- if(Math.abs(determinant)<100){
-  message(
-   "calibrationStatus",
-   "Invalid geometry. Calibrate again."
-  );
-  calibrating=false;
-  return;
- }
-
- const top={
-  x:c.x-vy.x,
-  y:c.y-vy.y
- };
-
- const topError=Math.hypot(
-  top.x-t.x,
-  top.y-t.y
- );
-
- const radius=Math.hypot(
-  vy.x,
-  vy.y
- );
-
- if(
-  radius<35||
-  topError>radius*.3
- ){
-  message(
-   "calibrationStatus",
-   "Inconsistent points. Calibrate again."
-  );
-  calibrating=false;
-  return;
- }
-
- board={
-  center:c,
-  vx,
-  vy,
-  determinant
- };
-
+ const vx={x:(r.x-l.x)/2,y:(r.y-l.y)/2};
+ const vy={x:(b.x-t.x)/2,y:(b.y-t.y)/2};
+ const det=vx.x*vy.y-vx.y*vy.x;
+ const top={x:c.x-vy.x,y:c.y-vy.y};
+ const radius=Math.hypot(vy.x,vy.y);
+ const error=Math.hypot(top.x-t.x,top.y-t.y);
  calibrating=false;
-
- $("baseline").disabled=
-  dartCount>=3;
-
- message(
-  "calibrationStatus",
-  "Board calibrated"
- );
-
- message(
-  "calibrationInstruction",
-  "Calibration complete. Keep the phone stationary."
- );
-
- drawOverlay();
+ if(Math.abs(det)<100||radius<35||error>radius*.3){
+  points=[];
+  status("CALIBRATION FAILED - PRESS RESTART");
+  draw();return;
+ }
+ board={c,vx,vy,det};
+ $("baseline").disabled=darts>=3;
+ status("CALIBRATION COMPLETE");
+ $("detectionStatus").textContent="Capture the empty board before throwing";
+ draw();
 }
-
-function normalizedPosition(p){
- const dx=p.x-board.center.x;
- const dy=p.y-board.center.y;
- const d=board.determinant;
-
+function normalize(p){
+ const dx=p.x-board.c.x,dy=p.y-board.c.y,d=board.det;
  return {
-  x:(
-   dx*board.vy.y-
-   dy*board.vy.x
-  )/d,
-
-  y:(
-   board.vx.x*dy-
-   board.vx.y*dx
-  )/d
+  x:(dx*board.vy.y-dy*board.vy.x)/d,
+  y:(board.vx.x*dy-board.vx.y*dx)/d
  };
 }
-
-function calculateScore(p){
+function scoring(p){
  if(!board)return null;
-
- const n=normalizedPosition(p);
-
- const radius=Math.hypot(
-  n.x,n.y
- );
-
- const mm=radius*170;
-
- if(mm>170){
-  return {
-   score:0,
-   segment:"MISS",
-   multiplier:0
-  };
- }
-
- if(mm<=6.35){
-  return {
-   score:50,
-   segment:"INNER BULL",
-   multiplier:2
-  };
- }
-
- if(mm<=15.9){
-  return {
-   score:25,
-   segment:"OUTER BULL",
-   multiplier:1
-  };
- }
-
- const angle=(
-  Math.atan2(n.x,-n.y)+
-  Math.PI*2
- )%(Math.PI*2);
-
- const index=Math.floor(
-  (angle+Math.PI/20)/
-  (Math.PI/10)
- )%20;
-
+ const n=normalize(p);
+ const mm=Math.hypot(n.x,n.y)*170;
+ if(mm>170)return {score:0,segment:"MISS",multi:0};
+ if(mm<=6.35)return {score:50,segment:"BULL",multi:2};
+ if(mm<=15.9)return {score:25,segment:"OUTER BULL",multi:1};
+ const a=(Math.atan2(n.x,-n.y)+Math.PI*2)%(Math.PI*2);
+ const index=Math.floor((a+Math.PI/20)/(Math.PI/10))%20;
  const segment=numbers[index];
-
- let multiplier=1;
-
- if(mm>=99&&mm<=107){
-  multiplier=3;
- }
-
- if(mm>=162&&mm<=170){
-  multiplier=2;
- }
-
- return {
-  score:segment*multiplier,
-  segment,
-  multiplier
- };
+ let multi=1;
+ if(mm>=99&&mm<=107)multi=3;
+ if(mm>=162&&mm<=170)multi=2;
+ return {score:segment*multi,segment,multi};
 }
-
-function setPending(
- position,
- confidence,
- corrected=false
-){
- const result=calculateScore(position);
-
- if(!result)return;
-
- pending={
-  ...result,
-  position,
-  confidence,
-  corrected
- };
-
- $("score").textContent=result.score;
- $("segment").textContent=result.segment;
- $("multiplier").textContent=
-  result.multiplier;
-
- $("confidence").textContent=
-  confidence===null
-   ?"MANUAL"
-   :confidence+"%";
-
- $("manualScore").value=result.score;
-
- drawOverlay();
+function candidate(p,confidence,corrected=false){
+ const s=scoring(p);if(!s)return;
+ pending={...s,position:p,confidence,corrected};
+ $("score").textContent=s.score;
+ $("segment").textContent="Segment: "+s.segment;
+ $("multiplier").textContent="Multiplier: "+s.multi;
+ $("confidence").textContent="Confidence: "+
+  (confidence===null?"MANUAL":confidence+"%");
+ $("manualScore").value=s.score;
+ draw();
 }
-
-function captureBaseline(){
+overlay.addEventListener("pointerdown",e=>{
+ if(!ready())return;
+ const p=toImage(e);if(!p)return;
+ if(calibrating){
+  points.push(p);
+  if(points.length===5)finishCalibration();
+  else status("STEP "+(points.length+1)+"/5: TAP "+names[points.length]);
+  draw();return;
+ }
+ if(board){
+  candidate(p,null,true);
+  status("DART POSITION SELECTED");
+  $("detectionStatus").textContent="Verify score and confirm";
+ }
+});
+function baseline(){
  try{
-  before=capture();
-  pending=null;
-
+  before=capture();pending=null;
   $("detect").disabled=false;
-
-  message(
-   "detectionStatus",
-   "Baseline captured. Throw one dart and wait."
-  );
-
-  drawOverlay();
-
- }catch(e){
-  message(
-   "detectionStatus",
-   e.message
-  );
- }
+  $("detectionStatus").textContent="Throw one dart, then press DETECT";
+  status("BASELINE CAPTURED");
+  draw();
+ }catch(e){status(e.message);}
 }
-
-function detectDart(){
- if(!before){
-  message(
-   "detectionStatus",
-   "Capture baseline first"
-  );
-  return;
- }
-
+function detect(){
+ if(!before){status("CAPTURE BEFORE FIRST");return;}
  let after;
-
- try{
-  after=capture();
- }catch(e){
-  message(
-   "detectionStatus",
-   e.message
-  );
-  return;
- }
-
+ try{after=capture();}catch(e){status(e.message);return;}
  const mask=new Uint8Array(W*H);
  let changed=0;
-
  for(let i=0;i<W*H;i++){
   const j=i*4;
-
   const delta=
-   Math.abs(
-    after.data[j]-
-    before.data[j]
-   )+
-   Math.abs(
-    after.data[j+1]-
-    before.data[j+1]
-   )+
-   Math.abs(
-    after.data[j+2]-
-    before.data[j+2]
-   );
-
-  if(delta>85){
-   mask[i]=1;
-   changed++;
-  }
+   Math.abs(after.data[j]-before.data[j])+
+   Math.abs(after.data[j+1]-before.data[j+1])+
+   Math.abs(after.data[j+2]-before.data[j+2]);
+  if(delta>85){mask[i]=1;changed++;}
  }
-
- const changedRatio=
-  changed/(W*H);
-
- if(changedRatio>.12){
-  message(
-   "detectionStatus",
-   "Excessive image change. Check camera stability."
-  );
-  return;
+ if(changed/(W*H)>.12){
+  status("CAMERA MOVEMENT DETECTED");return;
  }
-
- const visited=new Uint8Array(W*H);
- const components=[];
- const stack=[];
-
- for(let y=1;y<H-1;y++){
-  for(let x=1;x<W-1;x++){
-   const start=y*W+x;
-
-   if(
-    !mask[start]||
-    visited[start]
-   )continue;
-
-   let count=0;
-   let sumX=0;
-   let sumY=0;
-
-   let minX=x,maxX=x;
-   let minY=y,maxY=y;
-
-   visited[start]=1;
-   stack.push(start);
-
-   while(stack.length){
-    const idx=stack.pop();
-
-    const px=idx%W;
-    const py=Math.floor(idx/W);
-
-    count++;
-    sumX+=px;
-    sumY+=py;
-
-    minX=Math.min(minX,px);
-    maxX=Math.max(maxX,px);
-    minY=Math.min(minY,py);
-    maxY=Math.max(maxY,py);
-
-    const neighbors=[
-     idx-1,
-     idx+1,
-     idx-W,
-     idx+W
-    ];
-
-    for(const ni of neighbors){
-     if(
-      ni<0||
-      ni>=mask.length||
-      visited[ni]||
-      !mask[ni]
-     )continue;
-
-     const nx=ni%W;
-     const ny=Math.floor(ni/W);
-
-     if(
-      Math.abs(nx-px)+
-      Math.abs(ny-py)!==1
-     )continue;
-
-     visited[ni]=1;
-     stack.push(ni);
-    }
-   }
-
-   if(count>=8){
-    components.push({
-     count,
-     x:sumX/count,
-     y:sumY/count,
-     minX,maxX,
-     minY,maxY
-    });
+ const visited=new Uint8Array(W*H),stack=[],components=[];
+ for(let y=1;y<H-1;y++)for(let x=1;x<W-1;x++){
+  const start=y*W+x;
+  if(!mask[start]||visited[start])continue;
+  visited[start]=1;stack.push(start);
+  let count=0,sx=0,sy=0;
+  while(stack.length){
+   const i=stack.pop(),px=i%W,py=Math.floor(i/W);
+   count++;sx+=px;sy+=py;
+   for(const ni of [i-1,i+1,i-W,i+W]){
+    if(ni<0||ni>=W*H||visited[ni]||!mask[ni])continue;
+    const nx=ni%W,ny=Math.floor(ni/W);
+    if(Math.abs(nx-px)+Math.abs(ny-py)!==1)continue;
+    visited[ni]=1;stack.push(ni);
    }
   }
+  if(count>=8&&count<12000){
+   const p={x:sx/count,y:sy/count,count};
+   const n=normalize(p);
+   if(Math.hypot(n.x,n.y)<=1.05)components.push(p);
+  }
  }
-
- const output=dctx.createImageData(
-  W,H
- );
-
+ const output=dctx.createImageData(W,H);
  for(let i=0;i<W*H;i++){
   const j=i*4;
-
-  if(mask[i]){
-   output.data[j]=39;
-   output.data[j+1]=184;
-   output.data[j+2]=255;
-  }else{
-   output.data[j]=after.data[j]*.25;
-   output.data[j+1]=after.data[j+1]*.25;
-   output.data[j+2]=after.data[j+2]*.25;
-  }
-
+  output.data[j]=mask[i]?39:after.data[j]*.25;
+  output.data[j+1]=mask[i]?184:after.data[j+1]*.25;
+  output.data[j+2]=mask[i]?255:after.data[j+2]*.25;
   output.data[j+3]=255;
  }
-
- dctx.putImageData(
-  output,0,0
- );
-
- const candidates=components.filter(c=>{
-  const n=normalizedPosition(c);
-
-  return (
-   Math.hypot(n.x,n.y)<=1.05 &&
-   c.count<12000
-  );
- });
-
- candidates.sort(
-  (a,b)=>b.count-a.count
- );
-
- if(!candidates.length){
-  pending=null;
-
-  message(
-   "detectionStatus",
-   "No reliable candidate found. Tap dart entry point."
-  );
-
+ dctx.putImageData(output,0,0);
+ components.sort((a,b)=>b.count-a.count);
+ if(!components.length){
+  status("NO DART FOUND - TAP ENTRY POINT");
   return;
  }
-
- const candidate=candidates[0];
-
- // Heuristic indicator, not a measured
- // probability of scoring accuracy.
- const confidence=
-  candidates.length>1?15:25;
-
- setPending(
-  {
-   x:candidate.x,
-   y:candidate.y
-  },
-  confidence
- );
-
- message(
-  "detectionStatus",
-  "Candidate detected. Tap the actual dart entry point to verify before confirming."
- );
+ candidate(components[0],components.length>1?15:25);
+ status("VERIFY DART ENTRY POINT");
+ $("detectionStatus").textContent="Tap the dart tip if the candidate is incorrect";
 }
-
-overlay.addEventListener(
- "pointerdown",
- e=>{
-  if(!cameraReady())return;
-
-  const p=screenToImage(e);
-
-  if(!p)return;
-
-  if(calibrating){
-   points.push(p);
-
-   if(points.length===5){
-    finishCalibration();
-   }else{
-    message(
-     "calibrationInstruction",
-     "Tap: "+
-     calibrationNames[points.length]
-    );
-   }
-
-   drawOverlay();
-   return;
-  }
-
-  if(board){
-   setPending(
-    p,null,true
-   );
-
-   message(
-    "detectionStatus",
-    "Manual dart position selected. Verify score."
-   );
-  }
- }
-);
-
-function confirmDart(){
- if(dartCount>=3){
-  message(
-   "saveStatus",
-   "Visit complete. Start a new visit."
-  );
-  return;
- }
-
+function confirm(){
+ if(darts>=3){status("VISIT COMPLETE");return;}
  const raw=$("manualScore").value.trim();
-
- if(raw===""){
-  message(
-   "saveStatus",
-   "Enter a dart score."
-  );
-  return;
- }
-
+ if(raw===""){status("ENTER A SCORE");return;}
  const score=Number(raw);
-
- if(
-  !Number.isInteger(score)||
-  !validScores.has(score)
- ){
-  message(
-   "saveStatus",
-   "Invalid single-dart score."
-  );
-  return;
+ if(!Number.isInteger(score)||!valid.has(score)){
+  status("INVALID DART SCORE");return;
  }
-
- dartCount++;
- visitTotal+=score;
-
- $("visitTotal").textContent=
-  visitTotal;
-
- $("dartCount").textContent=
-  dartCount+" / 3";
-
+ darts++;total+=score;
  $("score").textContent=score;
-
- before=null;
- pending=null;
-
- $("detect").disabled=true;
+ $("visitTotal").textContent=total;
+ $("dartCount").textContent=darts+"/3";
  $("manualScore").value="";
-
- drawOverlay();
-
- message(
-  "saveStatus",
-  "Dart confirmed locally. No Supabase write."
- );
-
- if(dartCount<3){
-  message(
-   "detectionStatus",
-   "Capture a new baseline for the next dart."
-  );
- }else{
-  message(
-   "detectionStatus",
-   "Three darts confirmed. Visit complete."
-  );
-
-  $("baseline").disabled=true;
- }
+ before=null;pending=null;
+ $("detect").disabled=true;
+ $("baseline").disabled=darts>=3;
+ status(darts===3?"VISIT COMPLETE":"DART CONFIRMED");
+ $("detectionStatus").textContent=darts===3?
+  "Start a new visit":"Capture baseline for next dart";
+ $("saveStatus").textContent="Confirmed locally. No database writes.";
+ draw();
 }
-
 function newVisit(){
- dartCount=0;
- visitTotal=0;
- before=null;
- pending=null;
-
+ darts=0;total=0;before=null;pending=null;
  $("score").textContent="---";
- $("segment").textContent="---";
- $("multiplier").textContent="---";
- $("confidence").textContent="---";
-
  $("visitTotal").textContent="0";
- $("dartCount").textContent="0 / 3";
+ $("dartCount").textContent="0/3";
+ $("segment").textContent="Segment: ---";
+ $("multiplier").textContent="Multiplier: ---";
+ $("confidence").textContent="Confidence: ---";
  $("manualScore").value="";
-
- $("baseline").disabled=
-  !board||!cameraReady();
-
+ $("baseline").disabled=!board||!ready();
  $("detect").disabled=true;
-
- message(
-  "detectionStatus",
-  "New visit ready. Capture baseline."
- );
-
- message(
-  "saveStatus",
-  "Local prototype. No database writes."
- );
-
- drawOverlay();
+ status(board?"NEW VISIT READY":"CALIBRATE BOARD");
+ $("detectionStatus").textContent="Capture baseline";
+ draw();
 }
-
-// Automatic camera startup.
-window.addEventListener(
- "DOMContentLoaded",
- ()=>{
-  startCamera();
- }
-);
-
-// Camera controls.
-$("stopCamera").onclick=stopCamera;
-$("restartCamera").onclick=startCamera;
-
-// Calibration.
-$("calibrate").onclick=beginCalibration;
-
-// Detection.
-$("baseline").onclick=captureBaseline;
-$("detect").onclick=detectDart;
-
-// Scoring.
-$("confirm").onclick=confirmDart;
+$("calibrate").onclick=startCalibration;
+$("baseline").onclick=baseline;
+$("detect").onclick=detect;
+$("confirm").onclick=confirm;
 $("newVisit").onclick=newVisit;
-
-// Resize.
-window.addEventListener(
- "resize",
- resizeOverlay
-);
-
-// Cleanup.
-window.addEventListener(
- "pagehide",
- stopCamera
-);
-
-resizeOverlay();
-
+$("restartCamera").onclick=startCamera;
+$("stopCamera").onclick=stopCamera;
+window.addEventListener("resize",resize);
+window.addEventListener("pagehide",stopCamera);
+window.addEventListener("DOMContentLoaded",startCamera);
 </script>
 </body>
 </html>
