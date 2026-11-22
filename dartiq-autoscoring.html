@@ -1,243 +1,279 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#050b16">
-<title>DARTIQ | Automatic Calibration</title>
+<title>DARTIQ | Auto-Scoring</title>
+
 <style>
 :root{
- --bg:#050b16;
- --panel:#0d1a2b;
- --blue:#27b8ff;
- --line:#245078;
- --text:#eef8ff;
- --muted:#a6bdd5;
+  --bg:#050b16;
+  --panel:#0d1a2b;
+  --blue:#27b8ff;
+  --line:#245078;
+  --text:#eef8ff;
+  --muted:#a6bdd5;
 }
 *{box-sizing:border-box}
-body{
- margin:0;
- background:var(--bg);
- color:var(--text);
- font-family:Arial,sans-serif;
+html,body{
+  width:100%;
+  height:100%;
+  margin:0;
+  overflow:hidden;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,sans-serif;
 }
+button,input{font-family:inherit}
 main{
- max-width:700px;
- margin:auto;
- padding:10px;
+  width:100%;
+  max-width:700px;
+  height:100vh;
+  height:100dvh;
+  margin:auto;
+  padding:5px 8px max(5px,env(safe-area-inset-bottom));
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+  overflow:hidden;
 }
+header{flex:none;text-align:center}
 h1{
- text-align:center;
- color:var(--blue);
- letter-spacing:3px;
- text-shadow:0 0 18px #27b8ff88;
- margin:8px 0 3px;
+  margin:0;
+  font-size:19px;
+  letter-spacing:3px;
+  color:var(--blue);
+  text-shadow:0 0 12px #27b8ff88;
 }
 .subtitle{
- text-align:center;
- font-size:12px;
- color:var(--muted);
- margin:0 0 12px;
+  margin:1px 0 0;
+  font-size:9px;
+  color:var(--muted);
+  letter-spacing:1px;
 }
-.panel{
- background:var(--panel);
- border:1px solid var(--line);
- border-radius:14px;
- padding:10px;
+.workspace{
+  flex:1;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  gap:5px;
 }
 .stage{
- position:relative;
- width:100%;
- background:#000;
- border-radius:10px;
- overflow:hidden;
+  position:relative;
+  flex:1 1 auto;
+  min-height:70px;
+  width:100%;
+  background:#000;
+  border:1px solid var(--line);
+  border-radius:9px;
+  overflow:hidden;
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
 video{
- display:block;
- width:100%;
- height:100%;
- object-fit:contain;
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:contain;
 }
 #overlay{
- position:absolute;
- inset:0;
- width:100%;
- height:100%;
- pointer-events:none;
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
 }
-.status{
- text-align:center;
- padding:10px 4px;
- font-size:13px;
- color:var(--muted);
+.camera-meta{
+  display:flex;
+  justify-content:space-between;
+  gap:6px;
+  font-size:10px;
+  color:var(--muted);
+  flex:none;
 }
 #instruction{
- color:var(--blue);
- font-weight:800;
+  flex:none;
+  text-align:center;
+  font-size:11px;
+  font-weight:800;
+  color:var(--blue);
+  min-height:13px;
+  line-height:1.2;
 }
 button{
- border:0;
- border-radius:9px;
- padding:13px 8px;
- font-weight:800;
- font-size:12px;
- background:var(--blue);
- color:#00121e;
- cursor:pointer;
+  min-width:0;
+  min-height:34px;
+  padding:7px 3px;
+  border:0;
+  border-radius:7px;
+  background:var(--blue);
+  color:#00121e;
+  font-size:10px;
+  font-weight:800;
+  cursor:pointer;
 }
-button:disabled{opacity:.4}
+button:disabled{opacity:.35;cursor:not-allowed}
 .secondary{
- background:#19334c;
- color:white;
- border:1px solid #376181;
+  background:#19334c;
+  color:white;
+  border:1px solid #376181;
 }
-.full{
- width:100%;
- margin-top:8px;
-}
-.actions{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:8px;
- margin-top:8px;
+#calibrate{
+  flex:none;
+  width:100%;
+  min-height:38px;
+  font-size:11px;
 }
 .scorebar{
- display:grid;
- grid-template-columns:repeat(3,1fr);
- gap:7px;
- margin-top:10px;
+  flex:none;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:5px;
 }
 .metric{
- background:#071321;
- border:1px solid var(--line);
- border-radius:9px;
- text-align:center;
- padding:10px 3px;
+  background:#071321;
+  border:1px solid var(--line);
+  border-radius:7px;
+  text-align:center;
+  padding:5px 2px;
+  min-width:0;
 }
 .metric small{
- display:block;
- color:var(--muted);
- font-size:10px;
+  display:block;
+  color:var(--muted);
+  font-size:9px;
 }
 .metric strong{
- display:block;
- color:var(--blue);
- font-size:26px;
- margin-top:4px;
+  display:block;
+  font-size:21px;
+  color:var(--blue);
+  line-height:1.15;
+  margin-top:2px;
 }
-.details{
- display:flex;
- justify-content:space-between;
- gap:5px;
- color:var(--muted);
- font-size:11px;
- margin:10px 0;
+.actions{
+  flex:none;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:5px;
+}
+.score-input{
+  flex:none;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 42%;
+  gap:5px;
 }
 input{
- width:100%;
- background:#071321;
- color:white;
- border:1px solid var(--line);
- border-radius:8px;
- padding:12px;
- font-size:16px;
- margin-top:10px;
+  min-width:0;
+  width:100%;
+  min-height:34px;
+  border-radius:7px;
+  background:#071321;
+  border:1px solid var(--line);
+  color:white;
+  font-size:13px;
+  padding:6px 9px;
 }
-#diagnostic{
- display:none;
- width:100%;
- margin-top:10px;
- border-radius:8px;
+#details{
+  flex:none;
+  text-align:center;
+  color:var(--muted);
+  font-size:10px;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+#message{
+  flex:none;
+  text-align:center;
+  font-size:10px;
+  color:var(--muted);
+  min-height:12px;
+  line-height:1.2;
+}
+@media(max-height:650px){
+  main{gap:3px;padding-top:3px}
+  .workspace{gap:3px}
+  h1{font-size:16px}
+  .subtitle{font-size:8px}
+  button,input{min-height:29px;padding:4px}
+  #calibrate{min-height:31px}
+  .metric{padding:3px}
+  .metric strong{font-size:18px}
+  .metric small{font-size:8px}
+  #details,#message,.camera-meta{font-size:9px}
+}
+@media(max-height:490px){
+  .subtitle,#details{display:none}
+  .metric strong{font-size:15px}
+  .metric small{font-size:7px}
+  button,input{min-height:25px}
+  #calibrate{min-height:27px}
 }
 </style>
 </head>
+
 <body>
 <main>
-<h1>DARTIQ</h1>
-<p class="subtitle">
- AUTO-SCORING | AUTOMATIC CALIBRATION
-</p>
+<header>
+  <h1>DARTIQ</h1>
+  <p class="subtitle">AUTO-SCORING | AUTOMATIC CALIBRATION</p>
+</header>
 
-<section class="panel">
+<div class="workspace">
+  <div class="stage" id="stage">
+    <video id="camera" autoplay muted playsinline></video>
+    <canvas id="overlay"></canvas>
+  </div>
 
-<div class="stage" id="stage">
- <video id="camera" autoplay muted playsinline></video>
- <canvas id="overlay"></canvas>
+  <div class="camera-meta">
+    <span id="cameraStatus">Connecting camera...</span>
+    <span id="resolution">---</span>
+  </div>
+
+  <div id="instruction">WAITING FOR CAMERA</div>
+
+  <button id="calibrate" disabled>
+    START AUTOMATIC CALIBRATION
+  </button>
+
+  <div class="scorebar">
+    <div class="metric">
+      <small>DART SCORE</small>
+      <strong id="score">---</strong>
+    </div>
+    <div class="metric">
+      <small>VISIT TOTAL</small>
+      <strong id="visitTotal">0</strong>
+    </div>
+    <div class="metric">
+      <small>DARTS</small>
+      <strong id="dartCount">0/3</strong>
+    </div>
+  </div>
+
+  <div id="details">
+    Segment: --- | Multiplier: --- | Detection: ---
+  </div>
+
+  <div class="actions">
+    <button id="baseline" disabled>CAPTURE BEFORE</button>
+    <button id="detect" disabled>DETECT DART</button>
+  </div>
+
+  <div class="score-input">
+    <input id="manualScore" type="number" min="0" max="60" placeholder="Dart score">
+    <button id="confirm">CONFIRM DART</button>
+  </div>
+
+  <div class="actions">
+    <button id="newVisit" class="secondary">NEW VISIT</button>
+    <button id="restartCamera" class="secondary">RESTART CAMERA</button>
+  </div>
+
+  <div id="message">Local prototype | No database writes</div>
 </div>
-
-<div class="details">
- <span id="cameraStatus">Connecting camera...</span>
- <span id="resolution">---</span>
-</div>
-
-<div class="status" id="instruction">
- Waiting for camera
-</div>
-
-<button class="full" id="calibrate" disabled>
- START AUTOMATIC CALIBRATION
-</button>
-
-<div class="scorebar">
- <div class="metric">
-  <small>DART SCORE</small>
-  <strong id="score">---</strong>
- </div>
- <div class="metric">
-  <small>VISIT TOTAL</small>
-  <strong id="visitTotal">0</strong>
- </div>
- <div class="metric">
-  <small>DARTS</small>
-  <strong id="dartCount">0/3</strong>
- </div>
-</div>
-
-<div class="details">
- <span id="segment">Segment: ---</span>
- <span id="multiplier">Multiplier: ---</span>
- <span id="confidence">Detection: ---</span>
-</div>
-
-<div class="actions">
- <button id="baseline" disabled>CAPTURE BEFORE</button>
- <button id="detect" disabled>DETECT DART</button>
-</div>
-
-<input
- id="manualScore"
- type="number"
- min="0"
- max="60"
- placeholder="Confirm or correct dart score"
->
-
-<div class="actions">
- <button id="confirm">CONFIRM DART</button>
- <button id="newVisit" class="secondary">NEW VISIT</button>
-</div>
-
-<div class="actions">
- <button id="restartCamera" class="secondary">
- RESTART CAMERA
- </button>
- <button id="stopCamera" class="secondary">
- STOP CAMERA
- </button>
-</div>
-
-<div class="status" id="detectionStatus">
- Awaiting calibration
-</div>
-
-<canvas id="diagnostic"></canvas>
-
-<div class="status" id="saveStatus">
- Local prototype. No database writes.
-</div>
-
-</section>
 </main>
 
 <script>
@@ -248,510 +284,417 @@ const video=$("camera");
 const stage=$("stage");
 const overlay=$("overlay");
 const ctx=overlay.getContext("2d");
-const diagnostic=$("diagnostic");
-const dctx=diagnostic.getContext("2d");
 
 const work=document.createElement("canvas");
-const wctx=work.getContext("2d",{
- willReadFrequently:true
-});
+const wctx=work.getContext("2d",{willReadFrequently:true});
 
 let W=480,H=640;
 let stream=null;
 let requestId=0;
 let board=null;
 let before=null;
-let pending=null;
 let total=0;
 let darts=0;
 let calibrating=false;
 
-const numbers=[
- 20,1,18,4,13,6,10,15,2,17,
- 3,19,7,16,8,11,14,9,12,5
-];
-
 const valid=new Set([0,25,50]);
 for(let n=1;n<=20;n++){
- valid.add(n);
- valid.add(n*2);
- valid.add(n*3);
+  valid.add(n);
+  valid.add(n*2);
+  valid.add(n*3);
 }
 
-function status(s){
- $("instruction").textContent=s;
+function status(text){
+  $("instruction").textContent=text;
 }
-
+function message(text){
+  $("message").textContent=text;
+}
 function ready(){
- return !!stream &&
- video.readyState>=2 &&
- video.videoWidth>0;
+  return !!stream &&
+    video.readyState>=2 &&
+    video.videoWidth>0 &&
+    video.videoHeight>0;
 }
 
 function configure(){
- const vw=video.videoWidth;
- const vh=video.videoHeight;
- if(!vw||!vh)return;
+  const vw=video.videoWidth;
+  const vh=video.videoHeight;
+  if(!vw||!vh)return;
 
- stage.style.aspectRatio=vw+"/"+vh;
+  const scale=Math.min(1,640/Math.max(vw,vh));
+  W=Math.max(1,Math.round(vw*scale));
+  H=Math.max(1,Math.round(vh*scale));
 
- const scale=Math.min(1,640/Math.max(vw,vh));
- W=Math.round(vw*scale);
- H=Math.round(vh*scale);
+  work.width=W;
+  work.height=H;
+  $("resolution").textContent=vw+" × "+vh;
+  resize();
+}
 
- work.width=W;
- work.height=H;
- diagnostic.width=W;
- diagnostic.height=H;
+function videoRect(){
+  const vw=video.videoWidth||W;
+  const vh=video.videoHeight||H;
+  const cw=stage.clientWidth;
+  const ch=stage.clientHeight;
+  const scale=Math.min(cw/vw,ch/vh);
 
- $("resolution").textContent=vw+" × "+vh;
- resize();
+  return {
+    x:(cw-vw*scale)/2,
+    y:(ch-vh*scale)/2,
+    w:vw*scale,
+    h:vh*scale
+  };
 }
 
 function resize(){
- const r=stage.getBoundingClientRect();
- const dpr=devicePixelRatio||1;
- overlay.width=Math.round(r.width*dpr);
- overlay.height=Math.round(r.height*dpr);
- ctx.setTransform(dpr,0,0,dpr,0,0);
- draw();
+  const r=stage.getBoundingClientRect();
+  const dpr=window.devicePixelRatio||1;
+
+  overlay.width=Math.round(r.width*dpr);
+  overlay.height=Math.round(r.height*dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  draw();
 }
 
-function screenPoint(x,y){
- return {
-  x:x/W*overlay.clientWidth,
-  y:y/H*overlay.clientHeight
- };
+function toScreen(x,y){
+  const r=videoRect();
+  return {
+    x:r.x+x/W*r.w,
+    y:r.y+y/H*r.h
+  };
 }
 
 function draw(){
- ctx.clearRect(
-  0,0,
-  overlay.clientWidth,
-  overlay.clientHeight
- );
+  ctx.clearRect(0,0,overlay.clientWidth,overlay.clientHeight);
+  if(!board)return;
 
- if(board){
-  const c=screenPoint(board.x,board.y);
-  const sx=overlay.clientWidth/W;
-  const sy=overlay.clientHeight/H;
+  const c=toScreen(board.x,board.y);
+  const r=videoRect();
 
   ctx.strokeStyle="#27b8ff";
   ctx.lineWidth=2;
-
-  // Detected outer double-ring ellipse.
   ctx.beginPath();
   ctx.ellipse(
-   c.x,c.y,
-   board.rx*sx,
-   board.ry*sy,
-   0,0,Math.PI*2
+    c.x,c.y,
+    board.rx/W*r.w,
+    board.ry/H*r.h,
+    0,0,Math.PI*2
   );
   ctx.stroke();
 
-  // Bull reference.
   ctx.beginPath();
   ctx.arc(c.x,c.y,5,0,Math.PI*2);
   ctx.fillStyle="#27b8ff";
   ctx.fill();
 
-  // Reference crosshair.
   ctx.beginPath();
   ctx.moveTo(c.x-12,c.y);
   ctx.lineTo(c.x+12,c.y);
   ctx.moveTo(c.x,c.y-12);
   ctx.lineTo(c.x,c.y+12);
   ctx.stroke();
- }
-
- if(pending){
-  const p=screenPoint(pending.x,pending.y);
-  ctx.beginPath();
-  ctx.arc(p.x,p.y,7,0,Math.PI*2);
-  ctx.fillStyle="#ffcc00";
-  ctx.fill();
- }
 }
 
 async function startCamera(){
- const id=++requestId;
+  const id=++requestId;
 
- if(stream){
-  stream.getTracks().forEach(t=>t.stop());
- }
-
- stream=null;
- video.srcObject=null;
- board=null;
- before=null;
- pending=null;
- calibrating=false;
-
- $("calibrate").disabled=true;
- $("baseline").disabled=true;
- $("detect").disabled=true;
-
- status("CONNECTING CAMERA");
-
- try{
-  if(!navigator.mediaDevices?.getUserMedia){
-   throw Error("Camera access unavailable");
+  if(stream){
+    stream.getTracks().forEach(t=>t.stop());
   }
 
-  const s=await navigator.mediaDevices.getUserMedia({
-   audio:false,
-   video:{
-    facingMode:{ideal:"environment"},
-    width:{ideal:1280},
-    height:{ideal:720}
-   }
-  });
+  stream=null;
+  video.srcObject=null;
+  board=null;
+  before=null;
+  calibrating=false;
 
-  if(id!==requestId){
-   s.getTracks().forEach(t=>t.stop());
-   return;
+  $("calibrate").disabled=true;
+  $("baseline").disabled=true;
+  $("detect").disabled=true;
+
+  status("CONNECTING CAMERA");
+
+  try{
+    if(!navigator.mediaDevices?.getUserMedia){
+      throw Error("Camera access unavailable");
+    }
+
+    const s=await navigator.mediaDevices.getUserMedia({
+      audio:false,
+      video:{
+        facingMode:{ideal:"environment"},
+        width:{ideal:1280},
+        height:{ideal:720}
+      }
+    });
+
+    if(id!==requestId){
+      s.getTracks().forEach(t=>t.stop());
+      return;
+    }
+
+    stream=s;
+    video.srcObject=s;
+    await video.play();
+
+    if(id!==requestId)return;
+
+    configure();
+    $("calibrate").disabled=false;
+    $("cameraStatus").textContent="Camera active";
+    status("PRESS START AUTOMATIC CALIBRATION");
+    message("Keep the entire dartboard in view");
+
+  }catch(e){
+    if(id!==requestId)return;
+    $("cameraStatus").textContent="Camera error";
+    status("CAMERA UNAVAILABLE");
+    message(e.message);
   }
-
-  stream=s;
-  video.srcObject=s;
-  await video.play();
-
-  if(id!==requestId)return;
-
-  configure();
-
-  $("calibrate").disabled=false;
-  $("cameraStatus").textContent="Camera active";
-  status("PRESS START AUTOMATIC CALIBRATION");
-
- }catch(e){
-  if(id!==requestId)return;
-  $("cameraStatus").textContent="Camera error";
-  status(e.message);
- }
-}
-
-function stopCamera(){
- requestId++;
- if(stream)stream.getTracks().forEach(t=>t.stop());
- stream=null;
- video.srcObject=null;
- board=null;
- before=null;
- pending=null;
- calibrating=false;
-
- $("calibrate").disabled=true;
- $("baseline").disabled=true;
- $("detect").disabled=true;
- $("cameraStatus").textContent="Camera stopped";
- status("CAMERA STOPPED");
- draw();
 }
 
 function capture(){
- if(!ready())throw Error("Camera not ready");
- wctx.drawImage(video,0,0,W,H);
- return wctx.getImageData(0,0,W,H);
+  if(!ready())throw Error("Camera not ready");
+  wctx.drawImage(video,0,0,W,H);
+  return wctx.getImageData(0,0,W,H);
 }
 
-// Extract brightness and edge strength.
-function imageEdges(frame){
- const gray=new Float32Array(W*H);
- const edge=new Float32Array(W*H);
+function edges(frame){
+  const gray=new Float32Array(W*H);
+  const edge=new Float32Array(W*H);
 
- for(let i=0;i<W*H;i++){
-  const j=i*4;
-  gray[i]=
-   frame.data[j]*.299+
-   frame.data[j+1]*.587+
-   frame.data[j+2]*.114;
- }
-
- for(let y=1;y<H-1;y++){
-  for(let x=1;x<W-1;x++){
-   const i=y*W+x;
-   const gx=gray[i+1]-gray[i-1];
-   const gy=gray[i+W]-gray[i-W];
-   edge[i]=Math.hypot(gx,gy);
+  for(let i=0;i<W*H;i++){
+    const j=i*4;
+    gray[i]=
+      frame.data[j]*.299+
+      frame.data[j+1]*.587+
+      frame.data[j+2]*.114;
   }
- }
 
- return edge;
+  for(let y=1;y<H-1;y++){
+    for(let x=1;x<W-1;x++){
+      const i=y*W+x;
+      edge[i]=Math.hypot(
+        gray[i+1]-gray[i-1],
+        gray[i+W]-gray[i-W]
+      );
+    }
+  }
+  return edge;
 }
 
 function edgeAt(edge,x,y){
- const ix=Math.round(x);
- const iy=Math.round(y);
- if(ix<1||iy<1||ix>=W-1||iy>=H-1)return 0;
- return edge[iy*W+ix];
+  const ix=Math.round(x);
+  const iy=Math.round(y);
+  if(ix<1||iy<1||ix>=W-1||iy>=H-1)return 0;
+  return edge[iy*W+ix];
 }
 
-// Sample elliptical ring edge strength.
 function ringStrength(edge,cx,cy,rx,ry){
- let sum=0;
- let hits=0;
- const samples=96;
+  let sum=0,hits=0;
+  const samples=96;
 
- for(let i=0;i<samples;i++){
-  const a=i*Math.PI*2/samples;
-  const x=cx+Math.cos(a)*rx;
-  const y=cy+Math.sin(a)*ry;
-  const e=edgeAt(edge,x,y);
-  sum+=Math.min(e,100);
-  if(e>18)hits++;
- }
+  for(let i=0;i<samples;i++){
+    const a=i*Math.PI*2/samples;
+    const x=cx+Math.cos(a)*rx;
+    const y=cy+Math.sin(a)*ry;
+    const value=edgeAt(edge,x,y);
 
- return {
-  strength:sum/samples,
-  coverage:hits/samples
- };
+    sum+=Math.min(value,100);
+    if(value>18)hits++;
+  }
+
+  return {
+    strength:sum/samples,
+    coverage:hits/samples
+  };
 }
 
-// Search for a centered, approximately elliptical
-// dartboard ring. This is experimental and does not
-// guarantee correct calibration.
 function findBoard(frame){
- const edge=imageEdges(frame);
+  const edge=edges(frame);
+  const maxR=Math.min(W,H)*.48;
+  const minR=Math.min(W,H)*.15;
+  let best=null;
 
- const maxR=Math.min(W,H)*.48;
- const minR=Math.min(W,H)*.15;
+  const cx0=W/2;
+  const cy0=H/2;
 
- let best=null;
+  for(let cy=cy0-H*.2;cy<=cy0+H*.2;cy+=12){
+    for(let cx=cx0-W*.2;cx<=cx0+W*.2;cx+=12){
+      for(let r=minR;r<=maxR;r+=7){
+        for(const ratio of [.7,.8,.9,1,1.1,1.2,1.3]){
+          const rx=r;
+          const ry=r*ratio;
 
- // Candidate centers near image center.
- const cx0=W/2;
- const cy0=H/2;
+          if(
+            cx-rx<2||cx+rx>=W-2||
+            cy-ry<2||cy+ry>=H-2
+          )continue;
 
- for(let cy=cy0-H*.2;cy<=cy0+H*.2;cy+=12){
-  for(let cx=cx0-W*.2;cx<=cx0+W*.2;cx+=12){
-   for(let r=minR;r<=maxR;r+=7){
-    for(const ratio of [.7,.8,.9,1,1.1,1.2,1.3]){
-     const rx=r;
-     const ry=r*ratio;
+          const a=ringStrength(edge,cx,cy,rx,ry);
+          const quality=a.strength*a.coverage;
 
-     if(
-      cx-rx<2||cx+rx>=W-2||
-      cy-ry<2||cy+ry>=H-2
-     )continue;
-
-     const a=ringStrength(edge,cx,cy,rx,ry);
-
-     // Prefer strong, continuous rings.
-     const quality=a.strength*a.coverage;
-
-     if(!best||quality>best.quality){
-      best={cx,cy,rx,ry,quality,coverage:a.coverage};
-     }
+          if(!best||quality>best.quality){
+            best={
+              cx,cy,rx,ry,quality,
+              coverage:a.coverage
+            };
+          }
+        }
+      }
     }
-   }
   }
- }
 
- if(!best)return null;
+  if(!best)return null;
 
- // Refine the strongest candidate.
- let refined=best;
+  let refined=best;
 
- for(let cy=best.cy-12;cy<=best.cy+12;cy+=3){
-  for(let cx=best.cx-12;cx<=best.cx+12;cx+=3){
-   for(let rx=best.rx-9;rx<=best.rx+9;rx+=3){
-    for(let ry=best.ry-9;ry<=best.ry+9;ry+=3){
-     if(
-      rx<=0||ry<=0||
-      cx-rx<2||cx+rx>=W-2||
-      cy-ry<2||cy+ry>=H-2
-     )continue;
+  for(let cy=best.cy-12;cy<=best.cy+12;cy+=3){
+    for(let cx=best.cx-12;cx<=best.cx+12;cx+=3){
+      for(let rx=best.rx-9;rx<=best.rx+9;rx+=3){
+        for(let ry=best.ry-9;ry<=best.ry+9;ry+=3){
+          if(
+            rx<=0||ry<=0||
+            cx-rx<2||cx+rx>=W-2||
+            cy-ry<2||cy+ry>=H-2
+          )continue;
 
-     const a=ringStrength(edge,cx,cy,rx,ry);
-     const quality=a.strength*a.coverage;
+          const a=ringStrength(edge,cx,cy,rx,ry);
+          const quality=a.strength*a.coverage;
 
-     if(quality>refined.quality){
-      refined={
-       cx,cy,rx,ry,
-       quality,
-       coverage:a.coverage
-      };
-     }
+          if(quality>refined.quality){
+            refined={
+              cx,cy,rx,ry,quality,
+              coverage:a.coverage
+            };
+          }
+        }
+      }
     }
-   }
   }
- }
-
- return refined;
+  return refined;
 }
 
 async function autoCalibrate(){
- if(!ready()||calibrating)return;
+  if(!ready()||calibrating)return;
 
- calibrating=true;
- board=null;
- before=null;
- pending=null;
-
- $("calibrate").disabled=true;
- $("baseline").disabled=true;
- $("detect").disabled=true;
-
- status("ANALYZING DARTBOARD...");
-
- // Allow the status message to render.
- await new Promise(resolve=>
-  requestAnimationFrame(()=>resolve())
- );
-
- try{
-  const frame=capture();
-  const found=findBoard(frame);
-
-  if(!found){
-   throw Error("Board ring not detected");
-  }
-
-  // Conservative geometry validation.
-  if(
-   found.coverage<.55||
-   found.quality<13||
-   found.rx<40||
-   found.ry<40
-  ){
-   throw Error("Insufficient ring detection");
-  }
-
-  // This candidate is only a preliminary ellipse.
-  // Ring identity and sector orientation are not
-  // verified by the image-processing prototype.
-  board={
-   x:found.cx,
-   y:found.cy,
-   rx:found.rx,
-   ry:found.ry,
-   orientationVerified:false
-  };
-
-  draw();
-
-  // Do not enable scoring until the actual outer
-  // double ring and the 20 orientation are verified.
-  status("BOARD CANDIDATE FOUND - NOT YET VERIFIED");
-
-  $("detectionStatus").textContent=
-   "Automatic ring candidate detected. "+
-   "Scoring remains locked until ring and "+
-   "sector orientation can be verified.";
-
-  $("baseline").disabled=true;
-
- }catch(e){
+  calibrating=true;
   board=null;
-  status("CALIBRATION FAILED");
-  $("detectionStatus").textContent=e.message+
-   ". Adjust the camera view and retry.";
-  draw();
- }finally{
-  calibrating=false;
-  $("calibrate").disabled=!ready();
- }
-}
+  before=null;
 
-// Scoring remains disabled until calibration
-// is verified by a future detection engine.
-function scoreAt(p){
- if(!board||!board.orientationVerified)return null;
+  $("calibrate").disabled=true;
+  $("baseline").disabled=true;
+  $("detect").disabled=true;
 
- const nx=(p.x-board.x)/board.rx;
- const ny=(p.y-board.y)/board.ry;
- const mm=Math.hypot(nx,ny)*170;
+  status("ANALYZING BOARD");
 
- if(mm>170)return {score:0,segment:"MISS",multi:0};
- if(mm<=6.35)return {score:50,segment:"BULL",multi:2};
- if(mm<=15.9)return {score:25,segment:"OUTER BULL",multi:1};
+  await new Promise(resolve=>requestAnimationFrame(resolve));
 
- const a=(Math.atan2(nx,-ny)+Math.PI*2)%(Math.PI*2);
- const i=Math.floor((a+Math.PI/20)/(Math.PI/10))%20;
- const segment=numbers[i];
+  try{
+    const frame=capture();
+    const found=findBoard(frame);
 
- let multi=1;
- if(mm>=99&&mm<=107)multi=3;
- if(mm>=162&&mm<=170)multi=2;
+    if(
+      !found||
+      found.coverage<.55||
+      found.quality<13||
+      found.rx<40||
+      found.ry<40
+    ){
+      throw Error("Could not identify a reliable ring");
+    }
 
- return {score:segment*multi,segment,multi};
+    board={
+      x:found.cx,
+      y:found.cy,
+      rx:found.rx,
+      ry:found.ry,
+      orientationVerified:false
+    };
+
+    draw();
+    status("BOARD CANDIDATE DETECTED");
+    message("Ring and sector orientation require verification");
+
+  }catch(e){
+    board=null;
+    draw();
+    status("CALIBRATION FAILED");
+    message(e.message);
+
+  }finally{
+    calibrating=false;
+    $("calibrate").disabled=!ready();
+  }
 }
 
 function baseline(){
- if(!board?.orientationVerified){
-  status("CALIBRATION NOT VERIFIED");
-  return;
- }
- before=capture();
- $("detect").disabled=false;
- status("BASELINE CAPTURED");
+  if(!board?.orientationVerified){
+    status("CALIBRATION NOT VERIFIED");
+    return;
+  }
+
+  before=capture();
+  $("detect").disabled=false;
+  status("BASELINE CAPTURED");
 }
 
 function detect(){
- if(!before||!board?.orientationVerified){
-  status("CALIBRATION REQUIRED");
-  return;
- }
+  if(!before||!board?.orientationVerified){
+    status("CALIBRATION REQUIRED");
+    return;
+  }
 
- // Dart-tip detection requires a separately
- // validated algorithm, not an arbitrary
- // changed-pixel centroid.
- status("DART-TIP DETECTION NOT YET VERIFIED");
+  status("DART DETECTION NOT VERIFIED");
 }
 
 function confirm(){
- if(darts>=3){
-  status("VISIT COMPLETE");
-  return;
- }
+  if(darts>=3){
+    status("VISIT COMPLETE");
+    return;
+  }
 
- const raw=$("manualScore").value.trim();
+  const raw=$("manualScore").value.trim();
 
- if(raw===""){
-  status("ENTER A SCORE");
-  return;
- }
+  if(raw===""){
+    status("ENTER DART SCORE");
+    return;
+  }
 
- const value=Number(raw);
+  const value=Number(raw);
 
- if(!Number.isInteger(value)||!valid.has(value)){
-  status("INVALID DART SCORE");
-  return;
- }
+  if(!Number.isInteger(value)||!valid.has(value)){
+    status("INVALID DART SCORE");
+    return;
+  }
 
- darts++;
- total+=value;
+  darts++;
+  total+=value;
 
- $("score").textContent=value;
- $("visitTotal").textContent=total;
- $("dartCount").textContent=darts+"/3";
- $("manualScore").value="";
+  $("score").textContent=value;
+  $("visitTotal").textContent=total;
+  $("dartCount").textContent=darts+"/3";
+  $("manualScore").value="";
 
- status(darts===3?"VISIT COMPLETE":"DART CONFIRMED");
- $("saveStatus").textContent=
-  "Confirmed locally. No database writes.";
+  status(darts===3?"VISIT COMPLETE":"DART CONFIRMED");
+  message("Confirmed locally. No database writes.");
 }
 
 function newVisit(){
- darts=0;
- total=0;
- before=null;
- pending=null;
+  darts=0;
+  total=0;
+  before=null;
 
- $("score").textContent="---";
- $("visitTotal").textContent="0";
- $("dartCount").textContent="0/3";
- $("segment").textContent="Segment: ---";
- $("multiplier").textContent="Multiplier: ---";
- $("confidence").textContent="Detection: ---";
- $("manualScore").value="";
+  $("score").textContent="---";
+  $("visitTotal").textContent="0";
+  $("dartCount").textContent="0/3";
+  $("manualScore").value="";
 
- $("detect").disabled=true;
- $("baseline").disabled=!board?.orientationVerified;
+  $("baseline").disabled=!board?.orientationVerified;
+  $("detect").disabled=true;
 
- status(board?"BOARD CANDIDATE FOUND":"START CALIBRATION");
- draw();
+  status(board?"BOARD CANDIDATE DETECTED":"START CALIBRATION");
 }
 
 $("calibrate").onclick=autoCalibrate;
@@ -760,10 +703,20 @@ $("detect").onclick=detect;
 $("confirm").onclick=confirm;
 $("newVisit").onclick=newVisit;
 $("restartCamera").onclick=startCamera;
-$("stopCamera").onclick=stopCamera;
 
 window.addEventListener("resize",resize);
-window.addEventListener("pagehide",stopCamera);
+
+if(window.ResizeObserver){
+  new ResizeObserver(resize).observe(stage);
+}
+
+window.addEventListener("pagehide",()=>{
+  requestId++;
+  if(stream){
+    stream.getTracks().forEach(t=>t.stop());
+  }
+});
+
 window.addEventListener("DOMContentLoaded",startCamera);
 </script>
 </body>
