@@ -1,0 +1,274 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#050b16">
+<title>DARTIQ | Auto-Scoring</title>
+<style>
+:root{
+  --bg:#050b16;
+  --blue:#27b8ff;
+  --panel:#0d1a2b;
+  --line:#234867;
+  --white:#eef8ff;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--white);
+  font-family:Arial,sans-serif;
+}
+main{max-width:650px;margin:auto;padding:18px}
+h1{
+  text-align:center;
+  color:var(--blue);
+  text-shadow:0 0 18px #27b8ff77;
+  letter-spacing:2px;
+}
+.subtitle{text-align:center;color:#a8c8df}
+.panel{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:15px;
+  margin:15px 0;
+}
+video,canvas{
+  display:block;
+  width:100%;
+  border-radius:10px;
+  background:#000;
+}
+video{aspect-ratio:4/3;object-fit:contain}
+button{
+  background:var(--blue);
+  color:#00101e;
+  border:0;
+  border-radius:9px;
+  padding:13px;
+  font-weight:bold;
+  cursor:pointer;
+}
+button:disabled{opacity:.4;cursor:not-allowed}
+.controls{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:12px;
+}
+.full{width:100%;margin-top:10px}
+.secondary{
+  background:#19334c;
+  color:white;
+  border:1px solid #376181;
+}
+.status{color:#91b8d2;text-align:center}
+.score{
+  font-size:45px;
+  text-align:center;
+  color:var(--blue);
+  font-weight:bold;
+}
+input{
+  width:100%;
+  padding:13px;
+  background:#071321;
+  color:white;
+  border:1px solid var(--line);
+  border-radius:8px;
+  font-size:18px;
+}
+small{color:#9cb7c9}
+</style>
+</head>
+<body>
+<main>
+  <h1>DARTIQ</h1>
+  <p class="subtitle">AUTO-SCORING V1 | CAMERA TEST</p>
+
+  <section class="panel">
+    <h3>Camera</h3>
+    <video id="camera" autoplay muted playsinline></video>
+    <p class="status" id="status">Camera not started</p>
+    <div class="controls">
+      <button id="start">START CAMERA</button>
+      <button id="stop" class="secondary">STOP CAMERA</button>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h3>Throw Detection Test</h3>
+    <p><small>Keep the phone fixed. Capture the empty board, throw a dart, then capture again.</small></p>
+    <div class="controls">
+      <button id="before" disabled>CAPTURE BEFORE</button>
+      <button id="after" disabled>CAPTURE AFTER</button>
+    </div>
+    <p id="difference" class="status">Awaiting captures</p>
+    <canvas id="preview" width="320" height="240"></canvas>
+    <p><small>Highlighted pixels show changes between frames. They do not yet identify a dart tip or calculate a score.</small></p>
+  </section>
+
+  <section class="panel">
+    <h3>Score Confirmation</h3>
+    <div class="score" id="score">---</div>
+    <p><small>Manual confirmation during prototype testing.</small></p>
+    <input id="manualScore" type="number" min="0" max="60" placeholder="Enter dart score (0-60)">
+    <button class="full" id="confirm">CONFIRM DART</button>
+    <p id="visit" class="status">Visit: 0 points | 0/3 darts</p>
+    <button class="full secondary" id="reset">NEW VISIT</button>
+  </section>
+</main>
+
+<script>
+const video=document.getElementById("camera");
+const statusEl=document.getElementById("status");
+const beforeBtn=document.getElementById("before");
+const afterBtn=document.getElementById("after");
+const canvas=document.getElementById("preview");
+const ctx=canvas.getContext("2d",{willReadFrequently:true});
+
+let stream=null;
+let beforeFrame=null;
+let visitScore=0;
+let darts=0;
+
+function status(message){
+  statusEl.textContent=message;
+}
+
+function capture(){
+  if(!stream || video.readyState<2)
+    throw new Error("Camera is not ready");
+  ctx.drawImage(video,0,0,canvas.width,canvas.height);
+  return ctx.getImageData(0,0,canvas.width,canvas.height);
+}
+
+async function startCamera(){
+  try{
+    if(!navigator.mediaDevices?.getUserMedia)
+      throw new Error("Camera API unavailable. Use HTTPS.");
+
+    if(stream)stopCamera();
+
+    stream=await navigator.mediaDevices.getUserMedia({
+      audio:false,
+      video:{
+        facingMode:{ideal:"environment"},
+        width:{ideal:1280},
+        height:{ideal:720}
+      }
+    });
+
+    video.srcObject=stream;
+    await video.play();
+    beforeBtn.disabled=false;
+    afterBtn.disabled=false;
+    status("Camera active");
+  }catch(err){
+    status("Camera error: "+err.message);
+  }
+}
+
+function stopCamera(){
+  if(stream)stream.getTracks().forEach(t=>t.stop());
+  stream=null;
+  video.srcObject=null;
+  beforeFrame=null;
+  beforeBtn.disabled=true;
+  afterBtn.disabled=true;
+  status("Camera stopped");
+}
+
+document.getElementById("start").onclick=startCamera;
+document.getElementById("stop").onclick=stopCamera;
+
+beforeBtn.onclick=()=>{
+  try{
+    beforeFrame=capture();
+    document.getElementById("difference").textContent=
+      "Baseline captured. Throw one dart.";
+  }catch(err){status(err.message)}
+};
+
+afterBtn.onclick=()=>{
+  if(!beforeFrame){
+    status("Capture the board before throwing first.");
+    return;
+  }
+
+  try{
+    const after=capture();
+    const output=ctx.createImageData(canvas.width,canvas.height);
+    let changed=0;
+    const threshold=65;
+
+    for(let i=0;i<after.data.length;i+=4){
+      const delta=
+        Math.abs(after.data[i]-beforeFrame.data[i])+
+        Math.abs(after.data[i+1]-beforeFrame.data[i+1])+
+        Math.abs(after.data[i+2]-beforeFrame.data[i+2]);
+
+      if(delta>threshold){
+        output.data[i]=39;
+        output.data[i+1]=184;
+        output.data[i+2]=255;
+        changed++;
+      }else{
+        output.data[i]=after.data[i]*0.3;
+        output.data[i+1]=after.data[i+1]*0.3;
+        output.data[i+2]=after.data[i+2]*0.3;
+      }
+      output.data[i+3]=255;
+    }
+
+    ctx.putImageData(output,0,0);
+
+    const percentage=(changed/(canvas.width*canvas.height)*100);
+    document.getElementById("difference").textContent=
+      "Changed pixels: "+percentage.toFixed(2)+"%";
+
+    status("Frame comparison complete. Confirm score manually.");
+  }catch(err){status(err.message)}
+};
+
+document.getElementById("confirm").onclick=()=>{
+  const input=document.getElementById("manualScore");
+  if(input.value.trim()==="")return status("Enter a score.");
+  const value=Number(input.value);
+
+  if(!Number.isInteger(value)||value<0||value>60)
+    return status("Enter an integer from 0 to 60.");
+
+  if(darts>=3)return status("Visit complete. Start a new visit.");
+
+  darts++;
+  visitScore+=value;
+  document.getElementById("score").textContent=value;
+  document.getElementById("visit").textContent=
+    `Visit: ${visitScore} points | ${darts}/3 darts`;
+  input.value="";
+  beforeFrame=null;
+  document.getElementById("difference").textContent=
+    "Capture a new baseline before the next dart.";
+  status("Dart confirmed locally. Not yet saved to Supabase.");
+};
+
+document.getElementById("reset").onclick=()=>{
+  darts=0;
+  visitScore=0;
+  beforeFrame=null;
+  document.getElementById("score").textContent="---";
+  document.getElementById("visit").textContent=
+    "Visit: 0 points | 0/3 darts";
+  document.getElementById("difference").textContent=
+    "Awaiting captures";
+  status("New visit ready");
+};
+
+window.addEventListener("pagehide",stopCamera);
+</script>
+</body>
+</html>
