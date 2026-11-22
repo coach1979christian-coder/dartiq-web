@@ -5,433 +5,135 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#050b16">
-<title>DARTIQ | VIP Founder Registration Closed</title>
+<title>DARTIQ | Thanksgiving VIP Founder Special</title>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <style>
-:root {
-  --bg:#050b16;
-  --blue:#00bbff;
-  --muted:#a6bdd5;
-  --border:#245078;
-}
-* { box-sizing:border-box; }
-body {
-  margin:0;
-  min-height:100vh;
-  background:
-    radial-gradient(circle at 50% 0%,#12365f,transparent 55%),
-    var(--bg);
-  color:white;
-  font-family:Arial,Helvetica,sans-serif;
-  padding:20px;
-}
-.container {
-  max-width:520px;
-  margin:25px auto;
-  background:rgba(9,19,36,.97);
-  border:1px solid var(--border);
-  border-radius:24px;
-  padding:32px 25px;
-  box-shadow:0 0 45px rgba(0,164,255,.14);
-}
-.logo {
-  text-align:center;
-  font-size:45px;
-  font-weight:900;
-  letter-spacing:4px;
-  text-shadow:0 0 22px rgba(0,190,255,.45);
-}
-.logo span { color:var(--blue); }
-.tagline {
-  text-align:center;
-  color:var(--muted);
-  font-size:11px;
-  letter-spacing:3px;
-  margin-top:8px;
-}
-.language {
-  display:flex;
-  justify-content:center;
-  gap:10px;
-  margin:28px 0;
-}
-.language button {
-  background:#11243a;
-  color:var(--muted);
-  border:1px solid var(--border);
-  border-radius:25px;
-  padding:10px 20px;
-  cursor:pointer;
-}
-.language button.active {
-  background:#0879e6;
-  color:white;
-  border-color:var(--blue);
-}
-h1 {
-  text-align:center;
-  font-size:30px;
-  line-height:1.25;
-  margin-top:35px;
-}
-.highlight { color:var(--blue); }
-.launch {
-  text-align:center;
-  color:var(--blue);
-  font-size:13px;
-  font-weight:bold;
-  letter-spacing:1px;
-  line-height:1.6;
-}
-.description {
-  color:var(--muted);
-  text-align:center;
-  font-size:15px;
-  line-height:1.8;
-  margin:22px 0;
-}
-.milestone {
-  background:linear-gradient(135deg,#102c4c,#0b182b);
-  border:1px solid #168de1;
-  border-radius:17px;
-  padding:30px 20px;
-  text-align:center;
-  margin:28px 0;
-  box-shadow:0 0 35px rgba(0,187,255,.13);
-}
-.milestone-number {
-  font-size:100px;
-  font-weight:900;
-  line-height:1;
-  color:var(--blue);
-  text-shadow:0 0 35px rgba(0,187,255,.5);
-}
-.milestone-label {
-  font-size:16px;
-  font-weight:800;
-  letter-spacing:2px;
-  margin-top:15px;
-}
-.closed {
-  display:inline-block;
-  margin-top:22px;
-  padding:12px 22px;
-  border:1px solid var(--blue);
-  border-radius:30px;
-  color:var(--blue);
-  font-size:13px;
-  font-weight:800;
-  letter-spacing:1px;
-  background:rgba(0,187,255,.08);
-}
-.referral {
-  display:none;
-  background:#102c4b;
-  border:1px solid #22699a;
-  padding:15px;
-  border-radius:12px;
-  text-align:center;
-  color:#93e1ff;
-  margin:20px 0;
-  font-size:13px;
-  line-height:1.7;
-}
-.referral strong {
-  color:white;
-  font-size:17px;
-  letter-spacing:1px;
-}
-.thankyou {
-  text-align:center;
-  color:#d4e5f7;
-  font-size:16px;
-  line-height:1.8;
-  margin:28px 0;
-}
-.thankyou strong { color:var(--blue); }
-.launch-box {
-  border:1px solid var(--border);
-  background:#102239;
-  border-radius:14px;
-  padding:22px;
-  text-align:center;
-  margin:25px 0;
-}
-.launch-box .date {
-  font-size:23px;
-  font-weight:900;
-  color:var(--blue);
-  margin-top:10px;
-}
-.notice {
-  background:#102239;
-  border-radius:10px;
-  padding:16px;
-  font-size:13px;
-  line-height:1.7;
-  color:#a9bfd8;
-  margin-top:20px;
-  text-align:center;
-}
-footer {
-  text-align:center;
-  margin-top:30px;
-  font-size:12px;
-  color:#748da9;
-}
-@media(max-width:420px) {
-  .container { padding:28px 18px; }
-  .logo { font-size:38px; }
-  h1 { font-size:27px; }
-  .milestone-number { font-size:82px; }
-}
+:root{--bg:#050b16;--blue:#00bbff;--muted:#a6bdd5;--border:#245078;--gold:#ffdb8b}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% 0%,#12365f,transparent 55%),var(--bg);color:#fff;font-family:Arial,Helvetica,sans-serif;padding:20px}
+.container{max-width:520px;margin:25px auto;background:rgba(9,19,36,.97);border:1px solid var(--border);border-radius:24px;padding:32px 25px;box-shadow:0 0 45px rgba(0,164,255,.14)}
+.logo{text-align:center;font-size:45px;font-weight:900;letter-spacing:4px;text-shadow:0 0 22px rgba(0,190,255,.45)}
+.logo span,.highlight{color:var(--blue)}
+.tagline{text-align:center;color:var(--muted);font-size:11px;letter-spacing:3px;margin-top:8px}
+.language{display:flex;justify-content:center;gap:10px;margin:28px 0}
+.language button{background:#11243a;color:var(--muted);border:1px solid var(--border);border-radius:25px;padding:10px 20px;cursor:pointer}
+.language button.active{background:#0879e6;color:#fff;border-color:var(--blue)}
+h1{text-align:center;font-size:30px;line-height:1.2}
+.eyebrow{text-align:center;color:var(--gold);font-weight:900;letter-spacing:2px;font-size:13px;margin:12px 0}
+.launch{text-align:center;color:var(--blue);font-size:13px;font-weight:800;letter-spacing:1px;margin-top:15px}
+.description{color:var(--muted);text-align:center;font-size:15px;line-height:1.7;margin:22px 0}
+.offer{background:linear-gradient(135deg,#102c4c,#0b182b);border:1px solid #168de1;border-radius:17px;padding:23px;text-align:center;margin:26px 0}
+.offer-title{color:var(--gold);letter-spacing:2px;font-weight:900;font-size:13px}
+.price{font-size:43px;font-weight:900;margin:14px 0 4px}
+.price small{font-size:15px;color:var(--muted);font-weight:normal}
+.trial{color:#8fe8ff;font-size:13px;margin-top:12px}
+.features{margin-top:22px;display:grid;gap:12px}
+.feature{display:flex;gap:11px;color:#d4e5f7;font-size:14px;line-height:1.45;text-align:left}
+.check{color:var(--blue);font-weight:bold}
+.referral{display:none;background:#102c4b;border:1px solid #22699a;padding:13px;border-radius:10px;text-align:center;color:#93e1ff;margin:20px 0;font-size:13px}
+h2{font-size:19px;margin:28px 0 18px;text-align:center}
+label{display:block;color:#b7cce2;font-size:13px;margin:15px 0 8px}
+input[type=text],input[type=email]{width:100%;padding:16px;border-radius:10px;border:1px solid var(--border);background:#102037;color:#fff;font-size:16px}
+input:focus{outline-color:var(--blue)}
+.consent{display:flex;align-items:flex-start;gap:10px;margin:22px 0;color:var(--muted);font-size:12px;line-height:1.7}
+.consent input{margin-top:4px;flex-shrink:0}
+.consent label{display:inline;margin:0}
+.consent a{color:#39caff;font-weight:bold;text-decoration:underline}
+.turnstile-wrapper{display:flex;justify-content:center;margin:22px 0;min-height:65px}
+.submit{width:100%;background:linear-gradient(90deg,#0879e6,#00b9f4);border:none;border-radius:11px;padding:17px;color:#fff;font-weight:800;font-size:14px;cursor:pointer;box-shadow:0 0 24px rgba(0,168,255,.25)}
+.submit:disabled{opacity:.55;cursor:not-allowed}
+.status{display:none;margin-top:15px;padding:14px;border-radius:10px;text-align:center;font-size:14px;line-height:1.5}
+.status.visible{display:block;background:#122b46;border:1px solid #2688c5;color:#b4eaff}
+.status.error{background:#361d2a;border-color:#a14d60;color:#ffced7}
+.notice{background:#102239;border-radius:10px;padding:14px;font-size:12px;line-height:1.7;color:#a9bfd8;margin-top:20px;text-align:center}
+.window-status{text-align:center;padding:24px 16px;margin:24px 0;border:1px solid #168de1;border-radius:14px;background:#102239;line-height:1.7}
+.hp{position:absolute;left:-9999px;opacity:0}
+footer{text-align:center;margin-top:30px;font-size:12px;color:#748da9}
+[hidden]{display:none!important}
+@media(max-width:420px){.container{padding:28px 18px}.logo{font-size:38px}h1{font-size:27px}.price{font-size:38px}}
 </style>
 </head>
-
 <body>
 <main class="container">
-
 <div class="logo">DART<span>IQ</span></div>
 <div class="tagline">AI DARTS COACH</div>
-
 <div class="language">
-  <button id="enBtn" type="button"
-    class="active" onclick="setLanguage('en')">
-    ENGLISH
-  </button>
-  <button id="nlBtn" type="button"
-    onclick="setLanguage('nl')">
-    NEDERLANDS
-  </button>
+  <button id="enBtn" class="active" type="button" onclick="setLanguage('en')">ENGLISH</button>
+  <button id="nlBtn" type="button" onclick="setLanguage('nl')">NEDERLANDS</button>
 </div>
-
-<h1 id="headline">
-  100 VIP SPOTS<br>
-  <span class="highlight">CLAIMED!</span>
-</h1>
-
-<div class="launch" id="launch">
-  DARTIQ VIP FOUNDER REGISTRATION
-</div>
-
-<section class="milestone">
-  <div class="milestone-number">100</div>
-  <div class="milestone-label" id="milestoneLabel">
-    VIP REGISTRATIONS
-  </div>
-  <div class="closed" id="closedLabel">
-    REGISTRATION CLOSED
+<div class="eyebrow" id="special">THANKSGIVING VIP SPECIAL • NOV 23–27</div>
+<h1 id="headline">VIP FOUNDER<br><span class="highlight">REGISTRATION REOPENS</span></h1>
+<div id="launch" class="launch">VIP EARLY ACCESS • DECEMBER 15, 2026</div>
+<p id="description" class="description">A limited-time opportunity to join the DARTIQ VIP Founders.</p>
+<section class="offer">
+  <div id="offerTitle" class="offer-title">VIP FOUNDER MEMBERSHIP</div>
+  <div class="price">€19.99 <small id="yearly">/ year</small></div>
+  <div id="trial" class="trial">VIP access December 15 · No payment collected now</div>
+  <div class="features">
+    <div class="feature"><span class="check">✓</span><span id="benefit1">AI-powered darts coaching</span></div>
+    <div class="feature"><span class="check">✓</span><span id="benefit2">Track your darts performance</span></div>
+    <div class="feature"><span class="check">✓</span><span id="benefit3">Personalized training recommendations</span></div>
+    <div class="feature"><span class="check">✓</span><span id="benefit4">Exclusive VIP Founder annual rate</span></div>
   </div>
 </section>
-
-<!-- Existing ambassador referral URL support -->
-<div class="referral" id="referralBox">
-  <div id="referralTitle">AMBASSADOR REFERRAL</div>
-  <strong id="referralCodeDisplay"></strong>
-  <div id="referralNotice">
-    This referral link remains recognized.
-    VIP Founder registration is closed.
-  </div>
-</div>
-
-<p class="description" id="description">
-  All 100 exclusive DARTIQ VIP Founder
-  registration spots have been claimed.
-  Registration is now officially closed.
-</p>
-
-<div class="thankyou" id="thankyou">
-  💙 <strong>THANK YOU!</strong><br>
-  To our first 100 supporters who believed
-  in the DARTIQ vision.
-  You're part of the beginning of something special.
-</div>
-
-<div class="launch-box">
-  <div id="launchTitle">🚀 VIP EARLY ACCESS</div>
-  <div class="date" id="launchDate">
-    DECEMBER 15, 2026
-  </div>
-</div>
-
-<div class="notice" id="notice">
-  Already registered?
-  Your existing VIP registration remains valid.
-  Please complete your email verification
-  if you haven't already.
-</div>
-
-<footer id="footer">
-  Built with players, for players.
-</footer>
-
+<div id="referralBox" class="referral"></div>
+<div id="windowStatus" class="window-status" hidden></div>
+<section id="registration" hidden>
+  <h2 id="formTitle">Reserve Your Thanksgiving VIP Access</h2>
+  <form id="vipForm">
+    <label id="nameLabel" for="fullName">FULL NAME</label>
+    <input id="fullName" type="text" maxlength="100" autocomplete="name" placeholder="Enter your full name" required>
+    <label id="emailLabel" for="email">EMAIL ADDRESS</label>
+    <input id="email" type="email" maxlength="254" autocomplete="email" placeholder="Enter your email address" required>
+    <div class="hp" aria-hidden="true"><label for="website">Website</label><input id="website" type="text" tabindex="-1" autocomplete="off"></div>
+    <div class="consent">
+      <input id="consent" type="checkbox" required>
+      <label id="consentText" for="consent">I acknowledge the <a href="privacy.html?lang=en" target="_blank" rel="noopener noreferrer">DARTIQ Privacy Policy</a>.</label>
+    </div>
+    <div class="turnstile-wrapper"><div class="cf-turnstile" data-sitekey="0x4AAAAAAFnBmZTL4Ma2oxeF" data-theme="dark" data-callback="turnstileSuccess" data-expired-callback="turnstileExpired" data-error-callback="turnstileExpired"></div></div>
+    <button id="submitBtn" class="submit" type="submit">CLAIM THANKSGIVING VIP ACCESS</button>
+  </form>
+</section>
+<div id="status" class="status" role="status" aria-live="polite"></div>
+<div id="notice" class="notice">No payment details are collected during registration. VIP membership is €19.99 per year.</div>
+<footer id="footer">Built with players, for players.</footer>
 </main>
-
 <script>
 "use strict";
-
-// VIP registration remains closed.
-// No registration form or submission request.
-// Existing ambassador referral URL parameters
-// are recognized and displayed.
-
-// Same referral format as the original
-// DARTIQ VIP Founder registration page.
-const params = new URLSearchParams(
-  window.location.search
-);
-
-function cleanCode(value) {
-  const code = String(value || "")
-    .trim()
-    .toUpperCase();
-
-  return /^[A-Z0-9_-]{1,40}$/.test(code)
-    ? code
-    : "DIRECT";
-}
-
-const referralCode = cleanCode(
-  params.get("ref")
-);
-
-const campaignCode = cleanCode(
-  params.get("campaign")
-);
-
-// Store only for this browser session.
-// This does NOT send data to Glide or Supabase.
-try {
-  if (referralCode !== "DIRECT") {
-    sessionStorage.setItem(
-      "dartiq_referral_code",
-      referralCode
-    );
-    sessionStorage.setItem(
-      "dartiq_campaign_code",
-      campaignCode
-    );
-  }
-} catch (error) {
-  console.warn(
-    "Referral session storage unavailable",
-    error
-  );
-}
-
-const translations = {
-  en: {
-    headline:
-      '100 VIP SPOTS<br>' +
-      '<span class="highlight">CLAIMED!</span>',
-    launch: "DARTIQ VIP FOUNDER REGISTRATION",
-    milestoneLabel: "VIP REGISTRATIONS",
-    closedLabel: "REGISTRATION CLOSED",
-    description:
-      "All 100 exclusive DARTIQ VIP Founder " +
-      "registration spots have been claimed. " +
-      "Registration is now officially closed.",
-    thankyou:
-      "💙 <strong>THANK YOU!</strong><br>" +
-      "To our first 100 supporters who believed " +
-      "in the DARTIQ vision.<br>" +
-      "You're part of the beginning of " +
-      "something special.",
-    launchTitle: "🚀 VIP EARLY ACCESS",
-    launchDate: "DECEMBER 15, 2026",
-    notice:
-      "Already registered? Your existing VIP " +
-      "registration remains valid. Please " +
-      "complete your email verification " +
-      "if you haven't already.",
-    footer: "Built with players, for players.",
-    referralTitle: "AMBASSADOR REFERRAL",
-    referralNotice:
-      "This referral link remains recognized. " +
-      "VIP Founder registration is closed."
-  },
-  nl: {
-    headline:
-      '100 VIP-PLAATSEN<br>' +
-      '<span class="highlight">INGENOMEN!</span>',
-    launch: "DARTIQ VIP FOUNDER REGISTRATIE",
-    milestoneLabel: "VIP-REGISTRATIES",
-    closedLabel: "INSCHRIJVINGEN GESLOTEN",
-    description:
-      "Alle 100 exclusieve DARTIQ VIP Founder-" +
-      "registratieplaatsen zijn ingenomen. " +
-      "De inschrijvingen zijn nu officieel gesloten.",
-    thankyou:
-      "💙 <strong>BEDANKT!</strong><br>" +
-      "Aan onze eerste 100 supporters die " +
-      "in de visie van DARTIQ geloven.<br>" +
-      "Jullie maken deel uit van het begin " +
-      "van iets bijzonders.",
-    launchTitle: "🚀 VIP EARLY ACCESS",
-    launchDate: "15 DECEMBER 2026",
-    notice:
-      "Al geregistreerd? Je bestaande VIP-" +
-      "registratie blijft geldig. " +
-      "Bevestig je e-mailadres als je " +
-      "dat nog niet hebt gedaan.",
-    footer: "Gemaakt met spelers, voor spelers.",
-    referralTitle: "AMBASSADEUR REFERENTIE",
-    referralNotice:
-      "Deze verwijzingslink wordt nog herkend. " +
-      "VIP Founder-inschrijvingen zijn gesloten."
-  }
+// Preserve the original working endpoint, Turnstile key, and request fields.
+const VIP_ENDPOINT = "https://usglrseckxwcdykrwuvh.supabase.co/functions/v1/dartiq-vip-register";
+// Belgium is on CET (UTC+1) for the entire promotion.
+const OPEN_AT = Date.parse("2026-11-23T00:00:00+01:00");
+const CLOSE_AT = Date.parse("2026-11-28T00:00:00+01:00");
+const params = new URLSearchParams(window.location.search);
+function cleanCode(value){const code=String(value||"").trim().toUpperCase();return /^[A-Z0-9_-]{1,40}$/.test(code)?code:"DIRECT";}
+const referralCode = cleanCode(params.get("ref"));
+const campaignCode = cleanCode(params.get("campaign") || "THANKSGIVING2026");
+let currentLanguage="en",turnstileToken="",submitting=false,completed=false;
+window.turnstileSuccess=function(token){turnstileToken=token;};
+window.turnstileExpired=function(){turnstileToken="";};
+try{if(referralCode!=="DIRECT"){sessionStorage.setItem("dartiq_referral_code",referralCode);sessionStorage.setItem("dartiq_campaign_code",campaignCode);}}catch(e){}
+const translations={
+ en:{special:"THANKSGIVING VIP SPECIAL • NOV 23–27",headline:'VIP FOUNDER<br><span class="highlight">REGISTRATION REOPENS</span>',launch:"VIP EARLY ACCESS • DECEMBER 15, 2026",description:"A special five-day reopening for future DARTIQ VIP Founders. Registration ends November 27.",offerTitle:"VIP FOUNDER MEMBERSHIP",yearly:"/ year",trial:"VIP access December 15 · No payment collected now",benefit1:"AI-powered darts coaching",benefit2:"Track your darts performance",benefit3:"Personalized training recommendations",benefit4:"Exclusive VIP Founder annual rate",formTitle:"Reserve Your Thanksgiving VIP Access",nameLabel:"FULL NAME",emailLabel:"EMAIL ADDRESS",namePlaceholder:"Enter your full name",emailPlaceholder:"Enter your email address",consent:'I acknowledge that I have read the <a href="privacy.html?lang=en" target="_blank" rel="noopener noreferrer">DARTIQ Privacy Policy</a> and understand how my registration details are processed.',button:"CLAIM THANKSGIVING VIP ACCESS",processing:"Processing registration...",verification:"Complete the security check first.",success:"Registration received! Your Thanksgiving VIP Founder request has been recorded. Check your email for verification.",error:"Registration failed. Please try again.",notice:"No payment details are collected during registration. VIP membership costs €19.99 per year and begins with VIP access on December 15, 2026.",referral:"Ambassador referral code: ",pre:"THANKSGIVING VIP REGISTRATION OPENS NOVEMBER 23, 2026",post:"THANKSGIVING VIP REGISTRATION CLOSED NOVEMBER 27, 2026",footer:"Built with players, for players."},
+ nl:{special:"THANKSGIVING VIP-ACTIE • 23–27 NOV",headline:'VIP FOUNDER<br><span class="highlight">INSCHRIJVINGEN HEROPEND</span>',launch:"VIP EARLY ACCESS • 15 DECEMBER 2026",description:"Vijf dagen lang opnieuw inschrijven als DARTIQ VIP Founder. De inschrijvingen sluiten op 27 november.",offerTitle:"VIP FOUNDER LIDMAATSCHAP",yearly:"/ jaar",trial:"VIP-toegang vanaf 15 december · Geen betaling nu",benefit1:"AI-gestuurde dartscoaching",benefit2:"Volg je dartprestaties",benefit3:"Persoonlijke trainingsaanbevelingen",benefit4:"Exclusief jaarlijks VIP Founder-tarief",formTitle:"Reserveer je Thanksgiving VIP-toegang",nameLabel:"VOLLEDIGE NAAM",emailLabel:"E-MAILADRES",namePlaceholder:"Vul je volledige naam in",emailPlaceholder:"Vul je e-mailadres in",consent:'Ik bevestig dat ik de <a href="privacy.html?lang=nl" target="_blank" rel="noopener noreferrer">DARTIQ Privacyverklaring</a> heb gelezen en begrijp hoe mijn registratiegegevens worden verwerkt.',button:"REGISTREER VOOR THANKSGIVING VIP",processing:"Registratie verwerken...",verification:"Voltooi eerst de beveiligingscontrole.",success:"Registratie ontvangen! Je Thanksgiving VIP Founder-aanvraag is opgeslagen. Controleer je e-mail voor verificatie.",error:"Registratie mislukt. Probeer opnieuw.",notice:"Bij deze registratie worden geen betaalgegevens verzameld. Het VIP-lidmaatschap kost €19,99 per jaar en VIP-toegang start op 15 december 2026.",referral:"Ambassadeurcode: ",pre:"THANKSGIVING VIP-REGISTRATIE OPENT OP 23 NOVEMBER 2026",post:"THANKSGIVING VIP-REGISTRATIE GESLOTEN OP 27 NOVEMBER 2026",footer:"Gemaakt met spelers, voor spelers."}
 };
-
-function setLanguage(lang) {
-  const selected =
-    translations[lang] ? lang : "en";
-
-  const t = translations[selected];
-
-  document.documentElement.lang = selected;
-
-  document.getElementById("headline").innerHTML =
-    t.headline;
-
-  document.getElementById("thankyou").innerHTML =
-    t.thankyou;
-
-  [
-    "launch",
-    "milestoneLabel",
-    "closedLabel",
-    "description",
-    "launchTitle",
-    "launchDate",
-    "notice",
-    "footer",
-    "referralTitle",
-    "referralNotice"
-  ].forEach(id => {
-    document.getElementById(id).textContent = t[id];
-  });
-
-  document.getElementById("enBtn")
-    .classList.toggle("active", selected === "en");
-
-  document.getElementById("nlBtn")
-    .classList.toggle("active", selected === "nl");
-
-  const referralBox =
-    document.getElementById("referralBox");
-
-  if (referralCode !== "DIRECT") {
-    referralBox.style.display = "block";
-
-    document.getElementById(
-      "referralCodeDisplay"
-    ).textContent = referralCode;
-  } else {
-    referralBox.style.display = "none";
-  }
-}
-
-setLanguage("en");
+function campaignOpen(){const now=Date.now();return now>=OPEN_AT&&now<CLOSE_AT;}
+function refreshWindow(){const t=translations[currentLanguage],now=Date.now(),open=campaignOpen();const registration=document.getElementById("registration"),info=document.getElementById("windowStatus");registration.hidden=!open||completed;info.hidden=open||completed;if(!info.hidden)info.textContent=now<OPEN_AT?t.pre:t.post;}
+function setLanguage(lang){currentLanguage=translations[lang]?lang:"en";document.documentElement.lang=currentLanguage;const t=translations[currentLanguage];document.getElementById("headline").innerHTML=t.headline;["special","launch","description","offerTitle","yearly","trial","benefit1","benefit2","benefit3","benefit4","formTitle","nameLabel","emailLabel","notice","footer"].forEach(id=>document.getElementById(id).textContent=t[id]);document.getElementById("consentText").innerHTML=t.consent;document.getElementById("fullName").placeholder=t.namePlaceholder;document.getElementById("email").placeholder=t.emailPlaceholder;document.getElementById("submitBtn").textContent=t.button;document.getElementById("enBtn").classList.toggle("active",currentLanguage==="en");document.getElementById("nlBtn").classList.toggle("active",currentLanguage==="nl");const box=document.getElementById("referralBox");box.style.display=referralCode==="DIRECT"?"none":"block";box.textContent=t.referral+referralCode;refreshWindow();}
+document.getElementById("vipForm").addEventListener("submit",async function(event){
+ event.preventDefault();if(submitting||completed)return;const status=document.getElementById("status"),button=document.getElementById("submitBtn"),t=translations[currentLanguage];
+ if(!campaignOpen()){refreshWindow();return;}
+ if(!turnstileToken){status.className="status visible error";status.textContent=t.verification;return;}
+ submitting=true;button.disabled=true;status.className="status visible";status.textContent=t.processing;
+ try{
+  const response=await fetch(VIP_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({full_name:document.getElementById("fullName").value.trim(),email:document.getElementById("email").value.trim(),referral_code:referralCode,campaign:campaignCode,language:currentLanguage.toUpperCase(),turnstile_token:turnstileToken,website:document.getElementById("website").value})});
+  if(!response.ok)throw new Error("Registration request failed: "+response.status);
+  const result=await response.json();if(result.success!==true)throw new Error("Registration not confirmed");
+  completed=true;status.className="status visible";status.textContent=t.success;document.getElementById("vipForm").reset();refreshWindow();
+ }catch(error){console.error("DARTIQ VIP registration:",error);status.className="status visible error";status.textContent=t.error;}
+ finally{submitting=false;turnstileToken="";if(window.turnstile)window.turnstile.reset();if(!completed)button.disabled=false;}
+});
+setLanguage("en");setInterval(refreshWindow,30000);
 </script>
-
 </body>
 </html>
