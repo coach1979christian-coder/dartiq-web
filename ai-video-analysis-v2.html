@@ -1,262 +1,1801 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#050b16">
+<title>DARTIQ CORE Vision V16</title>
 <style>
-#recordSettings,
-#manualPanel,
-#comparisonPanel,
-#resultsPanel,
-#throwSelect,
-.timeline,
-.speeds,
-#prevFrame,
-#nextFrame,
-#toggleSkeleton,
-#phaseTitle,
-#phaseDescription,
-#visualPanel .grid,
-#visualPanel .notice,
-#visualPanel .time-row {
-  display:none!important;
+:root{
+  --bg:#050b16;
+  --panel:#0b1929;
+  --blue:#27b8ff;
+  --green:#45e6a0;
+  --gold:#ffce55;
+  --muted:#94abc2;
+  --border:#245078;
 }
-
-.controls {
-  grid-template-columns:1fr;
+*{box-sizing:border-box}
+body{
+  margin:0;
+  padding:14px;
+  background:var(--bg);
+  color:white;
+  font-family:Arial,sans-serif;
 }
-
-#coaching {
-  font-size:15px;
-  line-height:1.7;
+.app{max-width:760px;margin:auto}
+header{text-align:center;padding:24px 0}
+.brand{
+  color:var(--blue);
+  font-size:34px;
+  font-weight:900;
+  letter-spacing:5px;
+  text-shadow:0 0 24px #27b8ff88;
 }
-
-#coaching h3 {
-  color:#27b8ff;
-  font-size:12px;
-  letter-spacing:1.5px;
-  margin:18px 0 8px;
+.subtitle{
+  margin-top:8px;
+  color:var(--muted);
+  font-size:11px;
+  letter-spacing:3px;
 }
-
-#coaching p {
-  color:#ffffff;
+.panel{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:14px;
+  margin-bottom:14px;
+}
+h2{
+  color:var(--blue);
+  font-size:18px;
   margin:0 0 14px;
 }
-
-.v16-card {
+.stage{
+  position:relative;
+  background:black;
+  border-radius:12px;
+  overflow:hidden;
+}
+video{
+  display:block;
+  width:100%;
+  height:auto;
+}
+canvas{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+}
+.badge{
+  position:absolute;
+  top:10px;
+  left:10px;
+  background:#050b16dd;
+  border:1px solid var(--blue);
+  color:var(--blue);
+  padding:7px 10px;
+  border-radius:7px;
+  font-size:10px;
+  font-weight:bold;
+}
+.timer{
+  position:absolute;
+  top:10px;
+  right:10px;
+  background:#050b16dd;
+  padding:7px 10px;
+  border-radius:7px;
+  font-size:12px;
+}
+.countdown{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#0009;
+  font-size:100px;
+  font-weight:900;
+  text-shadow:0 0 35px var(--blue);
+}
+button{
+  width:100%;
+  border:0;
+  border-radius:11px;
+  padding:16px 10px;
+  margin-top:10px;
+  background:linear-gradient(110deg,#087ac1,#27b8ff);
+  color:white;
+  font-weight:bold;
+  font-size:13px;
+  cursor:pointer;
+}
+button:disabled{opacity:.35}
+.secondary{
+  background:#10243a;
+  border:1px solid var(--border);
+}
+.danger{
+  background:linear-gradient(110deg,#a81936,#ff5268);
+}
+.hidden{display:none!important}
+.status{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.6;
+  text-align:center;
+  margin-top:12px;
+}
+.track{
+  height:5px;
+  background:#20364a;
+  border-radius:8px;
+  overflow:hidden;
+  margin-top:14px;
+}
+#progress{
+  height:100%;
+  width:0;
+  background:var(--blue);
+}
+.card{
   background:#071321;
-  border:1px solid #245078;
+  border:1px solid var(--border);
   border-radius:14px;
   padding:16px;
   margin-top:12px;
 }
-
-.v16-issue {
+.label{
+  color:var(--blue);
+  font-size:10px;
+  letter-spacing:1.5px;
+  font-weight:bold;
+  margin-bottom:10px;
+}
+.issue{
   font-size:22px;
   font-weight:900;
-  color:#ffce55;
+  color:var(--gold);
 }
-
-.v16-note {
-  color:#94abc2;
+.value{
+  font-size:15px;
+  line-height:1.7;
+}
+.note{
+  color:var(--muted);
   font-size:11px;
   line-height:1.6;
+  margin-top:14px;
+}
+input[type=range]{
+  width:100%;
+  accent-color:var(--blue);
+  margin-top:16px;
+}
+.footer{
+  text-align:center;
+  color:var(--muted);
+  font-size:10px;
+  padding:18px 0;
 }
 </style>
+</head>
+<body>
 
-<script>
-window.addEventListener("DOMContentLoaded",()=>{
+<div class="app">
 
-  const $=id=>document.getElementById(id);
+<header>
+  <div class="brand">DARTIQ</div>
+  <div class="subtitle">CORE VISION V16</div>
+</header>
 
-  document.title="DARTIQ CORE Vision V16";
+<section class="panel">
 
-  document.querySelector(".subtitle").textContent=
-    "CORE VISION V16";
+<h2>AI Throw Analysis</h2>
 
-  document.querySelector(".footer").textContent=
-    "DARTIQ CORE VISION V16 · EXPERIMENTAL PROTOTYPE";
+<div class="stage">
+  <video id="camera" autoplay muted playsinline></video>
+  <video id="review" muted playsinline class="hidden"></video>
+  <canvas id="overlay"></canvas>
+  <div id="badge" class="badge">INITIALIZING</div>
+  <div id="timer" class="timer">0 s</div>
+  <div id="countdown" class="countdown hidden">5</div>
+</div>
 
-  $("armSelect").value="AUTO";
-  $("targetSelect").value="6";
+<button id="enableCamera" class="hidden">
+  ENABLE CAMERA
+</button>
 
-  $("visualPanel").querySelector("h2").textContent=
-    "Watch Your Throw";
+<button id="switchCamera" class="secondary" disabled>
+  SWITCH CAMERA
+</button>
 
-  $("coachPanel").querySelector("h2").textContent=
-    "Your AI Coaching";
+<button id="recordButton" class="danger" disabled>
+  ● RECORD MY THROW
+</button>
 
-  $("playButton").textContent=
-    "▶ PLAY SLOW MOTION";
+<button id="stopButton" class="danger hidden">
+  ■ STOP RECORDING
+</button>
 
-  $("recordButton").textContent=
-    "● RECORD MY THROW";
+<button id="analyzeButton" class="hidden">
+  GET AI THROW ANALYSIS
+</button>
 
-  $("analyzeButton").textContent=
-    "GET AI THROW ANALYSIS";
+<div id="playback" class="hidden">
+  <input id="scrubber" type="range" min="0" max="1" step="0.01" value="0">
+  <button id="playButton">▶ PLAY SLOW MOTION</button>
+  <button id="releaseButton" class="secondary">
+    VIEW ESTIMATED RELEASE
+  </button>
+</div>
 
-  const review=$("review");
+<div class="track">
+  <div id="progress"></div>
+</div>
 
-  review.addEventListener("pause",()=>{
-    $("playButton").textContent=
-      "▶ PLAY SLOW MOTION";
-  });
+<div id="status" class="status">
+  Loading CORE Vision...
+</div>
 
-  review.addEventListener("play",()=>{
-    $("playButton").textContent=
-      "Ⅱ PAUSE";
-  });
+</section>
 
-  const readMetric=label=>{
+<section id="results" class="panel hidden">
 
-    const metrics=[
-      ...$("summaryGrid").querySelectorAll(".metric")
-    ];
+<h2>Your AI Coaching</h2>
 
-    const metric=metrics.find(m=>
-      m.querySelector(".metric-label")
-        ?.textContent.trim()===label
-    );
+<div class="card">
+  <div class="label">MAIN ISSUE</div>
+  <div id="mainIssue" class="issue"></div>
+</div>
 
-    return parseFloat(
-      metric?.querySelector(".metric-value")
-        ?.textContent
-    );
-  };
+<div class="card">
+  <div class="label">AI COACH ADVICE</div>
+  <div id="coachAdvice" class="value"></div>
+</div>
 
-  function renderV16(){
+<div class="card">
+  <div class="label">RECOMMENDED TRAINING</div>
+  <div id="drill" class="value"></div>
+</div>
 
-    const samples=readMetric("Samples / Second");
-    const coverage=readMetric("Pose Coverage");
-    const throws=readMetric("Automatic Candidates");
-    const tempo=readMetric("Tempo Variation");
-    const head=readMetric("Head Movement / Torso");
+<div id="qualityNote" class="note"></div>
 
-    let issue="No clear weakness identified";
-    let advice=
-      "Maintain your natural throwing action and focus on repeating the same movement.";
+</section>
 
-    let drill="Consistent Throw Routine";
+<section id="restartPanel" class="panel hidden">
+  <button id="restartButton">START NEW ANALYSIS</button>
+</section>
 
-    let note=
-      "Release timing is estimated from body movement. Results are experimental.";
+<div class="footer">
+  DARTIQ CORE VISION V16 · EXPERIMENTAL PROTOTYPE
+</div>
 
-    const reliable=
-      Number.isFinite(samples)&&
-      samples>=15&&
-      coverage>=85&&
-      throws>=3&&
-      throws<=6;
+</div>
 
-    if(!reliable){
+<script type="module">
 
-      issue="More recording data needed";
+import {
+  FilesetResolver,
+  PoseLandmarker
+} from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22-rc.20250304/vision_bundle.mjs";
 
-      advice=
-        "Position your smartphone side-on. Keep your head, shoulder, elbow and throwing hand visible. Record six natural throws in good lighting.";
+const $=id=>document.getElementById(id);
 
-      drill="Repeat Throw Analysis";
+const camera=$("camera");
+const review=$("review");
+const canvas=$("overlay");
+const ctx=canvas.getContext("2d");
 
-      note=
-        "Tracking quality was insufficient to identify a reliable weakness.";
+const TARGET_THROWS=6;
+const MAX_RECORDING_MS=60000;
 
-    }else if(
-      Number.isFinite(head)&&head>12
-    ){
+let poseModel=null;
+let stream=null;
+let recorder=null;
+let frames=[];
+let chunks=[];
+let analysis=null;
+let recording=false;
+let stopping=false;
+let counting=false;
+let inReview=false;
+let recordStart=0;
+let recordDuration=0;
+let lastInference=0;
+let lastVideoTime=-1;
+let lastDetectionCheck=0;
+let facingMode="environment";
+let recordingURL=null;
+let recordingWidth=960;
+let recordingHeight=540;
+let selectedRelease=0;
+let stopTimeout=null;
 
-      issue="Possible head movement";
+const params=new URLSearchParams(location.search);
 
-      advice=
-        "Keep your head naturally steady throughout the delivery. Avoid forcing your body into a rigid position.";
+const playerName=
+  params.get("playername")||
+  params.get("playerName")||
+  params.get("player")||
+  "Player";
 
-      drill="Body Stability Training";
+const playerEmail=params.get("email")||"";
 
-    }else if(
-      Number.isFinite(tempo)&&tempo>30
-    ){
+const sessionId=
+  params.get("sessionID")||
+  params.get("sessionid")||
+  params.get("session")||
+  "";
 
-      issue="Possible delivery rhythm variation";
+const mean=a=>a.length
+  ?a.reduce((s,v)=>s+v,0)/a.length
+  :0;
 
-      advice=
-        "Use a comfortable, repeatable rhythm from preparation through delivery. Do not deliberately accelerate or slow your arm.";
+const clamp=(x,min,max)=>
+  Math.max(min,Math.min(max,x));
 
-      drill="Throw Rhythm Training";
+function median(a){
+  if(!a.length)return 0;
+  const s=[...a].sort((x,y)=>x-y);
+  const m=Math.floor(s.length/2);
+  return s.length%2?s[m]:(s[m-1]+s[m])/2;
+}
 
-    }
+function show(id){
+  $(id).classList.remove("hidden");
+}
 
-    $("coaching").innerHTML=`
-      <div class="v16-card">
-        <h3>MAIN ISSUE</h3>
-        <div class="v16-issue">${issue}</div>
-      </div>
+function hide(id){
+  $(id).classList.add("hidden");
+}
 
-      <div class="v16-card">
-        <h3>AI COACH ADVICE</h3>
-        <p>${advice}</p>
-      </div>
+function status(text){
+  $("status").textContent=text;
+}
 
-      <div class="v16-card">
-        <h3>RECOMMENDED TRAINING</h3>
-        <p>${drill}</p>
-      </div>
+function badge(text){
+  $("badge").textContent=text;
+}
 
-      <div class="v16-card v16-note">
-        ${note}
-      </div>
-    `;
+function vis(p){
+  return p?.visibility??0;
+}
 
-    $("status").textContent=reliable
-      ?"Your throw analysis is ready."
-      :"Recording reviewed. Improve tracking for coaching feedback.";
+function clone(points){
+  return points?.map(p=>({
+    x:p.x,
+    y:p.y,
+    z:p.z,
+    visibility:p.visibility
+  }))||null;
+}
 
-    $("badge").textContent=reliable
-      ?"ANALYSIS COMPLETE"
-      :"RECORDING REVIEWED";
+function distance(a,b){
+  if(!a||!b)return NaN;
 
-    $("throwSelect").value="-1";
+  return Math.hypot(
+    (a.x-b.x)*recordingWidth/recordingHeight,
+    a.y-b.y
+  );
+}
 
-    $("throwSelect").dispatchEvent(
-      new Event("change")
-    );
+function angle(a,b,c){
 
-    review.playbackRate=.5;
+  if(!a||!b||!c)return NaN;
+
+  const ratio=recordingWidth/recordingHeight;
+
+  const ux=(a.x-b.x)*ratio;
+  const uy=a.y-b.y;
+  const vx=(c.x-b.x)*ratio;
+  const vy=c.y-b.y;
+
+  const denominator=
+    Math.hypot(ux,uy)*Math.hypot(vx,vy);
+
+  if(denominator<.000001)return NaN;
+
+  return Math.acos(
+    clamp((ux*vx+uy*vy)/denominator,-1,1)
+  )*180/Math.PI;
+}
+
+function resizeCanvas(video){
+
+  if(!video.videoWidth||!video.videoHeight)return;
+
+  if(canvas.width!==video.videoWidth)
+    canvas.width=video.videoWidth;
+
+  if(canvas.height!==video.videoHeight)
+    canvas.height=video.videoHeight;
+}
+
+function clearOverlay(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+}
+
+function line(a,b,color,width){
+
+  if(!a||!b)return;
+
+  ctx.beginPath();
+  ctx.moveTo(a.x*canvas.width,a.y*canvas.height);
+  ctx.lineTo(b.x*canvas.width,b.y*canvas.height);
+  ctx.strokeStyle=color;
+  ctx.lineWidth=width;
+  ctx.lineCap="round";
+  ctx.stroke();
+}
+
+function point(p,color,radius){
+
+  if(!p)return;
+
+  ctx.beginPath();
+  ctx.arc(
+    p.x*canvas.width,
+    p.y*canvas.height,
+    radius,0,Math.PI*2
+  );
+  ctx.fillStyle=color;
+  ctx.fill();
+}
+
+function drawSkeleton(frame,side=null,release=false){
+
+  clearOverlay();
+
+  if(!frame?.pose)return;
+
+  const p=frame.pose;
+  const width=Math.max(2,canvas.width/260);
+  const radius=Math.max(3,canvas.width/180);
+
+  const connections=[
+    [11,12],[11,13],[13,15],
+    [12,14],[14,16],[11,23],
+    [12,24],[23,24]
+  ];
+
+  ctx.shadowColor="#27b8ff";
+  ctx.shadowBlur=6;
+
+  for(const [a,b] of connections){
+    if(vis(p[a])>.4&&vis(p[b])>.4)
+      line(p[a],p[b],"#27b8ff",width);
   }
 
-  const observer=new MutationObserver(()=>{
+  for(const i of [0,11,12,13,14,15,16,23,24]){
+    if(vis(p[i])>.4)
+      point(p[i],"#ffffff",radius);
+  }
+
+  if(side){
+
+    const ids=side==="RIGHT"
+      ?[12,14,16]
+      :[11,13,15];
+
+    for(let i=0;i<2;i++){
+      if(vis(p[ids[i]])>.4&&vis(p[ids[i+1]])>.4)
+        line(
+          p[ids[i]],
+          p[ids[i+1]],
+          "#45e6a0",
+          width+1
+        );
+    }
+
+    if(release&&vis(p[ids[2]])>.5){
+
+      const wrist=p[ids[2]];
+
+      const x=wrist.x*canvas.width;
+      const y=wrist.y*canvas.height;
+
+      ctx.shadowColor="#ffce55";
+      ctx.shadowBlur=12;
+      ctx.strokeStyle="#ffce55";
+      ctx.lineWidth=3;
+
+      ctx.beginPath();
+      ctx.arc(x,y,radius*3,0,Math.PI*2);
+      ctx.stroke();
+
+      ctx.shadowBlur=0;
+      ctx.fillStyle="#ffce55";
+      ctx.font=`bold ${Math.max(12,canvas.width/48)}px Arial`;
+
+      const label="ESTIMATED RELEASE";
+      const textWidth=ctx.measureText(label).width;
+
+      ctx.fillText(
+        label,
+        clamp(x-textWidth/2,5,Math.max(5,canvas.width-textWidth-5)),
+        Math.max(24,y-radius*4)
+      );
+    }
+  }
+
+  ctx.shadowBlur=0;
+}
+
+async function initialize(){
+
+  try{
+
+    const vision=await FilesetResolver.forVisionTasks(
+      "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22-rc.20250304/wasm"
+    );
+
+    const options={
+      baseOptions:{
+        modelAssetPath:
+          "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/latest/pose_landmarker_lite.task",
+        delegate:"GPU"
+      },
+      runningMode:"VIDEO",
+      numPoses:1,
+      minPoseDetectionConfidence:.5,
+      minPosePresenceConfidence:.5,
+      minTrackingConfidence:.5
+    };
+
+    try{
+      poseModel=await PoseLandmarker.createFromOptions(
+        vision,options
+      );
+    }catch(error){
+      options.baseOptions.delegate="CPU";
+
+      poseModel=await PoseLandmarker.createFromOptions(
+        vision,options
+      );
+    }
+
+    await startCamera();
+
+    requestAnimationFrame(liveLoop);
+
+  }catch(error){
+
+    badge("ENGINE ERROR");
+    status("Tracking engine unavailable. Reload this page.");
+    console.error(error);
+  }
+}
+
+async function startCamera(){
+
+  try{
+
+    if(!navigator.mediaDevices?.getUserMedia)
+      throw new Error("Camera access requires HTTPS.");
+
+    if(stream)
+      stream.getTracks().forEach(t=>t.stop());
+
+    stream=await navigator.mediaDevices.getUserMedia({
+      audio:false,
+      video:{
+        facingMode:{exact:facingMode},
+        width:{ideal:960},
+        height:{ideal:540},
+        frameRate:{ideal:30}
+      }
+    });
+
+    camera.srcObject=stream;
+
+    await camera.play();
+
+    inReview=false;
+    lastVideoTime=-1;
+
+    recordingWidth=camera.videoWidth||960;
+    recordingHeight=camera.videoHeight||540;
+
+    resizeCanvas(camera);
+
+    show("camera");
+    hide("review");
+    hide("enableCamera");
+
+    $("recordButton").disabled=false;
+    $("switchCamera").disabled=false;
+
+    badge("READY");
+
+    status(
+      "Position your smartphone side-on. Keep your head, shoulder, elbow and throwing hand visible."
+    );
+
+  }catch(error){
+
+    if(stream)
+      stream.getTracks().forEach(t=>t.stop());
+
+    stream=null;
+
+    $("recordButton").disabled=true;
+    $("switchCamera").disabled=false;
+
+    show("enableCamera");
+
+    badge("CAMERA REQUIRED");
+
+    status(
+      "Allow smartphone camera access or switch cameras."
+    );
+
+    console.error(error);
+  }
+}
+
+function sampleRate(source){
+
+  if(source.length<2)return 0;
+
+  const duration=
+    source.at(-1).time-source[0].time;
+
+  return duration>0
+    ?(source.length-1)/duration
+    :0;
+}
+
+function adaptiveGap(source){
+
+  const gaps=[];
+
+  for(let i=1;i<source.length;i++){
+
+    const dt=source[i].time-source[i-1].time;
+
+    if(dt>0)gaps.push(dt);
+  }
+
+  return clamp(median(gaps)*2.8,.12,.45);
+}
+
+function getSideData(frame,side){
+
+  if(!frame?.pose)return null;
+
+  const p=frame.pose;
+
+  const ids=side==="RIGHT"
+    ?[12,14,16,24]
+    :[11,13,15,23];
+
+  const shoulder=p[ids[0]];
+  const elbow=p[ids[1]];
+  const wrist=p[ids[2]];
+  const hip=p[ids[3]];
+
+  const quality=mean([
+    vis(shoulder),
+    vis(elbow),
+    vis(wrist)
+  ]);
+
+  if(
+    quality<.55||
+    vis(shoulder)<.4||
+    vis(elbow)<.4||
+    vis(wrist)<.4
+  )return null;
+
+  let torso=vis(hip)>.4
+    ?distance(shoulder,hip)
+    :NaN;
+
+  let torsoReliable=true;
+
+  if(!Number.isFinite(torso)||torso<.04){
+
+    torso=distance(shoulder,elbow)*1.7;
+    torsoReliable=false;
+  }
+
+  if(!Number.isFinite(torso)||torso<.04)
+    return null;
+
+  const elbowAngle=angle(shoulder,elbow,wrist);
+
+  if(!Number.isFinite(elbowAngle))
+    return null;
+
+  return{
+    time:frame.time,
+    frameIndex:frame.index,
+    shoulder,
+    elbow,
+    wrist,
+    head:vis(p[0])>.5?p[0]:null,
+    torso,
+    torsoReliable,
+    quality,
+    elbowAngle,
+    speed:null,
+    relativeSpeed:null,
+    angularVelocity:null
+  };
+}
+
+function buildSeries(source,side){
+
+  const series=source
+    .map(f=>getSideData(f,side))
+    .filter(Boolean);
+
+  const maxGap=adaptiveGap(source);
+
+  for(let i=1;i<series.length;i++){
+
+    const a=series[i-1];
+    const b=series[i];
+
+    const dt=b.time-a.time;
+
+    if(dt<=0||dt>maxGap)continue;
+
+    const scale=(a.torso+b.torso)/2;
+
+    b.speed=distance(a.wrist,b.wrist)/scale/dt;
+
+    const ar={
+      x:a.wrist.x-a.shoulder.x,
+      y:a.wrist.y-a.shoulder.y
+    };
+
+    const br={
+      x:b.wrist.x-b.shoulder.x,
+      y:b.wrist.y-b.shoulder.y
+    };
+
+    b.relativeSpeed=distance(ar,br)/scale/dt;
+
+    b.angularVelocity=
+      (b.elbowAngle-a.elbowAngle)/dt;
+  }
+
+  return series;
+}
+
+function createCandidate(series,peak,side,source,evidence){
+
+  const before=series.filter(
+    p=>p.time>=peak.time-1.3&&p.time<peak.time
+  );
+
+  const after=series.filter(
+    p=>p.time>peak.time&&p.time<=peak.time+.8
+  );
+
+  let draw=null;
+
+  if(before.length){
+
+    const p=before.reduce(
+      (best,x)=>x.elbowAngle<best.elbowAngle?x:best,
+      before[0]
+    );
+
+    if(peak.elbowAngle-p.elbowAngle>=7)
+      draw=p;
+  }
+
+  let follow=null;
+
+  if(after.length){
+
+    follow=after.reduce(
+      (best,x)=>x.elbowAngle>best.elbowAngle?x:best,
+      after[0]
+    );
+  }
+
+  const startTime=draw?.time??Math.max(0,peak.time-.5);
+
+  const endTime=follow?.time??peak.time+.5;
+
+  const interval=series.filter(
+    p=>p.time>=startTime&&p.time<=endTime
+  );
+
+  const localFrames=source.filter(
+    f=>f.time>=startTime&&f.time<=endTime
+  );
+
+  const coverage=localFrames.length
+    ?interval.length/localFrames.length*100
+    :0;
+
+  const stableScale=interval.filter(
+    p=>p.torsoReliable
+  );
+
+  const heads=stableScale.filter(p=>p.head);
+
+  const base=heads[0];
+
+  const headMovement=heads.length>=4
+    ?Math.max(
+      ...heads.map(p=>distance(p.head,base.head))
+    )/base.torso*100
+    :null;
+
+  const elbowBase=stableScale[0];
+
+  const elbowMovement=stableScale.length>=4
+    ?Math.max(
+      ...stableScale.map(p=>
+        distance(p.elbow,elbowBase.elbow)
+      )
+    )/elbowBase.torso*100
+    :null;
+
+  return{
+    side,
+    startTime,
+    endTime,
+    releaseTime:peak.time,
+    frameIndex:peak.frameIndex,
+    elbowAngle:peak.elbowAngle,
+    deliveryTempoMs:draw
+      ?(peak.time-draw.time)*1000
+      :null,
+    headMovement,
+    elbowMovement,
+    poseCoverage:coverage,
+    quality:peak.quality,
+    evidence,
+    directDartReleaseObserved:false
+  };
+}
+
+function detectThrows(source,side){
+
+  const series=buildSeries(source,side);
+
+  if(series.length<8)
+    return{series,throws:[]};
+
+  const fps=sampleRate(source);
+  const gap=adaptiveGap(source);
+
+  const speeds=series
+    .map(p=>p.relativeSpeed)
+    .filter(Number.isFinite);
+
+  const baseline=median(speeds);
+
+  const noise=median(
+    speeds.map(v=>Math.abs(v-baseline))
+  );
+
+  const threshold=clamp(
+    baseline+noise*2.5,
+    .45,
+    1.5
+  );
+
+  const candidates=[];
+
+  for(let i=1;i<series.length;i++){
+
+    const p=series[i];
 
     if(
-      $("coachPanel").classList.contains("hidden")
-    )return;
+      !Number.isFinite(p.relativeSpeed)||
+      p.relativeSpeed<threshold||
+      p.quality<.6
+    )continue;
 
-    if(
-      !$("summaryGrid").querySelector(".metric")
-    )return;
+    const local=series.filter(
+      x=>Math.abs(x.time-p.time)<=Math.max(.12,gap*.7)
+      &&Number.isFinite(x.relativeSpeed)
+    );
 
-    renderV16();
+    if(local.some(x=>x.relativeSpeed>p.relativeSpeed))
+      continue;
 
-  });
+    const before=series.filter(
+      x=>x.time>=p.time-.9&&x.time<p.time
+    );
 
-  observer.observe($("summaryGrid"),{
-    childList:true,
-    subtree:true
-  });
+    const after=series.filter(
+      x=>x.time>p.time&&x.time<=p.time+.55
+    );
 
-  $("analyzeButton").addEventListener("click",()=>{
+    if(before.length<2||!after.length)
+      continue;
 
-    setTimeout(()=>{
+    const low=Math.min(
+      ...before.map(x=>x.elbowAngle)
+    );
+
+    const high=Math.max(
+      p.elbowAngle,
+      ...after.map(x=>x.elbowAngle)
+    );
+
+    const extension=high-low;
+
+    const angular=Math.max(
+      0,
+      ...[...before,p,...after]
+        .map(x=>x.angularVelocity)
+        .filter(Number.isFinite)
+    );
+
+    if(extension<12||angular<20)
+      continue;
+
+    const relativeMovement=
+      p.relativeSpeed/Math.max(.01,p.speed||.01);
+
+    if(relativeMovement<.35)
+      continue;
+
+    const score=
+      extension+
+      p.relativeSpeed*12+
+      angular*.08+
+      p.quality*10;
+
+    candidates.push({
+      peak:p,
+      score,
+      evidence:{
+        extension,
+        angularVelocity:angular,
+        relativeSpeed:p.relativeSpeed,
+        sampleRate:fps
+      }
+    });
+  }
+
+  candidates.sort((a,b)=>b.score-a.score);
+
+  const selected=[];
+
+  for(const candidate of candidates){
+
+    if(!selected.some(
+      x=>Math.abs(x.peak.time-candidate.peak.time)<.75
+    )){
+      selected.push(candidate);
+    }
+  }
+
+  selected.sort((a,b)=>a.peak.time-b.peak.time);
+
+  const throws=selected.map(c=>
+    createCandidate(
+      series,c.peak,side,source,c.evidence
+    )
+  );
+
+  return{series,throws};
+}
+
+function recognizeThrows(source){
+
+  const right=detectThrows(source,"RIGHT");
+  const left=detectThrows(source,"LEFT");
+
+  const score=result=>
+    result.throws.reduce(
+      (sum,t)=>sum+
+        t.evidence.extension+
+        t.evidence.relativeSpeed*12+
+        t.evidence.angularVelocity*.08,
+      0
+    );
+
+  const rightScore=score(right);
+  const leftScore=score(left);
+
+  const side=rightScore>=leftScore?"RIGHT":"LEFT";
+
+  const selected=side==="RIGHT"?right:left;
+
+  return{
+    side:selected.throws.length?side:null,
+    throws:selected.throws,
+    series:selected.series,
+    armAmbiguous:
+      Math.max(rightScore,leftScore)>0&&
+      Math.min(rightScore,leftScore)/
+      Math.max(rightScore,leftScore)>.8
+  };
+}
+
+function liveLoop(timestamp){
+
+  requestAnimationFrame(liveLoop);
+
+  if(
+    inReview||
+    !poseModel||
+    !stream||
+    camera.readyState<2
+  )return;
+
+  if(recording){
+
+    const elapsed=performance.now()-recordStart;
+
+    $("timer").textContent=
+      (elapsed/1000).toFixed(1)+" s";
+
+    $("progress").style.width=
+      Math.min(100,elapsed/MAX_RECORDING_MS*100)+"%";
+
+    if(elapsed>=MAX_RECORDING_MS){
+
+      stopRecording();
+      return;
+    }
+  }
+
+  if(timestamp-lastInference<33)return;
+
+  if(camera.currentTime===lastVideoTime)return;
+
+  lastInference=timestamp;
+  lastVideoTime=camera.currentTime;
+
+  try{
+
+    resizeCanvas(camera);
+
+    const started=performance.now();
+
+    const result=poseModel.detectForVideo(
+      camera,started
+    );
+
+    const frame={
+      index:frames.length,
+      time:recording
+        ?Math.max(0,(started-recordStart)/1000)
+        :0,
+      pose:clone(result.landmarks?.[0])
+    };
+
+    drawSkeleton(frame);
+
+    if(recording){
+
+      frames.push(frame);
 
       if(
-        !$("coachPanel").classList.contains("hidden")
+        timestamp-lastDetectionCheck>1200&&
+        frames.length>=15
       ){
 
-        renderV16();
+        lastDetectionCheck=timestamp;
 
-        $("coachPanel").scrollIntoView({
-          behavior:"smooth",
-          block:"start"
-        });
+        const detected=recognizeThrows(frames);
 
+        const latest=detected.throws.at(-1);
+
+        if(
+          detected.throws.length>=TARGET_THROWS&&
+          !detected.armAmbiguous&&
+          sampleRate(frames)>=10&&
+          frame.time>=8&&
+          latest&&
+          frame.time-latest.releaseTime>=.9
+        ){
+
+          stopRecording();
+        }
+      }
+    }
+
+  }catch(error){
+
+    console.warn("Tracking sample skipped",error);
+  }
+}
+
+function supportedMime(){
+
+  if(typeof MediaRecorder==="undefined")
+    return "";
+
+  const types=[
+    "video/webm;codecs=vp8",
+    "video/webm",
+    "video/mp4"
+  ];
+
+  return types.find(t=>
+    MediaRecorder.isTypeSupported(t)
+  )||"";
+}
+
+async function countdown(){
+
+  if(counting||recording||!stream)return;
+
+  if(typeof MediaRecorder==="undefined"){
+
+    status("Recording is not supported in this browser.");
+    return;
+  }
+
+  counting=true;
+
+  $("recordButton").disabled=true;
+  $("switchCamera").disabled=true;
+
+  show("countdown");
+
+  badge("GET READY");
+
+  status("Prepare to throw six darts naturally.");
+
+  for(let i=5;i>=1;i--){
+
+    $("countdown").textContent=i;
+
+    await new Promise(
+      resolve=>setTimeout(resolve,1000)
+    );
+  }
+
+  hide("countdown");
+
+  counting=false;
+
+  beginRecording();
+}
+
+function beginRecording(){
+
+  try{
+
+    frames=[];
+    chunks=[];
+    analysis=null;
+    selectedRelease=0;
+    recordDuration=0;
+    lastDetectionCheck=0;
+    stopping=false;
+
+    const mime=supportedMime();
+
+    recorder=new MediaRecorder(
+      stream,
+      mime?{
+        mimeType:mime,
+        videoBitsPerSecond:2000000
+      }:{}
+    );
+
+    recorder.ondataavailable=e=>{
+      if(e.data.size)chunks.push(e.data);
+    };
+
+    recorder.onstop=prepareReview;
+
+    recorder.onerror=e=>{
+
+      recording=false;
+      stopping=false;
+
+      clearTimeout(stopTimeout);
+
+      if(stream)
+        stream.getTracks().forEach(t=>t.stop());
+
+      stream=null;
+
+      hide("stopButton");
+      show("restartPanel");
+
+      badge("RECORDING ERROR");
+
+      status("Recording failed. Start a new analysis.");
+
+      console.error(e);
+    };
+
+    recorder.start(250);
+
+    recordStart=performance.now();
+
+    recording=true;
+
+    stopTimeout=setTimeout(
+      stopRecording,
+      MAX_RECORDING_MS
+    );
+
+    hide("recordButton");
+    hide("switchCamera");
+    hide("results");
+
+    $("stopButton").disabled=false;
+
+    show("stopButton");
+
+    badge("RECORDING");
+
+    status(
+      "Throw six darts naturally. Recording stops automatically when enough movements are detected, or after 60 seconds."
+    );
+
+  }catch(error){
+
+    recording=false;
+
+    $("recordButton").disabled=false;
+    $("switchCamera").disabled=false;
+
+    status("Unable to start recording.");
+
+    console.error(error);
+  }
+}
+
+function stopRecording(){
+
+  if(!recording||stopping)return;
+
+  stopping=true;
+  recording=false;
+
+  clearTimeout(stopTimeout);
+
+  recordDuration=
+    (performance.now()-recordStart)/1000;
+
+  $("stopButton").disabled=true;
+
+  badge("PROCESSING");
+
+  status("Preparing your recording...");
+
+  if(recorder&&recorder.state!=="inactive")
+    recorder.stop();
+}
+
+async function prepareReview(){
+
+  try{
+
+    const blob=new Blob(chunks,{
+      type:recorder.mimeType||
+        chunks[0]?.type||
+        "video/webm"
+    });
+
+    if(!blob.size)
+      throw new Error("Empty recording.");
+
+    if(recordingURL)
+      URL.revokeObjectURL(recordingURL);
+
+    recordingURL=URL.createObjectURL(blob);
+
+    inReview=true;
+
+    if(stream)
+      stream.getTracks().forEach(t=>t.stop());
+
+    stream=null;
+    camera.srcObject=null;
+
+    hide("camera");
+    hide("stopButton");
+
+    show("review");
+
+    await new Promise((resolve,reject)=>{
+
+      const timeout=setTimeout(
+        ()=>reject(new Error("Video loading timeout.")),
+        12000
+      );
+
+      review.onloadedmetadata=()=>{
+        clearTimeout(timeout);
+        resolve();
+      };
+
+      review.onerror=()=>{
+        clearTimeout(timeout);
+        reject(new Error("Video playback unavailable."));
+      };
+
+      review.src=recordingURL;
+      review.load();
+    });
+
+    resizeCanvas(review);
+    clearOverlay();
+
+    $("progress").style.width="100%";
+
+    $("timer").textContent=
+      recordDuration.toFixed(1)+" s";
+
+    badge("RECORDING COMPLETE");
+
+    show("analyzeButton");
+    show("restartPanel");
+
+    status("Your recording is ready for AI analysis.");
+
+  }catch(error){
+
+    badge("RECORDING ERROR");
+    status(error.message);
+
+    show("restartPanel");
+
+  }finally{
+
+    stopping=false;
+  }
+}
+
+function coefficientVariation(values){
+
+  if(values.length<3)return null;
+
+  const avg=mean(values);
+
+  if(!avg)return null;
+
+  return Math.sqrt(
+    mean(values.map(v=>(v-avg)**2))
+  )/avg*100;
+}
+
+function analyzeRecording(){
+
+  $("analyzeButton").disabled=true;
+
+  badge("ANALYZING");
+
+  status("Analyzing your throwing movement...");
+
+  setTimeout(()=>{
+
+    try{
+
+      const detected=recognizeThrows(frames);
+
+      const coverage=frames.length
+        ?frames.filter(f=>f.pose).length/frames.length*100
+        :0;
+
+      const fps=sampleRate(frames);
+
+      const valid=detected.throws.filter(
+        t=>t.poseCoverage>=85&&t.quality>=.7
+      );
+
+      const values=key=>
+        valid.map(t=>t[key]).filter(Number.isFinite);
+
+      const head=values("headMovement");
+      const elbow=values("elbowMovement");
+      const tempo=values("deliveryTempoMs");
+
+      const tempoVariation=coefficientVariation(tempo);
+
+      const reliable=
+        fps>=15&&
+        coverage>=85&&
+        valid.length>=3&&
+        detected.throws.length<=TARGET_THROWS&&
+        !detected.armAmbiguous;
+
+      let mainIssue="More recording data needed";
+
+      let coachAdvice=
+        "Record again in good lighting. Keep your throwing arm, head and upper body visible throughout the recording.";
+
+      let drill="Repeat Throw Analysis";
+
+      let note=
+        "Tracking quality was insufficient for a reliable coaching observation.";
+
+      if(reliable){
+
+        mainIssue="No clear weakness identified";
+
+        coachAdvice=
+          "Maintain your natural throwing action and focus on repeating a comfortable, consistent movement.";
+
+        drill="Consistent Throw Routine";
+
+        note=
+          "Experimental movement analysis. Release markers estimate wrist movement, not the exact moment the dart leaves your fingers.";
+
+        if(head.length>=3&&mean(head)>12){
+
+          mainIssue="Possible head movement";
+
+          coachAdvice=
+            "Keep your head naturally steady throughout your delivery. Avoid unnecessary movement without forcing your body into a rigid position.";
+
+          drill="Body Stability Training";
+
+        }else if(elbow.length>=3&&mean(elbow)>18){
+
+          mainIssue="Possible elbow movement";
+
+          coachAdvice=
+            "Focus on repeating your elbow position during preparation and delivery. Allow a natural follow-through.";
+
+          drill="Elbow Movement Training";
+
+        }else if(
+          Number.isFinite(tempoVariation)&&
+          tempoVariation>30
+        ){
+
+          mainIssue="Possible rhythm variation";
+
+          coachAdvice=
+            "Use a comfortable, repeatable rhythm. Focus on consistency from preparation through delivery.";
+
+          drill="Throw Rhythm Training";
+
+        }else if(
+          head.length<3&&
+          elbow.length<3&&
+          tempo.length<3
+        ){
+
+          mainIssue="Limited movement evidence";
+
+          coachAdvice=
+            "Record another session with your entire throwing arm and upper body clearly visible.";
+
+          drill="Repeat Throw Analysis";
+        }
       }
 
-    },100);
+      analysis={
+        engine:"DARTIQ_CORE_VISION_V16",
+        playerName,
+        playerEmail,
+        sessionId,
+        recordingDuration:recordDuration,
+        sampleRate:fps,
+        poseCoverage:coverage,
+        arm:detected.side,
+        armAmbiguous:detected.armAmbiguous,
+        throws:detected.throws,
+        reliable,
+        mainIssue,
+        coachAdvice,
+        drill,
+        releaseDirectlyObserved:false
+      };
 
-  });
+      window.DARTIQ_ANALYSIS=analysis;
 
+      $("mainIssue").textContent=mainIssue;
+      $("coachAdvice").textContent=coachAdvice;
+      $("drill").textContent=drill;
+      $("qualityNote").textContent=note;
+
+      hide("analyzeButton");
+
+      show("results");
+      show("playback");
+      show("restartPanel");
+
+      $("releaseButton").disabled=
+        !detected.throws.length||
+        detected.armAmbiguous||
+        fps<10;
+
+      $("scrubber").max=
+        Number.isFinite(review.duration)
+          ?review.duration
+          :recordDuration;
+
+      review.playbackRate=.5;
+
+      badge(
+        reliable
+          ?"ANALYSIS COMPLETE"
+          :"RECORDING REVIEWED"
+      );
+
+      status(
+        reliable
+          ?"Your coaching report is ready."
+          :"Review your recording or try again for better tracking."
+      );
+
+      review.currentTime=0;
+
+      drawReview();
+
+    }catch(error){
+
+      $("analyzeButton").disabled=false;
+
+      badge("ANALYSIS ERROR");
+
+      status("Analysis failed. Please try again.");
+
+      console.error(error);
+    }
+
+  },100);
+}
+
+function nearestFrame(time){
+
+  if(!frames.length)return null;
+
+  let low=0;
+  let high=frames.length-1;
+
+  while(low<high){
+
+    const mid=Math.floor((low+high)/2);
+
+    if(frames[mid].time<time)
+      low=mid+1;
+    else
+      high=mid;
+  }
+
+  let frame=frames[low];
+
+  if(
+    low>0&&
+    Math.abs(frames[low-1].time-time)<
+    Math.abs(frame.time-time)
+  ){
+    frame=frames[low-1];
+  }
+
+  const tolerance=Math.min(
+    .18,
+    Math.max(.05,1.2/Math.max(1,sampleRate(frames)))
+  );
+
+  return Math.abs(frame.time-time)<=tolerance
+    ?frame
+    :null;
+}
+
+function drawReview(){
+
+  if(!inReview)return;
+
+  resizeCanvas(review);
+
+  const time=review.currentTime;
+
+  const frame=nearestFrame(time);
+
+  const release=Boolean(
+    analysis?.sampleRate>=10&&
+    !analysis?.armAmbiguous&&
+    analysis?.throws.some(
+      t=>Math.abs(t.releaseTime-time)<.09
+    )
+  );
+
+  drawSkeleton(
+    frame,
+    analysis?.arm||null,
+    release
+  );
+
+  $("scrubber").value=time;
+
+  $("timer").textContent=
+    time.toFixed(1)+" s";
+}
+
+function reviewLoop(){
+
+  if(!inReview||review.paused||review.ended)
+    return;
+
+  drawReview();
+
+  requestAnimationFrame(reviewLoop);
+}
+
+async function togglePlayback(){
+
+  if(!analysis)return;
+
+  if(review.paused){
+
+    review.playbackRate=.5;
+
+    if(
+      review.ended||
+      review.currentTime>=recordDuration-.1
+    ){
+      review.currentTime=0;
+    }
+
+    try{
+      await review.play();
+    }catch(error){
+      status("Playback unavailable.");
+    }
+
+  }else{
+
+    review.pause();
+  }
+}
+
+function viewRelease(){
+
+  if(!analysis?.throws.length)return;
+
+  if(analysis.armAmbiguous||analysis.sampleRate<10)
+    return;
+
+  review.pause();
+
+  const candidate=analysis.throws[
+    selectedRelease%analysis.throws.length
+  ];
+
+  review.currentTime=candidate.releaseTime;
+
+  selectedRelease++;
+
+  status(
+    "Estimated release position. Tap again to view the next detected release."
+  );
+}
+
+function restart(){
+
+  clearTimeout(stopTimeout);
+
+  recording=false;
+  stopping=false;
+  counting=false;
+
+  review.pause();
+
+  if(stream)
+    stream.getTracks().forEach(t=>t.stop());
+
+  stream=null;
+
+  review.removeAttribute("src");
+  review.load();
+
+  if(recordingURL)
+    URL.revokeObjectURL(recordingURL);
+
+  recordingURL=null;
+
+  frames=[];
+  chunks=[];
+  analysis=null;
+  window.DARTIQ_ANALYSIS=null;
+
+  selectedRelease=0;
+  recordDuration=0;
+  inReview=false;
+
+  clearOverlay();
+
+  hide("review");
+  hide("results");
+  hide("playback");
+  hide("restartPanel");
+  hide("analyzeButton");
+  hide("stopButton");
+
+  show("camera");
+  show("recordButton");
+  show("switchCamera");
+
+  $("recordButton").disabled=true;
+  $("analyzeButton").disabled=false;
+  $("stopButton").disabled=false;
+
+  $("progress").style.width="0%";
+  $("timer").textContent="0 s";
+  $("scrubber").value=0;
+
+  badge("INITIALIZING");
+
+  startCamera();
+}
+
+$("enableCamera").onclick=startCamera;
+
+$("switchCamera").onclick=async()=>{
+
+  if(recording||counting||stopping)return;
+
+  facingMode=facingMode==="environment"
+    ?"user"
+    :"environment";
+
+  $("switchCamera").disabled=true;
+  $("recordButton").disabled=true;
+
+  await startCamera();
+};
+
+$("recordButton").onclick=countdown;
+$("stopButton").onclick=stopRecording;
+$("analyzeButton").onclick=analyzeRecording;
+$("playButton").onclick=togglePlayback;
+$("releaseButton").onclick=viewRelease;
+$("restartButton").onclick=restart;
+
+$("scrubber").addEventListener("input",()=>{
+
+  review.pause();
+
+  review.currentTime=Number(
+    $("scrubber").value
+  );
 });
+
+review.addEventListener("play",()=>{
+
+  $("playButton").textContent="Ⅱ PAUSE";
+
+  requestAnimationFrame(reviewLoop);
+});
+
+review.addEventListener("pause",()=>{
+
+  $("playButton").textContent="▶ PLAY SLOW MOTION";
+
+  drawReview();
+});
+
+review.addEventListener("ended",()=>{
+
+  $("playButton").textContent="▶ PLAY SLOW MOTION";
+
+  drawReview();
+});
+
+review.addEventListener("seeked",drawReview);
+
+window.addEventListener("pagehide",()=>{
+
+  clearTimeout(stopTimeout);
+
+  if(stream)
+    stream.getTracks().forEach(t=>t.stop());
+
+  if(recordingURL)
+    URL.revokeObjectURL(recordingURL);
+});
+
+initialize();
+
 </script>
+</body>
+</html>
