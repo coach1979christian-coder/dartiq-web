@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>DARTIQ CORE Vision V2</title>
 
 <style>
@@ -10,18 +10,18 @@
   --bg:#050b16;
   --panel:#0b1929;
   --blue:#27b8ff;
-  --muted:#92a9bf;
   --green:#45e6a0;
-  --red:#ff687c;
+  --red:#ff5268;
+  --muted:#94abc2;
 }
 
 *{box-sizing:border-box}
 
 body{
   margin:0;
-  padding:14px;
+  padding:12px;
   background:var(--bg);
-  color:white;
+  color:#fff;
   font-family:Arial,sans-serif;
 }
 
@@ -30,83 +30,49 @@ body{
   margin:auto;
 }
 
-.header{
+header{
   text-align:center;
-  padding:20px 0;
+  padding:18px 0;
 }
 
 .brand{
+  color:var(--blue);
   font-size:32px;
   font-weight:900;
-  letter-spacing:4px;
-  color:var(--blue);
-  text-shadow:0 0 22px #27b8ff88;
+  letter-spacing:5px;
+  text-shadow:0 0 24px #27b8ff88;
 }
 
 .subtitle{
-  font-size:12px;
-  letter-spacing:3px;
   color:var(--muted);
-  margin-top:8px;
+  font-size:11px;
+  letter-spacing:3px;
+  margin-top:7px;
 }
 
 .panel{
-  background:var(--panel);
+  padding:15px;
+  margin-bottom:14px;
   border:1px solid #245078;
   border-radius:18px;
-  padding:16px;
-  margin-bottom:14px;
-}
-
-h2{
-  font-size:17px;
-  color:var(--blue);
-  margin:0 0 14px;
-}
-
-input,select,button{
-  width:100%;
-  padding:14px;
-  border-radius:12px;
-  font-size:15px;
-}
-
-input,select{
-  background:#071321;
-  color:white;
-  border:1px solid #245078;
-  margin-bottom:12px;
-}
-
-button{
-  background:linear-gradient(100deg,#087ac1,#27b8ff);
-  border:0;
-  color:white;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-button:disabled{
-  opacity:.4;
-  cursor:not-allowed;
+  background:var(--panel);
 }
 
 .stage{
   position:relative;
-  background:black;
-  border-radius:14px;
   overflow:hidden;
-  display:none;
-  margin-bottom:14px;
+  border-radius:14px;
+  background:#000;
+  min-height:220px;
 }
 
 video{
-  display:block;
   width:100%;
   height:auto;
+  display:block;
 }
 
-#overlay{
+canvas{
   position:absolute;
   inset:0;
   width:100%;
@@ -116,103 +82,132 @@ video{
 
 .badge{
   position:absolute;
-  top:10px;
-  left:10px;
+  top:12px;
+  left:12px;
   background:#050b16dd;
   border:1px solid var(--blue);
-  padding:8px 12px;
   border-radius:8px;
   color:var(--blue);
   font-size:11px;
   font-weight:bold;
+  padding:8px 10px;
+}
+
+.timer{
+  position:absolute;
+  top:12px;
+  right:12px;
+  background:#050b16dd;
+  padding:8px 12px;
+  border-radius:8px;
+  font-size:14px;
+  font-weight:bold;
+}
+
+.countdown{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#0006;
+  color:#fff;
+  font-size:110px;
+  font-weight:900;
+  text-shadow:0 0 35px var(--blue);
+}
+
+.recording{
+  color:var(--red);
+  border-color:var(--red);
+  animation:pulse 1s infinite;
+}
+
+@keyframes pulse{
+  50%{opacity:.5}
+}
+
+button{
+  display:block;
+  width:100%;
+  border:0;
+  border-radius:12px;
+  padding:16px;
+  margin-top:12px;
+  background:linear-gradient(100deg,#087ac1,#27b8ff);
+  color:white;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+button:disabled{
+  opacity:.4;
+  cursor:not-allowed;
+}
+
+.secondary{
+  background:#10243a;
+  border:1px solid #245078;
+}
+
+.record{
+  background:linear-gradient(100deg,#a81936,#ff5268);
 }
 
 .status{
   text-align:center;
-  font-size:14px;
-  line-height:1.5;
-  margin-top:12px;
   color:var(--muted);
+  font-size:13px;
+  line-height:1.6;
+  margin-top:14px;
 }
 
 .track{
-  height:8px;
+  height:7px;
+  background:#20364a;
   border-radius:10px;
   overflow:hidden;
-  background:#1b3045;
-  margin:14px 0;
+  margin-top:14px;
 }
 
 #progress{
-  width:0%;
   height:100%;
+  width:0;
   background:var(--blue);
-  transition:width .15s;
+  transition:width .2s;
 }
 
 .grid{
   display:grid;
-  grid-template-columns:repeat(2,1fr);
+  grid-template-columns:1fr 1fr;
   gap:10px;
 }
 
 .metric{
   background:#071321;
-  border:1px solid #23415d;
+  border:1px solid #245078;
   border-radius:12px;
   padding:14px;
 }
 
 .label{
+  font-size:10px;
   color:var(--muted);
-  font-size:11px;
   text-transform:uppercase;
 }
 
 .value{
-  color:var(--blue);
-  font-size:25px;
+  font-size:23px;
   font-weight:bold;
-  margin-top:8px;
-}
-
-.phase{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:11px;
-  margin-bottom:7px;
-  border-radius:9px;
-  background:#071321;
-  color:var(--muted);
-  font-size:13px;
-}
-
-.phase.active{
-  color:white;
-  border:1px solid var(--blue);
-}
-
-.phase.done{
-  color:var(--green);
-}
-
-.throw-card{
-  background:#071321;
-  border:1px solid #245078;
-  border-radius:13px;
-  padding:14px;
-  margin-bottom:10px;
-}
-
-.throw-card strong{
   color:var(--blue);
+  margin-top:7px;
 }
 
-.throw-card button{
-  margin-top:12px;
-  padding:10px;
-  font-size:12px;
+h2{
+  margin:0 0 14px;
+  color:var(--blue);
+  font-size:18px;
 }
 
 .small{
@@ -221,15 +216,24 @@ video{
   color:var(--muted);
 }
 
-.hidden{display:none}
+.throw-card{
+  padding:14px;
+  background:#071321;
+  border:1px solid #245078;
+  border-radius:12px;
+  margin-top:10px;
+}
+
+.throw-card strong{
+  color:var(--blue);
+}
 
 .success{color:var(--green)}
 .error{color:var(--red)}
 
-#saveBtn{
-  margin-top:12px;
+.hidden{
+  display:none!important;
 }
-
 </style>
 </head>
 
@@ -237,7 +241,7 @@ video{
 
 <div class="app">
 
-<header class="header">
+<header>
   <div class="brand">DARTIQ</div>
   <div class="subtitle">CORE VISION V2</div>
 </header>
@@ -246,61 +250,61 @@ video{
 
 <h2>AI Throw Analysis</h2>
 
-<p class="small">
-Record from the side with your throwing shoulder,
-elbow, wrist and fingers clearly visible.
-Keep the camera stationary.
-Record up to 15 seconds, preferably at 60 FPS.
-</p>
+<div class="stage">
 
-<input id="videoInput" type="file" accept="video/*">
+  <video id="camera" autoplay muted playsinline></video>
 
-<select id="armSelect">
-  <option value="auto">Automatic throwing arm</option>
-  <option value="right">Right-handed</option>
-  <option value="left">Left-handed</option>
-</select>
-
-<div id="stage" class="stage">
-
-  <video id="video" playsinline preload="auto"></video>
+  <video id="playback" playsinline class="hidden"></video>
 
   <canvas id="overlay"></canvas>
 
-  <div id="badge" class="badge">PREVIEW</div>
+  <div id="badge" class="badge">INITIALIZING</div>
+
+  <div id="timer" class="timer">00:00</div>
+
+  <div id="countdown" class="countdown hidden">5</div>
 
 </div>
 
-<button id="analyzeBtn" disabled>
-  ANALYZE MY THROW
+<button id="cameraBtn" class="hidden">
+  ENABLE CAMERA
+</button>
+
+<button id="switchBtn" class="secondary" disabled>
+  SWITCH CAMERA
+</button>
+
+<button id="recordBtn" class="record" disabled>
+  ● RECORD MY THROW
+</button>
+
+<button id="analysisBtn" class="hidden">
+  GET AI THROW ANALYSIS
+</button>
+
+<button id="retryBtn" class="secondary hidden">
+  RECORD AGAIN
 </button>
 
 <div id="status" class="status">
-  Loading AI models...
+  Initializing camera and AI models...
 </div>
 
 <div class="track">
   <div id="progress"></div>
 </div>
 
-</section>
-
-<section id="phasePanel" class="panel hidden">
-
-<h2>Motion Recognition</h2>
-
-<div class="phase" id="phase0">○ Body landmark tracking</div>
-<div class="phase" id="phase1">○ Hand and finger tracking</div>
-<div class="phase" id="phase2">○ Preparation and draw-back</div>
-<div class="phase" id="phase3">○ Forward acceleration</div>
-<div class="phase" id="phase4">○ Release estimation</div>
-<div class="phase" id="phase5">○ Follow-through validation</div>
+<p class="small">
+Position your smartphone sideways to your throwing arm.
+Keep your shoulder, elbow, wrist, hand and upper body visible.
+Throw naturally after the countdown.
+</p>
 
 </section>
 
 <section id="results" class="panel hidden">
 
-<h2>Analysis Results</h2>
+<h2>AI Throw Analysis Results</h2>
 
 <div class="grid">
 
@@ -335,12 +339,12 @@ Record up to 15 seconds, preferably at 60 FPS.
 </div>
 
 <div class="metric">
-  <div class="label">Head displacement</div>
+  <div class="label">Head movement</div>
   <div class="value" id="headMovement">—</div>
 </div>
 
 <div class="metric">
-  <div class="label">Tempo consistency</div>
+  <div class="label">Tempo variation</div>
   <div class="value" id="consistency">—</div>
 </div>
 
@@ -361,17 +365,6 @@ Record up to 15 seconds, preferably at 60 FPS.
   <p id="coachAdvice" class="small"></p>
 </section>
 
-<section id="savePanel" class="panel hidden">
-  <h2>Prototype Validation</h2>
-  <p class="small">
-    Review the detected throws and release markers.
-    This prototype does not write to production
-    Supabase or Glide tables.
-  </p>
-
-  <button id="saveBtn">EXPORT ANALYSIS JSON</button>
-</section>
-
 </div>
 
 <script type="module">
@@ -382,12 +375,22 @@ import {
   HandLandmarker
 } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22-rc.20250304/+esm";
 
-/* =========================================
-   DARTIQ CORE VISION V2
-   Prototype motion recognition engine
-========================================= */
+const VERSION = "0.10.22-rc.20250304";
 
-const MODEL_VERSION = "0.10.22-rc.20250304";
+const CONFIG = {
+  countdown:5,
+  targetThrows:3,
+  minimumRecordingSeconds:4,
+  maximumRecordingSeconds:30,
+  minimumPoseCoverage:0.70,
+  minimumVisibility:0.60,
+  minimumPeakVelocity:0.65,
+  minimumElbowExtension:20,
+  minimumThrowSeparation:0.55,
+  maximumFrameGap:0.20,
+  followThroughSeconds:0.10,
+  sampleFPS:30
+};
 
 const POSE_MODEL =
 "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_full/float16/1/pose_landmarker_full.task";
@@ -395,55 +398,61 @@ const POSE_MODEL =
 const HAND_MODEL =
 "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task";
 
-const CONFIG = {
-  sampleFPS:30,
-  maxDuration:15,
-  minVisibility:0.65,
-  minPoseCoverage:0.70,
-  minThrowDuration:0.12,
-  maxThrowDuration:0.95,
-  minElbowExtension:20,
-  minPeakVelocity:0.65,
-  minFollowThrough:0.10,
-  minThrowSeparation:0.55,
-  maxFrameGap:0.15
-};
+const $ = id=>document.getElementById(id);
 
-const $ = id => document.getElementById(id);
-
-const video = $("video");
+const camera = $("camera");
+const playback = $("playback");
 const overlay = $("overlay");
 const ctx = overlay.getContext("2d");
 
-const analysisCanvas = document.createElement("canvas");
-const analysisCtx = analysisCanvas.getContext("2d");
+const captureCanvas = document.createElement("canvas");
+const captureCtx = captureCanvas.getContext("2d");
 
-let poseLandmarker = null;
-let handLandmarker = null;
 let vision = null;
+let poseModel = null;
+let handModel = null;
 
-let selectedFile = null;
-let objectURL = null;
-let analysisResult = null;
+let stream = null;
+let recorder = null;
+let chunks = [];
+let recordedBlob = null;
+let recordingURL = null;
+
+let facingMode = "environment";
+let modelsReady = false;
+let cameraReady = false;
+
+let state = "initializing";
 let frames = [];
-let running = false;
+let liveFrames = [];
+let liveThrows = [];
+let recordedDuration = 0;
+
+let recordingStart = 0;
+let lastInference = 0;
+let lastRecognition = 0;
 let modelTimestamp = 0;
+let animationId = null;
+let timerId = null;
+let stopRequested = false;
+let frameNumber = 0;
 
 const params = new URLSearchParams(location.search);
 
 const playerEmail =
 params.get("email") ||
-params.get("player_email") ||
-params.get("Player_Email") || "";
+params.get("player_email") || "";
 
 const sessionId =
 params.get("session_id") ||
 params.get("sessionID") || "";
 
-const rowId =
-params.get("row_id") || "";
+const playerName =
+params.get("playername") ||
+params.get("playerName") ||
+params.get("player") || "";
 
-const ARM_INDEX = {
+const ARM = {
   right:{
     shoulder:12,
     elbow:14,
@@ -465,44 +474,31 @@ function status(message,type=""){
 
 function progress(value){
   $("progress").style.width =
-  Math.max(0,Math.min(100,value))+"%";
+    Math.max(0,Math.min(100,value))+"%";
 }
 
-function phase(index,state){
-  const el = $("phase"+index);
-
-  el.classList.remove("active","done");
-
-  if(state) el.classList.add(state);
+function show(id){
+  $(id).classList.remove("hidden");
 }
 
-function resetPhases(){
-  for(let i=0;i<6;i++) phase(i,"");
+function hide(id){
+  $(id).classList.add("hidden");
 }
 
-function mean(values){
-  const v = values.filter(Number.isFinite);
-
-  return v.length
-    ? v.reduce((a,b)=>a+b,0)/v.length
-    : null;
-}
-
-function median(values){
-  const v = values.filter(Number.isFinite)
-    .sort((a,b)=>a-b);
-
-  if(!v.length) return null;
-
-  const m = Math.floor(v.length/2);
-
-  return v.length%2
-    ? v[m]
-    : (v[m-1]+v[m])/2;
+function sleep(ms){
+  return new Promise(resolve=>setTimeout(resolve,ms));
 }
 
 function clamp(n,min,max){
   return Math.max(min,Math.min(max,n));
+}
+
+function mean(values){
+  const valid = values.filter(Number.isFinite);
+
+  return valid.length
+    ? valid.reduce((a,b)=>a+b,0)/valid.length
+    : null;
 }
 
 function round(n,d=1){
@@ -530,51 +526,217 @@ function angle(a,b,c){
 
   if(!a || !b || !c) return null;
 
-  const u = {
-    x:a.x-b.x,
-    y:a.y-b.y
-  };
+  const ux = a.x-b.x;
+  const uy = a.y-b.y;
 
-  const v = {
-    x:c.x-b.x,
-    y:c.y-b.y
-  };
+  const vx = c.x-b.x;
+  const vy = c.y-b.y;
 
   const denominator =
-    Math.hypot(u.x,u.y) *
-    Math.hypot(v.x,v.y);
+    Math.hypot(ux,uy)*
+    Math.hypot(vx,vy);
 
-  if(denominator < 0.000001) return null;
+  if(!denominator) return null;
 
-  const cosine = clamp(
-    (u.x*v.x+u.y*v.y)/denominator,
-    -1,1
-  );
-
-  return Math.acos(cosine)*180/Math.PI;
+  return Math.acos(
+    clamp(
+      (ux*vx+uy*vy)/denominator,
+      -1,1
+    )
+  )*180/Math.PI;
 }
 
-function pixelPoint(p){
+function point(p){
 
   if(!p) return null;
 
   return {
-    x:p.x*analysisCanvas.width,
-    y:p.y*analysisCanvas.height,
+    x:p.x*captureCanvas.width,
+    y:p.y*captureCanvas.height,
     z:p.z,
     visibility:p.visibility ?? 1
   };
 }
 
 function visible(p){
-  return p &&
+
+  return !!p &&
     Number.isFinite(p.x) &&
     Number.isFinite(p.y) &&
-    (p.visibility ?? 1)>=CONFIG.minVisibility;
+    p.visibility>=CONFIG.minimumVisibility;
+}
+
+function updateReady(){
+
+  const ready =
+    modelsReady &&
+    cameraReady &&
+    state!=="recording" &&
+    state!=="countdown" &&
+    state!=="analyzing" &&
+    state!=="finalizing";
+
+  $("recordBtn").disabled = !ready;
+  $("switchBtn").disabled = !cameraReady ||
+    !["ready","initializing"].includes(state);
+
+  if(ready && state==="initializing"){
+
+    state = "ready";
+
+    $("badge").textContent = "AI READY";
+
+    status(
+      "Position yourself and tap Record My Throw.",
+      "success"
+    );
+  }
 }
 
 /* =========================================
-   MODEL INITIALIZATION
+   CAMERA
+========================================= */
+
+function resizeCanvas(source){
+
+  const w = source.videoWidth;
+  const h = source.videoHeight;
+
+  if(!w || !h) return;
+
+  const scale = Math.min(
+    1,
+    960/Math.max(w,h)
+  );
+
+  captureCanvas.width =
+    Math.round(w*scale);
+
+  captureCanvas.height =
+    Math.round(h*scale);
+
+  overlay.width = captureCanvas.width;
+  overlay.height = captureCanvas.height;
+}
+
+async function openCamera(){
+
+  cameraReady = false;
+
+  $("recordBtn").disabled = true;
+  $("switchBtn").disabled = true;
+
+  if(stream){
+
+    stream.getTracks().forEach(
+      track=>track.stop()
+    );
+
+    stream = null;
+  }
+
+  try{
+
+    if(!navigator.mediaDevices?.getUserMedia){
+
+      throw new Error(
+        "Camera access requires HTTPS and a supported browser."
+      );
+    }
+
+    stream = await navigator.mediaDevices.getUserMedia({
+
+      audio:false,
+
+      video:{
+        facingMode:{ideal:facingMode},
+        width:{ideal:1280},
+        height:{ideal:720},
+        frameRate:{
+          ideal:30,
+          max:60
+        }
+      }
+    });
+
+    camera.srcObject = stream;
+
+    show("camera");
+    hide("playback");
+
+    await camera.play();
+
+    if(!camera.videoWidth){
+
+      await new Promise((resolve,reject)=>{
+
+        const timeout = setTimeout(
+          ()=>reject(new Error("Camera preview timed out.")),
+          10000
+        );
+
+        camera.addEventListener(
+          "loadedmetadata",
+          ()=>{
+            clearTimeout(timeout);
+            resolve();
+          },
+          {once:true}
+        );
+      });
+    }
+
+    resizeCanvas(camera);
+
+    cameraReady = true;
+
+    hide("cameraBtn");
+
+    updateReady();
+
+    if(modelsReady && state==="ready"){
+
+      status(
+        "Camera ready. Position your throwing arm in view.",
+        "success"
+      );
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+    show("cameraBtn");
+
+    status(
+      "Camera unavailable. Allow camera access and tap Enable Camera. If using an embedded app, open this page directly in your browser.",
+      "error"
+    );
+  }
+}
+
+$("cameraBtn").addEventListener(
+  "click",
+  openCamera
+);
+
+$("switchBtn").addEventListener(
+  "click",
+  async()=>{
+
+    if(state!=="ready") return;
+
+    facingMode =
+      facingMode==="environment"
+        ? "user"
+        : "environment";
+
+    await openCamera();
+  }
+);
+
+/* =========================================
+   AI MODEL INITIALIZATION
 ========================================= */
 
 async function createPose(delegate){
@@ -587,9 +749,9 @@ async function createPose(delegate){
       },
       runningMode:"VIDEO",
       numPoses:1,
-      minPoseDetectionConfidence:0.6,
-      minPosePresenceConfidence:0.6,
-      minTrackingConfidence:0.6
+      minPoseDetectionConfidence:0.60,
+      minPosePresenceConfidence:0.60,
+      minTrackingConfidence:0.60
     }
   );
 }
@@ -604,256 +766,81 @@ async function createHand(delegate){
       },
       runningMode:"VIDEO",
       numHands:2,
-      minHandDetectionConfidence:0.6,
-      minHandPresenceConfidence:0.6,
-      minTrackingConfidence:0.6
+      minHandDetectionConfidence:0.55,
+      minHandPresenceConfidence:0.55,
+      minTrackingConfidence:0.55
     }
   );
 }
 
-async function initialize(){
+async function initializeModels(){
 
   try{
 
-    status("Loading body and hand tracking models...");
-
     vision = await FilesetResolver.forVisionTasks(
-      `https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${MODEL_VERSION}/wasm`
+      `https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${VERSION}/wasm`
     );
 
     try{
-      poseLandmarker = await createPose("GPU");
+      poseModel = await createPose("GPU");
     }catch(error){
-      poseLandmarker = await createPose("CPU");
+      poseModel = await createPose("CPU");
     }
 
     try{
-      handLandmarker = await createHand("GPU");
+      handModel = await createHand("GPU");
     }catch(error){
-      handLandmarker = await createHand("CPU");
+      handModel = await createHand("CPU");
     }
 
-    status("CORE Vision V2 ready.","success");
+    modelsReady = true;
 
-    $("analyzeBtn").disabled = !selectedFile;
+    updateReady();
 
   }catch(error){
 
     console.error(error);
 
     status(
-      "AI models could not load. Check your connection and reload.",
+      "AI models failed to load. Reload the page and check your connection.",
       "error"
     );
   }
 }
 
 /* =========================================
-   VIDEO LOADING
-========================================= */
-
-$("videoInput").addEventListener("change",async event=>{
-
-  if(running) return;
-
-  selectedFile = event.target.files?.[0] || null;
-
-  analysisResult = null;
-  frames = [];
-
-  $("analyzeBtn").disabled = true;
-
-  [
-    "results",
-    "throwsPanel",
-    "coachPanel",
-    "savePanel",
-    "phasePanel"
-  ].forEach(id=>$(id).classList.add("hidden"));
-
-  progress(0);
-  resetPhases();
-
-  if(objectURL){
-    URL.revokeObjectURL(objectURL);
-    objectURL = null;
-  }
-
-  if(!selectedFile){
-    $("stage").style.display = "none";
-    return;
-  }
-
-  objectURL = URL.createObjectURL(selectedFile);
-
-  video.src = objectURL;
-
-  $("stage").style.display = "block";
-  $("badge").textContent = "VIDEO PREVIEW";
-
-  try{
-
-    await waitMetadata();
-
-    if(video.duration > CONFIG.maxDuration){
-
-      throw new Error(
-        "Use a video of 15 seconds or less."
-      );
-    }
-
-    const scale = Math.min(
-      1,
-      960/Math.max(video.videoWidth,video.videoHeight)
-    );
-
-    analysisCanvas.width =
-      Math.round(video.videoWidth*scale);
-
-    analysisCanvas.height =
-      Math.round(video.videoHeight*scale);
-
-    overlay.width = analysisCanvas.width;
-    overlay.height = analysisCanvas.height;
-
-    ctx.clearRect(0,0,overlay.width,overlay.height);
-
-    $("analyzeBtn").disabled =
-      !poseLandmarker || !handLandmarker;
-
-    status(
-      `Video ready: ${video.duration.toFixed(2)} seconds.`,
-      "success"
-    );
-
-  }catch(error){
-
-    selectedFile = null;
-
-    status(error.message,"error");
-  }
-});
-
-function waitMetadata(){
-
-  return new Promise((resolve,reject)=>{
-
-    if(
-      video.readyState>=1 &&
-      Number.isFinite(video.duration) &&
-      video.duration>0
-    ){
-      resolve();
-      return;
-    }
-
-    const timeout = setTimeout(()=>{
-      cleanup();
-      reject(new Error("Video loading timed out."));
-    },15000);
-
-    function cleanup(){
-      clearTimeout(timeout);
-      video.removeEventListener("loadedmetadata",loaded);
-      video.removeEventListener("error",failed);
-    }
-
-    function loaded(){
-      cleanup();
-      resolve();
-    }
-
-    function failed(){
-      cleanup();
-      reject(new Error("Video cannot be decoded."));
-    }
-
-    video.addEventListener("loadedmetadata",loaded);
-    video.addEventListener("error",failed);
-
-  });
-}
-
-/* =========================================
-   FRAME DECODING
-========================================= */
-
-async function seekFrame(time){
-
-  const target = clamp(
-    time,
-    0,
-    Math.max(0,video.duration-0.001)
-  );
-
-  video.pause();
-
-  if(
-    video.readyState>=2 &&
-    !video.seeking &&
-    Math.abs(video.currentTime-target)<0.002
-  ){
-    return true;
-  }
-
-  video.currentTime = target;
-
-  const start = performance.now();
-
-  while(performance.now()-start<5000){
-
-    await new Promise(resolve=>setTimeout(resolve,12));
-
-    if(
-      !video.seeking &&
-      video.readyState>=2 &&
-      Math.abs(video.currentTime-target)<0.025
-    ){
-      return true;
-    }
-  }
-
-  return false;
-}
-
-/* =========================================
-   HAND AND FINGER TRACKING
+   HAND TRACKING
 ========================================= */
 
 function handOpening(hand){
 
   if(!hand || hand.length<21) return null;
 
-  const palmWidth = distance(hand[5],hand[17]);
+  const palmWidth = distance(
+    hand[5],hand[17]
+  );
 
   if(!palmWidth || palmWidth<2) return null;
 
-  const thumbIndex = distance(hand[4],hand[8]);
-  const thumbMiddle = distance(hand[4],hand[12]);
+  const aperture = (
+    distance(hand[4],hand[8])+
+    distance(hand[4],hand[12])
+  )/(2*palmWidth);
 
-  const indexAngle = angle(
-    hand[5],hand[6],hand[8]
-  );
-
-  const middleAngle = angle(
-    hand[9],hand[10],hand[12]
-  );
+  const extension = mean([
+    angle(hand[5],hand[6],hand[8]),
+    angle(hand[9],hand[10],hand[12])
+  ]);
 
   return {
-    aperture:(
-      thumbIndex+thumbMiddle
-    )/(2*palmWidth),
-
-    extension:mean([
-      indexAngle,
-      middleAngle
-    ])/180
+    aperture,
+    extension:Number.isFinite(extension)
+      ? extension/180
+      : null
   };
 }
 
 function matchHand(wrist,hands,scale){
-
-  if(!wrist || !hands.length || !scale) return null;
 
   let best = null;
   let bestDistance = Infinity;
@@ -863,6 +850,7 @@ function matchHand(wrist,hands,scale){
     const d = distance(wrist,hand[0]);
 
     if(d!==null && d<bestDistance){
+
       bestDistance = d;
       best = hand;
     }
@@ -873,15 +861,11 @@ function matchHand(wrist,hands,scale){
     : null;
 }
 
-/* =========================================
-   BODY LANDMARK EXTRACTION
-========================================= */
-
 function extractArm(pose,hands,side){
 
   if(!pose) return null;
 
-  const index = ARM_INDEX[side];
+  const index = ARM[side];
 
   const shoulder = pose[index.shoulder];
   const elbow = pose[index.elbow];
@@ -901,26 +885,33 @@ function extractArm(pose,hands,side){
 
   if(!scale || scale<15) return null;
 
-  const hand = matchHand(wrist,hands,scale);
+  const hand = matchHand(
+    wrist,hands,scale
+  );
 
   return {
+
     shoulder,
     elbow,
     wrist,
     hip,
     scale,
+    hand,
+
+    fingers:handOpening(hand),
 
     relativeWrist:{
       x:(wrist.x-shoulder.x)/scale,
       y:(wrist.y-shoulder.y)/scale
     },
 
-    elbowAngle:angle(shoulder,elbow,wrist),
+    elbowAngle:angle(
+      shoulder,elbow,wrist
+    ),
 
-    armExtension:distance(shoulder,wrist)/scale,
-
-    hand,
-    fingers:handOpening(hand),
+    extension:distance(
+      shoulder,wrist
+    )/scale,
 
     visibility:mean([
       shoulder.visibility,
@@ -932,7 +923,7 @@ function extractArm(pose,hands,side){
 }
 
 /* =========================================
-   LANDMARK VISUALIZATION
+   VISUAL TRACKING OVERLAY
 ========================================= */
 
 function line(a,b,color,width=3){
@@ -957,20 +948,29 @@ function dot(p,color,radius=4){
   ctx.fill();
 }
 
-function drawArm(arm,color){
+function drawArm(arm){
 
   if(!arm) return;
 
-  line(arm.shoulder,arm.elbow,color);
-  line(arm.elbow,arm.wrist,color);
+  line(
+    arm.shoulder,
+    arm.elbow,
+    "#27b8ff"
+  );
 
-  dot(arm.shoulder,color);
-  dot(arm.elbow,color);
-  dot(arm.wrist,color);
+  line(
+    arm.elbow,
+    arm.wrist,
+    "#27b8ff"
+  );
+
+  dot(arm.shoulder,"#27b8ff");
+  dot(arm.elbow,"#27b8ff");
+  dot(arm.wrist,"#27b8ff");
 
   if(arm.hand){
 
-    const connections = [
+    const links = [
       [0,1],[1,2],[2,3],[3,4],
       [0,5],[5,6],[6,7],[7,8],
       [5,9],[9,10],[10,11],[11,12],
@@ -979,171 +979,146 @@ function drawArm(arm,color){
       [0,17]
     ];
 
-    connections.forEach(([a,b])=>{
-      line(arm.hand[a],arm.hand[b],"#45e6a0",2);
+    links.forEach(([a,b])=>{
+
+      line(
+        arm.hand[a],
+        arm.hand[b],
+        "#45e6a0",
+        2
+      );
     });
 
-    arm.hand.forEach(p=>dot(p,"#45e6a0",2));
+    arm.hand.forEach(
+      p=>dot(p,"#45e6a0",2)
+    );
   }
 }
 
 function drawFrame(frame,side=null){
 
-  ctx.clearRect(0,0,overlay.width,overlay.height);
+  ctx.clearRect(
+    0,0,
+    overlay.width,
+    overlay.height
+  );
 
   if(!frame) return;
 
   if(side){
-    drawArm(frame[side],"#27b8ff");
+
+    drawArm(frame[side]);
+
   }else{
-    drawArm(frame.right,"#27b8ff");
-    drawArm(frame.left,"#27b8ff");
+
+    drawArm(frame.right);
+    drawArm(frame.left);
   }
 
-  if(frame.nose) dot(frame.nose,"#ffffff",3);
+  dot(frame.nose,"#ffffff",3);
 }
 
 /* =========================================
-   SEQUENTIAL VIDEO ANALYSIS
+   FRAME INFERENCE
 ========================================= */
 
-async function scanVideo(){
+function inferFrame(source,time,index){
 
-  frames = [];
-
-  let readable = 0;
-  let poseCount = 0;
-
-  const count = Math.max(
-    1,
-    Math.floor(video.duration*CONFIG.sampleFPS)
+  captureCtx.drawImage(
+    source,
+    0,0,
+    captureCanvas.width,
+    captureCanvas.height
   );
 
-  phase(0,"active");
-  phase(1,"active");
+  modelTimestamp = Math.max(
+    modelTimestamp+1,
+    performance.now()
+  );
 
-  for(let i=0;i<count;i++){
+  const frame = {
+    time,
+    index,
+    poseDetected:false,
+    nose:null,
+    right:null,
+    left:null
+  };
 
-    const time = i/CONFIG.sampleFPS;
+  try{
 
-    const decoded = await seekFrame(time);
+    const poseResult =
+      poseModel.detectForVideo(
+        captureCanvas,
+        modelTimestamp
+      );
 
-    if(!decoded) continue;
+    const handResult =
+      handModel.detectForVideo(
+        captureCanvas,
+        modelTimestamp
+      );
 
-    readable++;
+    const pose =
+      poseResult.landmarks?.[0]?.map(point);
 
-    analysisCtx.drawImage(
-      video,
-      0,0,
-      analysisCanvas.width,
-      analysisCanvas.height
-    );
+    const hands =
+      (handResult.landmarks || [])
+      .map(hand=>hand.map(point));
 
-    modelTimestamp = Math.max(
-      modelTimestamp+1,
-      performance.now()
-    );
+    if(pose){
 
-    const frame = {
-      time,
-      frame:i,
-      nose:null,
-      right:null,
-      left:null
-    };
+      frame.poseDetected = true;
 
-    try{
-
-      const poseResult =
-        poseLandmarker.detectForVideo(
-          analysisCanvas,
-          modelTimestamp
-        );
-
-      const handResult =
-        handLandmarker.detectForVideo(
-          analysisCanvas,
-          modelTimestamp
-        );
-
-      const pose = poseResult.landmarks?.[0]
-        ?.map(pixelPoint);
-
-      const hands = (handResult.landmarks || [])
-        .map(hand=>hand.map(pixelPoint));
-
-      if(pose){
-
-        poseCount++;
-
-        frame.nose = visible(pose[0])
+      frame.nose =
+        visible(pose[0])
           ? pose[0]
           : null;
 
-        frame.right = extractArm(
-          pose,hands,"right"
-        );
+      frame.right = extractArm(
+        pose,hands,"right"
+      );
 
-        frame.left = extractArm(
-          pose,hands,"left"
-        );
-      }
-
-    }catch(error){
-      console.warn("Frame inference failed",i,error);
+      frame.left = extractArm(
+        pose,hands,"left"
+      );
     }
 
-    frames.push(frame);
+  }catch(error){
 
-    drawFrame(frame);
-
-    progress((i+1)/count*70);
-
-    $("badge").textContent =
-      `FRAME ${i+1} / ${count}`;
-
-    status(
-      `Tracking body and fingers: ${time.toFixed(2)}s`
-    );
-
-    await new Promise(resolve=>setTimeout(resolve,0));
+    console.warn("Inference failed",error);
   }
 
-  phase(0,"done");
-  phase(1,"done");
-
-  if(!readable){
-    throw new Error("No readable video frames.");
-  }
-
-  return {
-    requestedFrames:count,
-    readableFrames:readable,
-    poseCount,
-    poseCoverage:poseCount/count
-  };
+  return frame;
 }
 
 /* =========================================
-   MOTION SIGNAL PROCESSING
+   MOTION SIGNALS
 ========================================= */
 
-function buildSeries(side){
+function buildSeries(sourceFrames,side){
 
-  const series = frames.map(frame=>{
+  const series = sourceFrames.map(frame=>{
 
     const arm = frame[side];
 
     return {
+
       time:frame.time,
-      frame:frame.frame,
+      index:frame.index,
       source:frame,
       arm,
       valid:!!arm,
+
       angle:arm?.elbowAngle ?? null,
-      extension:arm?.armExtension ?? null,
+
+      extension:arm?.extension ?? null,
+
       aperture:arm?.fingers?.aperture ?? null,
-      fingerExtension:arm?.fingers?.extension ?? null,
+
+      fingerExtension:
+        arm?.fingers?.extension ?? null,
+
       velocity:null,
       angularVelocity:null,
       acceleration:null
@@ -1162,12 +1137,8 @@ function buildSeries(side){
 
     if(
       dt<=0 ||
-      dt>CONFIG.maxFrameGap
+      dt>CONFIG.maximumFrameGap*2
     ) continue;
-
-    b.angle = median([
-      a.angle,b.angle,c.angle
-    ]);
 
     b.velocity = distance(
       a.arm.relativeWrist,
@@ -1175,7 +1146,7 @@ function buildSeries(side){
     )/dt;
 
     b.angularVelocity =
-      (c.arm.elbowAngle-a.arm.elbowAngle)/dt;
+      (c.angle-a.angle)/dt;
   }
 
   for(let i=2;i<series.length-2;i++){
@@ -1189,34 +1160,15 @@ function buildSeries(side){
       !Number.isFinite(c.velocity)
     ) continue;
 
+    const dt = c.time-a.time;
+
+    if(dt<=0) continue;
+
     b.acceleration =
-      (c.velocity-a.velocity)/(c.time-a.time);
+      (c.velocity-a.velocity)/dt;
   }
 
   return series;
-}
-
-function validWindow(series,start,end){
-
-  const window = series.slice(start,end+1);
-
-  if(!window.length) return false;
-
-  const valid = window.filter(p=>p.valid);
-
-  if(valid.length/window.length<0.85) return false;
-
-  for(let i=1;i<valid.length;i++){
-
-    if(
-      valid[i].time-valid[i-1].time>
-      CONFIG.maxFrameGap
-    ){
-      return false;
-    }
-  }
-
-  return true;
 }
 
 /* =========================================
@@ -1225,75 +1177,77 @@ function validWindow(series,start,end){
 
 function estimateRelease(series,start,peak,end){
 
-  const peakTime = series[peak].time;
+  let best = null;
+  let bestScore = 0;
 
-  let bestFinger = null;
-  let bestFingerScore = 0;
+  const peakTime = series[peak].time;
 
   for(let i=start+1;i<=end;i++){
 
-    const previous = series[i-1];
-    const current = series[i];
+    const a = series[i-1];
+    const b = series[i];
 
     if(
-      Math.abs(current.time-peakTime)>0.15
+      Math.abs(b.time-peakTime)>0.15
     ) continue;
 
     if(
-      !Number.isFinite(previous.aperture) ||
-      !Number.isFinite(current.aperture)
+      !Number.isFinite(a.aperture) ||
+      !Number.isFinite(b.aperture)
     ) continue;
 
-    const dt = current.time-previous.time;
+    const dt = b.time-a.time;
 
-    if(dt<=0 || dt>0.10) continue;
+    if(dt<=0 || dt>0.15) continue;
 
     const opening =
-      (current.aperture-previous.aperture)/dt;
+      (b.aperture-a.aperture)/dt;
 
-    const extension =
-      Number.isFinite(current.fingerExtension) &&
-      Number.isFinite(previous.fingerExtension)
+    const fingerExtension =
+      Number.isFinite(a.fingerExtension) &&
+      Number.isFinite(b.fingerExtension)
         ? (
-            current.fingerExtension-
-            previous.fingerExtension
-          )/dt
+          b.fingerExtension-
+          a.fingerExtension
+        )/dt
         : 0;
 
-    const evidence =
+    const score =
       Math.max(0,opening)+
-      Math.max(0,extension)*0.5;
+      Math.max(0,fingerExtension)*0.5;
 
-    if(
-      opening>0.8 &&
-      evidence>bestFingerScore
-    ){
-      bestFingerScore = evidence;
-      bestFinger = i;
+    if(opening>0.8 && score>bestScore){
+
+      bestScore = score;
+      best = i;
     }
   }
 
-  if(bestFinger!==null){
+  if(best!==null){
 
     return {
-      index:bestFinger,
-      method:"Wrist motion + finger opening",
-      evidence:"Hand-supported estimate"
+      index:best,
+      method:"Wrist motion and finger opening",
+      handSupported:true
     };
   }
 
   return {
     index:peak,
     method:"Peak wrist velocity",
-    evidence:"Motion-only estimate"
+    handSupported:false
   };
 }
 
 /* =========================================
-   THROW SEQUENCE RECOGNITION
+   THROW RECOGNITION
 ========================================= */
 
-function detectThrows(series,side){
+function detectThrows(sourceFrames,side){
+
+  const series = buildSeries(
+    sourceFrames,side
+  );
 
   const detected = [];
 
@@ -1304,7 +1258,7 @@ function detectThrows(series,side){
     if(
       !peak.valid ||
       !Number.isFinite(peak.velocity) ||
-      peak.velocity<CONFIG.minPeakVelocity ||
+      peak.velocity<CONFIG.minimumPeakVelocity ||
       !Number.isFinite(peak.angularVelocity) ||
       peak.angularVelocity<35
     ) continue;
@@ -1317,68 +1271,61 @@ function detectThrows(series,side){
     if(
       detected.length &&
       peak.time-detected.at(-1).releaseTime<
-      CONFIG.minThrowSeparation
+      CONFIG.minimumThrowSeparation
     ) continue;
 
     let start = i;
-    let lowestAngle = peak.angle;
+    let minimumAngle = peak.angle;
 
     for(let j=i-1;j>=0;j--){
 
       const p = series[j];
 
       if(
-        peak.time-p.time>0.65 ||
-        !p.valid
+        !p.valid ||
+        peak.time-p.time>0.65
       ) break;
 
-      if(
-        Number.isFinite(p.angle) &&
-        p.angle<lowestAngle
-      ){
-        lowestAngle = p.angle;
+      if(p.angle<minimumAngle){
+
+        minimumAngle = p.angle;
         start = j;
       }
     }
 
     let end = i;
-    let highestAngle = peak.angle;
+    let maximumAngle = peak.angle;
 
     for(let j=i+1;j<series.length;j++){
 
       const p = series[j];
 
       if(
-        p.time-peak.time>0.45 ||
-        !p.valid
+        !p.valid ||
+        p.time-peak.time>0.45
       ) break;
 
-      if(
-        Number.isFinite(p.angle) &&
-        p.angle>highestAngle
-      ){
-        highestAngle = p.angle;
+      if(p.angle>maximumAngle){
+
+        maximumAngle = p.angle;
         end = j;
       }
     }
 
+    if(start>=i || end<=i) continue;
+
     const duration =
       series[end].time-series[start].time;
 
+    if(duration<0.12 || duration>1.10) continue;
+
     const extensionChange =
-      highestAngle-lowestAngle;
+      maximumAngle-minimumAngle;
 
     if(
-      duration<CONFIG.minThrowDuration ||
-      duration>CONFIG.maxThrowDuration ||
-      extensionChange<CONFIG.minElbowExtension ||
-      end<=i ||
-      start>=i
+      extensionChange<
+      CONFIG.minimumElbowExtension
     ) continue;
-
-    if(!validWindow(series,start,end)) continue;
-
-    /* Require evidence of a preceding draw-back. */
 
     let drawBack = false;
 
@@ -1387,11 +1334,12 @@ function detectThrows(series,side){
       const p = series[j];
 
       if(
-        series[start].time-p.time>0.85 ||
-        !p.valid
+        !p.valid ||
+        series[start].time-p.time>0.85
       ) break;
 
-      if(p.angle-lowestAngle>=8){
+      if(p.angle-minimumAngle>=8){
+
         drawBack = true;
         break;
       }
@@ -1399,74 +1347,86 @@ function detectThrows(series,side){
 
     if(!drawBack) continue;
 
-    /* Require measurable forward acceleration. */
+    const accelerationDetected =
+      series.slice(start,i+1).some(
+        p=>Number.isFinite(p.acceleration) &&
+        p.acceleration>1
+      );
 
-    const accelerated = series
-      .slice(start,i+1)
-      .some(p=>(
-        Number.isFinite(p.acceleration) &&
-        p.acceleration>1.0
-      ));
+    if(!accelerationDetected) continue;
 
-    if(!accelerated) continue;
+    const window = series.slice(start,end+1);
+
+    const valid = window.filter(p=>p.valid);
+
+    if(valid.length/window.length<0.85) continue;
+
+    let gapDetected = false;
+
+    for(let j=1;j<valid.length;j++){
+
+      if(
+        valid[j].time-valid[j-1].time>
+        CONFIG.maximumFrameGap
+      ){
+
+        gapDetected = true;
+        break;
+      }
+    }
+
+    if(gapDetected) continue;
 
     const release = estimateRelease(
       series,start,i,end
     );
 
-    const releasePoint = series[release.index];
+    const r = series[release.index];
 
-    if(!releasePoint.valid) continue;
+    if(!r.valid) continue;
 
-    const followDuration =
-      series[end].time-releasePoint.time;
+    const followTime =
+      series[end].time-r.time;
 
     if(
-      followDuration<CONFIG.minFollowThrough
+      followTime<
+      CONFIG.followThroughSeconds
     ) continue;
 
-    const followExtension =
-      series[end].extension-
-      releasePoint.extension;
-
-    const throwWindow = series
-      .slice(start,end+1)
-      .filter(p=>p.valid);
+    const first = series[start];
 
     const handCoverage =
-      throwWindow.filter(p=>p.arm.hand).length/
-      throwWindow.length;
+      valid.filter(p=>p.arm.hand).length/
+      valid.length*100;
 
-    const initial = series[start];
-
-    const initialNose = initial.source.nose;
+    const elbowDisplacement = Math.max(
+      ...valid.map(p=>
+        distance(
+          first.arm.elbow,
+          p.arm.elbow
+        )/first.arm.scale
+      )
+    )*100;
 
     let headDisplacement = null;
 
-    if(initialNose){
+    if(first.source.nose){
 
-      const values = throwWindow
+      const headValues = valid
         .filter(p=>p.source.nose)
         .map(p=>
-          distance(initialNose,p.source.nose)/
-          initial.arm.scale
+          distance(
+            first.source.nose,
+            p.source.nose
+          )/first.arm.scale
         );
 
-      if(values.length>=3){
+      if(headValues.length>=3){
 
         headDisplacement =
-          Math.max(...values)*100;
+          Math.max(...headValues)*100;
       }
     }
-
-    const elbowDisplacement = Math.max(
-      ...throwWindow.map(p=>
-        distance(
-          initial.arm.elbow,
-          p.arm.elbow
-        )/initial.arm.scale
-      )
-    )*100;
 
     detected.push({
 
@@ -1474,45 +1434,46 @@ function detectThrows(series,side){
 
       side,
 
-      startTime:round(series[start].time,3),
+      startTime:round(first.time,3),
 
-      releaseTime:round(releasePoint.time,3),
+      releaseTime:round(r.time,3),
 
       endTime:round(series[end].time,3),
 
-      releaseFrame:releasePoint.frame,
+      releaseFrame:r.index,
 
       releaseMethod:release.method,
 
-      releaseEvidence:release.evidence,
+      handSupported:release.handSupported,
+
+      elbowAngle:round(r.angle),
 
       deliveryTempoMs:Math.round(
-        (releasePoint.time-series[start].time)*1000
+        (r.time-first.time)*1000
       ),
-
-      elbowAngle:round(releasePoint.angle),
-
-      elbowExtensionDegrees:round(extensionChange),
-
-      peakWristVelocity:round(peak.velocity,3),
 
       followThroughMs:Math.round(
-        followDuration*1000
+        followTime*1000
       ),
+
+      elbowExtensionDegrees:
+        round(extensionChange),
 
       followThroughExtension:round(
-        followExtension*100
+        (series[end].extension-r.extension)*100
       ),
 
-      elbowDisplacement:round(elbowDisplacement),
+      elbowDisplacement:
+        round(elbowDisplacement),
 
-      headDisplacement:round(headDisplacement),
+      headDisplacement:
+        round(headDisplacement),
+
+      handCoverage:round(handCoverage),
 
       poseVisibility:round(
-        mean(throwWindow.map(p=>p.arm.visibility))*100
+        mean(valid.map(p=>p.arm.visibility))*100
       ),
-
-      handCoverage:round(handCoverage*100),
 
       directDartReleaseObserved:false
     });
@@ -1523,82 +1484,670 @@ function detectThrows(series,side){
   return detected;
 }
 
-/* =========================================
-   AUTOMATIC ARM SELECTION
-========================================= */
+function recognize(sourceFrames){
 
-function chooseArm(){
+  const right = detectThrows(
+    sourceFrames,"right"
+  );
 
-  const right = buildSeries("right");
-  const left = buildSeries("left");
+  const left = detectThrows(
+    sourceFrames,"left"
+  );
 
-  const rightThrows = detectThrows(right,"right");
-  const leftThrows = detectThrows(left,"left");
-
-  const requested = $("armSelect").value;
-
-  if(requested==="right"){
-    return {
-      side:"right",
-      series:right,
-      throws:rightThrows
-    };
-  }
-
-  if(requested==="left"){
-    return {
-      side:"left",
-      series:left,
-      throws:leftThrows
-    };
-  }
-
-  function evidence(throws){
+  function score(throws){
 
     return throws.reduce((sum,t)=>
-      sum+
-      1+
+      sum+1+
       t.handCoverage/100+
       t.poseVisibility/100,
       0
     );
   }
 
-  const rightScore = evidence(rightThrows);
-  const leftScore = evidence(leftThrows);
+  const rightScore = score(right);
+  const leftScore = score(left);
 
-  if(
+  const ambiguous =
     rightScore>0 &&
     leftScore>0 &&
     Math.abs(rightScore-leftScore)/
-    Math.max(rightScore,leftScore)<0.15
-  ){
+    Math.max(rightScore,leftScore)<0.15;
 
-    throw new Error(
-      "Throwing arm is ambiguous. Select left or right manually and analyze again."
-    );
+  if(ambiguous){
+
+    return {
+      side:null,
+      throws:[],
+      ambiguous:true
+    };
   }
 
   return rightScore>=leftScore
     ? {
-        side:"right",
-        series:right,
-        throws:rightThrows
-      }
+      side:"right",
+      throws:right,
+      ambiguous:false
+    }
     : {
-        side:"left",
-        series:left,
-        throws:leftThrows
-      };
+      side:"left",
+      throws:left,
+      ambiguous:false
+    };
 }
 
 /* =========================================
-   CONSISTENCY ANALYSIS
+   COUNTDOWN
 ========================================= */
 
-function calculateConsistency(throws){
+$("recordBtn").addEventListener(
+  "click",
+  startCountdown
+);
 
-  if(throws.length<2) return null;
+async function startCountdown(){
+
+  if(
+    state!=="ready" ||
+    !modelsReady ||
+    !cameraReady
+  ) return;
+
+  if(!window.MediaRecorder){
+
+    status(
+      "Video recording is not supported by this browser.",
+      "error"
+    );
+
+    return;
+  }
+
+  state = "countdown";
+
+  $("recordBtn").disabled = true;
+  $("switchBtn").disabled = true;
+
+  hide("analysisBtn");
+  hide("retryBtn");
+  hide("results");
+  hide("throwsPanel");
+  hide("coachPanel");
+
+  progress(0);
+
+  $("badge").textContent = "GET READY";
+
+  show("countdown");
+
+  for(let n=CONFIG.countdown;n>0;n--){
+
+    $("countdown").textContent = n;
+
+    status(
+      `Recording starts in ${n}...`
+    );
+
+    await sleep(1000);
+
+    if(state!=="countdown") return;
+  }
+
+  hide("countdown");
+
+  startRecording();
+}
+
+/* =========================================
+   AUTOMATIC VIDEO RECORDING
+========================================= */
+
+function chooseMimeType(){
+
+  const types = [
+    "video/webm;codecs=vp8",
+    "video/webm",
+    "video/mp4"
+  ];
+
+  return types.find(
+    type=>MediaRecorder.isTypeSupported(type)
+  ) || "";
+}
+
+function startRecording(){
+
+  chunks = [];
+  liveFrames = [];
+  liveThrows = [];
+  frames = [];
+
+  recordedBlob = null;
+  recordedDuration = 0;
+
+  stopRequested = false;
+  frameNumber = 0;
+
+  if(recordingURL){
+
+    URL.revokeObjectURL(recordingURL);
+    recordingURL = null;
+  }
+
+  try{
+
+    const mimeType = chooseMimeType();
+
+    const options = {
+      videoBitsPerSecond:2500000
+    };
+
+    if(mimeType) options.mimeType = mimeType;
+
+    recorder = new MediaRecorder(
+      stream,options
+    );
+
+    recorder.ondataavailable = event=>{
+
+      if(event.data && event.data.size){
+
+        chunks.push(event.data);
+      }
+    };
+
+    recorder.onerror = event=>{
+
+      console.error(event.error);
+
+      cancelAnimationFrame(animationId);
+      clearInterval(timerId);
+
+      state = "ready";
+
+      $("badge").classList.remove("recording");
+
+      status("Recording failed. Try again.","error");
+
+      updateReady();
+    };
+
+    recorder.onstop = finishRecording;
+
+    recorder.start(250);
+
+    recordingStart = performance.now();
+
+    lastInference = 0;
+    lastRecognition = 0;
+
+    state = "recording";
+
+    $("badge").textContent = "● RECORDING";
+
+    $("badge").classList.add("recording");
+
+    status(
+      "Throw naturally. DARTIQ is detecting your movements."
+    );
+
+    timerId = setInterval(()=>{
+
+      if(state!=="recording") return;
+
+      const elapsed =
+        (performance.now()-recordingStart)/1000;
+
+      $("timer").textContent =
+        "00:"+String(
+          Math.floor(elapsed)
+        ).padStart(2,"0");
+
+      if(
+        elapsed>=CONFIG.maximumRecordingSeconds
+      ){
+
+        stopRecording("time-limit");
+      }
+
+    },100);
+
+    animationId =
+      requestAnimationFrame(liveLoop);
+
+  }catch(error){
+
+    console.error(error);
+
+    state = "ready";
+
+    status(
+      "Unable to start recording.",
+      "error"
+    );
+
+    updateReady();
+  }
+}
+
+/* =========================================
+   LIVE THROW DETECTION
+========================================= */
+
+function liveLoop(now){
+
+  if(state!=="recording") return;
+
+  const elapsed =
+    (performance.now()-recordingStart)/1000;
+
+  if(
+    now-lastInference>=1000/CONFIG.sampleFPS &&
+    camera.readyState>=2
+  ){
+
+    lastInference = now;
+
+    const frame = inferFrame(
+      camera,
+      elapsed,
+      frameNumber++
+    );
+
+    liveFrames.push(frame);
+
+    drawFrame(frame);
+
+    if(now-lastRecognition>=300){
+
+      lastRecognition = now;
+
+      const result = recognize(liveFrames);
+
+      liveThrows = result.throws;
+
+      const poseCoverage =
+        liveFrames.filter(
+          f=>f.poseDetected
+        ).length/liveFrames.length;
+
+      const count = liveThrows.length;
+
+      progress(
+        Math.min(
+          100,
+          count/CONFIG.targetThrows*100
+        )
+      );
+
+      if(!frame.right && !frame.left){
+
+        status(
+          "Keep your throwing arm and upper body visible."
+        );
+
+      }else{
+
+        status(
+          `Throwing sequences detected: ${count}/${CONFIG.targetThrows}`
+        );
+      }
+
+      const last = liveThrows.at(-1);
+
+      const enoughFollowThrough =
+        last &&
+        elapsed-last.endTime>=0.65;
+
+      const sufficientSamples =
+        liveFrames.length>=35;
+
+      if(
+        elapsed>=CONFIG.minimumRecordingSeconds &&
+        count>=CONFIG.targetThrows &&
+        poseCoverage>=CONFIG.minimumPoseCoverage &&
+        sufficientSamples &&
+        enoughFollowThrough &&
+        !result.ambiguous
+      ){
+
+        stopRecording("sufficient-motion");
+
+        return;
+      }
+    }
+  }
+
+  if(elapsed>=CONFIG.maximumRecordingSeconds){
+
+    stopRecording("time-limit");
+
+    return;
+  }
+
+  animationId =
+    requestAnimationFrame(liveLoop);
+}
+
+/* =========================================
+   AUTOMATIC RECORDING STOP
+========================================= */
+
+let stopReason = "";
+
+function stopRecording(reason){
+
+  if(
+    state!=="recording" ||
+    stopRequested
+  ) return;
+
+  stopRequested = true;
+  stopReason = reason;
+
+  recordedDuration =
+    (performance.now()-recordingStart)/1000;
+
+  state = "finalizing";
+
+  cancelAnimationFrame(animationId);
+  clearInterval(timerId);
+
+  $("badge").classList.remove("recording");
+
+  $("badge").textContent = "PROCESSING VIDEO";
+
+  status("Finalizing recording...");
+
+  if(
+    recorder &&
+    recorder.state!=="inactive"
+  ){
+
+    recorder.stop();
+  }
+}
+
+async function finishRecording(){
+
+  try{
+
+    recordedBlob = new Blob(
+      chunks,{
+        type:recorder.mimeType ||
+        "video/webm"
+      }
+    );
+
+    if(!recordedBlob.size){
+
+      throw new Error("The recording is empty.");
+    }
+
+    recordingURL =
+      URL.createObjectURL(recordedBlob);
+
+    playback.src = recordingURL;
+
+    playback.load();
+
+    hide("camera");
+    show("playback");
+
+    ctx.clearRect(
+      0,0,
+      overlay.width,
+      overlay.height
+    );
+
+    state = "recorded";
+
+    hide("recordBtn");
+    hide("switchBtn");
+
+    show("analysisBtn");
+    show("retryBtn");
+
+    $("badge").textContent = "RECORDING COMPLETE";
+
+    if(stopReason==="sufficient-motion"){
+
+      progress(100);
+
+      status(
+        "Enough throwing movement captured. Your AI analysis is ready to begin.",
+        "success"
+      );
+
+    }else{
+
+      status(
+        "Recording time limit reached. Tap Get AI Throw Analysis to check whether enough usable movement was captured."
+      );
+    }
+
+    stream?.getTracks().forEach(
+      track=>track.stop()
+    );
+
+    stream = null;
+    cameraReady = false;
+    camera.srcObject = null;
+
+  }catch(error){
+
+    state = "ready";
+
+    status(error.message,"error");
+
+    updateReady();
+  }
+}
+
+/* =========================================
+   RECORDED VIDEO DECODING
+========================================= */
+
+async function waitPlayback(){
+
+  const started = performance.now();
+
+  while(performance.now()-started<15000){
+
+    if(
+      playback.readyState>=2 &&
+      playback.videoWidth>0
+    ){
+
+      resizeCanvas(playback);
+
+      return;
+    }
+
+    if(playback.error){
+
+      throw new Error(
+        "Recorded video cannot be decoded."
+      );
+    }
+
+    await sleep(50);
+  }
+
+  throw new Error(
+    "Recorded video loading timed out."
+  );
+}
+
+async function seekFrame(time){
+
+  const duration =
+    Number.isFinite(playback.duration)
+      ? playback.duration
+      : recordedDuration;
+
+  const target = clamp(
+    time,
+    0,
+    Math.max(0,duration-0.04)
+  );
+
+  playback.pause();
+
+  if(
+    playback.readyState>=2 &&
+    !playback.seeking &&
+    Math.abs(playback.currentTime-target)<0.005
+  ){
+
+    return true;
+  }
+
+  try{
+
+    playback.currentTime = target;
+
+  }catch(error){
+
+    return false;
+  }
+
+  const started = performance.now();
+
+  while(performance.now()-started<2500){
+
+    await sleep(12);
+
+    if(
+      !playback.seeking &&
+      playback.readyState>=2 &&
+      Math.abs(playback.currentTime-target)<0.035
+    ){
+
+      return true;
+    }
+  }
+
+  return false;
+}
+
+/* =========================================
+   FULL AI ANALYSIS
+========================================= */
+
+async function analyzeRecording(){
+
+  await waitPlayback();
+
+  const duration =
+    Number.isFinite(playback.duration) &&
+    playback.duration>0
+      ? playback.duration
+      : recordedDuration;
+
+  const count = Math.max(
+    1,
+    Math.floor(duration*CONFIG.sampleFPS)
+  );
+
+  frames = [];
+
+  let readable = 0;
+
+  for(let i=0;i<count;i++){
+
+    const time = i/CONFIG.sampleFPS;
+
+    const decoded = await seekFrame(time);
+
+    if(decoded){
+
+      readable++;
+
+      const frame = inferFrame(
+        playback,time,i
+      );
+
+      frames.push(frame);
+
+      drawFrame(frame);
+    }
+
+    progress(
+      (i+1)/count*90
+    );
+
+    $("badge").textContent =
+      `AI SCAN ${i+1}/${count}`;
+
+    status(
+      "Analyzing body movement, wrist acceleration and finger opening..."
+    );
+
+    await sleep(0);
+  }
+
+  if(!readable){
+
+    throw new Error(
+      "No readable frames found in the recording."
+    );
+  }
+
+  const poseCoverage =
+    frames.filter(
+      f=>f.poseDetected
+    ).length/count;
+
+  if(
+    poseCoverage<CONFIG.minimumPoseCoverage
+  ){
+
+    throw new Error(
+      `Insufficient pose coverage (${Math.round(poseCoverage*100)}%). Record again with your full throwing arm and upper body visible.`
+    );
+  }
+
+  const recognition = recognize(frames);
+
+  if(recognition.ambiguous){
+
+    throw new Error(
+      "Throwing arm could not be identified reliably. Record from a clearer side-on angle."
+    );
+  }
+
+  return {
+
+    engine:"DARTIQ CORE Vision V2",
+
+    playerEmail,
+    playerName,
+    sessionId,
+
+    recordingDuration:duration,
+
+    framesChecked:readable,
+
+    requestedFrames:count,
+
+    poseCoverage:round(poseCoverage*100),
+
+    arm:recognition.side,
+
+    throws:recognition.throws,
+
+    analysisSuccess:
+      recognition.throws.length>0,
+
+    releaseDirectlyObserved:false
+  };
+}
+
+/* =========================================
+   RESULTS AND CONSISTENCY
+========================================= */
+
+function consistency(throws){
 
   const values = throws
     .map(t=>t.deliveryTempoMs)
@@ -1612,158 +2161,116 @@ function calculateConsistency(throws){
     values.map(v=>(v-average)**2)
   );
 
-  const cv = Math.sqrt(variance)/average;
-
-  return {
-    tempoVariationPercent:round(cv*100),
-    sampleCount:values.length
-  };
-}
-
-/* =========================================
-   COACHING OBSERVATIONS
-========================================= */
-
-function coaching(throws,consistency){
-
-  if(!throws.length){
-
-    return {
-      observation:
-        "No complete throwing sequence met the prototype recognition requirements.",
-
-      advice:
-        "Record the complete preparation, draw-back, delivery and follow-through from a stationary side-on camera."
-    };
-  }
-
-  const head = mean(
-    throws.map(t=>t.headDisplacement)
+  return round(
+    Math.sqrt(variance)/average*100
   );
-
-  const elbow = mean(
-    throws.map(t=>t.elbowDisplacement)
-  );
-
-  const supported = throws.filter(
-    t=>t.releaseEvidence==="Hand-supported estimate"
-  ).length;
-
-  const observation = [
-    `${throws.length} candidate throwing sequence(s) detected.`,
-    `${supported} release estimate(s) supported by visible finger opening.`,
-    Number.isFinite(head)
-      ? `Average head displacement: ${round(head)}% of torso length.`
-      : "",
-    Number.isFinite(elbow)
-      ? `Average elbow displacement: ${round(elbow)}% of torso length.`
-      : "",
-    consistency
-      ? `Delivery tempo variation: ${consistency.tempoVariationPercent}%.`
-      : ""
-  ].filter(Boolean).join(" ");
-
-  return {
-
-    observation,
-
-    advice:
-      "Review the marked release frames and compare the detected movements between throws. Establish your personal baseline before changing technique. These measurements are observational and do not establish a universal ideal throwing style."
-  };
 }
-
-/* =========================================
-   RESULTS
-========================================= */
 
 function renderResults(result){
 
   const throws = result.throws;
 
-  $("results").classList.remove("hidden");
+  show("results");
 
-  $("throwCount").textContent = throws.length;
+  $("throwCount").textContent =
+    throws.length;
 
-  $("throwArm").textContent = throws.length
-    ? result.arm.toUpperCase()
-    : "—";
+  $("throwArm").textContent =
+    throws.length
+      ? result.arm.toUpperCase()
+      : "—";
 
   $("poseCoverage").textContent =
     `${result.poseCoverage}%`;
 
   $("handCoverage").textContent =
-    format(result.handCoverage,"%");
+    format(
+      round(mean(
+        throws.map(t=>t.handCoverage)
+      )),
+      "%"
+    );
 
   $("elbowAngle").textContent =
-    format(round(mean(
-      throws.map(t=>t.elbowAngle)
-    )),"°");
+    format(
+      round(mean(
+        throws.map(t=>t.elbowAngle)
+      )),
+      "°"
+    );
 
   $("tempo").textContent =
-    format(round(mean(
-      throws.map(t=>t.deliveryTempoMs)
-    ),0)," ms");
+    format(
+      round(mean(
+        throws.map(t=>t.deliveryTempoMs)
+      ),0),
+      " ms"
+    );
 
   $("headMovement").textContent =
-    format(round(mean(
-      throws.map(t=>t.headDisplacement)
-    )),"%");
+    format(
+      round(mean(
+        throws.map(t=>t.headDisplacement)
+      )),
+      "%"
+    );
 
   $("consistency").textContent =
-    result.consistency
-      ? `${result.consistency.tempoVariationPercent}% variation`
-      : "—";
+    format(consistency(throws),"%");
 
   $("summary").textContent =
-    `Analyzed ${result.readableFrames} of ${result.requestedFrames} requested samples. Release markers are estimates from body and hand movement, not direct observations of dart departure.`;
+    `${result.framesChecked} video samples analyzed. Release timing is estimated from wrist motion and visible finger movement. Actual dart departure is not directly detected.`;
 
   $("throwList").replaceChildren();
 
-  throws.forEach(t=>{
+  for(const t of throws){
 
     const card = document.createElement("div");
 
     card.className = "throw-card";
 
-    const heading = document.createElement("strong");
+    const title = document.createElement("strong");
 
-    heading.textContent = `THROW ${t.number}`;
+    title.textContent =
+      `THROW ${t.number}`;
 
-    card.appendChild(heading);
+    card.appendChild(title);
 
-    const details = document.createElement("p");
+    const detail = document.createElement("p");
 
-    details.className = "small";
+    detail.className = "small";
+    detail.style.whiteSpace = "pre-line";
 
-    details.style.whiteSpace = "pre-line";
-
-    details.textContent = [
+    detail.textContent = [
       `Preparation: ${t.startTime}s`,
       `Estimated release: ${t.releaseTime}s`,
-      `Follow-through end: ${t.endTime}s`,
       `Elbow angle: ${format(t.elbowAngle,"°")}`,
       `Delivery tempo: ${t.deliveryTempoMs} ms`,
       `Follow-through: ${t.followThroughMs} ms`,
+      `Elbow movement: ${format(t.elbowDisplacement,"%")}`,
       `Hand coverage: ${t.handCoverage}%`,
-      `Release evidence: ${t.releaseEvidence}`
+      `Release evidence: ${t.releaseMethod}`
     ].join("\n");
 
-    card.appendChild(details);
+    card.appendChild(detail);
 
     const review = document.createElement("button");
 
-    review.textContent = "REVIEW ESTIMATED RELEASE";
+    review.textContent =
+      "REVIEW ESTIMATED RELEASE";
 
     review.addEventListener("click",async()=>{
 
-      if(running) return;
+      if(state==="analyzing") return;
 
-      const success = await seekFrame(t.releaseTime);
+      const ok = await seekFrame(
+        t.releaseTime
+      );
 
-      if(!success){
+      if(!ok){
 
         status(
-          "Could not display the selected release frame.",
+          "Unable to display release frame.",
           "error"
         );
 
@@ -1771,15 +2278,15 @@ function renderResults(result){
       }
 
       const frame = frames.find(
-        f=>f.frame===t.releaseFrame
+        f=>f.index===t.releaseFrame
       );
 
       drawFrame(frame,t.side);
 
       $("badge").textContent =
-        `THROW ${t.number} · ESTIMATED RELEASE`;
+        `THROW ${t.number} · RELEASE ESTIMATE`;
 
-      $("stage").scrollIntoView({
+      playback.scrollIntoView({
         behavior:"smooth",
         block:"center"
       });
@@ -1788,240 +2295,241 @@ function renderResults(result){
     card.appendChild(review);
 
     $("throwList").appendChild(card);
-  });
+  }
 
-  $("throwsPanel").classList.toggle(
-    "hidden",
-    !throws.length
-  );
+  if(throws.length){
 
-  $("observation").textContent =
-    result.coaching.observation;
+    show("throwsPanel");
 
-  $("coachAdvice").textContent =
-    result.coaching.advice;
+    const supported = throws.filter(
+      t=>t.handSupported
+    ).length;
 
-  $("coachPanel").classList.remove("hidden");
-  $("savePanel").classList.remove("hidden");
+    const variation = consistency(throws);
+
+    $("observation").textContent =
+      `DARTIQ identified ${throws.length} candidate throwing sequences. ${supported} release estimates were supported by visible finger opening.`;
+
+    $("coachAdvice").textContent =
+      variation!==null
+        ? `Your delivery tempo variation was ${variation}%. Compare the individual throws and work toward a repeatable personal throwing rhythm.`
+        : "Record multiple complete throws to measure your consistency.";
+
+  }else{
+
+    hide("throwsPanel");
+
+    $("observation").textContent =
+      "No complete throwing sequence was identified reliably.";
+
+    $("coachAdvice").textContent =
+      "Record again with your throwing shoulder, elbow, wrist and fingers clearly visible throughout the complete throw.";
+  }
+
+  show("coachPanel");
 }
 
 /* =========================================
-   MAIN ANALYSIS
+   GET AI THROW ANALYSIS BUTTON
 ========================================= */
 
-$("analyzeBtn").addEventListener("click",async()=>{
+$("analysisBtn").addEventListener(
+  "click",
+  async()=>{
 
-  if(
-    running ||
-    !selectedFile ||
-    !poseLandmarker ||
-    !handLandmarker
-  ) return;
+    if(
+      state!=="recorded" ||
+      !recordedBlob
+    ) return;
 
-  running = true;
+    state = "analyzing";
 
-  $("analyzeBtn").disabled = true;
-  $("videoInput").disabled = true;
-  $("armSelect").disabled = true;
+    $("analysisBtn").disabled = true;
+    $("retryBtn").disabled = true;
 
-  $("phasePanel").classList.remove("hidden");
+    hide("results");
+    hide("throwsPanel");
+    hide("coachPanel");
 
-  [
-    "results",
-    "throwsPanel",
-    "coachPanel",
-    "savePanel"
-  ].forEach(id=>$(id).classList.add("hidden"));
-
-  resetPhases();
-  progress(0);
-
-  analysisResult = null;
-
-  try{
-
-    await waitMetadata();
-
-    status("Starting sequential AI analysis...");
-
-    const scan = await scanVideo();
-
-    if(scan.poseCoverage<CONFIG.minPoseCoverage){
-
-      throw new Error(
-        `Insufficient pose coverage (${Math.round(scan.poseCoverage*100)}%). Record a clearer side-on video.`
-      );
-    }
-
-    progress(75);
-
-    phase(2,"active");
-    phase(3,"active");
-
-    status("Recognizing complete throwing sequences...");
-
-    const selected = chooseArm();
-
-    phase(2,"done");
-    phase(3,"done");
-
-    phase(4,"active");
-    phase(5,"active");
-
-    progress(88);
-
-    const throws = selected.throws;
-
-    const consistency = calculateConsistency(throws);
-
-    const handCoverage = mean(
-      throws.map(t=>t.handCoverage)
-    );
-
-    analysisResult = {
-
-      engine:"DARTIQ CORE Vision V2",
-
-      prototype:true,
-
-      analysisId:crypto.randomUUID(),
-
-      playerEmail,
-      sessionId,
-      rowId,
-
-      createdAt:new Date().toISOString(),
-
-      videoDuration:round(video.duration,3),
-
-      requestedSampleFPS:CONFIG.sampleFPS,
-
-      requestedFrames:scan.requestedFrames,
-
-      readableFrames:scan.readableFrames,
-
-      poseCoverage:round(scan.poseCoverage*100),
-
-      handCoverage:round(handCoverage),
-
-      arm:throws.length
-        ? selected.side
-        : null,
-
-      throwCount:throws.length,
-
-      analysisSuccess:throws.length>0,
-
-      releaseDirectlyObserved:false,
-
-      consistency,
-
-      throws,
-
-      coaching:coaching(throws,consistency)
-    };
-
-    phase(4,throws.length?"done":"");
-    phase(5,throws.length?"done":"");
-
-    renderResults(analysisResult);
-
-    progress(100);
-
-    if(throws.length){
-
-      await seekFrame(throws[0].releaseTime);
-
-      const frame = frames.find(
-        f=>f.frame===throws[0].releaseFrame
-      );
-
-      drawFrame(frame,selected.side);
-
-      $("badge").textContent =
-        "ESTIMATED RELEASE";
-
-      status(
-        `${throws.length} candidate throw(s) detected. Review the release markers.`,
-        "success"
-      );
-
-    }else{
-
-      $("badge").textContent =
-        "NO VALID THROW SEQUENCE";
-
-      status(
-        "No complete throwing sequence detected.",
-        "error"
-      );
-    }
-
-    console.log(
-      "DARTIQ CORE Vision V2",
-      analysisResult
-    );
-
-  }catch(error){
-
-    console.error(error);
+    progress(0);
 
     $("badge").textContent =
-      "ANALYSIS NEEDS ATTENTION";
+      "AI ANALYSIS ACTIVE";
 
-    status(
-      error.message || "Analysis failed.",
-      "error"
+    try{
+
+      const result =
+        await analyzeRecording();
+
+      renderResults(result);
+
+      progress(100);
+
+      if(result.throws.length){
+
+        const first = result.throws[0];
+
+        await seekFrame(
+          first.releaseTime
+        );
+
+        const frame = frames.find(
+          f=>f.index===first.releaseFrame
+        );
+
+        drawFrame(frame,result.arm);
+
+        $("badge").textContent =
+          "ANALYSIS COMPLETE";
+
+        status(
+          `${result.throws.length} candidate throw(s) analyzed successfully.`,
+          "success"
+        );
+
+      }else{
+
+        $("badge").textContent =
+          "NO VALID THROW DETECTED";
+
+        status(
+          "Not enough reliable throwing movement. Please record again.",
+          "error"
+        );
+      }
+
+      console.log(
+        "DARTIQ CORE Vision V2",
+        result
+      );
+
+      state = "complete";
+
+      hide("analysisBtn");
+
+    }catch(error){
+
+      console.error(error);
+
+      state = "recorded";
+
+      $("badge").textContent =
+        "ANALYSIS NEEDS ATTENTION";
+
+      status(
+        error.message ||
+        "AI analysis failed.",
+        "error"
+      );
+
+    }finally{
+
+      $("analysisBtn").disabled = false;
+      $("retryBtn").disabled = false;
+    }
+  }
+);
+
+/* =========================================
+   RECORD AGAIN
+========================================= */
+
+$("retryBtn").addEventListener(
+  "click",
+  async()=>{
+
+    if(
+      state==="analyzing" ||
+      state==="recording"
+    ) return;
+
+    state = "initializing";
+
+    playback.pause();
+
+    playback.removeAttribute("src");
+
+    playback.load();
+
+    if(recordingURL){
+
+      URL.revokeObjectURL(recordingURL);
+
+      recordingURL = null;
+    }
+
+    recordedBlob = null;
+
+    frames = [];
+    liveFrames = [];
+    liveThrows = [];
+
+    hide("results");
+    hide("throwsPanel");
+    hide("coachPanel");
+    hide("analysisBtn");
+    hide("retryBtn");
+
+    show("recordBtn");
+    show("switchBtn");
+
+    $("timer").textContent = "00:00";
+
+    $("badge").textContent =
+      "RESTARTING CAMERA";
+
+    progress(0);
+
+    ctx.clearRect(
+      0,0,
+      overlay.width,
+      overlay.height
     );
 
-  }finally{
-
-    running = false;
-
-    $("analyzeBtn").disabled = false;
-    $("videoInput").disabled = false;
-    $("armSelect").disabled = false;
+    await openCamera();
   }
+);
+
+/* =========================================
+   CLEANUP
+========================================= */
+
+window.addEventListener("pagehide",()=>{
+
+  cancelAnimationFrame(animationId);
+  clearInterval(timerId);
+
+  if(
+    recorder &&
+    recorder.state!=="inactive"
+  ){
+
+    recorder.onstop = null;
+
+    recorder.stop();
+  }
+
+  stream?.getTracks().forEach(
+    track=>track.stop()
+  );
+
+  if(recordingURL){
+
+    URL.revokeObjectURL(recordingURL);
+  }
+
+  poseModel?.close();
+  handModel?.close();
 });
 
 /* =========================================
-   LOCAL PROTOTYPE EXPORT
+   AUTOMATIC STARTUP
 ========================================= */
 
-$("saveBtn").addEventListener("click",()=>{
-
-  if(!analysisResult) return;
-
-  const blob = new Blob(
-    [JSON.stringify(analysisResult,null,2)],
-    {type:"application/json"}
-  );
-
-  const url = URL.createObjectURL(blob);
-
-  const link = document.createElement("a");
-
-  link.href = url;
-
-  link.download =
-    `DARTIQ_CORE_V2_${Date.now()}.json`;
-
-  link.click();
-
-  setTimeout(()=>{
-    URL.revokeObjectURL(url);
-  },1000);
-});
-
-window.addEventListener("beforeunload",()=>{
-
-  if(objectURL) URL.revokeObjectURL(objectURL);
-
-  poseLandmarker?.close();
-  handLandmarker?.close();
-});
-
-initialize();
+Promise.allSettled([
+  openCamera(),
+  initializeModels()
+]);
 
 </script>
 
