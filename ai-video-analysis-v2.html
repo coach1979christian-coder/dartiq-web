@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>DARTIQ CORE Vision V2</title>
+<title>DARTIQ CORE Vision V3</title>
 
 <style>
 :root{
@@ -243,7 +243,7 @@ h2{
 
 <header>
   <div class="brand">DARTIQ</div>
-  <div class="subtitle">CORE VISION V2</div>
+  <div class="subtitle">CORE VISION V3</div>
 </header>
 
 <section class="panel">
@@ -436,6 +436,7 @@ let animationId = null;
 let timerId = null;
 let stopRequested = false;
 let frameNumber = 0;
+let stopReason = "";
 
 const params = new URLSearchParams(location.search);
 
@@ -577,7 +578,9 @@ function updateReady(){
     state!=="finalizing";
 
   $("recordBtn").disabled = !ready;
-  $("switchBtn").disabled = !cameraReady ||
+
+  $("switchBtn").disabled =
+    !cameraReady ||
     !["ready","initializing"].includes(state);
 
   if(ready && state==="initializing"){
@@ -1019,7 +1022,7 @@ function drawFrame(frame,side=null){
 }
 
 /* =========================================
-   FRAME INFERENCE
+   LIVE FRAME INFERENCE
 ========================================= */
 
 function inferFrame(source,time,index){
@@ -1832,8 +1835,6 @@ function liveLoop(now){
    AUTOMATIC RECORDING STOP
 ========================================= */
 
-let stopReason = "";
-
 function stopRecording(reason){
 
   if(
@@ -1914,14 +1915,14 @@ async function finishRecording(){
       progress(100);
 
       status(
-        "Enough throwing movement captured. Your AI analysis is ready to begin.",
+        "Enough throwing movement captured. Your AI analysis is ready.",
         "success"
       );
 
     }else{
 
       status(
-        "Recording time limit reached. Tap Get AI Throw Analysis to check whether enough usable movement was captured."
+        "Recording complete. Tap Get AI Throw Analysis to review captured movements."
       );
     }
 
@@ -1944,39 +1945,9 @@ async function finishRecording(){
 }
 
 /* =========================================
-   RECORDED VIDEO DECODING
+   VIDEO REVIEW ONLY
+   NO SECOND AI SCAN
 ========================================= */
-
-async function waitPlayback(){
-
-  const started = performance.now();
-
-  while(performance.now()-started<15000){
-
-    if(
-      playback.readyState>=2 &&
-      playback.videoWidth>0
-    ){
-
-      resizeCanvas(playback);
-
-      return;
-    }
-
-    if(playback.error){
-
-      throw new Error(
-        "Recorded video cannot be decoded."
-      );
-    }
-
-    await sleep(50);
-  }
-
-  throw new Error(
-    "Recorded video loading timed out."
-  );
-}
 
 async function seekFrame(time){
 
@@ -2031,81 +2002,54 @@ async function seekFrame(time){
 }
 
 /* =========================================
-   FULL AI ANALYSIS
+   CORE VISION V3
+   FAST LIVE LANDMARK REUSE
+   NO VIDEO REPROCESSING
 ========================================= */
 
 async function analyzeRecording(){
 
-  await waitPlayback();
-
-  const duration =
-    Number.isFinite(playback.duration) &&
-    playback.duration>0
-      ? playback.duration
-      : recordedDuration;
-
-  const count = Math.max(
-    1,
-    Math.floor(duration*CONFIG.sampleFPS)
-  );
-
-  frames = [];
-
-  let readable = 0;
-
-  for(let i=0;i<count;i++){
-
-    const time = i/CONFIG.sampleFPS;
-
-    const decoded = await seekFrame(time);
-
-    if(decoded){
-
-      readable++;
-
-      const frame = inferFrame(
-        playback,time,i
-      );
-
-      frames.push(frame);
-
-      drawFrame(frame);
-    }
-
-    progress(
-      (i+1)/count*90
-    );
-
-    $("badge").textContent =
-      `AI SCAN ${i+1}/${count}`;
-
-    status(
-      "Analyzing body movement, wrist acceleration and finger opening..."
-    );
-
-    await sleep(0);
-  }
-
-  if(!readable){
+  if(!liveFrames.length){
 
     throw new Error(
-      "No readable frames found in the recording."
+      "No movement data captured. Please record again."
     );
   }
 
+  status(
+    "Processing captured throwing movements..."
+  );
+
+  $("badge").textContent =
+    "AI ANALYSIS ACTIVE";
+
+  progress(30);
+
+  await sleep(30);
+
+  frames = liveFrames.slice();
+
+  const readable = frames.length;
+
+  const poseCount = frames.filter(
+    frame=>frame.poseDetected
+  ).length;
+
   const poseCoverage =
-    frames.filter(
-      f=>f.poseDetected
-    ).length/count;
+    poseCount/readable;
 
   if(
     poseCoverage<CONFIG.minimumPoseCoverage
   ){
 
     throw new Error(
-      `Insufficient pose coverage (${Math.round(poseCoverage*100)}%). Record again with your full throwing arm and upper body visible.`
+      `Insufficient pose coverage (${Math.round(poseCoverage*100)}%). Please record again.`
     );
   }
+
+  progress(60);
+
+  await sleep(30);
 
   const recognition = recognize(frames);
 
@@ -2116,21 +2060,27 @@ async function analyzeRecording(){
     );
   }
 
+  progress(90);
+
+  await sleep(30);
+
   return {
 
-    engine:"DARTIQ CORE Vision V2",
+    engine:"DARTIQ CORE Vision V3",
 
     playerEmail,
     playerName,
     sessionId,
 
-    recordingDuration:duration,
+    recordingDuration:recordedDuration,
 
     framesChecked:readable,
 
-    requestedFrames:count,
+    requestedFrames:readable,
 
-    poseCoverage:round(poseCoverage*100),
+    poseCoverage:round(
+      poseCoverage*100
+    ),
 
     arm:recognition.side,
 
@@ -2139,12 +2089,16 @@ async function analyzeRecording(){
     analysisSuccess:
       recognition.throws.length>0,
 
-    releaseDirectlyObserved:false
+    releaseDirectlyObserved:false,
+
+    processingMode:"LIVE_LANDMARK_REUSE",
+
+    secondaryVideoScan:false
   };
 }
 
 /* =========================================
-   RESULTS AND CONSISTENCY
+   CONSISTENCY
 ========================================= */
 
 function consistency(throws){
@@ -2165,6 +2119,10 @@ function consistency(throws){
     Math.sqrt(variance)/average*100
   );
 }
+
+/* =========================================
+   RESULTS
+========================================= */
 
 function renderResults(result){
 
@@ -2219,7 +2177,7 @@ function renderResults(result){
     format(consistency(throws),"%");
 
   $("summary").textContent =
-    `${result.framesChecked} video samples analyzed. Release timing is estimated from wrist motion and visible finger movement. Actual dart departure is not directly detected.`;
+    `${result.framesChecked} live movement samples analyzed. No secondary video scan. Release timing is estimated from wrist motion and visible finger movement. Actual dart departure is not directly detected.`;
 
   $("throwList").replaceChildren();
 
@@ -2330,7 +2288,7 @@ function renderResults(result){
 }
 
 /* =========================================
-   GET AI THROW ANALYSIS BUTTON
+   GET AI THROW ANALYSIS
 ========================================= */
 
 $("analysisBtn").addEventListener(
@@ -2367,18 +2325,6 @@ $("analysisBtn").addEventListener(
 
       if(result.throws.length){
 
-        const first = result.throws[0];
-
-        await seekFrame(
-          first.releaseTime
-        );
-
-        const frame = frames.find(
-          f=>f.index===first.releaseFrame
-        );
-
-        drawFrame(frame,result.arm);
-
         $("badge").textContent =
           "ANALYSIS COMPLETE";
 
@@ -2399,13 +2345,18 @@ $("analysisBtn").addEventListener(
       }
 
       console.log(
-        "DARTIQ CORE Vision V2",
+        "DARTIQ CORE Vision V3",
         result
       );
 
       state = "complete";
 
       hide("analysisBtn");
+
+      $("results").scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+      });
 
     }catch(error){
 
