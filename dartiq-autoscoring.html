@@ -330,6 +330,7 @@ let board=null;
 let samples=[];
 let calibrationStarted=0;
 let lastCalibrationSample=0;
+let calibrationTimer=null;
 
 let emptyFrame=null;
 let referenceFrame=null;
@@ -437,6 +438,9 @@ function stopCamera(){
   running=false;
   mode="idle";
 
+  clearTimeout(calibrationTimer);
+  calibrationTimer=null;
+
   if(stream){
     stream.getTracks().forEach(t=>t.stop());
   }
@@ -476,6 +480,7 @@ async function startCamera(){
     samples=[];
 
     $("zoom").disabled=false;
+    $("calibrate").disabled=false;
     $("calibrate").textContent="START AUTO CALIBRATION";
 
     updateHUD();
@@ -487,6 +492,9 @@ async function startCamera(){
 
     requestAnimationFrame(renderLoop);
   }catch(err){
+    $("calibrate").disabled=false;
+    $("calibrate").textContent="START CAMERA";
+
     setStatus(
       "CAMERA ERROR","red",err.message
     );
@@ -642,8 +650,6 @@ function verifyCalibration(){
     return false;
   }
 
-  // Check the colour-ring evidence at
-  // the expected outer and triple radii.
   const frame=capture();
   const data=frame.data;
 
@@ -705,8 +711,6 @@ function verifyCalibration(){
     Math.round(triple*100)+"%"
   );
 
-  // Conservative experimental thresholds.
-  // These are not proof of perfect alignment.
   if(outer<.40||triple<.35){
     return false;
   }
@@ -776,6 +780,9 @@ function drawCalibration(){
 function startCalibration(){
   if(!running)return;
 
+  clearTimeout(calibrationTimer);
+  calibrationTimer=null;
+
   mode="calibrating";
   samples=[];
   board=null;
@@ -785,9 +792,9 @@ function startCalibration(){
   calibrationStarted=performance.now();
   lastCalibrationSample=0;
 
-  $("zoom").disabled=true;
-  $("calibrate").disabled=true;
-  $("calibrate").textContent="CALIBRATING...";
+  $("zoom").disabled=false;
+  $("calibrate").disabled=false;
+  $("calibrate").textContent="RESTART CALIBRATION";
 
   updateHUD();
 
@@ -817,12 +824,18 @@ function calibrationStep(now){
     if(verifyCalibration()){
       mode="verified";
 
+      $("zoom").disabled=true;
+
       setStatus(
         "CALIBRATION VERIFIED","green",
         "Board alignment accepted"
       );
 
-      setTimeout(()=>{
+      clearTimeout(calibrationTimer);
+
+      calibrationTimer=setTimeout(()=>{
+        calibrationTimer=null;
+
         if(mode==="verified"){
           beginMonitoring();
         }
@@ -838,6 +851,9 @@ function calibrationStep(now){
   ){
     samples=[];
     calibrationStarted=now;
+
+    $("calibrate").disabled=false;
+    $("zoom").disabled=false;
 
     setStatus(
       "CALIBRATION RETRY","yellow",
@@ -862,6 +878,7 @@ function beginMonitoring(){
 
   mode="monitoring";
 
+  $("zoom").disabled=true;
   $("calibrate").disabled=false;
   $("calibrate").textContent="RECALIBRATE";
 
@@ -1160,8 +1177,6 @@ function checkRemoval(frame,now){
 }
 
 function verifyAlignment(frame){
-  // Compare ring geometry periodically.
-  // Camera displacement suspends scoring.
   const detected=estimateBoard(frame);
 
   if(!detected)return false;
@@ -1180,8 +1195,6 @@ function monitor(now){
     return;
   }
 
-  // Geometry check does not prove perfect
-  // alignment but rejects large shifts.
   if(!verifyAlignment(frame)){
     alignmentFailures++;
   }else{
@@ -1197,8 +1210,9 @@ function monitor(now){
     calibrationStarted=now;
     lastCalibrationSample=0;
 
-    $("calibrate").disabled=true;
-    $("calibrate").textContent="RECALIBRATING...";
+    $("calibrate").disabled=false;
+    $("calibrate").textContent="RESTART CALIBRATION";
+    $("zoom").disabled=false;
 
     setStatus(
       "ALIGNMENT LOST","yellow",
@@ -1345,11 +1359,43 @@ function renderLoop(now){
   requestAnimationFrame(renderLoop);
 }
 
+/* ZOOM AND CALIBRATION CONTROL FIX */
+
 $("zoom").addEventListener("input",e=>{
-  if(mode!=="ready")return;
+  if(!running)return;
+
+  if(mode==="monitoring"||mode==="verified"){
+    return;
+  }
+
+  clearTimeout(calibrationTimer);
+  calibrationTimer=null;
 
   zoom=Number(e.target.value);
-  $("zoomValue").textContent=zoom.toFixed(2)+"×";
+
+  $("zoomValue").textContent=
+    zoom.toFixed(2)+"×";
+
+  board=null;
+  samples=[];
+  candidate=null;
+
+  calibrationStarted=0;
+  lastCalibrationSample=0;
+
+  mode="ready";
+
+  $("zoom").disabled=false;
+  $("calibrate").disabled=false;
+
+  $("calibrate").textContent=
+    "START AUTO CALIBRATION";
+
+  setStatus(
+    "ZOOM ADJUSTED",
+    "blue",
+    "Tap START AUTO CALIBRATION"
+  );
 });
 
 $("calibrate").addEventListener("click",async()=>{
@@ -1357,9 +1403,12 @@ $("calibrate").addEventListener("click",async()=>{
 
   if(!running){
     await startCamera();
-  }else{
-    startCalibration();
+    return;
   }
+
+  $("calibrate").disabled=false;
+
+  startCalibration();
 });
 
 $("restart").addEventListener("click",async()=>{
@@ -1414,11 +1463,14 @@ document.addEventListener("visibilitychange",()=>{
 window.addEventListener("beforeunload",stopCamera);
 
 updateHUD();
+
 setStatus(
   "READY","blue",
   "Tap START CAMERA"
 );
+
 debug("DARTIQ V16 · Calibration verification enabled");
+
 </script>
 </body>
 </html>
