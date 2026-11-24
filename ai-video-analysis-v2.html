@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#050b16">
-<title>DARTIQ CORE Vision V14</title>
+<title>DARTIQ CORE Vision V15</title>
 
 <style>
 :root{
@@ -118,7 +118,7 @@ canvas{
   justify-content:center;
   font-size:110px;
   font-weight:900;
-  background:#0006;
+  background:#0008;
   text-shadow:0 0 40px var(--blue);
 }
 
@@ -291,6 +291,23 @@ input[type=range]{
   font-size:10px;
   padding:15px 0;
 }
+
+.field-label{
+  font-size:11px;
+  color:var(--muted);
+  margin-top:12px;
+}
+
+.notice{
+  padding:12px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:#071321;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.6;
+  margin-top:12px;
+}
 </style>
 </head>
 
@@ -300,7 +317,7 @@ input[type=range]{
 
 <header>
   <div class="brand">DARTIQ</div>
-  <div class="subtitle">CORE VISION V14</div>
+  <div class="subtitle">CORE VISION V15</div>
 </header>
 
 <section class="panel">
@@ -320,6 +337,27 @@ input[type=range]{
   <div id="timer" class="timer">00:00</div>
 
   <div id="countdown" class="countdown hidden">5</div>
+
+</div>
+
+<div id="recordSettings">
+
+  <div class="field-label">THROWING ARM</div>
+
+  <select id="armSelect">
+    <option value="AUTO">Automatic detection</option>
+    <option value="RIGHT">Right arm</option>
+    <option value="LEFT">Left arm</option>
+  </select>
+
+  <div class="field-label">RECORDING TARGET</div>
+
+  <select id="targetSelect">
+    <option value="3">3 darts</option>
+    <option value="6" selected>6 darts</option>
+    <option value="9">9 darts</option>
+    <option value="0">Manual stop</option>
+  </select>
 
 </div>
 
@@ -357,39 +395,36 @@ input[type=range]{
 
 <h2>Visual Throw Breakdown</h2>
 
-<select id="throwSelect"></select>
+<select id="throwSelect">
+  <option value="-1">Full recording</option>
+</select>
 
 <div class="timeline">
 
-  <button class="phase active" data-phase="0">
-    <span>01</span>
-    PREPARATION
+  <button class="phase" data-phase="0">
+    <span>01</span>PREPARATION
   </button>
 
   <button class="phase" data-phase="1">
-    <span>02</span>
-    DRAW-BACK
+    <span>02</span>DRAW-BACK
   </button>
 
   <button class="phase" data-phase="2">
-    <span>03</span>
-    ACCELERATION
+    <span>03</span>ACCELERATION
   </button>
 
   <button class="phase" data-phase="3">
-    <span>04</span>
-    RELEASE
+    <span>04</span>RELEASE
   </button>
 
   <button class="phase" data-phase="4">
-    <span>05</span>
-    FOLLOW-THROUGH
+    <span>05</span>FOLLOW-THROUGH
   </button>
 
 </div>
 
 <input id="scrubber" type="range"
-       min="0" max="1" step="0.001" value="0">
+  min="0" max="1" step="0.001" value="0">
 
 <div class="time-row">
   <span id="currentTime">0.000 s</span>
@@ -399,15 +434,15 @@ input[type=range]{
 <div class="controls">
 
   <button id="prevFrame" class="secondary">
-    ◀ FRAME
+    ◀ SAMPLE
   </button>
 
   <button id="playButton">
-    ▶ PLAY THROW
+    ▶ PLAY
   </button>
 
   <button id="nextFrame" class="secondary">
-    FRAME ▶
+    SAMPLE ▶
   </button>
 
 </div>
@@ -433,7 +468,7 @@ input[type=range]{
 </button>
 
 <div id="phaseTitle" class="phase-title">
-  Preparation
+  Full recording
 </div>
 
 <div id="phaseDescription" class="small"></div>
@@ -446,7 +481,7 @@ input[type=range]{
   </div>
 
   <div class="metric">
-    <div class="metric-label">Wrist Speed / Torso Length</div>
+    <div class="metric-label">Wrist Speed / Torso</div>
     <div id="phaseSpeed" class="metric-value">–</div>
   </div>
 
@@ -461,6 +496,37 @@ input[type=range]{
   </div>
 
 </div>
+
+<div class="notice">
+  Automatic phase markers are estimates.
+  Missing phases remain unavailable rather than
+  generating artificial measurements.
+</div>
+
+</section>
+
+<section id="manualPanel" class="panel hidden">
+
+<h2>Manual Review</h2>
+
+<div class="small">
+  Pause the recording at the estimated release
+  of a missed throw, then add it to the review.
+</div>
+
+<button id="addThrow" class="secondary">
+  + ADD THROW AT CURRENT POSITION
+</button>
+
+<button id="markPhase" class="secondary">
+  SET SELECTED PHASE AT CURRENT POSITION
+</button>
+
+<button id="removeThrow" class="secondary">
+  REMOVE SELECTED THROW
+</button>
+
+<div id="manualStatus" class="status"></div>
 
 </section>
 
@@ -497,7 +563,7 @@ input[type=range]{
 </section>
 
 <div class="footer">
-  DARTIQ CORE VISION V14 · EXPERIMENTAL PROTOTYPE
+  DARTIQ CORE VISION V15 · EXPERIMENTAL PROTOTYPE
 </div>
 
 </div>
@@ -510,60 +576,67 @@ import {
   HandLandmarker
 } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22-rc.20250304/vision_bundle.mjs";
 
-const $ = id => document.getElementById(id);
+const $=id=>document.getElementById(id);
 
-const camera = $("camera");
-const review = $("review");
-const canvas = $("overlay");
-const ctx = canvas.getContext("2d");
+const camera=$("camera");
+const review=$("review");
+const canvas=$("overlay");
+const ctx=canvas.getContext("2d");
 
-const MAX_RECORDING_MS = 30000;
-const TARGET_THROWS = 3;
-const MAX_SAMPLE_GAP = 0.18;
+const MAX_RECORDING_MS=60000;
 
-let poseModel = null;
-let handModel = null;
-let stream = null;
-let recorder = null;
-let chunks = [];
-let frames = [];
-let analysis = null;
-let recording = false;
-let countdownRunning = false;
-let stopping = false;
-let recordStart = 0;
-let recordDuration = 0;
-let lastInference = 0;
-let lastVideoTime = -1;
-let lastDetectionCheck = 0;
-let facingMode = "environment";
-let recordingURL = null;
-let showSkeleton = true;
-let selectedThrow = 0;
-let selectedPhase = 0;
-let playbackRate = 0.5;
-let inReview = false;
-let recordingWidth = 1;
-let recordingHeight = 1;
+let poseModel=null;
+let handModel=null;
+let stream=null;
+let recorder=null;
 
-const params = new URLSearchParams(location.search);
+let frames=[];
+let chunks=[];
+let analysis=null;
 
-const playerName =
-  params.get("playername") ||
-  params.get("playerName") ||
-  params.get("player") ||
+let recording=false;
+let stopping=false;
+let countdownRunning=false;
+let inReview=false;
+
+let recordStart=0;
+let recordDuration=0;
+let lastInference=0;
+let lastVideoTime=-1;
+let lastDetectionCheck=0;
+let lastHands=[];
+
+let facingMode="environment";
+let recordingURL=null;
+let showSkeleton=true;
+
+let selectedThrow=-1;
+let selectedPhase=3;
+let playbackRate=.5;
+
+let recordingWidth=1280;
+let recordingHeight=720;
+
+let targetThrows=6;
+let selectedArm="AUTO";
+
+const params=new URLSearchParams(location.search);
+
+const playerName=
+  params.get("playername")||
+  params.get("playerName")||
+  params.get("player")||
   "Player";
 
-const playerEmail =
-  params.get("email") || "";
+const playerEmail=params.get("email")||"";
 
-const sessionId =
-  params.get("sessionid") ||
-  params.get("sessionID") ||
-  params.get("session") ||
+const sessionId=
+  params.get("sessionID")||
+  params.get("sessionid")||
+  params.get("session")||
   "";
 
-const PHASES = [
+const PHASES=[
   "Preparation",
   "Draw-back",
   "Forward Acceleration",
@@ -571,44 +644,39 @@ const PHASES = [
   "Follow-through"
 ];
 
-const DESCRIPTIONS = [
-
-  "Observe the position of the head, shoulder and throwing arm before the delivery movement.",
-
-  "Observe elbow flexion and wrist movement during the detected draw-back.",
-
-  "Observe the forward extension of the throwing arm and increasing wrist speed.",
-
-  "Estimated release based on wrist movement and available hand landmarks. Actual dart departure is not directly observed.",
-
-  "Observe arm extension and movement immediately after the estimated release."
-
+const DESCRIPTIONS=[
+  "Review the position before the delivery movement.",
+  "Review the flexion of the throwing arm.",
+  "Review forward wrist movement and elbow extension.",
+  "Movement-based release estimate. Actual dart departure is not directly observed.",
+  "Review the arm movement following estimated release."
 ];
 
-const mean = arr => arr.length
-  ? arr.reduce((sum,v)=>sum+v,0)/arr.length
-  : 0;
+const mean=a=>a.length
+  ?a.reduce((s,v)=>s+v,0)/a.length
+  :0;
 
-const clamp = (x,min,max) =>
+const clamp=(x,min,max)=>
   Math.max(min,Math.min(max,x));
 
-function median(arr){
+function median(a){
 
-  if(!arr.length)return 0;
+  if(!a.length)return 0;
 
-  const s = [...arr].sort((a,b)=>a-b);
-  const m = Math.floor(s.length/2);
+  const s=[...a].sort((x,y)=>x-y);
+  const m=Math.floor(s.length/2);
 
   return s.length%2
-    ? s[m]
-    : (s[m-1]+s[m])/2;
+    ?s[m]
+    :(s[m-1]+s[m])/2;
 
 }
 
-function setStatus(message,type=""){
+function format(v,d=1,s=""){
 
-  $("status").textContent = message;
-  $("status").className = "status "+type;
+  return Number.isFinite(v)
+    ?v.toFixed(d)+s
+    :"–";
 
 }
 
@@ -620,42 +688,38 @@ function hide(id){
   $(id).classList.add("hidden");
 }
 
-function visibility(p){
-  return p?.visibility ?? 0;
+function setStatus(text,type=""){
+
+  $("status").textContent=text;
+  $("status").className="status "+type;
+
 }
 
-function cloneLandmarks(points){
+function vis(p){
+  return p?.visibility??0;
+}
+
+function clone(points){
 
   return points?.map(p=>({
     x:p.x,
     y:p.y,
     z:p.z,
     visibility:p.visibility
-  })) || null;
-
-}
-
-function adjustedPoint(p){
-
-  if(!p)return null;
-
-  return {
-    x:p.x*(recordingWidth/recordingHeight),
-    y:p.y
-  };
+  }))||null;
 
 }
 
 function distance(a,b){
 
-  if(!a||!b)return 0;
+  if(!a||!b)return NaN;
 
-  const p = adjustedPoint(a);
-  const q = adjustedPoint(b);
+  const ratio=
+    recordingWidth/recordingHeight;
 
   return Math.hypot(
-    p.x-q.x,
-    p.y-q.y
+    (a.x-b.x)*ratio,
+    a.y-b.y
   );
 
 }
@@ -664,31 +728,27 @@ function angle(a,b,c){
 
   if(!a||!b||!c)return NaN;
 
-  a=adjustedPoint(a);
-  b=adjustedPoint(b);
-  c=adjustedPoint(c);
+  const ratio=
+    recordingWidth/recordingHeight;
 
-  const u={
-    x:a.x-b.x,
-    y:a.y-b.y
-  };
+  const ux=(a.x-b.x)*ratio;
+  const uy=a.y-b.y;
 
-  const v={
-    x:c.x-b.x,
-    y:c.y-b.y
-  };
+  const vx=(c.x-b.x)*ratio;
+  const vy=c.y-b.y;
 
-  const denominator =
-    Math.hypot(u.x,u.y) *
-    Math.hypot(v.x,v.y);
+  const denominator=
+    Math.hypot(ux,uy)*
+    Math.hypot(vx,vy);
 
-  if(denominator<0.000001)return NaN;
-
-  const cosine =
-    (u.x*v.x+u.y*v.y)/denominator;
+  if(denominator<.000001)
+    return NaN;
 
   return Math.acos(
-    clamp(cosine,-1,1)
+    clamp(
+      (ux*vx+uy*vy)/denominator,
+      -1,1
+    )
   )*180/Math.PI;
 
 }
@@ -706,16 +766,14 @@ function midpoint(a,b){
 
 function resizeCanvas(video){
 
-  const width = video.videoWidth;
-  const height = video.videoHeight;
+  if(!video.videoWidth||
+     !video.videoHeight)return;
 
-  if(!width||!height)return;
+  if(canvas.width!==video.videoWidth)
+    canvas.width=video.videoWidth;
 
-  if(canvas.width!==width)
-    canvas.width=width;
-
-  if(canvas.height!==height)
-    canvas.height=height;
+  if(canvas.height!==video.videoHeight)
+    canvas.height=video.videoHeight;
 
 }
 
@@ -727,7 +785,7 @@ function clearOverlay(){
 
 }
 
-function drawLine(a,b,color="#27b8ff",width=3){
+function line(a,b,color,width){
 
   if(!a||!b)return;
 
@@ -750,7 +808,7 @@ function drawLine(a,b,color="#27b8ff",width=3){
 
 }
 
-function drawPoint(p,color="#ffffff",radius=4){
+function point(p,color,radius){
 
   if(!p)return;
 
@@ -767,11 +825,12 @@ function drawPoint(p,color="#ffffff",radius=4){
 
 }
 
-function drawSkeleton(frame,side=null){
+function drawSkeleton(frame,side){
 
   clearOverlay();
 
-  if(!showSkeleton||!frame?.pose)return;
+  if(!showSkeleton||!frame?.pose)
+    return;
 
   const p=frame.pose;
 
@@ -784,33 +843,18 @@ function drawSkeleton(frame,side=null){
   );
 
   const connections=[
-    [11,12],
-    [11,13],
-    [13,15],
-    [12,14],
-    [14,16],
-    [11,23],
-    [12,24],
-    [23,24]
+    [11,12],[11,13],[13,15],
+    [12,14],[14,16],[11,23],
+    [12,24],[23,24]
   ];
 
   ctx.shadowColor="#27b8ff";
-  ctx.shadowBlur=7;
+  ctx.shadowBlur=6;
 
   for(const [a,b] of connections){
 
-    if(
-      visibility(p[a])>.45 &&
-      visibility(p[b])>.45
-    ){
-
-      drawLine(
-        p[a],p[b],
-        "#27b8ff",
-        width
-      );
-
-    }
+    if(vis(p[a])>.35&&vis(p[b])>.35)
+      line(p[a],p[b],"#27b8ff",width);
 
   }
 
@@ -818,41 +862,24 @@ function drawSkeleton(frame,side=null){
     0,11,12,13,14,15,16,23,24
   ]){
 
-    if(visibility(p[i])>.45){
-
-      drawPoint(
-        p[i],
-        "#ffffff",
-        radius
-      );
-
-    }
+    if(vis(p[i])>.35)
+      point(p[i],"#ffffff",radius);
 
   }
 
-  if(side){
+  if(side==="RIGHT"||side==="LEFT"){
 
-    const indexes = side==="RIGHT"
-      ? [12,14,16]
-      : [11,13,15];
+    const ids=side==="RIGHT"
+      ?[12,14,16]
+      :[11,13,15];
 
     for(let i=0;i<2;i++){
 
-      const a=p[indexes[i]];
-      const b=p[indexes[i+1]];
+      const a=p[ids[i]];
+      const b=p[ids[i+1]];
 
-      if(
-        visibility(a)>.45 &&
-        visibility(b)>.45
-      ){
-
-        drawLine(
-          a,b,
-          "#45e6a0",
-          width+1
-        );
-
-      }
+      if(vis(a)>.35&&vis(b)>.35)
+        line(a,b,"#45e6a0",width+1);
 
     }
 
@@ -860,103 +887,51 @@ function drawSkeleton(frame,side=null){
 
   ctx.shadowBlur=0;
 
-  const handConnections=[
-
+  const hc=[
     [0,1],[1,2],[2,3],[3,4],
     [0,5],[5,6],[6,7],[7,8],
     [5,9],[9,10],[10,11],[11,12],
     [9,13],[13,14],[14,15],[15,16],
     [13,17],[17,18],[18,19],[19,20],
     [0,17]
-
   ];
 
   for(const hand of frame.hands||[]){
 
-    for(const [a,b] of handConnections){
-
-      drawLine(
+    for(const [a,b] of hc)
+      line(
         hand[a],hand[b],
         "#45e6a0",
         Math.max(1,width*.65)
       );
 
-    }
-
-    for(const point of hand){
-
-      drawPoint(
-        point,
-        "#ffffff",
+    for(const p of hand)
+      point(
+        p,"#ffffff",
         Math.max(1.5,radius*.5)
       );
 
-    }
-
   }
 
 }
 
-async function createPose(vision){
-
-  const options={
-    baseOptions:{
-      modelAssetPath:
-        "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_full/float16/latest/pose_landmarker_full.task",
-      delegate:"GPU"
-    },
-    runningMode:"VIDEO",
-    numPoses:1,
-    minPoseDetectionConfidence:.5,
-    minPosePresenceConfidence:.5,
-    minTrackingConfidence:.5
-  };
+async function createModel(
+  Model,vision,options
+){
 
   try{
 
-    return await PoseLandmarker
-      .createFromOptions(vision,options);
+    return await Model.createFromOptions(
+      vision,options
+    );
 
   }catch(error){
 
     options.baseOptions.delegate="CPU";
 
-    return await PoseLandmarker
-      .createFromOptions(vision,options);
-
-  }
-
-}
-
-async function createHand(vision){
-
-  const options={
-
-    baseOptions:{
-      modelAssetPath:
-        "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/latest/hand_landmarker.task",
-      delegate:"GPU"
-    },
-
-    runningMode:"VIDEO",
-    numHands:2,
-    minHandDetectionConfidence:.45,
-    minHandPresenceConfidence:.45,
-    minTrackingConfidence:.45
-
-  };
-
-  try{
-
-    return await HandLandmarker
-      .createFromOptions(vision,options);
-
-  }catch(error){
-
-    options.baseOptions.delegate="CPU";
-
-    return await HandLandmarker
-      .createFromOptions(vision,options);
+    return await Model.createFromOptions(
+      vision,options
+    );
 
   }
 
@@ -966,28 +941,53 @@ async function initialize(){
 
   try{
 
-    setStatus("Loading CORE Vision pose engine...");
-
-    const vision =
+    const vision=
       await FilesetResolver.forVisionTasks(
         "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.22-rc.20250304/wasm"
       );
 
-    poseModel=await createPose(vision);
+    poseModel=await createModel(
+      PoseLandmarker,
+      vision,
+      {
+        baseOptions:{
+          modelAssetPath:
+            "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/latest/pose_landmarker_lite.task",
+          delegate:"GPU"
+        },
+        runningMode:"VIDEO",
+        numPoses:1,
+        minPoseDetectionConfidence:.4,
+        minPosePresenceConfidence:.4,
+        minTrackingConfidence:.4
+      }
+    );
 
-    setStatus("Loading hand and finger tracking...");
+    setStatus("Loading hand tracking...");
 
     try{
 
-      handModel=await createHand(vision);
+      handModel=await createModel(
+        HandLandmarker,
+        vision,
+        {
+          baseOptions:{
+            modelAssetPath:
+              "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/latest/hand_landmarker.task",
+            delegate:"GPU"
+          },
+          runningMode:"VIDEO",
+          numHands:1,
+          minHandDetectionConfidence:.4,
+          minHandPresenceConfidence:.4,
+          minTrackingConfidence:.4
+        }
+      );
 
     }catch(error){
 
       handModel=null;
-
-      console.warn(
-        "Hand tracking unavailable",error
-      );
+      console.warn(error);
 
     }
 
@@ -997,12 +997,10 @@ async function initialize(){
 
   }catch(error){
 
-    console.error(error);
-
     $("badge").textContent="ENGINE ERROR";
 
     setStatus(
-      "Unable to initialize tracking: "+
+      "Tracking engine unavailable: "+
       error.message,
       "error"
     );
@@ -1015,53 +1013,54 @@ async function startCamera(){
 
   try{
 
-    if(stream){
-
+    if(stream)
       stream.getTracks().forEach(
-        track=>track.stop()
+        t=>t.stop()
       );
 
-    }
-
-    stream=await navigator.mediaDevices.getUserMedia({
-
-      audio:false,
-
-      video:{
-        facingMode:{ideal:facingMode},
-        width:{ideal:1280},
-        height:{ideal:720},
-        frameRate:{ideal:30,max:60}
-      }
-
-    });
+    stream=await navigator.mediaDevices
+      .getUserMedia({
+        audio:false,
+        video:{
+          facingMode:{ideal:facingMode},
+          width:{ideal:960},
+          height:{ideal:540},
+          frameRate:{ideal:30}
+        }
+      });
 
     camera.srcObject=stream;
 
     await camera.play();
 
     inReview=false;
+
     show("camera");
     hide("review");
+    hide("enableCamera");
+
+    recordingWidth=
+      camera.videoWidth||960;
+
+    recordingHeight=
+      camera.videoHeight||540;
 
     resizeCanvas(camera);
-
-    recordingWidth=camera.videoWidth||1280;
-    recordingHeight=camera.videoHeight||720;
 
     lastVideoTime=-1;
 
     $("badge").textContent="TRACKING READY";
+
     $("recordButton").disabled=false;
     $("switchCamera").disabled=false;
 
-    hide("enableCamera");
-
     setStatus(
-      "Position your smartphone side-on. Keep your head, shoulder, elbow and throwing hand visible."
+      "Keep your head, shoulder, elbow, throwing hand and upper torso visible. Position the smartphone side-on."
     );
 
   }catch(error){
+
+    stream=null;
 
     show("enableCamera");
 
@@ -1076,6 +1075,39 @@ async function startCamera(){
 
 }
 
+function sampleRate(source){
+
+  if(source.length<2)return 0;
+
+  const duration=
+    source.at(-1).time-source[0].time;
+
+  return duration>0
+    ?(source.length-1)/duration
+    :0;
+
+}
+
+function adaptiveGap(source){
+
+  const gaps=[];
+
+  for(let i=1;i<source.length;i++){
+
+    const dt=
+      source[i].time-source[i-1].time;
+
+    if(dt>0)gaps.push(dt);
+
+  }
+
+  return clamp(
+    median(gaps)*2.8,
+    .12,.65
+  );
+
+}
+
 function getSideData(frame,side){
 
   if(!frame?.pose)return null;
@@ -1083,50 +1115,73 @@ function getSideData(frame,side){
   const p=frame.pose;
 
   const ids=side==="RIGHT"
-    ? [12,14,16,24]
-    : [11,13,15,23];
+    ?[12,14,16,24]
+    :[11,13,15,23];
 
   const shoulder=p[ids[0]];
   const elbow=p[ids[1]];
   const wrist=p[ids[2]];
   const hip=p[ids[3]];
 
-  if(!shoulder||!elbow||!wrist)return null;
+  if(!shoulder||!elbow||!wrist)
+    return null;
 
   const quality=mean([
-    visibility(shoulder),
-    visibility(elbow),
-    visibility(wrist)
+    vis(shoulder),
+    vis(elbow),
+    vis(wrist)
   ]);
 
   if(
-    quality<.55 ||
-    visibility(shoulder)<.4 ||
-    visibility(elbow)<.4 ||
-    visibility(wrist)<.4
+    quality<.42||
+    vis(shoulder)<.25||
+    vis(elbow)<.25||
+    vis(wrist)<.25
   )return null;
 
-  const shoulders=midpoint(p[11],p[12]);
-  const hips=midpoint(p[23],p[24]);
-
-  let torso=null;
+  let torso=NaN;
 
   if(
-    visibility(p[11])>.4 &&
-    visibility(p[12])>.4 &&
-    visibility(p[23])>.4 &&
-    visibility(p[24])>.4
+    vis(p[11])>.3&&
+    vis(p[12])>.3&&
+    vis(p[23])>.3&&
+    vis(p[24])>.3
   ){
 
-    torso=distance(shoulders,hips);
+    torso=distance(
+      midpoint(p[11],p[12]),
+      midpoint(p[23],p[24])
+    );
 
-  }else if(visibility(hip)>.45){
+  }else if(vis(hip)>.3){
 
     torso=distance(shoulder,hip);
 
   }
 
-  if(!torso||torso<.035)return null;
+  let scaleMethod="TORSO";
+
+  if(!Number.isFinite(torso)||torso<.04){
+
+    const upperArm=distance(
+      shoulder,elbow
+    );
+
+    if(!Number.isFinite(upperArm)||
+       upperArm<.025)return null;
+
+    torso=upperArm*1.7;
+
+    scaleMethod="UPPER_ARM_PROXY";
+
+  }
+
+  const elbowAngle=angle(
+    shoulder,elbow,wrist
+  );
+
+  if(!Number.isFinite(elbowAngle))
+    return null;
 
   let hand=null;
   let closest=Infinity;
@@ -1146,39 +1201,27 @@ function getSideData(frame,side){
 
   }
 
-  const handSize=hand
-    ? distance(hand[0],hand[9])
-    : 0;
-
-  const fingerOpening=
-    hand&&handSize>.001
-      ? distance(hand[4],hand[8])/handSize
-      : null;
-
-  const elbowAngle=angle(
-    shoulder,elbow,wrist
-  );
-
-  if(!Number.isFinite(elbowAngle))
-    return null;
-
   return {
 
     time:frame.time,
     frameIndex:frame.index,
+
     shoulder,
     elbow,
     wrist,
-    head:visibility(p[0])>.45?p[0]:null,
+
+    head:vis(p[0])>.35?p[0]:null,
+
     torso,
+    scaleMethod,
     quality,
     elbowAngle,
     hand,
-    fingerOpening,
-    speed:0,
-    angularVelocity:0,
-    acceleration:0,
-    validMotion:false
+
+    speed:null,
+    relativeSpeed:null,
+    angularVelocity:null,
+    acceleration:null
 
   };
 
@@ -1186,364 +1229,457 @@ function getSideData(frame,side){
 
 function buildSeries(source,side){
 
-  const series=source
-    .map(frame=>getSideData(frame,side))
+  const s=source
+    .map(f=>getSideData(f,side))
     .filter(Boolean);
 
-  if(series.length<3)return series;
+  const maxGap=adaptiveGap(source);
 
-  for(let i=1;i<series.length;i++){
+  for(let i=1;i<s.length;i++){
 
-    const a=series[i-1];
-    const b=series[i];
+    const a=s[i-1];
+    const b=s[i];
 
     const dt=b.time-a.time;
 
-    if(dt<=0||dt>MAX_SAMPLE_GAP)
+    if(dt<=0||dt>maxGap)
       continue;
 
-    const torso=(a.torso+b.torso)/2;
+    const scale=(a.torso+b.torso)/2;
 
     b.speed=
       distance(a.wrist,b.wrist)/
-      torso/dt;
+      scale/dt;
+
+    const ar={
+      x:a.wrist.x-a.shoulder.x,
+      y:a.wrist.y-a.shoulder.y
+    };
+
+    const br={
+      x:b.wrist.x-b.shoulder.x,
+      y:b.wrist.y-b.shoulder.y
+    };
+
+    b.relativeSpeed=
+      distance(ar,br)/scale/dt;
 
     b.angularVelocity=
       (b.elbowAngle-a.elbowAngle)/dt;
 
-    b.validMotion=true;
-
   }
 
-  const rawSpeeds=series.map(s=>s.speed);
-  const rawAngular=series.map(
-    s=>s.angularVelocity
-  );
+  for(let i=2;i<s.length;i++){
 
-  for(let i=1;i<series.length-1;i++){
-
-    if(
-      series[i-1].validMotion &&
-      series[i].validMotion &&
-      series[i+1].validMotion
-    ){
-
-      series[i].speed=median(
-        rawSpeeds.slice(i-1,i+2)
-      );
-
-      series[i].angularVelocity=median(
-        rawAngular.slice(i-1,i+2)
-      );
-
-    }
-
-  }
-
-  for(let i=2;i<series.length;i++){
-
-    const a=series[i-1];
-    const b=series[i];
+    const a=s[i-1];
+    const b=s[i];
 
     const dt=b.time-a.time;
 
     if(
-      dt>0 &&
-      dt<=MAX_SAMPLE_GAP &&
-      a.validMotion &&
-      b.validMotion
+      dt>0&&dt<=maxGap&&
+      Number.isFinite(a.relativeSpeed)&&
+      Number.isFinite(b.relativeSpeed)
     ){
 
       b.acceleration=
-        (b.speed-a.speed)/dt;
+        (b.relativeSpeed-a.relativeSpeed)/dt;
 
     }
 
   }
 
-  return series;
+  return s;
+
+}
+
+function nearestPoint(series,time,tolerance=.3){
+
+  if(!series.length)return null;
+
+  const p=series.reduce(
+    (best,x)=>
+      Math.abs(x.time-time)<
+      Math.abs(best.time-time)
+        ?x:best,
+    series[0]
+  );
+
+  return Math.abs(p.time-time)<=tolerance
+    ?p:null;
+
+}
+
+function marker(p,method){
+
+  return p?{
+    time:p.time,
+    frameIndex:p.frameIndex,
+    method
+  }:null;
+
+}
+
+function createCandidate(
+  series,peak,side,source,evidence
+){
+
+  const gap=adaptiveGap(source);
+
+  const before=series.filter(
+    p=>p.time>=peak.time-1.3&&
+       p.time<peak.time
+  );
+
+  const after=series.filter(
+    p=>p.time>peak.time&&
+       p.time<=peak.time+.8
+  );
+
+  let draw=null;
+
+  if(before.length){
+
+    const p=before.reduce(
+      (best,x)=>
+        x.elbowAngle<best.elbowAngle
+          ?x:best,
+      before[0]
+    );
+
+    if(peak.elbowAngle-p.elbowAngle>=7)
+      draw=p;
+
+  }
+
+  let preparation=null;
+
+  if(draw){
+
+    const window=before.filter(
+      p=>p.time<draw.time&&
+         p.time>=draw.time-.8&&
+         Number.isFinite(p.relativeSpeed)
+    );
+
+    if(window.length){
+
+      preparation=window.reduce(
+        (best,x)=>
+          x.relativeSpeed<best.relativeSpeed
+            ?x:best,
+        window[0]
+      );
+
+    }
+
+  }
+
+  let acceleration=null;
+
+  if(draw){
+
+    const window=series.filter(
+      p=>p.time>draw.time&&
+         p.time<peak.time&&
+         Number.isFinite(p.acceleration)&&
+         p.acceleration>0
+    );
+
+    if(window.length){
+
+      acceleration=window.reduce(
+        (best,x)=>
+          x.acceleration>best.acceleration
+            ?x:best,
+        window[0]
+      );
+
+    }
+
+  }
+
+  let follow=null;
+
+  if(after.length){
+
+    const window=after.filter(
+      p=>p.time>=peak.time+.08
+    );
+
+    if(window.length){
+
+      follow=window.reduce(
+        (best,x)=>
+          x.elbowAngle>best.elbowAngle
+            ?x:best,
+        window[0]
+      );
+
+    }
+
+  }
+
+  const startTime=
+    preparation?.time??
+    draw?.time??
+    Math.max(0,peak.time-.8);
+
+  const endTime=
+    follow?.time??
+    Math.min(
+      source.at(-1)?.time||peak.time,
+      peak.time+.6
+    );
+
+  const interval=series.filter(
+    p=>p.time>=startTime&&
+       p.time<=endTime
+  );
+
+  const localFrames=source.filter(
+    f=>f.time>=startTime&&
+       f.time<=endTime
+  );
+
+  const coverage=localFrames.length
+    ?interval.length/localFrames.length*100
+    :0;
+
+  const heads=interval.filter(
+    p=>p.head&&p.scaleMethod==="TORSO"
+  );
+
+  const base=heads[0];
+
+  const headMovement=
+    heads.length>=2&&base
+
+      ?Math.max(...heads.map(
+          p=>distance(p.head,base.head)
+        ))/base.torso*100
+
+      :null;
+
+  const handCoverage=interval.length
+    ?interval.filter(p=>p.hand).length/
+      interval.length*100
+    :null;
+
+  const tempo=draw&&
+    peak.time-draw.time<=1.3
+
+      ?(peak.time-draw.time)*1000
+
+      :null;
+
+  return {
+
+    number:0,
+    side,
+    origin:"AUTOMATIC",
+    evidence,
+
+    startTime,
+    endTime,
+    releaseTime:peak.time,
+
+    releaseMethod:
+      "Forward movement peak estimate",
+
+    directDartReleaseObserved:false,
+
+    elbowAngle:peak.elbowAngle,
+
+    deliveryTempoMs:tempo,
+
+    followThroughMs:follow
+      ?(follow.time-peak.time)*1000
+      :null,
+
+    headMovement,
+    handCoverage,
+
+    poseCoverage:coverage,
+
+    sampleGap:gap,
+
+    phases:[
+
+      marker(preparation,"ESTIMATED"),
+      marker(draw,"ESTIMATED"),
+      marker(acceleration,"ESTIMATED"),
+      marker(peak,"ESTIMATED"),
+      marker(follow,"ESTIMATED")
+
+    ],
+
+    series:interval
+
+  };
 
 }
 
 function detectThrows(source,side){
 
-  const s=buildSeries(source,side);
-  const found=[];
+  const series=buildSeries(
+    source,side
+  );
 
-  if(s.length<12)return found;
+  if(series.length<5)
+    return {series,throws:[]};
 
-  let lastRelease=-10;
+  const fps=sampleRate(source);
+  const gap=adaptiveGap(source);
 
-  for(let i=3;i<s.length-3;i++){
+  const speeds=series
+    .map(p=>p.relativeSpeed)
+    .filter(Number.isFinite);
 
-    const peak=s[i];
+  const baseline=median(speeds);
 
-    if(!peak.validMotion)continue;
-    if(peak.speed<.65)continue;
+  const deviations=speeds.map(
+    v=>Math.abs(v-baseline)
+  );
+
+  const noise=median(deviations);
+
+  const threshold=clamp(
+    baseline+noise*2.5,
+    fps<8?.32:.45,
+    1.4
+  );
+
+  const candidates=[];
+
+  for(let i=1;i<series.length;i++){
+
+    const p=series[i];
 
     if(
-      peak.speed<s[i-1].speed ||
-      peak.speed<s[i+1].speed
+      !Number.isFinite(p.relativeSpeed)||
+      p.relativeSpeed<threshold
     )continue;
 
-    if(peak.time-lastRelease<.55)
-      continue;
-
-    const pre=s.filter(
-      x=>x.time>=peak.time-.65 &&
-      x.time<peak.time
+    const local=series.filter(
+      x=>Math.abs(x.time-p.time)<=
+        Math.max(.12,gap*.7)&&
+        Number.isFinite(x.relativeSpeed)
     );
 
-    const post=s.filter(
-      x=>x.time>peak.time &&
-      x.time<=peak.time+.4
-    );
-
-    if(pre.length<4||post.length<3)
-      continue;
-
-    if(
-      post[post.length-1].time-
-      peak.time<.10
-    )continue;
-
-    const draw=pre.reduce(
-      (best,x)=>
-        x.elbowAngle<best.elbowAngle
-          ?x:best,
-      pre[0]
-    );
-
-    const extensionPeak=[peak,...post]
-      .reduce(
-        (best,x)=>
-          x.elbowAngle>best.elbowAngle
-            ?x:best,
-        peak
-      );
-
-    const extension=
-      extensionPeak.elbowAngle-
-      draw.elbowAngle;
-
-    if(extension<20)continue;
-
-    const earlier=s.filter(
-      x=>x.time>=draw.time-.65 &&
-      x.time<draw.time
-    );
-
-    if(earlier.length<2)continue;
-
-    const previousAngle=Math.max(
-      ...earlier.map(x=>x.elbowAngle)
-    );
-
-    if(previousAngle-draw.elbowAngle<8)
-      continue;
-
-    const delivery=s.filter(
-      x=>x.time>=draw.time &&
-      x.time<=peak.time
-    );
-
-    if(delivery.length<3)continue;
-
-    const angularVelocity=Math.max(
-      ...delivery.map(x=>x.angularVelocity)
-    );
-
-    const acceleration=Math.max(
-      ...delivery.map(x=>x.acceleration)
-    );
-
-    if(angularVelocity<35||acceleration<1)
-      continue;
-
-    const prepWindow=earlier.filter(
-      x=>x.time>=draw.time-.45
-    );
-
-    const preparation=prepWindow.length
-
-      ? prepWindow.reduce(
-          (best,x)=>
-            x.speed<best.speed?x:best,
-          prepWindow[0]
-        )
-
-      : earlier[0];
-
-    let release=peak;
-    let releaseMethod="Peak wrist speed";
-
-    const handWindow=s.filter(
-      x=>Math.abs(x.time-peak.time)<=.14 &&
-      x.fingerOpening!==null
-    );
-
-    let bestOpeningRate=0;
-
-    for(let h=1;h<handWindow.length;h++){
-
-      const a=handWindow[h-1];
-      const b=handWindow[h];
-      const dt=b.time-a.time;
-
-      if(dt<=0||dt>MAX_SAMPLE_GAP)
-        continue;
-
-      const openingRate=
-        (b.fingerOpening-a.fingerOpening)/dt;
-
-      if(
-        openingRate>bestOpeningRate &&
-        openingRate>2 &&
-        b.speed>=peak.speed*.55 &&
-        b.time>draw.time
-      ){
-
-        bestOpeningRate=openingRate;
-        release=b;
-        releaseMethod=
-          "Wrist speed + finger opening";
-
-      }
-
-    }
-
-    if(release.time-lastRelease<.55)
-      continue;
-
-    const accelerationFrames=s.filter(
-      x=>x.time>draw.time &&
-      x.time<release.time
-    );
-
-    if(!accelerationFrames.length)
-      continue;
-
-    const accelerationPoint=
-      accelerationFrames.reduce(
-        (best,x)=>
-          x.acceleration>best.acceleration
-            ?x:best,
-        accelerationFrames[0]
-      );
-
-    const followCandidates=post.filter(
-      x=>x.time>=release.time+.10
-    );
-
-    if(!followCandidates.length)
-      continue;
-
-    const follow=followCandidates.reduce(
-      (best,x)=>
-        x.elbowAngle>best.elbowAngle
-          ?x:best,
-      followCandidates[0]
-    );
-
-    const intervalFrames=source.filter(
-      f=>f.time>=preparation.time &&
-      f.time<=follow.time
-    );
-
-    const interval=s.filter(
-      x=>x.time>=preparation.time &&
-      x.time<=follow.time
-    );
-
-    const coverage=intervalFrames.length
-
-      ? interval.length/intervalFrames.length
-      : 0;
-
-    if(coverage<.7)continue;
-
-    if(interval.some(
-      (x,j)=>j>0 &&
-      x.time-interval[j-1].time>MAX_SAMPLE_GAP
+    if(local.some(
+      x=>x.relativeSpeed>p.relativeSpeed
     ))continue;
 
-    const torso=median(
-      interval.map(x=>x.torso)
+    const before=series.filter(
+      x=>x.time>=p.time-.9&&
+         x.time<p.time
     );
 
-    const headPoints=interval
-      .map(x=>x.head)
-      .filter(Boolean);
+    const after=series.filter(
+      x=>x.time>p.time&&
+         x.time<=p.time+.55
+    );
 
-    const baseHead=headPoints[0]||null;
+    if(!before.length)continue;
 
-    const headMovement=baseHead
+    const low=Math.min(
+      ...before.map(x=>x.elbowAngle)
+    );
 
-      ? Math.max(...headPoints.map(
-          p=>distance(p,baseHead)
-        ))/torso*100
+    const high=Math.max(
+      p.elbowAngle,
+      ...after.map(x=>x.elbowAngle)
+    );
 
-      : null;
+    const extension=high-low;
 
-    const handCoverage=
-      interval.filter(x=>x.hand).length/
-      interval.length*100;
+    const localAngular=Math.max(
+      0,
+      ...[...before,p,...after]
+        .map(x=>x.angularVelocity)
+        .filter(Number.isFinite)
+    );
 
-    const strength=
-      extension +
-      peak.speed*10 +
-      mean(interval.map(x=>x.quality))*20;
+    const requiredExtension=
+      fps<8?9:12;
 
-    found.push({
+    const requiredAngular=
+      fps<8?12:20;
 
-      number:found.length+1,
-      side,
+    if(
+      extension<requiredExtension||
+      localAngular<requiredAngular
+    )continue;
 
-      startTime:preparation.time,
-      releaseTime:release.time,
-      endTime:follow.time,
+    const relativeMovement=
+      p.relativeSpeed/
+      Math.max(.01,p.speed||.01);
 
-      releaseFrame:release.frameIndex,
-      releaseMethod,
+    if(relativeMovement<.35)
+      continue;
 
-      directDartReleaseObserved:false,
+    const score=
+      extension+
+      p.relativeSpeed*12+
+      localAngular*.08+
+      p.quality*10;
 
-      elbowAngle:release.elbowAngle,
+    candidates.push({
 
-      deliveryTempoMs:
-        (release.time-draw.time)*1000,
+      peak:p,
+      score,
 
-      followThroughMs:
-        (follow.time-release.time)*1000,
-
-      elbowExtensionDegrees:extension,
-
-      headMovement,
-      handCoverage,
-
-      poseCoverage:coverage*100,
-
-      strength,
-
-      phases:[
-
-        preparation,
-        draw,
-        accelerationPoint,
-        release,
-        follow
-
-      ],
-
-      series:interval
+      evidence:{
+        extension,
+        angularVelocity:localAngular,
+        relativeSpeed:p.relativeSpeed,
+        threshold,
+        sampleRate:fps
+      }
 
     });
 
-    lastRelease=release.time;
+  }
+
+  candidates.sort(
+    (a,b)=>b.score-a.score
+  );
+
+  const selected=[];
+
+  for(const candidate of candidates){
+
+    const duplicate=selected.some(
+      x=>Math.abs(
+        x.peak.time-candidate.peak.time
+      )<.65
+    );
+
+    if(!duplicate)
+      selected.push(candidate);
 
   }
 
-  return found;
+  selected.sort(
+    (a,b)=>a.peak.time-b.peak.time
+  );
+
+  const throws=selected.map(c=>
+    createCandidate(
+      series,
+      c.peak,
+      side,
+      source,
+      c.evidence
+    )
+  );
+
+  throws.forEach(
+    (t,i)=>t.number=i+1
+  );
+
+  return {series,throws};
 
 }
 
@@ -1557,29 +1693,42 @@ function recognizeThrows(source){
     source,"LEFT"
   );
 
-  const score=list=>
-    list.length*100+
-    list.reduce(
-      (a,b)=>a+b.strength,0
+  const score=result=>
+    result.throws.reduce(
+      (sum,t)=>
+        sum+
+        t.evidence.extension+
+        t.evidence.relativeSpeed*12+
+        t.evidence.angularVelocity*.08,
+      0
     );
 
-  const selected=score(right)>=score(left)
+  let side=selectedArm;
 
-    ? {side:"RIGHT",throws:right}
-    : {side:"LEFT",throws:left};
+  if(side==="AUTO"){
 
-  selected.throws.sort(
-    (a,b)=>a.releaseTime-b.releaseTime
-  );
+    side=score(right)>=score(left)
+      ?"RIGHT":"LEFT";
 
-  selected.throws.forEach(
-    (t,i)=>t.number=i+1
-  );
+  }
 
-  if(!selected.throws.length)
-    selected.side=null;
+  const selected=side==="RIGHT"
+    ?right:left;
 
-  return selected;
+  return {
+
+    side:selected.throws.length||
+      selectedArm!=="AUTO"
+        ?side:null,
+
+    throws:selected.throws,
+
+    series:selected.series,
+
+    rightSeries:right.series,
+    leftSeries:left.series
+
+  };
 
 }
 
@@ -1632,47 +1781,71 @@ function liveLoop(timestamp){
 
     const started=performance.now();
 
-    const poseResult=
-      poseModel.detectForVideo(
-        camera,started
-      );
+    const result=poseModel.detectForVideo(
+      camera,started
+    );
 
-    const handResult=handModel
+    let hands=[];
 
-      ? handModel.detectForVideo(
-          camera,started
-        )
+    if(
+      handModel&&
+      (!recording||frames.length%3===0)
+    ){
 
-      : null;
+      try{
+
+        const handResult=
+          handModel.detectForVideo(
+            camera,started
+          );
+
+        hands=handResult.landmarks
+          ?.map(clone)||[];
+
+        lastHands=hands;
+
+      }catch(error){
+
+        hands=[];
+
+      }
+
+    }
 
     const frame={
 
       index:frames.length,
 
       time:recording
-        ? Math.max(
+        ?Math.max(
             0,(started-recordStart)/1000
           )
-        : 0,
+        :0,
 
-      pose:cloneLandmarks(
-        poseResult.landmarks?.[0]
-      ),
+      pose:clone(result.landmarks?.[0]),
 
-      hands:
-        handResult?.landmarks?.map(
-          cloneLandmarks
-        )||[]
+      hands,
+
+      handSampled:
+        Boolean(handModel)&&
+        (!recording||frames.length%3===0)
 
     };
 
-    drawSkeleton(frame);
+    drawSkeleton(
+      frame,
+      selectedArm==="AUTO"
+        ?null:selectedArm
+    );
 
     if(recording){
 
       frames.push(frame);
 
-      if(timestamp-lastDetectionCheck>300){
+      if(
+        timestamp-lastDetectionCheck>900&&
+        frames.length>=8
+      ){
 
         lastDetectionCheck=timestamp;
 
@@ -1681,16 +1854,16 @@ function liveLoop(timestamp){
         $("badge").textContent=
           "REC · "+
           result.throws.length+
-          "/"+TARGET_THROWS;
+          (targetThrows?"/"+targetThrows:"");
 
         const latest=result.throws.at(-1);
 
         if(
-          result.throws.length>=TARGET_THROWS &&
-          frames.length>=35 &&
-          frame.time>=4 &&
-          latest &&
-          frame.time-latest.endTime>=.4
+          targetThrows>0&&
+          result.throws.length>=targetThrows&&
+          frame.time>=4&&
+          latest&&
+          frame.time-latest.releaseTime>=.9
         ){
 
           stopRecording();
@@ -1704,7 +1877,7 @@ function liveLoop(timestamp){
   }catch(error){
 
     console.warn(
-      "Tracking frame skipped",error
+      "Tracking sample skipped",error
     );
 
   }
@@ -1714,16 +1887,13 @@ function liveLoop(timestamp){
 function supportedMime(){
 
   const types=[
-
     "video/webm;codecs=vp8",
-    "video/webm;codecs=vp9",
     "video/webm",
     "video/mp4"
-
   ];
 
-  return types.find(type=>
-    MediaRecorder.isTypeSupported(type)
+  return types.find(t=>
+    MediaRecorder.isTypeSupported(t)
   )||"";
 
 }
@@ -1739,7 +1909,7 @@ async function countdown(){
   if(typeof MediaRecorder==="undefined"){
 
     setStatus(
-      "This browser does not support camera recording.",
+      "Recording is not supported in this browser.",
       "error"
     );
 
@@ -1747,12 +1917,18 @@ async function countdown(){
 
   }
 
+  selectedArm=$("armSelect").value;
+
+  targetThrows=Number(
+    $("targetSelect").value
+  );
+
   countdownRunning=true;
 
   $("recordButton").disabled=true;
   $("switchCamera").disabled=true;
 
-  hide("analyzeButton");
+  hide("recordSettings");
   show("countdown");
 
   for(let i=5;i>=1;i--){
@@ -1780,6 +1956,7 @@ function beginRecording(){
     frames=[];
     chunks=[];
     analysis=null;
+
     recordDuration=0;
     lastDetectionCheck=0;
     stopping=false;
@@ -1790,18 +1967,20 @@ function beginRecording(){
       stream,
       mime?{
         mimeType:mime,
-        videoBitsPerSecond:3500000
+        videoBitsPerSecond:2500000
       }:{}
     );
 
-    recorder.ondataavailable=event=>{
+    recorder.ondataavailable=e=>{
 
-      if(event.data.size>0)
-        chunks.push(event.data);
+      if(e.data.size)
+        chunks.push(e.data);
 
     };
 
-    recorder.onerror=event=>{
+    recorder.onstop=prepareReview;
+
+    recorder.onerror=e=>{
 
       recording=false;
       stopping=false;
@@ -1811,43 +1990,44 @@ function beginRecording(){
         "error"
       );
 
-      show("recordButton");
-      hide("stopButton");
+      show("restartPanel");
 
-      $("recordButton").disabled=false;
-      $("switchCamera").disabled=false;
-
-      console.error(event);
+      console.error(e);
 
     };
 
-    recorder.onstop=prepareReview;
-
-    recorder.start(200);
+    recorder.start(250);
 
     recordStart=performance.now();
+
     recording=true;
 
     hide("recordButton");
     hide("switchCamera");
     show("stopButton");
 
-    $("badge").textContent="REC · 0/3";
-    $("badge").style.color="#ff5268";
+    $("badge").textContent="REC";
 
     setStatus(
-      "Recording. Throw three darts naturally."
+      targetThrows
+
+        ?"Throw "+targetThrows+
+          " darts naturally. Stop manually if automatic recognition misses a throw."
+
+        :"Recording. Press STOP when finished."
     );
 
   }catch(error){
 
     recording=false;
 
+    show("recordSettings");
+
     $("recordButton").disabled=false;
     $("switchCamera").disabled=false;
 
     setStatus(
-      "Cannot start recording: "+error.message,
+      error.message,
       "error"
     );
 
@@ -1868,16 +2048,12 @@ function stopRecording(){
 
   $("stopButton").disabled=true;
 
-  if(recorder?.state!=="inactive"){
-
+  if(recorder&&recorder.state!=="inactive")
     recorder.stop();
 
-  }
-
   $("badge").textContent="PROCESSING";
-  $("badge").style.color="";
 
-  setStatus("Preparing recorded video...");
+  setStatus("Preparing recording...");
 
 }
 
@@ -1917,47 +2093,44 @@ async function prepareReview(){
 
     hide("camera");
     hide("stopButton");
-    hide("switchCamera");
 
     show("review");
 
-    review.src=recordingURL;
-    review.load();
-
     await new Promise((resolve,reject)=>{
 
-      if(review.readyState>=1){
-
-        resolve();
-        return;
-
-      }
-
-      const timer=setTimeout(
+      const timeout=setTimeout(
         ()=>reject(
           new Error("Video loading timeout")
         ),
-        10000
+        12000
       );
 
-      review.addEventListener(
-        "loadedmetadata",
-        ()=>{
+      review.onloadedmetadata=()=>{
 
-          clearTimeout(timer);
-          resolve();
+        clearTimeout(timeout);
+        resolve();
 
-        },
-        {once:true}
-      );
+      };
+
+      review.onerror=()=>{
+
+        clearTimeout(timeout);
+        reject(
+          new Error("Video playback unavailable")
+        );
+
+      };
+
+      review.src=recordingURL;
+      review.load();
 
     });
 
     resizeCanvas(review);
-
     clearOverlay();
 
     $("progress").style.width="100%";
+
     $("badge").textContent="RECORDING COMPLETE";
 
     $("timer").textContent=
@@ -1968,7 +2141,9 @@ async function prepareReview(){
 
     setStatus(
       frames.length+
-      " live movement samples captured. Ready for analysis.",
+      " live samples captured at "+
+      sampleRate(frames).toFixed(1)+
+      " samples/sec.",
       "success"
     );
 
@@ -1991,40 +2166,23 @@ function coefficientVariation(values){
 
   const avg=mean(values);
 
-  if(avg===0)return null;
+  if(!avg)return null;
 
-  const variance=mean(
-    values.map(v=>(v-avg)**2)
-  );
-
-  return Math.sqrt(variance)/avg*100;
+  return Math.sqrt(
+    mean(values.map(
+      v=>(v-avg)**2
+    ))
+  )/avg*100;
 
 }
 
 function analyzeRecording(){
 
-  $("analyzeButton").disabled=true;
-
-  const source=frames.slice();
-
-  const detected=recognizeThrows(source);
-
-  const throws=detected.throws;
-
-  const coverage=source.length
-
-    ? source.filter(f=>f.pose).length/
-      source.length*100
-
-    : 0;
-
-  const tempos=throws.map(
-    t=>t.deliveryTempoMs
-  );
+  const result=recognizeThrows(frames);
 
   analysis={
 
-    engine:"DARTIQ_CORE_VISION_V14",
+    engine:"DARTIQ_CORE_VISION_V15",
 
     playerName,
     playerEmail,
@@ -2032,66 +2190,66 @@ function analyzeRecording(){
 
     recordingDuration:recordDuration,
 
-    framesChecked:source.length,
+    framesChecked:frames.length,
 
-    poseCoverage:coverage,
+    sampleRate:sampleRate(frames),
 
-    arm:detected.side,
+    poseCoverage:frames.length
+      ?frames.filter(f=>f.pose).length/
+        frames.length*100
+      :0,
 
-    throws,
+    arm:result.side,
 
-    tempoVariation:
-      coefficientVariation(tempos),
+    throws:result.throws,
+
+    rightSeries:result.rightSeries,
+    leftSeries:result.leftSeries,
 
     releaseDirectlyObserved:false,
 
     processingMode:"LIVE_LANDMARK_REUSE",
 
-    secondaryVideoScan:false,
-
-    analysisSuccess:throws.length>0
+    secondaryVideoScan:false
 
   };
 
-  renderResults();
-
   hide("analyzeButton");
 
-  if(!throws.length){
-
-    $("badge").textContent="NO VALID THROW";
-
-    setStatus(
-      "No sufficiently tracked throwing sequence was detected. Adjust the camera position and try again.",
-      "error"
-    );
-
-    return;
-
-  }
-
-  selectedThrow=0;
-
-  renderThrowSelector();
-
   show("visualPanel");
+  show("manualPanel");
+  show("resultsPanel");
   show("comparisonPanel");
   show("coachPanel");
   show("restartPanel");
 
   review.playbackRate=playbackRate;
 
-  selectThrow(0);
+  refreshResults();
 
-  $("badge").textContent="ANALYSIS COMPLETE";
-
-  setStatus(
-    throws.length+
-    " candidate throws detected. "+
-    source.length+
-    " live samples analyzed.",
-    "success"
+  selectThrow(
+    analysis.throws.length?0:-1
   );
+
+  if(analysis.throws.length){
+
+    $("badge").textContent="ANALYSIS COMPLETE";
+
+    setStatus(
+      analysis.throws.length+
+      " automatic throw candidates detected. Review each candidate for accuracy.",
+      "success"
+    );
+
+  }else{
+
+    $("badge").textContent="REVIEW AVAILABLE";
+
+    setStatus(
+      "No automatic throw candidates detected. Full recording and manual review remain available."
+    );
+
+  }
 
 }
 
@@ -2106,34 +2264,64 @@ function metric(label,value){
 
 }
 
-function format(value,decimals=1,suffix=""){
+function refreshResults(){
 
-  return Number.isFinite(value)
-    ? value.toFixed(decimals)+suffix
-    : "–";
+  analysis.throws.sort(
+    (a,b)=>a.releaseTime-b.releaseTime
+  );
 
-}
-
-function renderResults(){
+  analysis.throws.forEach(
+    (t,i)=>t.number=i+1
+  );
 
   const throws=analysis.throws;
 
+  const automatic=throws.filter(
+    t=>t.origin==="AUTOMATIC"
+  );
+
+  const manual=throws.filter(
+    t=>t.origin==="MANUAL"
+  );
+
   const values=key=>
-    throws.map(t=>t[key])
+    automatic.map(t=>t[key])
       .filter(Number.isFinite);
 
   const average=key=>{
 
-    const arr=values(key);
+    const a=values(key);
 
-    return arr.length?mean(arr):null;
+    return a.length?mean(a):null;
 
   };
+
+  const sampledHands=frames.filter(
+    f=>f.handSampled
+  );
+
+  const handCoverage=sampledHands.length
+
+    ?sampledHands.filter(
+        f=>f.hands.length
+      ).length/sampledHands.length*100
+
+    :null;
 
   $("summaryGrid").innerHTML=
 
     metric(
-      "Detected Throws",
+      "Automatic Candidates",
+      automatic.length
+    )+
+
+    metric(
+      "Manual Throws",
+      manual.length
+    )+
+
+    metric(
+      "Total Reviewed Throws",
       throws.length
     )+
 
@@ -2148,8 +2336,8 @@ function renderResults(){
     )+
 
     metric(
-      "Hand Coverage",
-      format(average("handCoverage"),1,"%")
+      "Hand Sample Coverage",
+      format(handCoverage,1,"%")
     )+
 
     metric(
@@ -2169,73 +2357,110 @@ function renderResults(){
 
     metric(
       "Tempo Variation",
-      format(analysis.tempoVariation,1,"%")
-    )+
-
-    metric(
-      "Follow-through Interval",
-      format(average("followThroughMs"),0," ms")
+      format(
+        coefficientVariation(
+          values("deliveryTempoMs")
+        ),
+        1,"%"
+      )
     )+
 
     metric(
       "Live Samples",
-      analysis.framesChecked
+      frames.length
+    )+
+
+    metric(
+      "Samples / Second",
+      format(analysis.sampleRate,1)
+    )+
+
+    metric(
+      "Recording Duration",
+      format(recordDuration,1," s")
+    )+
+
+    metric(
+      "Follow-through Interval",
+      format(
+        average("followThroughMs"),
+        0," ms"
+      )
     );
 
-  show("resultsPanel");
+  $("throwSelect").innerHTML=
 
-  $("comparison").innerHTML=
-    throws.map(t=>`
+    `<option value="-1">
+      FULL RECORDING
+    </option>`+
 
-      <div class="throw-card">
+    throws.map((t,i)=>`
 
-        <strong>THROW ${t.number}</strong>
-
-        <br>Arm: ${t.side}
-
-        <br>Estimated release elbow:
-        ${format(t.elbowAngle,1,"°")}
-
-        <br>Delivery tempo:
-        ${format(t.deliveryTempoMs,0," ms")}
-
-        <br>Follow-through interval:
-        ${format(t.followThroughMs,0," ms")}
-
-        <br>Head displacement:
-        ${format(t.headMovement,1,"%")}
-
-        <br>Hand coverage:
-        ${format(t.handCoverage,1,"%")}
-
-        <br>Release method:
-        ${t.releaseMethod}
-
-        <button class="secondary"
-          data-review-throw="${t.number-1}">
-          REVIEW THROW ${t.number}
-        </button>
-
-      </div>
+      <option value="${i}">
+        THROW ${i+1} · ${t.origin}
+      </option>
 
     `).join("");
 
+  $("comparison").innerHTML=
+
+    throws.length
+
+      ?throws.map((t,i)=>`
+
+        <div class="throw-card">
+
+          <strong>THROW ${i+1}</strong>
+
+          <br>Source: ${t.origin}
+
+          <br>Arm: ${t.side||"Unknown"}
+
+          <br>Release position:
+          ${format(t.releaseTime,3," s")}
+
+          <br>Elbow angle:
+          ${format(t.elbowAngle,1,"°")}
+
+          <br>Delivery tempo:
+          ${format(t.deliveryTempoMs,0," ms")}
+
+          <br>Follow-through:
+          ${format(t.followThroughMs,0," ms")}
+
+          <br>Available phases:
+          ${t.phases.filter(Boolean).length}/5
+
+          <button class="secondary"
+            data-review="${i}">
+            REVIEW THROW ${i+1}
+          </button>
+
+        </div>
+
+      `).join("")
+
+      :`<div class="small">
+        No automatic candidates.
+        Use the full recording to review
+        and manually mark missed throws.
+      </div>`;
+
   document.querySelectorAll(
-    "[data-review-throw]"
+    "[data-review]"
   ).forEach(button=>{
 
-    button.addEventListener("click",()=>{
+    button.onclick=()=>{
 
       selectThrow(
-        Number(button.dataset.reviewThrow)
+        Number(button.dataset.review)
       );
 
       $("visualPanel").scrollIntoView({
-        behavior:"smooth",
-        block:"start"
+        behavior:"smooth"
       });
 
-    });
+    };
 
   });
 
@@ -2245,97 +2470,84 @@ function renderResults(){
 
 function renderCoaching(){
 
-  const throws=analysis.throws;
+  const notes=[];
 
-  const observations=[];
+  if(analysis.sampleRate<10){
 
-  if(!throws.length)return;
+    notes.push(
+      "The live sampling rate is limited. Fast release movements may occur between captured samples."
+    );
 
-  const handCoverage=mean(
-    throws.map(t=>t.handCoverage)
+  }
+
+  if(analysis.poseCoverage<85){
+
+    notes.push(
+      "Some body landmarks were not detected. Improve lighting and keep the throwing arm visible."
+    );
+
+  }
+
+  const automatic=analysis.throws.filter(
+    t=>t.origin==="AUTOMATIC"
   );
 
-  if(handCoverage<60){
+  if(!automatic.length){
 
-    observations.push(
-      "Hand visibility was limited. Position the smartphone so the fingers remain clearly visible throughout the delivery."
+    notes.push(
+      "Automatic recognition did not identify a sufficiently supported forward throwing movement. Manual video review is available."
     );
 
   }
 
-  if(analysis.poseCoverage<80){
+  if(automatic.length>=2){
 
-    observations.push(
-      "Pose tracking coverage was limited. Improve lighting and keep the entire throwing arm inside the frame."
-    );
+    const tempos=automatic
+      .map(t=>t.deliveryTempoMs)
+      .filter(Number.isFinite);
 
-  }
+    if(tempos.length>=2){
 
-  if(throws.length>=2){
+      notes.push(
+        "Estimated delivery tempo varied by "+
+        Math.round(
+          Math.max(...tempos)-
+          Math.min(...tempos)
+        )+
+        " ms. Compare the available draw-back and release markers."
+      );
 
-    const tempos=throws.map(
-      t=>t.deliveryTempoMs
-    );
-
-    const range=Math.max(...tempos)-
-      Math.min(...tempos);
-
-    observations.push(
-      "The measured delivery tempo differed by "+
-      Math.round(range)+
-      " ms between the detected throws. Compare their draw-back and acceleration phases."
-    );
-
-    const angles=throws.map(
-      t=>t.elbowAngle
-    );
-
-    const angleRange=
-      Math.max(...angles)-
-      Math.min(...angles);
-
-    observations.push(
-      "Estimated release elbow angles varied by "+
-      angleRange.toFixed(1)+
-      "°. Review the corresponding release frames."
-    );
-
-  }else{
-
-    observations.push(
-      "Only one candidate throw was detected. Additional throws are needed before consistency can be assessed."
-    );
+    }
 
   }
 
-  observations.push(
-    "Release timing and preparation are movement-based estimates. Tracking visibility is not a technique score or accuracy guarantee."
+  notes.push(
+    "Automatic candidates require visual confirmation. Release timing is estimated, and unavailable measurements are not fabricated."
   );
 
-  $("coaching").innerHTML=
-    observations.map(
-      text=>`<p>${text}</p>`
-    ).join("");
-
-}
-
-function renderThrowSelector(){
-
-  $("throwSelect").innerHTML=
-    analysis.throws.map((t,i)=>`
-
-      <option value="${i}">
-        THROW ${i+1} · ${t.side} ARM
-      </option>
-
-    `).join("");
+  $("coaching").innerHTML=notes
+    .map(n=>`<p>${n}</p>`)
+    .join("");
 
 }
 
 function getThrow(){
 
-  return analysis?.throws?.[selectedThrow]
-    ||null;
+  return selectedThrow>=0
+    ?analysis?.throws[selectedThrow]||null
+    :null;
+
+}
+
+function bounds(){
+
+  const t=getThrow();
+
+  return t
+
+    ?{start:t.startTime,end:t.endTime}
+
+    :{start:0,end:recordDuration};
 
 }
 
@@ -2364,107 +2576,105 @@ function nearestFrame(time){
 
   return Math.abs(a.time-time)<
          Math.abs(b.time-time)
-
     ?a:b;
 
 }
 
 function interpolatedFrame(time){
 
-  if(!frames.length)return null;
-
   const nearest=nearestFrame(time);
 
   if(!nearest)return null;
+
+  const gap=adaptiveGap(frames);
 
   const index=nearest.index;
 
   const a=nearest.time<=time
 
-    ? nearest
-    : frames[Math.max(0,index-1)];
+    ?nearest
+
+    :frames[Math.max(0,index-1)];
 
   const b=nearest.time>=time
 
-    ? nearest
-    : frames[Math.min(
-        frames.length-1,index+1
-      )];
+    ?nearest
+
+    :frames[Math.min(
+      frames.length-1,index+1
+    )];
 
   if(
     !a?.pose||
     !b?.pose||
-    b.time-a.time>MAX_SAMPLE_GAP
+    b.time-a.time>gap
   ){
 
-    return Math.abs(nearest.time-time)<.09
-
-      ?nearest
-
-      :null;
+    return Math.abs(nearest.time-time)<=
+      Math.min(.12,gap/2)
+        ?nearest:null;
 
   }
 
   const dt=b.time-a.time;
 
-  if(dt<=0)return nearest;
+  if(dt<=0)
+    return Math.abs(nearest.time-time)<=.15
+      ?nearest:null;
 
   const f=clamp(
     (time-a.time)/dt,0,1
   );
 
-  const mix=(p,q)=>({
-
-    x:p.x+(q.x-p.x)*f,
-
-    y:p.y+(q.y-p.y)*f,
-
-    z:(p.z||0)+
-      ((q.z||0)-(p.z||0))*f,
-
-    visibility:Math.min(
-      visibility(p),
-      visibility(q)
-    )
-
-  });
-
   return {
 
     time,
 
-    pose:a.pose.map(
-      (p,i)=>mix(p,b.pose[i])
-    ),
+    pose:a.pose.map((p,i)=>{
+
+      const q=b.pose[i];
+
+      return {
+
+        x:p.x+(q.x-p.x)*f,
+        y:p.y+(q.y-p.y)*f,
+
+        z:(p.z||0)+
+          ((q.z||0)-(p.z||0))*f,
+
+        visibility:Math.min(
+          vis(p),vis(q)
+        )
+
+      };
+
+    }),
 
     hands:
       Math.abs(nearest.time-time)<.08
-
-        ?nearest.hands
-
-        :[]
+        ?nearest.hands:[]
 
   };
 
 }
 
-function nearestSeriesPoint(series,time){
+function activeSeries(){
 
-  if(!series.length)return null;
+  const side=
+    getThrow()?.side||
+    analysis?.arm||
+    (
+      selectedArm!=="AUTO"
+        ?selectedArm:null
+    );
 
-  const point=series.reduce(
-    (best,x)=>
-      Math.abs(x.time-time)<
-      Math.abs(best.time-time)
-        ?x:best,
-    series[0]
-  );
+  if(side==="RIGHT")
+    return analysis?.rightSeries||[];
 
-  return Math.abs(point.time-time)<=.10
+  if(side==="LEFT")
+    return analysis?.leftSeries||[];
 
-    ?point
-
-    :null;
+  return [];
 
 }
 
@@ -2472,36 +2682,48 @@ function updatePhaseMetrics(time){
 
   const t=getThrow();
 
-  if(!t)return;
-
-  const point=nearestSeriesPoint(
-    t.series,time
+  const p=nearestPoint(
+    activeSeries(),
+    time,
+    Math.min(
+      .25,
+      adaptiveGap(frames)/2
+    )
   );
 
-  const base=t.phases[0];
-
   $("phaseElbow").textContent=
-    format(point?.elbowAngle,1,"°");
+    format(p?.elbowAngle,1,"°");
 
   $("phaseSpeed").textContent=
-    point?.validMotion
-      ?format(point.speed,2,"/s")
+
+    p?.scaleMethod==="TORSO"
+
+      ?format(p.speed,2,"/s")
+
       :"–";
 
   $("phaseConfidence").textContent=
-    point
 
-      ?format(point.quality*100,0,"%")
-
+    p?format(p.quality*100,0,"%")
       :"–";
 
+  const base=t?.phases[0]
+
+    ?nearestPoint(
+        activeSeries(),
+        t.phases[0].time,.2
+      )
+
+    :null;
+
   $("phaseHead").textContent=
-    point?.head&&base?.head
+
+    p?.head&&base?.head&&
+    base.scaleMethod==="TORSO"
 
       ?format(
           distance(
-            point.head,
-            base.head
+            p.head,base.head
           )/base.torso*100,
           1,"%"
         )
@@ -2510,107 +2732,135 @@ function updatePhaseMetrics(time){
 
 }
 
-function updateReview(){
-
-  if(!inReview||!analysis?.throws.length)
-    return;
+function updatePhaseUI(){
 
   const t=getThrow();
-
-  if(!t)return;
-
-  const time=review.currentTime;
-
-  resizeCanvas(review);
-
-  drawSkeleton(
-    interpolatedFrame(time),
-    t.side
-  );
-
-  $("scrubber").value=clamp(
-    time,t.startTime,t.endTime
-  );
-
-  $("currentTime").textContent=
-    Math.max(
-      0,time-t.startTime
-    ).toFixed(3)+" s";
-
-  let phaseIndex=0;
-
-  for(let i=1;i<t.phases.length;i++){
-
-    if(time>=t.phases[i].time-.01)
-      phaseIndex=i;
-
-  }
-
-  if(phaseIndex!==selectedPhase){
-
-    selectedPhase=phaseIndex;
-
-    updatePhaseUI();
-
-  }
-
-  updatePhaseMetrics(time);
-
-  if(
-    !review.paused &&
-    time>=t.endTime
-  ){
-
-    review.pause();
-
-    review.currentTime=t.endTime;
-
-  }
-
-}
-
-function updatePhaseUI(){
 
   document.querySelectorAll(
     ".phase"
   ).forEach(button=>{
 
-    button.classList.toggle(
-      "active",
-      Number(button.dataset.phase)
-        ===selectedPhase
+    const index=Number(
+      button.dataset.phase
     );
 
+    button.classList.toggle(
+      "active",
+      index===selectedPhase
+    );
+
+    button.style.opacity=
+      t?.phases[index]?1:.55;
+
   });
+
+  if(!t){
+
+    $("phaseTitle").textContent=
+      "Full recording";
+
+    $("phaseDescription").textContent=
+      "Review the entire recording, including any movements missed by automatic recognition.";
+
+    return;
+
+  }
+
+  const phase=t.phases[selectedPhase];
 
   $("phaseTitle").textContent=
     PHASES[selectedPhase];
 
   $("phaseDescription").textContent=
-    DESCRIPTIONS[selectedPhase];
+
+    phase
+
+      ?DESCRIPTIONS[selectedPhase]+
+        " Marker: "+phase.method
+
+      :"This phase was not reliably identified. You can manually mark it during review.";
+
+}
+
+function updateReview(){
+
+  if(!inReview||!analysis)return;
+
+  const time=review.currentTime;
+  const t=getThrow();
+  const range=bounds();
+
+  resizeCanvas(review);
+
+  drawSkeleton(
+    interpolatedFrame(time),
+    t?.side||analysis.arm
+  );
+
+  $("scrubber").value=clamp(
+    time,range.start,range.end
+  );
+
+  $("currentTime").textContent=
+    Math.max(
+      0,time-range.start
+    ).toFixed(3)+" s";
+
+  updatePhaseMetrics(time);
+
+  if(!review.paused&&t){
+
+    let phaseIndex=selectedPhase;
+
+    const available=t.phases
+      .map((p,i)=>({p,i}))
+      .filter(x=>x.p&&x.p.time<=time)
+      .sort((a,b)=>a.p.time-b.p.time);
+
+    if(available.length)
+      phaseIndex=available.at(-1).i;
+
+    if(phaseIndex!==selectedPhase){
+
+      selectedPhase=phaseIndex;
+      updatePhaseUI();
+
+    }
+
+  }
+
+  if(
+    !review.paused&&
+    time>=range.end
+  ){
+
+    review.pause();
+
+  }
 
 }
 
 function seekTo(time){
 
-  const t=getThrow();
-
-  if(!t)return;
+  const range=bounds();
 
   review.pause();
 
   const target=clamp(
-    time,t.startTime,t.endTime
+    time,range.start,range.end
   );
 
   try{
 
     review.currentTime=target;
 
+    if(!review.seeking)
+      updateReview();
+
   }catch(error){
 
     setStatus(
-      "Video seek unavailable in this browser.",
+      "Video seeking is unavailable in this browser.",
       "error"
     );
 
@@ -2618,73 +2868,68 @@ function seekTo(time){
 
 }
 
+function selectThrow(index){
+
+  if(!analysis)return;
+
+  if(index>=0&&!analysis.throws[index])
+    return;
+
+  selectedThrow=index;
+
+  $("throwSelect").value=index;
+
+  const range=bounds();
+
+  $("scrubber").min=range.start;
+  $("scrubber").max=range.end;
+
+  $("totalTime").textContent=
+    (range.end-range.start)
+      .toFixed(3)+" s";
+
+  selectedPhase=0;
+
+  updatePhaseUI();
+
+  seekTo(range.start);
+
+}
+
 function selectPhase(index){
-
-  const t=getThrow();
-
-  if(!t)return;
 
   selectedPhase=index;
 
   updatePhaseUI();
 
-  seekTo(t.phases[index].time);
+  const phase=getThrow()
+    ?.phases[index];
 
-}
-
-function selectThrow(index){
-
-  if(!analysis?.throws[index])return;
-
-  review.pause();
-
-  selectedThrow=index;
-  selectedPhase=0;
-
-  $("throwSelect").value=index;
-
-  const t=getThrow();
-
-  $("scrubber").min=t.startTime;
-  $("scrubber").max=t.endTime;
-
-  $("totalTime").textContent=
-    (t.endTime-t.startTime)
-      .toFixed(3)+" s";
-
-  selectPhase(0);
+  if(phase)
+    seekTo(phase.time);
 
 }
 
 function stepFrame(direction){
 
-  const t=getThrow();
+  const range=bounds();
 
-  if(!t)return;
-
-  review.pause();
-
-  const current=review.currentTime;
+  const time=review.currentTime;
 
   const available=frames.filter(
-    f=>f.time>=t.startTime &&
-    f.time<=t.endTime
+    f=>f.time>=range.start&&
+       f.time<=range.end
   );
 
-  let target=null;
+  const target=direction>0
 
-  if(direction>0){
+    ?available.find(
+        f=>f.time>time+.005
+      )
 
-    target=available.find(
-      f=>f.time>current+.008
-    );
-
-  }else{
-
-    target=[...available].reverse()
-      .find(f=>f.time<current-.008);
-
-  }
+    :[...available].reverse().find(
+        f=>f.time<time-.005
+      );
 
   if(target)
     seekTo(target.time);
@@ -2693,9 +2938,7 @@ function stepFrame(direction){
 
 async function togglePlayback(){
 
-  const t=getThrow();
-
-  if(!t)return;
+  if(!analysis)return;
 
   if(!review.paused){
 
@@ -2704,12 +2947,14 @@ async function togglePlayback(){
 
   }
 
+  const range=bounds();
+
   if(
-    review.currentTime<t.startTime ||
-    review.currentTime>=t.endTime-.025
+    review.currentTime<range.start||
+    review.currentTime>=range.end-.03
   ){
 
-    review.currentTime=t.startTime;
+    review.currentTime=range.start;
 
   }
 
@@ -2730,12 +2975,237 @@ async function togglePlayback(){
 
 }
 
+function addManualThrow(){
+
+  if(!analysis)return;
+
+  review.pause();
+
+  const time=review.currentTime;
+
+  if(analysis.throws.some(
+    t=>Math.abs(t.releaseTime-time)<.35
+  )){
+
+    $("manualStatus").textContent=
+      "A throw already exists near this position.";
+
+    return;
+
+  }
+
+  const side=
+    analysis.arm||
+    (
+      selectedArm!=="AUTO"
+        ?selectedArm:null
+    );
+
+  const series=side==="RIGHT"
+
+    ?analysis.rightSeries
+
+    :side==="LEFT"
+
+      ?analysis.leftSeries
+
+      :[];
+
+  const p=nearestPoint(
+    series,time,.12
+  );
+
+  const t={
+
+    number:0,
+
+    origin:"MANUAL",
+
+    side,
+
+    startTime:Math.max(0,time-1.2),
+
+    endTime:Math.min(
+      recordDuration,time+.8
+    ),
+
+    releaseTime:time,
+
+    releaseMethod:"User-marked release",
+
+    directDartReleaseObserved:false,
+
+    elbowAngle:p?.elbowAngle??null,
+
+    deliveryTempoMs:null,
+
+    followThroughMs:null,
+
+    headMovement:null,
+
+    handCoverage:null,
+
+    phases:[
+
+      null,null,null,
+
+      {
+        time,
+        frameIndex:p?.frameIndex??null,
+        method:"MANUAL"
+      },
+
+      null
+
+    ]
+
+  };
+
+  analysis.throws.push(t);
+
+  refreshResults();
+
+  selectThrow(
+    analysis.throws.indexOf(t)
+  );
+
+  selectPhase(3);
+
+  $("manualStatus").textContent=
+    "Manual throw added. Other phases remain unmarked.";
+
+}
+
+function markSelectedPhase(){
+
+  const t=getThrow();
+
+  if(!t){
+
+    $("manualStatus").textContent=
+      "Select or add a throw first.";
+
+    return;
+
+  }
+
+  review.pause();
+
+  const time=review.currentTime;
+
+  const previous=t.phases
+    .slice(0,selectedPhase)
+    .filter(Boolean);
+
+  const following=t.phases
+    .slice(selectedPhase+1)
+    .filter(Boolean);
+
+  if(
+    previous.some(p=>p.time>time)||
+    following.some(p=>p.time<time)
+  ){
+
+    $("manualStatus").textContent=
+      "Phase markers must follow chronological order.";
+
+    return;
+
+  }
+
+  const p=nearestPoint(
+    activeSeries(),time,.12
+  );
+
+  t.phases[selectedPhase]={
+
+    time,
+
+    frameIndex:p?.frameIndex??null,
+
+    method:"MANUAL"
+
+  };
+
+  t.origin="MANUAL";
+
+  if(selectedPhase===3){
+
+    t.releaseTime=time;
+
+    t.elbowAngle=
+      p?.elbowAngle??null;
+
+    t.releaseMethod=
+      "User-marked release";
+
+  }
+
+  t.deliveryTempoMs=
+
+    t.phases[1]&&t.phases[3]
+
+      ?(t.phases[3].time-
+        t.phases[1].time)*1000
+
+      :null;
+
+  t.followThroughMs=
+
+    t.phases[3]&&t.phases[4]
+
+      ?(t.phases[4].time-
+        t.phases[3].time)*1000
+
+      :null;
+
+  refreshResults();
+
+  selectedThrow=analysis.throws.indexOf(t);
+
+  $("throwSelect").value=selectedThrow;
+
+  updatePhaseUI();
+
+  $("manualStatus").textContent=
+    PHASES[selectedPhase]+
+    " marked at "+
+    time.toFixed(3)+" s.";
+
+}
+
+function removeSelectedThrow(){
+
+  if(selectedThrow<0||!getThrow()){
+
+    $("manualStatus").textContent=
+      "Select a throw first.";
+
+    return;
+
+  }
+
+  review.pause();
+
+  analysis.throws.splice(
+    selectedThrow,1
+  );
+
+  refreshResults();
+
+  selectThrow(-1);
+
+  $("manualStatus").textContent=
+    "Selected throw removed.";
+
+}
+
 function playbackLoop(){
 
   if(
-    inReview &&
-    !review.paused &&
-    analysis?.throws.length
+    inReview&&
+    analysis&&
+    !review.paused
   ){
 
     updateReview();
@@ -2758,7 +3228,7 @@ async function restart(){
   chunks=[];
   analysis=null;
 
-  selectedThrow=0;
+  selectedThrow=-1;
   selectedPhase=0;
 
   review.removeAttribute("src");
@@ -2773,6 +3243,7 @@ async function restart(){
 
   [
     "visualPanel",
+    "manualPanel",
     "resultsPanel",
     "comparisonPanel",
     "coachPanel",
@@ -2784,15 +3255,18 @@ async function restart(){
 
   show("camera");
   show("recordButton");
+  show("recordSettings");
   show("switchCamera");
 
   $("recordButton").disabled=true;
   $("switchCamera").disabled=true;
   $("stopButton").disabled=false;
-  $("analyzeButton").disabled=false;
 
   $("progress").style.width="0%";
+
   $("timer").textContent="00:00";
+
+  $("manualStatus").textContent="";
 
   clearOverlay();
 
@@ -2805,105 +3279,72 @@ async function restart(){
 
 }
 
-$("enableCamera").addEventListener(
-  "click",async()=>{
+$("enableCamera").onclick=startCamera;
 
-    await startCamera();
+$("switchCamera").onclick=async()=>{
 
-  }
-);
+  if(recording||countdownRunning)
+    return;
 
-$("switchCamera").addEventListener(
-  "click",async()=>{
+  facingMode=facingMode==="environment"
 
-    if(recording||countdownRunning)return;
+    ?"user"
 
-    facingMode=facingMode==="environment"
+    :"environment";
 
-      ?"user"
+  await startCamera();
 
-      :"environment";
+};
 
-    await startCamera();
+$("recordButton").onclick=countdown;
 
-  }
-);
+$("stopButton").onclick=stopRecording;
 
-$("recordButton").addEventListener(
-  "click",countdown
-);
+$("analyzeButton").onclick=analyzeRecording;
 
-$("stopButton").addEventListener(
-  "click",stopRecording
-);
+$("restartButton").onclick=restart;
 
-$("analyzeButton").addEventListener(
-  "click",analyzeRecording
-);
+$("throwSelect").onchange=e=>
 
-$("restartButton").addEventListener(
-  "click",restart
-);
+  selectThrow(Number(e.target.value));
 
-$("throwSelect").addEventListener(
-  "change",event=>{
+$("scrubber").oninput=e=>
 
-    selectThrow(
-      Number(event.target.value)
-    );
+  seekTo(Number(e.target.value));
 
-  }
-);
+$("prevFrame").onclick=()=>stepFrame(-1);
 
-$("scrubber").addEventListener(
-  "input",event=>{
+$("nextFrame").onclick=()=>stepFrame(1);
 
-    seekTo(
-      Number(event.target.value)
-    );
+$("playButton").onclick=togglePlayback;
 
-  }
-);
+$("addThrow").onclick=addManualThrow;
 
-$("prevFrame").addEventListener(
-  "click",()=>stepFrame(-1)
-);
+$("markPhase").onclick=markSelectedPhase;
 
-$("nextFrame").addEventListener(
-  "click",()=>stepFrame(1)
-);
+$("removeThrow").onclick=removeSelectedThrow;
 
-$("playButton").addEventListener(
-  "click",togglePlayback
-);
+$("toggleSkeleton").onclick=()=>{
 
-$("toggleSkeleton").addEventListener(
-  "click",()=>{
+  showSkeleton=!showSkeleton;
 
-    showSkeleton=!showSkeleton;
+  $("toggleSkeleton").textContent=
+    "SKELETON: "+
+    (showSkeleton?"ON":"OFF");
 
-    $("toggleSkeleton").textContent=
-      "SKELETON: "+
-      (showSkeleton?"ON":"OFF");
+  updateReview();
 
-    updateReview();
-
-  }
-);
+};
 
 document.querySelectorAll(
   ".phase"
 ).forEach(button=>{
 
-  button.addEventListener(
-    "click",()=>{
+  button.onclick=()=>
 
-      selectPhase(
-        Number(button.dataset.phase)
-      );
-
-    }
-  );
+    selectPhase(
+      Number(button.dataset.phase)
+    );
 
 });
 
@@ -2911,32 +3352,31 @@ document.querySelectorAll(
   ".speed"
 ).forEach(button=>{
 
-  button.addEventListener(
-    "click",()=>{
+  button.onclick=()=>{
 
-      playbackRate=Number(
-        button.dataset.speed
-      );
+    playbackRate=Number(
+      button.dataset.speed
+    );
 
-      review.playbackRate=playbackRate;
+    review.playbackRate=playbackRate;
 
-      document.querySelectorAll(
-        ".speed"
-      ).forEach(
-        b=>b.classList.remove("active")
-      );
+    document.querySelectorAll(
+      ".speed"
+    ).forEach(
+      b=>b.classList.remove("active")
+    );
 
-      button.classList.add("active");
+    button.classList.add("active");
 
-    }
-  );
+  };
 
 });
 
 review.addEventListener(
   "play",()=>{
 
-    $("playButton").textContent="Ⅱ PAUSE";
+    $("playButton").textContent=
+      "Ⅱ PAUSE";
 
   }
 );
@@ -2944,7 +3384,8 @@ review.addEventListener(
 review.addEventListener(
   "pause",()=>{
 
-    $("playButton").textContent="▶ PLAY THROW";
+    $("playButton").textContent=
+      "▶ PLAY";
 
     updateReview();
 
@@ -2963,15 +3404,6 @@ review.addEventListener(
   "timeupdate",updateReview
 );
 
-review.addEventListener(
-  "ended",()=>{
-
-    $("playButton").textContent=
-      "▶ PLAY THROW";
-
-  }
-);
-
 window.addEventListener(
   "resize",()=>{
 
@@ -2988,13 +3420,10 @@ window.addEventListener(
 window.addEventListener(
   "pagehide",()=>{
 
-    if(stream){
-
+    if(stream)
       stream.getTracks().forEach(
-        track=>track.stop()
+        t=>t.stop()
       );
-
-    }
 
   }
 );
