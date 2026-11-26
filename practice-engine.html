@@ -712,7 +712,27 @@ const player=get("player","playerid");
 const userid=get("userid");
 const playerName=get("playerName","playername","name")||"Player";
 const language=get("language","lang")||"EN";
-const drill=get("drill","practice")||"501 Focused Practice";
+const keithPracticeNames = {
+  "KAG-170-001": "170 Practice",
+  "KAG-4160-001": "41-60 Finishing Practice",
+  "KAG-9DO-001": "9-Dart Double-Out",
+  "KAG-B27-001": "Bob's 27",
+  "KAG-ATC-001": "Around the Clock",
+  "KAG-RTW-001": "Round the World",
+  "KAG-CUP-001": "Count Up",
+  "KAG-CCU-001": "Cricket Count Up"
+};
+
+const selectedKeithPractice = get(
+  "practiceId",
+  "practiceID",
+  "practiceid"
+).trim().toUpperCase();
+
+const drill =
+  keithPracticeNames[selectedKeithPractice] ||
+  get("drill", "practice") ||
+  "501 Focused Practice";
 const mainIssue=get("mainIssue","focus");
 const focus=get("focus","mainIssue");
 const doubleTrouble=drill.toLowerCase().includes("double trouble");
