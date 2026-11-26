@@ -2142,7 +2142,259 @@ if(speechSupported){
     setTimeout(welcomeToLab,450);
   },{once:true});
 }
+/* KEITH ADAPTIVE PERFORMANCE GRADING */
 
+const keithGrades = [
+  {name:"RED",color:"#DC2626",range:get("red","keithred")},
+  {name:"ORANGE",color:"#F97316",range:get("orange","keithorange")},
+  {name:"YELLOW",color:"#EAB308",range:get("yellow","keithyellow")},
+  {name:"GREEN",color:"#16A34A",range:get("green","keithgreen")}
+];
+
+function matchesKeithRange(value,range){
+
+  const text = String(range || "")
+    .toLowerCase()
+    .replace(/[–—−]/g,"-")
+    .replace(/,/g,".")
+    .trim();
+
+  const n = "(\\d+(?:\\.\\d+)?)";
+
+  let match = text.match(
+    new RegExp("^"+n+"\\s*-\\s*"+n+"\\s*(?:darts?|points?|%)?$")
+  );
+
+  if(match){
+    return value >= Number(match[1]) &&
+           value <= Number(match[2]);
+  }
+
+  match = text.match(
+    new RegExp("^"+n+"\\s*\\+\\s*(?:darts?|points?|%)?$")
+  );
+
+  if(match)return value >= Number(match[1]);
+
+  match = text.match(
+    new RegExp("^"+n+"\\s*(?:darts?|points?|%)?\\s*(?:or more|and above)$")
+  );
+
+  if(match)return value >= Number(match[1]);
+
+  match = text.match(
+    new RegExp("^"+n+"\\s*(?:darts?|points?|%)?\\s*(?:or less|and below)$")
+  );
+
+  if(match)return value <= Number(match[1]);
+
+  match = text.match(
+    new RegExp("^(<=|>=|<|>|≤|≥)\\s*"+n+"\\s*(?:darts?|points?|%)?$")
+  );
+
+  if(match){
+    const limit = Number(match[2]);
+
+    switch(match[1]){
+      case "<": return value < limit;
+      case ">": return value > limit;
+      case "<=":
+      case "≤": return value <= limit;
+      case ">=":
+      case "≥": return value >= limit;
+    }
+  }
+
+  return false;
+}
+
+function calculateKeithGrade(){
+
+  if(!completed || finishedManually){
+    return null;
+  }
+
+  const metric = get(
+    "primarymetric",
+    "primaryMetric",
+    "keithprimarymetric"
+  ).toLowerCase().trim();
+
+  let value = null;
+
+  if(!doubleTrouble && remaining === 0){
+
+    if(/^(total darts|total darts used|darts used|darts thrown|darts to finish|darts to complete)$/.test(metric)){
+      value = totalDarts;
+    }
+
+    else if(/^(3-dart average|three dart average|average)$/.test(metric)){
+      value = Number(average().toFixed(2));
+    }
+
+    else if(/^(first 9 average|first9 average|first nine average)$/.test(metric)){
+      const first9 = calculateFirst9();
+      value = first9.first9Average;
+    }
+  }
+
+  if(value === null || !Number.isFinite(value)){
+    return null;
+  }
+
+  const matches = keithGrades.filter(
+    grade => matchesKeithRange(value,grade.range)
+  );
+
+  if(matches.length !== 1)return null;
+
+  return {
+    ...matches[0],
+    value,
+    metric
+  };
+}
+
+function renderKeithGrading(){
+
+  const results = $("resultsScreen");
+
+  if(!results || results.classList.contains("hidden")){
+    return;
+  }
+
+  if($("keithPerformanceGrade"))return;
+
+  const card = document.createElement("div");
+
+  card.id = "keithPerformanceGrade";
+  card.className = "panel";
+
+  card.style.cssText = `
+    margin:14px 0;
+    padding:16px;
+    border:1px solid #39a9ff55;
+    border-radius:14px;
+    background:#071827;
+  `;
+
+  const heading = document.createElement("div");
+
+  heading.className = "eyebrow";
+  heading.textContent = "KEITH'S PERFORMANCE GRADING";
+
+  card.appendChild(heading);
+
+  const achieved = calculateKeithGrade();
+
+  const result = document.createElement("div");
+
+  result.style.cssText = `
+    text-align:center;
+    padding:20px 10px;
+    margin:14px 0;
+    border-radius:12px;
+    font-size:24px;
+    font-weight:900;
+    background:${achieved ? achieved.color : "#102b43"};
+    color:${achieved &&
+      ["YELLOW","ORANGE"].includes(achieved.name)
+      ? "#111111" : "#FFFFFF"};
+  `;
+
+  result.textContent = achieved
+    ? achieved.name + " GRADE"
+    : "NOT GRADED";
+
+  card.appendChild(result);
+
+  const description = document.createElement("div");
+
+  description.className = "muted";
+  description.style.textAlign = "center";
+  description.style.marginBottom = "15px";
+
+  description.textContent = achieved
+    ? achieved.metric.toUpperCase() + ": " + achieved.value
+    : finishedManually
+      ? "Training ended before completion."
+      : "No verified grading match for this training metric.";
+
+  card.appendChild(description);
+
+  keithGrades.forEach(grade => {
+
+    const active = achieved &&
+      achieved.name === grade.name;
+
+    const row = document.createElement("div");
+
+    row.style.cssText = `
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:13px;
+      margin-top:8px;
+      border-radius:9px;
+      border:2px solid ${grade.color};
+      background:${active ? grade.color : "#10243a"};
+      color:${active &&
+        ["ORANGE","YELLOW"].includes(grade.name)
+        ? "#111111" : "#FFFFFF"};
+      font-size:12px;
+    `;
+
+    const label = document.createElement("strong");
+
+    label.textContent = grade.name +
+      (active ? " ✓" : "");
+
+    const range = document.createElement("span");
+
+    range.textContent = grade.range || "Not available";
+    range.style.textAlign = "right";
+
+    row.append(label,range);
+    card.appendChild(row);
+  });
+
+  const completion = $("dartiqTrainingComplete");
+
+  if(completion){
+
+    const stats = completion.querySelector(".tc-grid");
+
+    if(stats){
+      stats.after(card);
+    }else{
+      completion.appendChild(card);
+    }
+
+  }else{
+
+    const saveButton = $("saveButton");
+
+    if(saveButton){
+      saveButton.before(card);
+    }else{
+      results.appendChild(card);
+    }
+  }
+}
+
+const keithResultsObserver = new MutationObserver(
+  renderKeithGrading
+);
+
+keithResultsObserver.observe($("resultsScreen"),{
+  childList:true,
+  subtree:true,
+  attributes:true,
+  attributeFilter:["class"]
+});
+
+renderKeithGrading();
 </script>
 </body>
 </html>
