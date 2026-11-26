@@ -331,10 +331,24 @@ const fallbackObjectives={
 
 const issueKey=issue.toLowerCase();
 
-const drill=context.drill||
-  fallbackDrills[issueKey]||
+const keithPractices = {
+  "KAG-170-001": "170 Practice",
+  "KAG-4160-001": "41-60 Finishing Practice",
+  "KAG-9DO-001": "9-Dart Double-Out",
+  "KAG-B27-001": "Bob's 27",
+  "KAG-ATC-001": "Around the Clock",
+  "KAG-RTW-001": "Round the World",
+  "KAG-CUP-001": "Count Up",
+  "KAG-CCU-001": "Cricket Count Up"
+};
+
+const drill =
+  keithPractices[context.practiceID.trim().toUpperCase()] ||
+  context.drill ||
+  fallbackDrills[issueKey] ||
   "Focused Performance Training";
 
+context.drill = drill;
 const objective=context.objective||
   fallbackObjectives[issueKey]||
   "Improve consistency during your training.";
