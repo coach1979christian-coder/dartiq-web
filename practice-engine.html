@@ -2613,6 +2613,1419 @@ renderKeithGrading();
   updateClock();
 
 })();
+  /* DARTIQ — KEITH BOB'S 27 */
+
+(() => {
+
+  const practiceID = get(
+    "practiceId",
+    "practiceID",
+    "practiceid"
+  ).trim().toUpperCase();
+
+  const isBobs27 =
+    practiceID === "KAG-B27-001" ||
+    /bob.?s\s*27/i.test(drill);
+
+  if (!isBobs27) return;
+
+  let target = 1;
+  let highestWedge = 0;
+  let doublesHit = 0;
+
+  const originalAddDart = addDart;
+  const originalSegment = segment;
+  const originalPopulateResults = populateResults;
+
+  remaining = 27;
+  mode = "dartboard";
+
+  $("modeTabs").classList.add("hidden");
+
+  function updateBobs27() {
+
+    put("labLeg", "DOUBLES TRAINING");
+    put("labTarget", "BOB'S 27");
+
+    put(
+      "visitNumber",
+      completed ? "COMPLETE" : "TARGET D" + target
+    );
+
+    put("remainingLabel", "RUNNING POINTS");
+    put("remaining", remaining);
+
+    put("labLegsLabel", "FURTHEST WEDGE");
+    put("legsWon", highestWedge + "/20");
+
+    put(
+      "checkoutSuggestion",
+      completed
+        ? "TRAINING COMPLETE"
+        : "HIT DOUBLE " + target
+    );
+
+    drawBoard();
+  }
+
+  /* HIGHLIGHT CURRENT DOUBLE */
+
+  segment = function (
+    inner, outer, start, end,
+    color, num, mult, label
+  ) {
+
+    originalSegment(
+      inner, outer, start, end,
+      color, num, mult, label
+    );
+
+    if (
+      num === target &&
+      mult === 2 &&
+      !completed
+    ) {
+
+      const path = svg.lastElementChild;
+
+      path.setAttribute("fill", "#27B8FF");
+      path.setAttribute("stroke", "#FFFFFF");
+      path.setAttribute("stroke-width", "2");
+
+      path.style.filter =
+        "drop-shadow(0 0 6px #27B8FF)";
+    }
+  };
+
+  /* AUTOMATIC THREE-DART VISITS */
+
+  addDart = function (
+    number, multiplier, label
+  ) {
+
+    if (completed || saving) return;
+
+    originalAddDart(
+      number,
+      multiplier,
+      label
+    );
+
+    if (currentDarts.length === 3) {
+      confirmVisit();
+    }
+  };
+
+  /* BOB'S 27 SCORING */
+
+  confirmVisit = function () {
+
+    if (completed || saving) return;
+
+    if (currentDarts.length !== 3) {
+
+      message(
+        "Throw all three darts at D" +
+        target + "."
+      );
+
+      return;
+    }
+
+    const before = remaining;
+    const currentTarget = target;
+
+    const recordedDarts =
+      currentDarts.map(dart => ({
+        ...dart,
+        targetDouble: currentTarget
+      }));
+
+    const hits = recordedDarts.filter(
+      dart =>
+        dart.number === currentTarget &&
+        dart.multiplier === 2
+    ).length;
+
+    let scoreChange = 0;
+
+    totalDarts += 3;
+
+    if (hits > 0) {
+
+      scoreChange =
+        currentTarget * 2 * hits;
+
+      remaining += scoreChange;
+
+      doublesHit += hits;
+
+      highestWedge = Math.max(
+        highestWedge,
+        currentTarget
+      );
+
+      totalPoints += scoreChange;
+
+    } else {
+
+      scoreChange = -currentTarget;
+
+      remaining += scoreChange;
+    }
+
+    furthestWedge = highestWedge;
+    legsWon = highestWedge;
+
+    visits.push({
+
+      visitNumber: visit,
+
+      practiceId: "KAG-B27-001",
+
+      practiceVariant: "DOUBLES",
+
+      wedgeNumber: currentTarget,
+
+      targetDouble: currentTarget,
+
+      doubleHits: hits,
+
+      scoreChange,
+
+      score: Math.max(0, scoreChange),
+
+      attemptedScore:
+        recordedDarts.reduce(
+          (sum, dart) => sum + dart.score,
+          0
+        ),
+
+      dartsThrown: 3,
+
+      remainingBefore: before,
+
+      remainingAfter: remaining,
+
+      furthestWedge: highestWedge,
+
+      bust: false,
+
+      darts: recordedDarts,
+
+      createdAt: new Date().toISOString()
+
+    });
+
+    visit++;
+
+    resetVisit();
+
+    /* END CONDITIONS */
+
+    if (
+      remaining <= 0 ||
+      currentTarget === 20
+    ) {
+
+      completed = true;
+
+      $("confirmButton").disabled = true;
+
+      $("finishButton").textContent =
+        "VIEW PERFORMANCE RESULTS";
+
+      put(
+        "finishMessage",
+        "Bob's 27 complete."
+      );
+
+      updateBobs27();
+      updateVisitHistory();
+
+      message(
+        highestWedge === 20
+          ? "D20 CLEARED!"
+          : "TRAINING COMPLETE"
+      );
+
+      finishPractice();
+
+      return;
+    }
+
+    /* ADVANCE TO NEXT DOUBLE */
+
+    target++;
+
+    updateBobs27();
+    updateVisitHistory();
+
+    message(
+      (scoreChange > 0 ? "+" : "") +
+      scoreChange +
+      " POINTS | NEXT TARGET D" +
+      target
+    );
+  };
+
+  updateStats = function () {
+    updateBobs27();
+  };
+
+  /* PERFORMANCE RESULTS */
+
+  populateResults = function () {
+
+    originalPopulateResults();
+
+    put("resultTitle", "BOB'S 27");
+
+    put(
+      "resultDescription",
+      "Doubles proficiency results"
+    );
+
+    put("resultAverage", "D" + highestWedge);
+    put("resultDarts", totalDarts);
+    put("resultLegs", highestWedge);
+    put("resultRemaining", remaining);
+    put("resultPoints", remaining);
+
+    put(
+      "resultStatus",
+      highestWedge === 20
+        ? "D20 CLEARED"
+        : "TRAINING COMPLETE"
+    );
+
+    put(
+      "resultStatusDescription",
+
+      "Furthest wedge: D" +
+      highestWedge +
+
+      " | Doubles hit: " +
+      doublesHit +
+
+      " | Final score: " +
+      remaining +
+
+      " | Proficiency: " +
+      highestWedge * 5 + "%"
+    );
+  };
+
+  /* KEITH'S EXISTING GRADING */
+
+  calculateKeithGrade = function () {
+
+    if (!completed) return null;
+
+    const value = highestWedge;
+
+    let gradeName;
+
+    if (value >= 18) {
+      gradeName = "GREEN";
+    } else if (value >= 16) {
+      gradeName = "YELLOW";
+    } else if (value >= 14) {
+      gradeName = "ORANGE";
+    } else {
+      gradeName = "RED";
+    }
+
+    const grade = keithGrades.find(
+      item =>
+        item.name.toUpperCase() === gradeName
+    );
+
+    if (!grade) return null;
+
+    return {
+
+      ...grade,
+
+      value,
+
+      metric: "Furthest Wedge Cleared",
+
+      proficiency: value * 5,
+
+      recordScore:
+        value === 20 ? remaining : null
+    };
+  };
+
+  updateBobs27();
+
+})();
+  /* ==================================================
+   DARTIQ — KEITH PRACTICE LIBRARY
+   REMAINING SIX PRACTICE ENGINES
+   ================================================== */
+
+(() => {
+
+  const practiceID = get(
+    "practiceId",
+    "practiceID",
+    "practiceid"
+  ).trim().toUpperCase();
+
+  const library = {
+
+    "KAG-170-001": {
+      name: "170 Practice",
+      type: "170",
+      start: 170
+    },
+
+    "KAG-4160-001": {
+      name: "41-60 Finishing Practice",
+      type: "4160",
+      start: 41
+    },
+
+    "KAG-9DO-001": {
+      name: "9-Dart Double-Out",
+      type: "9DO",
+      start: 121
+    },
+
+    "KAG-RTW-001": {
+      name: "Round the World",
+      type: "RTW",
+      start: 1
+    },
+
+    "KAG-CUP-001": {
+      name: "Count Up",
+      type: "CUP",
+      start: 0
+    },
+
+    "KAG-CCU-001": {
+      name: "Cricket Count Up",
+      type: "CCU",
+      start: 20
+    }
+
+  };
+
+  const practice = library[practiceID] ||
+    Object.values(library).find(
+      item =>
+        item.name.toLowerCase() ===
+        drill.trim().toLowerCase()
+    );
+
+  if (!practice) return;
+
+  const type = practice.type;
+
+  const finishing = [
+    "170",
+    "4160",
+    "9DO"
+  ].includes(type);
+
+  const originalAddDart = addDart;
+  const originalSegment = segment;
+  const originalPopulateResults = populateResults;
+
+  let target = practice.start;
+
+  let baseNumber = 121;
+  let round = 0;
+  let practiceScore = 0;
+  let attemptDarts = 0;
+  let successfulCheckouts = 0;
+  let failedAttempts = 0;
+  let bestCheckout = 0;
+  let attemptLimit = type === "9DO" ? 9 : 3;
+
+  let checkoutResults = [];
+
+  let ready = type !== "170";
+
+  let targets = [];
+
+  if (type === "RTW") {
+
+    targets = Array.from(
+      { length: 20 },
+      (_, i) => i + 1
+    );
+
+    targets.push(25);
+  }
+
+  if (type === "CCU") {
+
+    targets = [
+      20, 19, 18, 17,
+      16, 15, 25
+    ];
+  }
+
+  const maximumRounds =
+    type === "RTW" ? 21 :
+    type === "CCU" ? 7 :
+    type === "CUP" ? 8 : 0;
+
+  remaining = finishing
+    ? practice.start
+    : 0;
+
+  mode = "dartboard";
+
+  $("modeTabs").classList.add("hidden");
+
+  function targetName(value) {
+
+    return value === 25
+      ? "BULL"
+      : String(value);
+  }
+
+  function metricValue() {
+
+    if (type === "170") {
+
+      const top10 = [...checkoutResults]
+        .sort((a, b) => b - a)
+        .slice(0, 10);
+
+      if (!top10.length) return 0;
+
+      return Number(
+        (
+          top10.reduce(
+            (sum, value) => sum + value,
+            0
+          ) / top10.length
+        ).toFixed(2)
+      );
+    }
+
+    if (type === "4160") {
+      return totalDarts;
+    }
+
+    if (type === "9DO") {
+      return bestCheckout;
+    }
+
+    return practiceScore;
+  }
+
+  function metricName() {
+
+    if (type === "170") {
+      return "Top 10 Checkout Average";
+    }
+
+    if (type === "4160") {
+      return "Total Darts Used";
+    }
+
+    if (type === "9DO") {
+      return "Highest Checkout Reached";
+    }
+
+    return "Total Score";
+  }
+
+  /* ======================================
+     170 PRACTICE — DART LIMIT SELECTION
+     ====================================== */
+
+  function select170Mode() {
+
+    if (type !== "170") return;
+
+    const board = $("dartboardMode");
+
+    board.classList.add("hidden");
+
+    $("confirmButton").disabled = true;
+
+    const setup = document.createElement("div");
+
+    setup.id = "keith170Setup";
+
+    setup.style.cssText = `
+      background:#071827;
+      border:1px solid #27B8FF;
+      border-radius:16px;
+      padding:24px;
+      margin:15px 0;
+      text-align:center;
+    `;
+
+    const title = document.createElement("h2");
+
+    title.textContent = "170 CHECKOUT";
+
+    title.style.color = "#27B8FF";
+
+    setup.appendChild(title);
+
+    const description =
+      document.createElement("p");
+
+    description.textContent =
+      "Choose your checkout dart limit";
+
+    setup.appendChild(description);
+
+    [3, 6, 9].forEach(limit => {
+
+      const button =
+        document.createElement("button");
+
+      button.type = "button";
+
+      button.textContent =
+        limit + " DART FINISH";
+
+      button.style.cssText = `
+        display:block;
+        width:100%;
+        padding:16px;
+        margin:12px 0;
+        background:#102b43;
+        color:white;
+        border:1px solid #27B8FF;
+        border-radius:12px;
+        font-weight:800;
+        font-size:17px;
+        cursor:pointer;
+      `;
+
+      button.onclick = () => {
+
+        attemptLimit = limit;
+
+        ready = true;
+
+        setup.remove();
+
+        board.classList.remove("hidden");
+
+        $("confirmButton").disabled = false;
+
+        updateKeithEngine();
+
+        message(
+          "Checkout 170 within " +
+          limit + " darts."
+        );
+      };
+
+      setup.appendChild(button);
+    });
+
+    board.before(setup);
+  }
+
+  /* ======================================
+     PRACTICE DISPLAY
+     ====================================== */
+
+  function updateKeithEngine() {
+
+    put(
+      "labTarget",
+      practice.name.toUpperCase()
+    );
+
+    if (finishing) {
+
+      put("labLeg", "CHECKOUT " + target);
+
+      put(
+        "visitNumber",
+        "DARTS " +
+        attemptDarts +
+        "/" +
+        attemptLimit
+      );
+
+      put("remainingLabel", "REMAINING");
+
+      put("remaining", remaining);
+
+      put("labLegsLabel", "CHECKOUTS");
+
+      put(
+        "legsWon",
+        type === "170"
+          ? successfulCheckouts + "/10"
+          : type === "4160"
+            ? successfulCheckouts + "/20"
+            : bestCheckout || "—"
+      );
+
+      put(
+        "checkoutSuggestion",
+        completed
+          ? "TRAINING COMPLETE"
+          : checkoutSuggestion(remaining)
+      );
+
+      if (type === "9DO" && !completed) {
+
+        put(
+          "labLeg",
+          "TARGET " + target +
+          " | BASE " + baseNumber
+        );
+      }
+
+    } else {
+
+      put(
+        "labLeg",
+        "ROUND " +
+        Math.min(round + 1, maximumRounds) +
+        "/" + maximumRounds
+      );
+
+      put(
+        "visitNumber",
+        completed
+          ? "COMPLETE"
+          : type === "CUP"
+            ? "SCORING ROUND"
+            : "TARGET " + targetName(target)
+      );
+
+      put("remainingLabel", "TOTAL SCORE");
+
+      put("remaining", practiceScore);
+
+      put("labLegsLabel", "ROUNDS");
+
+      put(
+        "legsWon",
+        round + "/" + maximumRounds
+      );
+
+      put(
+        "checkoutSuggestion",
+        completed
+          ? "TRAINING COMPLETE"
+          : type === "CUP"
+            ? "SCORE AS HIGH AS POSSIBLE"
+            : "AIM AT " + targetName(target)
+      );
+    }
+
+    drawBoard();
+  }
+
+  /* ======================================
+     TARGET HIGHLIGHTING
+     ====================================== */
+
+  segment = function (
+    inner, outer, start, end,
+    color, num, mult, label
+  ) {
+
+    originalSegment(
+      inner, outer, start, end,
+      color, num, mult, label
+    );
+
+    if (completed) return;
+
+    const highlight =
+      (type === "RTW" || type === "CCU") &&
+      num === target;
+
+    if (highlight) {
+
+      const path = svg.lastElementChild;
+
+      path.setAttribute("fill", "#27B8FF");
+
+      path.setAttribute("stroke", "#FFFFFF");
+
+      path.setAttribute("stroke-width", "2");
+
+      path.style.filter =
+        "drop-shadow(0 0 5px #27B8FF)";
+    }
+  };
+
+  /* ======================================
+     AUTOMATIC DART INPUT
+     ====================================== */
+
+  addDart = function (
+    number, multiplier, label
+  ) {
+
+    if (!ready || completed || saving) return;
+
+    originalAddDart(
+      number,
+      multiplier,
+      label
+    );
+
+    if (!currentDarts.length) return;
+
+    if (finishing) {
+
+      let running = remaining;
+
+      let endVisit = false;
+
+      for (const dart of currentDarts) {
+
+        running -= dart.score;
+
+        if (
+          running <= 1 ||
+          running < 0
+        ) {
+
+          endVisit = true;
+
+          break;
+        }
+      }
+
+      if (
+        endVisit ||
+        currentDarts.length >= 3 ||
+        attemptDarts +
+        currentDarts.length >= attemptLimit
+      ) {
+
+        confirmVisit();
+      }
+
+    } else if (currentDarts.length >= 3) {
+
+      confirmVisit();
+    }
+  };
+
+  /* ======================================
+     FINISH PRACTICE
+     ====================================== */
+
+  function completeKeithPractice() {
+
+    completed = true;
+
+    $("confirmButton").disabled = true;
+
+    $("finishButton").textContent =
+      "VIEW PERFORMANCE RESULTS";
+
+    put(
+      "finishMessage",
+      practice.name + " completed."
+    );
+
+    updateKeithEngine();
+
+    updateVisitHistory();
+
+    finishPractice();
+  }
+
+  /* ======================================
+     FINISHING ENGINE
+     ====================================== */
+
+  function confirmFinishingVisit() {
+
+    const before = remaining;
+
+    const currentTarget = target;
+
+    const recorded = [];
+
+    let rawScore = 0;
+
+    let bust = false;
+
+    let checkout = false;
+
+    let running = remaining;
+
+    for (const dart of currentDarts) {
+
+      if (
+        attemptDarts +
+        recorded.length >= attemptLimit
+      ) break;
+
+      recorded.push({ ...dart });
+
+      rawScore += dart.score;
+
+      running -= dart.score;
+
+      if (
+        running < 0 ||
+        running === 1
+      ) {
+
+        bust = true;
+
+        break;
+      }
+
+      if (running === 0) {
+
+        if (dart.multiplier === 2) {
+
+          checkout = true;
+
+        } else {
+
+          bust = true;
+        }
+
+        break;
+      }
+    }
+
+    const used = recorded.length;
+
+    totalDarts += used;
+
+    attemptDarts += used;
+
+    const score = bust ? 0 : rawScore;
+
+    remaining = bust ? before : running;
+
+    totalPoints += score;
+
+    if (score === 180) count180++;
+    else if (score >= 140) count140++;
+    else if (score >= 100) count100++;
+
+    visits.push({
+
+      visitNumber: visit,
+
+      practiceId: practiceID,
+
+      targetCheckout: currentTarget,
+
+      baseNumber,
+
+      attemptDarts,
+
+      score,
+
+      attemptedScore: rawScore,
+
+      dartsThrown: used,
+
+      bust,
+
+      checkout,
+
+      remainingBefore: before,
+
+      remainingAfter: remaining,
+
+      darts: recorded,
+
+      createdAt: new Date().toISOString()
+
+    });
+
+    visit++;
+
+    resetVisit();
+
+    if (checkout) {
+
+      successfulCheckouts++;
+
+      legsWon = successfulCheckouts;
+
+      bestCheckout = Math.max(
+        bestCheckout,
+        currentTarget
+      );
+
+      highestCheckout = bestCheckout;
+
+      checkoutDarts = attemptDarts;
+
+      checkoutResults.push(currentTarget);
+
+      /* 170 PRACTICE */
+
+      if (type === "170") {
+
+        if (successfulCheckouts >= 10) {
+
+          completeKeithPractice();
+
+          return;
+        }
+
+        target = 170;
+      }
+
+      /* 41-60 FINISHING */
+
+      if (type === "4160") {
+
+        if (currentTarget === 60) {
+
+          completeKeithPractice();
+
+          return;
+        }
+
+        target++;
+      }
+
+      /* 9-DART DOUBLE-OUT */
+
+      if (type === "9DO") {
+
+        if (currentTarget === 170) {
+
+          completeKeithPractice();
+
+          return;
+        }
+
+        target++;
+
+        const milestone =
+          121 +
+          Math.floor(
+            (target - 121) / 5
+          ) * 5;
+
+        baseNumber = Math.max(
+          baseNumber,
+          milestone
+        );
+
+        if (attemptDarts <= 3) {
+
+          baseNumber = Math.max(
+            baseNumber,
+            target
+          );
+        }
+      }
+
+      remaining = target;
+
+      attemptDarts = 0;
+
+      round++;
+
+      message(
+        "CHECKOUT SUCCESSFUL | NEXT: " +
+        target
+      );
+
+    } else if (
+      attemptDarts >= attemptLimit
+    ) {
+
+      failedAttempts++;
+
+      if (type === "9DO") {
+
+        target = baseNumber;
+      }
+
+      remaining = target;
+
+      attemptDarts = 0;
+
+      round++;
+
+      message(
+        "ATTEMPT FAILED | RESTART " +
+        target
+      );
+
+    } else {
+
+      message(
+        bust
+          ? "BUST | CONTINUE ATTEMPT"
+          : "REMAINING " + remaining
+      );
+    }
+
+    updateKeithEngine();
+
+    updateVisitHistory();
+  }
+
+  /* ======================================
+     ROUND THE WORLD / COUNT UP / CRICKET
+     ====================================== */
+
+  function confirmScoringVisit() {
+
+    if (currentDarts.length !== 3) {
+
+      message("Enter all three darts.");
+
+      return;
+    }
+
+    const recorded =
+      currentDarts.map(dart => ({
+        ...dart
+      }));
+
+    const before = practiceScore;
+
+    const currentTarget = target;
+
+    let roundScore = 0;
+
+    const rawScore = recorded.reduce(
+      (sum, dart) => sum + dart.score,
+      0
+    );
+
+    if (type === "CUP") {
+
+      roundScore = rawScore;
+
+    } else {
+
+      for (const dart of recorded) {
+
+        if (dart.number === currentTarget) {
+
+          roundScore += dart.multiplier;
+        }
+      }
+    }
+
+    practiceScore += roundScore;
+
+    remaining = practiceScore;
+
+    totalDarts += 3;
+
+    totalPoints += rawScore;
+
+    if (rawScore === 180) count180++;
+    else if (rawScore >= 140) count140++;
+    else if (rawScore >= 100) count100++;
+
+    visits.push({
+
+      visitNumber: visit,
+
+      practiceId: practiceID,
+
+      target: type === "CUP"
+        ? null
+        : currentTarget,
+
+      score: roundScore,
+
+      attemptedScore: rawScore,
+
+      rawScore,
+
+      dartsThrown: 3,
+
+      remainingBefore: before,
+
+      remainingAfter: practiceScore,
+
+      practiceScore,
+
+      bust: false,
+
+      darts: recorded,
+
+      createdAt: new Date().toISOString()
+
+    });
+
+    visit++;
+
+    round++;
+
+    legsWon = round;
+
+    resetVisit();
+
+    if (round >= maximumRounds) {
+
+      completeKeithPractice();
+
+      return;
+    }
+
+    if (type !== "CUP") {
+
+      target = targets[round];
+    }
+
+    updateKeithEngine();
+
+    updateVisitHistory();
+
+    message(
+      "+" + roundScore +
+      " | TOTAL " + practiceScore
+    );
+  }
+
+  /* ======================================
+     CONFIRM VISIT ROUTER
+     ====================================== */
+
+  confirmVisit = function () {
+
+    if (
+      !ready ||
+      completed ||
+      saving
+    ) return;
+
+    if (!currentDarts.length) {
+
+      message("Select your darts first.");
+
+      return;
+    }
+
+    if (finishing) {
+
+      confirmFinishingVisit();
+
+    } else {
+
+      confirmScoringVisit();
+    }
+  };
+
+  updateStats = function () {
+
+    updateKeithEngine();
+  };
+
+  /* ======================================
+     PERFORMANCE RESULTS
+     ====================================== */
+
+  populateResults = function () {
+
+    originalPopulateResults();
+
+    put(
+      "resultTitle",
+      practice.name.toUpperCase()
+    );
+
+    put(
+      "resultDescription",
+      metricName() + ": " + metricValue()
+    );
+
+    put("resultDarts", totalDarts);
+
+    put("resultVisits", visits.length);
+
+    put(
+      "resultRemaining",
+      metricValue()
+    );
+
+    put(
+      "resultPoints",
+      finishing
+        ? totalPoints
+        : practiceScore
+    );
+
+    put(
+      "resultCheckout",
+      bestCheckout || "—"
+    );
+
+    put(
+      "resultLegs",
+      finishing
+        ? successfulCheckouts
+        : round
+    );
+
+    put(
+      "resultAverage",
+      type === "CUP"
+        ? (practiceScore / Math.max(round, 1))
+            .toFixed(2)
+        : finishing
+          ? average().toFixed(2)
+          : metricValue()
+    );
+
+    put(
+      "resultStatus",
+      "TRAINING COMPLETE"
+    );
+
+    let description =
+      metricName() +
+      ": " +
+      metricValue() +
+      " | Darts: " +
+      totalDarts;
+
+    if (finishing) {
+
+      description +=
+        " | Successful checkouts: " +
+        successfulCheckouts +
+
+        " | Failed attempts: " +
+        failedAttempts;
+    }
+
+    if (type === "9DO") {
+
+      description +=
+        " | Final base: " +
+        baseNumber;
+    }
+
+    put(
+      "resultStatusDescription",
+      description
+    );
+  };
+
+  /* ======================================
+     KEITH PERFORMANCE GRADING
+     ====================================== */
+
+  calculateKeithGrade = function () {
+
+    if (!completed) return null;
+
+    if (
+      type !== "9DO" &&
+      finishedManually
+    ) return null;
+
+    const value = metricValue();
+
+    let gradeName = "RED";
+
+    if (type === "170") {
+
+      if (successfulCheckouts < 10) {
+        return null;
+      }
+
+      gradeName =
+        value >= 153 ? "GREEN" :
+        value >= 136 ? "YELLOW" :
+        value >= 119 ? "ORANGE" :
+        "RED";
+    }
+
+    if (type === "4160") {
+
+      gradeName =
+        value <= 23 ? "GREEN" :
+        value <= 27 ? "YELLOW" :
+        value <= 31 ? "ORANGE" :
+        "RED";
+    }
+
+    if (type === "9DO") {
+
+      gradeName =
+        value >= 165 ? "GREEN" :
+        value >= 160 ? "YELLOW" :
+        value >= 155 ? "ORANGE" :
+        "RED";
+    }
+
+    if (type === "RTW") {
+
+      gradeName =
+        value >= 146 ? "GREEN" :
+        value >= 111 ? "YELLOW" :
+        value >= 21 ? "ORANGE" :
+        "RED";
+    }
+
+    if (type === "CUP") {
+
+      gradeName =
+        value >= 1120 ? "GREEN" :
+        value >= 800 ? "YELLOW" :
+        value >= 480 ? "ORANGE" :
+        "RED";
+    }
+
+    if (type === "CCU") {
+
+      gradeName =
+        value >= 54 ? "GREEN" :
+        value >= 42 ? "YELLOW" :
+        value >= 18 ? "ORANGE" :
+        "RED";
+    }
+
+    const grade = keithGrades.find(
+      item =>
+        item.name.toUpperCase() ===
+        gradeName
+    );
+
+    if (!grade) return null;
+
+    return {
+
+      ...grade,
+
+      value,
+
+      metric: metricName()
+
+    };
+  };
+
+  /* ======================================
+     INITIALIZE SELECTED PRACTICE
+     ====================================== */
+
+  updateKeithEngine();
+
+  if (type === "170") {
+
+    select170Mode();
+  }
+
+})();
 </script>
 </body>
 </html>
