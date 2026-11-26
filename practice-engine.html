@@ -2395,6 +2395,224 @@ keithResultsObserver.observe($("resultsScreen"),{
 });
 
 renderKeithGrading();
+  /* DARTIQ — KEITH AROUND THE CLOCK DOUBLES */
+
+(() => {
+  const practiceID = get(
+    "practiceId",
+    "practiceID",
+    "practiceid"
+  ).trim().toUpperCase();
+
+  const isAroundTheClock =
+    practiceID === "KAG-ATC-001" ||
+    /around the clock/i.test(drill);
+
+  if (!isAroundTheClock) return;
+
+  let target = 1;
+  let cleared = 0;
+
+  const originalAddDart = addDart;
+  const originalDrawBoard = drawBoard;
+  const originalPopulateResults = populateResults;
+
+  remaining = 20;
+  mode = "dartboard";
+
+  $("modeTabs").classList.add("hidden");
+
+  function updateClock() {
+    put("labLeg", "DOUBLES TRAINING");
+    put("labTarget", "AROUND THE CLOCK");
+    put("visitNumber", "TARGET D" + target);
+
+    put("remainingLabel", "CURRENT DOUBLE");
+    put("remaining", cleared === 20 ? "DONE" : "D" + target);
+
+    put("labLegsLabel", "DOUBLES CLEARED");
+    put("legsWon", cleared + "/20");
+
+    put(
+      "checkoutSuggestion",
+      cleared === 20
+        ? "TRAINING COMPLETE"
+        : "HIT DOUBLE " + target
+    );
+
+    drawBoard();
+  }
+
+  const originalSegment = segment;
+
+  segment = function (
+    inner, outer, start, end,
+    color, num, mult, label
+  ) {
+    originalSegment(
+      inner, outer, start, end,
+      color, num, mult, label
+    );
+
+    if (
+      num === target &&
+      mult === 2 &&
+      cleared < 20
+    ) {
+      const path = svg.lastElementChild;
+
+      path.setAttribute("fill", "#27B8FF");
+      path.setAttribute("stroke", "#FFFFFF");
+      path.setAttribute("stroke-width", "2");
+
+      path.style.filter =
+        "drop-shadow(0 0 6px #27B8FF)";
+    }
+  };
+
+  addDart = function (number, multiplier, label) {
+    if (completed || saving) return;
+
+    originalAddDart(number, multiplier, label);
+
+    if (currentDarts.length >= 3) {
+      confirmVisit();
+    }
+  };
+
+  confirmVisit = function () {
+    if (completed || saving) return;
+
+    if (!currentDarts.length) {
+      message("Select your darts first.");
+      return;
+    }
+
+    const before = target;
+    const recordedDarts = [];
+
+    let score = 0;
+
+    for (const dart of currentDarts) {
+      if (cleared >= 20) break;
+
+      totalDarts++;
+      totalPoints += dart.score;
+      score += dart.score;
+
+      recordedDarts.push({
+        ...dart,
+        targetDouble: target
+      });
+
+      if (
+        dart.number === target &&
+        dart.multiplier === 2
+      ) {
+        cleared++;
+        target++;
+      }
+    }
+
+    remaining = 20 - cleared;
+    legsWon = cleared;
+
+    visits.push({
+      visitNumber: visit,
+      practiceId: "KAG-ATC-001",
+      practiceVariant: "DOUBLES",
+      score,
+      attemptedScore: score,
+      dartsThrown: recordedDarts.length,
+      bust: false,
+      targetBefore: before,
+      targetAfter: Math.min(target, 20),
+      remainingBefore: 21 - before,
+      remainingAfter: remaining,
+      doublesCleared: cleared,
+      darts: recordedDarts,
+      createdAt: new Date().toISOString()
+    });
+
+    visit++;
+
+    resetVisit();
+    updateClock();
+    updateVisitHistory();
+
+    if (cleared === 20) {
+      completed = true;
+      checkoutDarts = totalDarts;
+
+      $("confirmButton").disabled = true;
+
+      $("finishButton").textContent =
+        "VIEW PERFORMANCE RESULTS";
+
+      put(
+        "finishMessage",
+        "All 20 doubles completed in " +
+        totalDarts + " darts."
+      );
+
+      message("AROUND THE CLOCK COMPLETE");
+
+      finishPractice();
+
+    } else {
+      message(
+        "Next target: D" + target +
+        " | Darts thrown: " + totalDarts
+      );
+    }
+  };
+
+  updateStats = function () {
+    updateClock();
+  };
+
+  populateResults = function () {
+    originalPopulateResults();
+
+    put("resultTitle", "AROUND THE CLOCK");
+    put("resultDescription", "Doubles training results");
+    put("resultDarts", totalDarts);
+    put("resultLegs", cleared);
+    put("resultRemaining", 20 - cleared);
+
+    put(
+      "resultStatus",
+      cleared === 20 ? "COMPLETE" : "FINISHED"
+    );
+
+    put(
+      "resultStatusDescription",
+      cleared + "/20 doubles cleared in " +
+      totalDarts + " darts."
+    );
+  };
+
+  calculateKeithGrade = function () {
+    if (cleared !== 20) return null;
+
+    const value = totalDarts;
+
+    const matches = keithGrades.filter(
+      grade => matchesKeithRange(value, grade.range)
+    );
+
+    if (matches.length !== 1) return null;
+
+    return {
+      ...matches[0],
+      value,
+      metric: "Total darts used"
+    };
+  };
+
+  updateClock();
+
+})();
 </script>
 </body>
 </html>
