@@ -169,7 +169,33 @@ h1{
     <div class="objective" id="objective"></div>
     <div class="tip" id="instruction"></div>
   </section>
+<section class="card">
+  <div class="label">KEITH'S PERFORMANCE GRADING</div>
 
+  <div style="margin-top:14px;display:grid;gap:8px">
+
+    <div style="background:#dc2626;color:white;padding:12px;border-radius:8px">
+      <strong>RED</strong>
+      <div id="gradeRed"></div>
+    </div>
+
+    <div style="background:#f97316;color:#111;padding:12px;border-radius:8px">
+      <strong>ORANGE</strong>
+      <div id="gradeOrange"></div>
+    </div>
+
+    <div style="background:#eab308;color:#111;padding:12px;border-radius:8px">
+      <strong>YELLOW</strong>
+      <div id="gradeYellow"></div>
+    </div>
+
+    <div style="background:#16a34a;color:white;padding:12px;border-radius:8px">
+      <strong>GREEN</strong>
+      <div id="gradeGreen"></div>
+    </div>
+
+  </div>
+</section>
   <section class="card">
     <div class="voice-head">
       <div class="label">🔊 AI Voice Coach</div>
@@ -322,7 +348,17 @@ document.getElementById("issue").textContent=issue;
 document.getElementById("drill").textContent=drill;
 document.getElementById("objective").textContent=objective;
 document.getElementById("instruction").textContent=instruction;
+document.getElementById("gradeRed").textContent =
+  context.red || "Not available";
 
+document.getElementById("gradeOrange").textContent =
+  context.orange || "Not available";
+
+document.getElementById("gradeYellow").textContent =
+  context.yellow || "Not available";
+
+document.getElementById("gradeGreen").textContent =
+  context.green || "Not available";
 function voiceText(text){
   return String(text||"")
     .replace(
