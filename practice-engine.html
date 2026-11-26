@@ -4046,6 +4046,734 @@ renderKeithGrading();
   }
 
 })();
+  /* ==================================================
+   DARTIQ — DYNAMIC KEITH PERFORMANCE RESULTS
+   ALL EIGHT PRACTICE MODES
+   ================================================== */
+
+(() => {
+
+  const practiceID = get(
+    "practiceId",
+    "practiceID",
+    "practiceid"
+  ).trim().toUpperCase();
+
+  const configurations = {
+
+    "KAG-170-001": {
+      name: "170 Practice",
+      ranges: ["0-118", "119-135", "136-152", "153-170"]
+    },
+
+    "KAG-4160-001": {
+      name: "41-60 Finishing Practice",
+      ranges: ["32+ darts", "28-31 darts", "24-27 darts", "20-23 darts"]
+    },
+
+    "KAG-9DO-001": {
+      name: "9-Dart Double-Out",
+      ranges: ["121-154", "155-159", "160-164", "165-170"]
+    },
+
+    "KAG-B27-001": {
+      name: "Bob's 27",
+      ranges: ["0-13", "14-15", "16-17", "18-20"]
+    },
+
+    "KAG-ATC-001": {
+      name: "Around the Clock",
+      ranges: ["55-90 darts", "40-54 darts", "30-39 darts", "20-29 darts"]
+    },
+
+    "KAG-RTW-001": {
+      name: "Round the World",
+      ranges: ["0-20", "21-110", "111-145", "146-186"]
+    },
+
+    "KAG-CUP-001": {
+      name: "Count Up",
+      ranges: ["0-479", "480-799", "800-1119", "1120-1440"]
+    },
+
+    "KAG-CCU-001": {
+      name: "Cricket Count Up",
+      ranges: ["0-17", "18-41", "42-53", "54-60"]
+    }
+
+  };
+
+  const selected =
+    configurations[practiceID] ||
+    Object.values(configurations).find(
+      item =>
+        item.name.toLowerCase() ===
+        drill.trim().toLowerCase()
+    );
+
+  if (!selected) return;
+
+  const selectedID =
+    Object.keys(configurations).find(
+      key => configurations[key] === selected
+    );
+
+  /* ======================================
+     RESTORE KEITH GRADING RANGES
+     ====================================== */
+
+  keithGrades.forEach((grade, index) => {
+
+    const existing =
+      String(grade.range || "").trim();
+
+    if (
+      !existing ||
+      existing.toLowerCase() === "not available"
+    ) {
+
+      grade.range = selected.ranges[index];
+    }
+  });
+
+  /* ======================================
+     RESULT TILE CONTROLLER
+     ====================================== */
+
+  const tileIDs = [
+
+    "resultAverage",
+    "resultDarts",
+    "resultVisits",
+    "resultRemaining",
+    "result100",
+    "result140",
+    "result180",
+    "resultCheckout",
+    "resultLegs",
+    "resultPoints"
+
+  ];
+
+  function hideAllTiles() {
+
+    tileIDs.forEach(id => {
+
+      const element = $(id);
+
+      if (!element) return;
+
+      const tile =
+        element.closest(".result-tile");
+
+      if (tile) {
+        tile.style.display = "none";
+      }
+    });
+  }
+
+  function showTile(id, label, value) {
+
+    const element = $(id);
+
+    if (!element) return;
+
+    const tile =
+      element.closest(".result-tile");
+
+    if (!tile) return;
+
+    tile.style.display = "";
+
+    element.textContent = String(value);
+
+    const caption =
+      tile.querySelector("small");
+
+    if (caption) {
+
+      caption.textContent =
+        label.toUpperCase();
+    }
+  }
+
+  function percentage(value, maximum) {
+
+    if (!maximum) return "0.00%";
+
+    return (
+      value / maximum * 100
+    ).toFixed(2) + "%";
+  }
+
+  function numeric(value) {
+
+    return Number.isFinite(Number(value))
+      ? Number(value)
+      : 0;
+  }
+
+  function getVisitScore() {
+
+    return visits.reduce(
+      (sum, visit) =>
+        sum + numeric(visit.score),
+      0
+    );
+  }
+
+  function getCheckoutAttempts() {
+
+    return visits.filter(
+      visit => visit.checkout === true
+    );
+  }
+
+  function getBestCheckout() {
+
+    return Math.max(
+      0,
+      highestCheckout || 0,
+      ...getCheckoutAttempts().map(
+        visit => numeric(visit.targetCheckout)
+      )
+    );
+  }
+
+  function getGradeName() {
+
+    const grade = calculateKeithGrade();
+
+    return grade
+      ? grade.name
+      : "NOT GRADED";
+  }
+
+  function showCommonTiles() {
+
+    showTile(
+      "resultDarts",
+      "Darts thrown",
+      totalDarts
+    );
+
+    showTile(
+      "resultCheckout",
+      "Keith grade",
+      getGradeName()
+    );
+  }
+
+  /* ======================================
+     170 PRACTICE RESULTS
+     ====================================== */
+
+  function render170Results() {
+
+    const successes = getCheckoutAttempts();
+
+    const scores = successes.map(
+      visit => numeric(visit.targetCheckout)
+    );
+
+    const top10 = [...scores]
+      .sort((a, b) => b - a)
+      .slice(0, 10);
+
+    const top10Average = top10.length
+      ? top10.reduce(
+          (sum, value) => sum + value,
+          0
+        ) / top10.length
+      : 0;
+
+    showTile(
+      "resultAverage",
+      "Top 10 checkout average",
+      top10Average.toFixed(2)
+    );
+
+    showTile(
+      "resultVisits",
+      "Successful checkouts",
+      successes.length + "/10"
+    );
+
+    showTile(
+      "resultRemaining",
+      "Highest checkout",
+      getBestCheckout() || "—"
+    );
+
+    showTile(
+      "resultPoints",
+      "Darts per checkout",
+      successes.length
+        ? (
+            totalDarts / successes.length
+          ).toFixed(2)
+        : "—"
+    );
+
+    showCommonTiles();
+  }
+
+  /* ======================================
+     41-60 FINISHING RESULTS
+     ====================================== */
+
+  function render4160Results() {
+
+    const successes =
+      getCheckoutAttempts().length;
+
+    showTile(
+      "resultAverage",
+      "Checkout efficiency",
+      percentage(successes, totalDarts)
+    );
+
+    showTile(
+      "resultVisits",
+      "Checkouts completed",
+      successes + "/20"
+    );
+
+    showTile(
+      "resultRemaining",
+      "Highest checkout",
+      getBestCheckout() || "—"
+    );
+
+    showTile(
+      "resultPoints",
+      "Darts per checkout",
+      successes
+        ? (
+            totalDarts / successes
+          ).toFixed(2)
+        : "—"
+    );
+
+    showCommonTiles();
+  }
+
+  /* ======================================
+     9-DART DOUBLE-OUT RESULTS
+     ====================================== */
+
+  function render9DOResults() {
+
+    const successes =
+      getCheckoutAttempts();
+
+    let finalBase = 121;
+
+    visits.forEach(visit => {
+
+      finalBase = Math.max(
+        finalBase,
+        numeric(visit.baseNumber)
+      );
+
+      if (visit.checkout) {
+
+        const next =
+          Math.min(
+            170,
+            numeric(visit.targetCheckout) + 1
+          );
+
+        const milestone =
+          121 +
+          Math.floor(
+            (next - 121) / 5
+          ) * 5;
+
+        finalBase = Math.max(
+          finalBase,
+          milestone
+        );
+
+        if (
+          numeric(visit.attemptDarts) > 0 &&
+          numeric(visit.attemptDarts) <= 3
+        ) {
+
+          finalBase = Math.max(
+            finalBase,
+            next
+          );
+        }
+      }
+    });
+
+    const threeDartCheckouts =
+      successes.filter(
+        visit =>
+          numeric(visit.attemptDarts) > 0 &&
+          numeric(visit.attemptDarts) <= 3
+      ).length;
+
+    showTile(
+      "resultAverage",
+      "Highest checkout reached",
+      getBestCheckout() || "—"
+    );
+
+    showTile(
+      "resultVisits",
+      "Successful checkouts",
+      successes.length
+    );
+
+    showTile(
+      "resultRemaining",
+      "Final base number",
+      finalBase
+    );
+
+    showTile(
+      "resultPoints",
+      "Within 3 darts",
+      threeDartCheckouts
+    );
+
+    showCommonTiles();
+  }
+
+  /* ======================================
+     BOB'S 27 RESULTS
+     ====================================== */
+
+  function renderBobs27Results() {
+
+    const highestWedge =
+      Math.max(
+        0,
+        ...visits.map(
+          visit => numeric(visit.furthestWedge)
+        )
+      );
+
+    const doublesHit =
+      visits.reduce(
+        (sum, visit) =>
+          sum + numeric(visit.doubleHits),
+        0
+      );
+
+    showTile(
+      "resultAverage",
+      "Furthest wedge cleared",
+      highestWedge
+        ? "D" + highestWedge
+        : "NONE"
+    );
+
+    showTile(
+      "resultVisits",
+      "Proficiency",
+      percentage(highestWedge, 20)
+    );
+
+    showTile(
+      "resultRemaining",
+      "Final score",
+      remaining
+    );
+
+    showTile(
+      "resultPoints",
+      "Doubles hit",
+      doublesHit
+    );
+
+    showTile(
+      "resultLegs",
+      "Double hit rate",
+      percentage(doublesHit, totalDarts)
+    );
+
+    showCommonTiles();
+  }
+
+  /* ======================================
+     AROUND THE CLOCK RESULTS
+     ====================================== */
+
+  function renderATCResults() {
+
+    const cleared = Math.min(
+      20,
+      Math.max(
+        0,
+        ...visits.map(
+          visit =>
+            numeric(visit.doublesCleared)
+        )
+      )
+    );
+
+    showTile(
+      "resultAverage",
+      "Doubles cleared",
+      cleared + "/20"
+    );
+
+    showTile(
+      "resultVisits",
+      "Completion",
+      percentage(cleared, 20)
+    );
+
+    showTile(
+      "resultRemaining",
+      "Efficiency",
+      percentage(cleared, totalDarts)
+    );
+
+    showTile(
+      "resultPoints",
+      "Darts per double",
+      cleared
+        ? (
+            totalDarts / cleared
+          ).toFixed(2)
+        : "—"
+    );
+
+    showCommonTiles();
+  }
+
+  /* ======================================
+     ROUND THE WORLD RESULTS
+     ====================================== */
+
+  function renderRTWResults() {
+
+    const score = getVisitScore();
+
+    const rounds = visits.length;
+
+    showTile(
+      "resultAverage",
+      "Total marks",
+      score + "/186"
+    );
+
+    showTile(
+      "resultVisits",
+      "Rounds completed",
+      rounds + "/21"
+    );
+
+    showTile(
+      "resultRemaining",
+      "Maximum score achieved",
+      percentage(score, 186)
+    );
+
+    showTile(
+      "resultPoints",
+      "Average marks per round",
+      rounds
+        ? (score / rounds).toFixed(2)
+        : "0.00"
+    );
+
+    showCommonTiles();
+
+    if (score >= 171) {
+
+      showTile(
+        "resultCheckout",
+        "Keith grade",
+        "TOP GREEN"
+      );
+    }
+  }
+
+  /* ======================================
+     COUNT UP RESULTS
+     ====================================== */
+
+  function renderCountUpResults() {
+
+    const score = getVisitScore();
+
+    const rounds = visits.length;
+
+    showTile(
+      "resultAverage",
+      "3-dart average",
+      rounds
+        ? (score / rounds).toFixed(2)
+        : "0.00"
+    );
+
+    showTile(
+      "resultVisits",
+      "Rounds completed",
+      rounds + "/8"
+    );
+
+    showTile(
+      "resultRemaining",
+      "Total score",
+      score + "/1440"
+    );
+
+    showTile(
+      "result100",
+      "100-139 scores",
+      count100
+    );
+
+    showTile(
+      "result140",
+      "140-179 scores",
+      count140
+    );
+
+    showTile(
+      "result180",
+      "180 scores",
+      count180
+    );
+
+    showTile(
+      "resultPoints",
+      "Maximum score achieved",
+      percentage(score, 1440)
+    );
+
+    showCommonTiles();
+  }
+
+  /* ======================================
+     CRICKET COUNT UP RESULTS
+     ====================================== */
+
+  function renderCricketResults() {
+
+    const score = getVisitScore();
+
+    const rounds = visits.length;
+
+    showTile(
+      "resultAverage",
+      "Total marks",
+      score + "/60"
+    );
+
+    showTile(
+      "resultVisits",
+      "Rounds completed",
+      rounds + "/7"
+    );
+
+    showTile(
+      "resultRemaining",
+      "Maximum score achieved",
+      percentage(score, 60)
+    );
+
+    showTile(
+      "resultPoints",
+      "Average marks per round",
+      rounds
+        ? (score / rounds).toFixed(2)
+        : "0.00"
+    );
+
+    showCommonTiles();
+  }
+
+  /* ======================================
+     DYNAMIC PERFORMANCE RESULTS ROUTER
+     ====================================== */
+
+  const previousPopulateResults =
+    populateResults;
+
+  populateResults = function () {
+
+    previousPopulateResults();
+
+    hideAllTiles();
+
+    put(
+      "resultTitle",
+      selected.name.toUpperCase()
+    );
+
+    put(
+      "resultDrill",
+      selected.name
+    );
+
+    switch (selectedID) {
+
+      case "KAG-170-001":
+        render170Results();
+        break;
+
+      case "KAG-4160-001":
+        render4160Results();
+        break;
+
+      case "KAG-9DO-001":
+        render9DOResults();
+        break;
+
+      case "KAG-B27-001":
+        renderBobs27Results();
+        break;
+
+      case "KAG-ATC-001":
+        renderATCResults();
+        break;
+
+      case "KAG-RTW-001":
+        renderRTWResults();
+        break;
+
+      case "KAG-CUP-001":
+        renderCountUpResults();
+        break;
+
+      case "KAG-CCU-001":
+        renderCricketResults();
+        break;
+    }
+
+    if (finishedManually) {
+
+      put(
+        "resultStatus",
+        "SESSION FINISHED"
+      );
+
+    } else {
+
+      put(
+        "resultStatus",
+        "TRAINING COMPLETE"
+      );
+    }
+
+    const oldGrade =
+      $("keithPerformanceGrade");
+
+    if (oldGrade) {
+
+      oldGrade.remove();
+    }
+
+  };
+
+})();
 </script>
 </body>
 </html>
