@@ -2,10 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#050b16">
-<title>DARTIQ Board Vision V20.6</title>
-
+<title>DARTIQ Board Vision V20</title>
 <style>
 :root{
   --bg:#050b16;
@@ -15,397 +14,208 @@
   --yellow:#ffd166;
   --muted:#9db6cc;
 }
-
 *{box-sizing:border-box}
-
 html,body{
-  margin:0;
-  width:100%;
-  height:100%;
-  overflow:hidden;
-  background:var(--bg);
-  color:#fff;
-  font-family:Arial,sans-serif;
+  margin:0;width:100%;height:100%;
+  overflow:hidden;background:var(--bg);
+  color:white;font-family:Arial,sans-serif;
 }
-
 button,input{font:inherit}
-
 button{
   border:1px solid var(--blue);
   border-radius:10px;
-  background:#102b45;
-  color:#fff;
-  padding:10px;
-  font-weight:800;
+  background:#102b45;color:white;
+  padding:10px;font-weight:800;
 }
-
 button:disabled{opacity:.4}
-
 #app{
-  height:100vh;
-  height:100dvh;
-  display:flex;
-  flex-direction:column;
+  height:100vh;height:100dvh;
+  display:flex;flex-direction:column;
   padding:8px;
 }
-
 header{
-  height:44px;
-  flex-shrink:0;
-  display:flex;
-  align-items:center;
+  height:44px;flex-shrink:0;
+  display:flex;align-items:center;
   justify-content:space-between;
 }
-
 .brand{
-  color:var(--blue);
-  font-size:25px;
-  font-weight:900;
-  letter-spacing:2px;
+  color:var(--blue);font-size:25px;
+  font-weight:900;letter-spacing:2px;
   text-shadow:0 0 15px #27b8ff88;
 }
-
 .version{
-  color:var(--muted);
-  font-size:10px;
-  text-align:right;
-  line-height:1.5;
+  color:var(--muted);font-size:10px;
+  text-align:right;line-height:1.5;
 }
-
 #stage{
-  position:relative;
-  flex:1;
-  min-height:0;
+  position:relative;flex:1;min-height:0;
   border:1px solid #245477;
-  border-radius:12px;
-  overflow:hidden;
-  background:#000;
+  border-radius:12px;overflow:hidden;
+  background:black;
 }
-
 #camera{
-  position:absolute;
-  width:1px;
-  height:1px;
-  opacity:0;
-  pointer-events:none;
+  position:absolute;width:1px;height:1px;
+  opacity:0;pointer-events:none;
 }
-
-#view{
-  display:block;
-  width:100%;
-  height:100%;
-}
-
+#view{display:block;width:100%;height:100%}
 #statusBox{
-  position:absolute;
-  top:8px;
-  left:8px;
-  right:8px;
-  display:flex;
-  justify-content:space-between;
-  gap:6px;
-  pointer-events:none;
+  position:absolute;top:8px;left:8px;right:8px;
+  display:flex;justify-content:space-between;
+  gap:6px;pointer-events:none;
 }
-
 .pill{
   background:#04101ded;
   border:1px solid #285675;
-  border-radius:8px;
-  padding:8px;
-  font-size:10px;
-  font-weight:800;
+  border-radius:8px;padding:8px;
+  font-size:10px;font-weight:800;
 }
-
 #dot{
-  display:inline-block;
-  width:8px;
-  height:8px;
-  border-radius:50%;
-  background:var(--blue);
+  display:inline-block;width:8px;height:8px;
+  border-radius:50%;background:var(--blue);
   margin-right:5px;
 }
-
 #bottomStatus{
-  position:absolute;
-  bottom:8px;
-  left:8px;
-  right:8px;
-  padding:10px;
-  text-align:center;
+  position:absolute;bottom:8px;left:8px;right:8px;
+  padding:10px;text-align:center;
   background:#04101ded;
   border:1px solid #285675;
-  border-radius:8px;
-  font-size:11px;
-  font-weight:800;
+  border-radius:8px;font-size:11px;font-weight:800;
 }
-
-#controls{
-  flex-shrink:0;
-  padding-top:8px;
-}
-
+#controls{flex-shrink:0;padding-top:8px}
 #zoomRow{
-  display:flex;
-  gap:8px;
-  align-items:center;
-  margin-bottom:8px;
-  font-size:11px;
+  display:flex;gap:8px;align-items:center;
+  margin-bottom:8px;font-size:11px;
   color:var(--muted);
 }
-
-#zoom{
-  flex:1;
-  accent-color:var(--blue);
-}
-
-#zoomValue{
-  color:#fff;
-  min-width:44px;
-}
-
+#zoom{flex:1;accent-color:var(--blue)}
+#zoomValue{color:white;min-width:44px}
 #start{
-  width:100%;
-  background:linear-gradient(90deg,#0874bd,#27b8ff);
-  color:#00101d;
-  border:0;
-  margin-bottom:8px;
+  width:100%;background:linear-gradient(90deg,#0874bd,#27b8ff);
+  color:#00101d;border:0;margin-bottom:8px;
 }
-
 #metrics,#scores{
-  display:grid;
-  gap:6px;
-  margin-bottom:6px;
+  display:grid;gap:6px;margin-bottom:6px;
 }
-
-#metrics{
-  grid-template-columns:repeat(3,1fr);
-}
-
-#scores{
-  grid-template-columns:repeat(4,1fr);
-}
-
+#metrics{grid-template-columns:repeat(3,1fr)}
+#scores{grid-template-columns:repeat(4,1fr)}
 .metric{
-  padding:8px 4px;
-  text-align:center;
+  padding:8px 4px;text-align:center;
   background:#0b1c2d;
-  border:1px solid #244864;
-  border-radius:10px;
+  border:1px solid #244864;border-radius:10px;
 }
-
 .metric small{
-  display:block;
-  color:var(--muted);
-  font-size:9px;
-  margin-bottom:5px;
+  display:block;color:var(--muted);
+  font-size:9px;margin-bottom:5px;
 }
-
 .metric strong{
-  display:block;
-  color:var(--blue);
-  font-size:19px;
+  display:block;color:var(--blue);font-size:19px;
 }
-
-#visitTotal{
-  color:var(--green);
-  font-size:25px;
-}
-
+#visitTotal{color:var(--green);font-size:25px}
 #actions{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:6px;
-  margin-top:6px;
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:6px;margin-top:6px;
 }
-
-#actions button{
-  font-size:10px;
-  padding:10px 4px;
-}
-
+#actions button{font-size:10px;padding:10px 4px}
 #debug{
-  color:#7899b4;
-  font-size:10px;
-  text-align:center;
-  padding-top:6px;
-  min-height:20px;
+  color:#7899b4;font-size:10px;text-align:center;
+  padding-top:6px;min-height:20px;
 }
-
 #progress{
-  height:4px;
-  background:#13283d;
-  border-radius:4px;
-  overflow:hidden;
-  margin-bottom:8px;
+  height:4px;background:#13283d;border-radius:4px;
+  overflow:hidden;margin-bottom:8px;
 }
-
 #progressBar{
-  height:100%;
-  width:0%;
-  background:var(--blue);
+  height:100%;width:0%;background:var(--blue);
   box-shadow:0 0 10px var(--blue);
-  transition:width .2s;
 }
 </style>
 </head>
-
 <body>
-
 <div id="app">
-
 <header>
   <div class="brand">DARTIQ</div>
-  <div class="version">
-    BOARD VISION<br>
-    PROTOTYPE V20.6
-  </div>
+  <div class="version">BOARD VISION<br>PROTOTYPE V20</div>
 </header>
 
 <div id="stage">
-
   <video id="camera" autoplay muted playsinline></video>
-
   <canvas id="view"></canvas>
-
   <div id="statusBox">
     <div class="pill">
-      <span id="dot"></span>
-      <span id="status">READY</span>
+      <span id="dot"></span><span id="status">READY</span>
     </div>
-
-    <div class="pill" id="lockStatus">
-      UNLOCKED
-    </div>
+    <div class="pill" id="lockStatus">UNLOCKED</div>
   </div>
-
-  <div id="bottomStatus">
-    Starting smartphone camera
-  </div>
-
+  <div id="bottomStatus">Starting smartphone camera</div>
 </div>
 
 <div id="controls">
-
   <div id="scores">
-
     <div class="metric">
-      <small>DART 1</small>
-      <strong id="dartScore1">—</strong>
+      <small>DART 1</small><strong id="dartScore1">—</strong>
     </div>
-
     <div class="metric">
-      <small>DART 2</small>
-      <strong id="dartScore2">—</strong>
+      <small>DART 2</small><strong id="dartScore2">—</strong>
     </div>
-
     <div class="metric">
-      <small>DART 3</small>
-      <strong id="dartScore3">—</strong>
+      <small>DART 3</small><strong id="dartScore3">—</strong>
     </div>
-
     <div class="metric">
-      <small>VISIT</small>
-      <strong id="visitTotal">0</strong>
+      <small>VISIT</small><strong id="visitTotal">0</strong>
     </div>
-
   </div>
 
   <div id="zoomRow">
     <span>ZOOM</span>
-
-    <input id="zoom" type="range"
-      min="1" max="2.5"
-      step=".05" value="1">
-
+    <input id="zoom" type="range" min="1" max="2.5" step=".05" value="1">
     <strong id="zoomValue">1.00×</strong>
   </div>
 
   <button id="start">START CAMERA</button>
-
-  <div id="progress">
-    <div id="progressBar"></div>
-  </div>
+  <div id="progress"><div id="progressBar"></div></div>
 
   <div id="metrics">
-
     <div class="metric">
-      <small>RING ALIGNMENT</small>
-      <strong id="quality">0%</strong>
+      <small>RING ALIGNMENT</small><strong id="quality">0%</strong>
     </div>
-
     <div class="metric">
-      <small>EST. RING ERROR</small>
-      <strong id="error">—</strong>
+      <small>EST. RING ERROR</small><strong id="error">—</strong>
     </div>
-
     <div class="metric">
-      <small>STABLE FRAMES</small>
-      <strong id="stable">0/8</strong>
+      <small>STABLE FRAMES</small><strong id="stable">0/8</strong>
     </div>
-
   </div>
 
   <div id="actions">
-
-    <button id="preview" disabled>
-      CORRECTED VIEW
-    </button>
-
-    <button id="correct" disabled>
-      CORRECT SCORE
-    </button>
-
-    <button id="restart">
-      RESTART CAMERA
-    </button>
-
+    <button id="preview" disabled>CORRECTED VIEW</button>
+    <button id="correct" disabled>CORRECT SCORE</button>
+    <button id="restart">RESTART CAMERA</button>
   </div>
-
-  <div id="debug">
-    Native DARTIQ Vision Engine
-  </div>
-
+  <div id="debug">Native DARTIQ Vision Engine</div>
 </div>
 </div>
 
 <script>
 "use strict";
 
-/* =========================================
-   DARTIQ BOARD VISION V20.6
-   COMPLETE NATIVE VISION ENGINE
-   NO EXTERNAL LIBRARIES
-========================================= */
-
 const $ = id => document.getElementById(id);
-
 const video = $("camera");
 const canvas = $("view");
-
-const ctx = canvas.getContext(
-  "2d",{alpha:false}
-);
+const ctx = canvas.getContext("2d",{alpha:false});
 
 const work = document.createElement("canvas");
-
-const wc = work.getContext(
-  "2d",{willReadFrequently:true}
-);
+const wc = work.getContext("2d",{willReadFrequently:true});
 
 const corrected = document.createElement("canvas");
-
 const cc = corrected.getContext("2d");
 
 const W = 480;
 const H = 480;
-
-work.width = W;
-work.height = H;
-
-corrected.width = W;
-corrected.height = H;
-
+const N = W*H;
 const TAU = Math.PI*2;
+
+work.width = corrected.width = W;
+work.height = corrected.height = H;
 
 const SECTORS = [
   20,1,18,4,13,6,10,15,2,17,
@@ -426,7 +236,7 @@ const CONFIG = {
 };
 
 const DART_CONFIG = {
-  interval:150,
+  interval:180,
   differenceThreshold:24,
   minimumPixels:8,
   maximumPixels:12000,
@@ -437,217 +247,170 @@ const DART_CONFIG = {
   tipTolerance:8,
   baselineFrames:5
 };
-/* =========================================
-   APPLICATION STATE
-========================================= */
 
 let stream = null;
 let running = false;
+let cameraStarting = false;
+let cameraGeneration = 0;
 let mode = "idle";
-
 let zoom = 1;
 let board = null;
 let samples = [];
-
+let autoTimer = null;
 let lastCalibration = 0;
 let lastMovementCheck = 0;
 let movementFailures = 0;
-
+let lockedReference = null;
 let previewMode = false;
 let overlayUntil = 0;
-
-let lockedReference = null;
-let cameraGeneration = 0;
-let autoTimer = null;
-
 let orientationOffset = 0;
-let orientationVerified = false;
-
-let lastPreview = 0;
 let warpMap = null;
+let lastPreview = 0;
+let lastRenderedFrame = -1;
 
-let cameraStarting = false;
-
+let scoringMask = null;
+let scoringActive = false;
 let dartReference = null;
 let emptyReference = null;
-
+let previousScan = null;
+let baselineCandidate = null;
+let baselineCounter = 0;
 let detectedDarts = [];
 let pendingDart = null;
 let pendingFrames = 0;
-
 let lastDartTime = 0;
 let lastDartScan = 0;
-
 let removalCounter = 0;
-let scoringActive = false;
-
 let visitTotal = 0;
-
-let scoringGeneration = -1;
-let previousBoard = null;
-
-let scoringMask = null;
-
-let baselineCounter = 0;
-let baselineCandidate = null;
-
-let previousScan = null;
-
 let lastCompletedVisit = 0;
-
-/* =========================================
-   STATUS ENGINE
-========================================= */
+let uncertainDart = false;
 
 function setStatus(title,color,message){
-
   $("status").textContent = title;
-
   $("bottomStatus").textContent = message;
-
-  $("dot").style.background =
-    color==="green" ? "#37f5a1" :
-    color==="yellow" ? "#ffd166" :
-    color==="red" ? "#ff6578" :
-    "#27b8ff";
+  $("dot").style.background = {
+    green:"#37f5a1",
+    yellow:"#ffd166",
+    red:"#ff6578",
+    blue:"#27b8ff"
+  }[color] || "#27b8ff";
 }
 
 function debug(message){
-
   $("debug").textContent = message;
 }
 
-function updateProgress(){
-
-  const n = samples.length;
-
-  $("stable").textContent =
-    n+"/"+CONFIG.requiredFrames;
-
-  $("progressBar").style.width =
-    Math.min(
-      100,
-      n/CONFIG.requiredFrames*100
-    )+"%";
-}
-
-function resetMetrics(){
-
-  $("quality").textContent = "0%";
-  $("error").textContent = "—";
-
-  $("stable").textContent =
-    "0/"+CONFIG.requiredFrames;
-
-  $("progressBar").style.width = "0%";
-}
-
-function clamp(v,min,max){
-
-  return Math.max(min,Math.min(max,v));
-}
-
 function distance(a,b){
-
   return Math.hypot(a.x-b.x,a.y-b.y);
 }
 
-function median(values){
-
-  if(!values.length)return 0;
-
-  const a = [...values].sort((x,y)=>x-y);
-
-  return a[Math.floor(a.length/2)];
+function clamp(v,min,max){
+  return Math.max(min,Math.min(max,v));
 }
 
 function quantile(values,q){
-
   if(!values.length)return 0;
-
   const a = [...values].sort((x,y)=>x-y);
-
   return a[Math.floor(q*(a.length-1))];
 }
 
-/* =========================================
-   CAMERA ENGINE
-========================================= */
+function median(values){
+  return quantile(values,.5);
+}
+
+function updateProgress(){
+  $("stable").textContent =
+    samples.length+"/"+CONFIG.requiredFrames;
+  $("progressBar").style.width =
+    Math.min(100,samples.length/
+      CONFIG.requiredFrames*100)+"%";
+}
+
+function resetMetrics(){
+  $("quality").textContent = "0%";
+  $("error").textContent = "—";
+  samples = [];
+  updateProgress();
+}
+
+function capture(){
+  return wc.getImageData(0,0,W,H);
+}
+
+function cloneFrame(frame){
+  return new ImageData(
+    new Uint8ClampedArray(frame.data),
+    frame.width,frame.height
+  );
+}
+
+/* CAMERA ENGINE */
 
 function stopCamera(){
-
   running = false;
-
   cameraGeneration++;
-
   clearTimeout(autoTimer);
 
   if(stream){
-
-    stream.getTracks().forEach(
-      track=>track.stop()
-    );
+    stream.getTracks().forEach(t=>t.stop());
   }
 
   stream = null;
   video.srcObject = null;
-
-  mode = "idle";
-
   board = null;
   samples = [];
-
+  mode = "idle";
+  previewMode = false;
   warpMap = null;
   lockedReference = null;
-
-  previewMode = false;
-  orientationVerified = false;
-
+  lastRenderedFrame = -1;
   resetDartEngine();
 }
 
+function withTimeout(promise,ms,message){
+  let timer;
+  return Promise.race([
+    promise,
+    new Promise((_,reject)=>{
+      timer = setTimeout(
+        ()=>reject(new Error(message)),ms
+      );
+    })
+  ]).finally(()=>clearTimeout(timer));
+}
+
 async function startCamera(){
-
   if(cameraStarting)return;
-
   cameraStarting = true;
 
   stopCamera();
-
   const generation = cameraGeneration;
 
   $("start").disabled = true;
   $("restart").disabled = true;
   $("preview").disabled = true;
+  $("zoom").disabled = false;
+  $("lockStatus").textContent = "UNLOCKED";
 
-  $("start").textContent =
-    "STARTING CAMERA";
+  resetMetrics();
 
   setStatus(
-    "STARTING CAMERA",
-    "yellow",
+    "STARTING CAMERA","yellow",
     "Allow access to the rear camera"
   );
 
-  let timeoutId;
+  let expired = false;
 
   try{
-
-    if(
-      !navigator.mediaDevices ||
-      !navigator.mediaDevices.getUserMedia
-    ){
-
+    if(!navigator.mediaDevices?.getUserMedia){
       throw new Error(
         "Camera requires HTTPS and browser permission"
       );
     }
 
-    const cameraRequest =
+    const request =
       navigator.mediaDevices.getUserMedia({
-
         audio:false,
-
         video:{
           facingMode:{ideal:"environment"},
           width:{ideal:1920},
@@ -656,91 +419,44 @@ async function startCamera(){
         }
       });
 
-    let expired = false;
-
-    cameraRequest.then(s=>{
-
-      if(
-        expired ||
-        generation!==cameraGeneration
-      ){
-
-        s.getTracks().forEach(
-          track=>track.stop()
-        );
+    request.then(s=>{
+      if(expired || generation!==cameraGeneration){
+        s.getTracks().forEach(t=>t.stop());
       }
-
     }).catch(()=>{});
 
-    const timeout = new Promise(
-      (_,reject)=>{
-
-        timeoutId = setTimeout(()=>{
-
-          expired = true;
-
-          reject(
-            new Error("Camera permission timed out")
-          );
-
-        },20000);
-      }
+    stream = await withTimeout(
+      request,20000,"Camera permission timed out"
     );
 
-    const nextStream = await Promise.race([
-      cameraRequest,
-      timeout
-    ]);
-
-    clearTimeout(timeoutId);
-
     if(generation!==cameraGeneration){
-
-      nextStream.getTracks().forEach(
-        track=>track.stop()
-      );
-
+      stream.getTracks().forEach(t=>t.stop());
       return;
     }
 
-    stream = nextStream;
-
     video.srcObject = stream;
     video.muted = true;
+    video.playsInline = true;
 
-    await video.play();
+    await withTimeout(
+      video.play(),10000,"Camera playback timed out"
+    );
 
     if(generation!==cameraGeneration)return;
 
     running = true;
     mode = "ready";
+    lastRenderedFrame = -1;
 
-    $("zoom").disabled = false;
-    $("restart").disabled = false;
-    $("preview").disabled = true;
-
-    $("preview").textContent =
-      "CORRECTED VIEW";
-
-    $("start").disabled = false;
-
-    $("start").textContent =
-      "START CALIBRATION";
-
-    $("lockStatus").textContent =
-      "UNLOCKED";
-
-    resetMetrics();
+    $("start").textContent = "RECALIBRATE";
+    $("preview").textContent = "CORRECTED VIEW";
 
     setStatus(
-      "CAMERA READY",
-      "green",
-      "Position the complete empty dartboard inside the frame"
+      "CAMERA READY","green",
+      "Position the complete empty dartboard"
     );
 
-    debug(
-      "Native vision active · No external dependencies"
-    );
+    debug("Native vision engine active");
 
     requestAnimationFrame(
       now=>renderLoop(now,generation)
@@ -749,188 +465,109 @@ async function startCamera(){
     scheduleCalibration();
 
   }catch(err){
-
-    clearTimeout(timeoutId);
-
+    expired = true;
     stopCamera();
 
-    $("start").disabled = false;
-    $("restart").disabled = false;
-
-    $("start").textContent =
-      "RETRY CAMERA";
+    $("start").textContent = "RETRY CAMERA";
 
     setStatus(
-      "CAMERA ERROR",
-      "red",
-      err.message
+      "CAMERA ERROR","red",err.message
     );
 
     debug(err.name || "Camera startup failed");
 
   }finally{
-
     cameraStarting = false;
+    $("start").disabled = false;
+    $("restart").disabled = false;
   }
 }
 
 function drawCamera(){
-
-  if(
-    !video.videoWidth ||
-    !video.videoHeight
-  )return false;
+  if(video.readyState<2 ||
+     !video.videoWidth ||
+     !video.videoHeight)return false;
 
   const vw = video.videoWidth;
   const vh = video.videoHeight;
-
   const side = Math.min(vw,vh)/zoom;
 
   wc.drawImage(
     video,
-    (vw-side)/2,
-    (vh-side)/2,
-    side,
-    side,
-    0,0,W,H
+    (vw-side)/2,(vh-side)/2,
+    side,side,0,0,W,H
   );
 
   return true;
 }
 
-function capture(){
-
-  return wc.getImageData(0,0,W,H);
-}
-
-function cloneFrame(frame){
-
-  return new ImageData(
-    new Uint8ClampedArray(frame.data),
-    frame.width,
-    frame.height
-  );
-}
-
 function scheduleCalibration(){
-
   clearTimeout(autoTimer);
 
   autoTimer = setTimeout(()=>{
-
     if(running && mode==="ready"){
-
       startCalibration();
     }
-
   },1500);
 }
 
-/* =========================================
-   COLOR SEGMENTATION
-========================================= */
+/* COLOR SEGMENTATION */
 
 function colorClass(r,g,b){
-
-  if(
-    r>65 &&
-    r>g*1.28 &&
-    r>b*1.20
-  )return 1;
-
-  if(
-    g>50 &&
-    g>r*1.16 &&
-    g>b*1.10
-  )return 2;
-
+  if(r>65 && r>g*1.28 && r>b*1.20)return 1;
+  if(g>50 && g>r*1.16 && g>b*1.10)return 2;
   return 0;
 }
 
 function createColorMask(frame){
-
-  const mask = new Uint8Array(W*H);
-
+  const mask = new Uint8Array(N);
   const d = frame.data;
 
-  for(let i=0;i<W*H;i++){
-
+  for(let i=0;i<N;i++){
     const p = i*4;
-
-    mask[i] = colorClass(
-      d[p],
-      d[p+1],
-      d[p+2]
-    );
+    mask[i] = colorClass(d[p],d[p+1],d[p+2]);
   }
 
   return mask;
 }
 
 function pixelColor(mask,x,y){
-
   x = Math.round(x);
   y = Math.round(y);
 
-  if(
-    x<0 || y<0 ||
-    x>=W || y>=H
-  )return 0;
-
+  if(x<0 || y<0 || x>=W || y>=H)return 0;
   return mask[y*W+x];
 }
 
-/* =========================================
-   NATIVE LINEAR SYSTEM SOLVER
-========================================= */
+/* LINEAR SYSTEM SOLVER */
 
 function solveLinear(matrix,vector){
-
   const n = vector.length;
-
-  const a = matrix.map(
-    (row,i)=>[...row,vector[i]]
-  );
+  const a = matrix.map((row,i)=>[...row,vector[i]]);
 
   for(let i=0;i<n;i++){
-
     let pivot = i;
 
     for(let j=i+1;j<n;j++){
-
-      if(
-        Math.abs(a[j][i]) >
-        Math.abs(a[pivot][i])
-      ){
-
+      if(Math.abs(a[j][i])>Math.abs(a[pivot][i])){
         pivot = j;
       }
     }
 
-    if(Math.abs(a[pivot][i])<1e-10){
+    if(Math.abs(a[pivot][i])<1e-10)return null;
 
-      return null;
-    }
-
-    [a[i],a[pivot]] =
-      [a[pivot],a[i]];
+    [a[i],a[pivot]] = [a[pivot],a[i]];
 
     const divisor = a[i][i];
 
-    for(let k=i;k<=n;k++){
-
-      a[i][k] /= divisor;
-    }
+    for(let k=i;k<=n;k++)a[i][k]/=divisor;
 
     for(let j=0;j<n;j++){
-
       if(j===i)continue;
-
       const factor = a[j][i];
 
       for(let k=i;k<=n;k++){
-
-        a[j][k] -= factor*a[i][k];
+        a[j][k]-=factor*a[i][k];
       }
     }
   }
@@ -938,94 +575,58 @@ function solveLinear(matrix,vector){
   return a.map(row=>row[n]);
 }
 
-/* =========================================
-   NATIVE ROTATED ELLIPSE FITTING
-========================================= */
+/* ROTATED ELLIPSE FITTING */
 
 function fitEllipse(points){
-
   if(points.length<12)return null;
 
-  const ox =
-    points.reduce((s,p)=>s+p.x,0)/
-    points.length;
+  const ox = points.reduce((s,p)=>s+p.x,0)/points.length;
+  const oy = points.reduce((s,p)=>s+p.y,0)/points.length;
 
-  const oy =
-    points.reduce((s,p)=>s+p.y,0)/
-    points.length;
+  const scale = Math.max(1,Math.sqrt(
+    points.reduce((s,p)=>
+      s+(p.x-ox)**2+(p.y-oy)**2,0
+    )/points.length
+  ));
 
-  const scale = Math.max(
-    1,
-    Math.sqrt(
-      points.reduce(
-        (s,p)=>s+
-        (p.x-ox)**2+
-        (p.y-oy)**2,
-        0
-      )/points.length
-    )
-  );
-
-  const m = Array.from(
-    {length:5},
-    ()=>Array(5).fill(0)
-  );
-
+  const m = Array.from({length:5},()=>Array(5).fill(0));
   const v = Array(5).fill(0);
 
   for(const p of points){
-
     const x = (p.x-ox)/scale;
     const y = (p.y-oy)/scale;
-
-    const row = [
-      x*x,x*y,y*y,x,y
-    ];
+    const row = [x*x,x*y,y*y,x,y];
 
     for(let i=0;i<5;i++){
-
-      v[i] += row[i];
+      v[i]+=row[i];
 
       for(let j=0;j<5;j++){
-
-        m[i][j] += row[i]*row[j];
+        m[i][j]+=row[i]*row[j];
       }
     }
   }
 
   const solution = solveLinear(m,v);
-
   if(!solution)return null;
 
   const [A,B,C,D,E] = solution;
-
   const det = 4*A*C-B*B;
 
   if(det<=1e-10)return null;
 
-  const cx =
-    (B*E-2*C*D)/det;
-
-  const cy =
-    (B*D-2*A*E)/det;
+  const cx = (B*E-2*C*D)/det;
+  const cy = (B*D-2*A*E)/det;
 
   const k = 1-(
-    A*cx*cx+
-    B*cx*cy+
-    C*cy*cy+
-    D*cx+
-    E*cy
+    A*cx*cx+B*cx*cy+C*cy*cy+D*cx+E*cy
   );
 
   const delta = Math.hypot(A-C,B);
-
   const l1 = (A+C+delta)/2;
   const l2 = (A+C-delta)/2;
 
-  if(
-    Math.abs(l1)<1e-10 ||
-    Math.abs(l2)<1e-10
-  )return null;
+  if(Math.abs(l1)<1e-10 ||
+     Math.abs(l2)<1e-10)return null;
 
   const a2 = k/l1;
   const b2 = k/l2;
@@ -1034,187 +635,112 @@ function fitEllipse(points){
 
   const a = Math.sqrt(a2)*scale;
   const b = Math.sqrt(b2)*scale;
-
-  const angle =
-    .5*Math.atan2(B,A-C);
-
+  const angle = .5*Math.atan2(B,A-C);
   const major = Math.max(a,b);
   const minor = Math.min(a,b);
 
-  if(
-    !Number.isFinite(major) ||
-    !Number.isFinite(minor) ||
-    major<3
-  )return null;
+  if(!Number.isFinite(major) ||
+     !Number.isFinite(minor) ||
+     major<3)return null;
 
   return {
-
     cx:ox+cx*scale,
     cy:oy+cy*scale,
-
-    a,b,
-
-    major,
-    minor,
-
-    angle,
-
+    a,b,major,minor,angle,
     area:Math.PI*a*b
   };
 }
 
-/* =========================================
-   ELLIPSE GEOMETRY
-========================================= */
-
 function ellipsePoint(e,theta,r=1){
-
   const x = Math.cos(theta)*e.a*r;
   const y = Math.sin(theta)*e.b*r;
-
   const c = Math.cos(e.angle);
   const s = Math.sin(e.angle);
 
   return {
-
     x:e.cx+x*c-y*s,
     y:e.cy+x*s+y*c
   };
 }
 
 function ellipseLocal(e,p){
-
   const dx = p.x-e.cx;
   const dy = p.y-e.cy;
-
   const c = Math.cos(e.angle);
   const s = Math.sin(e.angle);
 
   return {
-
     x:(dx*c+dy*s)/e.a,
     y:(-dx*s+dy*c)/e.b
   };
 }
 
 function ellipseRadius(e,p){
-
   const q = ellipseLocal(e,p);
-
   return Math.hypot(q.x,q.y);
 }
 
 function ellipseVisible(e){
-
   for(let i=0;i<72;i++){
+    const p = ellipsePoint(e,i*TAU/72);
 
-    const p = ellipsePoint(
-      e,i*TAU/72
-    );
-
-    if(
-      p.x<5 ||
-      p.x>W-5 ||
-      p.y<5 ||
-      p.y>H-5
-    )return false;
+    if(p.x<5 || p.x>W-5 ||
+       p.y<5 || p.y>H-5)return false;
   }
 
   return true;
 }
 
-/* =========================================
-   CONNECTED COMPONENT DETECTION
-========================================= */
+/* CONNECTED COMPONENTS */
 
-function findComponents(mask,target){
-
-  const visited = new Uint8Array(W*H);
-
-  const queue = new Int32Array(W*H);
-
+function components(mask,target=1,diagonal=false){
+  const visited = new Uint8Array(N);
+  const queue = new Int32Array(N);
   const results = [];
 
-  for(let index=0;index<mask.length;index++){
+  const offsets = diagonal
+    ? [[-1,-1],[0,-1],[1,-1],[-1,0],
+       [1,0],[-1,1],[0,1],[1,1]]
+    : [[-1,0],[1,0],[0,-1],[0,1]];
 
-    if(
-      visited[index] ||
-      mask[index]!==target
-    )continue;
+  for(let index=0;index<N;index++){
+    if(visited[index] || mask[index]!==target)continue;
 
-    let head = 0;
-    let tail = 0;
+    let head=0,tail=0;
+    let sx=0,sy=0;
+    let minX=W,minY=H,maxX=0,maxY=0;
 
-    let sx = 0;
-    let sy = 0;
+    const points = [];
 
-    let minX = W;
-    let minY = H;
-
-    let maxX = 0;
-    let maxY = 0;
-
-    visited[index] = 1;
-
-    queue[tail++] = index;
+    visited[index]=1;
+    queue[tail++]=index;
 
     while(head<tail){
-
       const p = queue[head++];
-
       const x = p%W;
       const y = Math.floor(p/W);
 
-      sx += x;
-      sy += y;
+      points.push({x,y});
 
-      minX = Math.min(minX,x);
-      maxX = Math.max(maxX,x);
+      sx+=x;
+      sy+=y;
 
-      minY = Math.min(minY,y);
-      maxY = Math.max(maxY,y);
+      minX=Math.min(minX,x);
+      minY=Math.min(minY,y);
+      maxX=Math.max(maxX,x);
+      maxY=Math.max(maxY,y);
 
-      if(x>0){
+      for(const [dx,dy] of offsets){
+        const nx=x+dx;
+        const ny=y+dy;
 
-        const n = p-1;
+        if(nx<0 || ny<0 || nx>=W || ny>=H)continue;
 
-        if(!visited[n] && mask[n]===target){
-
-          visited[n] = 1;
-          queue[tail++] = n;
-        }
-      }
-
-      if(x<W-1){
-
-        const n = p+1;
+        const n=ny*W+nx;
 
         if(!visited[n] && mask[n]===target){
-
-          visited[n] = 1;
-          queue[tail++] = n;
-        }
-      }
-
-      if(y>0){
-
-        const n = p-W;
-
-        if(!visited[n] && mask[n]===target){
-
-          visited[n] = 1;
-          queue[tail++] = n;
-        }
-      }
-
-      if(y<H-1){
-
-        const n = p+W;
-
-        if(!visited[n] && mask[n]===target){
-
-          visited[n] = 1;
-          queue[tail++] = n;
+          visited[n]=1;
+          queue[tail++]=n;
         }
       }
     }
@@ -1222,36 +748,26 @@ function findComponents(mask,target){
     if(tail<5)continue;
 
     results.push({
-
       x:sx/tail,
       y:sy/tail,
-
       area:tail,
-
       width:maxX-minX+1,
-      height:maxY-minY+1
+      height:maxY-minY+1,
+      points
     });
   }
 
   return results;
 }
 
-/* =========================================
-   OUTER RING RECOGNITION
-========================================= */
+/* OUTER RING RECOGNITION */
 
 function collectColorPoints(mask){
-
-  const points = [];
+  const points=[];
 
   for(let y=3;y<H-3;y+=2){
-
     for(let x=3;x<W-3;x+=2){
-
-      if(mask[y*W+x]){
-
-        points.push({x,y});
-      }
+      if(mask[y*W+x])points.push({x,y});
     }
   }
 
@@ -1259,323 +775,209 @@ function collectColorPoints(mask){
 }
 
 function collectOuterPoints(points,cx,cy){
-
-  const bins = Array.from(
-    {length:120},
-    ()=>[]
-  );
+  const bins=Array.from({length:120},()=>[]);
 
   for(const p of points){
+    const dx=p.x-cx;
+    const dy=p.y-cy;
+    const angle=(Math.atan2(dy,dx)+TAU)%TAU;
 
-    const dx = p.x-cx;
-    const dy = p.y-cy;
-
-    const angle =
-      (Math.atan2(dy,dx)+TAU)%TAU;
-
-    const index = Math.min(
-      119,
-      Math.floor(angle/TAU*120)
+    const index=Math.min(
+      119,Math.floor(angle/TAU*120)
     );
 
     bins[index].push({
-
-      x:p.x,
-      y:p.y,
-
-      r:Math.hypot(dx,dy)
+      x:p.x,y:p.y,r:Math.hypot(dx,dy)
     });
   }
 
-  const outer = [];
+  const outer=[];
 
   for(const bin of bins){
-
     if(!bin.length)continue;
-
     bin.sort((a,b)=>a.r-b.r);
-
-    const i = Math.floor(
-      (bin.length-1)*.98
-    );
-
-    outer.push(bin[i]);
+    outer.push(bin[Math.floor((bin.length-1)*.98)]);
   }
 
   return outer;
 }
 
 function fitOuterRing(points,cx,cy){
-
-  let outer = collectOuterPoints(
-    points,cx,cy
-  );
+  let outer=collectOuterPoints(points,cx,cy);
 
   if(outer.length<90)return null;
 
-  let e = fitEllipse(outer);
-
+  let e=fitEllipse(outer);
   if(!e)return null;
 
   for(let pass=0;pass<3;pass++){
-
-    const errors = outer.map(
-      p=>Math.abs(
-        ellipseRadius(e,p)-1
-      )
+    const errors=outer.map(
+      p=>Math.abs(ellipseRadius(e,p)-1)
     );
 
-    const threshold = Math.max(
-      .018,
-      quantile(errors,.82)
-    );
+    const threshold=Math.max(.018,quantile(errors,.82));
 
-    const filtered = outer.filter(
-      p=>Math.abs(
-        ellipseRadius(e,p)-1
-      )<=threshold
+    const filtered=outer.filter(
+      p=>Math.abs(ellipseRadius(e,p)-1)<=threshold
     );
 
     if(filtered.length<70)break;
 
-    const refined = fitEllipse(filtered);
-
+    const refined=fitEllipse(filtered);
     if(!refined)break;
 
-    e = refined;
-    outer = filtered;
+    e=refined;
+    outer=filtered;
   }
 
-  if(
-    e.major<70 ||
-    e.major>W*.7 ||
-    e.minor/e.major<
-      CONFIG.minimumAxisRatio
-  )return null;
+  if(e.major<70 ||
+     e.major>W*.7 ||
+     e.minor/e.major<CONFIG.minimumAxisRatio){
+    return null;
+  }
 
-  if(!ellipseVisible(e))return null;
-
-  return e;
+  return ellipseVisible(e)?e:null;
 }
 
-/* =========================================
-   BULL RECOGNITION
-========================================= */
+/* BULL RECOGNITION */
 
-function findBullCandidates(mask,components){
+function findBullCandidates(mask,redComponents){
+  const candidates=[];
 
-  const candidates = [];
-
-  for(const c of components){
-
+  for(const c of redComponents){
     if(c.area<5 || c.area>1500)continue;
 
-    const ratio =
-      Math.min(c.width,c.height)/
+    const ratio=Math.min(c.width,c.height)/
       Math.max(c.width,c.height);
 
     if(ratio<.25)continue;
+    if(c.area/(c.width*c.height)<.30)continue;
 
-    const fill =
-      c.area/(c.width*c.height);
-
-    if(fill<.30)continue;
-
-    const size = Math.max(
-      3,
-      Math.round(
-        Math.max(c.width,c.height)*1.5
-      )
+    const size=Math.max(
+      3,Math.round(Math.max(c.width,c.height)*1.5)
     );
 
-    let red = 0;
-    let green = 0;
-    let total = 0;
+    let red=0,green=0,total=0;
 
     for(let dy=-size;dy<=size;dy++){
-
       for(let dx=-size;dx<=size;dx++){
-
         if(Math.hypot(dx,dy)>size)continue;
 
-        const color = pixelColor(
-          mask,
-          c.x+dx,
-          c.y+dy
-        );
+        const color=pixelColor(mask,c.x+dx,c.y+dy);
 
         if(color===1)red++;
         if(color===2)green++;
-
         total++;
       }
     }
 
     if(red<5 || green<5)continue;
 
-    const support =
-      (red+green)/Math.max(1,total);
+    const support=(red+green)/Math.max(1,total);
 
     if(support<.40)continue;
 
-    const centerDistance = Math.hypot(
-      c.x-W/2,
-      c.y-H/2
+    const centerDistance=Math.hypot(
+      c.x-W/2,c.y-H/2
     )/W;
 
     candidates.push({
-
-      x:c.x,
-      y:c.y,
-
+      x:c.x,y:c.y,
       size:Math.max(c.width,c.height),
-
       score:support-centerDistance*.35
     });
   }
 
-  candidates.sort(
-    (a,b)=>b.score-a.score
-  );
+  candidates.sort((a,b)=>b.score-a.score);
 
   return candidates.slice(0,12);
 }
 
-/* =========================================
-   PROJECTIVE GEOMETRY
-========================================= */
+/* PROJECTIVE PERSPECTIVE CORRECTION */
 
 function createProjectiveModel(outer,bull){
-
-  const p = ellipseLocal(
-    outer,bull
-  );
-
-  const magnitude =
-    Math.hypot(p.x,p.y);
+  const p=ellipseLocal(outer,bull);
+  const magnitude=Math.hypot(p.x,p.y);
 
   if(magnitude>=.48)return null;
 
-  const gamma =
-    1/Math.sqrt(
-      1-magnitude*magnitude
-    );
-
   return {
-
-    outer,
-    bull,
-
-    px:p.x,
-    py:p.y,
-
-    gamma
+    outer,bull,
+    px:p.x,py:p.y,
+    gamma:1/Math.sqrt(1-magnitude*magnitude)
   };
 }
 
 function imageToBoard(model,x,y){
+  if(!model ||
+     !Number.isFinite(x) ||
+     !Number.isFinite(y))return null;
 
-  const q = ellipseLocal(
-    model.outer,{x,y}
-  );
+  const q=ellipseLocal(model.outer,{x,y});
+  const px=model.px;
+  const py=model.py;
+  const p2=px*px+py*py;
 
-  const px = model.px;
-  const py = model.py;
+  if(p2<1e-10)return q;
 
-  const p2 = px*px+py*py;
+  const dot=px*q.x+py*q.y;
+  const g=model.gamma;
+  const k=(g-1)*dot/p2-g;
+  const denominator=g*(1-dot);
 
-  if(p2<1e-10){
+  if(Math.abs(denominator)<1e-8)return null;
 
-    return {
-      x:q.x,
-      y:q.y
-    };
-  }
-
-  const dot = px*q.x+py*q.y;
-
-  const g = model.gamma;
-
-  const k =
-    (g-1)*dot/p2-g;
-
-  const denominator =
-    g*(1-dot);
-
-  if(Math.abs(denominator)<1e-8){
-
-    return null;
-  }
-
-  return {
-
+  const result={
     x:(q.x+k*px)/denominator,
     y:(q.y+k*py)/denominator
   };
+
+  return Number.isFinite(result.x) &&
+    Number.isFinite(result.y)?result:null;
 }
 
 function boardToImage(model,x,y){
+  if(!model)return null;
 
-  const px = model.px;
-  const py = model.py;
+  const px=model.px;
+  const py=model.py;
+  const p2=px*px+py*py;
 
-  const p2 = px*px+py*py;
-
-  let qx = x;
-  let qy = y;
+  let qx=x,qy=y;
 
   if(p2>=1e-10){
+    const g=model.gamma;
+    const dot=px*x+py*y;
+    const k=(g-1)*dot/p2+g;
+    const denominator=g*(1+dot);
 
-    const g = model.gamma;
+    if(Math.abs(denominator)<1e-8)return null;
 
-    const dot = px*x+py*y;
-
-    const k =
-      (g-1)*dot/p2+g;
-
-    const denominator =
-      g*(1+dot);
-
-    if(Math.abs(denominator)<1e-8){
-
-      return null;
-    }
-
-    qx = (x+k*px)/denominator;
-    qy = (y+k*py)/denominator;
+    qx=(x+k*px)/denominator;
+    qy=(y+k*py)/denominator;
   }
 
-  const e = model.outer;
-
-  const lx = qx*e.a;
-  const ly = qy*e.b;
-
-  const c = Math.cos(e.angle);
-  const s = Math.sin(e.angle);
+  const e=model.outer;
+  const lx=qx*e.a;
+  const ly=qy*e.b;
+  const c=Math.cos(e.angle);
+  const s=Math.sin(e.angle);
 
   return {
-
     x:e.cx+lx*c-ly*s,
     y:e.cy+lx*s+ly*c
   };
 }
 
-/* =========================================
-   PROJECTED RING VALIDATION
-========================================= */
+/* RING VALIDATION */
 
-function projectedRingSupport(
-  mask,model,radius
-){
-
-  let hits = 0;
-  let total = 0;
+function projectedRingSupport(mask,model,radius){
+  let hits=0,total=0;
 
   for(let i=0;i<160;i++){
+    const angle=i*TAU/160;
 
-    const angle = i*TAU/160;
-
-    const p = boardToImage(
+    const p=boardToImage(
       model,
       Math.cos(angle)*radius,
       Math.sin(angle)*radius
@@ -1585,152 +987,78 @@ function projectedRingSupport(
 
     total++;
 
-    if(pixelColor(mask,p.x,p.y)){
-
-      hits++;
-    }
+    if(pixelColor(mask,p.x,p.y))hits++;
   }
 
-  return total ? hits/total : 0;
+  return total?hits/total:0;
 }
-
-function projectedVisibility(model){
-
-  for(let i=0;i<72;i++){
-
-    const a = i*TAU/72;
-
-    const p = boardToImage(
-      model,
-      Math.cos(a),
-      Math.sin(a)
-    );
-
-    if(!p)return false;
-
-    if(
-      p.x<5 ||
-      p.x>W-5 ||
-      p.y<5 ||
-      p.y>H-5
-    )return false;
-  }
-
-  return true;
-}
-
-/* =========================================
-   RING BOUNDARY ERROR
-========================================= */
 
 function measureRingError(mask,model){
-
-  const boundaries = [
-    1,
-    162/170,
-    107/170,
-    99/170
-  ];
-
-  const errors = [];
+  const boundaries=[1,162/170,107/170,99/170];
+  const errors=[];
 
   for(const target of boundaries){
-
     for(let i=0;i<60;i++){
+      const a=(i+.5)*TAU/60;
+      const c=Math.cos(a);
+      const s=Math.sin(a);
 
-      const a = (i+.5)*TAU/60;
-
-      const c = Math.cos(a);
-      const s = Math.sin(a);
-
-      let best = Infinity;
+      let best=Infinity;
 
       for(let d=-.04;d<=.04;d+=.003){
+        const r=target+d;
 
-        const r = target+d;
-
-        const p1 = boardToImage(
-          model,
-          c*(r-.005),
-          s*(r-.005)
+        const p1=boardToImage(
+          model,c*(r-.005),s*(r-.005)
         );
 
-        const p2 = boardToImage(
-          model,
-          c*(r+.005),
-          s*(r+.005)
+        const p2=boardToImage(
+          model,c*(r+.005),s*(r+.005)
         );
 
         if(!p1 || !p2)continue;
 
-        const c1 = pixelColor(
-          mask,p1.x,p1.y
-        );
+        const c1=pixelColor(mask,p1.x,p1.y);
+        const c2=pixelColor(mask,p2.x,p2.y);
 
-        const c2 = pixelColor(
-          mask,p2.x,p2.y
-        );
+        const outer=target===1 || target===107/170;
 
-        const outerBoundary =
-          target===1 ||
-          target===107/170;
-
-        const transition = outerBoundary
-          ? Boolean(c1) && !c2
-          : !c1 && Boolean(c2);
+        const transition=outer
+          ? Boolean(c1)&&!c2
+          : !c1&&Boolean(c2);
 
         if(transition){
-
-          best = Math.min(
-            best,Math.abs(d)
-          );
+          best=Math.min(best,Math.abs(d));
         }
       }
 
-      errors.push(
-        Number.isFinite(best)?
-        best:.05
-      );
+      errors.push(Number.isFinite(best)?best:.05);
     }
   }
 
   return {
-
     median:median(errors),
-
     p90:quantile(errors,.90),
-
-    coverage:errors.filter(
-      e=>e<.025
-    ).length/errors.length
+    coverage:errors.filter(e=>e<.025).length/errors.length
   };
 }
 
-/* =========================================
-   SECTOR ORIENTATION ESTIMATION
-   PROVISIONAL UPRIGHT BOARD ASSUMPTION
-========================================= */
+/* SECTOR ORIENTATION */
 
 function estimateOrientation(mask,model){
-
-  let bestPhase = 0;
-  let bestScore = -Infinity;
+  let bestPhase=0;
+  let bestScore=-Infinity;
 
   for(let phase=0;phase<36;phase+=.5){
-
-    let score = 0;
+    let score=0;
 
     for(let i=0;i<20;i++){
-
-      const a =
-        (phase+i*18)*Math.PI/180;
+      const a=(phase+i*18)*Math.PI/180;
 
       for(const offset of [-4,0,4]){
+        const angle=a+offset*Math.PI/180;
 
-        const angle =
-          a+offset*Math.PI/180;
-
-        const p = boardToImage(
+        const p=boardToImage(
           model,
           Math.cos(angle)*166/170,
           Math.sin(angle)*166/170
@@ -1738,34 +1066,25 @@ function estimateOrientation(mask,model){
 
         if(!p)continue;
 
-        const color = pixelColor(
-          mask,p.x,p.y
-        );
+        const color=pixelColor(mask,p.x,p.y);
+        const expected=i%2===0?1:2;
 
-        const expected =
-          i%2===0 ? 1 : 2;
-
-        score += color===expected
-          ? 1
-          : color ? -1 : -.5;
+        score+=color===expected?1:color?-1:-.5;
       }
     }
 
     if(score>bestScore){
-
-      bestScore = score;
-      bestPhase = phase;
+      bestScore=score;
+      bestPhase=phase;
     }
   }
 
-  let best = null;
+  let best=null;
 
   for(let i=0;i<20;i+=2){
+    const angle=(bestPhase+i*18)*Math.PI/180;
 
-    const angle =
-      (bestPhase+i*18)*Math.PI/180;
-
-    const p = boardToImage(
+    const p=boardToImage(
       model,
       Math.cos(angle)*166/170,
       Math.sin(angle)*166/170
@@ -1773,223 +1092,138 @@ function estimateOrientation(mask,model){
 
     if(!p)continue;
 
-    const dx = p.x-model.bull.x;
-    const dy = p.y-model.bull.y;
+    const dx=p.x-model.bull.x;
+    const dy=p.y-model.bull.y;
 
-    const deviation = Math.abs(
-      Math.atan2(dx,-dy)
-    );
+    const deviation=Math.abs(Math.atan2(dx,-dy));
 
     if(!best || deviation<best.deviation){
-
-      best = {
-        angle,
-        deviation
-      };
+      best={angle,deviation};
     }
   }
 
-  return best ? best.angle : 0;
+  if(!best)return null;
+
+  return ((best.angle%TAU)+TAU)%TAU;
 }
 
-/* =========================================
-   COMPLETE BOARD ESTIMATION
-========================================= */
+/* COMPLETE BOARD ESTIMATION */
 
 function estimateBoard(frame){
-
-  const mask = createColorMask(frame);
-
-  const points = collectColorPoints(mask);
+  const mask=createColorMask(frame);
+  const points=collectColorPoints(mask);
 
   if(points.length<250){
-
-    debug("Insufficient red and green ring pixels");
-
+    debug("Searching for red and green scoring rings");
     return null;
   }
 
-  const redComponents =
-    findComponents(mask,1);
-
-  const bulls = findBullCandidates(
-    mask,redComponents
-  );
+  const bulls=findBullCandidates(mask,components(mask,1));
 
   if(!bulls.length){
-
-    debug("Searching for red bull and green outer bull");
-
+    debug("Searching for bull");
     return null;
   }
 
-  const medianX = median(
-    points.map(p=>p.x)
-  );
-
-  const medianY = median(
-    points.map(p=>p.y)
-  );
-
-  const outerCandidates = [];
-
-  const centres = [
-
-    {x:medianX,y:medianY},
-
+  const centres=[
+    {
+      x:median(points.map(p=>p.x)),
+      y:median(points.map(p=>p.y))
+    },
     ...bulls.slice(0,4)
   ];
 
+  const outerCandidates=[];
+
   for(const centre of centres){
-
-    const outer = fitOuterRing(
-      points,
-      centre.x,
-      centre.y
-    );
-
-    if(outer){
-
-      outerCandidates.push(outer);
-    }
+    const outer=fitOuterRing(points,centre.x,centre.y);
+    if(outer)outerCandidates.push(outer);
   }
 
-  if(!outerCandidates.length){
-
-    debug("Outer double ring not fully identified");
-
-    return null;
-  }
-
-  let best = null;
+  let best=null;
 
   for(const outer of outerCandidates){
-
     for(const bull of bulls){
+      const relativeSize=bull.size/outer.major;
 
-      const relativeSize =
-        bull.size/outer.major;
+      if(relativeSize<.025 ||
+         relativeSize>.13 ||
+         ellipseRadius(outer,bull)>.48)continue;
 
-      if(
-        relativeSize<.025 ||
-        relativeSize>.13
-      )continue;
-
-      if(ellipseRadius(outer,bull)>.48){
-
-        continue;
-      }
-
-      const model = createProjectiveModel(
-        outer,bull
-      );
-
+      const model=createProjectiveModel(outer,bull);
       if(!model)continue;
 
-      if(!projectedVisibility(model)){
-
-        continue;
-      }
-
-      const doubleSupport =
-        projectedRingSupport(
-          mask,model,166/170
-        );
+      const doubleSupport=projectedRingSupport(
+        mask,model,166/170
+      );
 
       if(doubleSupport<.70)continue;
 
-      const tripleSupport =
-        projectedRingSupport(
-          mask,model,103/170
-        );
+      const tripleSupport=projectedRingSupport(
+        mask,model,103/170
+      );
 
       if(tripleSupport<.70)continue;
 
-      const bullSupport =
-        projectedRingSupport(
-          mask,model,11/170
-        );
+      const bullSupport=projectedRingSupport(
+        mask,model,11/170
+      );
 
       if(bullSupport<.55)continue;
 
-      const quality =
+      const quality=
         doubleSupport*.40+
         tripleSupport*.45+
         bullSupport*.15;
 
-      const geometry =
-        measureRingError(mask,model);
+      const geometry=measureRingError(mask,model);
 
-      if(
-        geometry.median>
-          CONFIG.maximumGeometryError ||
-        geometry.coverage<.75
-      )continue;
+      if(geometry.median>CONFIG.maximumGeometryError ||
+         geometry.coverage<.75)continue;
 
-      const result = {
-
-        ...model,
-
-        quality,
-
-        error:geometry.median,
-
-        coverage:geometry.coverage,
-
-        p90:geometry.p90,
-
-        orientation:
-          estimateOrientation(mask,model)
-      };
-
-      const rank =
-        quality-
+      const rank=quality-
         geometry.median*4+
         geometry.coverage*.2;
 
       if(!best || rank>best.rank){
-
-        best = {
-          ...result,
+        best={
+          ...model,
+          quality,
+          error:geometry.median,
+          coverage:geometry.coverage,
+          p90:geometry.p90,
           rank
         };
       }
     }
   }
 
-  if(!best){
+  if(best){
+    best.orientation=estimateOrientation(mask,best);
 
-    debug(
-      "Board detected · Ring geometry not yet verified"
-    );
+    if(!Number.isFinite(best.orientation))return null;
   }
 
   return best;
 }
 
-/* =========================================
-   STABILITY VERIFICATION
-========================================= */
+/* CALIBRATION STABILITY */
 
 function boardDistance(a,b){
-
   if(!a || !b)return Infinity;
 
-  let error = distance(
-    a.bull,b.bull
-  );
+  let error=distance(a.bull,b.bull);
 
   for(let i=0;i<20;i++){
+    const theta=i*TAU/20;
 
-    const theta = i*TAU/20;
-
-    const p1 = boardToImage(
+    const p1=boardToImage(
       a,
       Math.cos(theta+a.orientation),
       Math.sin(theta+a.orientation)
     );
 
-    const p2 = boardToImage(
+    const p2=boardToImage(
       b,
       Math.cos(theta+b.orientation),
       Math.sin(theta+b.orientation)
@@ -1997,284 +1231,171 @@ function boardDistance(a,b){
 
     if(!p1 || !p2)return Infinity;
 
-    error = Math.max(
-      error,
-      distance(p1,p2)
-    );
+    error=Math.max(error,distance(p1,p2));
   }
 
   return error;
 }
 
 function startCalibration(){
-
   if(!running)return;
 
   clearTimeout(autoTimer);
 
-  mode = "calibrating";
-
-  board = null;
-  samples = [];
-
-  previewMode = false;
-  orientationVerified = false;
-
-  warpMap = null;
-  lockedReference = null;
+  mode="calibrating";
+  board=null;
+  samples=[];
+  previewMode=false;
+  warpMap=null;
+  lockedReference=null;
+  lastCalibration=0;
 
   resetDartEngine();
-
-  lastCalibration = 0;
-
-  $("zoom").disabled = false;
-  $("preview").disabled = true;
-
-  $("preview").textContent =
-    "CORRECTED VIEW";
-
-  $("start").textContent =
-    "RESTART CALIBRATION";
-
-  $("lockStatus").textContent =
-    "UNLOCKED";
-
   resetMetrics();
 
+  $("zoom").disabled=false;
+  $("preview").disabled=true;
+  $("preview").textContent="CORRECTED VIEW";
+  $("start").textContent="RECALIBRATE";
+  $("lockStatus").textContent="UNLOCKED";
+
   setStatus(
-    "CALIBRATING",
-    "yellow",
+    "CALIBRATING","yellow",
     "Keep the phone still and the board empty"
   );
 }
 
 function calibrationStep(now){
+  if(now-lastCalibration<CONFIG.calibrationInterval)return;
 
-  if(
-    now-lastCalibration<
-    CONFIG.calibrationInterval
-  )return;
+  lastCalibration=now;
 
-  lastCalibration = now;
-
-  const frame = capture();
-
-  let detected;
-
-  try{
-
-    detected = estimateBoard(frame);
-
-  }catch(err){
-
-    debug("Vision error: "+err.message);
-
-    samples = [];
-    board = null;
-
-    resetMetrics();
-
-    setStatus(
-      "CALIBRATION ERROR",
-      "red",
-      err.message
-    );
-
-    return;
-  }
+  const frame=capture();
+  const detected=estimateBoard(frame);
 
   if(!detected){
-
-    samples = [];
-    board = null;
-
+    board=null;
     resetMetrics();
 
     setStatus(
-      "SEARCHING BOARD",
-      "yellow",
+      "SEARCHING BOARD","yellow",
       "Show the complete double ring and bull"
     );
 
     return;
   }
 
-  board = detected;
+  board=detected;
 
-  $("quality").textContent =
+  $("quality").textContent=
     Math.round(detected.quality*100)+"%";
 
-  $("error").textContent =
+  $("error").textContent=
     (detected.error*170).toFixed(1)+" mm";
 
-  if(
-    detected.quality<
-    CONFIG.minimumQuality
-  ){
-
-    samples = [];
-
+  if(detected.quality<CONFIG.minimumQuality){
+    samples=[];
     updateProgress();
-
-    setStatus(
-      "ALIGNMENT LOW",
-      "yellow",
-      "Improving geometric alignment"
-    );
-
     return;
   }
 
   if(samples.length){
+    const previous=samples[samples.length-1];
 
-    const previous =
-      samples[samples.length-1];
-
-    if(
-      boardDistance(previous,detected)>
-        CONFIG.maximumFrameDrift ||
-      boardDistance(samples[0],detected)>
-        CONFIG.maximumFrameDrift
-    ){
-
-      samples = [];
+    if(boardDistance(previous,detected)>
+       CONFIG.maximumFrameDrift ||
+       boardDistance(samples[0],detected)>
+       CONFIG.maximumFrameDrift){
+      samples=[];
     }
   }
 
   samples.push(detected);
-
   updateProgress();
 
-  debug(
-    "Ring support "+
-    Math.round(detected.quality*100)+
-    "% · Boundary coverage "+
-    Math.round(detected.coverage*100)+
-    "%"
-  );
-
   setStatus(
-    "VERIFYING",
-    "blue",
-    "Stable geometry "+
-    samples.length+
-    "/"+
+    "VERIFYING","blue",
+    "Stable geometry "+samples.length+"/"+
     CONFIG.requiredFrames
   );
 
-  if(
-    samples.length>=
-    CONFIG.requiredFrames
-  ){
+  debug(
+    "Ring support "+Math.round(detected.quality*100)+
+    "% · Boundary coverage "+
+    Math.round(detected.coverage*100)+"%"
+  );
 
+  if(samples.length>=CONFIG.requiredFrames){
     lockCalibration(frame);
   }
 }
 
-/* =========================================
-   CALIBRATION LOCK
-========================================= */
-
 function lockCalibration(frame){
+  board=samples[samples.length-1];
 
-  board = samples[samples.length-1];
+  orientationOffset=board.orientation;
 
-  orientationOffset = board.orientation;
+  if(!Number.isFinite(orientationOffset)){
+    startCalibration();
+    return;
+  }
 
-  orientationVerified = false;
+  lockedReference=createMovementReference(frame);
 
-  lockedReference =
-    createMovementReference(frame);
+  movementFailures=0;
+  lastMovementCheck=performance.now();
 
-  movementFailures = 0;
-
-  lastMovementCheck = performance.now();
-
-  mode = "locked";
-
-  overlayUntil =
-    performance.now()+1500;
-
-  warpMap = null;
-
-  $("zoom").disabled = true;
-  $("preview").disabled = false;
-
-  $("start").textContent =
-    "RECALIBRATE";
-
-  $("lockStatus").textContent =
-    "GEOMETRY LOCKED";
+  mode="locked";
+  overlayUntil=performance.now()+1500;
+  warpMap=null;
 
   resetDartEngine();
-
   buildScoringMask();
 
-  setStatus(
-    "GEOMETRY LOCKED",
-    "green",
-    "Keep board empty while scoring initializes"
-  );
+  $("zoom").disabled=true;
+  $("preview").disabled=false;
+  $("start").textContent="RECALIBRATE";
+  $("lockStatus").textContent="GEOMETRY LOCKED";
 
-  debug(
-    "Perspective locked · Preparing scoring test"
+  setStatus(
+    "GEOMETRY LOCKED","green",
+    "Keep board empty while scoring initializes"
   );
 }
 
-/* =========================================
-   CAMERA MOVEMENT DETECTION
-========================================= */
+/* CAMERA MOVEMENT PROTECTION */
 
 function grayAt(frame,x,y){
+  x=Math.round(x);
+  y=Math.round(y);
 
-  x = Math.round(x);
-  y = Math.round(y);
+  if(x<0 || y<0 || x>=W || y>=H)return 0;
 
-  if(
-    x<0 || y<0 ||
-    x>=W || y>=H
-  )return 0;
+  const i=(y*W+x)*4;
 
-  const i = (y*W+x)*4;
-
-  return (
-    frame.data[i]*.299+
+  return frame.data[i]*.299+
     frame.data[i+1]*.587+
-    frame.data[i+2]*.114
-  );
+    frame.data[i+2]*.114;
 }
 
 function createMovementReference(frame){
-
-  const reference = [];
+  const reference=[];
 
   for(let i=0;i<100;i++){
-
-    const angle = i*TAU/100;
+    const angle=i*TAU/100;
 
     for(const r of [.91,.97,1.02]){
-
-      const p = boardToImage(
-        board,
-        Math.cos(angle)*r,
-        Math.sin(angle)*r
+      const p=boardToImage(
+        board,Math.cos(angle)*r,Math.sin(angle)*r
       );
 
-      if(!p)continue;
-
-      if(
-        p.x<4 || p.x>W-4 ||
-        p.y<4 || p.y>H-4
-      )continue;
+      if(!p ||
+         p.x<4 || p.x>W-4 ||
+         p.y<4 || p.y>H-4)continue;
 
       reference.push({
-
-        x:p.x,
-        y:p.y,
-
-        value:grayAt(
-          frame,p.x,p.y
-        )
+        x:p.x,y:p.y,
+        value:grayAt(frame,p.x,p.y)
       });
     }
   }
@@ -2282,1778 +1403,975 @@ function createMovementReference(frame){
   return reference;
 }
 
-function verifyMovement(frame){
+function monitorCalibration(now,frame){
+  if(now-lastMovementCheck<700)return;
 
-  if(
-    !lockedReference ||
-    !lockedReference.length
-  )return false;
+  lastMovementCheck=now;
 
-  const differences =
-    lockedReference.map(p=>
+  if(!lockedReference?.length)return;
 
-      grayAt(
-        frame,p.x,p.y
-      )-p.value
-    );
+  const differences=lockedReference.map(
+    p=>grayAt(frame,p.x,p.y)-p.value
+  );
 
-  const brightnessShift =
-    median(differences);
+  const shift=median(differences);
 
-  let changed = 0;
+  const changed=differences.filter(
+    d=>Math.abs(d-shift)>45
+  ).length;
 
-  for(const d of differences){
+  const ratio=changed/differences.length;
 
-    if(
-      Math.abs(d-brightnessShift)>45
-    ){
-
-      changed++;
-    }
-  }
-
-  const ratio =
-    changed/differences.length;
-
-  return ratio<
-    CONFIG.movementThreshold;
-}
-
-function monitorCalibration(now){
-
-  if(now-lastMovementCheck<700){
-
-    return;
-  }
-
-  lastMovementCheck = now;
-
-  const frame = capture();
-
-  if(verifyMovement(frame)){
-
-    movementFailures = 0;
-
+  if(ratio<CONFIG.movementThreshold){
+    movementFailures=0;
   }else{
-
     movementFailures++;
   }
 
-  if(
-    movementFailures>=
-    CONFIG.movementConfirmations
-  ){
+  if(movementFailures>=CONFIG.movementConfirmations){
+    mode="paused";
+    previewMode=false;
 
-    mode = "paused";
-
-    previewMode = false;
-
-    orientationVerified = false;
-
-    $("lockStatus").textContent =
-      "ALIGNMENT LOST";
-
-    $("preview").disabled = true;
-    $("zoom").disabled = false;
-
-    $("preview").textContent =
-      "CORRECTED VIEW";
+    $("lockStatus").textContent="ALIGNMENT LOST";
+    $("preview").disabled=true;
+    $("correct").disabled=true;
+    $("zoom").disabled=false;
 
     setStatus(
-      "ALIGNMENT LOST",
-      "yellow",
+      "ALIGNMENT LOST","yellow",
       "Clear the board and recalibrate"
     );
 
-    $("start").textContent =
-      "RECALIBRATE";
-
-    debug(
-      "Persistent camera image change detected"
-    );
+    debug("Persistent camera movement detected");
   }
 }
 
-/* =========================================
-   NATIVE PERSPECTIVE CORRECTION
-========================================= */
-
-function buildWarpMap(){
-
-  if(!board)return;
-
-  warpMap = new Int32Array(W*H);
-
-  warpMap.fill(-1);
-
-  const c = CONFIG.centre;
-  const r = CONFIG.radius;
-
-  for(let y=0;y<H;y++){
-
-    for(let x=0;x<W;x++){
-
-      const qx = (x-c)/r;
-      const qy = (y-c)/r;
-
-      const p = boardToImage(
-        board,qx,qy
-      );
-
-      if(!p)continue;
-
-      const sx = Math.round(p.x);
-      const sy = Math.round(p.y);
-
-      if(
-        sx<0 || sy<0 ||
-        sx>=W || sy>=H
-      )continue;
-
-      warpMap[y*W+x] =
-        (sy*W+sx)*4;
-    }
-  }
-}
-
-function renderCorrected(){
-
-  if(!board)return false;
-
-  if(!warpMap){
-
-    buildWarpMap();
-  }
-
-  if(!warpMap)return false;
-
-  const source = capture();
-
-  const output = cc.createImageData(
-    W,H
-  );
-
-  const src = source.data;
-  const dst = output.data;
-
-  for(let i=0;i<warpMap.length;i++){
-
-    const p = warpMap[i];
-    const d = i*4;
-
-    if(p>=0){
-
-      dst[d] = src[p];
-      dst[d+1] = src[p+1];
-      dst[d+2] = src[p+2];
-    }
-
-    dst[d+3] = 255;
-  }
-
-  cc.putImageData(output,0,0);
-
-  return true;
-}
-
-/* =========================================
-   PROJECTED CALIBRATION OVERLAY
-========================================= */
-
-function drawProjectedRing(
-  radius,color,width
-){
-
-  ctx.beginPath();
-
-  let started = false;
-
-  for(let i=0;i<=180;i++){
-
-    const a = i*TAU/180;
-
-    const p = boardToImage(
-      board,
-      Math.cos(a)*radius,
-      Math.sin(a)*radius
-    );
-
-    if(!p)continue;
-
-    if(!started){
-
-      ctx.moveTo(p.x,p.y);
-
-      started = true;
-
-    }else{
-
-      ctx.lineTo(p.x,p.y);
-    }
-  }
-
-  ctx.closePath();
-
-  ctx.strokeStyle = color;
-  ctx.lineWidth = width;
-
-  ctx.stroke();
-}
-
-function drawCalibration(){
-
-  if(!board)return;
-
-  const color =
-    mode==="locked"?
-    "#37f5a1":"#27b8ff";
-
-  ctx.save();
-
-  ctx.shadowColor = color;
-  ctx.shadowBlur = 3;
-
-  const radii = [
-
-    1,
-    162/170,
-    107/170,
-    99/170,
-    15.9/170,
-    6.35/170
-  ];
-
-  for(const r of radii){
-
-    drawProjectedRing(
-      r,color,1.3
-    );
-  }
-
-  const phase = board.orientation;
-
-  for(let i=0;i<20;i++){
-
-    const angle =
-      phase+
-      (i*18-9)*Math.PI/180;
-
-    const p1 = boardToImage(
-
-      board,
-
-      Math.cos(angle)*15.9/170,
-      Math.sin(angle)*15.9/170
-    );
-
-    const p2 = boardToImage(
-
-      board,
-
-      Math.cos(angle),
-      Math.sin(angle)
-    );
-
-    if(!p1 || !p2)continue;
-
-    ctx.beginPath();
-
-    ctx.moveTo(p1.x,p1.y);
-    ctx.lineTo(p2.x,p2.y);
-
-    ctx.strokeStyle = color;
-    ctx.lineWidth = 1;
-
-    ctx.stroke();
-  }
-
-  ctx.beginPath();
-
-  ctx.arc(
-    board.bull.x,
-    board.bull.y,
-    3,0,TAU
-  );
-
-  ctx.fillStyle = color;
-
-  ctx.fill();
-
-  ctx.restore();
-}
-
-/* =========================================
-   CORRECTED BOARD OVERLAY
-========================================= */
-
-function drawCorrectedOverlay(){
-
-  const c = CONFIG.centre;
-  const r = CONFIG.radius;
-
-  ctx.save();
-
-  ctx.strokeStyle = "#27b8ff";
-  ctx.lineWidth = 1.2;
-
-  for(const ratio of [
-
-    1,
-    162/170,
-    107/170,
-    99/170,
-    15.9/170,
-    6.35/170
-  ]){
-
-    ctx.beginPath();
-
-    ctx.arc(
-      c,c,r*ratio,
-      0,TAU
-    );
-
-    ctx.stroke();
-  }
-
-  for(let i=0;i<20;i++){
-
-    const a =
-      orientationOffset+
-      (i*18-9)*Math.PI/180;
-
-    ctx.beginPath();
-
-    ctx.moveTo(
-
-      c+Math.cos(a)*r*15.9/170,
-
-      c+Math.sin(a)*r*15.9/170
-    );
-
-    ctx.lineTo(
-
-      c+Math.cos(a)*r,
-
-      c+Math.sin(a)*r
-    );
-
-    ctx.stroke();
-
-    const labelAngle =
-      orientationOffset+
-      i*Math.PI/10;
-
-    ctx.fillStyle = "#fff";
-
-    ctx.font = "bold 12px Arial";
-
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-
-    ctx.fillText(
-
-      SECTORS[i],
-
-      c+Math.cos(labelAngle)*r*1.12,
-
-      c+Math.sin(labelAngle)*r*1.12
-    );
-  }
-
-  ctx.fillStyle = "#ffd166";
-
-  ctx.font = "bold 10px Arial";
-
-  ctx.textAlign = "center";
-
-  ctx.fillText(
-    "EXPERIMENTAL SECTOR ORIENTATION",
-    c,18
-  );
-
-  ctx.restore();
-}
-
-/* =========================================
-   LIVE SCORING ENGINE
-========================================= */
+/* SCORING ENGINE */
 
 function updateDartScores(){
-
-  visitTotal = detectedDarts.reduce(
-    (sum,dart)=>sum+dart.score,
-    0
+  visitTotal=detectedDarts.reduce(
+    (sum,dart)=>sum+
+      (Number.isFinite(dart.score)?dart.score:0),0
   );
 
   for(let i=0;i<3;i++){
-
-    $("dartScore"+(i+1)).textContent =
-      detectedDarts[i]
-      ? detectedDarts[i].label
-      : "—";
+    $("dartScore"+(i+1)).textContent=
+      detectedDarts[i]?.label || "—";
   }
 
-  $("visitTotal").textContent =
-    visitTotal;
+  $("visitTotal").textContent=String(visitTotal);
 
-  $("correct").disabled =
-    mode!=="locked";
+  $("correct").disabled=
+    mode!=="locked" || !scoringActive;
 }
 
 function resetDartEngine(){
-
-  dartReference = null;
-  emptyReference = null;
-
-  detectedDarts = [];
-
-  pendingDart = null;
-  pendingFrames = 0;
-
-  removalCounter = 0;
-
-  lastDartTime = 0;
-  lastDartScan = 0;
-
-  scoringActive = false;
-
-  scoringMask = null;
-
-  baselineCounter = 0;
-  baselineCandidate = null;
-
-  previousScan = null;
-
-  previousBoard = null;
+  dartReference=null;
+  emptyReference=null;
+  previousScan=null;
+  baselineCandidate=null;
+  baselineCounter=0;
+  detectedDarts=[];
+  pendingDart=null;
+  pendingFrames=0;
+  removalCounter=0;
+  lastDartTime=0;
+  lastDartScan=0;
+  scoringActive=false;
+  scoringMask=null;
+  uncertainDart=false;
 
   updateDartScores();
 }
 
 function buildScoringMask(){
-
   if(!board)return;
 
-  scoringMask = new Uint8Array(W*H);
+  scoringMask=new Uint8Array(N);
 
   for(let y=2;y<H-2;y++){
-
     for(let x=2;x<W-2;x++){
+      const p=imageToBoard(board,x,y);
 
-      const p = imageToBoard(
-        board,x,y
-      );
-
-      if(!p)continue;
-
-      if(Math.hypot(p.x,p.y)<=1.20){
-
-        scoringMask[y*W+x] = 1;
+      if(p && Math.hypot(p.x,p.y)<=1.20){
+        scoringMask[y*W+x]=1;
       }
     }
   }
 }
 
-/* =========================================
-   PERSPECTIVE CORRECTED SCORING
-========================================= */
-
 function calculateDartScore(x,y){
+  if(!board || mode!=="locked")return null;
 
-  if(!board || mode!=="locked"){
-
-    return null;
-  }
-
-  const p = imageToBoard(
-    board,x,y
-  );
-
+  const p=imageToBoard(board,x,y);
   if(!p)return null;
 
-  const radius = Math.hypot(
-    p.x,p.y
-  );
+  const radius=Math.hypot(p.x,p.y);
 
-  if(radius>1){
+  if(!Number.isFinite(radius))return null;
 
-    return {
-      score:0,
-      label:"MISS"
-    };
-  }
+  if(radius>1)return {score:0,label:"MISS"};
+  if(radius<=6.35/170)return {score:50,label:"BULL"};
+  if(radius<=15.9/170)return {score:25,label:"25"};
 
-  if(radius<=6.35/170){
+  const rawAngle=Math.atan2(p.y,p.x)-orientationOffset;
 
-    return {
-      score:50,
-      label:"BULL"
-    };
-  }
+  if(!Number.isFinite(rawAngle))return null;
 
-  if(radius<=15.9/170){
+  const angle=((rawAngle%TAU)+TAU)%TAU;
 
-    return {
-      score:25,
-      label:"25"
-    };
-  }
+  const index=Math.round(angle/(Math.PI/10))%20;
+  const number=SECTORS[index];
 
-  const rawAngle =
-    Math.atan2(p.y,p.x) -
-    orientationOffset;
-
-  if(!Number.isFinite(rawAngle)){
-    debug("Invalid scoring angle");
-    return null;
-  }
-
-  const angle =
-    ((rawAngle % TAU) + TAU) % TAU;
-
-  const index =
-    Math.round(angle / (Math.PI/10)) % 20;
-
-  const number = SECTORS[index];
-
-  if(!Number.isInteger(number)){
-    debug("Invalid sector");
-    return null;
-  }
+  if(!Number.isInteger(number) ||
+     number<1 || number>20)return null;
 
   if(radius>=162/170){
-
-    return {
-      score:number*2,
-      label:"D"+number
-    };
+    return {score:number*2,label:"D"+number};
   }
 
-  if(
-    radius>=99/170 &&
-    radius<=107/170
-  ){
-
-    return {
-      score:number*3,
-      label:"T"+number
-    };
+  if(radius>=99/170 && radius<=107/170){
+    return {score:number*3,label:"T"+number};
   }
 
-  return {
-    score:number,
-    label:"S"+number
-  };
+  return {score:number,label:"S"+number};
 }
 
-/* =========================================
-   FRAME DIFFERENCE ENGINE
-========================================= */
+/* FRAME DIFFERENCE */
 
-function dartDifference(current,reference){
+function dartDifference(current,reference,threshold){
+  const mask=new Uint8Array(N);
 
-  const mask = new Uint8Array(W*H);
-
-  if(!scoringMask){
-
-    return {
-      mask,
-      count:0
-    };
+  if(!current || !reference || !scoringMask){
+    return {mask,count:0};
   }
 
-  const a = current.data;
-  const b = reference.data;
+  const a=current.data;
+  const b=reference.data;
+  const shifts=[];
 
-  let count = 0;
+  for(let i=0;i<N;i+=113){
+    if(!scoringMask[i])continue;
 
-  const shifts = [];
+    const p=i*4;
 
-  for(let index=0;index<W*H;index+=113){
+    shifts.push((
+      a[p]-b[p]+
+      a[p+1]-b[p+1]+
+      a[p+2]-b[p+2]
+    )/3);
+  }
 
-    if(!scoringMask[index])continue;
+  const shift=median(shifts);
+  let count=0;
 
-    const i = index*4;
+  for(let i=0;i<N;i++){
+    if(!scoringMask[i])continue;
 
-    shifts.push(
+    const p=i*4;
 
-      (
-        a[i]-b[i]+
-        a[i+1]-b[i+1]+
-        a[i+2]-b[i+2]
-      )/3
+    const difference=Math.max(
+      Math.abs(a[p]-b[p]-shift),
+      Math.abs(a[p+1]-b[p+1]-shift),
+      Math.abs(a[p+2]-b[p+2]-shift)
     );
-  }
 
-  const brightnessShift =
-    median(shifts);
-
-  for(let index=0;index<W*H;index++){
-
-    if(!scoringMask[index])continue;
-
-    const i = index*4;
-
-    const difference = (
-
-      Math.abs(a[i]-b[i]-brightnessShift)+
-
-      Math.abs(a[i+1]-b[i+1]-brightnessShift)+
-
-      Math.abs(a[i+2]-b[i+2]-brightnessShift)
-
-    )/3;
-
-    if(
-      difference>
-      DART_CONFIG.differenceThreshold
-    ){
-
-      mask[index] = 1;
+    if(difference>=threshold){
+      mask[i]=1;
       count++;
     }
   }
 
-  return {
-    mask,
-    count
-  };
+  return {mask,count};
 }
 
-/* =========================================
-   CONNECTED DART COMPONENTS
-========================================= */
+/* CONNECT FRAGMENTED DART SILHOUETTES */
 
-function findDartComponents(mask){
+function connectFragments(mask){
+  const expanded=new Uint8Array(N);
+  const connected=new Uint8Array(N);
 
-  const visited =
-    new Uint8Array(W*H);
+  for(let y=3;y<H-3;y++){
+    for(let x=3;x<W-3;x++){
+      if(!mask[y*W+x])continue;
 
-  const queue =
-    new Int32Array(W*H);
-
-  const components = [];
-
-  for(let index=0;index<mask.length;index++){
-
-    if(!mask[index] || visited[index]){
-
-      continue;
-    }
-
-    let head = 0;
-    let tail = 0;
-
-    const points = [];
-
-    visited[index] = 1;
-
-    queue[tail++] = index;
-
-    while(head<tail){
-
-      const p = queue[head++];
-
-      const x = p%W;
-      const y = Math.floor(p/W);
-
-      points.push({x,y});
-
-      for(let dy=-1;dy<=1;dy++){
-
-        for(let dx=-1;dx<=1;dx++){
-
-          if(dx===0 && dy===0)continue;
-
-          const nx = x+dx;
-          const ny = y+dy;
-
-          if(
-            nx<0 || ny<0 ||
-            nx>=W || ny>=H
-          )continue;
-
-          const n = ny*W+nx;
-
-          if(
-            mask[n] &&
-            !visited[n]
-          ){
-
-            visited[n] = 1;
-            queue[tail++] = n;
-          }
+      for(let dy=-2;dy<=2;dy++){
+        for(let dx=-2;dx<=2;dx++){
+          expanded[(y+dy)*W+x+dx]=1;
         }
       }
     }
-
-    if(
-      points.length<
-        DART_CONFIG.minimumPixels ||
-      points.length>
-        DART_CONFIG.maximumPixels
-    )continue;
-
-    components.push(points);
   }
 
-  return components;
+  for(let y=3;y<H-3;y++){
+    for(let x=3;x<W-3;x++){
+      let valid=true;
+
+      for(let dy=-1;dy<=1 && valid;dy++){
+        for(let dx=-1;dx<=1;dx++){
+          if(!expanded[(y+dy)*W+x+dx]){
+            valid=false;
+            break;
+          }
+        }
+      }
+
+      if(valid)connected[y*W+x]=1;
+    }
+  }
+
+  return connected;
 }
 
-/* =========================================
-   DART SHAFT AND TIP ESTIMATION
-========================================= */
+/* DART AXIS AND TIP ESTIMATION */
 
 function estimateDartTip(points){
+  const n=points.length;
+  if(n<8)return null;
 
-  const n = points.length;
+  const cx=points.reduce((s,p)=>s+p.x,0)/n;
+  const cy=points.reduce((s,p)=>s+p.y,0)/n;
 
-  if(n<12)return null;
-
-  const cx = points.reduce(
-    (sum,p)=>sum+p.x,0
-  )/n;
-
-  const cy = points.reduce(
-    (sum,p)=>sum+p.y,0
-  )/n;
-
-  let xx = 0;
-  let yy = 0;
-  let xy = 0;
+  let xx=0,yy=0,xy=0;
 
   for(const p of points){
+    const dx=p.x-cx;
+    const dy=p.y-cy;
 
-    const dx = p.x-cx;
-    const dy = p.y-cy;
-
-    xx += dx*dx;
-    yy += dy*dy;
-    xy += dx*dy;
+    xx+=dx*dx;
+    yy+=dy*dy;
+    xy+=dx*dy;
   }
 
-  const angle =
-    .5*Math.atan2(
-      2*xy,xx-yy
-    );
+  const angle=.5*Math.atan2(2*xy,xx-yy);
+  const ux=Math.cos(angle);
+  const uy=Math.sin(angle);
 
-  const ux = Math.cos(angle);
-  const uy = Math.sin(angle);
-
-  const projected = points.map(p=>{
-
-    const dx = p.x-cx;
-    const dy = p.y-cy;
+  const projected=points.map(p=>{
+    const dx=p.x-cx;
+    const dy=p.y-cy;
 
     return {
-
-      x:p.x,
-      y:p.y,
-
+      x:p.x,y:p.y,
       along:dx*ux+dy*uy,
-
       across:-dx*uy+dy*ux
     };
   });
 
-  projected.sort(
-    (a,b)=>a.along-b.along
-  );
+  projected.sort((a,b)=>a.along-b.along);
 
-  const min =
-    projected[0].along;
-
-  const max =
-    projected[n-1].along;
-
-  const length = max-min;
+  const min=projected[0].along;
+  const max=projected[n-1].along;
+  const length=max-min;
 
   if(length<9)return null;
 
-  const edgeSize =
-    Math.max(3,length*.20);
+  const edgeSize=Math.max(3,length*.20);
 
-  const first = projected.filter(
+  const first=projected.filter(
     p=>p.along<=min+edgeSize
   );
 
-  const last = projected.filter(
+  const last=projected.filter(
     p=>p.along>=max-edgeSize
   );
 
-  function endpointWidth(group){
-
+  function width(group){
     if(!group.length)return Infinity;
 
-    const values = group.map(
-      p=>p.across
-    );
+    const values=group.map(p=>p.across);
 
-    return Math.max(...values)-
-      Math.min(...values);
+    return Math.max(...values)-Math.min(...values);
   }
 
-  const firstWidth =
-    endpointWidth(first);
+  const firstWidth=width(first);
+  const lastWidth=width(last);
 
-  const lastWidth =
-    endpointWidth(last);
+  const widthDifference=Math.abs(firstWidth-lastWidth);
 
-  const widthDifference =
-    Math.abs(firstWidth-lastWidth);
+  if(!Number.isFinite(widthDifference) ||
+     widthDifference<1)return null;
 
-  if(widthDifference<1.5){
+  const firstIsTip=firstWidth<lastWidth;
 
-    return null;
-  }
-
-  const firstIsTip =
-    firstWidth<lastWidth;
-
-  const endpoint = firstIsTip
+  const endpoint=firstIsTip
     ? projected[0]
     : projected[n-1];
 
-  const tipX = endpoint.x;
-  const tipY = endpoint.y;
-
-  const position = imageToBoard(
-    board,tipX,tipY
+  const position=imageToBoard(
+    board,endpoint.x,endpoint.y
   );
 
-  if(!position)return null;
+  if(!position ||
+     Math.hypot(position.x,position.y)>1.18)return null;
 
-  if(
-    Math.hypot(
-      position.x,
-      position.y
-    )>1.18
-  )return null;
+  const confidence=widthDifference/
+    Math.max(firstWidth,lastWidth,1);
 
   return {
-
-    x:tipX,
-    y:tipY,
-
+    x:endpoint.x,
+    y:endpoint.y,
     length,
-
-    confidence:
-      widthDifference/
-      Math.max(
-        firstWidth,
-        lastWidth,
-        1
-      )
+    confidence
   };
 }
 
-/* =========================================
-   NEW DART RECOGNITION
-========================================= */
+/* NEW DART DETECTION */
 
 function findNewDart(frame){
+  const difference=dartDifference(
+    frame,dartReference,
+    DART_CONFIG.differenceThreshold
+  );
 
-  if(!dartReference || !scoringMask){
+  if(difference.count<DART_CONFIG.minimumPixels){
     return null;
   }
 
-  const a = frame.data;
-  const b = dartReference.data;
-
-  const mask = new Uint8Array(W*H);
-  const expanded = new Uint8Array(W*H);
-  const connected = new Uint8Array(W*H);
-
-  let count = 0;
-
-  const shifts = [];
-
-  for(let i=0;i<W*H;i+=113){
-
-    if(!scoringMask[i])continue;
-
-    const p = i*4;
-
-    shifts.push(
-      (
-        a[p]-b[p]+
-        a[p+1]-b[p+1]+
-        a[p+2]-b[p+2]
-      )/3
-    );
-  }
-
-  const shift = median(shifts);
-
-  for(let i=0;i<W*H;i++){
-
-    if(!scoringMask[i])continue;
-
-    const p = i*4;
-
-    const difference = Math.max(
-
-      Math.abs(a[p]-b[p]-shift),
-
-      Math.abs(a[p+1]-b[p+1]-shift),
-
-      Math.abs(a[p+2]-b[p+2]-shift)
-    );
-
-    if(difference>=24){
-
-      mask[i] = 1;
-      count++;
-    }
-  }
-
-  if(count<8){
-
-    debug("Monitoring · Changed pixels: "+count);
-
+  if(difference.count>DART_CONFIG.maximumPixels){
+    debug("Large movement · Waiting for stable board");
     return null;
   }
 
-  if(count>12000){
+  const connected=connectFragments(difference.mask);
+  const groups=components(connected,1,true);
+  const candidates=[];
 
-    debug("Movement detected · Waiting");
+  for(const group of groups){
+    if(group.area>DART_CONFIG.maximumPixels)continue;
 
-    return null;
-  }
-
-  // Connect fragmented dart silhouettes.
-
-  for(let y=3;y<H-3;y++){
-
-    for(let x=3;x<W-3;x++){
-
-      if(!mask[y*W+x])continue;
-
-      for(let dy=-2;dy<=2;dy++){
-
-        for(let dx=-2;dx<=2;dx++){
-
-          expanded[
-            (y+dy)*W+x+dx
-          ] = 1;
-        }
-      }
-    }
-  }
-
-  // Restore approximate original shape.
-
-  for(let y=3;y<H-3;y++){
-
-    for(let x=3;x<W-3;x++){
-
-      let valid = true;
-
-      for(let dy=-1;dy<=1;dy++){
-
-        for(let dx=-1;dx<=1;dx++){
-
-          if(!expanded[(y+dy)*W+x+dx]){
-
-            valid = false;
-            break;
-          }
-        }
-
-        if(!valid)break;
-      }
-
-      if(valid){
-
-        connected[y*W+x] = 1;
-      }
-    }
-  }
-
-  const components =
-    findDartComponents(connected);
-
-  const candidates = [];
-
-  for(const component of components){
-
-    // Use original pixels for tip estimation.
-
-    const points = component.filter(p=>
-      mask[p.y*W+p.x]
+    const points=group.points.filter(
+      p=>difference.mask[p.y*W+p.x]
     );
 
-    if(points.length<8)continue;
+    const tip=estimateDartTip(points);
 
-    const tip = estimateDartTip(points);
-
-    if(!tip)continue;
-
-    if(tip.confidence<.10)continue;
+    if(!tip || tip.confidence<.10)continue;
 
     candidates.push(tip);
   }
 
-  candidates.sort((a,b)=>
-
-    b.confidence*b.length-
-    a.confidence*a.length
+  candidates.sort(
+    (a,b)=>b.confidence*b.length-a.confidence*a.length
   );
 
   debug(
-
-    "Changed pixels: "+count+
-
-    " · Components: "+components.length+
-
+    "Changed pixels: "+difference.count+
+    " · Components: "+groups.length+
     " · Candidates: "+candidates.length
   );
 
   return candidates[0] || null;
 }
 
-  if(
-    difference.count<
-      DART_CONFIG.minimumPixels ||
-    difference.count>
-      DART_CONFIG.maximumPixels
-  )return null;
-
-  const components =
-    findDartComponents(
-      difference.mask
-    );
-
-  const candidates = [];
-
-  for(const points of components){
-
-    const tip = estimateDartTip(
-      points
-    );
-
-    if(!tip)continue;
-
-    if(tip.confidence<.20)continue;
-
-    candidates.push(tip);
-  }
-
-  candidates.sort(
-
-    (a,b)=>
-
-      (b.confidence*b.length)-
-      (a.confidence*a.length)
-  );
-
-  return candidates[0]||null;
-}
-
-/* =========================================
-   REGISTER CONFIRMED DART
-========================================= */
+/* REGISTER DART */
 
 function registerDart(tip,frame){
-
   if(detectedDarts.length>=3)return;
 
-  const result = calculateDartScore(
-    tip.x,tip.y
-  );
+  const result=calculateDartScore(tip.x,tip.y);
 
-  if(!result)return;
+  if(!result || !Number.isFinite(result.score)){
+    uncertainDart=true;
+
+    setStatus(
+      "CHECK DART","yellow",
+      "Impact score uncertain · Use score correction"
+    );
+
+    pendingDart=null;
+    pendingFrames=0;
+    return;
+  }
 
   detectedDarts.push({
-
     x:tip.x,
     y:tip.y,
-
     score:result.score,
     label:result.label,
-
     confidence:tip.confidence
   });
 
-  dartReference = cloneFrame(frame);
-
-  pendingDart = null;
-  pendingFrames = 0;
-
-  lastDartTime = performance.now();
+  dartReference=cloneFrame(frame);
+  pendingDart=null;
+  pendingFrames=0;
+  uncertainDart=false;
+  lastDartTime=performance.now();
 
   updateDartScores();
 
   if(detectedDarts.length===3){
-
-    lastCompletedVisit = visitTotal;
+    lastCompletedVisit=visitTotal;
 
     setStatus(
-
-      "VISIT COMPLETE",
-      "green",
-
-      "Visit "+visitTotal+
-      " · Remove darts"
+      "VISIT COMPLETE","green",
+      "Visit "+visitTotal+" · Remove darts"
     );
-
   }else{
-
     setStatus(
-
-      "DART DETECTED",
-      "green",
-
-      result.label+
-      " · Visit "+visitTotal
+      "DART DETECTED","green",
+      result.label+" · Visit "+visitTotal
     );
   }
 
   debug(
-
-    "Estimated score: "+
-    result.label+
+    "Estimated score: "+result.label+
     " · Tip shape confidence "+
-    Math.round(
-      tip.confidence*100
-    )+"%"
+    Math.round(tip.confidence*100)+"%"
   );
 }
 
-/* =========================================
-   AUTOMATIC DART REMOVAL
-========================================= */
+/* AUTOMATIC VISIT RESET */
 
 function checkDartRemoval(frame){
+  if(!emptyReference ||
+     !dartReference ||
+     !detectedDarts.length)return false;
 
-  if(
-    !emptyReference ||
-    !dartReference ||
-    !detectedDarts.length
-  )return false;
+  const currentDifference=dartDifference(
+    frame,emptyReference,32
+  ).count;
 
-  const currentDifference =
-    dartDifference(
-      frame,
-      emptyReference
-    ).count;
+  const occupiedDifference=dartDifference(
+    dartReference,emptyReference,32
+  ).count;
 
-  const occupiedDifference =
-    dartDifference(
-      dartReference,
-      emptyReference
-    ).count;
+  if(occupiedDifference<12)return false;
 
-  if(
-    occupiedDifference<12
-  )return false;
+  const ratio=currentDifference/occupiedDifference;
 
-  const ratio =
-    currentDifference/
-    occupiedDifference;
-
-  if(
-    ratio<
-    DART_CONFIG.removalThreshold
-  ){
-
+  if(ratio<DART_CONFIG.removalThreshold){
     removalCounter++;
-
   }else{
-
-    removalCounter = 0;
+    removalCounter=0;
   }
 
-  if(
-    removalCounter<
-    DART_CONFIG.removalFrames
-  )return false;
+  if(removalCounter<DART_CONFIG.removalFrames){
+    return false;
+  }
 
-  lastCompletedVisit = visitTotal;
+  lastCompletedVisit=visitTotal;
+  detectedDarts=[];
+  pendingDart=null;
+  pendingFrames=0;
+  removalCounter=0;
+  uncertainDart=false;
 
-  detectedDarts = [];
-
-  pendingDart = null;
-  pendingFrames = 0;
-
-  removalCounter = 0;
-
-  emptyReference = cloneFrame(frame);
-  dartReference = cloneFrame(frame);
-
-  previousScan = cloneFrame(frame);
+  emptyReference=cloneFrame(frame);
+  dartReference=cloneFrame(frame);
+  previousScan=cloneFrame(frame);
 
   updateDartScores();
 
   setStatus(
-
-    "READY TO THROW",
-    "green",
-
-    "Board clear · Throw next dart"
+    "READY TO THROW","green",
+    "Board clear · New visit ready"
   );
 
-  debug(
-    "Previous visit: "+
-    lastCompletedVisit+
-    " · New visit ready"
-  );
+  debug("Previous visit: "+lastCompletedVisit);
 
   return true;
 }
 
-/* =========================================
-   EMPTY BOARD BASELINE
-========================================= */
+/* EMPTY BOARD BASELINE */
 
 function prepareScoring(frame){
-
-  if(!scoringMask){
-
-    buildScoringMask();
-  }
+  if(!scoringMask)buildScoringMask();
 
   if(!baselineCandidate){
-
-    baselineCandidate = cloneFrame(frame);
-    baselineCounter = 1;
-
-    return false;
+    baselineCandidate=cloneFrame(frame);
+    baselineCounter=1;
+    return;
   }
 
-  const changes = dartDifference(
-    frame,baselineCandidate
+  const changes=dartDifference(
+    frame,baselineCandidate,42
   ).count;
 
-  if(changes>25){
-
-    baselineCandidate = cloneFrame(frame);
-    baselineCounter = 1;
-
-    return false;
+  if(changes>80){
+    baselineCandidate=cloneFrame(frame);
+    baselineCounter=1;
+    return;
   }
 
   baselineCounter++;
 
-  if(
-    baselineCounter<
-    DART_CONFIG.baselineFrames
-  ){
-
+  if(baselineCounter<DART_CONFIG.baselineFrames){
     setStatus(
-      "PREPARING SCORING",
-      "blue",
+      "PREPARING SCORING","blue",
       "Keep the board empty and still"
     );
-
-    return false;
+    return;
   }
 
-  emptyReference = cloneFrame(frame);
-  dartReference = cloneFrame(frame);
-
-  previousScan = cloneFrame(frame);
-
-  scoringGeneration = cameraGeneration;
-  previousBoard = board;
-
-  scoringActive = true;
+  emptyReference=cloneFrame(frame);
+  dartReference=cloneFrame(frame);
+  previousScan=cloneFrame(frame);
+  scoringActive=true;
 
   setStatus(
-
-    "READY TO THROW",
-    "green",
-
+    "READY TO THROW","green",
     "Experimental automatic scoring active"
   );
 
-  debug(
-
-    "Geometry locked · Sector orientation provisional"
-  );
+  debug("Geometry locked · Upright board assumed");
 
   updateDartScores();
-
-  return true;
 }
 
-/* =========================================
-   LIVE SCORING MONITOR
-========================================= */
+/* LIVE DART MONITOR */
 
-function monitorDarts(now){
+function monitorDarts(now,frame){
+  if(!running || mode!=="locked" || !board)return;
 
-  if(
-    !running ||
-    mode!=="locked" ||
-    !board
-  )return;
+  if(now-lastDartScan<DART_CONFIG.interval)return;
 
-  if(
-    now-lastDartScan<
-    DART_CONFIG.interval
-  )return;
-
-  lastDartScan = now;
-
-  const frame = capture();
+  lastDartScan=now;
 
   if(!scoringActive){
-
     prepareScoring(frame);
-
     return;
   }
 
-  if(
-    scoringGeneration!==cameraGeneration ||
-    previousBoard!==board
-  ){
+  if(now-lastDartTime<DART_CONFIG.cooldown)return;
 
-    resetDartEngine();
-    buildScoringMask();
+  if(checkDartRemoval(frame))return;
 
-    return;
-  }
-
-  if(
-    now-lastDartTime<
-    DART_CONFIG.cooldown
-  )return;
-
-  if(checkDartRemoval(frame)){
-
-    return;
-  }
-
-  if(detectedDarts.length>=3){
-
-    return;
-  }
+  if(detectedDarts.length>=3 || uncertainDart)return;
 
   if(previousScan){
-
-    const motion = dartDifference(
-      frame,previousScan
+    const motion=dartDifference(
+      frame,previousScan,42
     ).count;
 
-    previousScan = cloneFrame(frame);
+    previousScan=cloneFrame(frame);
 
     if(motion>120){
-
-      pendingDart = null;
-      pendingFrames = 0;
-
+      pendingDart=null;
+      pendingFrames=0;
       return;
     }
-
   }else{
-
-    previousScan = cloneFrame(frame);
-
+    previousScan=cloneFrame(frame);
     return;
   }
 
-  const candidate =
-    findNewDart(frame);
+  const candidate=findNewDart(frame);
 
   if(!candidate){
-
-    pendingDart = null;
-    pendingFrames = 0;
-
+    pendingDart=null;
+    pendingFrames=0;
     return;
   }
 
   if(!pendingDart){
-
-    pendingDart = candidate;
-    pendingFrames = 1;
-
+    pendingDart=candidate;
+    pendingFrames=1;
     return;
   }
 
-  const movement = Math.hypot(
-
-    candidate.x-pendingDart.x,
-
-    candidate.y-pendingDart.y
-  );
-
-  if(
-    movement>
-    DART_CONFIG.tipTolerance
-  ){
-
-    pendingDart = candidate;
-    pendingFrames = 1;
-
+  if(distance(candidate,pendingDart)>
+     DART_CONFIG.tipTolerance){
+    pendingDart=candidate;
+    pendingFrames=1;
     return;
   }
 
   pendingFrames++;
 
-  pendingDart.x = (
+  pendingDart.x=(pendingDart.x+candidate.x)/2;
+  pendingDart.y=(pendingDart.y+candidate.y)/2;
 
-    pendingDart.x+
-    candidate.x
-
-  )/2;
-
-  pendingDart.y = (
-
-    pendingDart.y+
-    candidate.y
-
-  )/2;
-
-  if(
-    pendingFrames>=
-    DART_CONFIG.confirmationFrames
-  ){
-
-    registerDart(
-      pendingDart,
-      frame
-    );
+  if(pendingFrames>=DART_CONFIG.confirmationFrames){
+    registerDart(pendingDart,frame);
   }
 }
 
-/* =========================================
-   MANUAL SCORE CORRECTION
-========================================= */
+/* MANUAL SCORE CORRECTION */
 
 function parseManualScore(value){
+  const input=String(value).trim().toUpperCase();
 
-  const input =
-    String(value)
-    .trim()
-    .toUpperCase();
-
-  if(
-    input==="BULL" ||
-    input==="50"
-  ){
-
-    return {
-      score:50,
-      label:"BULL"
-    };
+  if(input==="BULL" || input==="50"){
+    return {score:50,label:"BULL"};
   }
 
-  if(input==="25"){
+  if(input==="25")return {score:25,label:"25"};
 
-    return {
-      score:25,
-      label:"25"
-    };
+  if(input==="MISS" || input==="0"){
+    return {score:0,label:"MISS"};
   }
 
-  if(
-    input==="MISS" ||
-    input==="0"
-  ){
-
-    return {
-      score:0,
-      label:"MISS"
-    };
-  }
-
-  const match = input.match(
+  const match=input.match(
     /^([SDT]?)([1-9]|1[0-9]|20)$/
   );
 
   if(!match)return null;
 
-  const type = match[1]||"S";
+  const type=match[1] || "S";
+  const number=Number(match[2]);
 
-  const number =
-    Number(match[2]);
-
-  const multiplier =
-    type==="T"?3:
-    type==="D"?2:1;
+  const multiplier=type==="T"?3:type==="D"?2:1;
 
   return {
-
     score:number*multiplier,
-
     label:type+number
   };
 }
 
 function correctScore(){
+  if(mode!=="locked" || !scoringActive)return;
 
-  if(
-    mode!=="locked" ||
-    !scoringActive
-  )return;
+  const defaultIndex=uncertainDart
+    ? Math.min(3,detectedDarts.length+1)
+    : Math.max(1,detectedDarts.length);
 
-  const defaultIndex = detectedDarts.length
-    ? detectedDarts.length
-    : 1;
-
-  const inputIndex = prompt(
+  const inputIndex=prompt(
     "Dart number to correct or add (1, 2 or 3)",
     String(defaultIndex)
   );
 
   if(inputIndex===null)return;
 
-  const index = Number(inputIndex)-1;
+  const index=Number(inputIndex)-1;
 
-  if(
-    !Number.isInteger(index) ||
-    index<0 ||
-    index>2 ||
-    index>detectedDarts.length
-  ){
-
+  if(!Number.isInteger(index) ||
+     index<0 || index>2 ||
+     index>detectedDarts.length){
     alert("Select an existing dart or the next dart");
-
     return;
   }
 
-  const current = detectedDarts[index];
+  const current=detectedDarts[index];
 
-  const input = prompt(
-
+  const input=prompt(
     "Enter S20, D20, T20, 25, BULL or MISS",
-
-    current ? current.label : ""
+    current?.label || ""
   );
 
   if(input===null)return;
 
-  const result = parseManualScore(input);
+  const result=parseManualScore(input);
 
   if(!result){
-
     alert("Invalid dart score");
-
     return;
   }
 
   if(current){
-
-    current.score = result.score;
-    current.label = result.label;
-
+    current.score=result.score;
+    current.label=result.label;
   }else{
-
     detectedDarts.push({
-
-      x:null,
-      y:null,
-
+      x:null,y:null,
       score:result.score,
       label:result.label,
-
       confidence:0,
       manual:true
     });
 
-    dartReference = cloneFrame(capture());
+    dartReference=cloneFrame(capture());
   }
 
-  pendingDart = null;
-  pendingFrames = 0;
-
-  lastDartTime = performance.now();
+  uncertainDart=false;
+  pendingDart=null;
+  pendingFrames=0;
+  lastDartTime=performance.now();
 
   updateDartScores();
 
   if(detectedDarts.length===3){
-
-    lastCompletedVisit = visitTotal;
+    lastCompletedVisit=visitTotal;
 
     setStatus(
-
-      "VISIT COMPLETE",
-      "green",
-
-      "Visit "+visitTotal+
-      " · Remove darts"
+      "VISIT COMPLETE","green",
+      "Visit "+visitTotal+" · Remove darts"
     );
-
   }else{
-
     setStatus(
-
-      "SCORE CORRECTED",
-      "green",
-
-      result.label+
-      " · Visit "+visitTotal
+      "SCORE CORRECTED","green",
+      result.label+" · Visit "+visitTotal
     );
   }
 }
 
-/* =========================================
-   DART IMPACT MARKERS
-========================================= */
+/* PERSPECTIVE CORRECTED PREVIEW */
 
-function drawDartMarkers(){
+function buildWarpMap(){
+  if(!board)return;
 
-  if(
-    !scoringActive ||
-    !board ||
-    mode!=="locked"
-  )return;
+  warpMap=new Int32Array(N);
+  warpMap.fill(-1);
 
-  ctx.save();
+  const c=CONFIG.centre;
+  const r=CONFIG.radius;
 
-  for(const dart of detectedDarts){
-
-    if(
-      !Number.isFinite(dart.x) ||
-      !Number.isFinite(dart.y)
-    )continue;
-
-    let x = dart.x;
-    let y = dart.y;
-
-    if(previewMode){
-
-      const p = imageToBoard(
-        board,x,y
+  for(let y=0;y<H;y++){
+    for(let x=0;x<W;x++){
+      const p=boardToImage(
+        board,(x-c)/r,(y-c)/r
       );
 
       if(!p)continue;
 
-      x = CONFIG.centre+
-        p.x*CONFIG.radius;
+      const sx=Math.round(p.x);
+      const sy=Math.round(p.y);
 
-      y = CONFIG.centre+
-        p.y*CONFIG.radius;
+      if(sx<0 || sy<0 || sx>=W || sy>=H)continue;
+
+      warpMap[y*W+x]=(sy*W+sx)*4;
     }
+  }
+}
+
+function renderCorrected(){
+  if(!board)return;
+
+  if(!warpMap)buildWarpMap();
+  if(!warpMap)return;
+
+  const source=capture();
+  const output=cc.createImageData(W,H);
+
+  for(let i=0;i<N;i++){
+    const p=warpMap[i];
+    const d=i*4;
+
+    if(p>=0){
+      output.data[d]=source.data[p];
+      output.data[d+1]=source.data[p+1];
+      output.data[d+2]=source.data[p+2];
+    }
+
+    output.data[d+3]=255;
+  }
+
+  cc.putImageData(output,0,0);
+}
+
+/* CALIBRATION OVERLAY */
+
+function drawProjectedRing(radius,color){
+  ctx.beginPath();
+
+  let started=false;
+
+  for(let i=0;i<=180;i++){
+    const a=i*TAU/180;
+
+    const p=boardToImage(
+      board,Math.cos(a)*radius,Math.sin(a)*radius
+    );
+
+    if(!p)continue;
+
+    if(!started){
+      ctx.moveTo(p.x,p.y);
+      started=true;
+    }else{
+      ctx.lineTo(p.x,p.y);
+    }
+  }
+
+  ctx.closePath();
+  ctx.strokeStyle=color;
+  ctx.lineWidth=1.3;
+  ctx.stroke();
+}
+
+function drawCalibration(){
+  if(!board)return;
+
+  const color=mode==="locked"?"#37f5a1":"#27b8ff";
+
+  ctx.save();
+
+  for(const r of [
+    1,162/170,107/170,99/170,15.9/170,6.35/170
+  ]){
+    drawProjectedRing(r,color);
+  }
+
+  for(let i=0;i<20;i++){
+    const angle=board.orientation+
+      (i*18-9)*Math.PI/180;
+
+    const p1=boardToImage(
+      board,
+      Math.cos(angle)*15.9/170,
+      Math.sin(angle)*15.9/170
+    );
+
+    const p2=boardToImage(
+      board,Math.cos(angle),Math.sin(angle)
+    );
+
+    if(!p1 || !p2)continue;
+
+    ctx.beginPath();
+    ctx.moveTo(p1.x,p1.y);
+    ctx.lineTo(p2.x,p2.y);
+    ctx.strokeStyle=color;
+    ctx.lineWidth=1;
+    ctx.stroke();
+  }
+
+  ctx.beginPath();
+  ctx.arc(board.bull.x,board.bull.y,3,0,TAU);
+  ctx.fillStyle=color;
+  ctx.fill();
+
+  ctx.restore();
+}
+
+function drawCorrectedOverlay(){
+  const c=CONFIG.centre;
+  const r=CONFIG.radius;
+
+  ctx.save();
+
+  ctx.strokeStyle="#27b8ff";
+  ctx.lineWidth=1.2;
+
+  for(const ratio of [
+    1,162/170,107/170,99/170,15.9/170,6.35/170
+  ]){
+    ctx.beginPath();
+    ctx.arc(c,c,r*ratio,0,TAU);
+    ctx.stroke();
+  }
+
+  for(let i=0;i<20;i++){
+    const a=orientationOffset+
+      (i*18-9)*Math.PI/180;
 
     ctx.beginPath();
 
-    ctx.arc(
-      x,y,5,0,TAU
+    ctx.moveTo(
+      c+Math.cos(a)*r*15.9/170,
+      c+Math.sin(a)*r*15.9/170
     );
 
-    ctx.strokeStyle =
-      "#37f5a1";
-
-    ctx.lineWidth = 2;
+    ctx.lineTo(
+      c+Math.cos(a)*r,
+      c+Math.sin(a)*r
+    );
 
     ctx.stroke();
 
-    ctx.fillStyle =
-      "#37f5a1";
+    const labelAngle=orientationOffset+i*Math.PI/10;
 
-    ctx.font =
-      "bold 13px Arial";
-
-    ctx.textAlign = "left";
-
-    ctx.textBaseline = "bottom";
+    ctx.fillStyle="white";
+    ctx.font="bold 12px Arial";
+    ctx.textAlign="center";
+    ctx.textBaseline="middle";
 
     ctx.fillText(
-
-      dart.label,
-
-      x+9,y-9
+      SECTORS[i],
+      c+Math.cos(labelAngle)*r*1.12,
+      c+Math.sin(labelAngle)*r*1.12
     );
+  }
+
+  ctx.fillStyle="#ffd166";
+  ctx.font="bold 10px Arial";
+  ctx.textAlign="center";
+
+  ctx.fillText("PROVISIONAL SECTOR ORIENTATION",c,18);
+
+  ctx.restore();
+}
+
+/* DART IMPACT MARKERS */
+
+function drawDartMarkers(){
+  if(!scoringActive || !board || mode!=="locked")return;
+
+  ctx.save();
+
+  for(const dart of detectedDarts){
+    if(!Number.isFinite(dart.x) ||
+       !Number.isFinite(dart.y))continue;
+
+    let x=dart.x;
+    let y=dart.y;
+
+    if(previewMode){
+      const p=imageToBoard(board,x,y);
+      if(!p)continue;
+
+      x=CONFIG.centre+p.x*CONFIG.radius;
+      y=CONFIG.centre+p.y*CONFIG.radius;
+    }
+
+    ctx.beginPath();
+    ctx.arc(x,y,5,0,TAU);
+    ctx.strokeStyle="#37f5a1";
+    ctx.lineWidth=2;
+    ctx.stroke();
+
+    ctx.fillStyle="#37f5a1";
+    ctx.font="bold 13px Arial";
+    ctx.textAlign="left";
+    ctx.textBaseline="bottom";
+    ctx.fillText(dart.label,x+9,y-9);
   }
 
   ctx.restore();
 }
 
-/* =========================================
-   MAIN RENDER ENGINE
-========================================= */
+/* MAIN RENDER ENGINE */
 
 function renderLoop(now,generation){
-
-  if(
-    !running ||
-    generation!==cameraGeneration
-  )return;
+  if(!running || generation!==cameraGeneration)return;
 
   try{
-
-    if(!drawCamera()){
-
-      requestAnimationFrame(
-        t=>renderLoop(t,generation)
-      );
-
+    if(video.currentTime===lastRenderedFrame ||
+       !drawCamera()){
       return;
     }
 
-    const cw = $("stage").clientWidth;
-    const ch = $("stage").clientHeight;
+    lastRenderedFrame=video.currentTime;
 
-    if(
-      canvas.width!==cw ||
-      canvas.height!==ch
-    ){
+    const cw=$("stage").clientWidth;
+    const ch=$("stage").clientHeight;
 
-      canvas.width = cw;
-      canvas.height = ch;
+    if(cw<1 || ch<1)return;
+
+    if(canvas.width!==cw || canvas.height!==ch){
+      canvas.width=cw;
+      canvas.height=ch;
     }
 
-    ctx.fillStyle = "#000";
-
+    ctx.fillStyle="black";
     ctx.fillRect(0,0,cw,ch);
 
-    const scale = Math.min(
-      cw/W,ch/H
-    );
-
-    const ox = (cw-W*scale)/2;
-    const oy = (ch-H*scale)/2;
+    const scale=Math.min(cw/W,ch/H);
+    const ox=(cw-W*scale)/2;
+    const oy=(ch-H*scale)/2;
 
     ctx.save();
 
     try{
-
       ctx.translate(ox,oy);
-
       ctx.scale(scale,scale);
 
-      if(
-        previewMode &&
-        board &&
-        mode==="locked"
-      ){
-
+      if(previewMode && board && mode==="locked"){
         if(now-lastPreview>250){
-
-          lastPreview = now;
-
+          lastPreview=now;
           renderCorrected();
         }
 
-        ctx.drawImage(
-          corrected,0,0,W,H
-        );
-
+        ctx.drawImage(corrected,0,0,W,H);
         drawCorrectedOverlay();
 
       }else{
+        ctx.drawImage(work,0,0,W,H);
 
-        ctx.drawImage(
-          work,0,0,W,H
-        );
-
-        if(
-
-          board && (
-
-            mode==="calibrating" ||
-
-            (
-              mode==="locked" &&
-              now<overlayUntil
-            )
-          )
-        ){
-
+        if(board && (
+          mode==="calibrating" ||
+          (mode==="locked" && now<overlayUntil)
+        )){
           drawCalibration();
         }
       }
@@ -4061,267 +2379,174 @@ function renderLoop(now,generation){
       drawDartMarkers();
 
     }finally{
-
       ctx.restore();
     }
 
     if(mode==="calibrating"){
-
       calibrationStep(now);
 
     }else if(mode==="locked"){
+      if(now-lastDartScan>=DART_CONFIG.interval ||
+         now-lastMovementCheck>=700){
 
-      monitorCalibration(now);
+        const frame=capture();
 
-      if(mode==="locked"){
+        monitorCalibration(now,frame);
 
-        monitorDarts(now);
+        if(mode==="locked"){
+          monitorDarts(now,frame);
+        }
       }
     }
 
   }catch(err){
+    mode="paused";
+    previewMode=false;
 
-    debug(
-      "Render error: "+err.message
-    );
+    $("start").disabled=false;
+    $("zoom").disabled=false;
+    $("preview").disabled=true;
+    $("correct").disabled=true;
+    $("start").textContent="RECALIBRATE";
 
-    setStatus(
-      "VISION ERROR",
-      "red",
-      err.message
-    );
+    setStatus("VISION ERROR","red",err.message);
+    debug("Render error: "+err.message);
 
-    mode = "paused";
-
-    $("start").disabled = false;
-    $("zoom").disabled = false;
-    $("preview").disabled = true;
-    $("correct").disabled = true;
-
-    $("start").textContent =
-      "RECALIBRATE";
+  }finally{
+    if(running && generation===cameraGeneration){
+      requestAnimationFrame(
+        t=>renderLoop(t,generation)
+      );
+    }
   }
+}
 
-  requestAnimationFrame(
+/* USER CONTROLS */
 
-    t=>renderLoop(
-      t,generation
-    )
+$("zoom").addEventListener("input",e=>{
+  if(mode==="locked")return;
+
+  zoom=Number(e.target.value);
+
+  $("zoomValue").textContent=zoom.toFixed(2)+"×";
+
+  board=null;
+  samples=[];
+  warpMap=null;
+
+  resetMetrics();
+  resetDartEngine();
+
+  if(!running)return;
+
+  mode="ready";
+
+  setStatus(
+    "ZOOM ADJUSTED","blue",
+    "Automatic calibration will restart"
   );
+
+  scheduleCalibration();
+});
+
+$("start").addEventListener("click",()=>{
+  if(!running){
+    startCamera();
+  }else{
+    startCalibration();
+  }
+});
+
+$("restart").addEventListener("click",startCamera);
+
+$("preview").addEventListener("click",()=>{
+  if(mode!=="locked")return;
+
+  previewMode=!previewMode;
+  lastPreview=0;
+
+  $("preview").textContent=
+    previewMode?"LIVE CAMERA":"CORRECTED VIEW";
+});
+
+$("correct").addEventListener("click",correctScore);
+
+document.addEventListener("visibilitychange",()=>{
+  if(document.hidden){
+    if(mode==="calibrating"){
+      samples=[];
+      updateProgress();
+    }
+
+    if(mode==="locked"){
+      mode="paused";
+      previewMode=false;
+
+      $("preview").disabled=true;
+      $("zoom").disabled=false;
+      $("correct").disabled=true;
+      $("lockStatus").textContent="UNLOCKED";
+      $("start").textContent="RECALIBRATE";
+
+      setStatus(
+        "CALIBRATION PAUSED","yellow",
+        "Recalibrate after returning to the camera"
+      );
+    }
+  }else if(running && video.paused){
+    video.play().catch(err=>{
+      setStatus("CAMERA PAUSED","yellow",err.message);
+    });
+  }
+});
+
+window.addEventListener("pagehide",stopCamera);
+
+window.addEventListener("error",event=>{
+  debug("Runtime error: "+event.message);
+
+  $("start").disabled=false;
+
+  setStatus(
+    "RUNTIME ERROR","red",
+    event.message || "Unexpected runtime error"
+  );
+});
+
+window.addEventListener("unhandledrejection",event=>{
+  const message=event.reason?.message ||
+    String(event.reason);
+
+  debug(message);
+
+  $("start").disabled=false;
+
+  setStatus("ENGINE ERROR","red",message);
+});
+
+/* AUTOMATIC CAMERA STARTUP */
+
+function initialize(){
+  $("start").disabled=false;
+  $("start").textContent="START CAMERA";
+
+  setStatus(
+    "READY","blue",
+    "Starting smartphone camera"
+  );
+
+  debug("DARTIQ V20 · Native Vision Engine Ready");
+
+  startCamera();
 }
 
-/* =========================================
-   USER CONTROLS
-========================================= */
-
-$("zoom").addEventListener(
-
-  "input",e=>{
-
-    if(mode==="locked")return;
-
-    zoom = Number(e.target.value);
-
-    $("zoomValue").textContent =
-      zoom.toFixed(2)+"×";
-
-    board = null;
-    samples = [];
-
-    warpMap = null;
-
-    resetMetrics();
-    resetDartEngine();
-
-    if(!running)return;
-
-    mode = "ready";
-
-    setStatus(
-      "ZOOM ADJUSTED",
-      "blue",
-      "Automatic calibration will restart"
-    );
-
-    scheduleCalibration();
-  }
-);
-
-$("start").addEventListener(
-
-  "click",async()=>{
-
-    if(!running){
-
-      await startCamera();
-
-    }else{
-
-      startCalibration();
-    }
-  }
-);
-
-$("restart").addEventListener(
-
-  "click",async()=>{
-
-    await startCamera();
-  }
-);
-
-$("preview").addEventListener(
-
-  "click",()=>{
-
-    if(mode!=="locked")return;
-
-    previewMode = !previewMode;
-
-    lastPreview = 0;
-
-    $("preview").textContent =
-      previewMode?
-      "LIVE CAMERA":
-      "CORRECTED VIEW";
-  }
-);
-
-$("correct").addEventListener(
-  "click",
-  correctScore
-);
-
-document.addEventListener(
-
-  "visibilitychange",()=>{
-
-    if(document.hidden){
-
-      if(mode==="calibrating"){
-
-        samples = [];
-
-        updateProgress();
-      }
-
-      if(mode==="locked"){
-
-        mode = "paused";
-
-        previewMode = false;
-
-        orientationVerified = false;
-
-        $("preview").disabled = true;
-        $("zoom").disabled = false;
-        $("correct").disabled = true;
-
-        $("lockStatus").textContent =
-          "UNLOCKED";
-
-        $("start").textContent =
-          "RECALIBRATE";
-
-        setStatus(
-          "CALIBRATION PAUSED",
-          "yellow",
-          "Recalibrate after returning to the camera"
-        );
-      }
-    }
-  }
-);
-
-window.addEventListener(
-
-  "beforeunload",
-
-  stopCamera
-);
-
-window.addEventListener(
-
-  "error",event=>{
-
-    debug(
-      "Runtime error: "+
-      event.message
-    );
-
-    $("start").disabled = false;
-
-    setStatus(
-      "RUNTIME ERROR",
-      "red",
-      event.message
-    );
-  }
-);
-
-window.addEventListener(
-
-  "unhandledrejection",event=>{
-
-    const message =
-      event.reason &&
-      event.reason.message
-      ? event.reason.message
-      : String(event.reason);
-
-    debug(message);
-
-    $("start").disabled = false;
-
-    setStatus(
-      "ENGINE ERROR",
-      "red",
-      message
-    );
-  }
-);
-
-/* =========================================
-   AUTOMATIC CAMERA INITIALIZATION
-========================================= */
-
-async function autoStartCamera(){
-
-  if(running || cameraStarting)return;
-
-  await startCamera();
-}
-
-$("start").disabled = false;
-
-$("start").textContent =
-  "START CAMERA";
-
-setStatus(
-  "READY",
-  "green",
-  "Starting smartphone camera"
-);
-
-debug(
-  "DARTIQ V20.6 · Native Vision Engine Ready"
-);
-
-if(document.readyState==="complete"){
-
-  autoStartCamera();
-
+if(document.readyState==="loading"){
+  document.addEventListener(
+    "DOMContentLoaded",initialize,{once:true}
+  );
 }else{
-
-  window.addEventListener(
-
-    "load",
-    autoStartCamera,
-    {once:true}
-  );
+  initialize();
 }
-
 </script>
-
 </body>
 </html>
