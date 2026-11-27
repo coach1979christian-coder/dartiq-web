@@ -1,7 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#050b16">
+<title>DARTIQ Board Vision V20.6</title>
+
+<style>
+:root{
+  --bg:#050b16;
+  --blue:#27b8ff;
+  --green:#37f5a1;
+  --red:#ff6578;
+  --yellow:#ffd166;
+  --muted:#9db6cc;
+}
+
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:var(--bg);
+  color:#fff;
+  font-family:Arial,sans-serif;
+}
+
+button,input{font:inherit}
+
+button{
+  border:1px solid var(--blue);
+  border-radius:10px;
+  background:#102b45;
+  color:#fff;
+  padding:10px;
+  font-weight:800;
+}
+
+button:disabled{opacity:.4}
+
+#app{
+  height:100vh;
+  height:100dvh;
+  display:flex;
+  flex-direction:column;
+  padding:8px;
+}
+
+header{
+  height:44px;
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.brand{
+  color:var(--blue);
+  font-size:25px;
+  font-weight:900;
+  letter-spacing:2px;
+  text-shadow:0 0 15px #27b8ff88;
+}
+
+.version{
+  color:var(--muted);
+  font-size:10px;
+  text-align:right;
+  line-height:1.5;
+}
+
+#stage{
+  position:relative;
+  flex:1;
+  min-height:0;
+  border:1px solid #245477;
+  border-radius:12px;
+  overflow:hidden;
+  background:#000;
+}
+
+#camera{
+  position:absolute;
+  width:1px;
+  height:1px;
+  opacity:0;
+  pointer-events:none;
+}
+
+#view{
+  display:block;
+  width:100%;
+  height:100%;
+}
+
+#statusBox{
+  position:absolute;
+  top:8px;
+  left:8px;
+  right:8px;
+  display:flex;
+  justify-content:space-between;
+  gap:6px;
+  pointer-events:none;
+}
+
+.pill{
+  background:#04101ded;
+  border:1px solid #285675;
+  border-radius:8px;
+  padding:8px;
+  font-size:10px;
+  font-weight:800;
+}
+
+#dot{
+  display:inline-block;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--blue);
+  margin-right:5px;
+}
+
+#bottomStatus{
+  position:absolute;
+  bottom:8px;
+  left:8px;
+  right:8px;
+  padding:10px;
+  text-align:center;
+  background:#04101ded;
+  border:1px solid #285675;
+  border-radius:8px;
+  font-size:11px;
+  font-weight:800;
+}
+
+#controls{
+  flex-shrink:0;
+  padding-top:8px;
+}
+
+#zoomRow{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  margin-bottom:8px;
+  font-size:11px;
+  color:var(--muted);
+}
+
+#zoom{
+  flex:1;
+  accent-color:var(--blue);
+}
+
+#zoomValue{
+  color:#fff;
+  min-width:44px;
+}
+
+#start{
+  width:100%;
+  background:linear-gradient(90deg,#0874bd,#27b8ff);
+  color:#00101d;
+  border:0;
+  margin-bottom:8px;
+}
+
+#metrics,#scores{
+  display:grid;
+  gap:6px;
+  margin-bottom:6px;
+}
+
+#metrics{
+  grid-template-columns:repeat(3,1fr);
+}
+
+#scores{
+  grid-template-columns:repeat(4,1fr);
+}
+
+.metric{
+  padding:8px 4px;
+  text-align:center;
+  background:#0b1c2d;
+  border:1px solid #244864;
+  border-radius:10px;
+}
+
+.metric small{
+  display:block;
+  color:var(--muted);
+  font-size:9px;
+  margin-bottom:5px;
+}
+
+.metric strong{
+  display:block;
+  color:var(--blue);
+  font-size:19px;
+}
+
+#visitTotal{
+  color:var(--green);
+  font-size:25px;
+}
+
+#actions{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:6px;
+  margin-top:6px;
+}
+
+#actions button{
+  font-size:10px;
+  padding:10px 4px;
+}
+
+#debug{
+  color:#7899b4;
+  font-size:10px;
+  text-align:center;
+  padding-top:6px;
+  min-height:20px;
+}
+
+#progress{
+  height:4px;
+  background:#13283d;
+  border-radius:4px;
+  overflow:hidden;
+  margin-bottom:8px;
+}
+
+#progressBar{
+  height:100%;
+  width:0%;
+  background:var(--blue);
+  box-shadow:0 0 10px var(--blue);
+  transition:width .2s;
+}
+</style>
+</head>
+
+<body>
+
+<div id="app">
+
+<header>
+  <div class="brand">DARTIQ</div>
+  <div class="version">
+    BOARD VISION<br>
+    PROTOTYPE V20.6
+  </div>
+</header>
+
+<div id="stage">
+
+  <video id="camera" autoplay muted playsinline></video>
+
+  <canvas id="view"></canvas>
+
+  <div id="statusBox">
+    <div class="pill">
+      <span id="dot"></span>
+      <span id="status">READY</span>
+    </div>
+
+    <div class="pill" id="lockStatus">
+      UNLOCKED
+    </div>
+  </div>
+
+  <div id="bottomStatus">
+    Starting smartphone camera
+  </div>
+
+</div>
+
+<div id="controls">
+
+  <div id="scores">
+
+    <div class="metric">
+      <small>DART 1</small>
+      <strong id="dartScore1">—</strong>
+    </div>
+
+    <div class="metric">
+      <small>DART 2</small>
+      <strong id="dartScore2">—</strong>
+    </div>
+
+    <div class="metric">
+      <small>DART 3</small>
+      <strong id="dartScore3">—</strong>
+    </div>
+
+    <div class="metric">
+      <small>VISIT</small>
+      <strong id="visitTotal">0</strong>
+    </div>
+
+  </div>
+
+  <div id="zoomRow">
+    <span>ZOOM</span>
+
+    <input id="zoom" type="range"
+      min="1" max="2.5"
+      step=".05" value="1">
+
+    <strong id="zoomValue">1.00×</strong>
+  </div>
+
+  <button id="start">START CAMERA</button>
+
+  <div id="progress">
+    <div id="progressBar"></div>
+  </div>
+
+  <div id="metrics">
+
+    <div class="metric">
+      <small>RING ALIGNMENT</small>
+      <strong id="quality">0%</strong>
+    </div>
+
+    <div class="metric">
+      <small>EST. RING ERROR</small>
+      <strong id="error">—</strong>
+    </div>
+
+    <div class="metric">
+      <small>STABLE FRAMES</small>
+      <strong id="stable">0/8</strong>
+    </div>
+
+  </div>
+
+  <div id="actions">
+
+    <button id="preview" disabled>
+      CORRECTED VIEW
+    </button>
+
+    <button id="correct" disabled>
+      CORRECT SCORE
+    </button>
+
+    <button id="restart">
+      RESTART CAMERA
+    </button>
+
+  </div>
+
+  <div id="debug">
+    Native DARTIQ Vision Engine
+  </div>
+
+</div>
+</div>
+
+<script>
+"use strict";
+
 /* =========================================
-   DARTIQ V20.5
-   AUTOMATIC DART DETECTION & SCORING
+   DARTIQ BOARD VISION V20.6
+   COMPLETE NATIVE VISION ENGINE
+   NO EXTERNAL LIBRARIES
 ========================================= */
+
+const $ = id => document.getElementById(id);
+
+const video = $("camera");
+const canvas = $("view");
+
+const ctx = canvas.getContext(
+  "2d",{alpha:false}
+);
+
+const work = document.createElement("canvas");
+
+const wc = work.getContext(
+  "2d",{willReadFrequently:true}
+);
+
+const corrected = document.createElement("canvas");
+
+const cc = corrected.getContext("2d");
+
+const W = 480;
+const H = 480;
+
+work.width = W;
+work.height = H;
+
+corrected.width = W;
+corrected.height = H;
+
+const TAU = Math.PI*2;
+
+const SECTORS = [
+  20,1,18,4,13,6,10,15,2,17,
+  3,19,7,16,8,11,14,9,12,5
+];
+
+const CONFIG = {
+  requiredFrames:8,
+  calibrationInterval:500,
+  minimumQuality:.78,
+  minimumAxisRatio:.38,
+  maximumGeometryError:.025,
+  maximumFrameDrift:4,
+  movementThreshold:.19,
+  movementConfirmations:5,
+  radius:180,
+  centre:240
+};
 
 const DART_CONFIG = {
   interval:180,
@@ -9,73 +431,2254 @@ const DART_CONFIG = {
   minimumPixels:12,
   maximumPixels:3500,
   confirmationFrames:4,
-  cooldown:900,
+  cooldown:850,
   removalFrames:10,
-  removalThreshold:0.12,
-  tipTolerance:6
+  removalThreshold:.12,
+  tipTolerance:6,
+  baselineFrames:5
 };
+
+/* =========================================
+   APPLICATION STATE
+========================================= */
+
+let stream = null;
+let running = false;
+let mode = "idle";
+
+let zoom = 1;
+let board = null;
+let samples = [];
+
+let lastCalibration = 0;
+let lastMovementCheck = 0;
+let movementFailures = 0;
+
+let previewMode = false;
+let overlayUntil = 0;
+
+let lockedReference = null;
+let cameraGeneration = 0;
+let autoTimer = null;
+
+let orientationOffset = 0;
+let orientationVerified = false;
+
+let lastPreview = 0;
+let warpMap = null;
+
+let cameraStarting = false;
 
 let dartReference = null;
 let emptyReference = null;
+
 let detectedDarts = [];
 let pendingDart = null;
 let pendingFrames = 0;
+
 let lastDartTime = 0;
 let lastDartScan = 0;
+
 let removalCounter = 0;
 let scoringActive = false;
+
 let visitTotal = 0;
+
 let scoringGeneration = -1;
 let previousBoard = null;
 
-const scoringPanel = document.createElement("div");
+let scoringMask = null;
 
-scoringPanel.style.cssText = `
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:6px;
-  margin-bottom:8px;
-`;
+let baselineCounter = 0;
+let baselineCandidate = null;
 
-scoringPanel.innerHTML = `
-  <div class="metric">
-    <small>DART 1</small>
-    <strong id="dartScore1">—</strong>
-  </div>
-  <div class="metric">
-    <small>DART 2</small>
-    <strong id="dartScore2">—</strong>
-  </div>
-  <div class="metric">
-    <small>DART 3</small>
-    <strong id="dartScore3">—</strong>
-  </div>
-  <div class="metric">
-    <small>VISIT</small>
-    <strong id="visitTotal">0</strong>
-  </div>
-`;
+let previousScan = null;
 
-$("controls").insertBefore(
-  scoringPanel,
-  $("zoomRow")
-);
+let lastCompletedVisit = 0;
 
-const correctionButton =
-  document.createElement("button");
+/* =========================================
+   STATUS ENGINE
+========================================= */
 
-correctionButton.textContent =
-  "CORRECT LAST DART";
+function setStatus(title,color,message){
 
-correctionButton.style.cssText = `
-  width:100%;
-  margin-top:6px;
-  font-size:11px;
-`;
+  $("status").textContent = title;
 
-$("controls").appendChild(
-  correctionButton
-);
+  $("bottomStatus").textContent = message;
+
+  $("dot").style.background =
+    color==="green" ? "#37f5a1" :
+    color==="yellow" ? "#ffd166" :
+    color==="red" ? "#ff6578" :
+    "#27b8ff";
+}
+
+function debug(message){
+
+  $("debug").textContent = message;
+}
+
+function updateProgress(){
+
+  const n = samples.length;
+
+  $("stable").textContent =
+    n+"/"+CONFIG.requiredFrames;
+
+  $("progressBar").style.width =
+    Math.min(
+      100,
+      n/CONFIG.requiredFrames*100
+    )+"%";
+}
+
+function resetMetrics(){
+
+  $("quality").textContent = "0%";
+  $("error").textContent = "—";
+
+  $("stable").textContent =
+    "0/"+CONFIG.requiredFrames;
+
+  $("progressBar").style.width = "0%";
+}
+
+function clamp(v,min,max){
+
+  return Math.max(min,Math.min(max,v));
+}
+
+function distance(a,b){
+
+  return Math.hypot(a.x-b.x,a.y-b.y);
+}
+
+function median(values){
+
+  if(!values.length)return 0;
+
+  const a = [...values].sort((x,y)=>x-y);
+
+  return a[Math.floor(a.length/2)];
+}
+
+function quantile(values,q){
+
+  if(!values.length)return 0;
+
+  const a = [...values].sort((x,y)=>x-y);
+
+  return a[Math.floor(q*(a.length-1))];
+}
+
+/* =========================================
+   CAMERA ENGINE
+========================================= */
+
+function stopCamera(){
+
+  running = false;
+
+  cameraGeneration++;
+
+  clearTimeout(autoTimer);
+
+  if(stream){
+
+    stream.getTracks().forEach(
+      track=>track.stop()
+    );
+  }
+
+  stream = null;
+  video.srcObject = null;
+
+  mode = "idle";
+
+  board = null;
+  samples = [];
+
+  warpMap = null;
+  lockedReference = null;
+
+  previewMode = false;
+  orientationVerified = false;
+
+  resetDartEngine();
+}
+
+async function startCamera(){
+
+  if(cameraStarting)return;
+
+  cameraStarting = true;
+
+  stopCamera();
+
+  const generation = cameraGeneration;
+
+  $("start").disabled = true;
+  $("restart").disabled = true;
+  $("preview").disabled = true;
+
+  $("start").textContent =
+    "STARTING CAMERA";
+
+  setStatus(
+    "STARTING CAMERA",
+    "yellow",
+    "Allow access to the rear camera"
+  );
+
+  let timeoutId;
+
+  try{
+
+    if(
+      !navigator.mediaDevices ||
+      !navigator.mediaDevices.getUserMedia
+    ){
+
+      throw new Error(
+        "Camera requires HTTPS and browser permission"
+      );
+    }
+
+    const cameraRequest =
+      navigator.mediaDevices.getUserMedia({
+
+        audio:false,
+
+        video:{
+          facingMode:{ideal:"environment"},
+          width:{ideal:1920},
+          height:{ideal:1080},
+          frameRate:{ideal:30}
+        }
+      });
+
+    let expired = false;
+
+    cameraRequest.then(s=>{
+
+      if(
+        expired ||
+        generation!==cameraGeneration
+      ){
+
+        s.getTracks().forEach(
+          track=>track.stop()
+        );
+      }
+
+    }).catch(()=>{});
+
+    const timeout = new Promise(
+      (_,reject)=>{
+
+        timeoutId = setTimeout(()=>{
+
+          expired = true;
+
+          reject(
+            new Error("Camera permission timed out")
+          );
+
+        },20000);
+      }
+    );
+
+    const nextStream = await Promise.race([
+      cameraRequest,
+      timeout
+    ]);
+
+    clearTimeout(timeoutId);
+
+    if(generation!==cameraGeneration){
+
+      nextStream.getTracks().forEach(
+        track=>track.stop()
+      );
+
+      return;
+    }
+
+    stream = nextStream;
+
+    video.srcObject = stream;
+    video.muted = true;
+
+    await video.play();
+
+    if(generation!==cameraGeneration)return;
+
+    running = true;
+    mode = "ready";
+
+    $("zoom").disabled = false;
+    $("restart").disabled = false;
+    $("preview").disabled = true;
+
+    $("preview").textContent =
+      "CORRECTED VIEW";
+
+    $("start").disabled = false;
+
+    $("start").textContent =
+      "START CALIBRATION";
+
+    $("lockStatus").textContent =
+      "UNLOCKED";
+
+    resetMetrics();
+
+    setStatus(
+      "CAMERA READY",
+      "green",
+      "Position the complete empty dartboard inside the frame"
+    );
+
+    debug(
+      "Native vision active · No external dependencies"
+    );
+
+    requestAnimationFrame(
+      now=>renderLoop(now,generation)
+    );
+
+    scheduleCalibration();
+
+  }catch(err){
+
+    clearTimeout(timeoutId);
+
+    stopCamera();
+
+    $("start").disabled = false;
+    $("restart").disabled = false;
+
+    $("start").textContent =
+      "RETRY CAMERA";
+
+    setStatus(
+      "CAMERA ERROR",
+      "red",
+      err.message
+    );
+
+    debug(err.name || "Camera startup failed");
+
+  }finally{
+
+    cameraStarting = false;
+  }
+}
+
+function drawCamera(){
+
+  if(
+    !video.videoWidth ||
+    !video.videoHeight
+  )return false;
+
+  const vw = video.videoWidth;
+  const vh = video.videoHeight;
+
+  const side = Math.min(vw,vh)/zoom;
+
+  wc.drawImage(
+    video,
+    (vw-side)/2,
+    (vh-side)/2,
+    side,
+    side,
+    0,0,W,H
+  );
+
+  return true;
+}
+
+function capture(){
+
+  return wc.getImageData(0,0,W,H);
+}
+
+function cloneFrame(frame){
+
+  return new ImageData(
+    new Uint8ClampedArray(frame.data),
+    frame.width,
+    frame.height
+  );
+}
+
+function scheduleCalibration(){
+
+  clearTimeout(autoTimer);
+
+  autoTimer = setTimeout(()=>{
+
+    if(running && mode==="ready"){
+
+      startCalibration();
+    }
+
+  },1500);
+}
+
+/* =========================================
+   COLOR SEGMENTATION
+========================================= */
+
+function colorClass(r,g,b){
+
+  if(
+    r>65 &&
+    r>g*1.28 &&
+    r>b*1.20
+  )return 1;
+
+  if(
+    g>50 &&
+    g>r*1.16 &&
+    g>b*1.10
+  )return 2;
+
+  return 0;
+}
+
+function createColorMask(frame){
+
+  const mask = new Uint8Array(W*H);
+
+  const d = frame.data;
+
+  for(let i=0;i<W*H;i++){
+
+    const p = i*4;
+
+    mask[i] = colorClass(
+      d[p],
+      d[p+1],
+      d[p+2]
+    );
+  }
+
+  return mask;
+}
+
+function pixelColor(mask,x,y){
+
+  x = Math.round(x);
+  y = Math.round(y);
+
+  if(
+    x<0 || y<0 ||
+    x>=W || y>=H
+  )return 0;
+
+  return mask[y*W+x];
+}
+
+/* =========================================
+   NATIVE LINEAR SYSTEM SOLVER
+========================================= */
+
+function solveLinear(matrix,vector){
+
+  const n = vector.length;
+
+  const a = matrix.map(
+    (row,i)=>[...row,vector[i]]
+  );
+
+  for(let i=0;i<n;i++){
+
+    let pivot = i;
+
+    for(let j=i+1;j<n;j++){
+
+      if(
+        Math.abs(a[j][i]) >
+        Math.abs(a[pivot][i])
+      ){
+
+        pivot = j;
+      }
+    }
+
+    if(Math.abs(a[pivot][i])<1e-10){
+
+      return null;
+    }
+
+    [a[i],a[pivot]] =
+      [a[pivot],a[i]];
+
+    const divisor = a[i][i];
+
+    for(let k=i;k<=n;k++){
+
+      a[i][k] /= divisor;
+    }
+
+    for(let j=0;j<n;j++){
+
+      if(j===i)continue;
+
+      const factor = a[j][i];
+
+      for(let k=i;k<=n;k++){
+
+        a[j][k] -= factor*a[i][k];
+      }
+    }
+  }
+
+  return a.map(row=>row[n]);
+}
+
+/* =========================================
+   NATIVE ROTATED ELLIPSE FITTING
+========================================= */
+
+function fitEllipse(points){
+
+  if(points.length<12)return null;
+
+  const ox =
+    points.reduce((s,p)=>s+p.x,0)/
+    points.length;
+
+  const oy =
+    points.reduce((s,p)=>s+p.y,0)/
+    points.length;
+
+  const scale = Math.max(
+    1,
+    Math.sqrt(
+      points.reduce(
+        (s,p)=>s+
+        (p.x-ox)**2+
+        (p.y-oy)**2,
+        0
+      )/points.length
+    )
+  );
+
+  const m = Array.from(
+    {length:5},
+    ()=>Array(5).fill(0)
+  );
+
+  const v = Array(5).fill(0);
+
+  for(const p of points){
+
+    const x = (p.x-ox)/scale;
+    const y = (p.y-oy)/scale;
+
+    const row = [
+      x*x,x*y,y*y,x,y
+    ];
+
+    for(let i=0;i<5;i++){
+
+      v[i] += row[i];
+
+      for(let j=0;j<5;j++){
+
+        m[i][j] += row[i]*row[j];
+      }
+    }
+  }
+
+  const solution = solveLinear(m,v);
+
+  if(!solution)return null;
+
+  const [A,B,C,D,E] = solution;
+
+  const det = 4*A*C-B*B;
+
+  if(det<=1e-10)return null;
+
+  const cx =
+    (B*E-2*C*D)/det;
+
+  const cy =
+    (B*D-2*A*E)/det;
+
+  const k = 1-(
+    A*cx*cx+
+    B*cx*cy+
+    C*cy*cy+
+    D*cx+
+    E*cy
+  );
+
+  const delta = Math.hypot(A-C,B);
+
+  const l1 = (A+C+delta)/2;
+  const l2 = (A+C-delta)/2;
+
+  if(
+    Math.abs(l1)<1e-10 ||
+    Math.abs(l2)<1e-10
+  )return null;
+
+  const a2 = k/l1;
+  const b2 = k/l2;
+
+  if(a2<=0 || b2<=0)return null;
+
+  const a = Math.sqrt(a2)*scale;
+  const b = Math.sqrt(b2)*scale;
+
+  const angle =
+    .5*Math.atan2(B,A-C);
+
+  const major = Math.max(a,b);
+  const minor = Math.min(a,b);
+
+  if(
+    !Number.isFinite(major) ||
+    !Number.isFinite(minor) ||
+    major<3
+  )return null;
+
+  return {
+
+    cx:ox+cx*scale,
+    cy:oy+cy*scale,
+
+    a,b,
+
+    major,
+    minor,
+
+    angle,
+
+    area:Math.PI*a*b
+  };
+}
+
+/* =========================================
+   ELLIPSE GEOMETRY
+========================================= */
+
+function ellipsePoint(e,theta,r=1){
+
+  const x = Math.cos(theta)*e.a*r;
+  const y = Math.sin(theta)*e.b*r;
+
+  const c = Math.cos(e.angle);
+  const s = Math.sin(e.angle);
+
+  return {
+
+    x:e.cx+x*c-y*s,
+    y:e.cy+x*s+y*c
+  };
+}
+
+function ellipseLocal(e,p){
+
+  const dx = p.x-e.cx;
+  const dy = p.y-e.cy;
+
+  const c = Math.cos(e.angle);
+  const s = Math.sin(e.angle);
+
+  return {
+
+    x:(dx*c+dy*s)/e.a,
+    y:(-dx*s+dy*c)/e.b
+  };
+}
+
+function ellipseRadius(e,p){
+
+  const q = ellipseLocal(e,p);
+
+  return Math.hypot(q.x,q.y);
+}
+
+function ellipseVisible(e){
+
+  for(let i=0;i<72;i++){
+
+    const p = ellipsePoint(
+      e,i*TAU/72
+    );
+
+    if(
+      p.x<5 ||
+      p.x>W-5 ||
+      p.y<5 ||
+      p.y>H-5
+    )return false;
+  }
+
+  return true;
+}
+
+/* =========================================
+   CONNECTED COMPONENT DETECTION
+========================================= */
+
+function findComponents(mask,target){
+
+  const visited = new Uint8Array(W*H);
+
+  const queue = new Int32Array(W*H);
+
+  const results = [];
+
+  for(let index=0;index<mask.length;index++){
+
+    if(
+      visited[index] ||
+      mask[index]!==target
+    )continue;
+
+    let head = 0;
+    let tail = 0;
+
+    let sx = 0;
+    let sy = 0;
+
+    let minX = W;
+    let minY = H;
+
+    let maxX = 0;
+    let maxY = 0;
+
+    visited[index] = 1;
+
+    queue[tail++] = index;
+
+    while(head<tail){
+
+      const p = queue[head++];
+
+      const x = p%W;
+      const y = Math.floor(p/W);
+
+      sx += x;
+      sy += y;
+
+      minX = Math.min(minX,x);
+      maxX = Math.max(maxX,x);
+
+      minY = Math.min(minY,y);
+      maxY = Math.max(maxY,y);
+
+      if(x>0){
+
+        const n = p-1;
+
+        if(!visited[n] && mask[n]===target){
+
+          visited[n] = 1;
+          queue[tail++] = n;
+        }
+      }
+
+      if(x<W-1){
+
+        const n = p+1;
+
+        if(!visited[n] && mask[n]===target){
+
+          visited[n] = 1;
+          queue[tail++] = n;
+        }
+      }
+
+      if(y>0){
+
+        const n = p-W;
+
+        if(!visited[n] && mask[n]===target){
+
+          visited[n] = 1;
+          queue[tail++] = n;
+        }
+      }
+
+      if(y<H-1){
+
+        const n = p+W;
+
+        if(!visited[n] && mask[n]===target){
+
+          visited[n] = 1;
+          queue[tail++] = n;
+        }
+      }
+    }
+
+    if(tail<5)continue;
+
+    results.push({
+
+      x:sx/tail,
+      y:sy/tail,
+
+      area:tail,
+
+      width:maxX-minX+1,
+      height:maxY-minY+1
+    });
+  }
+
+  return results;
+}
+
+/* =========================================
+   OUTER RING RECOGNITION
+========================================= */
+
+function collectColorPoints(mask){
+
+  const points = [];
+
+  for(let y=3;y<H-3;y+=2){
+
+    for(let x=3;x<W-3;x+=2){
+
+      if(mask[y*W+x]){
+
+        points.push({x,y});
+      }
+    }
+  }
+
+  return points;
+}
+
+function collectOuterPoints(points,cx,cy){
+
+  const bins = Array.from(
+    {length:120},
+    ()=>[]
+  );
+
+  for(const p of points){
+
+    const dx = p.x-cx;
+    const dy = p.y-cy;
+
+    const angle =
+      (Math.atan2(dy,dx)+TAU)%TAU;
+
+    const index = Math.min(
+      119,
+      Math.floor(angle/TAU*120)
+    );
+
+    bins[index].push({
+
+      x:p.x,
+      y:p.y,
+
+      r:Math.hypot(dx,dy)
+    });
+  }
+
+  const outer = [];
+
+  for(const bin of bins){
+
+    if(!bin.length)continue;
+
+    bin.sort((a,b)=>a.r-b.r);
+
+    const i = Math.floor(
+      (bin.length-1)*.98
+    );
+
+    outer.push(bin[i]);
+  }
+
+  return outer;
+}
+
+function fitOuterRing(points,cx,cy){
+
+  let outer = collectOuterPoints(
+    points,cx,cy
+  );
+
+  if(outer.length<90)return null;
+
+  let e = fitEllipse(outer);
+
+  if(!e)return null;
+
+  for(let pass=0;pass<3;pass++){
+
+    const errors = outer.map(
+      p=>Math.abs(
+        ellipseRadius(e,p)-1
+      )
+    );
+
+    const threshold = Math.max(
+      .018,
+      quantile(errors,.82)
+    );
+
+    const filtered = outer.filter(
+      p=>Math.abs(
+        ellipseRadius(e,p)-1
+      )<=threshold
+    );
+
+    if(filtered.length<70)break;
+
+    const refined = fitEllipse(filtered);
+
+    if(!refined)break;
+
+    e = refined;
+    outer = filtered;
+  }
+
+  if(
+    e.major<70 ||
+    e.major>W*.7 ||
+    e.minor/e.major<
+      CONFIG.minimumAxisRatio
+  )return null;
+
+  if(!ellipseVisible(e))return null;
+
+  return e;
+}
+
+/* =========================================
+   BULL RECOGNITION
+========================================= */
+
+function findBullCandidates(mask,components){
+
+  const candidates = [];
+
+  for(const c of components){
+
+    if(c.area<5 || c.area>1500)continue;
+
+    const ratio =
+      Math.min(c.width,c.height)/
+      Math.max(c.width,c.height);
+
+    if(ratio<.25)continue;
+
+    const fill =
+      c.area/(c.width*c.height);
+
+    if(fill<.30)continue;
+
+    const size = Math.max(
+      3,
+      Math.round(
+        Math.max(c.width,c.height)*1.5
+      )
+    );
+
+    let red = 0;
+    let green = 0;
+    let total = 0;
+
+    for(let dy=-size;dy<=size;dy++){
+
+      for(let dx=-size;dx<=size;dx++){
+
+        if(Math.hypot(dx,dy)>size)continue;
+
+        const color = pixelColor(
+          mask,
+          c.x+dx,
+          c.y+dy
+        );
+
+        if(color===1)red++;
+        if(color===2)green++;
+
+        total++;
+      }
+    }
+
+    if(red<5 || green<5)continue;
+
+    const support =
+      (red+green)/Math.max(1,total);
+
+    if(support<.40)continue;
+
+    const centerDistance = Math.hypot(
+      c.x-W/2,
+      c.y-H/2
+    )/W;
+
+    candidates.push({
+
+      x:c.x,
+      y:c.y,
+
+      size:Math.max(c.width,c.height),
+
+      score:support-centerDistance*.35
+    });
+  }
+
+  candidates.sort(
+    (a,b)=>b.score-a.score
+  );
+
+  return candidates.slice(0,12);
+}
+
+/* =========================================
+   PROJECTIVE GEOMETRY
+========================================= */
+
+function createProjectiveModel(outer,bull){
+
+  const p = ellipseLocal(
+    outer,bull
+  );
+
+  const magnitude =
+    Math.hypot(p.x,p.y);
+
+  if(magnitude>=.48)return null;
+
+  const gamma =
+    1/Math.sqrt(
+      1-magnitude*magnitude
+    );
+
+  return {
+
+    outer,
+    bull,
+
+    px:p.x,
+    py:p.y,
+
+    gamma
+  };
+}
+
+function imageToBoard(model,x,y){
+
+  const q = ellipseLocal(
+    model.outer,{x,y}
+  );
+
+  const px = model.px;
+  const py = model.py;
+
+  const p2 = px*px+py*py;
+
+  if(p2<1e-10){
+
+    return {
+      x:q.x,
+      y:q.y
+    };
+  }
+
+  const dot = px*q.x+py*q.y;
+
+  const g = model.gamma;
+
+  const k =
+    (g-1)*dot/p2-g;
+
+  const denominator =
+    g*(1-dot);
+
+  if(Math.abs(denominator)<1e-8){
+
+    return null;
+  }
+
+  return {
+
+    x:(q.x+k*px)/denominator,
+    y:(q.y+k*py)/denominator
+  };
+}
+
+function boardToImage(model,x,y){
+
+  const px = model.px;
+  const py = model.py;
+
+  const p2 = px*px+py*py;
+
+  let qx = x;
+  let qy = y;
+
+  if(p2>=1e-10){
+
+    const g = model.gamma;
+
+    const dot = px*x+py*y;
+
+    const k =
+      (g-1)*dot/p2+g;
+
+    const denominator =
+      g*(1+dot);
+
+    if(Math.abs(denominator)<1e-8){
+
+      return null;
+    }
+
+    qx = (x+k*px)/denominator;
+    qy = (y+k*py)/denominator;
+  }
+
+  const e = model.outer;
+
+  const lx = qx*e.a;
+  const ly = qy*e.b;
+
+  const c = Math.cos(e.angle);
+  const s = Math.sin(e.angle);
+
+  return {
+
+    x:e.cx+lx*c-ly*s,
+    y:e.cy+lx*s+ly*c
+  };
+}
+
+/* =========================================
+   PROJECTED RING VALIDATION
+========================================= */
+
+function projectedRingSupport(
+  mask,model,radius
+){
+
+  let hits = 0;
+  let total = 0;
+
+  for(let i=0;i<160;i++){
+
+    const angle = i*TAU/160;
+
+    const p = boardToImage(
+      model,
+      Math.cos(angle)*radius,
+      Math.sin(angle)*radius
+    );
+
+    if(!p)continue;
+
+    total++;
+
+    if(pixelColor(mask,p.x,p.y)){
+
+      hits++;
+    }
+  }
+
+  return total ? hits/total : 0;
+}
+
+function projectedVisibility(model){
+
+  for(let i=0;i<72;i++){
+
+    const a = i*TAU/72;
+
+    const p = boardToImage(
+      model,
+      Math.cos(a),
+      Math.sin(a)
+    );
+
+    if(!p)return false;
+
+    if(
+      p.x<5 ||
+      p.x>W-5 ||
+      p.y<5 ||
+      p.y>H-5
+    )return false;
+  }
+
+  return true;
+}
+
+/* =========================================
+   RING BOUNDARY ERROR
+========================================= */
+
+function measureRingError(mask,model){
+
+  const boundaries = [
+    1,
+    162/170,
+    107/170,
+    99/170
+  ];
+
+  const errors = [];
+
+  for(const target of boundaries){
+
+    for(let i=0;i<60;i++){
+
+      const a = (i+.5)*TAU/60;
+
+      const c = Math.cos(a);
+      const s = Math.sin(a);
+
+      let best = Infinity;
+
+      for(let d=-.04;d<=.04;d+=.003){
+
+        const r = target+d;
+
+        const p1 = boardToImage(
+          model,
+          c*(r-.005),
+          s*(r-.005)
+        );
+
+        const p2 = boardToImage(
+          model,
+          c*(r+.005),
+          s*(r+.005)
+        );
+
+        if(!p1 || !p2)continue;
+
+        const c1 = pixelColor(
+          mask,p1.x,p1.y
+        );
+
+        const c2 = pixelColor(
+          mask,p2.x,p2.y
+        );
+
+        const outerBoundary =
+          target===1 ||
+          target===107/170;
+
+        const transition = outerBoundary
+          ? Boolean(c1) && !c2
+          : !c1 && Boolean(c2);
+
+        if(transition){
+
+          best = Math.min(
+            best,Math.abs(d)
+          );
+        }
+      }
+
+      errors.push(
+        Number.isFinite(best)?
+        best:.05
+      );
+    }
+  }
+
+  return {
+
+    median:median(errors),
+
+    p90:quantile(errors,.90),
+
+    coverage:errors.filter(
+      e=>e<.025
+    ).length/errors.length
+  };
+}
+
+/* =========================================
+   SECTOR ORIENTATION ESTIMATION
+   PROVISIONAL UPRIGHT BOARD ASSUMPTION
+========================================= */
+
+function estimateOrientation(mask,model){
+
+  let bestPhase = 0;
+  let bestScore = -Infinity;
+
+  for(let phase=0;phase<36;phase+=.5){
+
+    let score = 0;
+
+    for(let i=0;i<20;i++){
+
+      const a =
+        (phase+i*18)*Math.PI/180;
+
+      for(const offset of [-4,0,4]){
+
+        const angle =
+          a+offset*Math.PI/180;
+
+        const p = boardToImage(
+          model,
+          Math.cos(angle)*166/170,
+          Math.sin(angle)*166/170
+        );
+
+        if(!p)continue;
+
+        const color = pixelColor(
+          mask,p.x,p.y
+        );
+
+        const expected =
+          i%2===0 ? 1 : 2;
+
+        score += color===expected
+          ? 1
+          : color ? -1 : -.5;
+      }
+    }
+
+    if(score>bestScore){
+
+      bestScore = score;
+      bestPhase = phase;
+    }
+  }
+
+  let best = null;
+
+  for(let i=0;i<20;i+=2){
+
+    const angle =
+      (bestPhase+i*18)*Math.PI/180;
+
+    const p = boardToImage(
+      model,
+      Math.cos(angle)*166/170,
+      Math.sin(angle)*166/170
+    );
+
+    if(!p)continue;
+
+    const dx = p.x-model.bull.x;
+    const dy = p.y-model.bull.y;
+
+    const deviation = Math.abs(
+      Math.atan2(dx,-dy)
+    );
+
+    if(!best || deviation<best.deviation){
+
+      best = {
+        angle,
+        deviation
+      };
+    }
+  }
+
+  return best ? best.angle : 0;
+}
+
+/* =========================================
+   COMPLETE BOARD ESTIMATION
+========================================= */
+
+function estimateBoard(frame){
+
+  const mask = createColorMask(frame);
+
+  const points = collectColorPoints(mask);
+
+  if(points.length<250){
+
+    debug("Insufficient red and green ring pixels");
+
+    return null;
+  }
+
+  const redComponents =
+    findComponents(mask,1);
+
+  const bulls = findBullCandidates(
+    mask,redComponents
+  );
+
+  if(!bulls.length){
+
+    debug("Searching for red bull and green outer bull");
+
+    return null;
+  }
+
+  const medianX = median(
+    points.map(p=>p.x)
+  );
+
+  const medianY = median(
+    points.map(p=>p.y)
+  );
+
+  const outerCandidates = [];
+
+  const centres = [
+
+    {x:medianX,y:medianY},
+
+    ...bulls.slice(0,4)
+  ];
+
+  for(const centre of centres){
+
+    const outer = fitOuterRing(
+      points,
+      centre.x,
+      centre.y
+    );
+
+    if(outer){
+
+      outerCandidates.push(outer);
+    }
+  }
+
+  if(!outerCandidates.length){
+
+    debug("Outer double ring not fully identified");
+
+    return null;
+  }
+
+  let best = null;
+
+  for(const outer of outerCandidates){
+
+    for(const bull of bulls){
+
+      const relativeSize =
+        bull.size/outer.major;
+
+      if(
+        relativeSize<.025 ||
+        relativeSize>.13
+      )continue;
+
+      if(ellipseRadius(outer,bull)>.48){
+
+        continue;
+      }
+
+      const model = createProjectiveModel(
+        outer,bull
+      );
+
+      if(!model)continue;
+
+      if(!projectedVisibility(model)){
+
+        continue;
+      }
+
+      const doubleSupport =
+        projectedRingSupport(
+          mask,model,166/170
+        );
+
+      if(doubleSupport<.70)continue;
+
+      const tripleSupport =
+        projectedRingSupport(
+          mask,model,103/170
+        );
+
+      if(tripleSupport<.70)continue;
+
+      const bullSupport =
+        projectedRingSupport(
+          mask,model,11/170
+        );
+
+      if(bullSupport<.55)continue;
+
+      const quality =
+        doubleSupport*.40+
+        tripleSupport*.45+
+        bullSupport*.15;
+
+      const geometry =
+        measureRingError(mask,model);
+
+      if(
+        geometry.median>
+          CONFIG.maximumGeometryError ||
+        geometry.coverage<.75
+      )continue;
+
+      const result = {
+
+        ...model,
+
+        quality,
+
+        error:geometry.median,
+
+        coverage:geometry.coverage,
+
+        p90:geometry.p90,
+
+        orientation:
+          estimateOrientation(mask,model)
+      };
+
+      const rank =
+        quality-
+        geometry.median*4+
+        geometry.coverage*.2;
+
+      if(!best || rank>best.rank){
+
+        best = {
+          ...result,
+          rank
+        };
+      }
+    }
+  }
+
+  if(!best){
+
+    debug(
+      "Board detected · Ring geometry not yet verified"
+    );
+  }
+
+  return best;
+}
+
+/* =========================================
+   STABILITY VERIFICATION
+========================================= */
+
+function boardDistance(a,b){
+
+  if(!a || !b)return Infinity;
+
+  let error = distance(
+    a.bull,b.bull
+  );
+
+  for(let i=0;i<20;i++){
+
+    const theta = i*TAU/20;
+
+    const p1 = boardToImage(
+      a,
+      Math.cos(theta+a.orientation),
+      Math.sin(theta+a.orientation)
+    );
+
+    const p2 = boardToImage(
+      b,
+      Math.cos(theta+b.orientation),
+      Math.sin(theta+b.orientation)
+    );
+
+    if(!p1 || !p2)return Infinity;
+
+    error = Math.max(
+      error,
+      distance(p1,p2)
+    );
+  }
+
+  return error;
+}
+
+function startCalibration(){
+
+  if(!running)return;
+
+  clearTimeout(autoTimer);
+
+  mode = "calibrating";
+
+  board = null;
+  samples = [];
+
+  previewMode = false;
+  orientationVerified = false;
+
+  warpMap = null;
+  lockedReference = null;
+
+  resetDartEngine();
+
+  lastCalibration = 0;
+
+  $("zoom").disabled = false;
+  $("preview").disabled = true;
+
+  $("preview").textContent =
+    "CORRECTED VIEW";
+
+  $("start").textContent =
+    "RESTART CALIBRATION";
+
+  $("lockStatus").textContent =
+    "UNLOCKED";
+
+  resetMetrics();
+
+  setStatus(
+    "CALIBRATING",
+    "yellow",
+    "Keep the phone still and the board empty"
+  );
+}
+
+function calibrationStep(now){
+
+  if(
+    now-lastCalibration<
+    CONFIG.calibrationInterval
+  )return;
+
+  lastCalibration = now;
+
+  const frame = capture();
+
+  let detected;
+
+  try{
+
+    detected = estimateBoard(frame);
+
+  }catch(err){
+
+    debug("Vision error: "+err.message);
+
+    samples = [];
+    board = null;
+
+    resetMetrics();
+
+    setStatus(
+      "CALIBRATION ERROR",
+      "red",
+      err.message
+    );
+
+    return;
+  }
+
+  if(!detected){
+
+    samples = [];
+    board = null;
+
+    resetMetrics();
+
+    setStatus(
+      "SEARCHING BOARD",
+      "yellow",
+      "Show the complete double ring and bull"
+    );
+
+    return;
+  }
+
+  board = detected;
+
+  $("quality").textContent =
+    Math.round(detected.quality*100)+"%";
+
+  $("error").textContent =
+    (detected.error*170).toFixed(1)+" mm";
+
+  if(
+    detected.quality<
+    CONFIG.minimumQuality
+  ){
+
+    samples = [];
+
+    updateProgress();
+
+    setStatus(
+      "ALIGNMENT LOW",
+      "yellow",
+      "Improving geometric alignment"
+    );
+
+    return;
+  }
+
+  if(samples.length){
+
+    const previous =
+      samples[samples.length-1];
+
+    if(
+      boardDistance(previous,detected)>
+        CONFIG.maximumFrameDrift ||
+      boardDistance(samples[0],detected)>
+        CONFIG.maximumFrameDrift
+    ){
+
+      samples = [];
+    }
+  }
+
+  samples.push(detected);
+
+  updateProgress();
+
+  debug(
+    "Ring support "+
+    Math.round(detected.quality*100)+
+    "% · Boundary coverage "+
+    Math.round(detected.coverage*100)+
+    "%"
+  );
+
+  setStatus(
+    "VERIFYING",
+    "blue",
+    "Stable geometry "+
+    samples.length+
+    "/"+
+    CONFIG.requiredFrames
+  );
+
+  if(
+    samples.length>=
+    CONFIG.requiredFrames
+  ){
+
+    lockCalibration(frame);
+  }
+}
+
+/* =========================================
+   CALIBRATION LOCK
+========================================= */
+
+function lockCalibration(frame){
+
+  board = samples[samples.length-1];
+
+  orientationOffset = board.orientation;
+
+  orientationVerified = false;
+
+  lockedReference =
+    createMovementReference(frame);
+
+  movementFailures = 0;
+
+  lastMovementCheck = performance.now();
+
+  mode = "locked";
+
+  overlayUntil =
+    performance.now()+1500;
+
+  warpMap = null;
+
+  $("zoom").disabled = true;
+  $("preview").disabled = false;
+
+  $("start").textContent =
+    "RECALIBRATE";
+
+  $("lockStatus").textContent =
+    "GEOMETRY LOCKED";
+
+  resetDartEngine();
+
+  buildScoringMask();
+
+  setStatus(
+    "GEOMETRY LOCKED",
+    "green",
+    "Keep board empty while scoring initializes"
+  );
+
+  debug(
+    "Perspective locked · Preparing scoring test"
+  );
+}
+
+/* =========================================
+   CAMERA MOVEMENT DETECTION
+========================================= */
+
+function grayAt(frame,x,y){
+
+  x = Math.round(x);
+  y = Math.round(y);
+
+  if(
+    x<0 || y<0 ||
+    x>=W || y>=H
+  )return 0;
+
+  const i = (y*W+x)*4;
+
+  return (
+    frame.data[i]*.299+
+    frame.data[i+1]*.587+
+    frame.data[i+2]*.114
+  );
+}
+
+function createMovementReference(frame){
+
+  const reference = [];
+
+  for(let i=0;i<100;i++){
+
+    const angle = i*TAU/100;
+
+    for(const r of [.91,.97,1.02]){
+
+      const p = boardToImage(
+        board,
+        Math.cos(angle)*r,
+        Math.sin(angle)*r
+      );
+
+      if(!p)continue;
+
+      if(
+        p.x<4 || p.x>W-4 ||
+        p.y<4 || p.y>H-4
+      )continue;
+
+      reference.push({
+
+        x:p.x,
+        y:p.y,
+
+        value:grayAt(
+          frame,p.x,p.y
+        )
+      });
+    }
+  }
+
+  return reference;
+}
+
+function verifyMovement(frame){
+
+  if(
+    !lockedReference ||
+    !lockedReference.length
+  )return false;
+
+  const differences =
+    lockedReference.map(p=>
+
+      grayAt(
+        frame,p.x,p.y
+      )-p.value
+    );
+
+  const brightnessShift =
+    median(differences);
+
+  let changed = 0;
+
+  for(const d of differences){
+
+    if(
+      Math.abs(d-brightnessShift)>45
+    ){
+
+      changed++;
+    }
+  }
+
+  const ratio =
+    changed/differences.length;
+
+  return ratio<
+    CONFIG.movementThreshold;
+}
+
+function monitorCalibration(now){
+
+  if(now-lastMovementCheck<700){
+
+    return;
+  }
+
+  lastMovementCheck = now;
+
+  const frame = capture();
+
+  if(verifyMovement(frame)){
+
+    movementFailures = 0;
+
+  }else{
+
+    movementFailures++;
+  }
+
+  if(
+    movementFailures>=
+    CONFIG.movementConfirmations
+  ){
+
+    mode = "paused";
+
+    previewMode = false;
+
+    orientationVerified = false;
+
+    $("lockStatus").textContent =
+      "ALIGNMENT LOST";
+
+    $("preview").disabled = true;
+    $("zoom").disabled = false;
+
+    $("preview").textContent =
+      "CORRECTED VIEW";
+
+    setStatus(
+      "ALIGNMENT LOST",
+      "yellow",
+      "Clear the board and recalibrate"
+    );
+
+    $("start").textContent =
+      "RECALIBRATE";
+
+    debug(
+      "Persistent camera image change detected"
+    );
+  }
+}
+
+/* =========================================
+   NATIVE PERSPECTIVE CORRECTION
+========================================= */
+
+function buildWarpMap(){
+
+  if(!board)return;
+
+  warpMap = new Int32Array(W*H);
+
+  warpMap.fill(-1);
+
+  const c = CONFIG.centre;
+  const r = CONFIG.radius;
+
+  for(let y=0;y<H;y++){
+
+    for(let x=0;x<W;x++){
+
+      const qx = (x-c)/r;
+      const qy = (y-c)/r;
+
+      const p = boardToImage(
+        board,qx,qy
+      );
+
+      if(!p)continue;
+
+      const sx = Math.round(p.x);
+      const sy = Math.round(p.y);
+
+      if(
+        sx<0 || sy<0 ||
+        sx>=W || sy>=H
+      )continue;
+
+      warpMap[y*W+x] =
+        (sy*W+sx)*4;
+    }
+  }
+}
+
+function renderCorrected(){
+
+  if(!board)return false;
+
+  if(!warpMap){
+
+    buildWarpMap();
+  }
+
+  if(!warpMap)return false;
+
+  const source = capture();
+
+  const output = cc.createImageData(
+    W,H
+  );
+
+  const src = source.data;
+  const dst = output.data;
+
+  for(let i=0;i<warpMap.length;i++){
+
+    const p = warpMap[i];
+    const d = i*4;
+
+    if(p>=0){
+
+      dst[d] = src[p];
+      dst[d+1] = src[p+1];
+      dst[d+2] = src[p+2];
+    }
+
+    dst[d+3] = 255;
+  }
+
+  cc.putImageData(output,0,0);
+
+  return true;
+}
+
+/* =========================================
+   PROJECTED CALIBRATION OVERLAY
+========================================= */
+
+function drawProjectedRing(
+  radius,color,width
+){
+
+  ctx.beginPath();
+
+  let started = false;
+
+  for(let i=0;i<=180;i++){
+
+    const a = i*TAU/180;
+
+    const p = boardToImage(
+      board,
+      Math.cos(a)*radius,
+      Math.sin(a)*radius
+    );
+
+    if(!p)continue;
+
+    if(!started){
+
+      ctx.moveTo(p.x,p.y);
+
+      started = true;
+
+    }else{
+
+      ctx.lineTo(p.x,p.y);
+    }
+  }
+
+  ctx.closePath();
+
+  ctx.strokeStyle = color;
+  ctx.lineWidth = width;
+
+  ctx.stroke();
+}
+
+function drawCalibration(){
+
+  if(!board)return;
+
+  const color =
+    mode==="locked"?
+    "#37f5a1":"#27b8ff";
+
+  ctx.save();
+
+  ctx.shadowColor = color;
+  ctx.shadowBlur = 3;
+
+  const radii = [
+
+    1,
+    162/170,
+    107/170,
+    99/170,
+    15.9/170,
+    6.35/170
+  ];
+
+  for(const r of radii){
+
+    drawProjectedRing(
+      r,color,1.3
+    );
+  }
+
+  const phase = board.orientation;
+
+  for(let i=0;i<20;i++){
+
+    const angle =
+      phase+
+      (i*18-9)*Math.PI/180;
+
+    const p1 = boardToImage(
+
+      board,
+
+      Math.cos(angle)*15.9/170,
+      Math.sin(angle)*15.9/170
+    );
+
+    const p2 = boardToImage(
+
+      board,
+
+      Math.cos(angle),
+      Math.sin(angle)
+    );
+
+    if(!p1 || !p2)continue;
+
+    ctx.beginPath();
+
+    ctx.moveTo(p1.x,p1.y);
+    ctx.lineTo(p2.x,p2.y);
+
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 1;
+
+    ctx.stroke();
+  }
+
+  ctx.beginPath();
+
+  ctx.arc(
+    board.bull.x,
+    board.bull.y,
+    3,0,TAU
+  );
+
+  ctx.fillStyle = color;
+
+  ctx.fill();
+
+  ctx.restore();
+}
+
+/* =========================================
+   CORRECTED BOARD OVERLAY
+========================================= */
+
+function drawCorrectedOverlay(){
+
+  const c = CONFIG.centre;
+  const r = CONFIG.radius;
+
+  ctx.save();
+
+  ctx.strokeStyle = "#27b8ff";
+  ctx.lineWidth = 1.2;
+
+  for(const ratio of [
+
+    1,
+    162/170,
+    107/170,
+    99/170,
+    15.9/170,
+    6.35/170
+  ]){
+
+    ctx.beginPath();
+
+    ctx.arc(
+      c,c,r*ratio,
+      0,TAU
+    );
+
+    ctx.stroke();
+  }
+
+  for(let i=0;i<20;i++){
+
+    const a =
+      orientationOffset+
+      (i*18-9)*Math.PI/180;
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+
+      c+Math.cos(a)*r*15.9/170,
+
+      c+Math.sin(a)*r*15.9/170
+    );
+
+    ctx.lineTo(
+
+      c+Math.cos(a)*r,
+
+      c+Math.sin(a)*r
+    );
+
+    ctx.stroke();
+
+    const labelAngle =
+      orientationOffset+
+      i*Math.PI/10;
+
+    ctx.fillStyle = "#fff";
+
+    ctx.font = "bold 12px Arial";
+
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    ctx.fillText(
+
+      SECTORS[i],
+
+      c+Math.cos(labelAngle)*r*1.12,
+
+      c+Math.sin(labelAngle)*r*1.12
+    );
+  }
+
+  ctx.fillStyle = "#ffd166";
+
+  ctx.font = "bold 10px Arial";
+
+  ctx.textAlign = "center";
+
+  ctx.fillText(
+    "EXPERIMENTAL SECTOR ORIENTATION",
+    c,18
+  );
+
+  ctx.restore();
+}
+
+/* =========================================
+   LIVE SCORING ENGINE
+========================================= */
 
 function updateDartScores(){
 
@@ -94,6 +2697,9 @@ function updateDartScores(){
 
   $("visitTotal").textContent =
     visitTotal;
+
+  $("correct").disabled =
+    mode!=="locked";
 }
 
 function resetDartEngine(){
@@ -107,24 +2713,50 @@ function resetDartEngine(){
   pendingFrames = 0;
 
   removalCounter = 0;
+
   lastDartTime = 0;
+  lastDartScan = 0;
 
   scoringActive = false;
+
+  scoringMask = null;
+
+  baselineCounter = 0;
+  baselineCandidate = null;
+
+  previousScan = null;
+
+  previousBoard = null;
 
   updateDartScores();
 }
 
-function cloneFrame(frame){
+function buildScoringMask(){
 
-  return new ImageData(
-    new Uint8ClampedArray(frame.data),
-    frame.width,
-    frame.height
-  );
+  if(!board)return;
+
+  scoringMask = new Uint8Array(W*H);
+
+  for(let y=2;y<H-2;y++){
+
+    for(let x=2;x<W-2;x++){
+
+      const p = imageToBoard(
+        board,x,y
+      );
+
+      if(!p)continue;
+
+      if(Math.hypot(p.x,p.y)<=1.20){
+
+        scoringMask[y*W+x] = 1;
+      }
+    }
+  }
 }
 
 /* =========================================
-   EXPERIMENTAL SCORING COORDINATES
+   PERSPECTIVE CORRECTED SCORING
 ========================================= */
 
 function calculateDartScore(x,y){
@@ -171,7 +2803,7 @@ function calculateDartScore(x,y){
   const angle = (
 
     Math.atan2(p.y,p.x)-
-    board.orientation+
+    orientationOffset+
     TAU
 
   )%TAU;
@@ -218,44 +2850,63 @@ function dartDifference(current,reference){
 
   const mask = new Uint8Array(W*H);
 
+  if(!scoringMask){
+
+    return {
+      mask,
+      count:0
+    };
+  }
+
   const a = current.data;
   const b = reference.data;
 
   let count = 0;
 
-  for(let y=2;y<H-2;y++){
+  const shifts = [];
 
-    for(let x=2;x<W-2;x++){
+  for(let index=0;index<W*H;index+=113){
 
-      const p = imageToBoard(
-        board,x,y
-      );
+    if(!scoringMask[index])continue;
 
-      if(!p)continue;
+    const i = index*4;
 
-      if(
-        Math.hypot(p.x,p.y)>1.18
-      )continue;
+    shifts.push(
 
-      const index = y*W+x;
-      const i = index*4;
+      (
+        a[i]-b[i]+
+        a[i+1]-b[i+1]+
+        a[i+2]-b[i+2]
+      )/3
+    );
+  }
 
-      const difference = (
+  const brightnessShift =
+    median(shifts);
 
-        Math.abs(a[i]-b[i])+
-        Math.abs(a[i+1]-b[i+1])+
-        Math.abs(a[i+2]-b[i+2])
+  for(let index=0;index<W*H;index++){
 
-      )/3;
+    if(!scoringMask[index])continue;
 
-      if(
-        difference>
-        DART_CONFIG.differenceThreshold
-      ){
+    const i = index*4;
 
-        mask[index] = 1;
-        count++;
-      }
+    const difference = (
+
+      Math.abs(a[i]-b[i]-brightnessShift)+
+
+      Math.abs(a[i+1]-b[i+1]-brightnessShift)+
+
+      Math.abs(a[i+2]-b[i+2]-brightnessShift)
+
+    )/3;
+
+    if(
+      difference>
+      DART_CONFIG.differenceThreshold
+    ){
+
+      mask[index] = 1;
+      count++;
     }
   }
 
@@ -346,11 +2997,7 @@ function findDartComponents(mask){
 }
 
 /* =========================================
-   DART SHAFT AXIS & TIP ESTIMATION
-
-   Experimental:
-   The narrower endpoint is selected
-   as the probable dart point.
+   DART SHAFT AND TIP ESTIMATION
 ========================================= */
 
 function estimateDartTip(points){
@@ -497,7 +3144,7 @@ function estimateDartTip(points){
 }
 
 /* =========================================
-   FIND NEW DART
+   NEW DART RECOGNITION
 ========================================= */
 
 function findNewDart(frame){
@@ -582,6 +3229,8 @@ function registerDart(tip,frame){
 
   if(detectedDarts.length===3){
 
+    lastCompletedVisit = visitTotal;
+
     setStatus(
 
       "VISIT COMPLETE",
@@ -605,9 +3254,9 @@ function registerDart(tip,frame){
 
   debug(
 
-    "Experimental score: "+
+    "Estimated score: "+
     result.label+
-    " · Tip confidence "+
+    " · Tip shape confidence "+
     Math.round(
       tip.confidence*100
     )+"%"
@@ -663,6 +3312,8 @@ function checkDartRemoval(frame){
     DART_CONFIG.removalFrames
   )return false;
 
+  lastCompletedVisit = visitTotal;
+
   detectedDarts = [];
 
   pendingDart = null;
@@ -673,19 +3324,98 @@ function checkDartRemoval(frame){
   emptyReference = cloneFrame(frame);
   dartReference = cloneFrame(frame);
 
+  previousScan = cloneFrame(frame);
+
   updateDartScores();
 
   setStatus(
 
-    "READY",
+    "READY TO THROW",
     "green",
 
     "Board clear · Throw next dart"
   );
 
   debug(
-    "New visit automatically started"
+    "Previous visit: "+
+    lastCompletedVisit+
+    " · New visit ready"
   );
+
+  return true;
+}
+
+/* =========================================
+   EMPTY BOARD BASELINE
+========================================= */
+
+function prepareScoring(frame){
+
+  if(!scoringMask){
+
+    buildScoringMask();
+  }
+
+  if(!baselineCandidate){
+
+    baselineCandidate = cloneFrame(frame);
+    baselineCounter = 1;
+
+    return false;
+  }
+
+  const changes = dartDifference(
+    frame,baselineCandidate
+  ).count;
+
+  if(changes>25){
+
+    baselineCandidate = cloneFrame(frame);
+    baselineCounter = 1;
+
+    return false;
+  }
+
+  baselineCounter++;
+
+  if(
+    baselineCounter<
+    DART_CONFIG.baselineFrames
+  ){
+
+    setStatus(
+      "PREPARING SCORING",
+      "blue",
+      "Keep the board empty and still"
+    );
+
+    return false;
+  }
+
+  emptyReference = cloneFrame(frame);
+  dartReference = cloneFrame(frame);
+
+  previousScan = cloneFrame(frame);
+
+  scoringGeneration = cameraGeneration;
+  previousBoard = board;
+
+  scoringActive = true;
+
+  setStatus(
+
+    "READY TO THROW",
+    "green",
+
+    "Experimental automatic scoring active"
+  );
+
+  debug(
+
+    "Geometry locked · Sector orientation provisional"
+  );
+
+  updateDartScores();
 
   return true;
 }
@@ -700,15 +3430,7 @@ function monitorDarts(now){
     !running ||
     mode!=="locked" ||
     !board
-  ){
-
-    if(scoringActive){
-
-      resetDartEngine();
-    }
-
-    return;
-  }
+  )return;
 
   if(
     now-lastDartScan<
@@ -719,40 +3441,20 @@ function monitorDarts(now){
 
   const frame = capture();
 
+  if(!scoringActive){
+
+    prepareScoring(frame);
+
+    return;
+  }
+
   if(
-    !scoringActive ||
     scoringGeneration!==cameraGeneration ||
     previousBoard!==board
   ){
 
     resetDartEngine();
-
-    scoringGeneration =
-      cameraGeneration;
-
-    previousBoard = board;
-
-    emptyReference =
-      cloneFrame(frame);
-
-    dartReference =
-      cloneFrame(frame);
-
-    scoringActive = true;
-
-    setStatus(
-
-      "READY TO THROW",
-      "green",
-
-      "Experimental scoring active"
-    );
-
-    debug(
-
-      "Calibration locked · "+
-      "Sector orientation provisional"
-    );
+    buildScoringMask();
 
     return;
   }
@@ -768,6 +3470,29 @@ function monitorDarts(now){
   }
 
   if(detectedDarts.length>=3){
+
+    return;
+  }
+
+  if(previousScan){
+
+    const motion = dartDifference(
+      frame,previousScan
+    ).count;
+
+    previousScan = cloneFrame(frame);
+
+    if(motion>120){
+
+      pendingDart = null;
+      pendingFrames = 0;
+
+      return;
+    }
+
+  }else{
+
+    previousScan = cloneFrame(frame);
 
     return;
   }
@@ -901,57 +3626,112 @@ function parseManualScore(value){
   };
 }
 
-correctionButton.addEventListener(
+function correctScore(){
 
-  "click",()=>{
+  if(
+    mode!=="locked" ||
+    !scoringActive
+  )return;
 
-    if(!detectedDarts.length){
+  const defaultIndex = detectedDarts.length
+    ? detectedDarts.length
+    : 1;
 
-      return;
-    }
+  const inputIndex = prompt(
+    "Dart number to correct or add (1, 2 or 3)",
+    String(defaultIndex)
+  );
 
-    const last =
-      detectedDarts[
-        detectedDarts.length-1
-      ];
+  if(inputIndex===null)return;
 
-    const input = prompt(
+  const index = Number(inputIndex)-1;
 
-      "Correct dart: S20, D20, T20, 25, BULL or MISS",
+  if(
+    !Number.isInteger(index) ||
+    index<0 ||
+    index>2 ||
+    index>detectedDarts.length
+  ){
 
-      last.label
+    alert("Select an existing dart or the next dart");
+
+    return;
+  }
+
+  const current = detectedDarts[index];
+
+  const input = prompt(
+
+    "Enter S20, D20, T20, 25, BULL or MISS",
+
+    current ? current.label : ""
+  );
+
+  if(input===null)return;
+
+  const result = parseManualScore(input);
+
+  if(!result){
+
+    alert("Invalid dart score");
+
+    return;
+  }
+
+  if(current){
+
+    current.score = result.score;
+    current.label = result.label;
+
+  }else{
+
+    detectedDarts.push({
+
+      x:null,
+      y:null,
+
+      score:result.score,
+      label:result.label,
+
+      confidence:0,
+      manual:true
+    });
+
+    dartReference = cloneFrame(capture());
+  }
+
+  pendingDart = null;
+  pendingFrames = 0;
+
+  lastDartTime = performance.now();
+
+  updateDartScores();
+
+  if(detectedDarts.length===3){
+
+    lastCompletedVisit = visitTotal;
+
+    setStatus(
+
+      "VISIT COMPLETE",
+      "green",
+
+      "Visit "+visitTotal+
+      " · Remove darts"
     );
 
-    if(input===null)return;
-
-    const correctedScore =
-      parseManualScore(input);
-
-    if(!correctedScore){
-
-      alert("Invalid dart score");
-
-      return;
-    }
-
-    last.score =
-      correctedScore.score;
-
-    last.label =
-      correctedScore.label;
-
-    updateDartScores();
+  }else{
 
     setStatus(
 
       "SCORE CORRECTED",
       "green",
 
-      last.label+
+      result.label+
       " · Visit "+visitTotal
     );
   }
-);
+}
 
 /* =========================================
    DART IMPACT MARKERS
@@ -965,22 +3745,14 @@ function drawDartMarkers(){
     mode!=="locked"
   )return;
 
-  const cw = canvas.width;
-  const ch = canvas.height;
-
-  const scale = Math.min(
-    cw/W,ch/H
-  );
-
-  const ox = (cw-W*scale)/2;
-  const oy = (ch-H*scale)/2;
-
   ctx.save();
 
-  ctx.translate(ox,oy);
-  ctx.scale(scale,scale);
-
   for(const dart of detectedDarts){
+
+    if(
+      !Number.isFinite(dart.x) ||
+      !Number.isFinite(dart.y)
+    )continue;
 
     let x = dart.x;
     let y = dart.y;
@@ -1019,6 +3791,10 @@ function drawDartMarkers(){
     ctx.font =
       "bold 13px Arial";
 
+    ctx.textAlign = "left";
+
+    ctx.textBaseline = "bottom";
+
     ctx.fillText(
 
       dart.label,
@@ -1031,17 +3807,10 @@ function drawDartMarkers(){
 }
 
 /* =========================================
-   SCORING RENDER INTEGRATION
+   MAIN RENDER ENGINE
 ========================================= */
 
-const originalRenderLoop =
-  renderLoop;
-
-renderLoop = function(now,generation){
-
-  originalRenderLoop(
-    now,generation
-  );
+function renderLoop(now,generation){
 
   if(
     !running ||
@@ -1050,44 +3819,336 @@ renderLoop = function(now,generation){
 
   try{
 
-    monitorDarts(now);
+    if(!drawCamera()){
 
-    drawDartMarkers();
+      requestAnimationFrame(
+        t=>renderLoop(t,generation)
+      );
+
+      return;
+    }
+
+    const cw = $("stage").clientWidth;
+    const ch = $("stage").clientHeight;
+
+    if(
+      canvas.width!==cw ||
+      canvas.height!==ch
+    ){
+
+      canvas.width = cw;
+      canvas.height = ch;
+    }
+
+    ctx.fillStyle = "#000";
+
+    ctx.fillRect(0,0,cw,ch);
+
+    const scale = Math.min(
+      cw/W,ch/H
+    );
+
+    const ox = (cw-W*scale)/2;
+    const oy = (ch-H*scale)/2;
+
+    ctx.save();
+
+    try{
+
+      ctx.translate(ox,oy);
+
+      ctx.scale(scale,scale);
+
+      if(
+        previewMode &&
+        board &&
+        mode==="locked"
+      ){
+
+        if(now-lastPreview>250){
+
+          lastPreview = now;
+
+          renderCorrected();
+        }
+
+        ctx.drawImage(
+          corrected,0,0,W,H
+        );
+
+        drawCorrectedOverlay();
+
+      }else{
+
+        ctx.drawImage(
+          work,0,0,W,H
+        );
+
+        if(
+
+          board && (
+
+            mode==="calibrating" ||
+
+            (
+              mode==="locked" &&
+              now<overlayUntil
+            )
+          )
+        ){
+
+          drawCalibration();
+        }
+      }
+
+      drawDartMarkers();
+
+    }finally{
+
+      ctx.restore();
+    }
+
+    if(mode==="calibrating"){
+
+      calibrationStep(now);
+
+    }else if(mode==="locked"){
+
+      monitorCalibration(now);
+
+      if(mode==="locked"){
+
+        monitorDarts(now);
+      }
+    }
 
   }catch(err){
 
     debug(
+      "Render error: "+err.message
+    );
 
-      "Scoring error: "+
+    setStatus(
+      "VISION ERROR",
+      "red",
       err.message
     );
+
+    mode = "paused";
+
+    $("start").disabled = false;
+    $("zoom").disabled = false;
+    $("preview").disabled = true;
+    $("correct").disabled = true;
+
+    $("start").textContent =
+      "RECALIBRATE";
   }
-};
+
+  requestAnimationFrame(
+
+    t=>renderLoop(
+      t,generation
+    )
+  );
+}
 
 /* =========================================
-   AUTOMATIC CAMERA START
+   USER CONTROLS
 ========================================= */
 
-document.querySelector(
-  ".version"
-).innerHTML = `
+$("zoom").addEventListener(
 
-  BOARD VISION<br>
-  PROTOTYPE V20.5
-`;
+  "input",e=>{
 
-document.title =
-  "DARTIQ Board Vision V20.5";
+    if(mode==="locked")return;
+
+    zoom = Number(e.target.value);
+
+    $("zoomValue").textContent =
+      zoom.toFixed(2)+"×";
+
+    board = null;
+    samples = [];
+
+    warpMap = null;
+
+    resetMetrics();
+    resetDartEngine();
+
+    if(!running)return;
+
+    mode = "ready";
+
+    setStatus(
+      "ZOOM ADJUSTED",
+      "blue",
+      "Automatic calibration will restart"
+    );
+
+    scheduleCalibration();
+  }
+);
+
+$("start").addEventListener(
+
+  "click",async()=>{
+
+    if(!running){
+
+      await startCamera();
+
+    }else{
+
+      startCalibration();
+    }
+  }
+);
+
+$("restart").addEventListener(
+
+  "click",async()=>{
+
+    await startCamera();
+  }
+);
+
+$("preview").addEventListener(
+
+  "click",()=>{
+
+    if(mode!=="locked")return;
+
+    previewMode = !previewMode;
+
+    lastPreview = 0;
+
+    $("preview").textContent =
+      previewMode?
+      "LIVE CAMERA":
+      "CORRECTED VIEW";
+  }
+);
+
+$("correct").addEventListener(
+  "click",
+  correctScore
+);
+
+document.addEventListener(
+
+  "visibilitychange",()=>{
+
+    if(document.hidden){
+
+      if(mode==="calibrating"){
+
+        samples = [];
+
+        updateProgress();
+      }
+
+      if(mode==="locked"){
+
+        mode = "paused";
+
+        previewMode = false;
+
+        orientationVerified = false;
+
+        $("preview").disabled = true;
+        $("zoom").disabled = false;
+        $("correct").disabled = true;
+
+        $("lockStatus").textContent =
+          "UNLOCKED";
+
+        $("start").textContent =
+          "RECALIBRATE";
+
+        setStatus(
+          "CALIBRATION PAUSED",
+          "yellow",
+          "Recalibrate after returning to the camera"
+        );
+      }
+    }
+  }
+);
+
+window.addEventListener(
+
+  "beforeunload",
+
+  stopCamera
+);
+
+window.addEventListener(
+
+  "error",event=>{
+
+    debug(
+      "Runtime error: "+
+      event.message
+    );
+
+    $("start").disabled = false;
+
+    setStatus(
+      "RUNTIME ERROR",
+      "red",
+      event.message
+    );
+  }
+);
+
+window.addEventListener(
+
+  "unhandledrejection",event=>{
+
+    const message =
+      event.reason &&
+      event.reason.message
+      ? event.reason.message
+      : String(event.reason);
+
+    debug(message);
+
+    $("start").disabled = false;
+
+    setStatus(
+      "ENGINE ERROR",
+      "red",
+      message
+    );
+  }
+);
+
+/* =========================================
+   AUTOMATIC CAMERA INITIALIZATION
+========================================= */
 
 async function autoStartCamera(){
 
-  if(running || cameraStarting){
-
-    return;
-  }
+  if(running || cameraStarting)return;
 
   await startCamera();
 }
+
+$("start").disabled = false;
+
+$("start").textContent =
+  "START CAMERA";
+
+setStatus(
+  "READY",
+  "green",
+  "Starting smartphone camera"
+);
+
+debug(
+  "DARTIQ V20.6 · Native Vision Engine Ready"
+);
 
 if(document.readyState==="complete"){
 
@@ -1102,3 +4163,8 @@ if(document.readyState==="complete"){
     {once:true}
   );
 }
+
+</script>
+
+</body>
+</html>
