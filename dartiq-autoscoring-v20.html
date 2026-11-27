@@ -2799,22 +2799,27 @@ function calculateDartScore(x,y){
     };
   }
 
-  const angle = (
+  const rawAngle =
+    Math.atan2(p.y,p.x) -
+    orientationOffset;
 
-    Math.atan2(p.y,p.x)-
-    orientationOffset+
-    TAU
+  if(!Number.isFinite(rawAngle)){
+    debug("Invalid scoring angle");
+    return null;
+  }
 
-  )%TAU;
+  const angle =
+    ((rawAngle % TAU) + TAU) % TAU;
 
-  const index = Math.floor(
-
-    (angle+Math.PI/20)/
-    (Math.PI/10)
-
-  )%20;
+  const index =
+    Math.round(angle / (Math.PI/10)) % 20;
 
   const number = SECTORS[index];
+
+  if(!Number.isInteger(number)){
+    debug("Invalid sector");
+    return null;
+  }
 
   if(radius>=162/170){
 
