@@ -2632,69 +2632,88 @@ window.addEventListener(
 );
 
 /* =========================================
-   OPENCV INITIALIZATION
+   OPENCV INITIALIZATION - V20 FIX
 ========================================= */
+
+let runtimeInitialized = false;
 
 async function initializeOpenCV(){
 
+  if(runtimeInitialized)return;
+
   try{
 
-    if(
-      typeof cv!=="undefined" &&
-      typeof cv.then==="function"
-    ){
+    let engine = window.cv;
 
-      window.cv = await cv;
+    if(engine && typeof engine.then === "function"){
+      engine = await engine;
     }
 
-    if(
-      typeof cv==="undefined" ||
-      !cv.Mat
-    ){
-
-      throw new Error(
-        "Vision runtime unavailable"
-      );
+    if(!engine || typeof engine.Mat !== "function"){
+      return;
     }
 
+    const test = new engine.Mat();
+    test.delete();
+
+    window.cv = engine;
+
+    runtimeInitialized = true;
     cvReady = true;
 
-    $("start").disabled = false;
+    clearInterval(runtimeCheck);
+    clearTimeout(loadTimeout);
 
-    $("start").textContent =
-      "START CAMERA";
+    $("start").disabled = false;
+    $("start").textContent = "START CAMERA";
 
     setStatus(
       "READY",
-      "blue",
+      "green",
       "Start smartphone camera"
     );
 
-    debug(
-      "DARTIQ V20 · Projective engine ready"
-    );
+    debug("DARTIQ V20 · OpenCV runtime ready");
 
   }catch(err){
 
-    setStatus(
-      "VISION ERROR",
-      "red",
-      err.message
-    );
+    debug("Initializing OpenCV: " + err.message);
+
   }
 }
 
+const runtimeCheck = setInterval(
+  initializeOpenCV,
+  500
+);
+
+const loadTimeout = setTimeout(()=>{
+
+  if(runtimeInitialized)return;
+
+  clearInterval(runtimeCheck);
+
+  setStatus(
+    "VISION LOAD TIMEOUT",
+    "red",
+    "OpenCV could not initialize"
+  );
+
+  $("start").textContent = "RELOAD ENGINE";
+  $("start").disabled = false;
+  $("start").onclick = ()=>location.reload();
+
+  debug("OpenCV initialization timed out");
+
+},30000);
+
 window.Module = {
-
   onRuntimeInitialized(){
-
     initializeOpenCV();
-
   }
 };
 
-const loader =
-  document.createElement("script");
+const loader = document.createElement("script");
 
 loader.src =
   "https://docs.opencv.org/4.10.0/opencv.js";
@@ -2702,31 +2721,30 @@ loader.src =
 loader.async = true;
 
 loader.onload = ()=>{
-
-  if(
-    typeof cv!=="undefined" &&
-    (
-      cv.Mat ||
-      typeof cv.then==="function"
-    )
-  ){
-
-    initializeOpenCV();
-  }
+  initializeOpenCV();
 };
 
 loader.onerror = ()=>{
 
+  clearInterval(runtimeCheck);
+  clearTimeout(loadTimeout);
+
   setStatus(
-    "LOAD FAILED",
+    "VISION LOAD FAILED",
     "red",
-    "Unable to load OpenCV vision engine"
+    "Unable to download OpenCV"
   );
+
+  $("start").disabled = false;
+  $("start").textContent = "RETRY";
+  $("start").onclick = ()=>location.reload();
+
 };
 
 document.head.appendChild(loader);
 
 </script>
-
 </body>
 </html>
+
+
