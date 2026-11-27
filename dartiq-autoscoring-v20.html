@@ -426,18 +426,17 @@ const CONFIG = {
 };
 
 const DART_CONFIG = {
-  interval:180,
-  differenceThreshold:42,
-  minimumPixels:12,
-  maximumPixels:3500,
-  confirmationFrames:4,
-  cooldown:850,
+  interval:150,
+  differenceThreshold:24,
+  minimumPixels:8,
+  maximumPixels:12000,
+  confirmationFrames:3,
+  cooldown:650,
   removalFrames:10,
   removalThreshold:.12,
-  tipTolerance:6,
+  tipTolerance:8,
   baselineFrames:5
 };
-
 /* =========================================
    APPLICATION STATE
 ========================================= */
@@ -3149,11 +3148,164 @@ function estimateDartTip(points){
 
 function findNewDart(frame){
 
-  if(!dartReference)return null;
+  if(!dartReference || !scoringMask){
+    return null;
+  }
 
-  const difference = dartDifference(
-    frame,dartReference
+  const a = frame.data;
+  const b = dartReference.data;
+
+  const mask = new Uint8Array(W*H);
+  const expanded = new Uint8Array(W*H);
+  const connected = new Uint8Array(W*H);
+
+  let count = 0;
+
+  const shifts = [];
+
+  for(let i=0;i<W*H;i+=113){
+
+    if(!scoringMask[i])continue;
+
+    const p = i*4;
+
+    shifts.push(
+      (
+        a[p]-b[p]+
+        a[p+1]-b[p+1]+
+        a[p+2]-b[p+2]
+      )/3
+    );
+  }
+
+  const shift = median(shifts);
+
+  for(let i=0;i<W*H;i++){
+
+    if(!scoringMask[i])continue;
+
+    const p = i*4;
+
+    const difference = Math.max(
+
+      Math.abs(a[p]-b[p]-shift),
+
+      Math.abs(a[p+1]-b[p+1]-shift),
+
+      Math.abs(a[p+2]-b[p+2]-shift)
+    );
+
+    if(difference>=24){
+
+      mask[i] = 1;
+      count++;
+    }
+  }
+
+  if(count<8){
+
+    debug("Monitoring · Changed pixels: "+count);
+
+    return null;
+  }
+
+  if(count>12000){
+
+    debug("Movement detected · Waiting");
+
+    return null;
+  }
+
+  // Connect fragmented dart silhouettes.
+
+  for(let y=3;y<H-3;y++){
+
+    for(let x=3;x<W-3;x++){
+
+      if(!mask[y*W+x])continue;
+
+      for(let dy=-2;dy<=2;dy++){
+
+        for(let dx=-2;dx<=2;dx++){
+
+          expanded[
+            (y+dy)*W+x+dx
+          ] = 1;
+        }
+      }
+    }
+  }
+
+  // Restore approximate original shape.
+
+  for(let y=3;y<H-3;y++){
+
+    for(let x=3;x<W-3;x++){
+
+      let valid = true;
+
+      for(let dy=-1;dy<=1;dy++){
+
+        for(let dx=-1;dx<=1;dx++){
+
+          if(!expanded[(y+dy)*W+x+dx]){
+
+            valid = false;
+            break;
+          }
+        }
+
+        if(!valid)break;
+      }
+
+      if(valid){
+
+        connected[y*W+x] = 1;
+      }
+    }
+  }
+
+  const components =
+    findDartComponents(connected);
+
+  const candidates = [];
+
+  for(const component of components){
+
+    // Use original pixels for tip estimation.
+
+    const points = component.filter(p=>
+      mask[p.y*W+p.x]
+    );
+
+    if(points.length<8)continue;
+
+    const tip = estimateDartTip(points);
+
+    if(!tip)continue;
+
+    if(tip.confidence<.10)continue;
+
+    candidates.push(tip);
+  }
+
+  candidates.sort((a,b)=>
+
+    b.confidence*b.length-
+    a.confidence*a.length
   );
+
+  debug(
+
+    "Changed pixels: "+count+
+
+    " · Components: "+components.length+
+
+    " · Candidates: "+candidates.length
+  );
+
+  return candidates[0] || null;
+}
 
   if(
     difference.count<
